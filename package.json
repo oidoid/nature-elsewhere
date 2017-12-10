@@ -1,0 +1,43 @@
+{
+  "name": "pond",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/rndmem/pond",
+  "repository": "github:rndmem/pond",
+  "bugs": "https://github.com/rndmem/pond/issues",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "webpack-dev-server -dw",
+    "lint": "eslint --cache --max-warnings 0 --report-unused-disable-directives --ext ts .",
+    "format": "run-s -s lint -- --fix",
+    "test": "run-p -s lint build",
+    "build": "NODE_ENV=production webpack -p"
+  },
+  "engines": {
+    "node": "9.2.1"
+  },
+  "devDependencies": {
+    "@types/clean-webpack-plugin": "0.1.0",
+    "@types/copy-webpack-plugin": "4.0.1",
+    "@types/node": "8.0.57",
+    "@types/three": "0.84.35",
+    "clean-webpack-plugin": "0.1.17",
+    "copy-webpack-plugin": "4.2.3",
+    "eslint": "4.13.0",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-prettier": "2.3.1",
+    "file-loader": "1.1.5",
+    "npm-run-all": "4.1.2",
+    "pre-commit": "1.2.2",
+    "prettier": "1.9.1",
+    "three": "0.88.0",
+    "ts-loader": "3.2.0",
+    "ts-node": "3.3.0",
+    "typescript": "2.6.2",
+    "typescript-eslint-parser": "9.0.1",
+    "url-loader": "0.6.2",
+    "webpack": "3.10.0",
+    "webpack-dev-server": "2.9.7"
+  }
+}
