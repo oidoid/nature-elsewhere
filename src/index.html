@@ -8,11 +8,30 @@
       body {
         /* Make the body flush with the window. */
         margin: 0;
+
+        /* Set the background color shown while waiting for the canvas to be
+           attached .*/
+        background: black;
+
+        /* This doesn't seem like it should be necessary but scrollbars seem to
+           randomly appear when resizing otherwise. */
+        overflow: hidden;
       }
+
       canvas {
         /* Prevent additional line height spacing by changing display type from
            inline to block. */
         display: block;
+
+        /* The game is rendered to a small canvas with a fixed height and width
+           proportional to the window width / height ratio. Scale the canvas to
+           the dimensions of the window knowing that the game will always adjust
+           the width proportionally. */
+        width: 100% !important;
+        height: 100% !important;
+
+        /* Scale using nearest-neighbor to retain a pixely appearance. */
+        image-rendering: pixelated;
       }
     </style>
   </head>

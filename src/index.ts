@@ -1,24 +1,29 @@
 import * as Three from "three";
 
-const scene = new Three.Scene();
-const camera = new Three.PerspectiveCamera();
+const HEIGHT = 192;
+
+function width() {
+  const ratio = window.innerWidth / window.innerHeight;
+  return HEIGHT * ratio;
+}
 
 const renderer = new Three.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
+// No smoothing. Pixels are one for one when rendering.
+renderer.setPixelRatio(1);
 document.body.appendChild(renderer.domElement);
 
-const geometry = new Three.BoxGeometry(1, 1, 1);
+const camera = new Three.OrthographicCamera(0, width(), 0, HEIGHT);
+
+const geometry = new Three.BoxGeometry(10, 10, 10);
 const material = new Three.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new Three.Mesh(geometry, material);
+const scene = new Three.Scene();
 scene.add(cube);
-
-camera.position.z = 5;
 
 function render() {
   requestAnimationFrame(render);
 
-  cube.rotation.x += 0.1;
-  cube.rotation.y += 0.1;
+  cube.rotation.z += 0.033;
 
   renderer.render(scene, camera);
 }
@@ -26,20 +31,22 @@ function render() {
 resize();
 render();
 
-const scale = new Three.Vector3(4, 4, 1);
-
 window.addEventListener("resize", resize);
 
 function resize() {
-  const aspect = window.innerWidth / window.innerHeight;
   // eslint-disable-next-line no-console
   console.log(
-    `resize: scale=${scale} ` +
+    `resize: ` +
       `window=${window.innerWidth}x${window.innerHeight} ` +
-      `aspect=${aspect}`
+      `canvas=${width()}x${HEIGHT} ` +
+      `ratio=${window.innerWidth / window.innerHeight}`
   );
+  renderer.setSize(width(), HEIGHT);
 
-  camera.aspect = aspect;
+  camera.right = width();
+  camera.bottom = HEIGHT;
+  camera.position.x = -width() / 2;
+  camera.position.y = -HEIGHT / 2;
+
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
 }
