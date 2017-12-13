@@ -10,15 +10,15 @@ const config: webpack.Configuration = {
   output: { path: path.resolve("build"), filename: "index.js" },
 
   module: {
-    rules: [
-      { test: /\.png$/, use: "url-loader" },
-      { test: /\.ts$/, use: "ts-loader" }
-    ]
+    rules: [{ test: /\.ts$/, use: "ts-loader" }]
   },
 
   plugins: [
     new CleanPlugin("build"),
-    new CopyWebpackPlugin([{ from: "src/index.html" }])
+    new CopyWebpackPlugin([
+      { from: "src/index.html" },
+      { from: "src/assets", to: "assets" }
+    ])
   ]
 };
 
