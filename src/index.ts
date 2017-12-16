@@ -19,7 +19,7 @@ const camera = new Three.OrthographicCamera(0, Math.round(width()), 0, HEIGHT)
 
 const scene = new Three.Scene()
 
-const texture = new Three.TextureLoader().load('assets/images/pond1.png')
+const texture = new Three.TextureLoader().load('assets/textures/pond.png')
 texture.flipY = false
 const spriteMaterial = new Three.SpriteMaterial({map: texture})
 const sprite = new Three.Sprite(spriteMaterial)
