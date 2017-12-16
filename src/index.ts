@@ -1,7 +1,7 @@
 import * as Three from 'three'
 
 // An integer for pixel alignment.
-const HEIGHT = 192
+const HEIGHT = 128
 
 // Consistently call Math.round() on the result of width() to keep pixel
 // alignment.
@@ -27,14 +27,16 @@ sprite.position.set(0, 0, -1)
 sprite.scale.set(128, 16, 1)
 scene.add(sprite)
 
-const geometry = new Three.BoxGeometry(10, 10, 0)
-const material = new Three.MeshBasicMaterial({color: 0x00ff00})
+const geometry = new Three.BoxGeometry(5, 5, 0)
+const material = new Three.MeshBasicMaterial({color: 0xffffcd})
 const cube = new Three.Mesh(geometry, material)
+cube.position.set(20, -30, 0)
 scene.add(cube)
+scene.background = new Three.Color(0xf4f4ed)
 
 function render(clock: Three.Clock) {
   // console.log(clock.getDelta());
-  cube.rotation.z += 0.033
+  cube.rotation.z += 0.005
 
   renderer.render(scene, camera)
 
