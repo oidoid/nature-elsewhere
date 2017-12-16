@@ -1,6 +1,7 @@
 # 🦆 pond
 
 ## License (GPLv3)
+
 © 2017 Stephen Niedzielski.
 
 This program is free software: you can redistribute it and/or modify it under
@@ -15,6 +16,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 
 ### CC BY-SA 4.0
+
 This work, excluding source code, is licensed under the Creative Commons
 Attribution-ShareAlike 4.0 International License. To view a copy of this
 license, visit http://creativecommons.org/licenses/by-sa/4.0/ or send a letter
