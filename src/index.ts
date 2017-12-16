@@ -1,5 +1,5 @@
 import * as Three from 'three'
-import {cube, scene} from './load-scene'
+import {scene} from './load-scene'
 
 // An integer for pixel alignment.
 const HEIGHT = 128
@@ -21,7 +21,7 @@ const camera = new Three.OrthographicCamera(0, Math.round(width()), 0, HEIGHT)
 
 function render(clock: Three.Clock) {
   // console.log(clock.getDelta());
-  cube.rotation.z += 0.005
+  // cube.rotation.z += 0.005
 
   renderer.render(scene, camera)
 

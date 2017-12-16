@@ -1,0 +1,23 @@
+{
+  "backgroundColor": "#f4f4ed",
+  "characters": [
+    {
+      "type": "rectangle",
+      "color": "#ffffcd",
+      "width": 5,
+      "height": 5,
+      "x": 20,
+      "y": -30,
+      "z": 0
+    },
+    {
+      "type": "sprite",
+      "texture": "assets/textures/pond.png",
+      "width": 128,
+      "height": 16,
+      "x": 0,
+      "y": 0,
+      "z": -1
+    }
+  ]
+}
