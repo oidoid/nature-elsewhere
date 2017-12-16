@@ -1,4 +1,5 @@
 import * as Three from 'three'
+import {cube, scene} from './load-scene'
 
 // An integer for pixel alignment.
 const HEIGHT = 128
@@ -17,22 +18,6 @@ document.body.appendChild(renderer.domElement)
 
 const camera = new Three.OrthographicCamera(0, Math.round(width()), 0, HEIGHT)
 
-const scene = new Three.Scene()
-
-const texture = new Three.TextureLoader().load('assets/textures/pond.png')
-texture.flipY = false
-const spriteMaterial = new Three.SpriteMaterial({map: texture})
-const sprite = new Three.Sprite(spriteMaterial)
-sprite.position.set(0, 0, -1)
-sprite.scale.set(128, 16, 1)
-scene.add(sprite)
-
-const geometry = new Three.BoxGeometry(5, 5, 0)
-const material = new Three.MeshBasicMaterial({color: 0xffffcd})
-const cube = new Three.Mesh(geometry, material)
-cube.position.set(20, -30, 0)
-scene.add(cube)
-scene.background = new Three.Color(0xf4f4ed)
 
 function render(clock: Three.Clock) {
   // console.log(clock.getDelta());
