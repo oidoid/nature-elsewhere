@@ -1,58 +1,83 @@
 import * as Three from 'three'
+import {Tiled} from './types/tiled'
 
-enum CharacterType {
-  rectangle = 'rectangle',
-  sprite = 'sprite'
-}
-
-interface CharacterBase {
-  type: CharacterType
-  width: number
-  height: number
-  x: number
-  y: number
-  z: number
-}
-
-interface PrimitiveCharacter extends CharacterBase {
-  color: string
-}
-
-interface SpriteCharacter extends CharacterBase {
-  texture: string
-}
-
-type Character = PrimitiveCharacter | SpriteCharacter
-
-interface SceneConfig {
-  /** The background color of the scene. e.g., '#12345678'. */
-  backgroundColor: string
-  characters: Character[]
-}
-
-const config: SceneConfig = require('./scene.json')
+const map: Tiled.Map = require('../build/assets/maps/pond.json')
 
 export const scene = new Three.Scene()
-scene.background = new Three.Color(config.backgroundColor)
+scene.background = new Three.Color(map.backgroundcolor)
 
-config.characters.forEach(char => {
-  if (char.type === CharacterType.rectangle) {
-    const primitiveChar: PrimitiveCharacter = char as PrimitiveCharacter
+const textureLoader = new Three.TextureLoader()
+const textures: {[name: string]: Three.Texture} = {}
 
-    const geometry = new Three.BoxGeometry(char.width, char.height, 0)
-    const material = new Three.MeshBasicMaterial({color: primitiveChar.color})
-    const cube = new Three.Mesh(geometry, material)
-    cube.position.set(char.x, char.y, char.z)
-    scene.add(cube)
-  } else if (char.type === CharacterType.sprite) {
-    const spriteChar: SpriteCharacter = char as SpriteCharacter
+for (const tileset of map.tilesets) {
+  const texture = textureLoader.load('src/assets/maps/' + tileset.image)
+  texture.flipY = false
+  texture.name = tileset.name
+  textures[texture.name] = texture
+}
 
-    const texture = new Three.TextureLoader().load(spriteChar.texture)
-    texture.flipY = false
-    const spriteMaterial = new Three.SpriteMaterial({map: texture})
-    const sprite = new Three.Sprite(spriteMaterial)
-    sprite.position.set(char.x, char.y, char.z)
-    sprite.scale.set(char.width, char.height, 1)
-    scene.add(sprite)
-  } else throw new Error(`Unknown character type, "${char.type}".`)
-})
+for (const layer of map.layers) {
+  switch (layer.type) {
+    case Tiled.LayerType.TILE_LAYER:
+      const tileLayer: Tiled.TileLayer = layer as Tiled.TileLayer
+      if (typeof tileLayer.data === 'string')
+        throw new Error('TileLayer.data of type string is unsupported.')
+      for (let i = 0; i < tileLayer.data.length; ++i) {
+        if (tileLayer.width === undefined || tileLayer.height === undefined) {
+          throw new Error('TileLayer.width and height must be defined.')
+        }
+        let index = tileLayer.data[i]
+        if (index === 0) continue
+        index -= 1
+        const offsetTexture = textures['pond'].clone()
+        offsetTexture.offset = new Three.Vector2(
+          1 / 8 * (index % tileLayer.width),
+          0
+        )
+        offsetTexture.needsUpdate = true
+        offsetTexture.repeat = new Three.Vector2(1 / 8, 1)
+        const spriteMaterial = new Three.SpriteMaterial({map: offsetTexture})
+        const sprite = new Three.Sprite(spriteMaterial)
+        sprite.position.set(
+          (i % tileLayer.width) * 16,
+          Math.floor(i / tileLayer.width) * 16,
+          -1
+        )
+        sprite.scale.set(16, 16, 1)
+        scene.add(sprite)
+      }
+      break
+
+    case Tiled.LayerType.OBJECT_GROUP:
+      const objectGroup: Tiled.ObjectGroupLayer = layer as Tiled.ObjectGroupLayer
+      for (const object of objectGroup.objects) {
+        if (object.type === 'rectangle') {
+          // todo: Three.PlaneGeometry
+          const geometry = new Three.CubeGeometry(
+            object.width,
+            object.height,
+            0
+          )
+          const material = new Three.MeshBasicMaterial({
+            // todo: Three.js doesn't understand when the alpha channel is
+            // specified, ensure it's not. It's always specified for color
+            // properties but never for Map.backgroundcolor.
+            color: object.properties ? object.properties.color : undefined
+          })
+          const mesh = new Three.Mesh(geometry, material)
+          mesh.position.set(object.x, -object.y, -1)
+          scene.add(mesh)
+        } else throw new Error(`Unknown object type, "${object.type}".`)
+      }
+      break
+
+    case Tiled.LayerType.IMAGE_LAYER:
+      throw new Error(`Unsupported layer type, "${layer.type}".`)
+
+    case Tiled.LayerType.GROUP:
+      throw new Error(`Unsupported layer type, "${layer.type}".`)
+
+    default:
+      throw new Error(`Unknown layer type, "${layer.type}".`)
+  }
+}

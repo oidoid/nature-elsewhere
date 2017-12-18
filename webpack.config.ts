@@ -1,6 +1,7 @@
 import * as path from 'path'
 import * as CleanPlugin from 'clean-webpack-plugin'
-import * as CopyWebpackPlugin from 'copy-webpack-plugin'
+import * as CopyPlugin from 'copy-webpack-plugin'
+import ShellPlugin = require('webpack-shell-plugin')
 import * as webpack from 'webpack'
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
@@ -12,6 +13,10 @@ const STATS = {
   errorDetails: true,
   moduleTrace: true,
   warnings: true
+}
+
+function tiledCmd(asset: string) {
+  return `tiled --export-map json src/${asset}.tmx build/${asset}.json`
 }
 
 const config: webpack.Configuration = {
@@ -36,10 +41,17 @@ const config: webpack.Configuration = {
 
   plugins: [
     new CleanPlugin('build', {verbose: false}),
-    new CopyWebpackPlugin([
+    new CopyPlugin([
       {from: 'src/index.html'},
       {from: 'src/assets', to: 'assets'}
-    ])
+    ]),
+
+    // This is a complete hack since it runs unconditionally and requires the
+    // build directory to exist even when watching.
+    new ShellPlugin({
+      dev: false,
+      onBuildStart: ['mkdir -p build/assets/maps', tiledCmd('assets/maps/pond')]
+    })
   ]
 }
 
