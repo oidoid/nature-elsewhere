@@ -18,7 +18,6 @@ document.body.appendChild(renderer.domElement)
 
 const camera = new Three.OrthographicCamera(0, Math.round(width()), 0, HEIGHT)
 
-
 function render(clock: Three.Clock) {
   // console.log(clock.getDelta());
   // cube.rotation.z += 0.005
@@ -34,6 +33,7 @@ render(new Three.Clock())
 window.addEventListener('resize', resize)
 
 function resize() {
+  // eslint-disable-next-line no-console
   console.log(
     `resize: ` +
       `window=${window.innerWidth}x${window.innerHeight} ` +

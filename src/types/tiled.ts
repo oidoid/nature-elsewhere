@@ -123,7 +123,10 @@ export namespace Tiled {
 
     tileoffset?: TileOffset
 
-    /** Per-tile properties, indexed by gid as string. Found to be optional by inspection. */
+    /**
+     * Per-tile properties, indexed by gid as string. Found to be optional by
+     * inspection.
+     */
     tileproperties?: {[gid: string]: string}
 
     /** Mapping from tile ID to tile. */
@@ -149,7 +152,9 @@ export namespace Tiled {
   }
 
   export interface Object {
-    /**    ellipse bool Used to mark an object as an ellipse. Found to be optional by inspection */
+    /**
+     * Used to mark an object as an ellipse. Found to be optional by inspection.
+     */
     ellipse?: boolean
 
     /** GID, only if object comes from a Tilemap. */
@@ -167,13 +172,19 @@ export namespace Tiled {
     /** String assigned to name field in editor. Nonunique, possibly empty. */
     name: string
 
-    /** Used to mark an object as a point. Found to be optional by inspection. */
+    /**
+     * Used to mark an object as a point. Found to be optional by inspection.
+     */
     point?: boolean
 
-    /** A list of x,y coordinates in pixels. Found to be optional by inspection. */
+    /**
+     * A list of x,y coordinates in pixels. Found to be optional by inspection.
+     */
     polygon?: Vertex[]
 
-    /** A list of x,y coordinates in pixels. Found to be optional by inspection. */
+    /**
+     * A list of x,y coordinates in pixels. Found to be optional by inspection.
+     */
     polyline?: Vertex[]
 
     /** Found to be optional by inspection. */

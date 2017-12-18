@@ -49,6 +49,7 @@ for (const layer of map.layers) {
       break
 
     case Tiled.LayerType.OBJECT_GROUP:
+      // eslint-disable-next-line max-len
       const objectGroup: Tiled.ObjectGroupLayer = layer as Tiled.ObjectGroupLayer
       for (const object of objectGroup.objects) {
         if (object.type === 'rectangle') {

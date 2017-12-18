@@ -5,9 +5,5 @@
     "package-lock.json": true,
     ".eslintcache": true,
     "build": true
-  },
-
-  "[json]": {"editor.formatOnSave": true},
-  "[markdown]": {"editor.formatOnSave": true},
-  "[typescript]": {"editor.formatOnSave": true}
+  }
 }
