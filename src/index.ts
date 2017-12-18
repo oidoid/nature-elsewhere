@@ -16,7 +16,7 @@ const renderer = new Three.WebGLRenderer()
 renderer.setPixelRatio(1)
 document.body.appendChild(renderer.domElement)
 
-const camera = new Three.OrthographicCamera(0, Math.round(width()), 0, HEIGHT)
+const camera = new Three.OrthographicCamera(0, 0, 0, 0)
 
 function render(clock: Three.Clock) {
   // console.log(clock.getDelta());
@@ -37,14 +37,13 @@ function resize() {
   console.log(
     `resize: ` +
       `window=${window.innerWidth}x${window.innerHeight} ` +
-      `canvas=${Math.round(width())}x${HEIGHT} ` +
-      `ratio=${window.innerWidth / window.innerHeight}`
+      `canvas=${Math.ceil(width())}x${HEIGHT} ` +
+      `ratio=${window.innerWidth / window.innerHeight}` +
+      `scale=${window.innerHeight / HEIGHT}`
   )
-  renderer.setSize(Math.round(width()), HEIGHT)
+  renderer.setSize(Math.ceil(width()), HEIGHT)
 
-  camera.right = Math.round(width())
-  camera.position.x = Math.round(-width() / 2)
-  camera.position.y = Math.round(-HEIGHT / 2)
-
+  camera.right = Math.ceil(width())
+  camera.bottom = HEIGHT
   camera.updateProjectionMatrix()
 }
