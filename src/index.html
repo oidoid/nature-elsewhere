@@ -10,11 +10,11 @@
         margin: 0;
 
         /* Set the background color shown while waiting for the canvas to be
-           attached. This should match the initial stage background color. */
-        background: #f4f4ed;
+           attached. */
+        background: #000;
 
-        /* This doesn't seem like it should be necessary but scrollbars seem to
-           randomly appear when resizing otherwise. */
+        /* When the canvas exceeds the viewport, suppress scrollbars and hide
+           it. */
         overflow: hidden;
       }
 
@@ -24,19 +24,22 @@
         display: block;
 
         /* The game is rendered to a small canvas with a fixed height and width
-           proportional to the window width / height ratio. Scale the canvas to
-           the dimensions of the window knowing that the game will always adjust
-           the width proportionally. */
-        width: 100% !important;
-        height: 100% !important;
+           proportional to the viewport width / height ratio. Scale the canvas
+           to the dimensions of the window knowing that the game will always
+           adjust the width proportionally. Use percentage values instead of vw
+           / vh. Percentage values cause overflow but retain proportional
+           scaling for noninteger widths. */
+        width: 100%;
+        height: 100%;
 
-        /* Scale using nearest-neighbor to retain a pixely appearance. */
+        /* Scale using nearest-neighbor to keep a pixelated appearance. */
         image-rendering: optimizeSpeed; /* Firefox */
         image-rendering: pixelated;
       }
     </style>
   </head>
   <body>
+    <canvas></canvas>
     <script src=index.js></script>
   </body>
 </html>

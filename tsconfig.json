@@ -1,9 +1,6 @@
 {
   "compileOnSave": true,
 
-  // .tsx files here refer to Tiled tilesets not Reactive TypeScript.
-  "exclude": ["src/assets/tilesets"],
-
   "compilerOptions": {
     "target": "es5",
     "lib": ["es2017", "dom"],
