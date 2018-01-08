@@ -42,8 +42,8 @@ const config: webpack.Configuration = {
   plugins: [
     new CleanPlugin('build', {verbose: false}),
     new CopyPlugin([
-      {from: 'src/index.html'},
-      {from: 'src/assets/textures', to: 'assets/textures'}
+      {context: 'src', from: '**/*.html'},
+      {context: 'src', from: '**/*.png'}
     ])
   ]
 }
