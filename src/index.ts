@@ -1,9 +1,4 @@
-import {
-  createBuffer,
-  getAttribLocation,
-  getUniformLocation,
-  loadShaderProgram /*loadTexture*/
-} from './gfx'
+import * as gfx from './gfx'
 import * as vertexShaderSrc from './glsl/main.vert'
 import * as fragmentShaderSrc from './glsl/main.frag'
 
@@ -23,11 +18,11 @@ function main(window: Window) {
   })
   if (!gl) throw new Error('WebGL context unobtainable.')
 
-  const program = loadShaderProgram(gl, vertexShaderSrc, fragmentShaderSrc)
+  const program = gfx.loadShaderProgram(gl, vertexShaderSrc, fragmentShaderSrc)
   gl.useProgram(program)
   // todo: delete program.
 
-  const resolutionLocation = getUniformLocation(gl, program, 'uResolution')
+  const resolutionLocation = gfx.getUniformLocation(gl, program, 'uResolution')
   resize(gl, resolutionLocation)
   window.addEventListener('resize', () => resize(gl, resolutionLocation))
   // todo: remove.
@@ -35,6 +30,7 @@ function main(window: Window) {
   const image = new Image()
   image.src = '/assets/textures/pond.png'
   image.onload = () => loop(gl, program, image)
+
   // todo: remove.
 }
 
@@ -56,14 +52,18 @@ function render(
   gl.clear(gl.COLOR_BUFFER_BIT)
 
   // Create, bind, and load the texture coordinations.
-  const textureCoordsBuffer = createBuffer(gl)
+  const textureCoordsBuffer = gfx.createBuffer(gl)
   gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordsBuffer)
   gl.bufferData(
     gl.ARRAY_BUFFER,
     new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
     gl.STATIC_DRAW
   )
-  const textureCoordsLocation = getAttribLocation(gl, program, 'aTextureCoords')
+  const textureCoordsLocation = gfx.getAttribLocation(
+    gl,
+    program,
+    'aTextureCoords'
+  )
   gl.enableVertexAttribArray(textureCoordsLocation)
   gl.vertexAttribPointer(textureCoordsLocation, 2, gl.FLOAT, false, 0, 0)
 
@@ -79,9 +79,9 @@ function render(
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 
   // Create, bind, and load the vertices.
-  const vertexBuffer = createBuffer(gl)
+  const vertexBuffer = gfx.createBuffer(gl)
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-  const vertexLocation = getAttribLocation(gl, program, 'aVertex')
+  const vertexLocation = gfx.getAttribLocation(gl, program, 'aVertex')
   gl.enableVertexAttribArray(vertexLocation)
   gl.vertexAttribPointer(vertexLocation, 2, gl.UNSIGNED_SHORT, false, 0, 0)
   bufferRectangle(gl, 32, 64, image.width, image.height)
