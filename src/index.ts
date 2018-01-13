@@ -1,3 +1,4 @@
+import * as assetsLoader from './assets/asset-loader'
 import * as gfx from './gfx'
 import * as vertexShaderSrc from './glsl/main.vert'
 import * as fragmentShaderSrc from './glsl/main.frag'
@@ -18,6 +19,11 @@ function main(window: Window) {
   })
   if (!gl) throw new Error('WebGL context unobtainable.')
 
+  // Allow translucent textures to be layered.
+  gl.enable(gl.BLEND)
+  gl.blendEquation(gl.FUNC_ADD)
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+
   const program = gfx.loadShaderProgram(gl, vertexShaderSrc, fragmentShaderSrc)
   gl.useProgram(program)
   // todo: delete program.
@@ -25,28 +31,31 @@ function main(window: Window) {
   const resolutionLocation = gfx.getUniformLocation(gl, program, 'uResolution')
   resize(gl, resolutionLocation)
   window.addEventListener('resize', () => resize(gl, resolutionLocation))
-  // todo: remove.
+  // todo: remove event listener.
 
-  const image = new Image()
-  image.src = '/assets/textures/pond.png'
-  image.onload = () => loop(gl, program, image)
-
-  // todo: remove.
+  assetsLoader
+    .load([
+      assetsLoader.ImageURL.WATER,
+      assetsLoader.ImageURL.REFLECTIONS,
+      assetsLoader.ImageURL.POND
+    ])
+    .then(assets => loop(gl, program, assets))
+  // todo: exit.
 }
 
 function loop(
   gl: WebGLRenderingContext,
   program: WebGLProgram,
-  image: HTMLImageElement
+  assets: assetsLoader.Assets
 ): void {
-  render(gl, program, image)
-  window.requestAnimationFrame(() => loop(gl, program, image))
+  render(gl, program, assets)
+  window.requestAnimationFrame(() => loop(gl, program, assets))
 }
 
 function render(
   gl: WebGLRenderingContext,
   program: WebGLProgram,
-  image: HTMLImageElement
+  assets: assetsLoader.Assets
 ): void {
   gl.clearColor(0.956862745, 0.956862745, 0.929411765, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -76,22 +85,29 @@ function render(
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 
   // Load the image into the texture.
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
+  for (const asset of [
+    assetsLoader.ImageURL.WATER,
+    assetsLoader.ImageURL.REFLECTIONS,
+    assetsLoader.ImageURL.POND
+  ]) {
+    const image = assets[asset].image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 
-  // Create, bind, and load the vertices.
-  const vertexBuffer = gfx.createBuffer(gl)
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-  const vertexLocation = gfx.getAttribLocation(gl, program, 'aVertex')
-  gl.enableVertexAttribArray(vertexLocation)
-  gl.vertexAttribPointer(vertexLocation, 2, gl.UNSIGNED_SHORT, false, 0, 0)
-  bufferRectangle(gl, 32, 64, image.width, image.height)
+    // Create, bind, and load the vertices.
+    const vertexBuffer = gfx.createBuffer(gl)
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+    const vertexLocation = gfx.getAttribLocation(gl, program, 'aVertex')
+    gl.enableVertexAttribArray(vertexLocation)
+    gl.vertexAttribPointer(vertexLocation, 2, gl.UNSIGNED_SHORT, false, 0, 0)
+    bufferRectangle(gl, 32, 64, image.width, image.height)
 
-  // Draw.
-  gl.drawArrays(gl.TRIANGLES, 0, 6)
+    // Draw.
+    gl.drawArrays(gl.TRIANGLES, 0, 6)
 
-  // Clean.
-  gl.disableVertexAttribArray(vertexLocation)
-  gl.deleteBuffer(vertexBuffer)
+    // Clean.
+    gl.disableVertexAttribArray(vertexLocation)
+    gl.deleteBuffer(vertexBuffer)
+  }
 
   gl.disableVertexAttribArray(textureCoordsLocation)
   gl.deleteBuffer(textureCoordsBuffer)
