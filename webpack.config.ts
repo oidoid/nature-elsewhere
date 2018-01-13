@@ -7,7 +7,6 @@ const PRODUCTION = process.env.NODE_ENV === 'production'
 
 const STATS = {
   all: false,
-  colors: true,
   errors: true,
   errorDetails: true,
   moduleTrace: true,
