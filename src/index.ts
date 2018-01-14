@@ -5,6 +5,12 @@ import * as fragmentShaderSrc from './glsl/main.frag'
 
 const HEIGHT = 128
 
+enum ImageURL {
+  POND = '/assets/textures/pond.png',
+  REFLECTIONS = '/assets/textures/reflections.png',
+  WATER = '/assets/textures/water.png'
+}
+
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
@@ -34,11 +40,7 @@ function main(window: Window) {
   // todo: remove event listener.
 
   assetsLoader
-    .load([
-      assetsLoader.ImageURL.WATER,
-      assetsLoader.ImageURL.REFLECTIONS,
-      assetsLoader.ImageURL.POND
-    ])
+    .load(Object.values(ImageURL))
     .then(assets => loop(gl, program, assets))
   // todo: exit.
 }
@@ -85,12 +87,8 @@ function render(
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 
   // Load the image into the texture.
-  for (const asset of [
-    assetsLoader.ImageURL.WATER,
-    assetsLoader.ImageURL.REFLECTIONS,
-    assetsLoader.ImageURL.POND
-  ]) {
-    const image = assets[asset].image
+  for (const url of [ImageURL.WATER, ImageURL.REFLECTIONS, ImageURL.POND]) {
+    const image = assets[url].image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 
     // Create, bind, and load the vertices.
