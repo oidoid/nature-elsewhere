@@ -1,11 +1,14 @@
 import * as assetsLoader from './assets/asset-loader'
+import {Assets} from './assets/asset-loader'
+import {toObject, index} from './enum-util'
 import * as gfx from './gfx'
 import * as vertexShaderSrc from './glsl/main.vert'
 import * as fragmentShaderSrc from './glsl/main.frag'
 
 const HEIGHT = 128
 
-enum ImageURL {
+export type AssetTexture = Assets<typeof Texture>
+export enum Texture {
   POND = '/assets/textures/pond.png',
   REFLECTIONS = '/assets/textures/reflections.png',
   WATER = '/assets/textures/water.png'
@@ -39,16 +42,14 @@ function main(window: Window) {
   window.addEventListener('resize', () => resize(gl, resolutionLocation))
   // todo: remove event listener.
 
-  assetsLoader
-    .load(Object.values(ImageURL))
-    .then(assets => loop(gl, program, assets))
+  assetsLoader.load(toObject(Texture)).then(assets => loop(gl, program, assets))
   // todo: exit.
 }
 
 function loop(
   gl: WebGLRenderingContext,
   program: WebGLProgram,
-  assets: assetsLoader.Assets
+  assets: AssetTexture
 ): void {
   render(gl, program, assets)
   window.requestAnimationFrame(() => loop(gl, program, assets))
@@ -57,7 +58,7 @@ function loop(
 function render(
   gl: WebGLRenderingContext,
   program: WebGLProgram,
-  assets: assetsLoader.Assets
+  assets: AssetTexture
 ): void {
   gl.clearColor(0.956862745, 0.956862745, 0.929411765, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -87,8 +88,8 @@ function render(
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 
   // Load the image into the texture.
-  for (const url of [ImageURL.WATER, ImageURL.REFLECTIONS, ImageURL.POND]) {
-    const image = assets[url].image
+  for (const url of [Texture.WATER, Texture.REFLECTIONS, Texture.POND]) {
+    const image = index(assets, url).image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 
     // Create, bind, and load the vertices.
