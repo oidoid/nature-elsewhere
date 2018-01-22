@@ -126,7 +126,7 @@ function bufferRectangle(
 
 function resize(
   gl: WebGLRenderingContext,
-  resolution: WebGLUniformLocation
+  resolutionLocation: WebGLUniformLocation
 ): void {
   // The canvas is stretched to the width of the document proportionally.
   // Truncate the width to the lowest integer to so that the canvas height is
@@ -147,7 +147,7 @@ function resize(
   gl.canvas.width = width
   gl.canvas.height = HEIGHT
 
-  gl.uniform2f(resolution, width, HEIGHT)
+  gl.uniform2f(resolutionLocation, width, HEIGHT)
   gl.viewport(0, 0, width, HEIGHT)
 }
 
