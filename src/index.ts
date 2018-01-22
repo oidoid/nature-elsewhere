@@ -1,5 +1,6 @@
 import * as Level0 from './levels/level0'
 import * as assetsLoader from './assets/asset-loader'
+import * as shaderLoader from './glsl/shader-loader'
 import {toObject, index} from './enum-util'
 import * as gfx from './gfx'
 import * as vertexShaderSrc from './glsl/main.vert'
@@ -26,7 +27,7 @@ function main(window: Window) {
   gl.blendEquation(gl.FUNC_ADD)
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
-  const program = gfx.loadShaderProgram(gl, vertexShaderSrc, fragmentShaderSrc)
+  const program = shaderLoader.load(gl, vertexShaderSrc, fragmentShaderSrc)
   gl.useProgram(program)
   // todo: delete program.
 
