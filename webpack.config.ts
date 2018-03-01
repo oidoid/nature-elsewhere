@@ -1,4 +1,3 @@
-import * as path from 'path'
 import * as CleanPlugin from 'clean-webpack-plugin'
 import * as CopyPlugin from 'copy-webpack-plugin'
 import * as webpack from 'webpack'
@@ -14,10 +13,9 @@ const STATS = {
 }
 
 const config: webpack.Configuration = {
-  entry: './src',
   resolve: {extensions: ['.ts', '.js']},
 
-  output: {path: path.resolve('build'), filename: 'index.js'},
+  output: {filename: 'index.js'},
 
   module: {
     rules: [
@@ -38,7 +36,7 @@ const config: webpack.Configuration = {
       },
 
   plugins: [
-    new CleanPlugin('build', {verbose: false}),
+    new CleanPlugin('dist', {verbose: false}),
     new CopyPlugin([
       {context: 'src', from: '**/*.html'},
       {context: 'src', from: '**/*.png'}

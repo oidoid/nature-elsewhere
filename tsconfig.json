@@ -5,7 +5,6 @@
     "target": "es5",
     "lib": ["es2017", "dom"],
     "module": "commonjs",
-    "outDir": "build",
 
     "sourceMap": true,
 
