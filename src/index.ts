@@ -77,10 +77,13 @@ function resize(
 
   // eslint-disable-next-line no-console
   console.log(
-    `resize: window=${window.innerWidth}x${window.innerHeight} ` +
-      `canvas=${width}x${HEIGHT} ` +
-      `ratio=${ratio} ` +
+    [
+      'resize:',
+      `window=${window.innerWidth}x${window.innerHeight}`,
+      `canvas=${width}x${HEIGHT}`,
+      `ratio=${ratio}`,
       `scale=${window.innerHeight / HEIGHT}`
+    ].join(' ')
   )
 
   gl.canvas.width = width
