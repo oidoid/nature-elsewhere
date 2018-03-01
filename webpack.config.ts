@@ -33,7 +33,6 @@ const config: webpack.Configuration = {
     : {
         clientLogLevel: 'warning',
         progress: false,
-        noInfo: true,
         overlay: {warnings: true, errors: true},
         stats: STATS
       },
