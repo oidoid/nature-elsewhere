@@ -28,11 +28,13 @@
     "no-var": 1,
     "prefer-const": 1,
 
+    "no-unused-vars": [
+      0, // ESLint doesn't permit type-only imports.
+      {"varsIgnorePattern": "_.*", "argsIgnorePattern": "_.*"}
+    ],
+
     // Disable rules with known issues.
     // https://github.com/eslint/typescript-eslint-parser#known-issues
-    "no-undef": 0,
-    "no-unused-vars": 0,
-    "no-useless-constructor": 0,
-    "space-infix-ops": 0
+    "no-undef": 0
   }
 }
