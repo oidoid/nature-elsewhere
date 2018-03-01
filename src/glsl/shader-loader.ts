@@ -2,14 +2,11 @@ export function load(
   gl: WebGLRenderingContext,
   vertexShaderSrc: string,
   fragmentShaderSrc: string
-): WebGLProgram {
+): WebGLProgram | null {
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexShaderSrc)
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSrc)
 
   const program = gl.createProgram()
-  if (!program) {
-    throw new Error(`Shader program creation failed; error=${gl.getError()}`)
-  }
 
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragmentShader)
@@ -19,24 +16,33 @@ export function load(
 
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     const log = gl.getProgramInfoLog(program)
-    gl.deleteProgram(program)
-    throw new Error(
-      `Shader program linking failed; error=${gl.getError()}:\n${log}`
-    )
+    unload(gl, program, vertexShader, fragmentShader)
+    const msg = `Shader program linking failed; error=${gl.getError()}:\n${log}`
+    throw new Error(msg)
   }
 
   return program
+}
+
+export function unload(
+  gl: WebGLRenderingContext,
+  program: WebGLProgram | null,
+  vertexShader: WebGLShader | null,
+  fragmentShader: WebGLShader | null
+): void {
+  gl.detachShader(program, fragmentShader)
+  gl.detachShader(program, vertexShader)
+  gl.deleteShader(fragmentShader)
+  gl.deleteShader(vertexShader)
+  gl.deleteProgram(program)
 }
 
 function loadShader(
   gl: WebGLRenderingContext,
   type: number,
   src: string
-): WebGLShader {
+): WebGLShader | null {
   const shader = gl.createShader(type)
-  if (!shader) {
-    throw new Error(`Shader creation failed; error=${gl.getError()}.`)
-  }
 
   gl.shaderSource(shader, src)
   gl.compileShader(shader)
@@ -44,9 +50,8 @@ function loadShader(
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     const log = gl.getShaderInfoLog(shader)
     gl.deleteShader(shader)
-    throw new Error(
-      `Shader compilation failed; error=${gl.getError()}:\n${log}`
-    )
+    const msg = `Shader compilation failed; error=${gl.getError()}:\n${log}`
+    throw new Error(msg)
   }
 
   return shader
