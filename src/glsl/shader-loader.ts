@@ -7,20 +7,9 @@ export function load(
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSrc)
 
   const program = gl.createProgram()
-
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragmentShader)
-
   gl.linkProgram(program)
-  gl.validateProgram(program)
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    const log = gl.getProgramInfoLog(program)
-    unload(gl, program, vertexShader, fragmentShader)
-    const msg = `Shader program linking failed; error=${gl.getError()}:\n${log}`
-    throw new Error(msg)
-  }
-
   return program
 }
 
@@ -43,16 +32,7 @@ function loadShader(
   src: string
 ): WebGLShader | null {
   const shader = gl.createShader(type)
-
   gl.shaderSource(shader, src)
   gl.compileShader(shader)
-
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    const log = gl.getShaderInfoLog(shader)
-    gl.deleteShader(shader)
-    const msg = `Shader compilation failed; error=${gl.getError()}:\n${log}`
-    throw new Error(msg)
-  }
-
   return shader
 }

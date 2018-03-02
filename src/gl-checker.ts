@@ -3,6 +3,14 @@ export function wrap(gl: WebGLRenderingContext | null): WebGLRenderingContext {
 
   const proto: WebGLRenderingContext = Object.getPrototypeOf(gl)
   return Object.assign(gl, {
+    compileShader(shader: WebGLShader | null) {
+      proto.compileShader.apply(gl, arguments)
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        const log = gl.getShaderInfoLog(shader)
+        const msg = `Shader compilation failed; error=${gl.getError()}:\n${log}`
+        throw new Error(msg)
+      }
+    },
     createBuffer() {
       const buffer = proto.createBuffer.apply(gl, arguments)
       if (!buffer) {
@@ -51,6 +59,17 @@ export function wrap(gl: WebGLRenderingContext | null): WebGLRenderingContext {
         throw new Error(msg)
       }
       return location
+    },
+    linkProgram(program: WebGLProgram | null) {
+      proto.linkProgram.apply(gl, arguments)
+      gl.validateProgram(program)
+
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        const error = gl.getError()
+        const log = gl.getProgramInfoLog(program)
+        const msg = `Shader program linking failed; error=${error}:\n${log}`
+        throw new Error(msg)
+      }
     }
   })
 }
