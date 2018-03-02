@@ -1,10 +1,7 @@
 import * as Level0 from './levels/level0'
 import {index} from './enum-util'
 
-export type GLTextureWrap =
-  | 'GL_REPEAT'
-  | 'GL_MIRRORED_REPEAT'
-  | 'GL_CLAMP_TO_EDGE'
+export type GLTextureWrap = 'REPEAT' | 'MIRRORED_REPEAT' | 'CLAMP_TO_EDGE'
 
 export interface Texture {
   texture: WebGLTexture
@@ -14,15 +11,13 @@ export interface Texture {
 /** Creates, binds, and configures a texture. */
 export function createTexture(
   gl: WebGLRenderingContext,
-  _wrap: GLTextureWrap = 'GL_MIRRORED_REPEAT' // 'GL_REPEAT'
+  wrap: GLTextureWrap = 'MIRRORED_REPEAT'
 ): WebGLTexture | null {
   const texture = gl.createTexture()
   const target = gl.TEXTURE_2D
   gl.bindTexture(target, texture)
-  // (gl as any)[wrap as any])
-  gl.texParameteri(target, gl.TEXTURE_WRAP_S, gl.MIRRORED_REPEAT)
-  // (gl as any)[wrap as any])
-  gl.texParameteri(target, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT)
+  gl.texParameteri(target, gl.TEXTURE_WRAP_S, gl[wrap])
+  gl.texParameteri(target, gl.TEXTURE_WRAP_T, gl[wrap])
   gl.texParameteri(target, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
   gl.texParameteri(target, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
   return texture
