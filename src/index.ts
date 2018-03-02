@@ -3,7 +3,7 @@ import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './glsl/shader-loader'
 import {toObject} from './enum-util'
 import * as gfx from './gfx'
-import * as safeGL from './safe-gl'
+import * as glChecker from './gl-checker'
 import * as vertexShaderSrc from './glsl/main.vert'
 import * as fragmentShaderSrc from './glsl/main.frag'
 
@@ -13,7 +13,7 @@ function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
 
-  const gl = safeGL.wrap(
+  const gl = glChecker.wrap(
     canvas.getContext('webgl', {
       alpha: false,
       antialias: false,
