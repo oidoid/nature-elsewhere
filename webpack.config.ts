@@ -2,15 +2,7 @@ import * as CleanPlugin from 'clean-webpack-plugin'
 import * as CopyPlugin from 'copy-webpack-plugin'
 import * as webpack from 'webpack'
 
-const PRODUCTION = process.env.NODE_ENV === 'production'
-
-const STATS = {
-  all: false,
-  errors: true,
-  errorDetails: true,
-  moduleTrace: true,
-  warnings: true
-}
+const stats = {all: false, errors: true, warnings: true}
 
 const config: webpack.Configuration = {
   resolve: {extensions: ['.ts', '.js']},
@@ -24,16 +16,17 @@ const config: webpack.Configuration = {
     ]
   },
 
-  stats: STATS,
+  stats,
 
-  devServer: PRODUCTION
-    ? undefined
-    : {
-        clientLogLevel: 'warning',
-        progress: false,
-        overlay: {warnings: true, errors: true},
-        stats: STATS
-      },
+  devServer:
+    process.env.NODE_ENV === 'production'
+      ? undefined
+      : {
+          clientLogLevel: 'warning',
+          progress: false,
+          overlay: {warnings: true, errors: true},
+          stats
+        },
 
   plugins: [
     new CleanPlugin('dist', {verbose: false}),
