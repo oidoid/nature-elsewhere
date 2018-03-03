@@ -1,5 +1,5 @@
-import * as Level0 from './levels/level0'
-import {index} from './enum-util'
+import * as Level0 from '../levels/level0'
+import {index} from '../enum-util'
 
 export type GLTextureWrap = 'REPEAT' | 'MIRRORED_REPEAT' | 'CLAMP_TO_EDGE'
 

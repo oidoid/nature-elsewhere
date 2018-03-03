@@ -1,11 +1,11 @@
 import * as Level0 from './levels/level0'
 import * as assetsLoader from './assets/asset-loader'
-import * as shaderLoader from './glsl/shader-loader'
-import {toObject} from './enum-util'
-import * as gfx from './gfx'
-import * as glChecker from './gl-checker'
-import * as vertexShaderSrc from './glsl/main.vert'
-import * as fragmentShaderSrc from './glsl/main.frag'
+import * as shaderLoader from './gfx/glsl/shader-loader'
+import * as enumUtil from './enum-util'
+import * as gfx from './gfx/gfx'
+import * as glChecker from './gfx/gl-checker'
+import * as vertexShaderSrc from './gfx/glsl/main.vert'
+import * as fragmentShaderSrc from './gfx/glsl/main.frag'
 
 const HEIGHT = 128
 
@@ -39,7 +39,7 @@ function main(window: Window) {
   // todo: remove event listener.
 
   assetsLoader
-    .load(toObject(Level0.Texture))
+    .load(enumUtil.toObject(Level0.Texture))
     .then(assets => loop(gl, program, assets))
   // todo: exit.
 }
