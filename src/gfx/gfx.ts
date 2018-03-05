@@ -1,6 +1,5 @@
 import {GL, GLProgram, GLTexture} from './gl'
-import * as Level0 from '../levels/level0'
-import {index} from '../enum-util'
+import {TextureAsset} from '../assets/asset-loader'
 
 export type GLTextureWrap = 'REPEAT' | 'MIRRORED_REPEAT' | 'CLAMP_TO_EDGE'
 
@@ -34,12 +33,19 @@ export function createTexture(
   return texture
 }
 
+export interface Drawable<ID, URL> {
+  location: Point
+  bounds: Rectangle
+  texture: TextureAsset<ID, URL>
+}
+
 export function drawTextures(
   gl: GL,
   program: GLProgram | null,
-  // todo: this should be generic but isn't at the moment for good reason
-  assets: Level0.AssetTexture
+  drawables: Drawable<any, any>[]
 ) {
+  const DIMENSIONS = 2
+
   // Create, bind, and load the texture coordinations.
   const textureCoords = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1])
   const textureCoordsBuffer = gl.createBuffer()
@@ -47,7 +53,14 @@ export function drawTextures(
   gl.bufferData(gl.ARRAY_BUFFER, textureCoords, gl.STATIC_DRAW)
   const textureCoordsLocation = gl.getAttribLocation(program, 'aTextureCoords')
   gl.enableVertexAttribArray(textureCoordsLocation)
-  gl.vertexAttribPointer(textureCoordsLocation, 2, gl.FLOAT, false, 0, 0)
+  gl.vertexAttribPointer(
+    textureCoordsLocation,
+    DIMENSIONS,
+    gl.FLOAT,
+    false,
+    0,
+    0
+  )
 
   // Create, bind, and configure the texture.
   const texture = createTexture(gl)
@@ -56,22 +69,20 @@ export function drawTextures(
   gl.enableVertexAttribArray(vertexLocation)
   const vertexBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-  gl.vertexAttribPointer(vertexLocation, 2, gl.UNSIGNED_SHORT, false, 0, 0)
+  gl.vertexAttribPointer(
+    vertexLocation,
+    DIMENSIONS,
+    gl.UNSIGNED_SHORT,
+    false,
+    0,
+    0
+  )
 
   // Load the images into the texture.
-  for (const url of [
-    Level0.Texture.WATER,
-    Level0.Texture.REFLECTIONS,
-    Level0.Texture.POND
-  ]) {
-    const image = index(assets, url).image
+  for (const drawable of drawables) {
+    const image = drawable.texture.image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
-    bufferRectangle(
-      gl,
-      {x: 32, y: 64},
-      {width: image.width, height: image.height}
-    )
-    const DIMENSIONS = 2
+    bufferRectangle(gl, drawable.location, drawable.bounds)
     gl.drawArrays(gl.TRIANGLES, 0, textureCoords.length / DIMENSIONS)
   }
 
