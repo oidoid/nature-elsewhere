@@ -14,5 +14,5 @@ void main() {
 
   gl_Position = vec4(clipspace, 0, 1);
 
-  vTextureCoords = aTextureCoords;
+  vTextureCoords = aTextureCoords * vec2(1, 1);
 }

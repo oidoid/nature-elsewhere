@@ -1,18 +1,29 @@
+import {GL, GLProgram, GLTexture} from './gl'
 import * as Level0 from '../levels/level0'
 import {index} from '../enum-util'
 
 export type GLTextureWrap = 'REPEAT' | 'MIRRORED_REPEAT' | 'CLAMP_TO_EDGE'
 
 export interface Texture {
-  texture: WebGLTexture
+  texture: GLTexture
   wrap: GLTextureWrap
+}
+
+interface Point {
+  x: number
+  y: number
+}
+
+interface Rectangle {
+  width: number
+  height: number
 }
 
 /** Creates, binds, and configures a texture. */
 export function createTexture(
-  gl: WebGLRenderingContext,
+  gl: GL,
   wrap: GLTextureWrap = 'MIRRORED_REPEAT'
-): WebGLTexture | null {
+): GLTexture | null {
   const texture = gl.createTexture()
   const target = gl.TEXTURE_2D
   gl.bindTexture(target, texture)
@@ -24,8 +35,8 @@ export function createTexture(
 }
 
 export function drawTextures(
-  gl: WebGLRenderingContext,
-  program: WebGLProgram | null,
+  gl: GL,
+  program: GLProgram | null,
   // todo: this should be generic but isn't at the moment for good reason
   assets: Level0.AssetTexture
 ) {
@@ -55,9 +66,13 @@ export function drawTextures(
   ]) {
     const image = index(assets, url).image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
-    bufferRectangle(gl, 32, 64, image.width, image.height)
-    const COMPONENTS = 2
-    gl.drawArrays(gl.TRIANGLES, 0, textureCoords.length / COMPONENTS)
+    bufferRectangle(
+      gl,
+      {x: 32, y: 64},
+      {width: image.width, height: image.height}
+    )
+    const DIMENSIONS = 2
+    gl.drawArrays(gl.TRIANGLES, 0, textureCoords.length / DIMENSIONS)
   }
 
   // Clean.
@@ -70,11 +85,9 @@ export function drawTextures(
 }
 
 function bufferRectangle(
-  gl: WebGLRenderingContext,
-  x: number,
-  y: number,
-  width: number,
-  height: number
+  gl: GL,
+  {x, y}: Point,
+  {width, height}: Rectangle
 ): void {
   const x1 = x + width
   const y1 = y + height

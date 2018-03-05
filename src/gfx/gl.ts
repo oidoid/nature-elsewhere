@@ -1,9 +1,15 @@
-export function wrap(gl: WebGLRenderingContext | null): WebGLRenderingContext {
+export type GL = WebGLRenderingContext
+export type GLProgram = WebGLProgram
+export type GLShader = WebGLShader
+export type GLTexture = WebGLTexture
+export type GLUniformLocation = WebGLUniformLocation
+
+export function check(gl: GL | null): GL {
   if (!gl) throw new Error('WebGL context unobtainable.')
 
-  const proto: WebGLRenderingContext = Object.getPrototypeOf(gl)
+  const proto: GL = Object.getPrototypeOf(gl)
   return Object.assign(gl, {
-    compileShader(shader: WebGLShader | null) {
+    compileShader(shader: GLShader | null) {
       proto.compileShader.apply(gl, arguments)
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         const log = gl.getShaderInfoLog(shader)
@@ -40,7 +46,7 @@ export function wrap(gl: WebGLRenderingContext | null): WebGLRenderingContext {
       }
       return texture
     },
-    getAttribLocation(_program: WebGLProgram, name: string) {
+    getAttribLocation(_program: GLProgram, name: string) {
       const location = proto.getAttribLocation.apply(gl, arguments)
       if (location < 0) {
         const msg =
@@ -50,7 +56,7 @@ export function wrap(gl: WebGLRenderingContext | null): WebGLRenderingContext {
       }
       return location
     },
-    getUniformLocation(_program: WebGLProgram, name: string) {
+    getUniformLocation(_program: GLProgram, name: string) {
       const location = proto.getUniformLocation.apply(gl, arguments)
       if (location === null || location < 0) {
         const msg =
@@ -60,7 +66,7 @@ export function wrap(gl: WebGLRenderingContext | null): WebGLRenderingContext {
       }
       return location
     },
-    linkProgram(program: WebGLProgram | null) {
+    linkProgram(program: GLProgram | null) {
       proto.linkProgram.apply(gl, arguments)
       gl.validateProgram(program)
 

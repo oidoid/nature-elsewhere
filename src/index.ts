@@ -3,7 +3,7 @@ import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './gfx/glsl/shader-loader'
 import * as enumUtil from './enum-util'
 import * as gfx from './gfx/gfx'
-import * as glChecker from './gfx/gl-checker'
+import {check, GLProgram, GL, GLUniformLocation} from './gfx/gl'
 import * as vertexShaderSrc from './gfx/glsl/main.vert'
 import * as fragmentShaderSrc from './gfx/glsl/main.frag'
 
@@ -13,7 +13,7 @@ function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
 
-  const gl = glChecker.wrap(
+  const gl = check(
     canvas.getContext('webgl', {
       alpha: false,
       antialias: false,
@@ -43,19 +43,23 @@ function main(window: Window) {
     .then(assets => loop(gl, program, assets))
   // todo: exit.
 }
-
+// let timestamp = Date.now()
 function loop(
-  gl: WebGLRenderingContext,
-  program: WebGLProgram | null,
+  gl: GL,
+  program: GLProgram | null,
   assets: Level0.AssetTexture
 ): void {
+  // const now = Date.now()
+  // const step = 60 * (now - timestamp) / 1000
+  // timestamp = now
+
   render(gl, program, assets)
   window.requestAnimationFrame(() => loop(gl, program, assets))
 }
 
 function render(
-  gl: WebGLRenderingContext,
-  program: WebGLProgram | null,
+  gl: GL,
+  program: GLProgram | null,
   assets: Level0.AssetTexture
 ): void {
   gl.clearColor(0.956862745, 0.956862745, 0.929411765, 1)
@@ -63,10 +67,7 @@ function render(
   gfx.drawTextures(gl, program, assets)
 }
 
-function resize(
-  gl: WebGLRenderingContext,
-  resolutionLocation: WebGLUniformLocation | null
-): void {
+function resize(gl: GL, resolutionLocation: GLUniformLocation | null): void {
   // The canvas is stretched to the width of the document proportionally.
   // Truncate the width to the lowest integer to so that the canvas height is
   // scaled to be equal to or slightly greater than the document height. If
