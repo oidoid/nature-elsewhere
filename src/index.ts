@@ -6,6 +6,7 @@ import * as gfx from './gfx/gfx'
 import {check, GLProgram, GL, GLUniformLocation} from './gfx/gl'
 import * as vertexShaderSrc from './gfx/glsl/main.vert'
 import * as fragmentShaderSrc from './gfx/glsl/main.frag'
+import * as kbd from './input/kbd'
 
 const HEIGHT = 128
 
@@ -37,6 +38,12 @@ function main(window: Window) {
   resize(gl, resolutionLocation)
   window.addEventListener('resize', () => resize(gl, resolutionLocation))
   // todo: remove event listener.
+
+  document.addEventListener('keydown', event => {
+    const btn = kbd.defaultControllerMap[event.key.toLowerCase()]
+    // eslint-disable-next-line no-console
+    console.log(`${event.key} => ${btn}`)
+  })
 
   assetsLoader
     .load(enumUtil.toObject(Level0.Texture))
