@@ -1,4 +1,4 @@
-import * as Level0 from './levels/level0'
+import {Level0} from './levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './gfx/glsl/shader-loader'
 import * as enumUtil from './enum-util'
