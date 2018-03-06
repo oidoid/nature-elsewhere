@@ -1,5 +1,5 @@
 import {GL, GLProgram, GLTexture} from './gl'
-import {TextureAsset} from '../assets/asset-loader'
+import {Assets} from '../assets/asset-loader'
 
 export type GLTextureWrap = 'REPEAT' | 'MIRRORED_REPEAT' | 'CLAMP_TO_EDGE'
 
@@ -33,16 +33,17 @@ export function createTexture(
   return texture
 }
 
-export interface Drawable<ID, URL> {
+export interface Drawable {
   location: Point
   bounds: Rectangle
-  texture: TextureAsset<ID, URL>
+  url: string
 }
 
 export function drawTextures(
   gl: GL,
   program: GLProgram | null,
-  drawables: Drawable<any, any>[]
+  assets: Assets<any>,
+  drawables: Drawable[]
 ) {
   const DIMENSIONS = 2
 
@@ -80,7 +81,7 @@ export function drawTextures(
 
   // Load the images into the texture.
   for (const drawable of drawables) {
-    const image = drawable.texture.image
+    const image = assets[drawable.url].image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
     bufferRectangle(gl, drawable.location, drawable.bounds)
     gl.drawArrays(gl.TRIANGLES, 0, textureCoords.length / DIMENSIONS)

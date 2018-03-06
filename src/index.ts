@@ -40,58 +40,32 @@ function main(window: Window) {
 
   assetsLoader
     .load(enumUtil.toObject(Level0.Texture))
-    .then(assets => [
-      {
-        location: {x: 32, y: 64},
-        bounds: {
-          width: enumUtil.index(assets, Level0.Texture.WATER).image.width,
-          height: enumUtil.index(assets, Level0.Texture.WATER).image.height
-        },
-        texture: enumUtil.index(assets, Level0.Texture.WATER)
-      },
-      {
-        location: {x: 32, y: 64},
-        bounds: {
-          width: enumUtil.index(assets, Level0.Texture.REFLECTIONS).image.width,
-          height: enumUtil.index(assets, Level0.Texture.REFLECTIONS).image
-            .height
-        },
-        texture: enumUtil.index(assets, Level0.Texture.REFLECTIONS)
-      },
-      {
-        location: {x: 32, y: 64},
-        bounds: {
-          width: enumUtil.index(assets, Level0.Texture.POND).image.width,
-          height: enumUtil.index(assets, Level0.Texture.POND).image.height
-        },
-        texture: enumUtil.index(assets, Level0.Texture.POND)
-      }
-    ])
-    .then(drawables => loop(gl, program, drawables))
+    .then(assets => loop(gl, program, assets))
   // todo: exit.
 }
 // let timestamp = Date.now()
 function loop(
   gl: GL,
   program: GLProgram | null,
-  drawables: gfx.Drawable<any, any>[]
+  assets: assetsLoader.Assets<any>
 ): void {
   // const now = Date.now()
   // const step = 60 * (now - timestamp) / 1000
   // timestamp = now
 
-  render(gl, program, drawables)
-  window.requestAnimationFrame(() => loop(gl, program, drawables))
+  render(gl, program, assets)
+  window.requestAnimationFrame(() => loop(gl, program, assets))
 }
 
 function render(
   gl: GL,
   program: GLProgram | null,
-  drawables: gfx.Drawable<any, any>[]
+  assets: assetsLoader.Assets<any>
 ): void {
-  gl.clearColor(0.956862745, 0.956862745, 0.929411765, 1)
+  const {r, g, b, a} = Level0.Map.backgroundColor
+  gl.clearColor(r, g, b, a)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gfx.drawTextures(gl, program, drawables)
+  gfx.drawTextures(gl, program, assets, Level0.Map.drawables)
 }
 
 function resize(gl: GL, resolutionLocation: GLUniformLocation | null): void {
