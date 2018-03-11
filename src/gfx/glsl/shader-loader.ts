@@ -10,19 +10,20 @@ export function load(
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragmentShader)
   gl.linkProgram(program)
+
+  // Mark shaders for deletion when not in use.
+  gl.detachShader(program, fragmentShader)
+  gl.detachShader(program, vertexShader)
+  gl.deleteShader(fragmentShader)
+  gl.deleteShader(vertexShader)
+
   return program
 }
 
 export function unload(
   gl: WebGLRenderingContext,
-  program: WebGLProgram | null,
-  vertexShader: WebGLShader | null,
-  fragmentShader: WebGLShader | null
+  program: WebGLProgram | null
 ): void {
-  gl.detachShader(program, fragmentShader)
-  gl.detachShader(program, vertexShader)
-  gl.deleteShader(fragmentShader)
-  gl.deleteShader(vertexShader)
   gl.deleteProgram(program)
 }
 
