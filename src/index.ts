@@ -32,12 +32,8 @@ function main(window: Window) {
 
   const program = shaderLoader.load(gl, vertexShaderSrc, fragmentShaderSrc)
   gl.useProgram(program)
-  // todo: delete program.
-
   const resolutionLocation = gl.getUniformLocation(program, 'uResolution')
-  resize(gl, resolutionLocation)
-  window.addEventListener('resize', () => resize(gl, resolutionLocation))
-  // todo: remove event listener.
+  // todo: delete program.
 
   document.addEventListener('keydown', event => {
     const btn = kbd.defaultControllerMap[event.key.toLowerCase()]
@@ -47,59 +43,53 @@ function main(window: Window) {
 
   assetsLoader
     .load(enumUtil.toObject(Level0.Texture))
-    .then(assets => loop(gl, program, assets))
+    .then(assets => loop(gl, program, resolutionLocation, assets, Date.now()))
   // todo: exit.
 }
-// let timestamp = Date.now()
-function loop(
-  gl: GL,
-  program: GLProgram | null,
-  assets: assetsLoader.Assets<any>
-): void {
-  // const now = Date.now()
-  // const step = 60 * (now - timestamp) / 1000
-  // timestamp = now
 
-  render(gl, program, assets)
-  window.requestAnimationFrame(() => loop(gl, program, assets))
-}
-
-function render(
-  gl: GL,
-  program: GLProgram | null,
-  assets: assetsLoader.Assets<any>
-): void {
-  const {r, g, b, a} = Level0.Map.backgroundColor
-  gl.clearColor(r, g, b, a)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gfx.drawTextures(gl, program, assets, Level0.Map.drawables)
-}
-
-function resize(gl: GL, resolutionLocation: GLUniformLocation | null): void {
+function resize(gl: GL, resolutionLocation: GLUniformLocation | null) {
   // The canvas is stretched to the width of the document proportionally.
   // Truncate the width to the lowest integer to so that the canvas height is
   // scaled to be equal to or slightly greater than the document height. If
   // Math.ceil() is used instead, the canvas will often not quite fill the
   // height of the document.
   const ratio = window.innerWidth / window.innerHeight
-  const width = Math.trunc(HEIGHT * ratio)
-
-  // eslint-disable-next-line no-console
-  console.log(
-    [
-      'resize:',
-      `window=${window.innerWidth}x${window.innerHeight}`,
-      `canvas=${width}x${HEIGHT}`,
-      `ratio=${ratio}`,
-      `scale=${window.innerHeight / HEIGHT}`
-    ].join(' ')
-  )
-
+  const width = Math.trunc(HEIGHT * ratio) // window.devicePixelRatio
   gl.canvas.width = width
   gl.canvas.height = HEIGHT
 
   gl.uniform2f(resolutionLocation, width, HEIGHT)
   gl.viewport(0, 0, width, HEIGHT)
+}
+
+function loop(
+  gl: GL,
+  program: GLProgram | null,
+  resolutionLocation: GLUniformLocation | null,
+  assets: assetsLoader.Assets<any>,
+  timestamp: number
+): void {
+  const now = Date.now()
+  window.requestAnimationFrame(() =>
+    loop(gl, program, resolutionLocation, assets, now)
+  )
+
+  resize(gl, resolutionLocation)
+
+  const step = (now - timestamp) / 1000
+  render(gl, program, assets, step)
+}
+
+function render(
+  gl: GL,
+  program: GLProgram | null,
+  assets: assetsLoader.Assets<any>,
+  step: number
+): void {
+  const {r, g, b, a} = Level0.Map.backgroundColor
+  gl.clearColor(r, g, b, a)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gfx.drawTextures(gl, program, assets, Level0.Map.drawables, step)
 }
 
 main(window)

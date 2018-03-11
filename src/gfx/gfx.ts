@@ -37,13 +37,15 @@ export interface Drawable {
   location: Point
   bounds: Rectangle
   url: string
+  speed?: number
 }
 
 export function drawTextures(
   gl: GL,
   program: GLProgram | null,
   assets: Assets<any>,
-  drawables: Drawable[]
+  drawables: Drawable[],
+  step: number
 ) {
   const DIMENSIONS = 2
 
@@ -83,6 +85,7 @@ export function drawTextures(
   for (const drawable of drawables) {
     const image = assets[drawable.url].image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
+    drawable.location.x += drawable.speed ? step * drawable.speed : 0
     bufferRectangle(gl, drawable.location, drawable.bounds)
     gl.drawArrays(gl.TRIANGLES, 0, textureCoords.length / DIMENSIONS)
   }

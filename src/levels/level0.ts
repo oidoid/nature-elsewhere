@@ -20,7 +20,8 @@ export namespace Level0 {
       {
         location: {x: 32, y: 64},
         bounds: {width: 128, height: 16},
-        url: Texture.REFLECTIONS
+        url: Texture.REFLECTIONS,
+        speed: 1 // in pixels per second
       },
       {
         location: {x: 32, y: 64},
