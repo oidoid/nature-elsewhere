@@ -9,8 +9,8 @@ export function check(gl: GL | null): GL {
 
   type Indexed = {[prop: string]: any}
   const proto: GL = Object.getPrototypeOf(gl)
-  return Object.assign(
-    gl,
+  const checked: GL = Object.assign(
+    {},
     ...Object.keys(proto)
       .filter(prop => typeof (<Indexed>gl)[prop] === 'function')
       .map(prop => ({
@@ -23,25 +23,66 @@ export function check(gl: GL | null): GL {
           }
           return ret
         }
-      })),
-    {
-      getError: proto.getError,
-      compileShader(shader: GLShader | null) {
-        proto.compileShader.apply(gl, arguments)
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-          const log = gl.getShaderInfoLog(shader)
-          throw new Error(`Shader compilation failed: ${log}`)
-        }
-      },
-      linkProgram(program: GLProgram | null) {
-        proto.linkProgram.apply(gl, arguments)
-        gl.validateProgram(program)
+      }))
+  )
 
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-          const log = gl.getProgramInfoLog(program)
-          throw new Error(`Shader linking failed: ${log}`)
-        }
+  return Object.assign(gl, checked, {
+    getError: proto.getError,
+    compileShader(shader: GLShader | null) {
+      checked.compileShader.apply(gl, arguments)
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        const log = gl.getShaderInfoLog(shader)
+        throw new Error(`Shader compilation failed: ${log}`)
+      }
+    },
+    createBuffer() {
+      const buffer = checked.createBuffer.apply(gl, arguments)
+      if (!buffer) throw new Error('Buffer creation failed.')
+      return buffer
+    },
+    createProgram() {
+      const program = checked.createProgram.apply(gl, arguments)
+      if (!program) throw new Error('Shader program creation failed.')
+      return program
+    },
+    createShader() {
+      const shader = checked.createShader.apply(gl, arguments)
+      if (!shader) throw new Error('Shader creation failed.')
+      return shader
+    },
+    createTexture() {
+      const texture = checked.createTexture.apply(gl, arguments)
+      if (!texture) throw new Error('Texture creation failed.')
+      return texture
+    },
+    getAttribLocation(_program: GLProgram, name: string) {
+      const location = checked.getAttribLocation.apply(gl, arguments)
+      if (location < 0) {
+        const msg =
+          'Shader attribute location unknown; ' +
+          `name=${name} location=${location}.`
+        throw new Error(msg)
+      }
+      return location
+    },
+    getUniformLocation(_program: GLProgram, name: string) {
+      const location = checked.getUniformLocation.apply(gl, arguments)
+      if (location === null || location < 0) {
+        const msg =
+          'Shader uniform location unknown; ' +
+          `name=${name} location=${location}.`
+        throw new Error(msg)
+      }
+      return location
+    },
+    linkProgram(program: GLProgram | null) {
+      checked.linkProgram.apply(gl, arguments)
+      gl.validateProgram(program)
+
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        const log = gl.getProgramInfoLog(program)
+        throw new Error(`Shader linking failed: ${log}`)
       }
     }
-  )
+  })
 }
