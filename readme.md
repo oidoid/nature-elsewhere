@@ -1,4 +1,4 @@
-# 🦆 pond
+# 🦆 nature elsewhere
 
 ## License (GPLv3)
 
