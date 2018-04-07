@@ -13,7 +13,8 @@
     "lint": "eslint --cache --max-warnings 0 --report-unused-disable-directives --ext .ts .",
     "style": "prettier './**/*.{md,json}'",
     "format": "run-p -s 'lint -- --fix' 'style -- --write'",
-    "test": "run-p -s build lint 'style -- -l'"
+    "test": "run-p -s build lint 'style -- -l'",
+    "build:atlas": "cd src/assets/textures && aseprite -b *.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.json --palette palette.aseprite --sheet-pack --inner-padding 1 --sheet atlas.png"
   },
   "engines": {
     "node": "9.6.1"

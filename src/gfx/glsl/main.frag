@@ -1,9 +1,16 @@
 precision mediump float;
 
+uniform vec2 uAtlasBounds;
+uniform vec2 uTextureBounds;
+uniform vec2 uTexturePosition;
+uniform vec2 uTextureOffset;
 uniform sampler2D uTexture;
 
 varying vec2 vTextureCoords;
 
 void main() {
-  gl_FragColor = texture2D(uTexture, vTextureCoords);
+  vec2 offset = vTextureCoords + uTextureOffset;
+  vec2 wrap = uTexturePosition / uAtlasBounds
+            + mod(offset, uTextureBounds) / uAtlasBounds;
+  gl_FragColor = texture2D(uTexture, wrap);
 }
