@@ -243,7 +243,7 @@
   },
   "meta": {
     "app": "http://www.aseprite.org/",
-    "version": "1.2.7.3",
+    "version": "1.2.8.1",
     "image": "atlas.png",
     "format": "RGBA8888",
     "size": {"w": 256, "h": 128},
