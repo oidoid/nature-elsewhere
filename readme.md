@@ -1,4 +1,12 @@
-# 🦆 nature elsewhere
+# nature elsewhere
+
+## Terminology
+
+- Atlas: a sprite sheet or texture of packages sub-textures
+- Bounds: having width and height
+- Location: a WebGL shader program variable identifier
+- Position: a coordinate
+- XY: having X and Y-coordinate dimensions such as a position, bounds, or vertex
 
 ## License (GPLv3)
 
