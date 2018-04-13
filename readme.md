@@ -2,15 +2,15 @@
 
 ## Terminology
 
-- Atlas: a sprite sheet or texture of packages sub-textures
-- Bounds: having width and height
-- Location: a WebGL shader program variable identifier
-- Position: a coordinate
-- XY: having X and Y-coordinate dimensions such as a position, bounds, or vertex
+* Atlas: a sprite sheet or texture of packages sub-textures
+* Bounds: having width and height
+* Location: a WebGL shader program variable identifier
+* Position: a coordinate
+* XY: having X and Y-coordinate dimensions such as a position, bounds, or vertex
 
 ## License (GPLv3)
 
-© 2018 Stephen Niedzielski.
+© Stephen Niedzielski.
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
