@@ -14,7 +14,8 @@
     "style": "prettier './**/*.{md,json}'",
     "format": "run-p -s 'lint -- --fix' 'style -- --write'",
     "test": "run-p -s build lint 'style -- -l'",
-    "build:atlas": "cd src/assets/textures && aseprite -b *.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.json --sheet-pack --inner-padding 1 --sheet atlas.png"
+    "build:atlas": "cd src/assets/textures && aseprite -b *.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.json --sheet-pack --inner-padding 1 --sheet atlas.png",
+    "palettize": "cd src/assets/textures && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "engines": {
     "node": "9.11.1"
