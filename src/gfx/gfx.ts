@@ -68,14 +68,14 @@ export function drawTextures(
   gl.bufferData(gl.ARRAY_BUFFER, textureCoords, gl.STATIC_DRAW)
 
   gl.vertexAttribPointer(
-    ctx.attr.aTextureCoords,
+    ctx.attr('aTextureCoords'),
     DIMENSIONS,
     gl.FLOAT,
     false,
     0,
     0
   )
-  gl.enableVertexAttribArray(ctx.attr.aTextureCoords)
+  gl.enableVertexAttribArray(ctx.attr('aTextureCoords'))
 
   // Create, bind, and configure the texture.
   const texture = createTexture(gl)
@@ -94,47 +94,47 @@ export function drawTextures(
       }
     }
     const offset = drawable.textureOffset ? textureOffset : {x: 0, y: 0}
-    gl.uniform2f(ctx.uniform.uTextureOffset, offset.x, offset.y)
+    gl.uniform2f(ctx.uniform('uTextureOffset'), offset.x, offset.y)
     bufferRectangle(gl, drawable.location, drawable.bounds)
 
     gl.uniform2f(
-      ctx.uniform.uAtlasBounds,
+      ctx.uniform('uAtlasBounds'),
       Level0.Map.atlasBounds.x,
       Level0.Map.atlasBounds.y
     )
 
     gl.uniform2f(
-      ctx.uniform.uTextureBounds,
+      ctx.uniform('uTextureBounds'),
       drawable.bounds.width,
       drawable.bounds.height
     )
 
     gl.uniform2f(
-      ctx.uniform.uTexturePosition,
+      ctx.uniform('uTexturePosition'),
       drawable.texturePosition.x,
       drawable.texturePosition.y
     )
 
     const stride = 1 * DIMENSIONS * Float32Array.BYTES_PER_ELEMENT
     gl.vertexAttribPointer(
-      ctx.attr.aVertex,
+      ctx.attr('aVertex'),
       DIMENSIONS,
       gl.FLOAT,
       false,
       stride,
       0
     )
-    gl.enableVertexAttribArray(ctx.attr.aVertex)
+    gl.enableVertexAttribArray(ctx.attr('aVertex'))
 
     gl.drawArrays(gl.TRIANGLES, 0, textureCoords.length / DIMENSIONS)
   }
 
   // Clean.
   gl.deleteBuffer(vertexBuffer)
-  gl.disableVertexAttribArray(ctx.attr.aVertex)
+  gl.disableVertexAttribArray(ctx.attr('aVertex'))
 
   gl.deleteTexture(texture)
-  gl.disableVertexAttribArray(ctx.attr.aTextureCoords)
+  gl.disableVertexAttribArray(ctx.attr('aTextureCoords'))
   gl.deleteBuffer(textureCoordsBuffer)
 }
 

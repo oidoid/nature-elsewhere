@@ -69,7 +69,7 @@ function loop(
   const now = Date.now()
   window.requestAnimationFrame(() => loop(gl, ctx, assets, now))
 
-  resize(gl, ctx.uniform.uResolution)
+  resize(gl, ctx.uniform('uResolution'))
 
   const step = (now - timestamp) / 1000
   render(gl, ctx, assets, step)

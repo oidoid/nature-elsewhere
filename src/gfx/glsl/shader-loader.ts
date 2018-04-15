@@ -4,8 +4,8 @@ export type AttributeLocations = {[name: string]: number}
 export type UniformLocations = {[name: string]: GLUniformLocation | null}
 export type ShaderContext = {
   program: GLProgram | null
-  attr: AttributeLocations
-  uniform: UniformLocations
+  attr(name: string): number
+  uniform(name: string): GLUniformLocation | null
 }
 
 export function load(
@@ -14,10 +14,20 @@ export function load(
   fragmentSrc: string
 ): ShaderContext {
   const program = loadShaders(gl, vertexSrc, fragmentSrc)
+  const attrs = getAttributeLocations(gl, program)
+  const uniforms = getUniformLocations(gl, program)
   return {
     program,
-    attr: getAttributeLocations(gl, program),
-    uniform: getUniformLocations(gl, program)
+    attr(name: string) {
+      const attr = attrs[name]
+      if (attr !== undefined) return attr
+      throw new Error(`Shader attribute with name "${name}" unknown.`)
+    },
+    uniform(name: string) {
+      const uniform = uniforms[name]
+      if (uniform !== undefined) return uniform
+      throw new Error(`Shader uniform with name "${name}" unknown.`)
+    }
   }
 }
 
