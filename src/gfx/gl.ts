@@ -37,7 +37,7 @@ export function check(gl: GL | null): GL {
     },
     createBuffer() {
       const buffer = checked.createBuffer.apply(gl, arguments)
-      if (!buffer) throw new Error('Buffer creation failed.')
+      if (!buffer) throw new Error('Shader buffer creation failed.')
       return buffer
     },
     createProgram() {
@@ -52,36 +52,56 @@ export function check(gl: GL | null): GL {
     },
     createTexture() {
       const texture = checked.createTexture.apply(gl, arguments)
-      if (!texture) throw new Error('Texture creation failed.')
+      if (!texture) throw new Error('Shader texture creation failed.')
       return texture
+    },
+    getActiveAttrib(_program: GLProgram, index: number) {
+      const attrib = checked.getActiveAttrib.apply(gl, arguments)
+      if (!attrib) {
+        throw new Error(`Shader attribute at index ${index} unknown.`)
+      }
+      return attrib
     },
     getAttribLocation(_program: GLProgram, name: string) {
       const location = checked.getAttribLocation.apply(gl, arguments)
       if (location < 0) {
-        const msg =
-          'Shader attribute location unknown; ' +
-          `name=${name} location=${location}.`
-        throw new Error(msg)
+        throw new Error(
+          `Shader attribute with name "${name}" location unknown (${location}).`
+        )
       }
       return location
+    },
+    getProgramParameter(_program: GLProgram, name: string) {
+      const param = checked.getProgramParameter.apply(gl, arguments)
+      if (param === null) {
+        throw new Error(`Shader parameter with name "${name}" unknown.`)
+      }
+      return param
     },
     getUniformLocation(_program: GLProgram, name: string) {
       const location = checked.getUniformLocation.apply(gl, arguments)
       if (location === null || location < 0) {
-        const msg =
-          'Shader uniform location unknown; ' +
-          `name=${name} location=${location}.`
-        throw new Error(msg)
+        throw new Error(
+          `Shader uniform with name "${name}" location unknown (${location}).`
+        )
       }
       return location
     },
     linkProgram(program: GLProgram | null) {
-      checked.linkProgram.apply(gl, arguments)
-      gl.validateProgram(program)
+      try {
+        checked.linkProgram.apply(gl, arguments)
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+          throw new Error(`Shader linking failed.`)
+        }
 
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        checked.validateProgram(program)
+        if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) {
+          throw new Error(`Shader validation failed.`)
+        }
+      } catch (e) {
         const log = gl.getProgramInfoLog(program)
-        throw new Error(`Shader linking failed: ${log}`)
+        e.msg += log
+        throw e
       }
     }
   })

@@ -3,9 +3,9 @@ import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './gfx/glsl/shader-loader'
 import * as enumUtil from './enum-util'
 import * as gfx from './gfx/gfx'
-import {check, GLProgram, GL, GLUniformLocation} from './gfx/gl'
-import * as vertexShaderSrc from './gfx/glsl/main.vert'
-import * as fragmentShaderSrc from './gfx/glsl/main.frag'
+import {check, GL, GLUniformLocation} from './gfx/gl'
+import * as vertexSrc from './gfx/glsl/main.vert'
+import * as fragmentSrc from './gfx/glsl/main.frag'
 import * as kbd from './input/kbd'
 
 const HEIGHT = 128
@@ -30,10 +30,8 @@ function main(window: Window) {
   gl.blendEquation(gl.FUNC_ADD)
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
-  const program = shaderLoader.load(gl, vertexShaderSrc, fragmentShaderSrc)
-  gl.useProgram(program)
-  const resolutionLocation = gl.getUniformLocation(program, 'uResolution')
-  // todo: delete program.
+  const ctx = shaderLoader.load(gl, vertexSrc, fragmentSrc)
+  gl.useProgram(ctx.program)
 
   document.addEventListener('keydown', event => {
     const btn = kbd.defaultControllerMap[event.key.toLowerCase()]
@@ -43,7 +41,7 @@ function main(window: Window) {
 
   assetsLoader
     .load(enumUtil.toObject(Level0.Texture))
-    .then(assets => loop(gl, program, resolutionLocation, assets, Date.now()))
+    .then(assets => loop(gl, ctx, assets, Date.now()))
   // todo: exit.
 }
 
@@ -64,32 +62,29 @@ function resize(gl: GL, resolutionLocation: GLUniformLocation | null) {
 
 function loop(
   gl: GL,
-  program: GLProgram | null,
-  resolutionLocation: GLUniformLocation | null,
+  ctx: shaderLoader.ShaderContext,
   assets: assetsLoader.Assets<any>,
   timestamp: number
 ): void {
   const now = Date.now()
-  window.requestAnimationFrame(() =>
-    loop(gl, program, resolutionLocation, assets, now)
-  )
+  window.requestAnimationFrame(() => loop(gl, ctx, assets, now))
 
-  resize(gl, resolutionLocation)
+  resize(gl, ctx.uniform.uResolution)
 
   const step = (now - timestamp) / 1000
-  render(gl, program, assets, step)
+  render(gl, ctx, assets, step)
 }
 
 function render(
   gl: GL,
-  program: GLProgram | null,
+  ctx: shaderLoader.ShaderContext,
   assets: assetsLoader.Assets<any>,
   step: number
 ): void {
   const {r, g, b, a} = Level0.Map.backgroundColor
   gl.clearColor(r, g, b, a)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gfx.drawTextures(gl, program, assets, Level0.Map.drawables, step)
+  gfx.drawTextures(gl, ctx, assets, Level0.Map.drawables, step)
 }
 
 main(window)
