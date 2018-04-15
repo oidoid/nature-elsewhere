@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "npm start",
+      "type": "node",
+      "request": "launch",
+      "env": {"TS_NODE_TYPE_CHECK": "1"},
+      "program": "${workspaceRoot}/node_modules/.bin/webpack-dev-server",
+      "args": ["-dw"]
+    }
+  ]
+}
