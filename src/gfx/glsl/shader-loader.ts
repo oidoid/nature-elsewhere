@@ -1,12 +1,13 @@
 import {GL, GLProgram, GLUniformLocation} from '../gl'
 
-export type AttributeLocations = {[name: string]: number}
-export type UniformLocations = {[name: string]: GLUniformLocation | null}
 export type ShaderContext = {
   program: GLProgram | null
-  attr(name: string): number
-  uniform(name: string): GLUniformLocation | null
+  location(name: string): number
+  location(name: string): GLUniformLocation | null
 }
+type Locations = {[name: string]: number | GLUniformLocation | null}
+type UniformLocations = {[name: string]: GLUniformLocation | null}
+type AttributeLocations = {[name: string]: number}
 
 export function load(
   gl: GL,
@@ -14,19 +15,14 @@ export function load(
   fragmentSrc: string
 ): ShaderContext {
   const program = loadShaders(gl, vertexSrc, fragmentSrc)
-  const attrs = getAttributeLocations(gl, program)
-  const uniforms = getUniformLocations(gl, program)
+  const locations = getLocations(gl, program)
   return {
     program,
-    attr(name: string) {
-      const attr = attrs[name]
-      if (attr !== undefined) return attr
-      throw new Error(`Shader attribute with name "${name}" unknown.`)
-    },
-    uniform(name: string) {
-      const uniform = uniforms[name]
-      if (uniform !== undefined) return uniform
-      throw new Error(`Shader uniform with name "${name}" unknown.`)
+    location(name: string): any {
+      const location = locations[name]
+      if (location !== undefined) return location
+
+      throw new Error(`Shader location with name "${name}" unknown.`)
     }
   }
 }
@@ -58,6 +54,20 @@ function loadShader(gl: GL, type: number, src: string): WebGLShader | null {
   gl.shaderSource(shader, src)
   gl.compileShader(shader)
   return shader
+}
+
+function getLocations(gl: GL, program: GLProgram | null): Locations {
+  const attrs = getAttributeLocations(gl, program)
+  const uniforms = getUniformLocations(gl, program)
+
+  Object.keys(attrs).forEach(name => {
+    const overlap = uniforms[name] !== undefined
+    if (overlap) {
+      throw new Error(`Shader attribute and uniform name "${name}" conflicts.`)
+    }
+  })
+
+  return Object.assign(attrs, uniforms)
 }
 
 function getAttributeLocations(
