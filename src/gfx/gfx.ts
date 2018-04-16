@@ -46,23 +46,20 @@ export function drawTextures(
 ) {
   const DIMENSIONS = 2
 
-  // uesprogram
+  // todo: pass shader in and call useprogram here.
+
+  // Create, bind, and configure the texture.
+  const texture = createTexture(gl)
+
+  gl.activeTexture(gl.TEXTURE0)
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+  // Use a single texture unit for everything currently.
+  gl.uniform1i(ctx.location('uTexture'), 0)
 
   // Create, bind, and load the texture coordinations.
-  const textureCoords = new Float32Array([
-    0,
-    0,
-    128,
-    0,
-    0,
-    16,
-    0,
-    16,
-    128,
-    0,
-    128,
-    16
-  ])
+  // todo: this probably only needs to happen once if the mapping is always one
+  //       to one.
+  const textureCoords = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1])
   const textureCoordsBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordsBuffer)
   gl.bufferData(gl.ARRAY_BUFFER, textureCoords, gl.STATIC_DRAW)
@@ -77,15 +74,13 @@ export function drawTextures(
   )
   gl.enableVertexAttribArray(ctx.location('aTextureCoords'))
 
-  // Create, bind, and configure the texture.
-  const texture = createTexture(gl)
-
   const vertexBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
 
   // Load the images into the texture.
   for (const drawable of drawables) {
     const image = assets[drawable.url].image
+    // todo: this probably doesn't need to happen multiple times every frame.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
     if (drawable.textureOffset) {
       textureOffset = {

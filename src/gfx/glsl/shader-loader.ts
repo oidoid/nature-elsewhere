@@ -21,7 +21,6 @@ export function load(
     location(name: string): any {
       const location = locations[name]
       if (location !== undefined) return location
-
       throw new Error(`Shader location with name "${name}" unknown.`)
     }
   }

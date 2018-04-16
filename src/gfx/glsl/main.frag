@@ -9,7 +9,7 @@ uniform sampler2D uTexture;
 varying vec2 vTextureCoords;
 
 void main() {
-  vec2 offset = vTextureCoords + uTextureOffset;
+  vec2 offset = vTextureCoords * uTextureBounds + uTextureOffset;
   vec2 wrap = (uTexturePosition + mod(offset, uTextureBounds)) / uAtlasBounds;
   gl_FragColor = texture2D(uTexture, wrap);
 }
