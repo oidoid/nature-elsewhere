@@ -8,8 +8,8 @@
   "bugs": "https://github.com/rndmem/nature-elsewhere/issues",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "TS_NODE_TYPE_CHECK=1 webpack-dev-server -dw",
-    "build": "NODE_ENV=production TS_NODE_TYPE_CHECK=1 webpack -p",
+    "start": "webpack-dev-server -dw",
+    "build": "NODE_ENV=production webpack -p",
     "lint": "eslint --cache --max-warnings 0 --report-unused-disable-directives --ext .ts .",
     "style": "prettier './**/*.{md,json}'",
     "format": "run-p -s 'lint -- --fix' 'style -- --write'",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/clean-webpack-plugin": "0.1.2",
     "@types/copy-webpack-plugin": "4.4.1",
-    "@types/node": "9.6.4",
+    "@types/node": "9.6.5",
     "clean-webpack-plugin": "0.1.19",
     "copy-webpack-plugin": "4.5.1",
     "eslint": "4.19.1",
@@ -31,13 +31,13 @@
     "eslint-plugin-prettier": "2.6.0",
     "npm-run-all": "4.1.2",
     "pre-commit": "1.2.2",
-    "prettier": "1.12.0",
+    "prettier": "1.12.1",
     "raw-loader": "0.5.1",
     "ts-loader": "4.2.0",
-    "ts-node": "5.0.1",
+    "ts-node": "6.0.0",
     "typescript": "2.8.1",
-    "typescript-eslint-parser": "14.0.0",
-    "webpack": "4.5.0",
+    "typescript-eslint-parser": "15.0.0",
+    "webpack": "4.6.0",
     "webpack-cli": "2.0.14",
     "webpack-dev-server": "3.1.3"
   }
