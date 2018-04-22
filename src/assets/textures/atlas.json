@@ -309,7 +309,7 @@
         ]
       },
       {
-        "name": "cloud s",
+        "name": "cloud xs",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 4, "y": 12, "w": 7, "h": 3}}]
       },
