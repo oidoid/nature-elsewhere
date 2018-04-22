@@ -25,12 +25,12 @@
  */
 export type File = {
   meta: Meta
-  /**
-   * All Frames for all files packed.
-   * @type {Object.<TagFrameNumber, Frame>}
-   */
-  frames: {[tagFrameNumber: string]: Frame}
+  /** All Frames for all files packed. */
+  frames: Frames
 }
+
+/** @type {Object.<TagFrameNumber, Frame>} */
+export type Frames = {[tagFrameNumber: string]: Frame}
 
 export type Meta = {
   /** E.g., 'http://www.aseprite.org/'. */
@@ -39,7 +39,7 @@ export type Meta = {
   version: string
   /** The associated output. E.g., 'atlas.png'. */
   image: string
-  /** E.g., 'RGBA8888'. */
+  /** E.g., 'RGBA8888' or 'I8'. */
   format: string
   /** Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2. */
   size: WH
@@ -142,7 +142,12 @@ export type Slice = {
 
 /** A Frame collision boundary subset within the file packed. */
 export type Key = {
-  /** The associated Frame's index. */
+  /**
+   * The inclusive associated Frame's start offset, the exclusive previous
+   * Frame's end offset. **By convention,** the exclusive end offset is the next
+   * higher Key.frame if it exists or the animation's end if not. A Key's Frame
+   * index may be calculated from FrameTag.index + Key.frame.
+   */
   frame: number
   /** The Frame's collision boundary within the file packed. */
   bounds: Rect

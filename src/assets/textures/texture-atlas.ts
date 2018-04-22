@@ -16,11 +16,11 @@ export type Animations = {[tag: string]: Animation}
 
 /** Animation and collision frames. */
 export type Animation = {
-  frames: Frame[]
+  cels: Cel[]
   direction: Aseprite.Direction
 }
 
-export type Frame = {
+export type Cel = {
   /** Texture bounds within the atlas. */
   texture: Aseprite.Rect
   /** Animation length in milliseconds, possibly infinite. */
@@ -32,40 +32,51 @@ export type Frame = {
 export function unmarshal(file: Aseprite.File): TextureAtlas {
   return {
     size: file.meta.size,
-    animations: unmarshalAnimations(file)
+    animations: unmarshalAnimations(
+      file.meta.frameTags,
+      file.frames,
+      file.meta.slices
+    )
   }
 }
 
-export function unmarshalAnimations(file: Aseprite.File): Animations {
+export function unmarshalAnimations(
+  frameTags: Aseprite.FrameTag[],
+  frames: Aseprite.Frames,
+  slices: Aseprite.Slice[]
+): Animations {
   return (
-    file.meta.frameTags // FrameTag[]
+    frameTags
       // Animations[]
-      .map(frameTag => ({[frameTag.name]: unmarshalAnimation(file, frameTag)}))
+      .map(frameTag => ({
+        [frameTag.name]: unmarshalAnimation(frameTag, frames, slices)
+      }))
       .reduce((sum, animations) => ({...sum, ...animations}), {}) // Animations
   )
 }
 
 export function unmarshalAnimation(
-  file: Aseprite.File,
-  frameTag: Aseprite.FrameTag
+  frameTag: Aseprite.FrameTag,
+  frames: Aseprite.Frames,
+  slices: Aseprite.Slice[]
 ): Animation {
-  const frames = []
+  const cels = []
   for (
     let frameNumber = frameTag.from;
     frameNumber <= frameTag.to;
     ++frameNumber
   ) {
     const tagFrameNumber = marshalTagFrameNumber(frameTag.name, frameNumber)
-    const frame = unmarshalFrame(
-      file.frames[tagFrameNumber],
-      frameTag.name,
+    const cel = unmarshalCel(
+      frameTag,
+      frames[tagFrameNumber],
       frameNumber,
-      file.meta.slices
+      slices
     )
-    frames.push(frame)
+    cels.push(cel)
   }
 
-  return {frames, direction: frameTag.direction}
+  return {cels, direction: frameTag.direction}
 }
 
 export function marshalTagFrameNumber(
@@ -75,16 +86,16 @@ export function marshalTagFrameNumber(
   return `${tag} ${index === undefined ? '' : index}`
 }
 
-export function unmarshalFrame(
+export function unmarshalCel(
+  frameTag: Aseprite.FrameTag,
   frame: Aseprite.Frame,
-  tag: Aseprite.Tag,
   frameNumber: number,
   slices: Aseprite.Slice[]
-): Frame {
+): Cel {
   return {
     texture: unmarshalTexture(frame),
     duration: unmarshalDuration(frame.duration),
-    collision: unmarshalCollision(slices, tag, frameNumber)
+    collision: unmarshalCollision(frameTag, frameNumber, slices)
   }
 }
 
@@ -112,14 +123,18 @@ export function unmarshalDuration(duration: Aseprite.Duration): number {
 }
 
 export function unmarshalCollision(
-  slices: Aseprite.Slice[],
-  tag: Aseprite.Tag,
-  frameNumber: number
+  frameTag: Aseprite.FrameTag,
+  frameNumber: number,
+  slices: Aseprite.Slice[]
 ): Aseprite.Rect[] {
-  return slices
-    .filter(slice => slice.name === tag) // Filter out Slices not for this Tag.
-    .map(slice => slice.keys) // To Key[][].
-    .reduce((sum, keys) => sum.concat(keys), []) // To Key[].
-    .filter(key => key.frame === frameNumber) // Filter Keys not for this Frame.
-    .map(key => key.bounds) // To Bounds.
+  const offset = frameNumber - frameTag.from
+  return (
+    slices
+      // Filter out Slices not for this Tag.
+      .filter(slice => slice.name === frameTag.name)
+      // For each Slice, get the latest relevant Key.
+      .map(slice => slice.keys.filter(key => key.frame <= offset).slice(-1))
+      .reduce((sum, keys) => sum.concat(keys), []) // Key[]
+      .map(key => key.bounds) // Bounds
+  )
 }
