@@ -25,8 +25,11 @@
  */
 export type File = {
   meta: Meta
-  /** All Frames for all files packed. */
-  frames: {[tagFrame in TagFrame]: Frame}
+  /**
+   * All Frames for all files packed.
+   * @type {Object.<TagFrameNumber, Frame>}
+   */
+  frames: {[tagFrameNumber: string]: Frame}
 }
 
 export type Meta = {
@@ -55,7 +58,7 @@ export type Meta = {
  * index 4, and 'sky  ' refers to the file named "sky.aseprite" with animation
  * named "", the first frame.
  */
-export type TagFrame = string
+export type TagFrameNumber = string
 
 /**
  * **By convention**, tags are a file stem followed by a space followed by a
@@ -78,11 +81,11 @@ export type Frame = {
    * calculated by subtracting member's WH dimensions from sourceSize and
    * dividing by 2.
    */
-  frame: XY & WH
+  frame: Rect
   rotated: boolean
   trimmed: boolean
   /** The Frame's bounds within the file packed, not including padding. */
-  spriteSourceSize: XY & WH
+  spriteSourceSize: Rect
   sourceSize: WH
   duration: Duration
 }
@@ -142,8 +145,10 @@ export type Key = {
   /** The associated Frame's index. */
   frame: number
   /** The Frame's collision boundary within the file packed. */
-  bounds: XY & WH
+  bounds: Rect
 }
+
+export type Rect = XY & WH
 
 /** Width and height lengths. */
 export type WH = {
