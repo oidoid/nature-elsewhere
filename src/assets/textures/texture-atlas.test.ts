@@ -1,5 +1,7 @@
 import * as Aseprite from './aseprite'
 import {
+  marshalTagFrameNumber,
+  unmarshalFrame,
   unmarshalTexture,
   unmarshalPadding,
   unmarshalDuration,
@@ -7,6 +9,41 @@ import {
 } from './texture-atlas'
 
 describe('texture-atlas', () => {
+  describe('#marshalTagFrameNumber()', () => {
+    test('Converts stem and Frame number.', () => {
+      expect(marshalTagFrameNumber('stem ', 0)).toEqual('stem  0')
+    })
+
+    test('Converts Tag.', () => {
+      expect(marshalTagFrameNumber('stem ')).toEqual('stem  ')
+    })
+  })
+
+  describe('#unmarshalFrame()', () => {
+    test('Converts 1:1 texture mapping.', () => {
+      const frame = {
+        frame: {x: 130, y: 18, w: 18, h: 18},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
+        sourceSize: {w: 16, h: 16},
+        duration: 65535
+      }
+      const slices = [
+        {
+          name: 'stem ',
+          color: '#0000ffff',
+          keys: [{frame: 0, bounds: {x: 4, y: 4, w: 8, h: 12}}]
+        }
+      ]
+      expect(unmarshalFrame(frame, 'stem ', 0, slices)).toEqual({
+        texture: {x: 131, y: 19, w: 16, h: 16},
+        duration: Number.POSITIVE_INFINITY,
+        collision: [{x: 4, y: 4, w: 8, h: 12}]
+      })
+    })
+  })
+
   describe('#unmarshalTexture()', () => {
     test('Converts 1:1 texture mapping.', () => {
       const frame = {
@@ -86,12 +123,12 @@ describe('texture-atlas', () => {
     test('Convert Slice to Rect[].', () => {
       const slices = [
         {
-          name: 'tag',
+          name: 'stem ',
           color: '#00000000',
           keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
         }
       ]
-      expect(unmarshalCollision(slices, 'tag', 0)).toEqual([
+      expect(unmarshalCollision(slices, 'stem ', 0)).toEqual([
         {x: 0, y: 1, w: 2, h: 3}
       ])
     })
@@ -99,7 +136,7 @@ describe('texture-atlas', () => {
     test('Filter out unrelated Tags.', () => {
       const slices = [
         {
-          name: 'unrelated',
+          name: 'unrelated ',
           color: '#00000000',
           keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
         }
@@ -110,18 +147,18 @@ describe('texture-atlas', () => {
     test('Filter out unrelated Frame numbers.', () => {
       const slices = [
         {
-          name: 'tag',
+          name: 'stem ',
           color: '#00000000',
           keys: [{frame: 1, bounds: {x: 0, y: 1, w: 2, h: 3}}]
         }
       ]
-      expect(unmarshalCollision(slices, 'tag', 0)).toEqual([])
+      expect(unmarshalCollision(slices, 'stem ', 0)).toEqual([])
     })
 
     test('Convert Slice with multiple keys to Rect[].', () => {
       const slices = [
         {
-          name: 'tag',
+          name: 'stem ',
           color: '#00000000',
           keys: [
             {frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}},
@@ -129,20 +166,20 @@ describe('texture-atlas', () => {
           ]
         }
       ]
-      expect(unmarshalCollision(slices, 'tag', 0)).toEqual([
+      expect(unmarshalCollision(slices, 'stem ', 0)).toEqual([
         {x: 0, y: 1, w: 2, h: 3}
       ])
     })
 
     test('Convert no Slices.', () => {
       const slices: Aseprite.Slice[] = []
-      expect(unmarshalCollision(slices, 'tag', 0)).toEqual([])
+      expect(unmarshalCollision(slices, 'stem ', 0)).toEqual([])
     })
 
     test('Convert multiple Slices.', () => {
       const slices = [
         {
-          name: 'tag',
+          name: 'stem ',
           color: '#00000000',
           keys: [
             {frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}},
@@ -150,22 +187,22 @@ describe('texture-atlas', () => {
           ]
         },
         {
-          name: 'unrelated',
+          name: 'unrelated ',
           color: '#00000000',
           keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
         },
         {
-          name: 'tag',
+          name: 'stem ',
           color: '#00000000',
           keys: [{frame: 1, bounds: {x: 0, y: 1, w: 2, h: 3}}]
         },
         {
-          name: 'tag',
+          name: 'stem ',
           color: '#00000000',
           keys: [{frame: 0, bounds: {x: 8, y: 9, w: 10, h: 11}}]
         }
       ]
-      expect(unmarshalCollision(slices, 'tag', 0)).toEqual([
+      expect(unmarshalCollision(slices, 'stem ', 0)).toEqual([
         {x: 0, y: 1, w: 2, h: 3},
         {x: 8, y: 9, w: 10, h: 11}
       ])

@@ -57,10 +57,10 @@ export function unmarshalAnimation(
   ) {
     const tagFrameNumber = marshalTagFrameNumber(frameTag.name, frameNumber)
     const frame = unmarshalFrame(
-      file.meta.slices,
       file.frames[tagFrameNumber],
       frameTag.name,
-      frameNumber
+      frameNumber,
+      file.meta.slices
     )
     frames.push(frame)
   }
@@ -76,10 +76,10 @@ export function marshalTagFrameNumber(
 }
 
 export function unmarshalFrame(
-  slices: Aseprite.Slice[],
   frame: Aseprite.Frame,
   tag: Aseprite.Tag,
-  frameNumber: number
+  frameNumber: number,
+  slices: Aseprite.Slice[]
 ): Frame {
   return {
     texture: unmarshalTexture(frame),
