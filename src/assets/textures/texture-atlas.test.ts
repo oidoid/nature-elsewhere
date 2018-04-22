@@ -1,11 +1,80 @@
 import * as Aseprite from './aseprite'
-import {unmarshalDuration, unmarshalCollision} from './texture-atlas'
+import {
+  unmarshalTexture,
+  unmarshalPadding,
+  unmarshalDuration,
+  unmarshalCollision
+} from './texture-atlas'
 
-describe('TextureAtlas', () => {
-  describe('.unmarshalDuration()', () => {
+describe('texture-atlas', () => {
+  describe('#unmarshalTexture()', () => {
+    test('Converts 1:1 texture mapping.', () => {
+      const frame = {
+        frame: {x: 1, y: 2, w: 3, h: 4},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 3, h: 4},
+        sourceSize: {w: 3, h: 4},
+        duration: 1
+      }
+      expect(unmarshalTexture(frame)).toEqual({x: 1, y: 2, w: 3, h: 4})
+    })
+    test('Converts texture mapping with padding.', () => {
+      const frame = {
+        frame: {x: 1, y: 2, w: 5, h: 6},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 3, h: 4},
+        sourceSize: {w: 3, h: 4},
+        duration: 1
+      }
+      expect(unmarshalTexture(frame)).toEqual({x: 2, y: 3, w: 3, h: 4})
+    })
+  })
+
+  describe('#unmarshalPadding()', () => {
+    test('Converts zero padding.', () => {
+      const frame = {
+        frame: {x: 1, y: 2, w: 3, h: 4},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 3, h: 4},
+        sourceSize: {w: 3, h: 4},
+        duration: 1
+      }
+      expect(unmarshalPadding(frame)).toEqual({w: 0, h: 0})
+    })
+
+    test('Converts nonzero padding.', () => {
+      const frame = {
+        frame: {x: 1, y: 2, w: 4, h: 5},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 3, h: 4},
+        sourceSize: {w: 3, h: 4},
+        duration: 1
+      }
+      expect(unmarshalPadding(frame)).toEqual({w: 1, h: 1})
+    })
+
+    test('Converts mixed padding.', () => {
+      const frame = {
+        frame: {x: 1, y: 2, w: 4, h: 6},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 3, h: 4},
+        sourceSize: {w: 3, h: 4},
+        duration: 1
+      }
+      expect(unmarshalPadding(frame)).toEqual({w: 1, h: 2})
+    })
+  })
+
+  describe('#unmarshalDuration()', () => {
     test('Convert Duration to number.', () => {
       expect(unmarshalDuration(0)).toEqual(0)
     })
+
     test('Convert infinite Duration to +∞.', () => {
       expect(unmarshalDuration(Aseprite.INFINITE_DURATION)).toEqual(
         Number.POSITIVE_INFINITY
@@ -13,7 +82,7 @@ describe('TextureAtlas', () => {
     })
   })
 
-  describe('.unmarshalCollision()', () => {
+  describe('#unmarshalCollision()', () => {
     test('Convert Slice to Rect[].', () => {
       const slices = [
         {

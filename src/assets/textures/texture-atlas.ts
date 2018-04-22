@@ -57,7 +57,7 @@ export function unmarshalAnimation(
   ) {
     const tagFrameNumber = marshalTagFrameNumber(frameTag.name, frameNumber)
     const frame = unmarshalFrame(
-      file,
+      file.meta.slices,
       file.frames[tagFrameNumber],
       frameTag.name,
       frameNumber
@@ -76,7 +76,7 @@ export function marshalTagFrameNumber(
 }
 
 export function unmarshalFrame(
-  file: Aseprite.File,
+  slices: Aseprite.Slice[],
   frame: Aseprite.Frame,
   tag: Aseprite.Tag,
   frameNumber: number
@@ -84,7 +84,7 @@ export function unmarshalFrame(
   return {
     texture: unmarshalTexture(frame),
     duration: unmarshalDuration(frame.duration),
-    collision: unmarshalCollision(file.meta.slices, tag, frameNumber)
+    collision: unmarshalCollision(slices, tag, frameNumber)
   }
 }
 
@@ -93,15 +93,15 @@ export function unmarshalTexture(frame: Aseprite.Frame): Aseprite.Rect {
   return {
     x: frame.frame.x + padding.w / 2,
     y: frame.frame.y + padding.h / 2,
-    w: frame.spriteSourceSize.w,
-    h: frame.spriteSourceSize.h
+    w: frame.sourceSize.w,
+    h: frame.sourceSize.h
   }
 }
 
 export function unmarshalPadding(frame: Aseprite.Frame): Aseprite.WH {
   return {
-    w: frame.frame.w - frame.spriteSourceSize.w,
-    h: frame.frame.h - frame.spriteSourceSize.h
+    w: frame.frame.w - frame.sourceSize.w,
+    h: frame.frame.h - frame.sourceSize.h
   }
 }
 
