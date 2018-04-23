@@ -1,5 +1,9 @@
 import * as Aseprite from './aseprite'
+import * as TestExpected from './texture-atlas.expect.test'
+import * as TestInput from './texture-atlas.input.test.json'
 import {
+  unmarshal,
+  unmarshalAnimations,
   unmarshalAnimation,
   marshalTagFrameNumber,
   unmarshalCel,
@@ -10,6 +14,141 @@ import {
 } from './texture-atlas'
 
 describe('texture-atlas', () => {
+  describe('#unmarshal()', () => {
+    test('Converts size.', () => {
+      expect(unmarshal(<Aseprite.File>TestInput)).toEqual(TestExpected.default)
+    })
+  })
+
+  describe('#unmarshalAnimations()', () => {
+    test('Converts Animations.', () => {
+      const frameTags = [
+        {
+          name: 'cactus s',
+          from: 0,
+          to: 0,
+          direction: <Aseprite.Direction>'forward'
+        },
+        {
+          name: 'cactus m',
+          from: 1,
+          to: 1,
+          direction: <Aseprite.Direction>'forward'
+        },
+        {
+          name: 'cactus l',
+          from: 2,
+          to: 2,
+          direction: <Aseprite.Direction>'forward'
+        },
+        {
+          name: 'cactus xl',
+          from: 3,
+          to: 3,
+          direction: <Aseprite.Direction>'forward'
+        }
+      ]
+      const frames = {
+        'cactus s 0': {
+          frame: {x: 220, y: 18, w: 18, h: 18},
+          rotated: false,
+          trimmed: false,
+          spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
+          sourceSize: {w: 16, h: 16},
+          duration: 65535
+        },
+        'cactus m 1': {
+          frame: {x: 90, y: 54, w: 18, h: 18},
+          rotated: false,
+          trimmed: false,
+          spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
+          sourceSize: {w: 16, h: 16},
+          duration: 65535
+        },
+        'cactus l 2': {
+          frame: {x: 72, y: 54, w: 18, h: 18},
+          rotated: false,
+          trimmed: false,
+          spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
+          sourceSize: {w: 16, h: 16},
+          duration: 65535
+        },
+        'cactus xl 3': {
+          frame: {x: 54, y: 54, w: 18, h: 18},
+          rotated: false,
+          trimmed: false,
+          spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
+          sourceSize: {w: 16, h: 16},
+          duration: 65535
+        }
+      }
+      const slices = [
+        {
+          name: 'cactus s',
+          color: '#0000ffff',
+          keys: [{frame: 0, bounds: {x: 8, y: 12, w: 2, h: 3}}]
+        },
+        {
+          name: 'cactus m',
+          color: '#0000ffff',
+          keys: [{frame: 0, bounds: {x: 7, y: 11, w: 3, h: 4}}]
+        },
+        {
+          name: 'cactus l',
+          color: '#0000ffff',
+          keys: [{frame: 0, bounds: {x: 7, y: 10, w: 3, h: 5}}]
+        },
+        {
+          name: 'cactus xl',
+          color: '#0000ffff',
+          keys: [{frame: 0, bounds: {x: 7, y: 9, w: 3, h: 6}}]
+        }
+      ]
+      expect(unmarshalAnimations(frameTags, frames, slices)).toEqual({
+        'cactus s': {
+          cels: [
+            {
+              texture: {x: 221, y: 19, w: 16, h: 16},
+              duration: Number.POSITIVE_INFINITY,
+              collision: [{x: 8, y: 12, w: 2, h: 3}]
+            }
+          ],
+          direction: Aseprite.Direction.FORWARD
+        },
+        'cactus m': {
+          cels: [
+            {
+              texture: {x: 91, y: 55, w: 16, h: 16},
+              duration: Number.POSITIVE_INFINITY,
+              collision: [{x: 7, y: 11, w: 3, h: 4}]
+            }
+          ],
+          direction: Aseprite.Direction.FORWARD
+        },
+        'cactus l': {
+          cels: [
+            {
+              texture: {x: 73, y: 55, w: 16, h: 16},
+              duration: Number.POSITIVE_INFINITY,
+              collision: [{x: 7, y: 10, w: 3, h: 5}]
+            }
+          ],
+          direction: Aseprite.Direction.FORWARD
+        },
+        'cactus xl': {
+          cels: [
+            {
+              texture: {x: 55, y: 55, w: 16, h: 16},
+              duration: Number.POSITIVE_INFINITY,
+              collision: [{x: 7, y: 9, w: 3, h: 6}]
+            }
+          ],
+          direction: Aseprite.Direction.FORWARD
+        }
+      })
+    })
+  })
+
   describe('#unmarshalAnimation()', () => {
     test('Converts FrameTag, Frame from Frame[], and Slice.', () => {
       const frameTag = {

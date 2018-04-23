@@ -1,0 +1,433 @@
+{
+  "frames": {
+    "cactus s 0": {
+      "frame": {"x": 220, "y": 18, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cactus m 1": {
+      "frame": {"x": 90, "y": 54, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cactus l 2": {
+      "frame": {"x": 72, "y": 54, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cactus xl 3": {
+      "frame": {"x": 54, "y": 54, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "char walk 0": {
+      "frame": {"x": 36, "y": 54, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 100
+    },
+    "char walk 1": {
+      "frame": {"x": 18, "y": 54, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 100
+    },
+    "char walk 2": {
+      "frame": {"x": 0, "y": 54, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 100
+    },
+    "char walk 3": {
+      "frame": {"x": 238, "y": 36, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 100
+    },
+    "char walk 4": {
+      "frame": {"x": 220, "y": 36, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 100
+    },
+    "cloud xs 0": {
+      "frame": {"x": 202, "y": 36, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cloud s 1": {
+      "frame": {"x": 184, "y": 36, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cloud m 2": {
+      "frame": {"x": 166, "y": 36, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cloud l 3": {
+      "frame": {"x": 148, "y": 36, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cloud xl 4": {
+      "frame": {"x": 130, "y": 36, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "flag  ": {
+      "frame": {"x": 238, "y": 18, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "grass  ": {
+      "frame": {"x": 130, "y": 0, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 0 0": {
+      "frame": {"x": 202, "y": 18, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 1 1": {
+      "frame": {"x": 184, "y": 18, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 2 2": {
+      "frame": {"x": 166, "y": 18, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 3 3": {
+      "frame": {"x": 148, "y": 18, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 4 4": {
+      "frame": {"x": 130, "y": 18, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 5 5": {
+      "frame": {"x": 238, "y": 0, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 6 6": {
+      "frame": {"x": 220, "y": 0, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 7 7": {
+      "frame": {"x": 202, "y": 0, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 8 8": {
+      "frame": {"x": 184, "y": 0, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "palette 9 9": {
+      "frame": {"x": 166, "y": 0, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "pond mask 0": {
+      "frame": {"x": 0, "y": 36, "w": 130, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 128, "h": 16},
+      "sourceSize": {"w": 128, "h": 16},
+      "duration": 65535
+    },
+    "pond water 1": {
+      "frame": {"x": 0, "y": 18, "w": 130, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 128, "h": 16},
+      "sourceSize": {"w": 128, "h": 16},
+      "duration": 65535
+    },
+    "pond reflections 2": {
+      "frame": {"x": 0, "y": 0, "w": 130, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 128, "h": 16},
+      "sourceSize": {"w": 128, "h": 16},
+      "duration": 65535
+    },
+    "rain  ": {
+      "frame": {"x": 148, "y": 0, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    }
+  },
+  "meta": {
+    "app": "http://www.aseprite.org/",
+    "version": "1.2.8.1",
+    "image": "atlas.png",
+    "format": "I8",
+    "size": {"w": 256, "h": 128},
+    "scale": "1",
+    "frameTags": [
+      {"name": "cactus s", "from": 0, "to": 0, "direction": "forward"},
+      {"name": "cactus m", "from": 1, "to": 1, "direction": "forward"},
+      {"name": "cactus l", "from": 2, "to": 2, "direction": "forward"},
+      {"name": "cactus xl", "from": 3, "to": 3, "direction": "forward"},
+      {"name": "char walk", "from": 0, "to": 4, "direction": "pingpong"},
+      {"name": "cloud xs", "from": 0, "to": 0, "direction": "forward"},
+      {"name": "cloud s", "from": 1, "to": 1, "direction": "forward"},
+      {"name": "cloud m", "from": 2, "to": 2, "direction": "forward"},
+      {"name": "cloud l", "from": 3, "to": 3, "direction": "forward"},
+      {"name": "cloud xl", "from": 4, "to": 4, "direction": "forward"},
+      {"name": "flag ", "from": 0, "to": 0, "direction": "forward"},
+      {"name": "grass ", "from": 0, "to": 0, "direction": "forward"},
+      {"name": "palette 0", "from": 0, "to": 0, "direction": "forward"},
+      {"name": "palette 1", "from": 1, "to": 1, "direction": "forward"},
+      {"name": "palette 2", "from": 2, "to": 2, "direction": "forward"},
+      {"name": "palette 3", "from": 3, "to": 3, "direction": "forward"},
+      {"name": "palette 4", "from": 4, "to": 4, "direction": "forward"},
+      {"name": "palette 5", "from": 5, "to": 5, "direction": "forward"},
+      {"name": "palette 6", "from": 6, "to": 6, "direction": "forward"},
+      {"name": "palette 7", "from": 7, "to": 7, "direction": "forward"},
+      {"name": "palette 8", "from": 8, "to": 8, "direction": "forward"},
+      {"name": "palette 9", "from": 9, "to": 9, "direction": "forward"},
+      {"name": "pond mask", "from": 0, "to": 0, "direction": "forward"},
+      {"name": "pond water", "from": 1, "to": 1, "direction": "forward"},
+      {"name": "pond reflections", "from": 2, "to": 2, "direction": "forward"},
+      {"name": "rain ", "from": 0, "to": 0, "direction": "forward"}
+    ],
+    "slices": [
+      {
+        "name": "cactus s",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 8, "y": 12, "w": 2, "h": 3}}]
+      },
+      {
+        "name": "cactus m",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 7, "y": 11, "w": 3, "h": 4}}]
+      },
+      {
+        "name": "cactus l",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 7, "y": 10, "w": 3, "h": 5}}]
+      },
+      {
+        "name": "cactus xl",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 7, "y": 9, "w": 3, "h": 6}}]
+      },
+      {
+        "name": "char walk",
+        "color": "#0000ffff",
+        "keys": [
+          {"frame": 0, "bounds": {"x": 6, "y": 8, "w": 4, "h": 7}},
+          {"frame": 1, "bounds": {"x": 6, "y": 9, "w": 4, "h": 6}},
+          {"frame": 2, "bounds": {"x": 6, "y": 10, "w": 4, "h": 5}},
+          {"frame": 3, "bounds": {"x": 6, "y": 9, "w": 4, "h": 6}},
+          {"frame": 4, "bounds": {"x": 6, "y": 8, "w": 4, "h": 7}}
+        ]
+      },
+      {
+        "name": "cloud xs",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 4, "y": 12, "w": 7, "h": 3}}]
+      },
+      {
+        "name": "cloud s",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 4, "y": 11, "w": 9, "h": 4}}]
+      },
+      {
+        "name": "cloud m",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 3, "y": 11, "w": 10, "h": 4}}]
+      },
+      {
+        "name": "cloud l",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 3, "y": 10, "w": 9, "h": 5}}]
+      },
+      {
+        "name": "cloud xl",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 3, "y": 9, "w": 9, "h": 6}}]
+      },
+      {
+        "name": "flag ",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 7, "y": 10, "w": 3, "h": 5}}]
+      },
+      {
+        "name": "grass ",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 15, "w": 16, "h": 1}}]
+      },
+      {
+        "name": "palette 0",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 1",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 2",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 3",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 4",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 5",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 6",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 7",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 8",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "palette 9",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
+      },
+      {
+        "name": "pond mask 0",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 11, "w": 49, "h": 1}}]
+      },
+      {
+        "name": "pond mask 1",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 49, "y": 10, "w": 65, "h": 4}}]
+      },
+      {
+        "name": "pond mask 2",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 114, "y": 11, "w": 14, "h": 1}}]
+      },
+      {
+        "name": "pond water 0",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 24, "y": 11, "w": 25, "h": 1}}]
+      },
+      {
+        "name": "pond water 1",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 49, "y": 10, "w": 65, "h": 4}}]
+      },
+      {
+        "name": "pond reflections",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 11, "w": 128, "h": 1}}]
+      },
+      {
+        "name": "rain ",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 4, "y": 0, "w": 7, "h": 16}}]
+      }
+    ]
+  }
+}

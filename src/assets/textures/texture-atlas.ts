@@ -67,12 +67,12 @@ export function unmarshalAnimation(
     ++frameNumber
   ) {
     const tagFrameNumber = marshalTagFrameNumber(frameTag.name, frameNumber)
-    const cel = unmarshalCel(
-      frameTag,
-      frames[tagFrameNumber],
-      frameNumber,
-      slices
-    )
+    let frame = frames[tagFrameNumber]
+    if (!frameNumber && frame === undefined) {
+      // https://github.com/aseprite/aseprite/issues/1713
+      frame = frames[frameTag.name + ' ']
+    }
+    const cel = unmarshalCel(frameTag, frame, frameNumber, slices)
     cels.push(cel)
   }
 

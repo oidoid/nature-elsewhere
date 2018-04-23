@@ -53,10 +53,10 @@ export type Meta = {
 
 /**
  * A Tag followed by a space followed by an optional frame number **via CLI**
- * `--filename-format '{tag} {frame}' --format json-hash`. E.g., 'cloud xl 4'
- * refers to the file named "cloud.aseprite" with animation named "xs", frame
- * index 4, and 'sky  ' refers to the file named "sky.aseprite" with animation
- * named "", the first frame.
+ * `--filename-format '{tag} {frame}'`. E.g., 'cloud xl 4' refers to the file
+ * named "cloud.aseprite" with animation named "xs", frame index 4, and 'sky  '
+ * refers to the file named "sky.aseprite" with animation named "", the first
+ * frame. See https://github.com/aseprite/aseprite/issues/1713.
  */
 export type TagFrameNumber = string
 
