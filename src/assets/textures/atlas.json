@@ -336,7 +336,7 @@
       {
         "name": "flag ",
         "color": "#0000ffff",
-        "keys": [{"frame": 0, "bounds": {"x": 7, "y": 10, "w": 3, "h": 5}}]
+        "keys": [{"frame": 0, "bounds": {"x": 6, "y": 10, "w": 3, "h": 5}}]
       },
       {
         "name": "grass ",
