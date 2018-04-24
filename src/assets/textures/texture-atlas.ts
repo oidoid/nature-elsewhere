@@ -1,18 +1,14 @@
-// A pretty tight coupling to the underlying Aseprite format for simplicity. The
-// existing format is close enough to what's needed but indexing from tag to
-// animation is much more intuitive than indexing from tag and frame number to
-// frame, an array of collision data that must be mapped back to frames, and a
-// similar array of frame tags.
-
 import * as Aseprite from './aseprite'
 
 export type TextureAtlas = {
-  size: Aseprite.WH
-  animations: Animations
+  size: WH
+  animations: AnimationMap
 }
 
-/** @type {Object.<Aseprite.Tag, Animation>} */
-export type Animations = {[tag: string]: Animation}
+/** @type {Object.<Tag, Animation>} */
+export type AnimationMap = {[tag: string]: Animation}
+
+export type Tag = Aseprite.Tag
 
 /** Animation and collision frames. */
 export type Animation = {
@@ -20,13 +16,19 @@ export type Animation = {
   direction: Aseprite.Direction
 }
 
+export type Direction = Aseprite.Direction
+
+export type Rect = Aseprite.XY & Aseprite.WH
+export type WH = Aseprite.WH
+export type XY = Aseprite.XY
+
 export type Cel = {
   /** Texture bounds within the atlas. */
-  texture: Aseprite.Rect
+  texture: Rect
   /** Animation length in milliseconds, possibly infinite. */
   duration: number
   /** Collision within the texture. */
-  collision: Aseprite.Rect[]
+  collision: Rect[]
 }
 
 export function unmarshal(file: Aseprite.File): TextureAtlas {
@@ -42,9 +44,9 @@ export function unmarshal(file: Aseprite.File): TextureAtlas {
 
 export function unmarshalAnimations(
   frameTags: Aseprite.FrameTag[],
-  frames: Aseprite.Frames,
+  frames: Aseprite.FrameMap,
   slices: Aseprite.Slice[]
-): Animations {
+): AnimationMap {
   return (
     frameTags
       // Animations[]
@@ -57,7 +59,7 @@ export function unmarshalAnimations(
 
 export function unmarshalAnimation(
   frameTag: Aseprite.FrameTag,
-  frames: Aseprite.Frames,
+  frames: Aseprite.FrameMap,
   slices: Aseprite.Slice[]
 ): Animation {
   const cels = []
@@ -66,11 +68,12 @@ export function unmarshalAnimation(
     frameNumber <= frameTag.to;
     ++frameNumber
   ) {
-    const tagFrameNumber = marshalTagFrameNumber(frameTag.name, frameNumber)
+    let tagFrameNumber = marshalTagFrameNumber(frameTag.name, frameNumber)
     let frame = frames[tagFrameNumber]
     if (!frameNumber && frame === undefined) {
       // https://github.com/aseprite/aseprite/issues/1713
-      frame = frames[frameTag.name + ' ']
+      tagFrameNumber = marshalTagFrameNumber(frameTag.name)
+      frame = frames[tagFrameNumber]
     }
     const cel = unmarshalCel(frameTag, frame, frameNumber, slices)
     cels.push(cel)
@@ -80,7 +83,7 @@ export function unmarshalAnimation(
 }
 
 export function marshalTagFrameNumber(
-  tag: Aseprite.Tag,
+  tag: Tag,
   index?: number
 ): Aseprite.TagFrameNumber {
   return `${tag} ${index === undefined ? '' : index}`
@@ -99,7 +102,7 @@ export function unmarshalCel(
   }
 }
 
-export function unmarshalTexture(frame: Aseprite.Frame): Aseprite.Rect {
+export function unmarshalTexture(frame: Aseprite.Frame): Rect {
   const padding = unmarshalPadding(frame)
   return {
     x: frame.frame.x + padding.w / 2,
@@ -109,7 +112,7 @@ export function unmarshalTexture(frame: Aseprite.Frame): Aseprite.Rect {
   }
 }
 
-export function unmarshalPadding(frame: Aseprite.Frame): Aseprite.WH {
+export function unmarshalPadding(frame: Aseprite.Frame): WH {
   return {
     w: frame.frame.w - frame.sourceSize.w,
     h: frame.frame.h - frame.sourceSize.h
@@ -126,13 +129,13 @@ export function unmarshalCollision(
   frameTag: Aseprite.FrameTag,
   frameNumber: number,
   slices: Aseprite.Slice[]
-): Aseprite.Rect[] {
+): Rect[] {
   const offset = frameNumber - frameTag.from
   return (
     slices
       // Filter out Slices not for this Tag.
       .filter(slice => slice.name === frameTag.name)
-      // For each Slice, get the latest relevant Key.
+      // For each Slice, get the greatest relevant Key.
       .map(slice => slice.keys.filter(key => key.frame <= offset).slice(-1))
       .reduce((sum, keys) => sum.concat(keys), []) // Key[]
       .map(key => key.bounds) // Bounds

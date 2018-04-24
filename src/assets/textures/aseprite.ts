@@ -21,16 +21,17 @@
 /**
  * The topmost data type for JSON exported from Aseprite. This format contains
  * all the image, animation, and collision information for every file packed in
- * the atlas.
+ * the atlas. **By convention**, every file has one or more animations. Every
+ * animation has a Frame sequence, a Tag, and zero or more Slices.
  */
 export type File = {
   meta: Meta
   /** All Frames for all files packed. */
-  frames: Frames
+  frames: FrameMap
 }
 
 /** @type {Object.<TagFrameNumber, Frame>} */
-export type Frames = {[tagFrameNumber: string]: Frame}
+export type FrameMap = {[tagFrameNumber: string]: Frame}
 
 export type Meta = {
   /** E.g., 'http://www.aseprite.org/'. */
@@ -53,7 +54,8 @@ export type Meta = {
 
 /**
  * A Tag followed by a space followed by an optional frame number **via CLI**
- * `--filename-format '{tag} {frame}'`. E.g., 'cloud xl 4' refers to the file
+ * `--filename-format '{tag} {frame}'`. The frame number is only optional when
+ * it is zero in a single frame animation. E.g., 'cloud xl 4' refers to the file
  * named "cloud.aseprite" with animation named "xs", frame index 4, and 'sky  '
  * refers to the file named "sky.aseprite" with animation named "", the first
  * frame. See https://github.com/aseprite/aseprite/issues/1713.
@@ -81,11 +83,11 @@ export type Frame = {
    * calculated by subtracting member's WH dimensions from sourceSize and
    * dividing by 2.
    */
-  frame: Rect
+  frame: XY & WH
   rotated: boolean
   trimmed: boolean
   /** The Frame's bounds within the file packed, not including padding. */
-  spriteSourceSize: Rect
+  spriteSourceSize: XY & WH
   sourceSize: WH
   duration: Duration
 }
@@ -150,10 +152,8 @@ export type Key = {
    */
   frame: number
   /** The Frame's collision boundary within the file packed. */
-  bounds: Rect
+  bounds: XY & WH
 }
-
-export type Rect = XY & WH
 
 /** Width and height lengths. */
 export type WH = {

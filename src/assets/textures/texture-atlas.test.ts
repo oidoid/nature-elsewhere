@@ -1,6 +1,7 @@
 import * as Aseprite from './aseprite'
 import * as TestExpected from './texture-atlas.expect.test'
 import * as TestInput from './texture-atlas.input.test.json'
+import * as Atlas from './atlas.json'
 import {
   unmarshal,
   unmarshalAnimations,
@@ -14,6 +15,26 @@ import {
 } from './texture-atlas'
 
 describe('texture-atlas', () => {
+  describe('atlas.json', () => {
+    const file: Aseprite.File = Atlas
+    const tags = file.meta.frameTags.map(frameTag => frameTag.name)
+
+    test('Converts current atlas.json.', () => {
+      expect(unmarshal(file)).toBeTruthy()
+    })
+
+    test('Each Frame is indexed by a TagFrameNumber', () => {
+      const frameKeys = Object.keys(file.frames).map(tagFrameNumber =>
+        tagFrameNumber.replace(/ [0-9]*$/, '')
+      )
+      frameKeys.forEach(key => expect(tags).toContainEqual(key))
+    })
+
+    test('Each Slice name is a Tag', () => {
+      file.meta.slices.forEach(slice => expect(tags).toContainEqual(slice.name))
+    })
+  })
+
   describe('#unmarshal()', () => {
     test('Converts size.', () => {
       expect(unmarshal(<Aseprite.File>TestInput)).toEqual(TestExpected.default)
@@ -266,6 +287,7 @@ describe('texture-atlas', () => {
       }
       expect(unmarshalTexture(frame)).toEqual({x: 1, y: 2, w: 3, h: 4})
     })
+
     test('Converts texture mapping with padding.', () => {
       const frame = {
         frame: {x: 1, y: 2, w: 5, h: 6},
@@ -318,11 +340,11 @@ describe('texture-atlas', () => {
   })
 
   describe('#unmarshalDuration()', () => {
-    test('Convert Duration.', () => {
+    test('Converts Duration.', () => {
       expect(unmarshalDuration(0)).toEqual(0)
     })
 
-    test('Convert infinite Duration.', () => {
+    test('Converts infinite Duration.', () => {
       expect(unmarshalDuration(Aseprite.INFINITE_DURATION)).toEqual(
         Number.POSITIVE_INFINITY
       )
@@ -330,7 +352,7 @@ describe('texture-atlas', () => {
   })
 
   describe('#unmarshalCollision()', () => {
-    test('Convert Slice to Rect[].', () => {
+    test('Converts Slice to Rect[].', () => {
       const frameTag = {
         name: 'stem ',
         from: 0,
@@ -349,7 +371,7 @@ describe('texture-atlas', () => {
       ])
     })
 
-    test('Filter out unrelated Tags.', () => {
+    test('Filters out unrelated Tags.', () => {
       const frameTag = {
         name: 'stem ',
         from: 0,
@@ -366,7 +388,7 @@ describe('texture-atlas', () => {
       expect(unmarshalCollision(frameTag, 0, slices)).toEqual([])
     })
 
-    test('Filter out unrelated Frame number Keys.', () => {
+    test('Filters out unrelated Frame number Keys.', () => {
       const frameTag = {
         name: 'stem ',
         from: 0,
@@ -389,7 +411,7 @@ describe('texture-atlas', () => {
       ])
     })
 
-    test('Convert Slice with multiple keys to Rect[].', () => {
+    test('Converts Slice with multiple Keys to Rect[].', () => {
       const frameTag = {
         name: 'stem ',
         from: 0,
@@ -411,18 +433,18 @@ describe('texture-atlas', () => {
       ])
     })
 
-    test('Convert no Slices.', () => {
+    test('Converts no Slices.', () => {
       const frameTag = {
         name: 'stem ',
         from: 0,
         to: 0,
         direction: <Aseprite.Direction>'forward'
       }
-      const slices: Aseprite.Slice[] = []
+      const slices = []
       expect(unmarshalCollision(frameTag, 0, slices)).toEqual([])
     })
 
-    test('Convert multiple Slices.', () => {
+    test('Converts multiple Slices.', () => {
       const frameTag = {
         name: 'stem ',
         from: 0,
