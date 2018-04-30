@@ -1,6 +1,6 @@
 import {GL, GLTexture} from './gl'
 import {Assets} from '../assets/asset-loader'
-import {Level0} from '../levels/level0'
+import {Level0} from '../assets/levels/level0'
 import {ShaderContext} from './glsl/shader-loader'
 
 export interface Texture {
