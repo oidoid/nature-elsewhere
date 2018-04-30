@@ -2,11 +2,14 @@
 
 ## Terminology
 
-* Atlas: a sprite sheet or texture of packages sub-textures
-* Bounds: having width and height
+* Atlas: a sprite sheet or composite texture
+* Bounds: having a position and size
 * Location: a WebGL shader program variable identifier
 * Position: a coordinate
-* XY: having X and Y-coordinate dimensions such as a position, bounds, or vertex
+* Rect: a rectangular bounds
+* Size: an area
+* WH: a size have width and height
+* XY: having x and y-coordinate dimensions such as a position
 
 ## License (GPLv3)
 

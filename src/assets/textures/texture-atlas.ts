@@ -1,5 +1,7 @@
 import * as Aseprite from './aseprite'
+import {Rect, WH} from '../../geo'
 
+/** A sprite sheet or composite texture. */
 export type TextureAtlas = {
   size: WH
   animations: AnimationMap
@@ -17,10 +19,6 @@ export type Animation = {
 }
 
 export type Direction = Aseprite.Direction
-
-export type Rect = Aseprite.XY & Aseprite.WH
-export type WH = Aseprite.WH
-export type XY = Aseprite.XY
 
 export type Cel = {
   /** Texture bounds within the atlas. */
@@ -135,7 +133,7 @@ export function unmarshalCollision(
     slices
       // Filter out Slices not for this Tag.
       .filter(slice => slice.name === frameTag.name)
-      // For each Slice, get the greatest relevant Key.
+      // For each Slice, get the greatest relevant Key (as a Key[]).
       .map(slice => slice.keys.filter(key => key.frame <= offset).slice(-1))
       .reduce((sum, keys) => sum.concat(keys), []) // Key[]
       .map(key => key.bounds) // Bounds
