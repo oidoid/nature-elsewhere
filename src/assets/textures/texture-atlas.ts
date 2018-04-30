@@ -20,6 +20,7 @@ export type Animation = {
 
 export type Direction = Aseprite.Direction
 
+/** A single cel of animation sequence. */
 export type Cel = {
   /** Texture bounds within the atlas. */
   texture: Rect
@@ -29,6 +30,10 @@ export type Cel = {
   collision: Rect[]
 }
 
+// todo: don't version build products like atlas.json and atlas.png.
+// todo: proocess / unmarshal at compilation time instead of at runtime and
+//       share the same TextureAtlas type defintion between compilation code and
+//       runtime code.
 export function unmarshal(file: Aseprite.File): TextureAtlas {
   return {
     size: file.meta.size,
