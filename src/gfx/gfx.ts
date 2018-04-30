@@ -1,20 +1,12 @@
 import {GL, GLTexture} from './gl'
 import {Assets} from '../assets/asset-loader'
-import {Level0} from '../assets/levels/level0'
+import {Sprite} from '../assets/levels/sprite'
 import {ShaderContext} from './glsl/shader-loader'
+import {WH, XY} from '../geo'
+import * as textureAtlas from '../assets/textures/texture-atlas'
 
 export interface Texture {
   texture: GLTexture
-}
-
-interface Point {
-  x: number
-  y: number
-}
-
-interface Rectangle {
-  width: number
-  height: number
 }
 
 /** Creates, binds, and configures a texture. */
@@ -27,21 +19,14 @@ export function createTexture(gl: GL): GLTexture | null {
   return texture
 }
 
-export interface Drawable {
-  location: Point
-  bounds: Rectangle
-  url: string
-  textureOffset?: Point
-  texturePosition: Point
-}
-
 let textureOffset = {x: 0, y: 0}
 
 export function drawTextures(
   gl: GL,
   ctx: ShaderContext,
+  atlas: textureAtlas.TextureAtlas,
   assets: Assets<any>,
-  drawables: Drawable[],
+  sprites: Sprite[],
   step: number
 ) {
   const DIMENSIONS = 2
@@ -78,37 +63,28 @@ export function drawTextures(
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
 
   // Load the images into the texture.
-  for (const drawable of drawables) {
-    const image = assets[drawable.url].image
+  for (const sprite of sprites) {
+    const image = assets[sprite.textureURL].image
     // todo: this probably doesn't need to happen multiple times every frame.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
-    if (drawable.textureOffset) {
+    if (sprite.textureOffset) {
       textureOffset = {
-        x: textureOffset.x + step * drawable.textureOffset.x,
-        y: textureOffset.y + step * drawable.textureOffset.y
+        x: textureOffset.x + step * sprite.textureOffset.x,
+        y: textureOffset.y + step * sprite.textureOffset.y
       }
     }
-    const offset = drawable.textureOffset ? textureOffset : {x: 0, y: 0}
+
+    const tex = atlas.animations[sprite.textureID].cels[0].texture
+
+    const offset = sprite.textureOffset ? textureOffset : {x: 0, y: 0}
     gl.uniform2f(ctx.location('uTextureOffset'), offset.x, offset.y)
-    bufferRectangle(gl, drawable.location, drawable.bounds)
+    bufferRectangle(gl, sprite.position, {w: tex.w, h: tex.h})
 
-    gl.uniform2f(
-      ctx.location('uAtlasBounds'),
-      Level0.Map.atlasBounds.x,
-      Level0.Map.atlasBounds.y
-    )
+    gl.uniform2f(ctx.location('uAtlasBounds'), atlas.size.w, atlas.size.h)
 
-    gl.uniform2f(
-      ctx.location('uTextureBounds'),
-      drawable.bounds.width,
-      drawable.bounds.height
-    )
+    gl.uniform2f(ctx.location('uTextureBounds'), tex.w, tex.h)
 
-    gl.uniform2f(
-      ctx.location('uTexturePosition'),
-      drawable.texturePosition.x,
-      drawable.texturePosition.y
-    )
+    gl.uniform2f(ctx.location('uTexturePosition'), tex.x, tex.y)
 
     const stride = 1 * DIMENSIONS * Float32Array.BYTES_PER_ELEMENT
     gl.vertexAttribPointer(
@@ -133,13 +109,9 @@ export function drawTextures(
   gl.deleteBuffer(textureCoordsBuffer)
 }
 
-function bufferRectangle(
-  gl: GL,
-  {x, y}: Point,
-  {width, height}: Rectangle
-): void {
-  const x1 = x + width
-  const y1 = y + height
+function bufferRectangle(gl: GL, {x, y}: XY, {w, h}: WH): void {
+  const x1 = x + w
+  const y1 = y + h
   const vertices = new Float32Array([x, y, x1, y, x, y1, x, y1, x1, y, x1, y1])
   gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
 }

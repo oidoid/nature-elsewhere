@@ -7,10 +7,10 @@ export type TextureAtlas = {
   animations: AnimationMap
 }
 
-/** @type {Object.<Tag, Animation>} */
-export type AnimationMap = {[tag: string]: Animation}
+/** @type {Object.<TextureID, Animation>} */
+export type AnimationMap = {[textureID: string]: Animation}
 
-export type Tag = Aseprite.Tag
+export type TextureID = Aseprite.Tag
 
 /** Animation and collision frames. */
 export type Animation = {
@@ -86,10 +86,10 @@ export function unmarshalAnimation(
 }
 
 export function marshalTagFrameNumber(
-  tag: Tag,
+  textureID: TextureID,
   index?: number
 ): Aseprite.TagFrameNumber {
-  return `${tag} ${index === undefined ? '' : index}`
+  return `${textureID} ${index === undefined ? '' : index}`
 }
 
 export function unmarshalCel(

@@ -1,7 +1,7 @@
 import * as Aseprite from './aseprite'
-import * as TestExpected from './texture-atlas.expect.test'
-import * as TestInput from './texture-atlas.input.test.json'
-import * as Atlas from './atlas.json'
+import * as testExpected from './texture-atlas.expect.test'
+import * as testInput from './texture-atlas.input.test.json'
+import * as atlas from './atlas.json'
 import {
   unmarshal,
   unmarshalAnimations,
@@ -16,7 +16,7 @@ import {
 
 describe('texture-atlas', () => {
   describe('atlas.json', () => {
-    const file: Aseprite.File = Atlas
+    const file: Aseprite.File = atlas
     const tags = file.meta.frameTags.map(frameTag => frameTag.name)
 
     test('Converts current atlas.json.', () => {
@@ -37,7 +37,7 @@ describe('texture-atlas', () => {
 
   describe('#unmarshal()', () => {
     test('Converts size.', () => {
-      expect(unmarshal(<Aseprite.File>TestInput)).toEqual(TestExpected.default)
+      expect(unmarshal(<Aseprite.File>testInput)).toEqual(testExpected.default)
     })
   })
 

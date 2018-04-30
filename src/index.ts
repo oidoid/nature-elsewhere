@@ -7,6 +7,9 @@ import {check, GL, GLUniformLocation} from './gfx/gl'
 import * as vertexSrc from './gfx/glsl/main.vert'
 import * as fragmentSrc from './gfx/glsl/main.frag'
 import * as kbd from './input/kbd'
+import * as Aseprite from './assets/textures/aseprite'
+import * as textureAtlas from './assets/textures/texture-atlas'
+import * as atlasJSON from './assets/textures/atlas.json'
 
 const HEIGHT = 128
 
@@ -39,9 +42,10 @@ function main(window: Window) {
     console.log(`${event.key} => ${btn}`)
   })
 
+  const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
   assetsLoader
     .load(enumUtil.toObject(Level0.Texture))
-    .then(assets => loop(gl, ctx, assets, Date.now()))
+    .then(assets => loop(gl, ctx, atlas, assets, Date.now()))
   // todo: exit.
 }
 
@@ -63,28 +67,30 @@ function resize(gl: GL, resolutionLocation: GLUniformLocation | null) {
 function loop(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
+  atlas: textureAtlas.TextureAtlas,
   assets: assetsLoader.Assets<any>,
   timestamp: number
 ): void {
   const now = Date.now()
-  window.requestAnimationFrame(() => loop(gl, ctx, assets, now))
+  window.requestAnimationFrame(() => loop(gl, ctx, atlas, assets, now))
 
   resize(gl, ctx.location('uResolution'))
 
   const step = (now - timestamp) / 1000
-  render(gl, ctx, assets, step)
+  render(gl, ctx, atlas, assets, step)
 }
 
 function render(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
+  atlas: textureAtlas.TextureAtlas,
   assets: assetsLoader.Assets<any>,
   step: number
 ): void {
   const {r, g, b, a} = Level0.Map.backgroundColor
   gl.clearColor(r, g, b, a)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gfx.drawTextures(gl, ctx, assets, Level0.Map.drawables, step)
+  gfx.drawTextures(gl, ctx, atlas, assets, Level0.Map.sprites, step)
 }
 
 main(window)
