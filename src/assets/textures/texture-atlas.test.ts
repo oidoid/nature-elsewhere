@@ -23,6 +23,13 @@ describe('texture-atlas', () => {
       expect(unmarshal(file)).toBeTruthy()
     })
 
+    test('Each Tag has a Frame', () => {
+      const frameKeys = Object.keys(file.frames).map(tagFrameNumber =>
+        tagFrameNumber.replace(/ [0-9]*$/, '')
+      )
+      tags.forEach(key => expect(frameKeys).toContainEqual(key))
+    })
+
     test('Each Frame is indexed by a TagFrameNumber', () => {
       const frameKeys = Object.keys(file.frames).map(tagFrameNumber =>
         tagFrameNumber.replace(/ [0-9]*$/, '')
