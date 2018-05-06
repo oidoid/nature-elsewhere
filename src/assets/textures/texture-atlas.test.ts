@@ -20,8 +20,12 @@ describe('texture-atlas', () => {
     const file = <Aseprite.File>atlas
     const tags = file.meta.frameTags.map(frameTag => frameTag.name)
 
-    test('Converts current atlas.json.', () => {
-      expect(unmarshal(file)).toBeTruthy()
+    test('Converts current JSON and size is a reasonable power of 2.', () => {
+      const atlas = unmarshal(file)
+      expect(atlas.size.w).toBeLessThanOrEqual(2048)
+      expect(atlas.size.h).toBeLessThanOrEqual(2048)
+      expect(Math.log2(atlas.size.w) % 1).toEqual(0)
+      expect(Math.log2(atlas.size.h) % 1).toEqual(0)
     })
 
     test('Each Tag is unique within the sheet', () => {
