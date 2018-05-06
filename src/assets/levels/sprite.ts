@@ -4,6 +4,6 @@ import {XY} from '../../geo'
 export type Sprite = {
   textureURL: string
   textureID: TextureAtlas.TextureID
-  textureOffset?: XY
+  scroll?: XY
   position: XY
 }

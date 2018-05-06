@@ -19,7 +19,7 @@ export function createTexture(gl: GL): GLTexture | null {
   return texture
 }
 
-let textureOffset = {x: 0, y: 0}
+let textureScroll = {x: 0, y: 0}
 
 export function drawTextures(
   gl: GL,
@@ -67,17 +67,17 @@ export function drawTextures(
     const image = assets[sprite.textureURL].image
     // todo: this probably doesn't need to happen multiple times every frame.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
-    if (sprite.textureOffset) {
-      textureOffset = {
-        x: textureOffset.x + step * sprite.textureOffset.x,
-        y: textureOffset.y + step * sprite.textureOffset.y
+    if (sprite.scroll) {
+      textureScroll = {
+        x: textureScroll.x + step * sprite.scroll.x,
+        y: textureScroll.y + step * sprite.scroll.y
       }
     }
 
     const tex = atlas.animations[sprite.textureID].cels[0].texture
 
-    const offset = sprite.textureOffset ? textureOffset : {x: 0, y: 0}
-    gl.uniform2f(ctx.location('uTextureOffset'), offset.x, offset.y)
+    const scroll = sprite.scroll ? textureScroll : {x: 0, y: 0}
+    gl.uniform2f(ctx.location('uTextureScroll'), scroll.x, scroll.y)
     bufferRectangle(gl, sprite.position, {w: tex.w, h: tex.h})
 
     gl.uniform2f(ctx.location('uAtlasBounds'), atlas.size.w, atlas.size.h)
