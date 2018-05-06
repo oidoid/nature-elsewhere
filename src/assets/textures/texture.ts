@@ -33,6 +33,6 @@ export const TEXTURE = {
   RAIN: {url: TextureURL.ATLAS, id: 'rain '}
 }
 
-export function textureEquals(this: Texture, texture: Texture): boolean {
-  return this.url === texture.url && this.id === texture.id
+export function textureEquals(lhs: Texture, rhs: Texture): boolean {
+  return lhs.url === rhs.url && lhs.id === rhs.id
 }

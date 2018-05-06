@@ -1,9 +1,11 @@
-/** Asserts that each array entry is unique. */
-export function expectToContainSet<T>(
-  arr: T[],
-  equals: (lhs: T, rhs: T) => boolean
-): void {
-  arr.forEach((item, i) => expect(arr.findIndex(equals.bind(item))).toEqual(i))
+/**
+ * @param {Equals} equals e.g., {@link Object.is}.
+ * Asserts that each array entry is unique.
+ */
+export function expectToContainSet<T>(arr: T[], equals: Equals<T>): void {
+  arr.forEach((lhs, index) =>
+    expect(arr.findIndex(rhs => equals(lhs, rhs))).toEqual(index)
+  )
 }
 
 /** Asserts that array contains partial object. */

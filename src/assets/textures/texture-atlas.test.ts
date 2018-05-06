@@ -2,6 +2,7 @@ import * as Aseprite from './aseprite'
 import * as atlas from './atlas.json'
 import * as testExpected from './texture-atlas.expect.test'
 import * as testInput from './texture-atlas.input.test.json'
+import {expectToContainSet} from '../../test.util.test'
 import {
   unmarshal,
   unmarshalAnimations,
@@ -24,7 +25,7 @@ describe('texture-atlas', () => {
     })
 
     test('Each Tag is unique within the sheet', () => {
-      tags.forEach((tag, index) => expect(tags.indexOf(tag)).toEqual(index))
+      expectToContainSet(tags, Object.is)
     })
 
     test('Each Tag has a Frame', () => {

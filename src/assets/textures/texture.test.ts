@@ -12,10 +12,11 @@ const SRC = 'src'
 
 describe('texture', () => {
   describe('URL', () => {
-    test('Each URL exists', () =>
+    test('Each URL exists', () => {
       Object.values(TextureURL).forEach(url =>
         expect(fs.existsSync(`${SRC}${url}`)).toEqual(true)
-      ))
+      )
+    })
   })
 
   describe('atlas', () => {
