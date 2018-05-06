@@ -1,7 +1,7 @@
 import * as Aseprite from './aseprite'
+import * as atlas from './atlas.json'
 import * as testExpected from './texture-atlas.expect.test'
 import * as testInput from './texture-atlas.input.test.json'
-import * as atlas from './atlas.json'
 import {
   unmarshal,
   unmarshalAnimations,
@@ -21,6 +21,10 @@ describe('texture-atlas', () => {
 
     test('Converts current atlas.json.', () => {
       expect(unmarshal(file)).toBeTruthy()
+    })
+
+    test('Each Tag is unique within the sheet', () => {
+      tags.forEach((tag, index) => expect(tags.indexOf(tag)).toEqual(index))
     })
 
     test('Each Tag has a Frame', () => {

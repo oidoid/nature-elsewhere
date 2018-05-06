@@ -63,12 +63,12 @@ export type Meta = {
 export type TagFrameNumber = string
 
 /**
- * **By convention**, tags are a file stem followed by a space followed by a
- * possibly empty animation name. E.g., 'cactus xs' describes the file named
- * "cactus.aseprite" with animation named "xs" and 'sun ' refers to the file
- * named "sun.aseprite" with animation named "". Animation names are use to
- * distinguish different variations like size (s, m, l) or state (walk, run,
- * fly).
+ * **By convention**, Tags are a file stem followed by a space followed by a
+ * possibly empty animation name and unique within the sheet. E.g., 'cactus xs'
+ * describes the file named "cactus.aseprite" with animation named "xs" and
+ * 'sun ' refers to the file named "sun.aseprite" with animation named "".
+ * Animation names are use to distinguish different variations like size (s, m,
+ * l) or state (walk, run, fly).
  */
 export type Tag = string
 
