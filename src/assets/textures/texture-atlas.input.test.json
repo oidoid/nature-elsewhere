@@ -394,27 +394,27 @@
         "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 16, "h": 16}}]
       },
       {
-        "name": "pond mask 0",
+        "name": "pond mask",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 0, "y": 11, "w": 49, "h": 1}}]
       },
       {
-        "name": "pond mask 1",
+        "name": "pond mask",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 49, "y": 10, "w": 65, "h": 4}}]
       },
       {
-        "name": "pond mask 2",
+        "name": "pond mask",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 114, "y": 11, "w": 14, "h": 1}}]
       },
       {
-        "name": "pond water 0",
+        "name": "pond water",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 24, "y": 11, "w": 25, "h": 1}}]
       },
       {
-        "name": "pond water 1",
+        "name": "pond water",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 49, "y": 10, "w": 65, "h": 4}}]
       },

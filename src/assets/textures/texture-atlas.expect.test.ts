@@ -246,7 +246,11 @@ export default {
         {
           bounds: {x: 1, y: 37, w: 128, h: 16},
           duration: Number.POSITIVE_INFINITY,
-          collision: []
+          collision: [
+            {x: 0, y: 11, w: 49, h: 1},
+            {x: 49, y: 10, w: 65, h: 4},
+            {x: 114, y: 11, w: 14, h: 1}
+          ]
         }
       ],
       direction: 'forward'
@@ -256,7 +260,7 @@ export default {
         {
           bounds: {x: 1, y: 19, w: 128, h: 16},
           duration: Number.POSITIVE_INFINITY,
-          collision: []
+          collision: [{x: 24, y: 11, w: 25, h: 1}, {x: 49, y: 10, w: 65, h: 4}]
         }
       ],
       direction: 'forward'

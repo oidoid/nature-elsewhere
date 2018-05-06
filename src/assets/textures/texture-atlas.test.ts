@@ -48,7 +48,7 @@ describe('texture-atlas', () => {
   })
 
   describe('#unmarshal()', () => {
-    test('Converts size.', () => {
+    test('Converts.', () => {
       expect(unmarshal(<Aseprite.File>testInput)).toEqual(testExpected.default)
     })
   })
