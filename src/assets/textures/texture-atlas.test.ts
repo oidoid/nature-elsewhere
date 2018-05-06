@@ -16,7 +16,7 @@ import {
 
 describe('texture-atlas', () => {
   describe('atlas.json', () => {
-    const file: Aseprite.File = atlas
+    const file = <Aseprite.File>atlas
     const tags = file.meta.frameTags.map(frameTag => frameTag.name)
 
     test('Converts current atlas.json.', () => {
@@ -451,7 +451,7 @@ describe('texture-atlas', () => {
         to: 0,
         direction: <Aseprite.Direction>'forward'
       }
-      const slices = []
+      const slices: Aseprite.Slice[] = []
       expect(unmarshalCollision(frameTag, 0, slices)).toEqual([])
     })
 

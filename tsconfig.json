@@ -1,5 +1,4 @@
 {
-  "exclude": ["src/**/*.test.ts"],
   "compilerOptions": {
     "target": "es5",
     "lib": ["es2017", "dom"],
