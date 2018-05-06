@@ -4,7 +4,7 @@ export default {
     'cactus s': {
       cels: [
         {
-          texture: {x: 221, y: 19, w: 16, h: 16},
+          bounds: {x: 221, y: 19, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 8, y: 12, w: 2, h: 3}]
         }
@@ -14,7 +14,7 @@ export default {
     'cactus m': {
       cels: [
         {
-          texture: {x: 91, y: 55, w: 16, h: 16},
+          bounds: {x: 91, y: 55, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 7, y: 11, w: 3, h: 4}]
         }
@@ -24,7 +24,7 @@ export default {
     'cactus l': {
       cels: [
         {
-          texture: {x: 73, y: 55, w: 16, h: 16},
+          bounds: {x: 73, y: 55, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 7, y: 10, w: 3, h: 5}]
         }
@@ -34,7 +34,7 @@ export default {
     'cactus xl': {
       cels: [
         {
-          texture: {x: 55, y: 55, w: 16, h: 16},
+          bounds: {x: 55, y: 55, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 7, y: 9, w: 3, h: 6}]
         }
@@ -44,27 +44,27 @@ export default {
     'char walk': {
       cels: [
         {
-          texture: {x: 37, y: 55, w: 16, h: 16},
+          bounds: {x: 37, y: 55, w: 16, h: 16},
           duration: 100,
           collision: [{x: 6, y: 8, w: 4, h: 7}]
         },
         {
-          texture: {x: 19, y: 55, w: 16, h: 16},
+          bounds: {x: 19, y: 55, w: 16, h: 16},
           duration: 100,
           collision: [{x: 6, y: 9, w: 4, h: 6}]
         },
         {
-          texture: {x: 1, y: 55, w: 16, h: 16},
+          bounds: {x: 1, y: 55, w: 16, h: 16},
           duration: 100,
           collision: [{x: 6, y: 10, w: 4, h: 5}]
         },
         {
-          texture: {x: 239, y: 37, w: 16, h: 16},
+          bounds: {x: 239, y: 37, w: 16, h: 16},
           duration: 100,
           collision: [{x: 6, y: 9, w: 4, h: 6}]
         },
         {
-          texture: {x: 221, y: 37, w: 16, h: 16},
+          bounds: {x: 221, y: 37, w: 16, h: 16},
           duration: 100,
           collision: [{x: 6, y: 8, w: 4, h: 7}]
         }
@@ -74,7 +74,7 @@ export default {
     'cloud xs': {
       cels: [
         {
-          texture: {x: 203, y: 37, w: 16, h: 16},
+          bounds: {x: 203, y: 37, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 4, y: 12, w: 7, h: 3}]
         }
@@ -84,7 +84,7 @@ export default {
     'cloud s': {
       cels: [
         {
-          texture: {x: 185, y: 37, w: 16, h: 16},
+          bounds: {x: 185, y: 37, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 4, y: 11, w: 9, h: 4}]
         }
@@ -94,7 +94,7 @@ export default {
     'cloud m': {
       cels: [
         {
-          texture: {x: 167, y: 37, w: 16, h: 16},
+          bounds: {x: 167, y: 37, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 3, y: 11, w: 10, h: 4}]
         }
@@ -104,7 +104,7 @@ export default {
     'cloud l': {
       cels: [
         {
-          texture: {x: 149, y: 37, w: 16, h: 16},
+          bounds: {x: 149, y: 37, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 3, y: 10, w: 9, h: 5}]
         }
@@ -114,7 +114,7 @@ export default {
     'cloud xl': {
       cels: [
         {
-          texture: {x: 131, y: 37, w: 16, h: 16},
+          bounds: {x: 131, y: 37, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 3, y: 9, w: 9, h: 6}]
         }
@@ -124,7 +124,7 @@ export default {
     'flag ': {
       cels: [
         {
-          texture: {x: 239, y: 19, w: 16, h: 16},
+          bounds: {x: 239, y: 19, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 7, y: 10, w: 3, h: 5}]
         }
@@ -134,7 +134,7 @@ export default {
     'grass ': {
       cels: [
         {
-          texture: {x: 131, y: 1, w: 16, h: 16},
+          bounds: {x: 131, y: 1, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 15, w: 16, h: 1}]
         }
@@ -144,7 +144,7 @@ export default {
     'palette 0': {
       cels: [
         {
-          texture: {x: 203, y: 19, w: 16, h: 16},
+          bounds: {x: 203, y: 19, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -154,7 +154,7 @@ export default {
     'palette 1': {
       cels: [
         {
-          texture: {x: 185, y: 19, w: 16, h: 16},
+          bounds: {x: 185, y: 19, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -164,7 +164,7 @@ export default {
     'palette 2': {
       cels: [
         {
-          texture: {x: 167, y: 19, w: 16, h: 16},
+          bounds: {x: 167, y: 19, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -174,7 +174,7 @@ export default {
     'palette 3': {
       cels: [
         {
-          texture: {x: 149, y: 19, w: 16, h: 16},
+          bounds: {x: 149, y: 19, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -184,7 +184,7 @@ export default {
     'palette 4': {
       cels: [
         {
-          texture: {x: 131, y: 19, w: 16, h: 16},
+          bounds: {x: 131, y: 19, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -194,7 +194,7 @@ export default {
     'palette 5': {
       cels: [
         {
-          texture: {x: 239, y: 1, w: 16, h: 16},
+          bounds: {x: 239, y: 1, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -204,7 +204,7 @@ export default {
     'palette 6': {
       cels: [
         {
-          texture: {x: 221, y: 1, w: 16, h: 16},
+          bounds: {x: 221, y: 1, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -214,7 +214,7 @@ export default {
     'palette 7': {
       cels: [
         {
-          texture: {x: 203, y: 1, w: 16, h: 16},
+          bounds: {x: 203, y: 1, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -224,7 +224,7 @@ export default {
     'palette 8': {
       cels: [
         {
-          texture: {x: 185, y: 1, w: 16, h: 16},
+          bounds: {x: 185, y: 1, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -234,7 +234,7 @@ export default {
     'palette 9': {
       cels: [
         {
-          texture: {x: 167, y: 1, w: 16, h: 16},
+          bounds: {x: 167, y: 1, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 0, w: 16, h: 16}]
         }
@@ -244,7 +244,7 @@ export default {
     'pond mask': {
       cels: [
         {
-          texture: {x: 1, y: 37, w: 128, h: 16},
+          bounds: {x: 1, y: 37, w: 128, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: []
         }
@@ -254,7 +254,7 @@ export default {
     'pond water': {
       cels: [
         {
-          texture: {x: 1, y: 19, w: 128, h: 16},
+          bounds: {x: 1, y: 19, w: 128, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: []
         }
@@ -264,7 +264,7 @@ export default {
     'pond reflections': {
       cels: [
         {
-          texture: {x: 1, y: 1, w: 128, h: 16},
+          bounds: {x: 1, y: 1, w: 128, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 0, y: 11, w: 128, h: 1}]
         }
@@ -274,7 +274,7 @@ export default {
     'rain ': {
       cels: [
         {
-          texture: {x: 149, y: 1, w: 16, h: 16},
+          bounds: {x: 149, y: 1, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 4, y: 0, w: 7, h: 16}]
         }

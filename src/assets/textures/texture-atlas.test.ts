@@ -136,7 +136,7 @@ describe('texture-atlas', () => {
         'cactus s': {
           cels: [
             {
-              texture: {x: 221, y: 19, w: 16, h: 16},
+              bounds: {x: 221, y: 19, w: 16, h: 16},
               duration: Number.POSITIVE_INFINITY,
               collision: [{x: 8, y: 12, w: 2, h: 3}]
             }
@@ -146,7 +146,7 @@ describe('texture-atlas', () => {
         'cactus m': {
           cels: [
             {
-              texture: {x: 91, y: 55, w: 16, h: 16},
+              bounds: {x: 91, y: 55, w: 16, h: 16},
               duration: Number.POSITIVE_INFINITY,
               collision: [{x: 7, y: 11, w: 3, h: 4}]
             }
@@ -156,7 +156,7 @@ describe('texture-atlas', () => {
         'cactus l': {
           cels: [
             {
-              texture: {x: 73, y: 55, w: 16, h: 16},
+              bounds: {x: 73, y: 55, w: 16, h: 16},
               duration: Number.POSITIVE_INFINITY,
               collision: [{x: 7, y: 10, w: 3, h: 5}]
             }
@@ -166,7 +166,7 @@ describe('texture-atlas', () => {
         'cactus xl': {
           cels: [
             {
-              texture: {x: 55, y: 55, w: 16, h: 16},
+              bounds: {x: 55, y: 55, w: 16, h: 16},
               duration: Number.POSITIVE_INFINITY,
               collision: [{x: 7, y: 9, w: 3, h: 6}]
             }
@@ -231,7 +231,7 @@ describe('texture-atlas', () => {
       expect(unmarshalAnimation(frameTag, frames, slices)).toEqual({
         cels: [
           {
-            texture: {x: 185, y: 37, w: 16, h: 16},
+            bounds: {x: 185, y: 37, w: 16, h: 16},
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 4, y: 11, w: 9, h: 4}]
           }
@@ -275,7 +275,7 @@ describe('texture-atlas', () => {
         }
       ]
       expect(unmarshalCel(frameTag, frame, 0, slices)).toEqual({
-        texture: {x: 131, y: 19, w: 16, h: 16},
+        bounds: {x: 131, y: 19, w: 16, h: 16},
         duration: Number.POSITIVE_INFINITY,
         collision: [{x: 4, y: 4, w: 8, h: 12}]
       })

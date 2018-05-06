@@ -23,10 +23,10 @@ export type Direction = Aseprite.Direction
 /** A single cel of animation sequence. */
 export type Cel = {
   /** Texture bounds within the atlas. */
-  texture: Rect
+  bounds: Rect
   /** Animation length in milliseconds, possibly infinite. */
   duration: number
-  /** Collision within the texture. */
+  /** Collision bounds within the texture. */
   collision: Rect[]
 }
 
@@ -99,7 +99,7 @@ export function unmarshalCel(
   slices: Aseprite.Slice[]
 ): Cel {
   return {
-    texture: unmarshalTexture(frame),
+    bounds: unmarshalTexture(frame),
     duration: unmarshalDuration(frame.duration),
     collision: unmarshalCollision(frameTag, frameNumber, slices)
   }
