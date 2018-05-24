@@ -2,9 +2,12 @@
  * Asserts that each array entry is unique.
  * @param {Equals} equals E.g., {@link Object.is}.
  */
-export function expectToContainSet<T>(arr: T[], equals: Equals<T>): void {
-  arr.forEach((lhs, index) =>
-    expect(arr.findIndex(rhs => equals(lhs, rhs))).toEqual(index)
+export function expectToContainSet<T>(array: T[], equals: Equals<T>): void {
+  array.forEach((item, index) =>
+    expect({item, index: array.findIndex(rhs => equals(item, rhs))}).toEqual({
+      item,
+      index
+    })
   )
 }
 
