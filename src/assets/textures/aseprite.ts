@@ -86,7 +86,10 @@ export type Frame = {
   frame: XY & WH
   rotated: boolean
   trimmed: boolean
-  /** The Frame's bounds within the file packed, not including padding. */
+  /**
+   * The Frame's bounds within the file packed, not including padding. **By
+   * convention**, dimensions are multiples of 16 pixels.
+   */
   spriteSourceSize: XY & WH
   sourceSize: WH
   duration: Duration
@@ -97,6 +100,7 @@ export type Frame = {
  * referenced Frames, an animation is represented.
  */
 export type FrameTag = {
+  /** **By convention**, the associated Frame's Tag. */
   name: Tag
   /** The inclusive starting Frame index. */
   from: number

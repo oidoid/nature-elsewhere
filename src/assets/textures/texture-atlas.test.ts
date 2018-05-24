@@ -2,7 +2,7 @@ import * as Aseprite from './aseprite'
 import * as atlas from './atlas.json'
 import * as testExpected from './texture-atlas.expect.test'
 import * as testInput from './texture-atlas.input.test.json'
-import {expectToContainSet} from '../../test.util.test'
+import {expectToContainSet, uniq} from '../../test.util.test'
 import {
   unmarshal,
   unmarshalAnimations,
@@ -33,21 +33,34 @@ describe('texture-atlas', () => {
     })
 
     test('Each Tag has a Frame', () => {
-      const frameKeys = Object.keys(file.frames).map(tagFrameNumber =>
-        tagFrameNumber.replace(/ [0-9]*$/, '')
-      )
-      tags.forEach(key => expect(frameKeys).toContainEqual(key))
+      const frameKeys = Object.keys(file.frames)
+        .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
+        .filter(uniq(Object.is))
+      tags.forEach(tag => expect(frameKeys).toContainEqual(tag))
     })
 
     test('Each Frame is indexed by a TagFrameNumber', () => {
-      const frameKeys = Object.keys(file.frames).map(tagFrameNumber =>
-        tagFrameNumber.replace(/ [0-9]*$/, '')
-      )
+      const frameKeys = Object.keys(file.frames)
+        .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
+        .filter(uniq(Object.is))
       frameKeys.forEach(key => expect(tags).toContainEqual(key))
     })
 
     test('Each Slice name is a Tag', () => {
       file.meta.slices.forEach(slice => expect(tags).toContainEqual(slice.name))
+    })
+
+    test("Each Frame's dimensions are a multiple of 16 pixels", () => {
+      const tagFrameNumbers = Object.keys(file.frames)
+      tagFrameNumbers.forEach(tagFrameNumber => {
+        const frame = file.frames[tagFrameNumber]
+        expect({modulo: frame.spriteSourceSize.w % 16, tagFrameNumber}).toEqual(
+          {modulo: 0, tagFrameNumber}
+        )
+        expect({modulo: frame.spriteSourceSize.h % 16, tagFrameNumber}).toEqual(
+          {modulo: 0, tagFrameNumber}
+        )
+      })
     })
   })
 

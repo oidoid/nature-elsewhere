@@ -31,8 +31,8 @@ export type Cel = {
 }
 
 // todo: don't version build products like atlas.json and atlas.png.
-// todo: proocess / unmarshal at compilation time instead of at runtime and
-//       share the same TextureAtlas type defintion between compilation code and
+// todo: process / unmarshal at compilation time instead of at runtime and share
+//       the same TextureAtlas type definition between compilation code and
 //       runtime code.
 export function unmarshal(file: Aseprite.File): TextureAtlas {
   return {
