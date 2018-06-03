@@ -9,14 +9,15 @@
  *
  *       y
  *       |0 1 2 …
- *   x---+------►
+ *   x---+------>
  *     0 |
  *     1 |
  *     2 |
- *     : ▼
+ *     : v
  *
- * [binary format]: https://github.com/aseprite/aseprite/blob/master/docs/ase-file-specs.md.
+ * [binary format]: https://github.com/aseprite/aseprite/blob/master/docs/ase-file-specs.md
  */
+// todo: is this necessary with --resolveJsonModule?
 
 /**
  * The topmost data type for JSON exported from Aseprite. This format contains

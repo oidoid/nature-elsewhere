@@ -2,7 +2,7 @@ import * as Aseprite from './aseprite'
 import * as atlas from './atlas.json'
 import * as testExpected from './texture-atlas.expect.test'
 import * as testInput from './texture-atlas.input.test.json'
-import {expectToContainSet, uniq} from '../../test.util.test'
+import {uniq} from '../../test.util.test'
 import {
   unmarshal,
   unmarshalAnimations,
@@ -24,49 +24,52 @@ describe('texture-atlas', () => {
       const atlas = unmarshal(file)
       expect(atlas.size.w).toBeLessThanOrEqual(2048)
       expect(atlas.size.h).toBeLessThanOrEqual(2048)
-      expect(Math.log2(atlas.size.w) % 1).toEqual(0)
-      expect(Math.log2(atlas.size.h) % 1).toEqual(0)
+      expect(Math.log2(atlas.size.w) % 1).toStrictEqual(0)
+      expect(Math.log2(atlas.size.h) % 1).toStrictEqual(0)
     })
 
-    test('Each Tag is unique within the sheet', () => {
-      expectToContainSet(tags, Object.is)
+    test.each(tags)('Tag (%s) is unique within the sheet', tag => {
+      expect(tags.filter(val => val === tag).length).toStrictEqual(1)
     })
 
-    test('Each Tag has a Frame', () => {
+    test.each(tags)('Tag (%s) has a Frame', tag => {
       const frameKeys = Object.keys(file.frames)
         .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
         .filter(uniq(Object.is))
-      tags.forEach(tag => expect(frameKeys).toContainEqual(tag))
+      expect(frameKeys).toContainEqual(tag)
     })
 
-    test('Each Frame is indexed by a TagFrameNumber', () => {
+    {
       const frameKeys = Object.keys(file.frames)
         .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
         .filter(uniq(Object.is))
-      frameKeys.forEach(key => expect(tags).toContainEqual(key))
-    })
-
-    test('Each Slice name is a Tag', () => {
-      file.meta.slices.forEach(slice => expect(tags).toContainEqual(slice.name))
-    })
-
-    test("Each Frame's dimensions are a multiple of 16 pixels", () => {
-      const tagFrameNumbers = Object.keys(file.frames)
-      tagFrameNumbers.forEach(tagFrameNumber => {
-        const frame = file.frames[tagFrameNumber]
-        expect({modulo: frame.spriteSourceSize.w % 16, tagFrameNumber}).toEqual(
-          {modulo: 0, tagFrameNumber}
-        )
-        expect({modulo: frame.spriteSourceSize.h % 16, tagFrameNumber}).toEqual(
-          {modulo: 0, tagFrameNumber}
-        )
+      test.each(frameKeys)('Frame has a Tag (%s)', frameKey => {
+        expect(tags).toContainEqual(frameKey)
       })
-    })
+    }
+
+    test.each(file.meta.slices)('Slice name (%o) is a Tag', slice =>
+      expect(tags).toContainEqual(slice.name)
+    )
+
+    {
+      const tagFrameNumbers = Object.keys(file.frames)
+      test.each(tagFrameNumbers)(
+        'Frame (%s) dimensions are a multiple of 16 pixels',
+        tagFrameNumber => {
+          const frame = file.frames[tagFrameNumber]
+          expect(frame.spriteSourceSize.w % 16).toStrictEqual(0)
+          expect(frame.spriteSourceSize.h % 16).toStrictEqual(0)
+        }
+      )
+    }
   })
 
   describe('#unmarshal()', () => {
     test('Converts.', () => {
-      expect(unmarshal(<Aseprite.File>testInput)).toEqual(testExpected.default)
+      expect(unmarshal(<Aseprite.File>testInput)).toStrictEqual(
+        testExpected.default
+      )
     })
   })
 
@@ -154,7 +157,7 @@ describe('texture-atlas', () => {
           keys: [{frame: 0, bounds: {x: 7, y: 9, w: 3, h: 6}}]
         }
       ]
-      expect(unmarshalAnimations(frameTags, frames, slices)).toEqual({
+      expect(unmarshalAnimations(frameTags, frames, slices)).toStrictEqual({
         'cactus s': {
           cels: [
             {
@@ -250,7 +253,7 @@ describe('texture-atlas', () => {
           keys: [{frame: 0, bounds: {x: 3, y: 11, w: 10, h: 4}}]
         }
       ]
-      expect(unmarshalAnimation(frameTag, frames, slices)).toEqual({
+      expect(unmarshalAnimation(frameTag, frames, slices)).toStrictEqual({
         cels: [
           {
             bounds: {x: 185, y: 37, w: 16, h: 16},
@@ -265,11 +268,11 @@ describe('texture-atlas', () => {
 
   describe('#marshalTagFrameNumber()', () => {
     test('Converts Tag and Frame number.', () => {
-      expect(marshalTagFrameNumber('stem ', 0)).toEqual('stem  0')
+      expect(marshalTagFrameNumber('stem ', 0)).toStrictEqual('stem  0')
     })
 
     test('Converts Tag.', () => {
-      expect(marshalTagFrameNumber('stem ')).toEqual('stem  ')
+      expect(marshalTagFrameNumber('stem ')).toStrictEqual('stem  ')
     })
   })
 
@@ -296,7 +299,7 @@ describe('texture-atlas', () => {
           keys: [{frame: 0, bounds: {x: 4, y: 4, w: 8, h: 12}}]
         }
       ]
-      expect(unmarshalCel(frameTag, frame, 0, slices)).toEqual({
+      expect(unmarshalCel(frameTag, frame, 0, slices)).toStrictEqual({
         bounds: {x: 131, y: 19, w: 16, h: 16},
         duration: Number.POSITIVE_INFINITY,
         collision: [{x: 4, y: 4, w: 8, h: 12}]
@@ -314,7 +317,7 @@ describe('texture-atlas', () => {
         sourceSize: {w: 3, h: 4},
         duration: 1
       }
-      expect(unmarshalTexture(frame)).toEqual({x: 1, y: 2, w: 3, h: 4})
+      expect(unmarshalTexture(frame)).toStrictEqual({x: 1, y: 2, w: 3, h: 4})
     })
 
     test('Converts texture mapping with padding.', () => {
@@ -326,7 +329,7 @@ describe('texture-atlas', () => {
         sourceSize: {w: 3, h: 4},
         duration: 1
       }
-      expect(unmarshalTexture(frame)).toEqual({x: 2, y: 3, w: 3, h: 4})
+      expect(unmarshalTexture(frame)).toStrictEqual({x: 2, y: 3, w: 3, h: 4})
     })
   })
 
@@ -340,7 +343,7 @@ describe('texture-atlas', () => {
         sourceSize: {w: 3, h: 4},
         duration: 1
       }
-      expect(unmarshalPadding(frame)).toEqual({w: 0, h: 0})
+      expect(unmarshalPadding(frame)).toStrictEqual({w: 0, h: 0})
     })
 
     test('Converts nonzero padding.', () => {
@@ -352,7 +355,7 @@ describe('texture-atlas', () => {
         sourceSize: {w: 3, h: 4},
         duration: 1
       }
-      expect(unmarshalPadding(frame)).toEqual({w: 1, h: 1})
+      expect(unmarshalPadding(frame)).toStrictEqual({w: 1, h: 1})
     })
 
     test('Converts mixed padding.', () => {
@@ -364,17 +367,17 @@ describe('texture-atlas', () => {
         sourceSize: {w: 3, h: 4},
         duration: 1
       }
-      expect(unmarshalPadding(frame)).toEqual({w: 1, h: 2})
+      expect(unmarshalPadding(frame)).toStrictEqual({w: 1, h: 2})
     })
   })
 
   describe('#unmarshalDuration()', () => {
     test('Converts Duration.', () => {
-      expect(unmarshalDuration(0)).toEqual(0)
+      expect(unmarshalDuration(0)).toStrictEqual(0)
     })
 
     test('Converts infinite Duration.', () => {
-      expect(unmarshalDuration(Aseprite.INFINITE_DURATION)).toEqual(
+      expect(unmarshalDuration(Aseprite.INFINITE_DURATION)).toStrictEqual(
         Number.POSITIVE_INFINITY
       )
     })
@@ -395,7 +398,7 @@ describe('texture-atlas', () => {
           keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
         }
       ]
-      expect(unmarshalCollision(frameTag, 0, slices)).toEqual([
+      expect(unmarshalCollision(frameTag, 0, slices)).toStrictEqual([
         {x: 0, y: 1, w: 2, h: 3}
       ])
     })
@@ -414,7 +417,7 @@ describe('texture-atlas', () => {
           keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
         }
       ]
-      expect(unmarshalCollision(frameTag, 0, slices)).toEqual([])
+      expect(unmarshalCollision(frameTag, 0, slices)).toStrictEqual([])
     })
 
     test('Filters out unrelated Frame number Keys.', () => {
@@ -435,7 +438,7 @@ describe('texture-atlas', () => {
           ]
         }
       ]
-      expect(unmarshalCollision(frameTag, 1, slices)).toEqual([
+      expect(unmarshalCollision(frameTag, 1, slices)).toStrictEqual([
         {x: 4, y: 5, w: 6, h: 7}
       ])
     })
@@ -457,7 +460,7 @@ describe('texture-atlas', () => {
           ]
         }
       ]
-      expect(unmarshalCollision(frameTag, 0, slices)).toEqual([
+      expect(unmarshalCollision(frameTag, 0, slices)).toStrictEqual([
         {x: 0, y: 1, w: 2, h: 3}
       ])
     })
@@ -470,7 +473,7 @@ describe('texture-atlas', () => {
         direction: <Aseprite.Direction>'forward'
       }
       const slices: Aseprite.Slice[] = []
-      expect(unmarshalCollision(frameTag, 0, slices)).toEqual([])
+      expect(unmarshalCollision(frameTag, 0, slices)).toStrictEqual([])
     })
 
     test('Converts multiple Slices.', () => {
@@ -505,7 +508,7 @@ describe('texture-atlas', () => {
           keys: [{frame: 0, bounds: {x: 8, y: 9, w: 10, h: 11}}]
         }
       ]
-      expect(unmarshalCollision(frameTag, 1, slices)).toEqual([
+      expect(unmarshalCollision(frameTag, 1, slices)).toStrictEqual([
         {x: 4, y: 5, w: 6, h: 7},
         {x: 0, y: 1, w: 2, h: 3},
         {x: 8, y: 9, w: 10, h: 11}

@@ -1,36 +1,35 @@
-export type Assets<T, ID extends keyof T = keyof T> = {
-  readonly [URL in T[ID] & string]: Asset<ID, URL>
-}
-export type Asset<ID, URL> = TextureAsset<ID, URL>
+export type Assets<ID> = {[id in ID & string]: Asset}
 
-export interface TextureAsset<ID, URL> {
-  id: ID & string
-  url: URL & string
-  image: HTMLImageElement
-}
-export type URLMap<T> = {[ID in keyof T]: T[ID]}
+export type Asset = HTMLImageElement
+export type ResolvedAsset<ID> = {id: ID & string; result: Asset}
 
-export function load<T extends URLMap<T>>(textures: T): Promise<Assets<T>> {
-  return loadTextures(textures).then(assets =>
-    Object.assign({}, ...assets.map(asset => ({[asset.url]: asset})))
+export type URLMap<ID> = {[id in ID & string]: string}
+
+export function load<ID>(textureURLs: URLMap<ID>): Promise<Assets<ID>> {
+  return loadTextureAssets(textureURLs).then(assets =>
+    Object.assign({}, ...assets.map(asset => ({[asset.id]: asset.result})))
   )
 }
 
-function loadTextures<T>(
-  urls: URLMap<T>
-): Promise<TextureAsset<string, T[keyof T]>[]> {
-  const promises = Object.entries(urls).map(([id, url]) => loadTexture(id, url))
-  return Promise.all(promises)
+function loadTextureAssets<ID>(
+  urls: URLMap<ID>
+): Promise<ResolvedAsset<keyof URLMap<ID>>[]> {
+  type K = keyof URLMap<ID>
+  type V = URLMap<ID>[K]
+  const assets = Object.entries(urls).map(([id, url]) =>
+    loadTextureAsset(<K>id, <V>url)
+  )
+  return Promise.all(assets)
 }
 
-function loadTexture<ID, URL>(
+function loadTextureAsset<ID>(
   id: ID & string,
-  url: URL & string
-): Promise<TextureAsset<ID, URL>> {
-  const image = new Image()
+  url: string
+): Promise<ResolvedAsset<ID>> {
   return new Promise((resolve, reject) => {
-    image.onload = () => resolve({id, url, image})
-    image.onerror = () => reject({id, url, image})
+    const image = new Image()
+    image.onload = () => resolve({id, result: image})
+    image.onerror = reject
     image.src = url
-  }) // todo: .cancel(() => { image.src = undefined }})
+  })
 }

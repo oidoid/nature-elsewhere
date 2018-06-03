@@ -2,41 +2,38 @@ import * as Aseprite from './aseprite'
 import * as atlasJSON from '../textures/atlas.json'
 import * as fs from 'fs'
 import * as TextureAtlas from './texture-atlas'
-import {TEXTURE, TextureURL, textureEquals} from './texture'
-import {
-  expectToContainSet,
-  expectToContainObjectContaining
-} from '../../test.util.test'
-
-const SRC = 'src'
+import {ASSET_URL, TEXTURE, textureEquals} from './texture'
+import {expectToContainObjectContaining} from '../../test.util.test'
 
 describe('texture', () => {
   describe('URL', () => {
-    test('Each URL exists', () => {
-      Object.values(TextureURL).forEach(url =>
-        expect(fs.existsSync(`${SRC}${url}`)).toEqual(true)
-      )
+    test.each(Object.values(ASSET_URL))('URL (%s) resource exists', url => {
+      const SRC_DIR = 'src'
+      expect(fs.existsSync(`${SRC_DIR}${url}`)).toStrictEqual(true)
     })
   })
 
   describe('atlas', () => {
     const atlas = TextureAtlas.unmarshal(<Aseprite.File>atlasJSON)
+    const textures = Object.values(TEXTURE)
 
-    test('Each URL _and_ ID is unique', () => {
-      expectToContainSet(Object.values(TEXTURE), textureEquals)
-    })
+    test.each(textures)(
+      'Texture (%o) asset and ID are a unique combination',
+      texture =>
+        expect(
+          textures.filter(val => textureEquals(val, texture)).length
+        ).toStrictEqual(1)
+    )
 
-    test('Each Texture has an Animation', () => {
-      Object.values(TEXTURE).forEach(({id}) =>
-        expect(atlas.animations).toHaveProperty(id)
-      )
-    })
+    test.each(textures)('Texture (%o) has an Animation', ({id}) =>
+      expect(atlas.animations).toHaveProperty(id)
+    )
 
-    test('Each Animation has a Texture', () => {
-      const textures = Object.values(TEXTURE)
-      Object.keys(atlas.animations).forEach(id =>
+    {
+      const ids = Object.keys(atlas.animations)
+      test.each(ids)('Animation ID (%s) has a Texture', id =>
         expectToContainObjectContaining(textures, {id})
       )
-    })
+    }
   })
 })

@@ -1,54 +1,66 @@
-export enum TextureURL {
-  ATLAS = '/assets/textures/atlas.png'
+export enum AssetID {
+  ATLAS
 }
 
-export type TextureName = keyof typeof TEXTURE
-export type Texture = typeof TEXTURE[TextureName]
+export const ASSET_URL = {
+  [AssetID.ATLAS]: '/assets/textures/atlas.png'
+}
+
+export type Texture = typeof TEXTURE[keyof typeof TEXTURE]
 export const TEXTURE = {
-  BIRD_REST: {url: TextureURL.ATLAS, id: 'bird rest'},
-  BIRD_RISE: {url: TextureURL.ATLAS, id: 'bird rise'},
-  BIRD_FLY: {url: TextureURL.ATLAS, id: 'bird fly'},
-  BULL: {url: TextureURL.ATLAS, id: 'bull '},
-  CACTUS_S: {url: TextureURL.ATLAS, id: 'cactus s'},
-  CACTUS_M: {url: TextureURL.ATLAS, id: 'cactus m'},
-  CACTUS_L: {url: TextureURL.ATLAS, id: 'cactus l'},
-  CACTUS_XL: {url: TextureURL.ATLAS, id: 'cactus xl'},
-  CATTAILS: {url: TextureURL.ATLAS, id: 'cattails '},
-  CHAR_WALK: {url: TextureURL.ATLAS, id: 'char walk'},
-  CHAR_XS: {url: TextureURL.ATLAS, id: 'cloud xs'},
-  CLOUD_S: {url: TextureURL.ATLAS, id: 'cloud s'},
-  CLOUD_M: {url: TextureURL.ATLAS, id: 'cloud m'},
-  CLOUD_L: {url: TextureURL.ATLAS, id: 'cloud l'},
-  CLOUD_XL: {url: TextureURL.ATLAS, id: 'cloud xl'},
-  COPYRIGHT_RNDMEM: {url: TextureURL.ATLAS, id: 'copyright-rndmem '},
-  FLAG: {url: TextureURL.ATLAS, id: 'flag '},
-  GRASS_XS: {url: TextureURL.ATLAS, id: 'grass xs'},
-  GRASS_S: {url: TextureURL.ATLAS, id: 'grass s'},
-  GRASS_M: {url: TextureURL.ATLAS, id: 'grass m'},
-  GRASS_L: {url: TextureURL.ATLAS, id: 'grass l'},
-  NATURE_ELSEWHERE: {url: TextureURL.ATLAS, id: 'nature-elsewhere '},
-  PALETTE_0: {url: TextureURL.ATLAS, id: 'palette 0'},
-  PALETTE_1: {url: TextureURL.ATLAS, id: 'palette 1'},
-  PALETTE_2: {url: TextureURL.ATLAS, id: 'palette 2'},
-  PALETTE_3: {url: TextureURL.ATLAS, id: 'palette 3'},
-  PALETTE_4: {url: TextureURL.ATLAS, id: 'palette 4'},
-  PALETTE_5: {url: TextureURL.ATLAS, id: 'palette 5'},
-  PALETTE_6: {url: TextureURL.ATLAS, id: 'palette 6'},
-  PALETTE_7: {url: TextureURL.ATLAS, id: 'palette 7'},
-  PALETTE_8: {url: TextureURL.ATLAS, id: 'palette 8'},
-  PALETTE_9: {url: TextureURL.ATLAS, id: 'palette 9'},
-  POND_MASK: {url: TextureURL.ATLAS, id: 'pond mask'},
-  POND_WATER: {url: TextureURL.ATLAS, id: 'pond water'},
-  POND_REFLECTIONS: {url: TextureURL.ATLAS, id: 'pond reflections'},
-  PUMPKIN: {url: TextureURL.ATLAS, id: 'pumpkin '},
-  RAIN: {url: TextureURL.ATLAS, id: 'rain '},
-  SNAKE: {url: TextureURL.ATLAS, id: 'snake '},
-  TREE: {url: TextureURL.ATLAS, id: 'tree '},
-  WATER_S: {url: TextureURL.ATLAS, id: 'water s'},
-  WATER_M: {url: TextureURL.ATLAS, id: 'water m'},
-  WATER_L: {url: TextureURL.ATLAS, id: 'water l'}
+  BIRD_REST: {assetID: AssetID.ATLAS, id: 'bird rest'},
+  BIRD_RISE: {assetID: AssetID.ATLAS, id: 'bird rise'},
+  BIRD_FLY: {assetID: AssetID.ATLAS, id: 'bird fly'},
+  BULL: {assetID: AssetID.ATLAS, id: 'bull '},
+  CACTUS_S: {assetID: AssetID.ATLAS, id: 'cactus s'},
+  CACTUS_M: {assetID: AssetID.ATLAS, id: 'cactus m'},
+  CACTUS_L: {assetID: AssetID.ATLAS, id: 'cactus l'},
+  CACTUS_XL: {assetID: AssetID.ATLAS, id: 'cactus xl'},
+  CATTAILS: {assetID: AssetID.ATLAS, id: 'cattails '},
+  CHAR_WALK: {assetID: AssetID.ATLAS, id: 'char walk'},
+  CHAR_XS: {assetID: AssetID.ATLAS, id: 'cloud xs'},
+  CLOUD_S: {assetID: AssetID.ATLAS, id: 'cloud s'},
+  CLOUD_M: {assetID: AssetID.ATLAS, id: 'cloud m'},
+  CLOUD_L: {assetID: AssetID.ATLAS, id: 'cloud l'},
+  CLOUD_XL: {assetID: AssetID.ATLAS, id: 'cloud xl'},
+  COPYRIGHT_RNDMEM: {
+    assetID: AssetID.ATLAS,
+    id: 'copyright-rndmem '
+  },
+  FLAG: {assetID: AssetID.ATLAS, id: 'flag '},
+  GRASS_XS: {assetID: AssetID.ATLAS, id: 'grass xs'},
+  GRASS_S: {assetID: AssetID.ATLAS, id: 'grass s'},
+  GRASS_M: {assetID: AssetID.ATLAS, id: 'grass m'},
+  GRASS_L: {assetID: AssetID.ATLAS, id: 'grass l'},
+  NATURE_ELSEWHERE: {
+    assetID: AssetID.ATLAS,
+    id: 'nature-elsewhere '
+  },
+  PALETTE_0: {assetID: AssetID.ATLAS, id: 'palette 0'},
+  PALETTE_1: {assetID: AssetID.ATLAS, id: 'palette 1'},
+  PALETTE_2: {assetID: AssetID.ATLAS, id: 'palette 2'},
+  PALETTE_3: {assetID: AssetID.ATLAS, id: 'palette 3'},
+  PALETTE_4: {assetID: AssetID.ATLAS, id: 'palette 4'},
+  PALETTE_5: {assetID: AssetID.ATLAS, id: 'palette 5'},
+  PALETTE_6: {assetID: AssetID.ATLAS, id: 'palette 6'},
+  PALETTE_7: {assetID: AssetID.ATLAS, id: 'palette 7'},
+  PALETTE_8: {assetID: AssetID.ATLAS, id: 'palette 8'},
+  PALETTE_9: {assetID: AssetID.ATLAS, id: 'palette 9'},
+  POND_MASK: {assetID: AssetID.ATLAS, id: 'pond mask'},
+  POND_WATER: {assetID: AssetID.ATLAS, id: 'pond water'},
+  POND_REFLECTIONS: {
+    assetID: AssetID.ATLAS,
+    id: 'pond reflections'
+  },
+  PUMPKIN: {assetID: AssetID.ATLAS, id: 'pumpkin '},
+  RAIN: {assetID: AssetID.ATLAS, id: 'rain '},
+  SNAKE: {assetID: AssetID.ATLAS, id: 'snake '},
+  TREE: {assetID: AssetID.ATLAS, id: 'tree '},
+  WATER_S: {assetID: AssetID.ATLAS, id: 'water s'},
+  WATER_M: {assetID: AssetID.ATLAS, id: 'water m'},
+  WATER_L: {assetID: AssetID.ATLAS, id: 'water l'}
 }
 
 export function textureEquals(lhs: Texture, rhs: Texture): boolean {
-  return lhs.url === rhs.url && lhs.id === rhs.id
+  return lhs.assetID === rhs.assetID && lhs.id === rhs.id
 }

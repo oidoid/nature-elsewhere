@@ -1,7 +1,6 @@
 import {Level0} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './gfx/glsl/shader-loader'
-import * as enumUtil from './enum-util'
 import * as gfx from './gfx/gfx'
 import {check, GL, GLUniformLocation} from './gfx/gl'
 import * as vertexSrc from './gfx/glsl/main.vert'
@@ -10,6 +9,7 @@ import * as kbd from './input/kbd'
 import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
+import {ASSET_URL} from './assets/textures/texture'
 
 const HEIGHT = 128
 
@@ -44,7 +44,7 @@ function main(window: Window) {
 
   const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
   assetsLoader
-    .load(enumUtil.toObject(Level0.Texture))
+    .load(ASSET_URL)
     .then(assets => loop(gl, ctx, atlas, assets, Date.now()))
   // todo: exit.
 }

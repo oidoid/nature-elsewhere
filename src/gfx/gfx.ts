@@ -64,7 +64,7 @@ export function drawTextures(
 
   // Load the images into the texture.
   for (const sprite of sprites) {
-    const image = assets[sprite.texture.url].image
+    const image = assets[sprite.texture.assetID]
     // todo: this probably doesn't need to happen multiple times every frame.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
     if (sprite.scroll) {
