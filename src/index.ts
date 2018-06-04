@@ -68,7 +68,7 @@ function loop(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
   atlas: textureAtlas.TextureAtlas,
-  assets: assetsLoader.Assets<any>,
+  assets: assetsLoader.Assets,
   timestamp: number
 ): void {
   const now = Date.now()
@@ -84,7 +84,7 @@ function render(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
   atlas: textureAtlas.TextureAtlas,
-  assets: assetsLoader.Assets<any>,
+  assets: assetsLoader.Assets,
   step: number
 ): void {
   const {r, g, b, a} = Level0.Map.backgroundColor

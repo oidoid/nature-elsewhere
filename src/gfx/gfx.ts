@@ -25,7 +25,7 @@ export function drawTextures(
   gl: GL,
   ctx: ShaderContext,
   atlas: textureAtlas.TextureAtlas,
-  assets: Assets<any>,
+  assets: Assets,
   sprites: Sprite[],
   step: number
 ) {
@@ -64,7 +64,7 @@ export function drawTextures(
 
   // Load the images into the texture.
   for (const sprite of sprites) {
-    const image = assets[sprite.texture.assetID]
+    const image = assets[sprite.texture.textureAssetID]
     // todo: this probably doesn't need to happen multiple times every frame.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
     if (sprite.scroll) {
@@ -74,7 +74,7 @@ export function drawTextures(
       }
     }
 
-    const tex = atlas.animations[sprite.texture.id].cels[0].bounds
+    const tex = atlas.animations[sprite.texture.textureID].cels[0].bounds
 
     const scroll = sprite.scroll ? textureScroll : {x: 0, y: 0}
     gl.uniform2f(ctx.location('uTextureScroll'), scroll.x, scroll.y)

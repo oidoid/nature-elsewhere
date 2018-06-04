@@ -31,8 +31,7 @@ export type File = {
   frames: FrameMap
 }
 
-/** @type {Object.<TagFrameNumber, Frame>} */
-export type FrameMap = {[tagFrameNumber: string]: Frame}
+export type FrameMap = {[tagFrameNumber in TagFrameNumber]: Frame}
 
 export type Meta = {
   /** E.g., 'http://www.aseprite.org/'. */

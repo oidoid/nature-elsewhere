@@ -7,8 +7,7 @@ export type TextureAtlas = {
   animations: AnimationMap
 }
 
-/** @type {Object.<TextureID, Animation>} */
-export type AnimationMap = {[textureID: string]: Animation}
+export type AnimationMap = {[textureID in TextureID]: Animation}
 
 export type TextureID = Aseprite.Tag
 

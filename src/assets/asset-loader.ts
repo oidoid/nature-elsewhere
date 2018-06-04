@@ -1,34 +1,31 @@
-export type Assets<ID> = {[id in ID & string]: Asset}
+export type AssetID = TextureAssetID
+export enum TextureAssetID {
+  ATLAS
+}
+
+export type Assets = {[id in AssetID]: Asset}
 
 export type Asset = HTMLImageElement
-export type ResolvedAsset<ID> = {id: ID & string; result: Asset}
 
-export type URLMap<ID> = {[id in ID & string]: string}
+export type URLMap = {[id in AssetID]: string}
 
-export function load<ID>(textureURLs: URLMap<ID>): Promise<Assets<ID>> {
-  return loadTextureAssets(textureURLs).then(assets =>
-    Object.assign({}, ...assets.map(asset => ({[asset.id]: asset.result})))
-  )
+export function load(textureURLs: URLMap): Promise<Assets> {
+  return loadTextureAssets(textureURLs)
 }
 
-function loadTextureAssets<ID>(
-  urls: URLMap<ID>
-): Promise<ResolvedAsset<keyof URLMap<ID>>[]> {
-  type K = keyof URLMap<ID>
-  type V = URLMap<ID>[K]
+function loadTextureAssets(urls: URLMap): Promise<Assets> {
+  type K = keyof URLMap
+  type V = URLMap[K]
   const assets = Object.entries(urls).map(([id, url]) =>
-    loadTextureAsset(<K>id, <V>url)
+    loadTextureAsset(<K>(<any>id), <V>url)
   )
-  return Promise.all(assets)
+  return Promise.all(assets).then(assets => Object.assign({}, ...assets))
 }
 
-function loadTextureAsset<ID>(
-  id: ID & string,
-  url: string
-): Promise<ResolvedAsset<ID>> {
+function loadTextureAsset(id: AssetID, url: string): Promise<Assets> {
   return new Promise((resolve, reject) => {
     const image = new Image()
-    image.onload = () => resolve({id, result: image})
+    image.onload = () => resolve({[id]: image})
     image.onerror = reject
     image.src = url
   })

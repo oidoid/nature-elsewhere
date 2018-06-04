@@ -4,16 +4,17 @@ import * as fs from 'fs'
 import * as TextureAtlas from './texture-atlas'
 import {ASSET_URL, TEXTURE, textureEquals} from './texture'
 import {expectToContainObjectContaining} from '../../test.util.test'
+import {TextureAssetID} from '../asset-loader'
 
 describe('texture', () => {
-  describe('URL', () => {
+  describe('ASSET_URL', () => {
     test.each(Object.values(ASSET_URL))('URL (%s) resource exists', url => {
       const SRC_DIR = 'src'
       expect(fs.existsSync(`${SRC_DIR}${url}`)).toStrictEqual(true)
     })
   })
 
-  describe('atlas', () => {
+  describe('TEXTURE', () => {
     const atlas = TextureAtlas.unmarshal(<Aseprite.File>atlasJSON)
     const textures = Object.values(TEXTURE)
 
@@ -21,18 +22,22 @@ describe('texture', () => {
       'Texture (%o) asset and ID are a unique combination',
       texture =>
         expect(
-          textures.filter(val => textureEquals(val, texture)).length
-        ).toStrictEqual(1)
+          textures.filter(val => textureEquals(val, texture))
+        ).toHaveLength(1)
     )
 
-    test.each(textures)('Texture (%o) has an Animation', ({id}) =>
-      expect(atlas.animations).toHaveProperty(id)
+    test.each(textures)('Texture (%o) AssetID exists', ({textureAssetID}) =>
+      expect(TextureAssetID).toHaveProperty(textureAssetID.toString())
+    )
+
+    test.each(textures)('Texture (%o) ID has an Animation', ({textureID}) =>
+      expect(atlas.animations).toHaveProperty(textureID)
     )
 
     {
       const ids = Object.keys(atlas.animations)
-      test.each(ids)('Animation ID (%s) has a Texture', id =>
-        expectToContainObjectContaining(textures, {id})
+      test.each(ids)('Animation ID (%s) has a Texture', textureID =>
+        expectToContainObjectContaining(textures, {textureID})
       )
     }
   })

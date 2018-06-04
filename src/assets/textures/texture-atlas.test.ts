@@ -29,7 +29,7 @@ describe('texture-atlas', () => {
     })
 
     test.each(tags)('Tag (%s) is unique within the sheet', tag => {
-      expect(tags.filter(val => val === tag).length).toStrictEqual(1)
+      expect(tags.filter(val => val === tag)).toHaveLength(1)
     })
 
     test.each(tags)('Tag (%s) has a Frame', tag => {
