@@ -11,7 +11,7 @@ import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL} from './assets/textures/texture'
 
-const HEIGHT = 128
+const HEIGHT = 192
 
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')

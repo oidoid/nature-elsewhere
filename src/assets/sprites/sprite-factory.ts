@@ -9,3 +9,7 @@ export function newPond(position: XY, flowRate: number): Sprite[] {
     {texture: TEXTURE.POND_MASK, position}
   ]
 }
+
+export function newPlayer(position: XY): Sprite[] {
+  return [{texture: TEXTURE.PLAYER_IDLE, position}]
+}
