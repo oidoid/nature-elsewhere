@@ -45,15 +45,18 @@ function main(window: Window) {
         // flip
         PLAYER.position.x -= 1
         PLAYER.texture = TEXTURE.PLAYER_WALK
+        PLAYER.celIndex = (PLAYER.celIndex + 1) % 2
         break
       case 'right':
         PLAYER.position.x += 1
         PLAYER.texture = TEXTURE.PLAYER_WALK
+        PLAYER.celIndex = (PLAYER.celIndex + 1) % 2
         break
       case 'up':
         break
       case 'down':
         PLAYER.texture = TEXTURE.PLAYER_IDLE
+        PLAYER.celIndex = 0
         break
       case 'zap':
         break

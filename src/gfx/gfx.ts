@@ -74,7 +74,8 @@ export function drawTextures(
       }
     }
 
-    const tex = atlas.animations[sprite.texture.textureID].cels[0].bounds
+    const tex =
+      atlas.animations[sprite.texture.textureID].cels[sprite.celIndex].bounds
 
     const scroll = sprite.scroll ? textureScroll : {x: 0, y: 0}
     gl.uniform2f(ctx.location('uTextureScroll'), scroll.x, scroll.y)
