@@ -9,7 +9,7 @@
   },
   "env": {"es6": true, "browser": true},
   "rules": {
-    "prettier/prettier": [1, {"parser": "typescript"}],
+    "prettier/prettier": 1,
 
     "max-len": [
       1,
