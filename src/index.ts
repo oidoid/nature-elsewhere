@@ -1,4 +1,4 @@
-import {Level0} from './assets/levels/level0'
+import {Level0, PLAYER} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './gfx/glsl/shader-loader'
 import * as gfx from './gfx/gfx'
@@ -9,7 +9,7 @@ import * as kbd from './input/kbd'
 import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
-import {ASSET_URL} from './assets/textures/texture'
+import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 
 const HEIGHT = 192
 
@@ -40,6 +40,28 @@ function main(window: Window) {
     const btn = kbd.defaultControllerMap[event.key.toLowerCase()]
     // eslint-disable-next-line no-console
     console.log(`${event.key} => ${btn}`)
+    switch (btn) {
+      case 'left':
+        // flip
+        PLAYER.position.x -= 1
+        PLAYER.texture = TEXTURE.PLAYER_WALK
+        break
+      case 'right':
+        PLAYER.position.x += 1
+        PLAYER.texture = TEXTURE.PLAYER_WALK
+        break
+      case 'up':
+        break
+      case 'down':
+        PLAYER.texture = TEXTURE.PLAYER_IDLE
+        break
+      case 'zap':
+        break
+      case 'menu':
+        break
+      default:
+        break
+    }
   })
 
   const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
