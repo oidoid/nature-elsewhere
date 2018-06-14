@@ -106,17 +106,17 @@ function loop(
     PLAYER.flip.x = true
     PLAYER.position.x -= pps
     PLAYER.texture = TEXTURE.PLAYER_WALK
-    PLAYER.celIndexFraction = Math.abs(Math.round(PLAYER.position.x)) % 2
+    PLAYER.celIndex = Math.abs(Math.round(PLAYER.position.x)) % 2
   }
   if (actionState[Action.RIGHT]) {
     PLAYER.flip.x = false
     PLAYER.position.x += pps
     PLAYER.texture = TEXTURE.PLAYER_WALK
-    PLAYER.celIndexFraction = Math.abs(Math.round(PLAYER.position.x)) % 2
+    PLAYER.celIndex = Math.abs(Math.round(PLAYER.position.x)) % 2
   }
   if (!actionState[Action.LEFT] && !actionState[Action.RIGHT]) {
     PLAYER.texture = TEXTURE.PLAYER_IDLE
-    PLAYER.celIndexFraction = 0
+    PLAYER.celIndex = 0
   }
 
   render(gl, ctx, atlas, assets, step)
