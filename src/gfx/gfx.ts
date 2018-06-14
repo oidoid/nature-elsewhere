@@ -75,11 +75,19 @@ export function drawTextures(
     }
 
     const tex =
-      atlas.animations[sprite.texture.textureID].cels[sprite.celIndex].bounds
+      atlas.animations[sprite.texture.textureID].cels[
+        Math.floor(sprite.celIndexFraction)
+      ].bounds
 
     const scroll = sprite.scroll ? textureScroll : {x: 0, y: 0}
     gl.uniform2f(ctx.location('uTextureScroll'), scroll.x, scroll.y)
     bufferRectangle(gl, sprite.position, {w: tex.w, h: tex.h})
+
+    gl.uniform2f(
+      ctx.location('uScale'),
+      sprite.flip.x ? -1 : 1,
+      sprite.flip.y ? -1 : 1
+    )
 
     gl.uniform2f(ctx.location('uAtlasBounds'), atlas.size.w, atlas.size.h)
 
