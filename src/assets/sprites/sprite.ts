@@ -7,4 +7,5 @@ export type Sprite = {
   celIndex: number
   scroll?: XY
   position: XY
+  flip: {x: boolean; y: boolean}
 }

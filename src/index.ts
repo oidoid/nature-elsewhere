@@ -5,16 +5,21 @@ import * as gfx from './gfx/gfx'
 import {check, GL, GLUniformLocation} from './gfx/gl'
 import * as vertexSrc from './gfx/glsl/main.vert'
 import * as fragmentSrc from './gfx/glsl/main.frag'
-import * as kbd from './input/kbd'
+import * as keyboard from './input/keyboard'
 import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
+import {Action, ActionState} from './input/action'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
 // render width.
 const MIN_RENDER_HEIGHT = 128
+const actionState: ActionState = Object.assign(
+  {},
+  ...Object.values(Action).map(action => ({[action]: false}))
+)
 
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
@@ -39,36 +44,13 @@ function main(window: Window) {
   const ctx = shaderLoader.load(gl, vertexSrc, fragmentSrc)
   gl.useProgram(ctx.program)
 
-  document.addEventListener('keydown', event => {
-    const btn = kbd.defaultControllerMap[event.key.toLowerCase()]
-    // eslint-disable-next-line no-console
-    console.log(`${event.key} => ${btn}`)
-    switch (btn) {
-      case 'left':
-        // flip
-        PLAYER.position.x -= 1
-        PLAYER.texture = TEXTURE.PLAYER_WALK
-        PLAYER.celIndex = (PLAYER.celIndex + 1) % 2
-        break
-      case 'right':
-        PLAYER.position.x += 1
-        PLAYER.texture = TEXTURE.PLAYER_WALK
-        PLAYER.celIndex = (PLAYER.celIndex + 1) % 2
-        break
-      case 'up':
-        break
-      case 'down':
-        PLAYER.texture = TEXTURE.PLAYER_IDLE
-        PLAYER.celIndex = 0
-        break
-      case 'zap':
-        break
-      case 'menu':
-        break
-      default:
-        break
-    }
-  })
+  const onKeyChange = (event: KeyboardEvent) => {
+    const action = keyboard.DEFAULT_KEY_MAP[event.key]
+    const active = event.type === 'keydown'
+    actionState[action] = active
+  }
+  document.addEventListener('keydown', onKeyChange)
+  document.addEventListener('keyup', onKeyChange)
 
   const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
   assetsLoader
@@ -118,6 +100,24 @@ function loop(
   resize(gl, ctx.location('uResolution'))
 
   const step = (now - timestamp) / 1000
+
+  const pps = 16 * step
+  if (actionState[Action.LEFT]) {
+    // flip
+    PLAYER.position.x -= pps
+    PLAYER.texture = TEXTURE.PLAYER_WALK
+    PLAYER.celIndex = (PLAYER.celIndex + 1) % 2
+  }
+  if (actionState[Action.RIGHT]) {
+    PLAYER.position.x += pps
+    PLAYER.texture = TEXTURE.PLAYER_WALK
+    PLAYER.celIndex = (PLAYER.celIndex + 1) % 2
+  }
+  if (!actionState[Action.LEFT] && !actionState[Action.RIGHT]) {
+    PLAYER.texture = TEXTURE.PLAYER_IDLE
+    PLAYER.celIndex = 0
+  }
+
   render(gl, ctx, atlas, assets, step)
 }
 
