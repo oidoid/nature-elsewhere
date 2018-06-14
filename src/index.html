@@ -12,10 +12,6 @@
         /* Set the background color shown while waiting for the canvas to be
            attached. */
         background: #000;
-
-        /* When the canvas exceeds the viewport, suppress scrollbars and hide
-           it. */
-        overflow: hidden;
       }
 
       canvas {
@@ -26,11 +22,9 @@
         /* The game is rendered to a small canvas with a fixed height and width
            proportional to the viewport width / height ratio. Scale the canvas
            to the dimensions of the window knowing that the game will always
-           adjust the width proportionally. Use percentage values instead of vw
-           / vh. Percentage values cause overflow but retain proportional
-           scaling for noninteger widths. */
-        width: 100%;
-        height: 100%;
+           adjust the width proportionally. */
+        width: 100vw;
+        height: 100vh;
 
         /* Scale using nearest-neighbor to keep a pixelated appearance. */
         image-rendering: optimizeSpeed; /* Firefox */
