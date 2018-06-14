@@ -10,12 +10,16 @@ import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
+import * as palette from './assets/levels/palette'
 
 const HEIGHT = 192
 
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
+
+  document.body.style.background = `rgba(${palette.base.r * 255}, ${palette.base
+    .g * 255}, ${palette.base.b * 255}, ${palette.base.a})`
 
   const gl = check(
     canvas.getContext('webgl', {
@@ -71,22 +75,22 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => loop(gl, ctx, atlas, assets, Date.now()))
-  // todo: exit.
+  // todo: exit and remove key EventListener.
 }
 
-function resize(gl: GL, resolutionLocation: GLUniformLocation | null) {
-  // The canvas is stretched to the width of the document proportionally.
-  // Truncate the width to the lowest integer to so that the canvas height is
-  // scaled to be equal to or slightly greater than the document height. If
-  // Math.ceil() is used instead, the canvas will often not quite fill the
-  // height of the document.
-  const ratio = window.innerWidth / window.innerHeight
-  const width = Math.trunc(HEIGHT * ratio) // window.devicePixelRatio
-  gl.canvas.width = width
-  gl.canvas.height = HEIGHT
+function resize(gl: GL, resolutionLocation: GLUniformLocation | null): void {
+  const scale = Math.max(1, Math.floor(window.innerHeight / RENDER_HEIGHT))
 
-  gl.uniform2f(resolutionLocation, width, HEIGHT)
-  gl.viewport(0, 0, width, HEIGHT)
+  const renderWidth = Math.round(window.innerWidth / scale)
+  gl.canvas.width = renderWidth
+  gl.canvas.height = RENDER_HEIGHT
+  gl.uniform2f(resolutionLocation, renderWidth, RENDER_HEIGHT)
+  gl.viewport(0, 0, renderWidth, RENDER_HEIGHT)
+
+  const scaledWidth = renderWidth * scale
+  const scaledHeight = RENDER_HEIGHT * scale
+  gl.canvas.style.width = `${scaledWidth}px`
+  gl.canvas.style.height = `${scaledHeight}px`
 }
 
 function loop(
