@@ -10,16 +10,15 @@ import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
-import * as palette from './assets/levels/palette'
 
-const HEIGHT = 192
+// The minimum render height and expected minimum render width. The maximum
+// render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
+// render width.
+const MIN_RENDER_HEIGHT = 128
 
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
-
-  document.body.style.background = `rgba(${palette.base.r * 255}, ${palette.base
-    .g * 255}, ${palette.base.b * 255}, ${palette.base.a})`
 
   const gl = check(
     canvas.getContext('webgl', {
@@ -79,16 +78,29 @@ function main(window: Window) {
 }
 
 function resize(gl: GL, resolutionLocation: GLUniformLocation | null): void {
-  const scale = Math.max(1, Math.floor(window.innerHeight / RENDER_HEIGHT))
+  // An integer multiple.
+  const scale = Math.max(1, Math.floor(window.innerHeight / MIN_RENDER_HEIGHT))
+  const renderHeight = Math.ceil(window.innerHeight / scale)
+  const renderWidth = Math.ceil(window.innerWidth / scale)
 
-  const renderWidth = Math.round(window.innerWidth / scale)
+  // Set the canvas' native dimensions.
   gl.canvas.width = renderWidth
-  gl.canvas.height = RENDER_HEIGHT
-  gl.uniform2f(resolutionLocation, renderWidth, RENDER_HEIGHT)
-  gl.viewport(0, 0, renderWidth, RENDER_HEIGHT)
+  gl.canvas.height = renderHeight
 
+  // Update the vertex shader's resolution and the viewport within the canvas to
+  // use the complete canvas area. For this game, the resolution is so low that
+  // the canvas's native dimensions within the window are like a postage stamp
+  // on an envelope.
+  gl.uniform2f(resolutionLocation, renderWidth, renderHeight)
+  gl.viewport(0, 0, renderWidth, renderHeight)
+
+  // Uniformly stretch the canvas to the window's bounds. Continuing the
+  // metaphor of the previous comment, the stamp now covers the envelope. These
+  // dimensions may slightly exceed the bounds to retain pixel perfect scaling.
+  // Excess is cropped from the lower-right corner. The maximum excess is equal
+  // to `scale` pixels in both axes.
   const scaledWidth = renderWidth * scale
-  const scaledHeight = RENDER_HEIGHT * scale
+  const scaledHeight = renderHeight * scale
   gl.canvas.style.width = `${scaledWidth}px`
   gl.canvas.style.height = `${scaledHeight}px`
 }
