@@ -101,6 +101,7 @@ function loop(
 
   const step = (now - timestamp) / 1000
 
+  // todo: add pixel per second doc.
   const pps = (actionState[Action.RUN] ? 32 : 16) * step
   if (actionState[Action.LEFT]) {
     PLAYER.flip.x = true

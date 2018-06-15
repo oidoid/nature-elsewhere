@@ -36,3 +36,25 @@ export function newPlayer(position: XY): Sprite[] {
     }
   ]
 }
+
+export function newGrassL(position: XY): Sprite[] {
+  return [
+    {
+      texture: TEXTURE.GRASS_L,
+      position,
+      celIndex: 0,
+      flip: {x: false, y: false}
+    }
+  ]
+}
+
+export function newTree(position: XY): Sprite[] {
+  return [
+    {
+      texture: TEXTURE.TREE,
+      position,
+      celIndex: 0,
+      flip: {x: false, y: false}
+    }
+  ]
+}
