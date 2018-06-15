@@ -334,7 +334,7 @@
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
       "sourceSize": {"w": 16, "h": 16},
-      "duration": 100
+      "duration": 1000
     },
     "player walk 5": {
       "frame": {"x": 232, "y": 36, "w": 18, "h": 18},
@@ -342,7 +342,7 @@
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
       "sourceSize": {"w": 16, "h": 16},
-      "duration": 100
+      "duration": 1000
     },
     "player walk-armed 6": {
       "frame": {"x": 214, "y": 36, "w": 18, "h": 18},
@@ -374,7 +374,7 @@
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
       "sourceSize": {"w": 16, "h": 16},
-      "duration": 100
+      "duration": 200
     },
     "player run-armed 10": {
       "frame": {"x": 90, "y": 54, "w": 18, "h": 18},

@@ -101,17 +101,21 @@ function loop(
 
   const step = (now - timestamp) / 1000
 
-  const pps = 16 * step
+  const pps = (actionState[Action.RUN] ? 32 : 16) * step
   if (actionState[Action.LEFT]) {
     PLAYER.flip.x = true
     PLAYER.position.x -= pps
-    PLAYER.texture = TEXTURE.PLAYER_WALK
+    PLAYER.texture = actionState[Action.RUN]
+      ? TEXTURE.PLAYER_RUN
+      : TEXTURE.PLAYER_WALK
     PLAYER.celIndex = Math.abs(Math.round(PLAYER.position.x)) % 2
   }
   if (actionState[Action.RIGHT]) {
     PLAYER.flip.x = false
     PLAYER.position.x += pps
-    PLAYER.texture = TEXTURE.PLAYER_WALK
+    PLAYER.texture = actionState[Action.RUN]
+      ? TEXTURE.PLAYER_RUN
+      : TEXTURE.PLAYER_WALK
     PLAYER.celIndex = Math.abs(Math.round(PLAYER.position.x)) % 2
   }
   if (!actionState[Action.LEFT] && !actionState[Action.RIGHT]) {

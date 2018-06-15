@@ -3,6 +3,7 @@ export enum Action {
   RIGHT,
   UP,
   DOWN,
+  RUN,
   ZAP,
   MENU
 }
