@@ -102,7 +102,7 @@ function loop(
   const step = (now - timestamp) / 1000
 
   // todo: add pixel per second doc.
-  const pps = (actionState[Action.RUN] ? 32 : 16) * step
+  const pps = (actionState[Action.RUN] ? 48 : 16) * step
   if (actionState[Action.LEFT]) {
     PLAYER.flip.x = true
     PLAYER.position.x -= pps
@@ -123,6 +123,15 @@ function loop(
     PLAYER.texture = TEXTURE.PLAYER_IDLE
     PLAYER.celIndex = 0
   }
+
+  const renderWidth = gl.canvas.width
+  const renderHeight = gl.canvas.height
+  const cameraLocation = ctx.location('uCamera')
+  gl.uniform2f(
+    cameraLocation,
+    -PLAYER.position.x + renderWidth / 2,
+    PLAYER.position.y + renderHeight / 2
+  )
 
   render(gl, ctx, atlas, assets, step)
 }
