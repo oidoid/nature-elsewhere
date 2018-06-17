@@ -57,6 +57,12 @@ export function newRainCloudS({x, y}: XY): Sprite[] {
     {...defaults(), texture, position: {x: x + 1, y: y + 16}, speed, scroll},
     {...defaults(), texture, position: {x: x + 1, y: y + 31}, speed, scroll},
     {...defaults(), texture, position: {x: x + 1, y: y + 40}, speed, scroll},
+    {
+      ...defaults(),
+      texture: TEXTURE.WATER_M,
+      position: {x: x + 1, y: y + 42},
+      speed
+    },
     {...defaults(), texture: TEXTURE.CLOUD_S, position: {x, y}, speed}
   ]
 }
