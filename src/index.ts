@@ -1,10 +1,10 @@
 import {Level0, PLAYER} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
-import * as shaderLoader from './gfx/glsl/shader-loader'
-import * as gfx from './gfx/gfx'
-import {check, GL, GLUniformLocation} from './gfx/gl'
-import * as vertexSrc from './gfx/glsl/main.vert'
-import * as fragmentSrc from './gfx/glsl/main.frag'
+import * as shaderLoader from './graphics/glsl/shader-loader'
+import * as graphics from './graphics/graphics'
+import {check, GL, GLUniformLocation} from './graphics/gl'
+import * as vertexSrc from './graphics/glsl/main.vert'
+import * as fragmentSrc from './graphics/glsl/main.frag'
 import * as keyboard from './input/keyboard'
 import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
@@ -165,7 +165,7 @@ function render(
   const {r, g, b, a} = Level0.Map.backgroundColor
   gl.clearColor(r, g, b, a)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gfx.drawTextures(gl, ctx, atlas, assets, Level0.Map.sprites)
+  graphics.drawTextures(gl, ctx, atlas, assets, Level0.Map.sprites)
 }
 
 main(window)
