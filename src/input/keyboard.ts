@@ -1,9 +1,8 @@
 import {Action} from './action'
 
-export interface KeyMap {
-  // Event.key
-  [key: string]: Action
-}
+/** An KeyboardEvent.key. */
+export type Key = string
+export type KeyMap = {[key in Key]: Action}
 
 export const DEFAULT_KEY_MAP: KeyMap = {
   ArrowLeft: Action.LEFT,

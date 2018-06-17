@@ -10,16 +10,13 @@ import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
-import {Action, ActionState} from './input/action'
+import {Action, ActionState, newActionState} from './input/action'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
 // render width.
 const MIN_RENDER_HEIGHT = 128
-const actionState: ActionState = Object.assign(
-  {},
-  ...Object.values(Action).map(action => ({[action]: false}))
-)
+const actionState: ActionState = newActionState()
 
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
