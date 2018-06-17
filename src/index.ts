@@ -131,6 +131,8 @@ function loop(
     PLAYER.celIndex = 0
   }
 
+  PLAYER.position.x = Math.max(0, PLAYER.position.x)
+
   const renderWidth = gl.canvas.width
   const renderHeight = gl.canvas.height
   const cameraLocation = ctx.location('uCamera')
@@ -140,6 +142,10 @@ function loop(
     renderHeight / 4
   )
 
+  for (const sprite of Level0.Map.sprites) {
+    sprite.position.x += step * sprite.speed.x
+    sprite.position.y += step * sprite.speed.y
+  }
   render(gl, ctx, atlas, assets, step)
 }
 

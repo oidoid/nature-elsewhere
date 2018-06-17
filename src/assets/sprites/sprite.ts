@@ -6,6 +6,8 @@ export type Sprite = {
   texture: Texture
   celIndex: number
   scroll?: XY
+  scrollPosition?: XY
   position: XY
+  speed: XY
   flip: {x: boolean; y: boolean}
 }

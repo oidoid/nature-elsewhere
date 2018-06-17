@@ -19,8 +19,6 @@ export function createTexture(gl: GL): GLTexture | null {
   return texture
 }
 
-let textureScroll = {x: 0, y: 0}
-
 export function drawTextures(
   gl: GL,
   ctx: ShaderContext,
@@ -67,18 +65,19 @@ export function drawTextures(
     const image = assets[sprite.texture.textureAssetID]
     // todo: this probably doesn't need to happen multiple times every frame.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
-    if (sprite.scroll) {
-      textureScroll = {
-        x: textureScroll.x + step * sprite.scroll.x,
-        y: textureScroll.y + step * sprite.scroll.y
-      }
+    if (sprite.scroll && sprite.scrollPosition) {
+      sprite.scrollPosition.x += step * sprite.scroll.x
+      sprite.scrollPosition.y += step * sprite.scroll.y
     }
 
     const tex =
       atlas.animations[sprite.texture.textureID].cels[sprite.celIndex].bounds
 
-    const scroll = sprite.scroll ? textureScroll : {x: 0, y: 0}
-    gl.uniform2f(ctx.location('uTextureScroll'), scroll.x, scroll.y)
+    gl.uniform2f(
+      ctx.location('uTextureScroll'),
+      sprite.scrollPosition ? sprite.scrollPosition.x : 0,
+      sprite.scrollPosition ? sprite.scrollPosition.y : 0
+    )
     bufferRectangle(gl, sprite.position, {w: tex.w, h: tex.h})
 
     gl.uniform2f(
