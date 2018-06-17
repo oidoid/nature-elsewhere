@@ -116,6 +116,16 @@ function loop(
       : TEXTURE.PLAYER_WALK
     PLAYER.celIndex = Math.abs(Math.round(PLAYER.position.x)) % 2
   }
+  if (actionState[Action.UP]) {
+    PLAYER.position.y -= pps
+    PLAYER.texture = TEXTURE.PLAYER_ASCEND
+    PLAYER.celIndex = 0
+  }
+  if (actionState[Action.DOWN]) {
+    PLAYER.position.y += pps
+    PLAYER.texture = TEXTURE.PLAYER_DESCEND
+    PLAYER.celIndex = 0
+  }
   if (!actionState[Action.LEFT] && !actionState[Action.RIGHT]) {
     PLAYER.texture = TEXTURE.PLAYER_IDLE
     PLAYER.celIndex = 0
@@ -127,7 +137,7 @@ function loop(
   gl.uniform2f(
     cameraLocation,
     -PLAYER.position.x + renderWidth / 2,
-    PLAYER.position.y - renderHeight / 4
+    renderHeight / 4
   )
 
   render(gl, ctx, atlas, assets, step)
