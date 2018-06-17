@@ -145,21 +145,23 @@ function loop(
   for (const sprite of Level0.Map.sprites) {
     sprite.position.x += step * sprite.speed.x
     sprite.position.y += step * sprite.speed.y
+
+    sprite.scrollPosition.x += step * sprite.scroll.x
+    sprite.scrollPosition.y += step * sprite.scroll.y
   }
-  render(gl, ctx, atlas, assets, step)
+  render(gl, ctx, atlas, assets)
 }
 
 function render(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
   atlas: textureAtlas.TextureAtlas,
-  assets: assetsLoader.Assets,
-  step: number
+  assets: assetsLoader.Assets
 ): void {
   const {r, g, b, a} = Level0.Map.backgroundColor
   gl.clearColor(r, g, b, a)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gfx.drawTextures(gl, ctx, atlas, assets, Level0.Map.sprites, step)
+  gfx.drawTextures(gl, ctx, atlas, assets, Level0.Map.sprites)
 }
 
 main(window)

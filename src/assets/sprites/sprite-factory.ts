@@ -2,154 +2,65 @@ import {TEXTURE} from '../textures/texture'
 import {XY} from '../../geo'
 import {Sprite} from './sprite'
 
+function defaults() {
+  return {
+    speed: {x: 0, y: 0},
+    celIndex: 0,
+    flip: {x: false, y: false},
+    scroll: {x: 0, y: 0},
+    scrollPosition: {x: 0, y: 0}
+  }
+}
+
 export function newCloudS(position: XY): Sprite[] {
-  return [
-    {
-      texture: TEXTURE.CLOUD_S,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
-  ]
+  return [{...defaults(), texture: TEXTURE.CLOUD_S, position}]
 }
 
 export function newCloudM(position: XY): Sprite[] {
-  return [
-    {
-      texture: TEXTURE.CLOUD_M,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
-  ]
+  return [{...defaults(), texture: TEXTURE.CLOUD_M, position}]
 }
 
 export function newCloudL(position: XY): Sprite[] {
-  return [
-    {
-      texture: TEXTURE.CLOUD_L,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
-  ]
+  return [{...defaults(), texture: TEXTURE.CLOUD_L, position}]
 }
 
 export function newCloudXL(position: XY): Sprite[] {
-  return [
-    {
-      texture: TEXTURE.CLOUD_XL,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
-  ]
+  return [{...defaults(), texture: TEXTURE.CLOUD_XL, position}]
 }
 
 export function newGrassL(position: XY): Sprite[] {
-  return [
-    {
-      texture: TEXTURE.GRASS_L,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
-  ]
+  return [{...defaults(), texture: TEXTURE.GRASS_L, position}]
 }
 
 export function newPlayer(position: XY): Sprite[] {
-  return [
-    {
-      texture: TEXTURE.PLAYER_IDLE,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
-  ]
+  return [{...defaults(), texture: TEXTURE.PLAYER_IDLE, position}]
 }
 
 export function newPond(position: XY, flowRate: number): Sprite[] {
   return [
+    {...defaults(), texture: TEXTURE.POND_WATER, position},
     {
-      texture: TEXTURE.POND_WATER,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    },
-    {
+      ...defaults(),
       texture: TEXTURE.POND_REFLECTIONS,
       position,
-      speed: {x: 0, y: 0},
-      scroll: {x: flowRate, y: 0},
-      scrollPosition: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
+      scroll: {x: flowRate, y: 0}
     },
-    {
-      texture: TEXTURE.POND_MASK,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
+    {...defaults(), texture: TEXTURE.POND_MASK, position}
   ]
 }
 
-export function newRainCloudS(position: XY): Sprite[] {
+export function newRainCloudS({x, y}: XY): Sprite[] {
+  const texture = TEXTURE.RAIN
   const speed = {x: -0.1, y: 0}
+  const scroll = {x: 0, y: -12}
   return [
-    {
-      texture: TEXTURE.RAIN,
-      position: {x: position.x + 1, y: position.y + 15},
-      speed,
-      celIndex: 0,
-      flip: {x: false, y: false},
-      scroll: {x: 0, y: -12},
-      scrollPosition: {x: 0, y: 0}
-    },
-    {
-      texture: TEXTURE.RAIN,
-      position: {x: position.x + 1, y: position.y + 31},
-      speed,
-      celIndex: 0,
-      flip: {x: false, y: false},
-      scroll: {x: 0, y: -12},
-      scrollPosition: {x: 0, y: 0}
-    },
-    {
-      texture: TEXTURE.RAIN,
-      position: {x: position.x + 1, y: position.y + 40},
-      speed,
-      celIndex: 0,
-      flip: {x: false, y: false},
-      scroll: {x: 0, y: -12},
-      scrollPosition: {x: 0, y: 0}
-    },
-    {
-      texture: TEXTURE.CLOUD_S,
-      position,
-      speed,
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
+    {...defaults(), texture, position: {x: x + 1, y: y + 16}, speed, scroll},
+    {...defaults(), texture, position: {x: x + 1, y: y + 31}, speed, scroll},
+    {...defaults(), texture, position: {x: x + 1, y: y + 40}, speed, scroll},
+    {...defaults(), texture: TEXTURE.CLOUD_S, position: {x, y}, speed}
   ]
 }
 
 export function newTree(position: XY): Sprite[] {
-  return [
-    {
-      texture: TEXTURE.TREE,
-      position,
-      speed: {x: 0, y: 0},
-      celIndex: 0,
-      flip: {x: false, y: false}
-    }
-  ]
+  return [{...defaults(), texture: TEXTURE.TREE, position}]
 }
