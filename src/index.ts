@@ -53,7 +53,10 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => loop(gl, ctx, atlas, assets, Date.now()))
-  // todo: exit and remove key EventListener.
+    .catch(() => {
+      document.removeEventListener('keyup', onKeyChange)
+      document.removeEventListener('keydown', onKeyChange)
+    })
 }
 
 function resize(gl: GL, resolutionLocation: GLUniformLocation | null): void {
@@ -96,7 +99,8 @@ function loop(
 
   resize(gl, ctx.location('uResolution'))
 
-  const step = (now - timestamp) / 1000
+  // If focus is lost, do not advance more than a second.
+  const step = Math.min(1000, now - timestamp) / 1000
 
   // todo: add pixel per second doc.
   const pps = (actionState[Action.RUN] ? 48 : 16) * step
