@@ -127,7 +127,7 @@ function loop(
   gl.uniform2f(
     cameraLocation,
     -PLAYER.position.x + renderWidth / 2,
-    PLAYER.position.y + renderHeight / 2
+    PLAYER.position.y - renderHeight / 4
   )
 
   render(gl, ctx, atlas, assets, step)
