@@ -17,8 +17,9 @@ GRASS_L.concat(SpriteFactory.newGrassL({x: 160, y: 60})).concat(
 export const TREE = SpriteFactory.newTree({x: 185, y: 44})
 export const CLOUDS = SpriteFactory.newCloudS({x: 40, y: 20})
   .concat(SpriteFactory.newCloudM({x: 58, y: 16}))
-  .concat(SpriteFactory.newRainCloudS({x: 75, y: 18}))
+  .concat(SpriteFactory.newRainCloud('CLOUD_S', {x: 75, y: 18}, -0.08))
   .concat(SpriteFactory.newCloudXL({x: 120, y: 10}))
+  .concat(SpriteFactory.newRainCloud('CLOUD_L', {x: 20, y: -10}, -0.1))
 
 export namespace Level0 {
   export const Map = {
@@ -30,5 +31,7 @@ export namespace Level0 {
       .concat(GRASS_L)
       .concat(TREE)
       .concat(CLOUDS)
+      .concat(SpriteFactory.newQuicksand({x: 160, y: 75}, 3))
+      .concat(SpriteFactory.newQuicksand({x: 176, y: 75}, 3))
   }
 }

@@ -1,4 +1,4 @@
-import {TEXTURE} from '../textures/texture'
+import {TEXTURE, CloudTextureKey} from '../textures/texture'
 import {XY} from '../../geo'
 import {Sprite} from './sprite'
 
@@ -49,22 +49,50 @@ export function newPond(position: XY, flowRate: number): Sprite[] {
   ]
 }
 
-export function newRainCloudS({x, y}: XY): Sprite[] {
-  const texture = TEXTURE.RAIN
-  const speed = {x: -0.1, y: 0}
-  const scroll = {x: 0, y: -12}
+export function newQuicksand(position: XY, flowRate: number): Sprite[] {
   return [
-    {...defaults(), texture, position: {x: x + 1, y: y + 16}, speed, scroll},
-    {...defaults(), texture, position: {x: x + 1, y: y + 31}, speed, scroll},
-    {...defaults(), texture, position: {x: x + 1, y: y + 40}, speed, scroll},
     {
       ...defaults(),
-      texture: TEXTURE.WATER_M,
-      position: {x: x + 1, y: y + 42},
-      speed
-    },
-    {...defaults(), texture: TEXTURE.CLOUD_S, position: {x, y}, speed}
+      texture: TEXTURE.QUICKSAND,
+      position,
+      scroll: {x: flowRate, y: 0}
+    }
   ]
+}
+
+const BOTTOM_Y = 60
+
+export function newRainCloud(
+  cloud: CloudTextureKey,
+  {x, y}: XY,
+  speed: number
+): Sprite[] {
+  const sprites: Sprite[] = []
+  for (let i = 0; i < (64 - y) / 16; ++i) {
+    sprites.push({
+      ...defaults(),
+      texture: TEXTURE.RAIN,
+      position: {
+        x: x + Math.round(i / 2),
+        y: y + 15 + i * 16 - Math.max(0, y + 15 + i * 16 - BOTTOM_Y)
+      },
+      speed: {x: speed, y: 0},
+      scroll: {x: 0, y: -12}
+    })
+  }
+  sprites.push({
+    ...defaults(),
+    texture: TEXTURE.WATER_M,
+    position: {x: x + 1, y: BOTTOM_Y},
+    speed: {x: speed, y: 0}
+  })
+  sprites.push({
+    ...defaults(),
+    texture: TEXTURE[cloud],
+    position: {x, y},
+    speed: {x: speed, y: 0}
+  })
+  return sprites
 }
 
 export function newTree(position: XY): Sprite[] {

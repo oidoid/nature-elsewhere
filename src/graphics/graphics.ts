@@ -5,10 +5,6 @@ import {ShaderContext} from './glsl/shader-loader'
 import {WH, XY} from '../geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
 
-export interface Texture {
-  texture: GLTexture
-}
-
 /** Creates, binds, and configures a texture. */
 export function createTexture(gl: GL): GLTexture | null {
   const texture = gl.createTexture()
@@ -68,12 +64,13 @@ export function drawTextures(
     const tex =
       atlas.animations[sprite.texture.textureID].cels[sprite.celIndex].bounds
 
+    bufferRectangle(gl, sprite.position, {w: tex.w, h: tex.h})
+
     gl.uniform2f(
       ctx.location('uTextureScroll'),
       sprite.scrollPosition.x,
       sprite.scrollPosition.y
     )
-    bufferRectangle(gl, sprite.position, {w: tex.w, h: tex.h})
 
     gl.uniform2f(
       ctx.location('uScale'),

@@ -1,7 +1,7 @@
 {
   "frames": {
     "bird rest 0": {
-      "frame": {"x": 72, "y": 126, "w": 18, "h": 18},
+      "frame": {"x": 198, "y": 126, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -9,14 +9,6 @@
       "duration": 65535
     },
     "bird rise 1": {
-      "frame": {"x": 54, "y": 90, "w": 18, "h": 18},
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
-      "sourceSize": {"w": 16, "h": 16},
-      "duration": 100
-    },
-    "bird fly 2": {
       "frame": {"x": 72, "y": 90, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -24,8 +16,16 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 100
     },
-    "bird fly 3": {
+    "bird fly 2": {
       "frame": {"x": 90, "y": 90, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 100
+    },
+    "bird fly 3": {
+      "frame": {"x": 218, "y": 90, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -57,14 +57,6 @@
       "duration": 65535
     },
     "bull  ": {
-      "frame": {"x": 218, "y": 90, "w": 18, "h": 18},
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
-      "sourceSize": {"w": 16, "h": 16},
-      "duration": 65535
-    },
-    "cactus s 0": {
       "frame": {"x": 236, "y": 90, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -72,7 +64,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "cactus m 1": {
+    "cactus s 0": {
       "frame": {"x": 108, "y": 104, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -80,7 +72,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "cactus l 2": {
+    "cactus m 1": {
       "frame": {"x": 126, "y": 104, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -88,7 +80,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "cactus xl 3": {
+    "cactus l 2": {
       "frame": {"x": 178, "y": 104, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -96,7 +88,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "cattails  ": {
+    "cactus xl 3": {
       "frame": {"x": 196, "y": 104, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -104,15 +96,15 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "char walk 0": {
+    "cattails  ": {
       "frame": {"x": 0, "y": 106, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
       "sourceSize": {"w": 16, "h": 16},
-      "duration": 100
+      "duration": 65535
     },
-    "char walk 1": {
+    "char walk 0": {
       "frame": {"x": 144, "y": 106, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -120,7 +112,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 100
     },
-    "char walk 2": {
+    "char walk 1": {
       "frame": {"x": 18, "y": 108, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -128,7 +120,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 100
     },
-    "char walk 3": {
+    "char walk 2": {
       "frame": {"x": 36, "y": 108, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -136,7 +128,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 100
     },
-    "char walk 4": {
+    "char walk 3": {
       "frame": {"x": 54, "y": 108, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -144,8 +136,16 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 100
     },
-    "cloud xs 0": {
+    "char walk 4": {
       "frame": {"x": 72, "y": 108, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 100
+    },
+    "cloud xs 0": {
+      "frame": {"x": 90, "y": 108, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -153,7 +153,7 @@
       "duration": 65535
     },
     "cloud s 1": {
-      "frame": {"x": 36, "y": 90, "w": 18, "h": 18},
+      "frame": {"x": 54, "y": 90, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -161,14 +161,6 @@
       "duration": 65535
     },
     "cloud m 2": {
-      "frame": {"x": 214, "y": 108, "w": 18, "h": 18},
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
-      "sourceSize": {"w": 16, "h": 16},
-      "duration": 65535
-    },
-    "cloud l 3": {
       "frame": {"x": 232, "y": 108, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -176,8 +168,16 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "cloud xl 4": {
+    "cloud l 3": {
       "frame": {"x": 108, "y": 122, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "cloud xl 4": {
+      "frame": {"x": 126, "y": 122, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -193,14 +193,6 @@
       "duration": 65535
     },
     "flag  ": {
-      "frame": {"x": 126, "y": 122, "w": 18, "h": 18},
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
-      "sourceSize": {"w": 16, "h": 16},
-      "duration": 65535
-    },
-    "grass xs 0": {
       "frame": {"x": 162, "y": 122, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -208,7 +200,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "grass s 1": {
+    "grass xs 0": {
       "frame": {"x": 180, "y": 122, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -216,7 +208,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "grass m 2": {
+    "grass s 1": {
       "frame": {"x": 0, "y": 124, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -224,8 +216,16 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "grass l 3": {
+    "grass m 2": {
       "frame": {"x": 144, "y": 124, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "grass l 3": {
+      "frame": {"x": 18, "y": 126, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -241,14 +241,6 @@
       "duration": 65535
     },
     "palette 0 0": {
-      "frame": {"x": 18, "y": 126, "w": 18, "h": 18},
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
-      "sourceSize": {"w": 16, "h": 16},
-      "duration": 65535
-    },
-    "palette 1 1": {
       "frame": {"x": 36, "y": 126, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -256,7 +248,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "palette 2 2": {
+    "palette 1 1": {
       "frame": {"x": 54, "y": 126, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -264,15 +256,15 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "palette 3 3": {
-      "frame": {"x": 88, "y": 72, "w": 18, "h": 18},
+    "palette 2 2": {
+      "frame": {"x": 72, "y": 126, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "palette 4 4": {
+    "palette 3 3": {
       "frame": {"x": 90, "y": 126, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -280,8 +272,16 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
+    "palette 4 4": {
+      "frame": {"x": 106, "y": 72, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
     "palette 5 5": {
-      "frame": {"x": 198, "y": 126, "w": 18, "h": 18},
+      "frame": {"x": 216, "y": 126, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -289,7 +289,7 @@
       "duration": 65535
     },
     "palette 6 6": {
-      "frame": {"x": 90, "y": 108, "w": 18, "h": 18},
+      "frame": {"x": 214, "y": 108, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -345,7 +345,7 @@
       "duration": 65535
     },
     "player crouch-armed 3": {
-      "frame": {"x": 70, "y": 54, "w": 18, "h": 18},
+      "frame": {"x": 230, "y": 0, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -385,7 +385,7 @@
       "duration": 100
     },
     "player run 8": {
-      "frame": {"x": 230, "y": 0, "w": 18, "h": 18},
+      "frame": {"x": 230, "y": 18, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -417,7 +417,7 @@
       "duration": 100
     },
     "player ascend 12": {
-      "frame": {"x": 230, "y": 18, "w": 18, "h": 18},
+      "frame": {"x": 88, "y": 72, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -425,7 +425,7 @@
       "duration": 65535
     },
     "player ascend-armed 13": {
-      "frame": {"x": 106, "y": 72, "w": 18, "h": 18},
+      "frame": {"x": 70, "y": 54, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -449,7 +449,7 @@
       "duration": 65535
     },
     "pond mask 0": {
-      "frame": {"x": 0, "y": 36, "w": 130, "h": 18},
+      "frame": {"x": 0, "y": 0, "w": 130, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 128, "h": 16},
@@ -457,7 +457,7 @@
       "duration": 65535
     },
     "pond water 1": {
-      "frame": {"x": 0, "y": 18, "w": 130, "h": 18},
+      "frame": {"x": 0, "y": 36, "w": 130, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 128, "h": 16},
@@ -465,7 +465,7 @@
       "duration": 65535
     },
     "pond reflections 2": {
-      "frame": {"x": 0, "y": 0, "w": 130, "h": 18},
+      "frame": {"x": 0, "y": 18, "w": 130, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 128, "h": 16},
@@ -480,7 +480,7 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "rain  ": {
+    "quicksand  ": {
       "frame": {"x": 142, "y": 86, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -488,8 +488,16 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "snake  0": {
+    "rain  ": {
       "frame": {"x": 182, "y": 86, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "snake  0": {
+      "frame": {"x": 200, "y": 86, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -497,7 +505,7 @@
       "duration": 100
     },
     "snake  1": {
-      "frame": {"x": 200, "y": 86, "w": 18, "h": 18},
+      "frame": {"x": 0, "y": 88, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -513,14 +521,6 @@
       "duration": 65535
     },
     "water s 0": {
-      "frame": {"x": 0, "y": 88, "w": 18, "h": 18},
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
-      "sourceSize": {"w": 16, "h": 16},
-      "duration": 65535
-    },
-    "water m 1": {
       "frame": {"x": 160, "y": 88, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
@@ -528,8 +528,16 @@
       "sourceSize": {"w": 16, "h": 16},
       "duration": 65535
     },
-    "water l 2": {
+    "water m 1": {
       "frame": {"x": 18, "y": 90, "w": 18, "h": 18},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
+      "sourceSize": {"w": 16, "h": 16},
+      "duration": 65535
+    },
+    "water l 2": {
+      "frame": {"x": 36, "y": 90, "w": 18, "h": 18},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 16},
@@ -616,6 +624,7 @@
       {"name": "pond water", "from": 1, "to": 1, "direction": "forward"},
       {"name": "pond reflections", "from": 2, "to": 2, "direction": "forward"},
       {"name": "pumpkin ", "from": 0, "to": 0, "direction": "forward"},
+      {"name": "quicksand ", "from": 0, "to": 0, "direction": "forward"},
       {"name": "rain ", "from": 0, "to": 0, "direction": "forward"},
       {"name": "snake ", "from": 0, "to": 1, "direction": "forward"},
       {"name": "tree ", "from": 0, "to": 0, "direction": "forward"},
@@ -708,12 +717,18 @@
       {
         "name": "cloud s",
         "color": "#0000ffff",
-        "keys": [{"frame": 0, "bounds": {"x": 4, "y": 11, "w": 9, "h": 4}}]
+        "keys": [
+          {"frame": 0, "bounds": {"x": 4, "y": 11, "w": 9, "h": 4}},
+          {"frame": 1, "bounds": {"x": 3, "y": 11, "w": 9, "h": 4}}
+        ]
       },
       {
         "name": "cloud m",
         "color": "#0000ffff",
-        "keys": [{"frame": 0, "bounds": {"x": 3, "y": 11, "w": 10, "h": 4}}]
+        "keys": [
+          {"frame": 0, "bounds": {"x": 3, "y": 11, "w": 10, "h": 4}},
+          {"frame": 1, "bounds": {"x": 3, "y": 11, "w": 10, "h": 4}}
+        ]
       },
       {
         "name": "cloud l",

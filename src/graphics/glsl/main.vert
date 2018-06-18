@@ -1,5 +1,5 @@
 uniform vec2 uResolution; // In pixels.
-uniform vec2 uCamera;
+uniform vec2 uCamera; // In pixels.
 
 attribute vec2 aVertex; // In pixels.
 attribute vec2 aTextureCoords;

@@ -4,6 +4,8 @@ export const ASSET_URL = {
   [TextureAssetID.ATLAS]: '/assets/textures/atlas.png'
 }
 
+export type CloudTextureKey = 'CLOUD_S' | 'CLOUD_M' | 'CLOUD_L' | 'CLOUD_XL'
+
 export type Texture = typeof TEXTURE[keyof typeof TEXTURE]
 const atlas = {textureAssetID: TextureAssetID.ATLAS}
 export const TEXTURE = {
@@ -58,6 +60,7 @@ export const TEXTURE = {
   POND_WATER: {...atlas, textureID: 'pond water'},
   POND_REFLECTIONS: {...atlas, textureID: 'pond reflections'},
   PUMPKIN: {...atlas, textureID: 'pumpkin '},
+  QUICKSAND: {...atlas, textureID: 'quicksand '},
   RAIN: {...atlas, textureID: 'rain '},
   SNAKE: {...atlas, textureID: 'snake '},
   TREE: {...atlas, textureID: 'tree '},
