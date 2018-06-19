@@ -74,7 +74,7 @@ export function newRainCloud(
       texture: TEXTURE.RAIN,
       position: {
         x: x + Math.round(i / 2),
-        y: y + 15 + i * 16 - Math.max(0, y + 15 + i * 16 - BOTTOM_Y)
+        y: y + 15 + i * 16 - Math.max(0, y + 16 + i * 16 - BOTTOM_Y)
       },
       speed: {x: speed, y: 0},
       scroll: {x: 0, y: -12}

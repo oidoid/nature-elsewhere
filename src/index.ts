@@ -2,7 +2,7 @@ import {Level0, PLAYER} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './graphics/glsl/shader-loader'
 import * as graphics from './graphics/graphics'
-import {check, GL, GLUniformLocation} from './graphics/gl'
+import {check, GL} from './graphics/gl'
 import * as vertexSrc from './graphics/glsl/main.vert'
 import * as fragmentSrc from './graphics/glsl/main.frag'
 import * as keyboard from './input/keyboard'
@@ -59,34 +59,6 @@ function main(window: Window) {
     })
 }
 
-function resize(gl: GL, resolutionLocation: GLUniformLocation | null): void {
-  // An integer multiple.
-  const scale = Math.max(1, Math.floor(window.innerHeight / MIN_RENDER_HEIGHT))
-  const renderHeight = Math.ceil(window.innerHeight / scale)
-  const renderWidth = Math.ceil(window.innerWidth / scale)
-
-  // Set the canvas' native dimensions.
-  gl.canvas.width = renderWidth
-  gl.canvas.height = renderHeight
-
-  // Update the vertex shader's resolution and the viewport within the canvas to
-  // use the complete canvas area. For this game, the resolution is so low that
-  // the canvas's native dimensions within the window are like a postage stamp
-  // on an envelope.
-  gl.uniform2f(resolutionLocation, renderWidth, renderHeight)
-  gl.viewport(0, 0, renderWidth, renderHeight)
-
-  // Uniformly stretch the canvas to the window's bounds. Continuing the
-  // metaphor of the previous comment, the stamp now covers the envelope. These
-  // dimensions may slightly exceed the bounds to retain pixel perfect scaling.
-  // Excess is cropped from the lower-right corner. The maximum excess is equal
-  // to `scale` pixels in both axes.
-  const scaledWidth = renderWidth * scale
-  const scaledHeight = renderHeight * scale
-  gl.canvas.style.width = `${scaledWidth}px`
-  gl.canvas.style.height = `${scaledHeight}px`
-}
-
 function loop(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
@@ -96,8 +68,6 @@ function loop(
 ): void {
   const now = Date.now()
   window.requestAnimationFrame(() => loop(gl, ctx, atlas, assets, now))
-
-  resize(gl, ctx.location('uResolution'))
 
   // If focus is lost, do not advance more than a second.
   const step = Math.min(1000, now - timestamp) / 1000
@@ -139,7 +109,7 @@ function loop(
 
   const renderWidth = gl.canvas.width
   const renderHeight = gl.canvas.height
-  const cameraLocation = ctx.location('uCamera')
+  const cameraLocation = ctx.location('uViewport.camera')
   gl.uniform2f(
     cameraLocation,
     -PLAYER.position.x + renderWidth / 2,
@@ -153,19 +123,16 @@ function loop(
     sprite.scrollPosition.x += step * sprite.scroll.x
     sprite.scrollPosition.y += step * sprite.scroll.y
   }
-  render(gl, ctx, atlas, assets)
-}
 
-function render(
-  gl: GL,
-  ctx: shaderLoader.ShaderContext,
-  atlas: textureAtlas.TextureAtlas,
-  assets: assetsLoader.Assets
-): void {
-  const {r, g, b, a} = Level0.Map.backgroundColor
-  gl.clearColor(r, g, b, a)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  graphics.drawTextures(gl, ctx, atlas, assets, Level0.Map.sprites)
+  graphics.render(
+    gl,
+    ctx,
+    atlas,
+    assets,
+    Level0.Map.sprites,
+    Level0.Map.backgroundColor,
+    MIN_RENDER_HEIGHT
+  )
 }
 
 main(window)

@@ -1,12 +1,71 @@
-import {GL, GLTexture} from './gl'
+import {GL, GLTexture, GLUniformLocation} from './gl'
 import {Assets} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
 import {WH, XY} from '../geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
+import {RGBA} from '../assets/levels/palette'
+
+export function render(
+  gl: GL,
+  ctx: ShaderContext,
+  atlas: textureAtlas.TextureAtlas,
+  assets: Assets,
+  sprites: Sprite[],
+  {r, g, b, a}: RGBA,
+  minRenderHeight: number // hieght in peixels
+): void {
+  resize(
+    gl,
+    ctx.location('uViewport.resolution'),
+    {w: window.innerWidth, h: window.innerHeight},
+    minRenderHeight
+  )
+  gl.clearColor(r, g, b, a)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  drawTextures(gl, ctx, atlas, assets, sprites)
+}
+
+/**
+ * Resizes the viewport and Canvas. Scaling is performed proportionally using
+ * integer ratios to maintain pixel perfect accuracy which may yield a Canvas
+ * slightly larger than window.
+ */
+function resize(
+  gl: GL,
+  resolutionLocation: GLUniformLocation | null,
+  window: WH,
+  minRenderHeight: number
+): void {
+  // An integer multiple.
+  const scale = Math.max(1, Math.floor(window.h / minRenderHeight))
+  const renderHeight = Math.ceil(window.h / scale)
+  const renderWidth = Math.ceil(window.w / scale)
+
+  // Set the canvas' native dimensions.
+  gl.canvas.width = renderWidth
+  gl.canvas.height = renderHeight
+
+  // Update the vertex shader's resolution and the viewport within the canvas to
+  // use the complete canvas area. For this game, the resolution is so low that
+  // the canvas's native dimensions within the window are like a postage stamp
+  // on an envelope.
+  gl.uniform2f(resolutionLocation, renderWidth, renderHeight)
+  gl.viewport(0, 0, renderWidth, renderHeight)
+
+  // Uniformly stretch the canvas to the window's bounds. Continuing the
+  // metaphor of the previous comment, the stamp now covers the envelope. These
+  // dimensions may slightly exceed the bounds to retain pixel perfect scaling.
+  // Excess is cropped from the lower-right corner. The maximum excess is equal
+  // to `scale` pixels in both axes.
+  const scaledWidth = renderWidth * scale
+  const scaledHeight = renderHeight * scale
+  gl.canvas.style.width = `${scaledWidth}px`
+  gl.canvas.style.height = `${scaledHeight}px`
+}
 
 /** Creates, binds, and configures a texture. */
-export function createTexture(gl: GL): GLTexture | null {
+function createTexture(gl: GL): GLTexture | null {
   const texture = gl.createTexture()
   const target = gl.TEXTURE_2D
   gl.bindTexture(target, texture)
@@ -15,7 +74,7 @@ export function createTexture(gl: GL): GLTexture | null {
   return texture
 }
 
-export function drawTextures(
+function drawTextures(
   gl: GL,
   ctx: ShaderContext,
   atlas: textureAtlas.TextureAtlas,
