@@ -2,32 +2,32 @@ import * as Aseprite from './aseprite'
 import {Rect, WH} from '../../types/geo'
 
 /** A sprite sheet or composite texture. */
-export type TextureAtlas = {
-  readonly size: WH
-  readonly animations: AnimationMap
-}
+export type TextureAtlas = Readonly<{
+  size: WH
+  animations: AnimationMap
+}>
 
 export type AnimationMap = Readonly<Record<TextureID, Animation>>
 
 export type TextureID = Aseprite.Tag
 
 /** Animation and collision frames. */
-export type Animation = {
-  readonly cels: Cel[]
-  readonly direction: Aseprite.Direction
-}
+export type Animation = Readonly<{
+  cels: Cel[]
+  direction: Aseprite.Direction
+}>
 
 export type Direction = Aseprite.Direction
 
 /** A single cel of animation sequence. */
-export type Cel = {
+export type Cel = Readonly<{
   /** Texture bounds within the atlas. */
-  readonly bounds: Rect
+  bounds: Rect
   /** Animation length in milliseconds, possibly infinite. */
-  readonly duration: number
+  duration: number
   /** Collision bounds within the texture. */
-  readonly collision: Rect[]
-}
+  collision: Rect[]
+}>
 
 // todo: don't version build products like atlas.json and atlas.png.
 // todo: process / unmarshal at compilation time instead of at runtime and share

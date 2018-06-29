@@ -1,3 +1,5 @@
+import {XY, WH} from '../../types/geo'
+
 /**
  * This typing assumes the options specified in package.json and annotated
  * herein with **via CLI**. The JSON export format appears to not be documented
@@ -33,24 +35,24 @@ export type File = {
 
 export type FrameMap = Readonly<Record<TagFrameNumber, Frame>>
 
-export type Meta = {
+export type Meta = Readonly<{
   /** E.g., 'http://www.aseprite.org/'. */
-  readonly app: string
+  app: string
   /** E.g., '1.2.8.1'. */
-  readonly version: string
+  version: string
   /** The associated output. E.g., 'atlas.png'. */
-  readonly image: string
+  image: string
   /** E.g., 'RGBA8888' or 'I8'. */
-  readonly format: string
+  format: string
   /** Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2. */
-  readonly size: WH
+  size: WH
   /** E.g., '1'. */
-  readonly scale: string
+  scale: string
   /** All FrameTags for all files packed **via CLI** `--list-tags`. */
-  readonly frameTags: FrameTag[]
+  frameTags: FrameTag[]
   /** All slices for all files packed **via CLI** `--list-slices`. */
-  readonly slices: Slice[]
-}
+  slices: Slice[]
+}>
 
 /**
  * A Tag followed by a space followed by an optional frame number **via CLI**
@@ -76,41 +78,41 @@ export type Tag = string
  * A single animation frame and most primitive unit. Each file packed always
  * has at least one Frame.
  */
-export type Frame = {
+export type Frame = Readonly<{
   /**
    * The Frame's bounds within the atlas, including a 1px border padding
    * **via CLI** `--inner-padding 1`. The padding dimensions may also be
    * calculated by subtracting member's WH dimensions from sourceSize and
    * dividing by 2.
    */
-  readonly frame: XY & WH
-  readonly rotated: boolean
-  readonly trimmed: boolean
+  frame: XY & WH
+  rotated: boolean
+  trimmed: boolean
   /**
    * The Frame's bounds within the file packed, not including padding. **By
    * convention**, dimensions are multiples of 16 pixels.
    */
-  readonly spriteSourceSize: XY & WH
-  readonly sourceSize: WH
-  readonly duration: Duration
-}
+  spriteSourceSize: XY & WH
+  sourceSize: WH
+  duration: Duration
+}>
 
 /**
  * A label and animation behavior for one or more Frames. When combined with the
  * referenced Frames, an animation is represented.
  */
-export type FrameTag = {
+export type FrameTag = Readonly<{
   /** **By convention**, the associated Frame's Tag. */
-  readonly name: Tag
+  name: Tag
   /** The inclusive starting Frame index. */
-  readonly from: number
+  from: number
   /**
    * The inclusive ending Frame index, possibly identical to the starting frame
    * index.
    */
-  readonly to: number
-  readonly direction: Direction
-}
+  to: number
+  direction: Direction
+}>
 
 /** Animation length in milliseconds. */
 export type Duration = number
@@ -139,38 +141,22 @@ export enum Direction {
  * **By convention**, a collection of bounds within the file packed whose union
  * defines the total collision polygon for a single Frame.
  */
-export type Slice = {
-  readonly name: Tag
+export type Slice = Readonly<{
+  name: Tag
   /** Color in #rrggbbaa format. E.g., blue is '#0000ffff'. */
-  readonly color: string
-  readonly keys: Key[]
-}
+  color: string
+  keys: Key[]
+}>
 
 /** A Frame collision boundary subset within the file packed. */
-export type Key = {
+export type Key = Readonly<{
   /**
    * The inclusive associated Frame's start offset, the exclusive previous
    * Frame's end offset. **By convention,** the exclusive end offset is the next
    * higher Key.frame if it exists or the animation's end if not. A Key's Frame
    * index may be calculated from FrameTag.index + Key.frame.
    */
-  readonly frame: number
+  frame: number
   /** The Frame's collision boundary within the file packed. */
-  readonly bounds: XY & WH
-}
-
-/** Width and height lengths. */
-export type WH = {
-  /** Width. */
-  readonly w: number
-  /** Height. */
-  readonly h: number
-}
-
-/** x and y-coordinates. */
-export type XY = {
-  /** Distance along the x-axis. */
-  readonly x: number
-  /** Distance along the y-axis. */
-  readonly y: number
-}
+  bounds: XY & WH
+}>

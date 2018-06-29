@@ -1,1 +1,1 @@
-type Equals<T> = (lhs: T, rhs: T) => boolean
+export type Equals<T> = (lhs: T, rhs: T) => boolean

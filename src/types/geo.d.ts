@@ -2,17 +2,17 @@
 export type Rect = XY & WH
 
 /** A size given by width and height lengths. */
-export type WH = {
+export type WH = Readonly<{
   /** Width. */
-  readonly w: number
+  w: number
   /** Height. */
-  readonly h: number
-}
+  h: number
+}>
 
 /** A position given in x and y-coordinates. */
-export type XY = {
+export type XY = Readonly<{
   /** Distance along the x-axis. */
-  readonly x: number
+  x: number
   /** Distance along the y-axis. */
-  readonly y: number
-}
+  y: number
+}>

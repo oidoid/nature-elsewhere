@@ -7,13 +7,13 @@ export enum SpriteType {
 }
 
 /** An instance of a texture. todo: revise terminology. */
-export type Sprite = {
-  readonly type: SpriteType
-  readonly texture: Texture
-  readonly celIndex: number
-  readonly scroll: XY
-  readonly scrollPosition: XY
-  readonly position: XY
-  readonly speed: XY
-  readonly flip: {readonly x: boolean; readonly y: boolean}
-}
+export type Sprite = Readonly<{
+  type: SpriteType
+  texture: Texture
+  celIndex: number
+  scroll: XY
+  scrollPosition: XY
+  position: XY
+  speed: XY
+  flip: Readonly<{x: boolean; y: boolean}>
+}>

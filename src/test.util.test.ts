@@ -1,3 +1,5 @@
+import {Equals} from './types/equals'
+
 /** Asserts that array contains partial object. */
 export function expectToContainObjectContaining<T>(
   arr: T[],
