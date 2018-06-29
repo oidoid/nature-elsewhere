@@ -4,15 +4,15 @@ export type Rect = XY & WH
 /** A size given by width and height lengths. */
 export type WH = {
   /** Width. */
-  w: number
+  readonly w: number
   /** Height. */
-  h: number
+  readonly h: number
 }
 
 /** A position given in x and y-coordinates. */
 export type XY = {
   /** Distance along the x-axis. */
-  x: number
+  readonly x: number
   /** Distance along the y-axis. */
-  y: number
+  readonly y: number
 }

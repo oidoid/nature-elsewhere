@@ -1,4 +1,4 @@
-import {Level0, PLAYER} from './assets/levels/level0'
+import {Level0} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './graphics/glsl/shader-loader'
 import * as graphics from './graphics/graphics'
@@ -11,6 +11,7 @@ import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
+import {Sprite, SpriteType} from './assets/sprites/sprite'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -52,7 +53,9 @@ function main(window: Window) {
   const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
   assetsLoader
     .load(ASSET_URL)
-    .then(assets => loop(gl, ctx, atlas, assets, Date.now()))
+    .then(assets =>
+      loop(gl, ctx, atlas, assets, Date.now(), Level0.Map.sprites)
+    )
     .catch(() => {
       document.removeEventListener('keyup', onKeyChange)
       document.removeEventListener('keydown', onKeyChange)
@@ -64,75 +67,92 @@ function loop(
   ctx: shaderLoader.ShaderContext,
   atlas: textureAtlas.TextureAtlas,
   assets: assetsLoader.Assets,
-  timestamp: number
+  timestamp: number,
+  sprites: Sprite[]
 ): void {
   const now = Date.now()
-  window.requestAnimationFrame(() => loop(gl, ctx, atlas, assets, now))
+  window.requestAnimationFrame(() => loop(gl, ctx, atlas, assets, now, sprites))
 
   // If focus is lost, do not advance more than a second.
   const step = Math.min(1000, now - timestamp) / 1000
 
-  // todo: add pixel per second doc.
-  const pps = (actionState[Action.RUN] ? 48 : 16) * step
-  if (actionState[Action.LEFT]) {
-    PLAYER.flip.x = true
-    PLAYER.position.x -= pps
-    PLAYER.texture = actionState[Action.RUN]
-      ? TEXTURE.PLAYER_RUN
-      : TEXTURE.PLAYER_WALK
-    PLAYER.celIndex = Math.abs(Math.round(PLAYER.position.x)) % 2
-  }
-  if (actionState[Action.RIGHT]) {
-    PLAYER.flip.x = false
-    PLAYER.position.x += pps
-    PLAYER.texture = actionState[Action.RUN]
-      ? TEXTURE.PLAYER_RUN
-      : TEXTURE.PLAYER_WALK
-    PLAYER.celIndex = Math.abs(Math.round(PLAYER.position.x)) % 2
-  }
-  if (actionState[Action.UP]) {
-    PLAYER.position.y -= pps
-    PLAYER.texture = TEXTURE.PLAYER_ASCEND
-    PLAYER.celIndex = 0
-  }
-  if (actionState[Action.DOWN]) {
-    PLAYER.position.y += pps
-    PLAYER.texture = TEXTURE.PLAYER_DESCEND
-    PLAYER.celIndex = 0
-  }
-  if (!actionState[Action.LEFT] && !actionState[Action.RIGHT]) {
-    PLAYER.texture = TEXTURE.PLAYER_IDLE
-    PLAYER.celIndex = 0
-  }
-
-  PLAYER.position.x = Math.max(0, PLAYER.position.x)
+  sprites = sprites.map(sprite => stepSprite(sprite, step))
+  const playerIndex = sprites.findIndex(
+    sprite => sprite.type === SpriteType.PLAYER
+  )
+  const playerUpdates = stepPlayer(atlas, sprites[playerIndex], step)
+  sprites[playerIndex] = {...sprites[playerIndex], ...playerUpdates}
 
   const renderWidth = gl.canvas.width
   const renderHeight = gl.canvas.height
   const cameraLocation = ctx.location('uViewport.camera')
   gl.uniform2f(
     cameraLocation,
-    -PLAYER.position.x + renderWidth / 2,
+    -playerUpdates.position.x + renderWidth / 2,
     renderHeight / 4
   )
-
-  for (const sprite of Level0.Map.sprites) {
-    sprite.position.x += step * sprite.speed.x
-    sprite.position.y += step * sprite.speed.y
-
-    sprite.scrollPosition.x += step * sprite.scroll.x
-    sprite.scrollPosition.y += step * sprite.scroll.y
-  }
 
   graphics.render(
     gl,
     ctx,
     atlas,
     assets,
-    Level0.Map.sprites,
+    sprites,
     Level0.Map.backgroundColor,
     MIN_RENDER_HEIGHT
   )
+}
+
+function stepPlayer(
+  atlas: textureAtlas.TextureAtlas,
+  player: Sprite,
+  step: number
+) {
+  // todo: add pixel per second doc.
+  const pps = (actionState[Action.RUN] ? 48 : 16) * step
+
+  const flip = {x: actionState[Action.LEFT], y: player.flip.y}
+  const position = {
+    x: Math.max(
+      0,
+      player.position.x -
+        (actionState[Action.LEFT] ? pps : 0) +
+        (actionState[Action.RIGHT] ? pps : 0)
+    ),
+    y:
+      player.position.y -
+      (actionState[Action.UP] ? pps : 0) +
+      (actionState[Action.DOWN] ? pps : 0)
+  }
+  const texture = actionState[Action.UP]
+    ? TEXTURE.PLAYER_ASCEND
+    : actionState[Action.DOWN]
+      ? TEXTURE.PLAYER_DESCEND
+      : actionState[Action.LEFT] || actionState[Action.RIGHT]
+        ? actionState[Action.RUN]
+          ? TEXTURE.PLAYER_RUN
+          : TEXTURE.PLAYER_WALK
+        : TEXTURE.PLAYER_IDLE
+
+  const celIndex =
+    Math.abs(Math.round(position.x)) %
+    atlas.animations[texture.textureID].cels.length
+
+  return {flip, position, texture, celIndex}
+}
+
+function stepSprite(sprite: Sprite, step: number): Sprite {
+  return {
+    ...sprite,
+    position: {
+      x: sprite.position.x + step * sprite.speed.x,
+      y: sprite.position.y + step * sprite.speed.y
+    },
+    scrollPosition: {
+      x: sprite.scrollPosition.x + step * sprite.scroll.x,
+      y: sprite.scrollPosition.y + step * sprite.scroll.y
+    }
+  }
 }
 
 main(window)

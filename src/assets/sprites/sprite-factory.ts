@@ -1,9 +1,10 @@
 import {TEXTURE, CloudTextureKey} from '../textures/texture'
 import {XY} from '../../types/geo'
-import {Sprite} from './sprite'
+import {Sprite, SpriteType} from './sprite'
 
 function defaults() {
   return {
+    type: SpriteType.OTHER,
     speed: {x: 0, y: 0},
     celIndex: 0,
     flip: {x: false, y: false},
@@ -33,7 +34,14 @@ export function newGrassL(position: XY): Sprite[] {
 }
 
 export function newPlayer(position: XY): Sprite[] {
-  return [{...defaults(), texture: TEXTURE.PLAYER_IDLE, position}]
+  return [
+    {
+      ...defaults(),
+      type: SpriteType.PLAYER,
+      texture: TEXTURE.PLAYER_IDLE,
+      position
+    }
+  ]
 }
 
 export function newPond(position: XY, flowRate: number): Sprite[] {

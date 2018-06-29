@@ -2,7 +2,7 @@ import {Action} from './action'
 
 /** An KeyboardEvent.key. */
 export type Key = string
-export type KeyMap = {[key in Key]: Action}
+export type KeyMap = {readonly [key in Key]: Action}
 
 export const DEFAULT_KEY_MAP: KeyMap = {
   ArrowLeft: Action.LEFT,

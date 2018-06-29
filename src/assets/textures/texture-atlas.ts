@@ -3,18 +3,18 @@ import {Rect, WH} from '../../types/geo'
 
 /** A sprite sheet or composite texture. */
 export type TextureAtlas = {
-  size: WH
-  animations: AnimationMap
+  readonly size: WH
+  readonly animations: AnimationMap
 }
 
-export type AnimationMap = {[textureID in TextureID]: Animation}
+export type AnimationMap = {readonly [textureID in TextureID]: Animation}
 
 export type TextureID = Aseprite.Tag
 
 /** Animation and collision frames. */
 export type Animation = {
-  cels: Cel[]
-  direction: Aseprite.Direction
+  readonly cels: Cel[]
+  readonly direction: Aseprite.Direction
 }
 
 export type Direction = Aseprite.Direction
@@ -22,11 +22,11 @@ export type Direction = Aseprite.Direction
 /** A single cel of animation sequence. */
 export type Cel = {
   /** Texture bounds within the atlas. */
-  bounds: Rect
+  readonly bounds: Rect
   /** Animation length in milliseconds, possibly infinite. */
-  duration: number
+  readonly duration: number
   /** Collision bounds within the texture. */
-  collision: Rect[]
+  readonly collision: Rect[]
 }
 
 // todo: don't version build products like atlas.json and atlas.png.

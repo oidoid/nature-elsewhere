@@ -9,11 +9,11 @@ export function check(gl: GL | null): GL {
 
   type Indexed = {[prop: string]: any}
   const proto: GL = Object.getPrototypeOf(gl)
-  const checked: GL = Object.assign(
-    {},
-    ...Object.keys(proto)
-      .filter(prop => typeof (<Indexed>gl)[prop] === 'function')
-      .map(prop => ({
+  const checked: GL = Object.keys(proto)
+    .filter(prop => typeof (<Indexed>gl)[prop] === 'function')
+    .reduce(
+      (sum, prop) => ({
+        ...sum,
         [prop]: function() {
           const ret = (<Indexed>proto)[prop].apply(gl, arguments)
           const err = gl.getError()
@@ -23,12 +23,13 @@ export function check(gl: GL | null): GL {
           }
           return ret
         }
-      }))
-  )
+      }),
+      <GL>{}
+    )
 
-  return Object.assign(gl, checked, {
+  return Object.assign(gl, checked, <Partial<GL>>{
     getError: proto.getError,
-    compileShader(shader: GLShader | null) {
+    compileShader(shader) {
       checked.compileShader.apply(gl, arguments)
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         const log = gl.getShaderInfoLog(shader)
@@ -55,14 +56,14 @@ export function check(gl: GL | null): GL {
       if (!texture) throw new Error('Shader texture creation failed.')
       return texture
     },
-    getActiveAttrib(_program: GLProgram, index: number) {
+    getActiveAttrib(_program, index) {
       const attrib = checked.getActiveAttrib.apply(gl, arguments)
       if (!attrib) {
         throw new Error(`Shader attribute at index ${index} unknown.`)
       }
       return attrib
     },
-    getAttribLocation(_program: GLProgram, name: string) {
+    getAttribLocation(_program, name) {
       const location = checked.getAttribLocation.apply(gl, arguments)
       if (location < 0) {
         throw new Error(
@@ -71,14 +72,14 @@ export function check(gl: GL | null): GL {
       }
       return location
     },
-    getProgramParameter(_program: GLProgram, name: string) {
+    getProgramParameter(_program, name) {
       const param = checked.getProgramParameter.apply(gl, arguments)
       if (param === null) {
         throw new Error(`Shader parameter with name "${name}" unknown.`)
       }
       return param
     },
-    getUniformLocation(_program: GLProgram, name: string) {
+    getUniformLocation(_program, name) {
       const location = checked.getUniformLocation.apply(gl, arguments)
       if (location === null || location < 0) {
         throw new Error(
@@ -87,7 +88,7 @@ export function check(gl: GL | null): GL {
       }
       return location
     },
-    linkProgram(program: GLProgram | null) {
+    linkProgram(program) {
       try {
         checked.linkProgram.apply(gl, arguments)
         if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {

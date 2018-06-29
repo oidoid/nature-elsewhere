@@ -26,30 +26,30 @@
  * animation has a Frame sequence, a Tag, and zero or more Slices.
  */
 export type File = {
-  meta: Meta
+  readonly meta: Meta
   /** All Frames for all files packed. */
-  frames: FrameMap
+  readonly frames: FrameMap
 }
 
-export type FrameMap = {[tagFrameNumber in TagFrameNumber]: Frame}
+export type FrameMap = {readonly [tagFrameNumber in TagFrameNumber]: Frame}
 
 export type Meta = {
   /** E.g., 'http://www.aseprite.org/'. */
-  app: string
+  readonly app: string
   /** E.g., '1.2.8.1'. */
-  version: string
+  readonly version: string
   /** The associated output. E.g., 'atlas.png'. */
-  image: string
+  readonly image: string
   /** E.g., 'RGBA8888' or 'I8'. */
-  format: string
+  readonly format: string
   /** Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2. */
-  size: WH
+  readonly size: WH
   /** E.g., '1'. */
-  scale: string
+  readonly scale: string
   /** All FrameTags for all files packed **via CLI** `--list-tags`. */
-  frameTags: FrameTag[]
+  readonly frameTags: FrameTag[]
   /** All slices for all files packed **via CLI** `--list-slices`. */
-  slices: Slice[]
+  readonly slices: Slice[]
 }
 
 /**
@@ -83,16 +83,16 @@ export type Frame = {
    * calculated by subtracting member's WH dimensions from sourceSize and
    * dividing by 2.
    */
-  frame: XY & WH
-  rotated: boolean
-  trimmed: boolean
+  readonly frame: XY & WH
+  readonly rotated: boolean
+  readonly trimmed: boolean
   /**
    * The Frame's bounds within the file packed, not including padding. **By
    * convention**, dimensions are multiples of 16 pixels.
    */
-  spriteSourceSize: XY & WH
-  sourceSize: WH
-  duration: Duration
+  readonly spriteSourceSize: XY & WH
+  readonly sourceSize: WH
+  readonly duration: Duration
 }
 
 /**
@@ -101,15 +101,15 @@ export type Frame = {
  */
 export type FrameTag = {
   /** **By convention**, the associated Frame's Tag. */
-  name: Tag
+  readonly name: Tag
   /** The inclusive starting Frame index. */
-  from: number
+  readonly from: number
   /**
    * The inclusive ending Frame index, possibly identical to the starting frame
    * index.
    */
-  to: number
-  direction: Direction
+  readonly to: number
+  readonly direction: Direction
 }
 
 /** Animation length in milliseconds. */
@@ -140,10 +140,10 @@ export enum Direction {
  * defines the total collision polygon for a single Frame.
  */
 export type Slice = {
-  name: Tag
+  readonly name: Tag
   /** Color in #rrggbbaa format. E.g., blue is '#0000ffff'. */
-  color: string
-  keys: Key[]
+  readonly color: string
+  readonly keys: Key[]
 }
 
 /** A Frame collision boundary subset within the file packed. */
@@ -154,23 +154,23 @@ export type Key = {
    * higher Key.frame if it exists or the animation's end if not. A Key's Frame
    * index may be calculated from FrameTag.index + Key.frame.
    */
-  frame: number
+  readonly frame: number
   /** The Frame's collision boundary within the file packed. */
-  bounds: XY & WH
+  readonly bounds: XY & WH
 }
 
 /** Width and height lengths. */
 export type WH = {
   /** Width. */
-  w: number
+  readonly w: number
   /** Height. */
-  h: number
+  readonly h: number
 }
 
 /** x and y-coordinates. */
 export type XY = {
   /** Distance along the x-axis. */
-  x: number
+  readonly x: number
   /** Distance along the y-axis. */
-  y: number
+  readonly y: number
 }

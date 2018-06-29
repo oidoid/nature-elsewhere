@@ -1,13 +1,14 @@
 import {GL, GLProgram, GLUniformLocation} from '../gl'
+import {range} from '../../util'
 
 export type ShaderContext = {
-  program: GLProgram | null
+  readonly program: GLProgram | null
   location(name: string): number
   location(name: string): GLUniformLocation | null
 }
-type Locations = {[name: string]: number | GLUniformLocation | null}
-type UniformLocations = {[name: string]: GLUniformLocation | null}
-type AttributeLocations = {[name: string]: number}
+type Locations = {readonly [name: string]: number | GLUniformLocation | null}
+type UniformLocations = {readonly [name: string]: GLUniformLocation | null}
+type AttributeLocations = {readonly [name: string]: number}
 
 export function load(
   gl: GL,
@@ -73,28 +74,27 @@ function getAttributeLocations(
   gl: GL,
   program: GLProgram | null
 ): AttributeLocations {
-  const locations: AttributeLocations = {}
   const end = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES) || 0
-  for (let i = 0; i < end; ++i) {
+  return range(0, end).reduce((sum, i) => {
     const attr = gl.getActiveAttrib(program, i)
-    locations[attr ? attr.name : i] = i
-  }
-  return locations
+    return {...sum, [attr ? attr.name : i]: i}
+  }, {})
 }
 
 function getUniformLocations(
   gl: GL,
   program: GLProgram | null
 ): UniformLocations {
-  const locations: UniformLocations = {}
   const end = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS) || 0
-  for (let i = 0; i < end; ++i) {
+  return range(0, end).reduce((sum, i) => {
     const uniform = gl.getActiveUniform(program, i)
-    if (uniform) {
-      locations[uniform.name] = gl.getUniformLocation(program, uniform.name)
+    return {
+      ...sum,
+      [uniform ? uniform.name : i]: uniform
+        ? gl.getUniformLocation(program, uniform.name)
+        : null
     }
-  }
-  return locations
+  }, {})
 }
 
 export function unload(gl: GL, program: GLProgram | null): void {
