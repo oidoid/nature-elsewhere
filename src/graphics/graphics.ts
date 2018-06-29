@@ -2,7 +2,7 @@ import {GL, GLTexture, GLUniformLocation} from './gl'
 import {Assets} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
-import {WH, XY} from '../geo'
+import {WH, XY} from '../types/geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
 import {RGBA} from '../assets/levels/palette'
 

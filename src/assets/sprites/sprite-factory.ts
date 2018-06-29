@@ -1,5 +1,5 @@
 import {TEXTURE, CloudTextureKey} from '../textures/texture'
-import {XY} from '../../geo'
+import {XY} from '../../types/geo'
 import {Sprite} from './sprite'
 
 function defaults() {

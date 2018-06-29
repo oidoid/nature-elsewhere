@@ -1,5 +1,5 @@
 import {Texture} from '../textures/texture'
-import {XY} from '../../geo'
+import {XY} from '../../types/geo'
 
 /** An instance of a texture. todo: revise terminology. */
 export type Sprite = {

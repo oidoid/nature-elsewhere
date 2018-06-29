@@ -1,5 +1,5 @@
 import * as Aseprite from './aseprite'
-import {Rect, WH} from '../../geo'
+import {Rect, WH} from '../../types/geo'
 
 /** A sprite sheet or composite texture. */
 export type TextureAtlas = {
