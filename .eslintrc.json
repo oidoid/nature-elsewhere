@@ -3,11 +3,11 @@
   "plugins": ["prettier"],
   "parser": "typescript-eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {"impliedStrict": true}
   },
-  "env": {"es6": true, "browser": true},
+  "env": {"browser": true},
   "rules": {
     "prettier/prettier": 1,
 
@@ -21,7 +21,7 @@
         //       ignored AND this rule to be disabled which would trigger
         //       --report-unused-disable-directives. By excluding max-len, the
         //       effect is to consider the line but disable this rule.
-        "ignorePattern": "^/// .+|// (?!eslint-.+max-len)eslint-.+"
+        "ignorePattern": "// (?!eslint-.+max-len)eslint-.+"
       }
     ],
     "no-console": 1,

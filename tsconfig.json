@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2018", "dom"],
 
     "strict": true,
     "noUnusedLocals": true,
