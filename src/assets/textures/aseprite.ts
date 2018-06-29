@@ -1,3 +1,4 @@
+import {U16_MAX} from '../../limits'
 import {XY, WH} from '../../types/geo'
 
 /**
@@ -120,7 +121,7 @@ export type Duration = number
 /**
  * **By convention**, animations that should never end have this reserved value.
  */
-export const INFINITE_DURATION: Duration = 65535
+export const INFINITE_DURATION: Duration = U16_MAX
 
 /** An animation's looping behavior. */
 export enum Direction {

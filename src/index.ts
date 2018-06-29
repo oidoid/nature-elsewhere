@@ -92,15 +92,7 @@ function loop(
     renderHeight / 4
   )
 
-  graphics.render(
-    gl,
-    ctx,
-    atlas,
-    assets,
-    sprites,
-    Level0.Map.backgroundColor,
-    MIN_RENDER_HEIGHT
-  )
+  graphics.render(gl, ctx, atlas, assets, sprites, MIN_RENDER_HEIGHT)
 }
 
 function stepPlayer(
@@ -111,7 +103,14 @@ function stepPlayer(
   // todo: add pixel per second doc.
   const pps = (actionState[Action.RUN] ? 48 : 16) * step
 
-  const flip = {x: actionState[Action.LEFT], y: player.flip.y}
+  const scale = {
+    x: actionState[Action.LEFT]
+      ? -1
+      : actionState[Action.RIGHT]
+        ? 1
+        : player.scale.x,
+    y: player.scale.y
+  }
   const position = {
     x: Math.max(
       0,
@@ -138,7 +137,7 @@ function stepPlayer(
     Math.abs(Math.round(position.x)) %
     atlas.animations[texture.textureID].cels.length
 
-  return {flip, position, texture, celIndex}
+  return {scale, position, texture, celIndex}
 }
 
 function stepSprite(sprite: Sprite, step: number): Sprite {

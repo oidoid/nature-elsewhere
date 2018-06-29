@@ -15,5 +15,5 @@ export type Sprite = Readonly<{
   scrollPosition: XY
   position: XY
   speed: XY
-  flip: Readonly<{x: boolean; y: boolean}>
+  scale: XY
 }>

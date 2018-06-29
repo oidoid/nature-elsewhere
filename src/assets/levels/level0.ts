@@ -1,5 +1,5 @@
-import * as palette from './palette'
 import * as SpriteFactory from '../sprites/sprite-factory'
+import {I16_MIN, I16_MAX} from '../../limits'
 import {Sprite} from '../sprites/sprite'
 import {range} from '../../util'
 
@@ -10,8 +10,11 @@ export namespace Level0 {
   export const Map = {
     width: 1024,
     height: 128,
-    backgroundColor: palette.base,
-    sprites: SpriteFactory.newPond({x: 32, y: 64}, 1)
+    sprites: SpriteFactory.newPalette3(
+      {x: I16_MIN, y: I16_MIN},
+      {x: I16_MAX, y: I16_MAX}
+    )
+      .concat(SpriteFactory.newPond({x: 32, y: 64}, 1))
       .concat(SpriteFactory.newPlayer({x: 35, y: 60}))
       .concat(
         range(-minRenderHeight * 8, 32, width).reduce(

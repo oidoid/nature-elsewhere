@@ -7,7 +7,7 @@ function defaults() {
     type: SpriteType.OTHER,
     speed: {x: 0, y: 0},
     celIndex: 0,
-    flip: {x: false, y: false},
+    scale: {x: 1, y: 1},
     scroll: {x: 0, y: 0},
     scrollPosition: {x: 0, y: 0}
   }
@@ -31,6 +31,17 @@ export function newCloudXL(position: XY): Sprite[] {
 
 export function newGrassL(position: XY): Sprite[] {
   return [{...defaults(), texture: TEXTURE.GRASS_L, position}]
+}
+
+export function newPalette3(position: XY, scale: XY): Sprite[] {
+  return [
+    {
+      ...defaults(),
+      texture: TEXTURE.PALETTE_3,
+      position,
+      scale
+    }
+  ]
 }
 
 export function newPlayer(position: XY): Sprite[] {

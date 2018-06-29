@@ -4,7 +4,6 @@ import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
 import {WH, XY} from '../types/geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
-import {RGBA} from '../assets/levels/palette'
 
 export function render(
   gl: GL,
@@ -12,7 +11,6 @@ export function render(
   atlas: textureAtlas.TextureAtlas,
   assets: Assets,
   sprites: Sprite[],
-  {r, g, b, a}: RGBA,
   minRenderHeight: number // hieght in peixels
 ): void {
   resize(
@@ -21,8 +19,7 @@ export function render(
     {w: window.innerWidth, h: window.innerHeight},
     minRenderHeight
   )
-  gl.clearColor(r, g, b, a)
-  gl.clear(gl.COLOR_BUFFER_BIT)
+  // gl.clear(gl.COLOR_BUFFER_BIT)
   drawTextures(gl, ctx, atlas, assets, sprites)
 }
 
@@ -131,11 +128,7 @@ function drawTextures(
       sprite.scrollPosition.y
     )
 
-    gl.uniform2f(
-      ctx.location('uScale'),
-      sprite.flip.x ? -1 : 1,
-      sprite.flip.y ? -1 : 1
-    )
+    gl.uniform2f(ctx.location('uScale'), sprite.scale.x, sprite.scale.y)
 
     gl.uniform2f(ctx.location('uAtlasBounds'), atlas.size.w, atlas.size.h)
 
