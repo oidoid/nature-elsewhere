@@ -11,10 +11,10 @@ type AttributeLocations = {[name: string]: number}
 
 export function load(
   gl: GL,
-  vertexSrc: string,
-  fragmentSrc: string
+  vertexSource: string,
+  fragmentSource: string
 ): ShaderContext {
-  const program = loadShaders(gl, vertexSrc, fragmentSrc)
+  const program = loadShaders(gl, vertexSource, fragmentSource)
   const locations = getLocations(gl, program)
   return {
     program,
@@ -28,11 +28,11 @@ export function load(
 
 function loadShaders(
   gl: GL,
-  vertexSrc: string,
-  fragmentSrc: string
+  vertexSource: string,
+  fragmentSource: string
 ): GLProgram | null {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexSrc)
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentSrc)
+  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexSource)
+  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentSource)
 
   const program = gl.createProgram()
   gl.attachShader(program, vertexShader)
@@ -59,14 +59,14 @@ function getLocations(gl: GL, program: GLProgram | null): Locations {
   const attrs = getAttributeLocations(gl, program)
   const uniforms = getUniformLocations(gl, program)
 
-  Object.keys(attrs).forEach(name => {
-    const overlap = uniforms[name] !== undefined
-    if (overlap) {
-      throw new Error(`Shader attribute and uniform name "${name}" conflicts.`)
-    }
-  })
+  const conflict = Object.keys(attrs).find(name => uniforms[name] !== undefined)
+  if (conflict) {
+    throw new Error(
+      `Shader attribute and uniform name "${conflict}" conflicts.`
+    )
+  }
 
-  return Object.assign(attrs, uniforms)
+  return {...attrs, ...uniforms}
 }
 
 function getAttributeLocations(
