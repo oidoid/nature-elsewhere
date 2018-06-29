@@ -3,11 +3,11 @@ export enum TextureAssetID {
   ATLAS
 }
 
-export type Assets = {readonly [id in AssetID]: Asset}
+export type Assets = Readonly<Record<AssetID, Asset>>
 
 export type Asset = HTMLImageElement
 
-export type URLMap = {readonly [id in AssetID]: string}
+export type URLMap = Readonly<Record<AssetID, string>>
 
 export function load(textureURLs: URLMap): Promise<Assets> {
   return loadTextureAssets(textureURLs)

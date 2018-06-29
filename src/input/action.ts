@@ -9,7 +9,7 @@ export enum Action {
 }
 
 export type Active = boolean
-export type ActionState = {[action in Action]: Active}
+export type ActionState = Record<Action, Active>
 
 export function newActionState(): ActionState {
   return Object.values(Action).reduce(

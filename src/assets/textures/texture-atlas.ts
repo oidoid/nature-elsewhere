@@ -7,7 +7,7 @@ export type TextureAtlas = {
   readonly animations: AnimationMap
 }
 
-export type AnimationMap = {readonly [textureID in TextureID]: Animation}
+export type AnimationMap = Readonly<Record<TextureID, Animation>>
 
 export type TextureID = Aseprite.Tag
 

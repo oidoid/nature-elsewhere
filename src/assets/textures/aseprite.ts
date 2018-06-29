@@ -31,7 +31,7 @@ export type File = {
   readonly frames: FrameMap
 }
 
-export type FrameMap = {readonly [tagFrameNumber in TagFrameNumber]: Frame}
+export type FrameMap = Readonly<Record<TagFrameNumber, Frame>>
 
 export type Meta = {
   /** E.g., 'http://www.aseprite.org/'. */

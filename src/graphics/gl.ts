@@ -7,15 +7,14 @@ export type GLUniformLocation = WebGLUniformLocation
 export function check(gl: GL | null): GL {
   if (!gl) throw new Error('WebGL context unobtainable.')
 
-  type Indexed = {[prop: string]: any}
   const proto: GL = Object.getPrototypeOf(gl)
-  const checked: GL = Object.keys(proto)
-    .filter(prop => typeof (<Indexed>gl)[prop] === 'function')
+  const checked = Object.keys(proto)
+    .filter(prop => typeof (<Record<string, any>>gl)[prop] === 'function')
     .reduce(
       (sum, prop) => ({
         ...sum,
         [prop]: function() {
-          const ret = (<Indexed>proto)[prop].apply(gl, arguments)
+          const ret = (<Record<string, any>>proto)[prop].apply(gl, arguments)
           const err = gl.getError()
           if (err !== gl.NO_ERROR) {
             const invocation = `${prop}(${Array.from(arguments)}) => ${ret}`
