@@ -2,7 +2,7 @@ import {GL, GLTexture, GLUniformLocation} from './gl'
 import {Assets} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
-import {WH, XY} from '../types/geo'
+import {WH, XYZ} from '../types/geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
 
 export function render(
@@ -19,7 +19,6 @@ export function render(
     {w: window.innerWidth, h: window.innerHeight},
     minRenderHeight
   )
-  // gl.clear(gl.COLOR_BUFFER_BIT)
   drawTextures(gl, ctx, atlas, assets, sprites)
 }
 
@@ -136,10 +135,10 @@ function drawTextures(
 
     gl.uniform2f(ctx.location('uTexturePosition'), tex.x, tex.y)
 
-    const stride = 1 * DIMENSIONS * Float32Array.BYTES_PER_ELEMENT
+    const stride = 1 * (DIMENSIONS + 1) * Float32Array.BYTES_PER_ELEMENT
     gl.vertexAttribPointer(
       ctx.location('aVertex'),
-      DIMENSIONS,
+      DIMENSIONS + 1,
       gl.FLOAT,
       false,
       stride,
@@ -159,9 +158,28 @@ function drawTextures(
   gl.deleteBuffer(textureCoordsBuffer)
 }
 
-function bufferRectangle(gl: GL, {x, y}: XY, {w, h}: WH): void {
+function bufferRectangle(gl: GL, {x, y, z}: XYZ, {w, h}: WH): void {
   const x1 = x + w
   const y1 = y + h
-  const vertices = new Float32Array([x, y, x1, y, x, y1, x, y1, x1, y, x1, y1])
+  const vertices = new Float32Array([
+    x,
+    y,
+    z,
+    x1,
+    y,
+    z,
+    x,
+    y1,
+    z,
+    x,
+    y1,
+    z,
+    x1,
+    y,
+    z,
+    x1,
+    y1,
+    z
+  ])
   gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
 }

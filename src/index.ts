@@ -121,7 +121,8 @@ function stepPlayer(
     y:
       player.position.y -
       (actionState[Action.UP] ? pps : 0) +
-      (actionState[Action.DOWN] ? pps : 0)
+      (actionState[Action.DOWN] ? pps : 0),
+    z: player.position.z
   }
   const texture = actionState[Action.UP]
     ? TEXTURE.PLAYER_ASCEND
@@ -145,7 +146,8 @@ function stepSprite(sprite: Sprite, step: number): Sprite {
     ...sprite,
     position: {
       x: sprite.position.x + step * sprite.speed.x,
-      y: sprite.position.y + step * sprite.speed.y
+      y: sprite.position.y + step * sprite.speed.y,
+      z: sprite.position.z
     },
     scrollPosition: {
       x: sprite.scrollPosition.x + step * sprite.scroll.x,

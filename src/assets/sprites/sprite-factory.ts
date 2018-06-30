@@ -1,6 +1,6 @@
 import {TEXTURE, CloudTextureKey} from '../textures/texture'
-import {XY} from '../../types/geo'
-import {Sprite, SpriteType} from './sprite'
+import {XY, XYZ} from '../../types/geo'
+import {Sprite, SpriteType, DrawOrder} from './sprite'
 
 function defaults() {
   return {
@@ -13,27 +13,32 @@ function defaults() {
   }
 }
 
-export function newCloudS(position: XY): Sprite[] {
-  return [{...defaults(), texture: TEXTURE.CLOUD_S, position}]
+export function newCloudS({x, y}: XY): Sprite[] {
+  const z = DrawOrder.CLOUDS
+  return [{...defaults(), texture: TEXTURE.CLOUD_S, position: {x, y, z}}]
 }
 
-export function newCloudM(position: XY): Sprite[] {
-  return [{...defaults(), texture: TEXTURE.CLOUD_M, position}]
+export function newCloudM({x, y}: XY): Sprite[] {
+  const z = DrawOrder.CLOUDS
+  return [{...defaults(), texture: TEXTURE.CLOUD_M, position: {x, y, z}}]
 }
 
-export function newCloudL(position: XY): Sprite[] {
-  return [{...defaults(), texture: TEXTURE.CLOUD_L, position}]
+export function newCloudL({x, y}: XY): Sprite[] {
+  const z = DrawOrder.CLOUDS
+  return [{...defaults(), texture: TEXTURE.CLOUD_L, position: {x, y, z}}]
 }
 
-export function newCloudXL(position: XY): Sprite[] {
-  return [{...defaults(), texture: TEXTURE.CLOUD_XL, position}]
+export function newCloudXL({x, y}: XY): Sprite[] {
+  const z = DrawOrder.CLOUDS
+  return [{...defaults(), texture: TEXTURE.CLOUD_XL, position: {x, y, z}}]
 }
 
-export function newGrassL(position: XY): Sprite[] {
-  return [{...defaults(), texture: TEXTURE.GRASS_L, position}]
+export function newGrassL({x, y}: XY): Sprite[] {
+  const z = DrawOrder.BACKGROUND_SCENERY
+  return [{...defaults(), texture: TEXTURE.GRASS_L, position: {x, y, z}}]
 }
 
-export function newPalette3(position: XY, scale: XY): Sprite[] {
+export function newPalette3(position: XYZ, scale: XY): Sprite[] {
   return [
     {
       ...defaults(),
@@ -44,18 +49,19 @@ export function newPalette3(position: XY, scale: XY): Sprite[] {
   ]
 }
 
-export function newPlayer(position: XY): Sprite[] {
+export function newPlayer({x, y}: XY): Sprite[] {
   return [
     {
       ...defaults(),
       type: SpriteType.PLAYER,
       texture: TEXTURE.PLAYER_IDLE,
-      position
+      position: {x, y, z: DrawOrder.PLAYER}
     }
   ]
 }
 
-export function newPond(position: XY, flowRate: number): Sprite[] {
+export function newPond({x, y}: XY, flowRate: number): Sprite[] {
+  const position = {x, y, z: DrawOrder.BACKGROUND_SCENERY}
   return [
     {...defaults(), texture: TEXTURE.POND_WATER, position},
     {
@@ -68,12 +74,12 @@ export function newPond(position: XY, flowRate: number): Sprite[] {
   ]
 }
 
-export function newQuicksand(position: XY, flowRate: number): Sprite[] {
+export function newQuicksand({x, y}: XY, flowRate: number): Sprite[] {
   return [
     {
       ...defaults(),
       texture: TEXTURE.QUICKSAND,
-      position,
+      position: {x, y, z: DrawOrder.FOREGROUND},
       scroll: {x: flowRate, y: 0}
     }
   ]
@@ -87,13 +93,15 @@ export function newRainCloud(
   speed: number
 ): Sprite[] {
   const sprites: Sprite[] = []
+  const z = DrawOrder.CLOUDS
   for (let i = 0; i < (64 - y) / 16; ++i) {
     sprites.push({
       ...defaults(),
       texture: TEXTURE.RAIN,
       position: {
         x: x + Math.round(i / 2),
-        y: y + 15 + i * 16 - Math.max(0, y + 16 + i * 16 - BOTTOM_Y)
+        y: y + 15 + i * 16 - Math.max(0, y + 16 + i * 16 - BOTTOM_Y),
+        z
       },
       speed: {x: speed, y: 0},
       scroll: {x: 0, y: -12}
@@ -102,18 +110,19 @@ export function newRainCloud(
   sprites.push({
     ...defaults(),
     texture: TEXTURE.WATER_M,
-    position: {x: x + 1, y: BOTTOM_Y},
+    position: {x: x + 1, y: BOTTOM_Y, z},
     speed: {x: speed, y: 0}
   })
   sprites.push({
     ...defaults(),
     texture: TEXTURE[cloud],
-    position: {x, y},
+    position: {x, y, z},
     speed: {x: speed, y: 0}
   })
   return sprites
 }
 
-export function newTree(position: XY): Sprite[] {
-  return [{...defaults(), texture: TEXTURE.TREE, position}]
+export function newTree({x, y}: XY): Sprite[] {
+  const z = DrawOrder.BACKGROUND_SCENERY
+  return [{...defaults(), texture: TEXTURE.TREE, position: {x, y, z}}]
 }

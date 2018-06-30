@@ -9,6 +9,11 @@ export type WH = Readonly<{
   h: number
 }>
 
+export type XYZ = XY & {
+  /** Distance along the z-axis. */
+  readonly z: number
+}
+
 /** A position given in x and y-coordinates. */
 export type XY = Readonly<{
   /** Distance along the x-axis. */
