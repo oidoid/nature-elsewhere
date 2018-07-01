@@ -12,6 +12,7 @@ import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
+import {LOCATION_OVERIDES} from './graphics/glsl/main'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -39,8 +40,11 @@ function main(window: Window) {
   gl.blendEquation(gl.FUNC_ADD)
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
-  const ctx = shaderLoader.load(gl, vertexSrc, fragmentSrc)
+  const ctx = shaderLoader.load(gl, vertexSrc, fragmentSrc, LOCATION_OVERIDES)
   gl.useProgram(ctx.program)
+
+  // Debug.
+  Object.assign(window, {gl, ctx})
 
   const onKeyChange = (event: KeyboardEvent) => {
     const action = keyboard.DEFAULT_KEY_MAP[event.key]

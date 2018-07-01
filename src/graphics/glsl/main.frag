@@ -1,17 +1,16 @@
 precision mediump float;
 
-uniform vec2 uAtlasBounds; // In pixels.
-// uniform vec2 uScale;
-uniform vec2 uTexturePosition; // In pixels.
-uniform vec2 uTextureScroll; // In pixels.
 uniform sampler2D uTexture;
 
-varying vec2 vTextureBounds; // In pixels.
-varying vec2 vScale;
-varying vec2 vTextureCoords;
+varying vec2 vAtlasBounds;
+varying vec4 vTextureRect;
+varying vec2 vTextureUV;
+
+varying vec2 vTextureScroll;
+varying vec2 vTextureScale;
 
 void main() {
-  vec2 scroll = vTextureCoords * vTextureBounds * vScale / abs(vScale) + uTextureScroll;
-  vec2 wrap = (uTexturePosition + mod(scroll, vTextureBounds)) / uAtlasBounds;
+  vec2 scroll = vTextureUV * vTextureRect.zw * vTextureScale / abs(vTextureScale) + vTextureScroll;
+  vec2 wrap = (vTextureRect.xy + mod(scroll, vTextureRect.zw)) / vAtlasBounds;
   gl_FragColor = texture2D(uTexture, wrap);
 }

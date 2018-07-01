@@ -98,14 +98,14 @@ function drawTextures(
   gl.bufferData(gl.ARRAY_BUFFER, textureCoords, gl.STATIC_DRAW)
 
   gl.vertexAttribPointer(
-    ctx.location('aTextureCoords'),
+    ctx.location('aTextureUV'),
     DIMENSIONS,
     gl.FLOAT,
     false,
     0,
     0
   )
-  gl.enableVertexAttribArray(ctx.location('aTextureCoords'))
+  gl.enableVertexAttribArray(ctx.location('aTextureUV'))
 
   const vertexBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
@@ -127,13 +127,11 @@ function drawTextures(
       sprite.scrollPosition.y
     )
 
-    gl.uniform2f(ctx.location('uScale'), sprite.scale.x, sprite.scale.y)
+    gl.uniform2f(ctx.location('uTextureScale'), sprite.scale.x, sprite.scale.y)
 
     gl.uniform2f(ctx.location('uAtlasBounds'), atlas.size.w, atlas.size.h)
 
-    gl.uniform2f(ctx.location('uTextureBounds'), tex.w, tex.h)
-
-    gl.uniform2f(ctx.location('uTexturePosition'), tex.x, tex.y)
+    gl.uniform4f(ctx.location('uTextureRect'), tex.x, tex.y, tex.w, tex.h)
 
     const stride = 1 * (DIMENSIONS + 1) * Float32Array.BYTES_PER_ELEMENT
     gl.vertexAttribPointer(
@@ -154,7 +152,7 @@ function drawTextures(
   gl.disableVertexAttribArray(ctx.location('aVertex'))
 
   gl.deleteTexture(texture)
-  gl.disableVertexAttribArray(ctx.location('aTextureCoords'))
+  gl.disableVertexAttribArray(ctx.location('aTextureUV'))
   gl.deleteBuffer(textureCoordsBuffer)
 }
 

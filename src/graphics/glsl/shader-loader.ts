@@ -6,21 +6,25 @@ export type ShaderContext = {
   location(name: string): number
   location(name: string): GLUniformLocation | null
 }
-type Locations = {readonly [name: string]: number | GLUniformLocation | null}
-type UniformLocations = {readonly [name: string]: GLUniformLocation | null}
-type AttributeLocations = {readonly [name: string]: number}
+type Locations = Readonly<Record<string, number | GLUniformLocation | null>>
+type UniformLocations = Readonly<Record<string, GLUniformLocation | null>>
+type AttributeLocations = Readonly<Record<string, number>>
 
 export function load(
   gl: GL,
   vertexSource: string,
-  fragmentSource: string
+  fragmentSource: string,
+  locationOverrides: Locations
 ): ShaderContext {
   const program = loadShaders(gl, vertexSource, fragmentSource)
   const locations = getLocations(gl, program)
   return {
     program,
     location(name: string): any {
-      const location = locations[name]
+      const location =
+        locationOverrides[name] === undefined
+          ? locations[name]
+          : locationOverrides[name]
       if (location !== undefined) return location
       throw new Error(`Shader location with name "${name}" unknown.`)
     }
