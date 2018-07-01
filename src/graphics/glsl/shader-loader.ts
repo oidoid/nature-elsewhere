@@ -13,18 +13,14 @@ type AttributeLocations = Readonly<Record<string, number>>
 export function load(
   gl: GL,
   vertexSource: string,
-  fragmentSource: string,
-  locationOverrides: Locations
+  fragmentSource: string
 ): ShaderContext {
   const program = loadShaders(gl, vertexSource, fragmentSource)
   const locations = getLocations(gl, program)
   return {
     program,
     location(name: string): any {
-      const location =
-        locationOverrides[name] === undefined
-          ? locations[name]
-          : locationOverrides[name]
+      const location = locations[name]
       if (location !== undefined) return location
       throw new Error(`Shader location with name "${name}" unknown.`)
     }
@@ -81,7 +77,8 @@ function getAttributeLocations(
   const end = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES) || 0
   return range(0, end).reduce((sum, i) => {
     const attr = gl.getActiveAttrib(program, i)
-    return {...sum, [attr ? attr.name : i]: i}
+    const location = attr ? gl.getAttribLocation(program, attr.name) : i
+    return {...sum, [attr ? attr.name : location]: location}
   }, {})
 }
 
