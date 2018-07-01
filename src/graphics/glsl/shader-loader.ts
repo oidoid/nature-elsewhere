@@ -1,5 +1,5 @@
 import {GL, GLProgram, GLUniformLocation} from '../gl'
-import {range} from '../../util'
+import {range, keys} from '../../util'
 
 export type ShaderContext = {
   readonly program: GLProgram | null
@@ -60,7 +60,7 @@ function getLocations(gl: GL, program: GLProgram | null): Locations {
   const attrs = getAttributeLocations(gl, program)
   const uniforms = getUniformLocations(gl, program)
 
-  const conflict = Object.keys(attrs).find(name => uniforms[name] !== undefined)
+  const conflict = keys(attrs).find(name => uniforms[name] !== undefined)
   if (conflict) {
     throw new Error(
       `Shader attribute and uniform name "${conflict}" conflicts.`

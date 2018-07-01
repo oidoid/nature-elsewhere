@@ -1,3 +1,5 @@
+import {entries} from '../util'
+
 export type AssetID = TextureAssetID
 export enum TextureAssetID {
   ATLAS
@@ -14,12 +16,9 @@ export function load(textureURLs: URLMap): Promise<Assets> {
 }
 
 function loadTextureAssets(urls: URLMap): Promise<Assets> {
-  type K = keyof URLMap
-  type V = URLMap[K]
-  const assets = Object.entries(urls).map(([id, url]) =>
-    loadTextureAsset(<K>(<any>id), <V>url)
-  )
-  return Promise.all(assets).then(assets => Object.assign({}, ...assets))
+  return Promise.all(
+    entries(urls).map(([id, url]) => loadTextureAsset(id, url))
+  ).then(assets => Object.assign({}, ...assets))
 }
 
 function loadTextureAsset(id: AssetID, url: string): Promise<Assets> {

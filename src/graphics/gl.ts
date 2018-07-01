@@ -1,3 +1,5 @@
+import {keys} from '../util'
+
 export type GL = WebGLRenderingContext
 export type GLProgram = WebGLProgram
 export type GLShader = WebGLShader
@@ -8,13 +10,13 @@ export function check(gl: GL | null): GL {
   if (!gl) throw new Error('WebGL context unobtainable.')
 
   const proto: GL = Object.getPrototypeOf(gl)
-  const checked = Object.keys(proto)
-    .filter(prop => typeof (<Record<string, any>>gl)[prop] === 'function')
+  const checked = keys(proto)
+    .filter(prop => typeof gl[prop] === 'function')
     .reduce(
       (sum, prop) => ({
         ...sum,
         [prop]: function() {
-          const ret = (<Record<string, any>>proto)[prop].apply(gl, arguments)
+          const ret = (<Function>proto[prop]).apply(gl, arguments)
           const err = gl.getError()
           if (err !== gl.NO_ERROR) {
             const invocation = `${prop}(${Array.from(arguments)}) => ${ret}`

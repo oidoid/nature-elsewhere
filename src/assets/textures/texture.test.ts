@@ -5,6 +5,7 @@ import * as TextureAtlas from './texture-atlas'
 import {ASSET_URL, TEXTURE, textureEquals} from './texture'
 import {expectToContainObjectContaining} from '../../test.util.test'
 import {TextureAssetID} from '../asset-loader'
+import {keys} from '../../util'
 
 describe('texture', () => {
   describe('ASSET_URL', () => {
@@ -35,7 +36,7 @@ describe('texture', () => {
     )
 
     {
-      const ids = Object.keys(atlas.animations)
+      const ids = keys(atlas.animations)
       test.each(ids)('Animation ID (%s) has a Texture', textureID =>
         expectToContainObjectContaining(textures, {textureID})
       )

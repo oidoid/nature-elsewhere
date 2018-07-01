@@ -14,6 +14,7 @@ import {
   unmarshalDuration,
   unmarshalCollision
 } from './texture-atlas'
+import {keys} from '../../util'
 
 describe('texture-atlas', () => {
   describe('atlas.json', () => {
@@ -33,14 +34,14 @@ describe('texture-atlas', () => {
     })
 
     test.each(tags)('Tag (%s) has a Frame', tag => {
-      const frameKeys = Object.keys(file.frames)
+      const frameKeys = keys(file.frames)
         .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
         .filter(uniq(Object.is))
       expect(frameKeys).toContainEqual(tag)
     })
 
     {
-      const frameKeys = Object.keys(file.frames)
+      const frameKeys = keys(file.frames)
         .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
         .filter(uniq(Object.is))
       test.each(frameKeys)('Frame has a Tag (%s)', frameKey => {
@@ -53,7 +54,7 @@ describe('texture-atlas', () => {
     )
 
     {
-      const tagFrameNumbers = Object.keys(file.frames)
+      const tagFrameNumbers = keys(file.frames)
       test.each(tagFrameNumbers)(
         'Frame (%s) dimensions are a multiple of 16 pixels',
         tagFrameNumber => {
