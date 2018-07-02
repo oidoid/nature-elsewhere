@@ -121,16 +121,20 @@ function stepPlayer(
         (actionState[Action.LEFT] ? pps : 0) +
         (actionState[Action.RIGHT] ? pps : 0)
     ),
-    y:
+    y: Math.min(
+      60,
       player.position.y -
-      (actionState[Action.UP] ? pps : 0) +
-      (actionState[Action.DOWN] ? pps : 0),
+        (actionState[Action.UP] ? pps : 0) +
+        (actionState[Action.DOWN] ? pps : 0)
+    ),
     z: player.position.z
   }
   const texture = actionState[Action.UP]
     ? TEXTURE.PLAYER_ASCEND
     : actionState[Action.DOWN]
-      ? TEXTURE.PLAYER_DESCEND
+      ? player.position.y < 60
+        ? TEXTURE.PLAYER_DESCEND
+        : TEXTURE.PLAYER_CROUCH
       : actionState[Action.LEFT] || actionState[Action.RIGHT]
         ? actionState[Action.RUN]
           ? TEXTURE.PLAYER_RUN
