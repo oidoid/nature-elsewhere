@@ -2,7 +2,7 @@ import {GL, GLTexture, GLUniformLocation} from './gl'
 import {Assets} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
-import {WH, XYZ, XY} from '../types/geo'
+import {WH, XYZ, XY, Rect} from '../types/geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
 
 export function render(
@@ -68,6 +68,23 @@ function createTexture(gl: GL): GLTexture | null {
   return texture
 }
 
+function newAttributeStruct() {
+  let stride = 0
+  const attrs = [
+    {name: 'aAtlasSize', length: 2},
+    {name: 'aTextureRect', length: 4},
+    {name: 'aTextureUV', length: 2},
+    {name: 'aVertex', length: 3},
+    {name: 'aTextureScroll', length: 2},
+    {name: 'aTextureScale', length: 2}
+  ].map(({name, length}) => {
+    const attr = {name, length, offset: stride}
+    stride += length * Int16Array.BYTES_PER_ELEMENT
+    return attr
+  })
+  return {attrs, stride}
+}
+
 function drawTextures(
   gl: GL,
   ctx: ShaderContext,
@@ -75,8 +92,6 @@ function drawTextures(
   assets: Assets,
   sprites: Sprite[]
 ) {
-  const DIMENSIONS = 2
-
   // todo: pass shader in and call useprogram here.
 
   // Create, bind, and configure the texture.
@@ -90,23 +105,23 @@ function drawTextures(
   // Create, bind, and load the texture coordinations.
   // todo: this probably only needs to happen once if the mapping is always one
   //       to one.
-  const textureCoords = new Int16Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1])
-  const textureCoordsBuffer = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordsBuffer)
-  gl.bufferData(gl.ARRAY_BUFFER, textureCoords, gl.STATIC_DRAW)
 
-  gl.vertexAttribPointer(
-    ctx.location('aTextureUV'),
-    DIMENSIONS,
-    gl.SHORT,
-    false,
-    0,
-    0
-  )
-  gl.enableVertexAttribArray(ctx.location('aTextureUV'))
+  const buffer = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
 
-  const vertexBuffer = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+  const struct = newAttributeStruct()
+  for (const {name, length, offset} of struct.attrs) {
+    // stride can move here
+    gl.vertexAttribPointer(
+      ctx.location(name),
+      length,
+      gl.SHORT,
+      false,
+      struct.stride,
+      offset
+    )
+    gl.enableVertexAttribArray(ctx.location(name))
+  }
 
   // Load the images into the texture.
   for (const sprite of sprites) {
@@ -117,65 +132,86 @@ function drawTextures(
     const tex =
       atlas.animations[sprite.texture.textureID].cels[sprite.celIndex].bounds
 
-    bufferRectangle(gl, sprite.position, {w: tex.w, h: tex.h})
-
-    gl.uniform2f(
-      ctx.location('uTextureScroll'),
-      sprite.scrollPosition.x,
-      sprite.scrollPosition.y
+    const textureUV = [
+      {x: 0, y: 0},
+      {x: 1, y: 0},
+      {x: 0, y: 1},
+      {x: 0, y: 1},
+      {x: 1, y: 0},
+      {x: 1, y: 1}
+    ]
+    bufferRectangle(
+      gl,
+      atlas.size,
+      tex,
+      textureUV,
+      sprite.position,
+      sprite.scrollPosition,
+      sprite.scale
     )
 
-    gl.uniform2f(ctx.location('uTextureScale'), sprite.scale.x, sprite.scale.y)
-
-    gl.uniform2f(ctx.location('uAtlasBounds'), atlas.size.w, atlas.size.h)
-
-    gl.uniform4f(ctx.location('uTextureRect'), tex.x, tex.y, tex.w, tex.h)
-
-    const stride = 1 * (DIMENSIONS + 1) * Int16Array.BYTES_PER_ELEMENT
-    gl.vertexAttribPointer(
-      ctx.location('aVertex'),
-      DIMENSIONS + 1,
-      gl.SHORT,
-      false,
-      stride,
-      0
-    )
-    gl.enableVertexAttribArray(ctx.location('aVertex'))
-
-    gl.drawArrays(gl.TRIANGLES, 0, textureCoords.length / DIMENSIONS)
+    gl.drawArrays(gl.TRIANGLES, 0, 3 * 2)
   }
 
   // Clean.
-  gl.deleteBuffer(vertexBuffer)
-  gl.disableVertexAttribArray(ctx.location('aVertex'))
+  gl.deleteBuffer(buffer)
+  // gl.disableVertexAttribArray(ctx.location('aVertex'))
 
   gl.deleteTexture(texture)
-  gl.disableVertexAttribArray(ctx.location('aTextureUV'))
-  gl.deleteBuffer(textureCoordsBuffer)
 }
 
-function bufferRectangle(gl: GL, {x, y, z}: XYZ, {w, h}: WH): void {
-  const x1 = x + w
-  const y1 = y + h
-  const vertices = new Int16Array([
-    x,
-    y,
-    z,
-    x1,
-    y,
-    z,
-    x,
-    y1,
-    z,
-    x,
-    y1,
-    z,
-    x1,
-    y,
-    z,
-    x1,
-    y1,
-    z
-  ])
+// yo these will int16s so expect _truncation_
+function bufferRectangle(
+  gl: GL,
+  atlasSize: WH,
+  textureRect: Rect,
+  textureUV: XY[],
+  {x, y, z}: XYZ,
+  scroll: XY,
+  scale: XY
+): void {
+  const x1 = x + textureRect.w
+  const y1 = y + textureRect.h
+  // const common = [z, wh, scroll, scale]
+  const vertices = new Int16Array(
+    (<number[]>[]).concat(
+      addVertex(atlasSize, textureRect, textureUV[0], x, y, z, scroll, scale),
+      addVertex(atlasSize, textureRect, textureUV[1], x1, y, z, scroll, scale),
+      addVertex(atlasSize, textureRect, textureUV[2], x, y1, z, scroll, scale),
+      addVertex(atlasSize, textureRect, textureUV[3], x, y1, z, scroll, scale),
+      addVertex(atlasSize, textureRect, textureUV[4], x1, y, z, scroll, scale),
+      addVertex(atlasSize, textureRect, textureUV[5], x1, y1, z, scroll, scale)
+    )
+  )
+
   gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
+}
+
+function addVertex(
+  atlasSize: WH,
+  textureRect: Rect,
+  textureUV: XY,
+  x: number,
+  y: number,
+  z: number,
+  scroll: XY,
+  scale: XY
+): number[] {
+  return [
+    atlasSize.w,
+    atlasSize.h,
+    textureRect.x,
+    textureRect.y,
+    textureRect.w,
+    textureRect.h,
+    textureUV.x,
+    textureUV.y,
+    x,
+    y,
+    z,
+    scroll.x,
+    scroll.y,
+    scale.x,
+    scale.y
+  ]
 }
