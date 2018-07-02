@@ -12,15 +12,10 @@ export function render(
   assets: Assets,
   sprites: Sprite[],
   camera: XY,
+  bounds: WH,
   minRenderHeight: number // hieght in peixels
 ): void {
-  resize(
-    gl,
-    ctx.location('uViewport'),
-    camera,
-    {w: window.innerWidth, h: window.innerHeight},
-    minRenderHeight
-  )
+  resize(gl, ctx.location('uViewport'), camera, bounds, minRenderHeight)
   drawTextures(gl, ctx, atlas, assets, sprites)
 }
 
@@ -33,13 +28,13 @@ function resize(
   gl: GL,
   viewportLocation: GLUniformLocation | null,
   camera: XY,
-  window: WH,
+  bounds: WH,
   minRenderHeight: number
 ): void {
   // An integer multiple.
-  const scale = Math.max(1, Math.floor(window.h / minRenderHeight))
-  const renderHeight = Math.ceil(window.h / scale)
-  const renderWidth = Math.ceil(window.w / scale)
+  const scale = Math.max(1, Math.floor(bounds.h / minRenderHeight))
+  const renderWidth = Math.ceil(bounds.w / scale)
+  const renderHeight = Math.ceil(bounds.h / scale)
 
   // Set the canvas' native dimensions.
   gl.canvas.width = renderWidth

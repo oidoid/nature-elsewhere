@@ -86,9 +86,6 @@ function loop(
   const playerUpdates = stepPlayer(atlas, sprites[playerIndex], step)
   sprites[playerIndex] = {...sprites[playerIndex], ...playerUpdates}
 
-  const renderWidth = gl.canvas.width
-  const renderHeight = gl.canvas.height
-
   graphics.render(
     gl,
     ctx,
@@ -96,9 +93,11 @@ function loop(
     assets,
     sprites,
     {
-      x: Math.trunc(-playerUpdates.position.x) + Math.trunc(renderWidth / 2),
-      y: Math.trunc(renderHeight / 4)
+      x:
+        Math.trunc(-playerUpdates.position.x) + Math.trunc(gl.canvas.width / 2),
+      y: Math.trunc(gl.canvas.height / 4)
     },
+    {w: window.innerWidth, h: window.innerHeight},
     MIN_RENDER_HEIGHT
   )
 }
@@ -147,7 +146,7 @@ function stepPlayer(
         : TEXTURE.PLAYER_IDLE
 
   const celIndex =
-    Math.abs(Math.round(position.x)) %
+    Math.abs(Math.round(position.x / (actionState[Action.RUN] ? 6 : 4))) %
     atlas.animations[texture.textureID].cels.length
 
   return {scale, position, texture, celIndex}
