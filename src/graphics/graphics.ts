@@ -68,22 +68,17 @@ function createTexture(gl: GL): GLTexture | null {
   return texture
 }
 
-function newAttributeStruct() {
-  let stride = 0
-  const attrs = [
-    {name: 'aAtlasSize', length: 2},
-    {name: 'aTextureRect', length: 4},
-    {name: 'aTextureUV', length: 2},
-    {name: 'aVertex', length: 3},
-    {name: 'aTextureScroll', length: 2},
-    {name: 'aTextureScale', length: 2}
-  ].map(({name, length}) => {
-    const attr = {name, length, offset: stride}
-    stride += length * Int16Array.BYTES_PER_ELEMENT
-    return attr
-  })
-  return {attrs, stride}
-}
+const attrs = [
+  {name: 'aAtlasSize', length: 2},
+  {name: 'aTextureRect', length: 4},
+  {name: 'aTextureUV', length: 2},
+  {name: 'aVertex', length: 3},
+  {name: 'aTextureScroll', length: 2},
+  {name: 'aTextureScale', length: 2}
+]
+const stride =
+  attrs.reduce((sum, {length}) => sum + length, 0) *
+  Int16Array.BYTES_PER_ELEMENT
 
 function drawTextures(
   gl: GL,
@@ -109,18 +104,18 @@ function drawTextures(
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
 
-  const struct = newAttributeStruct()
-  for (const {name, length, offset} of struct.attrs) {
-    // stride can move here
+  let offset = 0
+  for (const {name, length} of attrs) {
     gl.vertexAttribPointer(
       ctx.location(name),
       length,
       gl.SHORT,
       false,
-      struct.stride,
+      stride,
       offset
     )
     gl.enableVertexAttribArray(ctx.location(name))
+    offset += length * Int16Array.BYTES_PER_ELEMENT
   }
 
   // Load the images into the texture.
