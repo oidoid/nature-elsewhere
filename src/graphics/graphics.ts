@@ -95,7 +95,7 @@ function drawTextures(
   // Create, bind, and load the texture coordinations.
   // todo: this probably only needs to happen once if the mapping is always one
   //       to one.
-  const textureCoords = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1])
+  const textureCoords = new Int16Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1])
   const textureCoordsBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordsBuffer)
   gl.bufferData(gl.ARRAY_BUFFER, textureCoords, gl.STATIC_DRAW)
@@ -103,7 +103,7 @@ function drawTextures(
   gl.vertexAttribPointer(
     ctx.location('aTextureUV'),
     DIMENSIONS,
-    gl.FLOAT,
+    gl.SHORT,
     false,
     0,
     0
@@ -136,11 +136,11 @@ function drawTextures(
 
     gl.uniform4f(ctx.location('uTextureRect'), tex.x, tex.y, tex.w, tex.h)
 
-    const stride = 1 * (DIMENSIONS + 1) * Float32Array.BYTES_PER_ELEMENT
+    const stride = 1 * (DIMENSIONS + 1) * Int16Array.BYTES_PER_ELEMENT
     gl.vertexAttribPointer(
       ctx.location('aVertex'),
       DIMENSIONS + 1,
-      gl.FLOAT,
+      gl.SHORT,
       false,
       stride,
       0
@@ -162,7 +162,7 @@ function drawTextures(
 function bufferRectangle(gl: GL, {x, y, z}: XYZ, {w, h}: WH): void {
   const x1 = x + w
   const y1 = y + h
-  const vertices = new Float32Array([
+  const vertices = new Int16Array([
     x,
     y,
     z,

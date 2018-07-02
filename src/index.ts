@@ -96,8 +96,8 @@ function loop(
     assets,
     sprites,
     {
-      x: -playerUpdates.position.x + renderWidth / 2,
-      y: renderHeight / 4
+      x: Math.trunc(-playerUpdates.position.x) + Math.trunc(renderWidth / 2),
+      y: Math.trunc(renderHeight / 4)
     },
     MIN_RENDER_HEIGHT
   )
