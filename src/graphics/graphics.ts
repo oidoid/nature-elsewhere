@@ -2,7 +2,7 @@ import {GL, GLTexture, GLUniformLocation} from './gl'
 import {Assets} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
-import {WH, XYZ} from '../types/geo'
+import {WH, XYZ, XY} from '../types/geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
 
 export function render(
@@ -11,11 +11,13 @@ export function render(
   atlas: textureAtlas.TextureAtlas,
   assets: Assets,
   sprites: Sprite[],
+  camera: XY,
   minRenderHeight: number // hieght in peixels
 ): void {
   resize(
     gl,
-    ctx.location('uViewport.resolution'),
+    ctx.location('uViewport'),
+    camera,
     {w: window.innerWidth, h: window.innerHeight},
     minRenderHeight
   )
@@ -29,7 +31,8 @@ export function render(
  */
 function resize(
   gl: GL,
-  resolutionLocation: GLUniformLocation | null,
+  viewportLocation: GLUniformLocation | null,
+  camera: XY,
   window: WH,
   minRenderHeight: number
 ): void {
@@ -46,7 +49,7 @@ function resize(
   // use the complete canvas area. For this game, the resolution is so low that
   // the canvas's native dimensions within the window are like a postage stamp
   // on an envelope.
-  gl.uniform2f(resolutionLocation, renderWidth, renderHeight)
+  gl.uniform4f(viewportLocation, camera.x, camera.y, renderWidth, renderHeight)
   gl.viewport(0, 0, renderWidth, renderHeight)
 
   // Uniformly stretch the canvas to the window's bounds. Continuing the
@@ -87,7 +90,7 @@ function drawTextures(
   gl.activeTexture(gl.TEXTURE0)
   gl.bindTexture(gl.TEXTURE_2D, texture)
   // Use a single texture unit for everything currently.
-  gl.uniform1i(ctx.location('uTexture'), 0)
+  gl.uniform1i(ctx.location('uTextureUnit'), 0)
 
   // Create, bind, and load the texture coordinations.
   // todo: this probably only needs to happen once if the mapping is always one

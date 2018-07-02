@@ -88,14 +88,19 @@ function loop(
 
   const renderWidth = gl.canvas.width
   const renderHeight = gl.canvas.height
-  const cameraLocation = ctx.location('uViewport.camera')
-  gl.uniform2f(
-    cameraLocation,
-    -playerUpdates.position.x + renderWidth / 2,
-    renderHeight / 4
-  )
 
-  graphics.render(gl, ctx, atlas, assets, sprites, MIN_RENDER_HEIGHT)
+  graphics.render(
+    gl,
+    ctx,
+    atlas,
+    assets,
+    sprites,
+    {
+      x: -playerUpdates.position.x + renderWidth / 2,
+      y: renderHeight / 4
+    },
+    MIN_RENDER_HEIGHT
+  )
 }
 
 function stepPlayer(
