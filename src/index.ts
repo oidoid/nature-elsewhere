@@ -52,14 +52,17 @@ function main(window: Window) {
   }
   document.addEventListener('keydown', onKeyChange)
   document.addEventListener('keyup', onKeyChange)
+  // if focus loss detected, reset the inputs and pause
 
   const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
   assetsLoader
     .load(ASSET_URL)
-    .then(assets =>
+    .then(assets => {
+      graphics.init(gl, ctx, assets)
       loop(gl, ctx, atlas, assets, Date.now(), Level0.Map.sprites)
-    )
+    })
     .catch(() => {
+      graphics.deinit(gl, ctx, null, null)
       document.removeEventListener('keyup', onKeyChange)
       document.removeEventListener('keydown', onKeyChange)
     })
@@ -90,7 +93,6 @@ function loop(
     gl,
     ctx,
     atlas,
-    assets,
     sprites,
     {
       x:

@@ -5,18 +5,84 @@ import {ShaderContext} from './glsl/shader-loader'
 import {WH, XYZ, XY, Rect} from '../types/geo'
 import * as textureAtlas from '../assets/textures/texture-atlas'
 
+const attrs = [
+  {name: 'aAtlasSize', length: 2},
+  {name: 'aTextureRect', length: 4},
+  {name: 'aTextureUV', length: 2},
+  {name: 'aVertex', length: 3},
+  {name: 'aTextureScroll', length: 2},
+  {name: 'aTextureScale', length: 2}
+]
+const stride =
+  attrs.reduce((sum, {length}) => sum + length, 0) *
+  Int16Array.BYTES_PER_ELEMENT
+
+const textureUV = [
+  {x: 0, y: 0},
+  {x: 1, y: 0},
+  {x: 0, y: 1},
+  {x: 0, y: 1},
+  {x: 1, y: 0},
+  {x: 1, y: 1}
+]
+
+export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
+  const texture = createTexture(gl)
+
+  gl.activeTexture(gl.TEXTURE0)
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+  gl.uniform1i(ctx.location('uTextureUnit'), 0)
+
+  const buffer = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+
+  let offset = 0
+  for (const {name, length} of attrs) {
+    gl.vertexAttribPointer(
+      ctx.location(name),
+      length,
+      gl.SHORT,
+      false,
+      stride,
+      offset
+    )
+    gl.enableVertexAttribArray(ctx.location(name))
+    offset += length * Int16Array.BYTES_PER_ELEMENT
+  }
+
+  gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    assets[TextureAssetID.ATLAS]
+  )
+}
+
+export function deinit(
+  gl: GL,
+  ctx: ShaderContext,
+  texture: WebGLTexture | null,
+  buffer: WebGLBuffer | null
+): void {
+  gl.deleteBuffer(buffer)
+  for (const {name} of attrs) gl.disableVertexAttribArray(ctx.location(name))
+
+  gl.deleteTexture(texture)
+}
+
 export function render(
   gl: GL,
   ctx: ShaderContext,
   atlas: textureAtlas.TextureAtlas,
-  assets: Assets,
   sprites: Sprite[],
   camera: XY,
   bounds: WH,
   minRenderHeight: number // hieght in peixels
 ): void {
   resize(gl, ctx.location('uViewport'), camera, bounds, minRenderHeight)
-  drawTextures(gl, ctx, atlas, assets, sprites)
+  drawTextures(gl, atlas, sprites)
 }
 
 /**
@@ -68,74 +134,12 @@ function createTexture(gl: GL): GLTexture | null {
   return texture
 }
 
-const attrs = [
-  {name: 'aAtlasSize', length: 2},
-  {name: 'aTextureRect', length: 4},
-  {name: 'aTextureUV', length: 2},
-  {name: 'aVertex', length: 3},
-  {name: 'aTextureScroll', length: 2},
-  {name: 'aTextureScale', length: 2}
-]
-const stride =
-  attrs.reduce((sum, {length}) => sum + length, 0) *
-  Int16Array.BYTES_PER_ELEMENT
-
-const textureUV = [
-  {x: 0, y: 0},
-  {x: 1, y: 0},
-  {x: 0, y: 1},
-  {x: 0, y: 1},
-  {x: 1, y: 0},
-  {x: 1, y: 1}
-]
-
 function drawTextures(
   gl: GL,
-  ctx: ShaderContext,
   atlas: textureAtlas.TextureAtlas,
-  assets: Assets,
   sprites: Sprite[]
-) {
+): void {
   // todo: pass shader in and call useprogram here.
-
-  // Create, bind, and configure the texture.
-  const texture = createTexture(gl)
-
-  gl.activeTexture(gl.TEXTURE0)
-  gl.bindTexture(gl.TEXTURE_2D, texture)
-  // Use a single texture unit for everything currently.
-  gl.uniform1i(ctx.location('uTextureUnit'), 0)
-
-  // Create, bind, and load the texture coordinations.
-  // todo: this probably only needs to happen once if the mapping is always one
-  //       to one.
-
-  const buffer = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-
-  let offset = 0
-  for (const {name, length} of attrs) {
-    gl.vertexAttribPointer(
-      ctx.location(name),
-      length,
-      gl.SHORT,
-      false,
-      stride,
-      offset
-    )
-    gl.enableVertexAttribArray(ctx.location(name))
-    offset += length * Int16Array.BYTES_PER_ELEMENT
-  }
-
-  // todo: make generic
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    0,
-    gl.RGBA,
-    gl.RGBA,
-    gl.UNSIGNED_BYTE,
-    assets[TextureAssetID.ATLAS]
-  )
 
   const verts: number[] = []
 
@@ -158,18 +162,9 @@ function drawTextures(
 
   const VERTS_PER_TRI = 3
   const TRIS_PER_RECT = 2
+  const VERTS_PER_SPRITE = VERTS_PER_TRI * TRIS_PER_RECT
   gl.bufferData(gl.ARRAY_BUFFER, new Int16Array(verts), gl.STATIC_DRAW)
-  gl.drawArrays(
-    gl.TRIANGLES,
-    0,
-    VERTS_PER_TRI * TRIS_PER_RECT * (verts.length / sprites.length)
-  )
-
-  // Clean.
-  gl.deleteBuffer(buffer)
-  for (const {name} of attrs) gl.disableVertexAttribArray(ctx.location(name))
-
-  gl.deleteTexture(texture)
+  gl.drawArrays(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length)
 }
 
 // yo these will int16s so expect _truncation_
