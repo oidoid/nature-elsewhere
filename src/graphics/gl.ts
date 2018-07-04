@@ -6,9 +6,12 @@ export type GLShader = WebGLShader
 export type GLTexture = WebGLTexture
 export type GLUniformLocation = WebGLUniformLocation
 
-export function check(gl: GL | null): GL {
+export function check(gl: GL | null, check: boolean): GL {
   if (!gl) throw new Error('WebGL context unobtainable.')
 
+  if (!check) return gl
+
+  console.log('GL checking enabled.') // eslint-disable-line no-console
   const proto: GL = Object.getPrototypeOf(gl)
   const checked = keys(proto)
     .filter(prop => typeof gl[prop] === 'function')

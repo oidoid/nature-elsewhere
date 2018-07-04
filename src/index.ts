@@ -2,7 +2,7 @@ import {Level0} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './graphics/glsl/shader-loader'
 import * as graphics from './graphics/graphics'
-import {check, GL} from './graphics/gl'
+import {GL, check} from './graphics/gl'
 import * as vertexSrc from './graphics/glsl/main.vert'
 import * as fragmentSrc from './graphics/glsl/main.frag'
 import * as keyboard from './input/keyboard'
@@ -19,19 +19,27 @@ import {Sprite, SpriteType} from './assets/sprites/sprite'
 const MIN_RENDER_HEIGHT = 128
 const actionState: ActionState = newActionState()
 
+enum QueryParams {
+  CHECK_GL = 'checkgl'
+}
+
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
 
-  const gl = check(
+  const checkGL =
+    new URL(location.href.toLowerCase()).searchParams.get(
+      QueryParams.CHECK_GL
+    ) === 'true'
+
+  const gl: GL = check(
     canvas.getContext('webgl', {
       alpha: false,
-      antialias: false,
       depth: false,
-      stencil: false,
-      preserveDrawingBuffer: false,
+      antialias: false,
       failIfMajorPerformanceCaveat: true
-    })
+    }),
+    checkGL
   )
 
   // Allow translucent textures to be layered.
