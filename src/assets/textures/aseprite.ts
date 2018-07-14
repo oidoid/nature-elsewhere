@@ -28,11 +28,11 @@ import {XY, WH} from '../../types/geo'
  * the atlas. **By convention**, every file has one or more animations. Every
  * animation has a Frame sequence, a Tag, and zero or more Slices.
  */
-export type File = {
-  readonly meta: Meta
+export type File = Readonly<{
+  meta: Meta
   /** All Frames for all files packed. */
-  readonly frames: FrameMap
-}
+  frames: FrameMap
+}>
 
 export type FrameMap = Readonly<Record<TagFrameNumber, Frame>>
 

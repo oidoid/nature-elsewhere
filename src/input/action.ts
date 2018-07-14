@@ -1,3 +1,5 @@
+import {values} from '../util'
+
 export enum Action {
   LEFT,
   RIGHT,
@@ -12,8 +14,7 @@ export type Active = boolean
 export type ActionState = Record<Action, Active>
 
 export function newActionState(): ActionState {
-  return Object.values(Action).reduce(
-    (sum: ActionState, action: Action) => ({...sum, [action]: false}),
-    {}
-  )
+  return values(Action).reduce((sum, action) => ({...sum, [action]: false}), <
+    ActionState
+  >{})
 }
