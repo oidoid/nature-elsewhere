@@ -14,5 +14,7 @@ export function keys<T>(obj: T): (keyof T)[] {
 
 // https://github.com/Microsoft/TypeScript/pull/12253
 export function entries<T>(obj: T): [keyof T, T[keyof T]][] {
-  return keys(obj).map(key => <[keyof T, T[keyof T]]>[key, obj[key]])
+  const keys: [keyof T, T[keyof T]][] = []
+  for (const key in obj) if (obj.hasOwnProperty(key)) keys.push([key, obj[key]])
+  return keys
 }
