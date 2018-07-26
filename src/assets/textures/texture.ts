@@ -9,6 +9,7 @@ export type CloudTextureKey = 'CLOUD_S' | 'CLOUD_M' | 'CLOUD_L' | 'CLOUD_XL'
 export type Texture = typeof TEXTURE[keyof typeof TEXTURE]
 const atlas = {textureAssetID: TextureAssetID.ATLAS}
 export const TEXTURE = {
+  BEEHIVE: {...atlas, textureID: 'beehive'},
   BIRD_REST: {...atlas, textureID: 'bird rest'},
   BIRD_RISE: {...atlas, textureID: 'bird rise'},
   BIRD_FLY: {...atlas, textureID: 'bird fly'},
