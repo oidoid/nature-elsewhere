@@ -11,5 +11,6 @@ export const DEFAULT_KEY_MAP: KeyMap = {
   ArrowDown: Action.DOWN,
   Shift: Action.RUN,
   ' ': Action.ZAP,
-  Escape: Action.MENU
+  Escape: Action.MENU,
+  p: Action.DEBUG_CONTEXT_LOSS
 }

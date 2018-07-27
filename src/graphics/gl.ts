@@ -21,7 +21,7 @@ export function check(gl: GL | null, check: boolean): GL {
         [prop]: function() {
           const ret = (<Function>proto[prop]).apply(gl, arguments)
           const err = gl.getError()
-          if (err !== gl.NO_ERROR) {
+          if (err !== gl.NO_ERROR && err !== gl.CONTEXT_LOST_WEBGL) {
             const invocation = `${prop}(${Array.from(arguments)}) => ${ret}`
             throw new Error(`${invocation}; getError() => ${err}`)
           }
@@ -35,7 +35,10 @@ export function check(gl: GL | null, check: boolean): GL {
     getError: proto.getError,
     compileShader(shader) {
       checked.compileShader.apply(gl, arguments)
-      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      if (
+        !gl.getShaderParameter(shader, gl.COMPILE_STATUS) &&
+        !gl.isContextLost()
+      ) {
         const log = gl.getShaderInfoLog(shader)
         throw new Error(`Shader compilation failed: ${log}`)
       }
@@ -95,7 +98,10 @@ export function check(gl: GL | null, check: boolean): GL {
     linkProgram(program) {
       try {
         checked.linkProgram.apply(gl, arguments)
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        if (
+          !gl.getProgramParameter(program, gl.LINK_STATUS) &&
+          !gl.isContextLost()
+        ) {
           throw new Error(`Shader linking failed.`)
         }
 

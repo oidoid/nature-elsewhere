@@ -7,7 +7,8 @@ export enum Action {
   DOWN,
   RUN,
   ZAP,
-  MENU
+  MENU,
+  DEBUG_CONTEXT_LOSS
 }
 
 export type Active = boolean
