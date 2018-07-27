@@ -55,6 +55,8 @@ export type Meta = Readonly<{
   slices: Slice[]
 }>
 
+// textures do not need to be multiples of 16px. update the assets and docs.
+
 /**
  * A Tag followed by a space followed by an optional frame number **via CLI**
  * `--filename-format '{tag} {frame}'`. The frame number is only optional when

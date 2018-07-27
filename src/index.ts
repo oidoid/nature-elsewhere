@@ -12,17 +12,32 @@ import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
+import {entries} from './util'
+import {newVertex} from './graphics/vertex'
+import {WH, Rect, XYZ, XY} from './types/geo'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
 // render width.
 const MIN_RENDER_HEIGHT = 128
 const actionState: ActionState = newActionState()
+let requestAnimationFrameID: number | undefined
 
 enum QueryParams {
   CHECK_GL = 'checkgl'
 }
 
+const textureUV = [
+  {x: 0, y: 0},
+  {x: 1, y: 0},
+  {x: 0, y: 1},
+  {x: 0, y: 1},
+  {x: 1, y: 0},
+  {x: 1, y: 1}
+]
+let verts = new Int16Array()
+
+// need to make those array changes!
 function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
@@ -60,6 +75,9 @@ function main(window: Window) {
   }
   document.addEventListener('keydown', onKeyChange)
   document.addEventListener('keyup', onKeyChange)
+  canvas.addEventListener('webglcontextlost', onGLContextLost)
+  canvas.addEventListener('webglcontextrestored', onGLContextRestored)
+
   // if focus loss detected, reset the inputs and pause
 
   const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
@@ -67,7 +85,10 @@ function main(window: Window) {
     .load(ASSET_URL)
     .then(assets => {
       graphics.init(gl, ctx, assets)
-      loop(gl, ctx, atlas, assets, Date.now(), Level0.Map.sprites)
+      verts = new Int16Array(Level0.Map.sprites.length * 15 * 6)
+      requestAnimationFrameID = requestAnimationFrame(now =>
+        loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites)
+      )
     })
     .catch(() => {
       graphics.deinit(gl, ctx, null, null)
@@ -76,32 +97,83 @@ function main(window: Window) {
     })
 }
 
+// render
+// ReadOnly<array>
+// invalidate: updated ? true : false
+// eslint-config-rndmem without style?
+
 function loop(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
   atlas: textureAtlas.TextureAtlas,
   assets: assetsLoader.Assets,
-  timestamp: number,
+  prev: number,
+  next: number,
   sprites: Sprite[]
 ): void {
-  const now = Date.now()
-  window.requestAnimationFrame(() => loop(gl, ctx, atlas, assets, now, sprites))
+  requestAnimationFrameID = requestAnimationFrame(now =>
+    loop(gl, ctx, atlas, assets, next, now, sprites)
+  )
 
   // If focus is lost, do not advance more than a second.
-  const step = Math.min(1000, now - timestamp) / 1000
+  const step = Math.min(1000, next - prev) / 1000
 
-  sprites = sprites.map(sprite => stepSprite(sprite, step))
+  if (actionState[Action.DEBUG_CONTEXT_LOSS]) {
+    const extension = gl.getExtension('WEBGL_lose_context')
+    if (extension) {
+      if (gl.isContextLost()) {
+        console.log('GL restore context.') // eslint-disable-line no-console
+        extension.restoreContext()
+      } else {
+        console.log('GL lose context.') // eslint-disable-line no-console
+        extension.loseContext()
+      }
+    }
+  }
+
+  sprites = sprites.map(sprite => update(atlas, sprite, step))
   const playerIndex = sprites.findIndex(
     sprite => sprite.type === SpriteType.PLAYER
   )
-  const playerUpdates = stepPlayer(atlas, sprites[playerIndex], step)
-  sprites[playerIndex] = {...sprites[playerIndex], ...playerUpdates}
+  const playerUpdates = updatePlayer(atlas, sprites[playerIndex], step)
+  const playerUpdated = entries(playerUpdates).some(
+    ([key, val]) => val !== sprites[playerIndex][key]
+  )
+  const player = {
+    ...sprites[playerIndex],
+    ...playerUpdates,
+    invalidated: playerUpdated
+  }
+  sprites[playerIndex] = player
+
+  let i = 0
+  // Load the images into the texture.
+  for (const sprite of sprites) {
+    if (!sprite.invalidated) {
+      i += 15 * 6
+      continue
+    }
+
+    const tex = atlas.animations[sprite.texture.textureID]
+
+    for (const vert of rect(
+      atlas.size,
+      tex.cels[sprite.celIndex].bounds,
+      textureUV,
+      sprite.position,
+      sprite.scrollPosition,
+      sprite.scale
+    )) {
+      verts[i] = vert
+      ++i
+    }
+  }
 
   graphics.render(
     gl,
     ctx,
-    atlas,
     sprites,
+    verts,
     {
       x:
         Math.trunc(-playerUpdates.position.x) + Math.trunc(gl.canvas.width / 2),
@@ -112,41 +184,78 @@ function loop(
   )
 }
 
-function stepPlayer(
+function rect(
+  atlasSize: WH,
+  textureRect: Rect,
+  textureUV: XY[],
+  {x, y, z}: XYZ,
+  scroll: XY,
+  scale: XY
+): number[] {
+  const x1 = x + textureRect.w
+  const y1 = y + textureRect.h
+  const v = newVertex.bind(undefined, atlasSize, textureRect, scroll, scale)
+  return (<number[]>[]).concat(
+    v(textureUV[0], x, y, z),
+    v(textureUV[1], x1, y, z),
+    v(textureUV[2], x, y1, z),
+    v(textureUV[3], x, y1, z),
+    v(textureUV[4], x1, y, z),
+    v(textureUV[5], x1, y1, z)
+  )
+}
+
+function onGLContextLost(event: Event) {
+  console.log('GL context lost') // eslint-disable-line no-console
+  event.preventDefault()
+  if (requestAnimationFrameID !== undefined) {
+    cancelAnimationFrame(requestAnimationFrameID)
+    requestAnimationFrameID = undefined
+  }
+}
+
+function onGLContextRestored() {
+  console.log('GL context restored') // eslint-disable-line no-console
+  // init();
+}
+
+function updatePlayer(
   atlas: textureAtlas.TextureAtlas,
-  player: Sprite,
+  sprite: Sprite,
   step: number
 ) {
   // todo: add pixel per second doc.
   const pps = (actionState[Action.RUN] ? 48 : 16) * step
+
+  // sprite.texture.
 
   const scale = {
     x: actionState[Action.LEFT]
       ? -1
       : actionState[Action.RIGHT]
         ? 1
-        : player.scale.x,
-    y: player.scale.y
+        : sprite.scale.x,
+    y: sprite.scale.y
   }
   const position = {
     x: Math.max(
       0,
-      player.position.x -
+      sprite.position.x -
         (actionState[Action.LEFT] ? pps : 0) +
         (actionState[Action.RIGHT] ? pps : 0)
     ),
     y: Math.min(
       60,
-      player.position.y -
+      sprite.position.y -
         (actionState[Action.UP] ? pps : 0) +
         (actionState[Action.DOWN] ? pps : 0)
     ),
-    z: player.position.z
+    z: sprite.position.z
   }
   const texture = actionState[Action.UP]
     ? TEXTURE.PLAYER_ASCEND
     : actionState[Action.DOWN]
-      ? player.position.y < 60
+      ? sprite.position.y < 60
         ? TEXTURE.PLAYER_DESCEND
         : TEXTURE.PLAYER_CROUCH
       : actionState[Action.LEFT] || actionState[Action.RIGHT]
@@ -156,13 +265,18 @@ function stepPlayer(
         : TEXTURE.PLAYER_IDLE
 
   const celIndex =
-    Math.abs(Math.round(position.x / (actionState[Action.RUN] ? 6 : 4))) %
+    Math.abs(Math.round(position.x / (actionState[Action.RUN] ? 6 : 2))) %
     atlas.animations[texture.textureID].cels.length
 
   return {scale, position, texture, celIndex}
 }
 
-function stepSprite(sprite: Sprite, step: number): Sprite {
+function update(
+  _atlas: textureAtlas.TextureAtlas,
+  sprite: Sprite,
+  step: number
+): Sprite {
+  if (!isSpriteUpdating(sprite, step)) return sprite
   return {
     ...sprite,
     position: {
@@ -173,8 +287,15 @@ function stepSprite(sprite: Sprite, step: number): Sprite {
     scrollPosition: {
       x: sprite.scrollPosition.x + step * sprite.scroll.x,
       y: sprite.scrollPosition.y + step * sprite.scroll.y
-    }
+    },
+    invalidated: true
   }
+}
+
+function isSpriteUpdating({speed, scroll}: Sprite, step: number): boolean {
+  const moving = speed.x || speed.y
+  const scrolling = scroll.x || scroll.y
+  return !!(step && (moving || scrolling))
 }
 
 main(window)
