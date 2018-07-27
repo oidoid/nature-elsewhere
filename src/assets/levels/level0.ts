@@ -1,10 +1,8 @@
 import * as SpriteFactory from '../sprites/sprite-factory'
 import {I16_MIN, I16_MAX} from '../../limits'
 import {Sprite, DrawOrder} from '../sprites/sprite'
-import {range} from '../../util'
 
 const minRenderHeight = 128
-const width = 16
 
 export namespace Level0 {
   export const Map = {
@@ -20,16 +18,9 @@ export namespace Level0 {
       .concat(SpriteFactory.newPlayer({x: 35, y: 60}))
       .concat(SpriteFactory.newPond({x: 32, y: 64}, 1))
       .concat(
-        range(-minRenderHeight * 8, 32, width).reduce(
-          (sum: Sprite[], x) => [
-            ...sum,
-            ...SpriteFactory.newGrassL({x, y: 60})
-          ],
-          []
-        )
+        SpriteFactory.newGrassL({x: -minRenderHeight * 8, y: 60}, {x: 66, y: 1})
       )
-      .concat(SpriteFactory.newGrassL({x: 160, y: 60}))
-      .concat(SpriteFactory.newGrassL({x: 176, y: 60}))
+      .concat(SpriteFactory.newGrassL({x: 208, y: 60}, {x: 2, y: 1}))
       .concat(SpriteFactory.newTree({x: 185, y: 44}))
       .concat(SpriteFactory.newCloudS({x: 40, y: 20}))
       .concat(SpriteFactory.newCloudM({x: 58, y: 16}))

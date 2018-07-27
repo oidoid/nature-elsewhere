@@ -4,18 +4,16 @@ uniform vec4 uViewport;
 
 attribute vec2 aAtlasSize; // In pixels.
 attribute vec4 aTextureRect; // x, y, z (width), and w (height) in pixels.
-attribute vec2 aTextureUV; // Scalar (0 - 1).
-
-attribute vec3 aVertex; // In pixels except for z.
 attribute vec2 aTextureScroll; // In pixels.
 attribute vec2 aTextureScale; // Scalar.
+attribute vec2 aTextureUV; // Scalar (0 - 1).
+attribute vec3 aVertex; // In pixels except for z.
 
 varying vec2 vAtlasSize;
 varying vec4 vTextureRect;
-varying vec2 vTextureUV;
-
 varying vec2 vTextureScroll;
 varying vec2 vTextureScale;
+varying vec2 vTextureUV;
 
 void main() {
   // Convert pixels to clipspace.
@@ -27,8 +25,7 @@ void main() {
 
   vAtlasSize = aAtlasSize;
   vTextureRect = aTextureRect;
-  vTextureUV = aTextureUV;
-
   vTextureScroll = aTextureScroll;
   vTextureScale = aTextureScale;
+  vTextureUV = aTextureUV;
 }

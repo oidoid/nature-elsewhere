@@ -2,8 +2,11 @@ import {TEXTURE, CloudTextureKey} from '../textures/texture'
 import {XY, XYZ} from '../../types/geo'
 import {Sprite, SpriteType, DrawOrder} from './sprite'
 
+const BOTTOM_Y = 60
+
 function defaults() {
   return {
+    invalidated: true,
     type: SpriteType.OTHER,
     speed: {x: 0, y: 0},
     celIndex: 0,
@@ -33,9 +36,9 @@ export function newCloudXL({x, y}: XY): Sprite[] {
   return [{...defaults(), texture: TEXTURE.CLOUD_XL, position: {x, y, z}}]
 }
 
-export function newGrassL({x, y}: XY): Sprite[] {
+export function newGrassL({x, y}: XY, scale: XY): Sprite[] {
   const z = DrawOrder.BACKGROUND_SCENERY
-  return [{...defaults(), texture: TEXTURE.GRASS_L, position: {x, y, z}}]
+  return [{...defaults(), texture: TEXTURE.GRASS_L, position: {x, y, z}, scale}]
 }
 
 export function newPalette3(position: XYZ, scale: XY): Sprite[] {
@@ -84,8 +87,6 @@ export function newQuicksand({x, y}: XY, flowRate: number): Sprite[] {
     }
   ]
 }
-
-const BOTTOM_Y = 60
 
 export function newRainCloud(
   cloud: CloudTextureKey,

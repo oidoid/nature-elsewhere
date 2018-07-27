@@ -17,6 +17,7 @@ export enum DrawOrder {
 
 /** An instance of a texture. todo: revise terminology. */
 export type Sprite = Readonly<{
+  invalidated: boolean
   type: SpriteType
   texture: Texture
   celIndex: number

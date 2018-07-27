@@ -19,7 +19,7 @@ export function entries<T>(obj: T): [keyof T, T[keyof T]][] {
   return keys
 }
 
-// For enum typing.
+// Keep enum typing.
 export function values<T>(obj: T): T[keyof T][] {
   const vals: T[keyof T][] = []
   for (const key in obj) if (obj.hasOwnProperty(key)) vals.push(obj[key])
