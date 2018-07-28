@@ -53,18 +53,6 @@ describe('texture-atlas', () => {
       'Slice name (%o) is a Tag',
       (slice: Aseprite.Slice) => expect(tags).toContainEqual(slice.name)
     )
-
-    {
-      const tagFrameNumbers = keys(file.frames)
-      test.each(tagFrameNumbers)(
-        'Frame (%s) dimensions are a multiple of 16 pixels',
-        (tagFrameNumber: string) => {
-          const frame = file.frames[tagFrameNumber]
-          expect(frame.spriteSourceSize.w % 16).toStrictEqual(0)
-          expect(frame.spriteSourceSize.h % 16).toStrictEqual(0)
-        }
-      )
-    }
   })
 
   describe('#unmarshal()', () => {
