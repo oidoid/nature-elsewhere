@@ -90,7 +90,6 @@ function main(window: Window) {
 // render
 // ReadOnly<array>
 // invalidate: updated ? true : false
-// eslint-config-rndmem without style?
 
 function loop(
   gl: GL,
@@ -112,10 +111,10 @@ function loop(
     const extension = gl.getExtension('WEBGL_lose_context')
     if (extension) {
       if (gl.isContextLost()) {
-        console.log('GL restore context.') // eslint-disable-line no-console
+        console.log('GL restore context.')
         extension.restoreContext()
       } else {
-        console.log('GL lose context.') // eslint-disable-line no-console
+        console.log('GL lose context.')
         extension.loseContext()
       }
     }
@@ -196,7 +195,7 @@ function rect(
 }
 
 function onGLContextLost(event: Event) {
-  console.log('GL context lost') // eslint-disable-line no-console
+  console.log('GL context lost')
   event.preventDefault()
   if (requestAnimationFrameID !== undefined) {
     cancelAnimationFrame(requestAnimationFrameID)
@@ -205,7 +204,7 @@ function onGLContextLost(event: Event) {
 }
 
 function onGLContextRestored() {
-  console.log('GL context restored') // eslint-disable-line no-console
+  console.log('GL context restored')
   // init();
 }
 
