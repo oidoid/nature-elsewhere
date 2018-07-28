@@ -23,10 +23,6 @@ const MIN_RENDER_HEIGHT = 128
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
 
-enum QueryParams {
-  CHECK_GL = 'checkgl'
-}
-
 const textureUV = [
   {x: 0, y: 0},
   {x: 1, y: 0},
@@ -42,19 +38,13 @@ function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
 
-  const checkGL =
-    new URL(location.href.toLowerCase()).searchParams.get(
-      QueryParams.CHECK_GL
-    ) === 'true'
-
   const gl: GL = check(
     canvas.getContext('webgl', {
       alpha: false,
       depth: false,
       antialias: false,
       failIfMajorPerformanceCaveat: true
-    }),
-    checkGL
+    })
   )
 
   // Allow translucent textures to be layered.
