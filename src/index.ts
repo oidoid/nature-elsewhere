@@ -39,7 +39,7 @@ function main(window: Window) {
   if (!canvas) throw new Error('Canvas missing in document.')
 
   const gl: GL = check(
-    canvas.getContext('webgl', {
+    canvas.getContext('webgl2', {
       alpha: false,
       depth: false,
       antialias: false,

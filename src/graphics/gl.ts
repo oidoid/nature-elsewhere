@@ -1,5 +1,5 @@
-export type GL = WebGLRenderingContext
-export const GL = WebGLRenderingContext
+export type GL = WebGL2RenderingContext
+export const GL = WebGL2RenderingContext
 export type GLProgram = WebGLProgram
 export type GLShader = WebGLShader
 export type GLTexture = WebGLTexture
