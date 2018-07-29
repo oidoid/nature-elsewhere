@@ -1,19 +1,20 @@
+#version 300 es
 // x, y, z (width), and w (height) in pixels. This can be thought of as the
 // camera's x and y coordinates and the render resolution (width and height).
 uniform vec4 uViewport;
 
-attribute vec2 aAtlasSize; // In pixels.
-attribute vec4 aTextureRect; // x, y, z (width), and w (height) in pixels.
-attribute vec2 aTextureScroll; // In pixels.
-attribute vec2 aTextureScale; // Scalar.
-attribute vec2 aTextureUV; // Scalar (0 - 1).
-attribute vec3 aVertex; // In pixels except for z.
+in vec2 aAtlasSize; // In pixels.
+in vec4 aTextureRect; // x, y, z (width), and w (height) in pixels.
+in vec2 aTextureScroll; // In pixels.
+in vec2 aTextureScale; // Scalar.
+in vec2 aTextureUV; // Scalar (0 - 1).
+in vec3 aVertex; // In pixels except for z.
 
-varying vec2 vAtlasSize;
-varying vec4 vTextureRect;
-varying vec2 vTextureScroll;
-varying vec2 vTextureScale;
-varying vec2 vTextureUV;
+out vec2 vAtlasSize;
+out vec4 vTextureRect;
+out vec2 vTextureScroll;
+out vec2 vTextureScale;
+out vec2 vTextureUV;
 
 void main() {
   // Convert pixels to clipspace.
