@@ -24,6 +24,13 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
   gl.activeTexture(gl.TEXTURE0)
   gl.bindTexture(gl.TEXTURE_2D, texture)
   gl.uniform1i(ctx.location('uSampler'), 0)
+  const atlas = assets[TextureAssetID.ATLAS]
+  // or atlas.animations[sprite.texture.textureID].size
+  gl.uniform2f(
+    ctx.location('uAtlasSize'),
+    atlas.naturalWidth,
+    atlas.naturalHeight
+  )
 
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)

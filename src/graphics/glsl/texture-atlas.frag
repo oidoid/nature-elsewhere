@@ -4,18 +4,14 @@ precision mediump float;
 precision mediump sampler2D;
 
 uniform sampler2D uSampler;
+uniform vec2 uAtlasSize; // x, y in pixels.
 
-in vec2 vAtlasSize;
-in vec4 vTextureRect;
-in vec2 vTextureUV;
-
-in vec2 vTextureScroll;
-in vec2 vTextureScale;
+in vec4 vSubTexCoord;
+in vec2 vTexScroll;
 
 out vec4 frag;
 
 void main() {
-  vec2 scroll = vTextureUV * vTextureRect.zw * vTextureScale / abs(vTextureScale) + vTextureScroll;
-  vec2 wrap = (vTextureRect.xy + mod(scroll, vTextureRect.zw)) / vAtlasSize;
-  frag = texture(uSampler, wrap);
+  vec2 px = vSubTexCoord.xy + mod(vTexScroll, vSubTexCoord.zw);
+  frag = texture(uSampler, px / uAtlasSize);
 }

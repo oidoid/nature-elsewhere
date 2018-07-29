@@ -14,7 +14,7 @@ import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {entries} from './util'
 import {newVertex} from './graphics/vertex'
-import {WH, Rect, XYZ, XY} from './types/geo'
+import {Rect, XYZ, XY} from './types/geo'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -147,7 +147,6 @@ function loop(
     const tex = atlas.animations[sprite.texture.textureID]
 
     for (const vert of rect(
-      atlas.size,
       tex.cels[sprite.celIndex].bounds,
       textureUV,
       sprite.position,
@@ -175,7 +174,6 @@ function loop(
 }
 
 function rect(
-  atlasSize: WH,
   textureRect: Rect,
   textureUV: XY[],
   {x, y, z}: XYZ,
@@ -184,7 +182,7 @@ function rect(
 ): number[] {
   const x1 = x + textureRect.w
   const y1 = y + textureRect.h
-  const v = newVertex.bind(undefined, atlasSize, textureRect, scroll, scale)
+  const v = newVertex.bind(undefined, textureRect, scroll, scale)
   return (<number[]>[]).concat(
     v(textureUV[0], x, y, z),
     v(textureUV[1], x1, y, z),
