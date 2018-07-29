@@ -1,7 +1,7 @@
 import {Level0} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './graphics/glsl/shader-loader'
-import * as graphics from './graphics/graphics'
+import * as renderer from './graphics/renderer'
 import {GL, check} from './graphics/gl'
 import * as vertexSrc from './graphics/glsl/texture-atlas.vert'
 import * as fragmentSrc from './graphics/glsl/texture-atlas.frag'
@@ -74,14 +74,14 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => {
-      graphics.init(gl, ctx, assets)
+      renderer.init(gl, ctx, assets)
       verts = new Int16Array(Level0.Map.sprites.length * 15 * 6)
       requestAnimationFrameID = requestAnimationFrame(now =>
         loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites)
       )
     })
     .catch(() => {
-      graphics.deinit(gl, ctx, null, null)
+      renderer.deinit(gl, ctx, null, null)
       document.removeEventListener('keyup', onKeyChange)
       document.removeEventListener('keydown', onKeyChange)
     })
@@ -158,7 +158,7 @@ function loop(
     }
   }
 
-  graphics.render(
+  renderer.render(
     gl,
     ctx,
     sprites,
