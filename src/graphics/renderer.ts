@@ -23,7 +23,7 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
 
   gl.activeTexture(gl.TEXTURE0)
   gl.bindTexture(gl.TEXTURE_2D, texture)
-  gl.uniform1i(ctx.location('uTextureUnit'), 0)
+  gl.uniform1i(ctx.location('uSampler'), 0)
 
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)

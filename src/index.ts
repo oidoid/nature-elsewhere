@@ -80,7 +80,8 @@ function main(window: Window) {
         loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites)
       )
     })
-    .catch(() => {
+    .catch(e => {
+      console.error(e)
       renderer.deinit(gl, ctx, null, null)
       document.removeEventListener('keyup', onKeyChange)
       document.removeEventListener('keydown', onKeyChange)

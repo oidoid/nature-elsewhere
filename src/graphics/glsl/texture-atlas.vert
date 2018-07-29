@@ -1,4 +1,7 @@
 #version 300 es
+precision mediump int;
+precision mediump float;
+
 // x, y, z (width), and w (height) in pixels. This can be thought of as the
 // camera's x and y coordinates and the render resolution (width and height).
 uniform vec4 uViewport;
