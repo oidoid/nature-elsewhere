@@ -30,10 +30,7 @@ const config: webpack.Configuration = {
 
   plugins: [
     new CleanPlugin('dist', {verbose: false}),
-    new CopyPlugin([
-      {context: 'src', from: '**/*.html'},
-      {context: 'src', from: '**/*.png'}
-    ])
+    new CopyPlugin([{context: 'src', from: '**/*.{html,png}'}])
   ]
 }
 
