@@ -3,8 +3,6 @@ type JSONPrimitive = string | number | boolean | null
 
 type JSONValue = JSONPrimitive | JSONObject | JSONArray
 
-interface JSONObject {
-  readonly [member: string]: JSONValue
-}
+interface JSONObject extends Record<string, JSONValue> {}
 
 interface JSONArray extends Array<JSONValue> {}
