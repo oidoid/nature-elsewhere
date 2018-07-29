@@ -1,8 +1,7 @@
 import {TextureAssetID} from '../asset-loader'
-import * as atlasURL from './atlas.png'
 
 export const ASSET_URL = {
-  [TextureAssetID.ATLAS]: atlasURL
+  [TextureAssetID.ATLAS]: '/assets/textures/atlas.png'
 }
 
 export type CloudTextureKey = 'CLOUD_S' | 'CLOUD_M' | 'CLOUD_L' | 'CLOUD_XL'

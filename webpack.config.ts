@@ -11,13 +11,8 @@ const config: webpack.Configuration = {
 
   module: {
     rules: [
-      {test: /\.ts$/, loader: 'ts-loader'},
-      {test: /\.(frag|vert)$/, loader: 'raw-loader'},
-      {
-        test: /\.(png)$/,
-        loader: 'file-loader',
-        options: {name: '[path][name].[ext]', context: 'src'}
-      }
+      {test: /\.ts$/, use: 'ts-loader'},
+      {test: /\.(frag|vert)$/, use: 'raw-loader'}
     ]
   },
 
@@ -35,7 +30,10 @@ const config: webpack.Configuration = {
 
   plugins: [
     new CleanPlugin('dist', {verbose: false}),
-    new CopyPlugin([{context: 'src', from: '**/*.html'}])
+    new CopyPlugin([
+      {context: 'src', from: '**/*.html'},
+      {context: 'src', from: '**/*.png'}
+    ])
   ]
 }
 
