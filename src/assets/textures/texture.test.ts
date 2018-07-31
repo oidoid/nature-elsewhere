@@ -1,4 +1,3 @@
-import * as Aseprite from './aseprite'
 import * as atlasJSON from '../textures/atlas.json'
 import * as fs from 'fs'
 import * as TextureAtlas from './texture-atlas'
@@ -19,7 +18,7 @@ describe('texture', () => {
   })
 
   describe('TEXTURE', () => {
-    const atlas = TextureAtlas.unmarshal(<Aseprite.File>atlasJSON)
+    const atlas = TextureAtlas.unmarshal(atlasJSON)
     const textures = Object.values(TEXTURE)
 
     test.each(textures)(

@@ -24,13 +24,13 @@ export const VERTEX_ATTRS_STRIDE = VERTEX_ATTRS.reduce(
 )
 
 export function newVertex(
-  textureRect: Rect,
-  textureScroll: XY,
-  textureScale: XY,
   textureUV: XY,
   x: number,
   y: number,
-  z: number
+  z: number,
+  textureRect: Rect,
+  textureScroll: XY,
+  textureScale: XY
 ): number[] {
   return [
     textureRect.x,

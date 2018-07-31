@@ -20,7 +20,6 @@ import {XY, WH} from '../../types/geo'
  *
  * [binary format]: https://github.com/aseprite/aseprite/blob/master/docs/ase-file-specs.md
  */
-// todo: is this necessary with --resolveJsonModule?
 
 /**
  * The topmost data type for JSON exported from Aseprite. This format contains
@@ -111,7 +110,8 @@ export type FrameTag = Readonly<{
    * index.
    */
   to: number
-  direction: Direction
+  // todo: remove string when type can be resolved as enum.
+  direction: Direction | string
 }>
 
 /** Animation length in milliseconds. */

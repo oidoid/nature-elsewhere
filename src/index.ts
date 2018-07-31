@@ -6,7 +6,6 @@ import {GL, check} from './graphics/gl'
 import * as vertexSrc from './graphics/glsl/texture-atlas.vert'
 import * as fragmentSrc from './graphics/glsl/texture-atlas.frag'
 import * as keyboard from './input/keyboard'
-import * as Aseprite from './assets/textures/aseprite'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
@@ -70,7 +69,7 @@ function main(window: Window) {
 
   // if focus loss detected, reset the inputs and pause
 
-  const atlas = textureAtlas.unmarshal(<Aseprite.File>atlasJSON)
+  const atlas = textureAtlas.unmarshal(atlasJSON)
   assetsLoader
     .load(ASSET_URL)
     .then(assets => {
@@ -182,14 +181,14 @@ function rect(
 ): number[] {
   const x1 = x + textureRect.w
   const y1 = y + textureRect.h
-  const v = newVertex.bind(undefined, textureRect, scroll, scale)
+  const v: [Rect, XY, XY] = [textureRect, scroll, scale]
   return (<number[]>[]).concat(
-    v(textureUV[0], x, y, z),
-    v(textureUV[1], x1, y, z),
-    v(textureUV[2], x, y1, z),
-    v(textureUV[3], x, y1, z),
-    v(textureUV[4], x1, y, z),
-    v(textureUV[5], x1, y1, z)
+    newVertex(textureUV[0], x, y, z, ...v),
+    newVertex(textureUV[1], x1, y, z, ...v),
+    newVertex(textureUV[2], x, y1, z, ...v),
+    newVertex(textureUV[3], x, y1, z, ...v),
+    newVertex(textureUV[4], x1, y, z, ...v),
+    newVertex(textureUV[5], x1, y1, z, ...v)
   )
 }
 

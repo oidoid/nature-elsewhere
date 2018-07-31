@@ -81,7 +81,7 @@ export function unmarshalAnimation(
     cels.push(cel)
   }
 
-  return {cels, direction: frameTag.direction}
+  return {cels, direction: unmarshalDirection(frameTag.direction)}
 }
 
 export function marshalTagFrameNumber(
@@ -142,4 +142,15 @@ export function unmarshalCollision(
       .reduce((sum, keys) => sum.concat(keys), []) // Key[]
       .map(key => key.bounds) // Bounds
   )
+}
+
+// todo: remove string when type can be resolved as enum.
+function unmarshalDirection(direction: string): Direction {
+  if (isDirection(direction)) return direction
+  throw new Error(`"${direction}" is not a Direction.`)
+}
+
+// todo: remove string when type can be resolved as enum.
+function isDirection(direction: string): direction is Aseprite.Direction {
+  return Object.values(Aseprite.Direction).includes(direction)
 }

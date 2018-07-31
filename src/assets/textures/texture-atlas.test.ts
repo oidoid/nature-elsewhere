@@ -18,13 +18,13 @@ import {keys} from '../../util'
 
 describe('texture-atlas', () => {
   describe('atlas.json', () => {
-    const file = <Aseprite.File>atlas
+    const file = atlas
     const tags = file.meta.frameTags.map(frameTag => frameTag.name)
 
     test('Converts current JSON and size is a reasonable power of 2.', () => {
       const atlas = unmarshal(file)
-      expect(atlas.size.w).toBeLessThanOrEqual(2048)
-      expect(atlas.size.h).toBeLessThanOrEqual(2048)
+      expect(atlas.size.w).toBeLessThanOrEqual(4096)
+      expect(atlas.size.h).toBeLessThanOrEqual(4096)
       expect(Math.log2(atlas.size.w) % 1).toStrictEqual(0)
       expect(Math.log2(atlas.size.h) % 1).toStrictEqual(0)
     })
@@ -57,39 +57,17 @@ describe('texture-atlas', () => {
 
   describe('#unmarshal()', () => {
     test('Converts.', () => {
-      expect(unmarshal(<Aseprite.File>testInput)).toStrictEqual(
-        testExpected.default
-      )
+      expect(unmarshal(testInput)).toStrictEqual(testExpected.default)
     })
   })
 
   describe('#unmarshalAnimations()', () => {
     test('Converts Animations.', () => {
       const frameTags = [
-        {
-          name: 'cactus s',
-          from: 0,
-          to: 0,
-          direction: <Aseprite.Direction>'forward'
-        },
-        {
-          name: 'cactus m',
-          from: 1,
-          to: 1,
-          direction: <Aseprite.Direction>'forward'
-        },
-        {
-          name: 'cactus l',
-          from: 2,
-          to: 2,
-          direction: <Aseprite.Direction>'forward'
-        },
-        {
-          name: 'cactus xl',
-          from: 3,
-          to: 3,
-          direction: <Aseprite.Direction>'forward'
-        }
+        {name: 'cactus s', from: 0, to: 0, direction: 'forward'},
+        {name: 'cactus m', from: 1, to: 1, direction: 'forward'},
+        {name: 'cactus l', from: 2, to: 2, direction: 'forward'},
+        {name: 'cactus xl', from: 3, to: 3, direction: 'forward'}
       ]
       const frames = {
         'cactus s 0': {
@@ -156,7 +134,7 @@ describe('texture-atlas', () => {
               collision: [{x: 8, y: 12, w: 2, h: 3}]
             }
           ],
-          direction: Aseprite.Direction.FORWARD
+          direction: 'forward'
         },
         'cactus m': {
           cels: [
@@ -166,7 +144,7 @@ describe('texture-atlas', () => {
               collision: [{x: 7, y: 11, w: 3, h: 4}]
             }
           ],
-          direction: Aseprite.Direction.FORWARD
+          direction: 'forward'
         },
         'cactus l': {
           cels: [
@@ -176,7 +154,7 @@ describe('texture-atlas', () => {
               collision: [{x: 7, y: 10, w: 3, h: 5}]
             }
           ],
-          direction: Aseprite.Direction.FORWARD
+          direction: 'forward'
         },
         'cactus xl': {
           cels: [
@@ -186,7 +164,7 @@ describe('texture-atlas', () => {
               collision: [{x: 7, y: 9, w: 3, h: 6}]
             }
           ],
-          direction: Aseprite.Direction.FORWARD
+          direction: 'forward'
         }
       })
     })
@@ -194,12 +172,7 @@ describe('texture-atlas', () => {
 
   describe('#unmarshalAnimation()', () => {
     test('Converts FrameTag, Frame from Frame[], and Slice.', () => {
-      const frameTag = {
-        name: 'cloud s',
-        from: 1,
-        to: 1,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'cloud s', from: 1, to: 1, direction: 'forward'}
       const frames = {
         'cloud xs 0': {
           frame: {x: 202, y: 36, w: 18, h: 18},
@@ -251,7 +224,7 @@ describe('texture-atlas', () => {
             collision: [{x: 4, y: 11, w: 9, h: 4}]
           }
         ],
-        direction: Aseprite.Direction.FORWARD
+        direction: 'forward'
       })
     })
   })
@@ -268,12 +241,7 @@ describe('texture-atlas', () => {
 
   describe('#unmarshalCel()', () => {
     test('Converts 1:1 texture mapping.', () => {
-      const frameTag = {
-        name: 'stem ',
-        from: 0,
-        to: 0,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
       const frame = {
         frame: {x: 130, y: 18, w: 18, h: 18},
         rotated: false,
@@ -367,20 +335,13 @@ describe('texture-atlas', () => {
     })
 
     test('Converts infinite Duration.', () => {
-      expect(unmarshalDuration(Aseprite.INFINITE_DURATION)).toStrictEqual(
-        Number.POSITIVE_INFINITY
-      )
+      expect(unmarshalDuration(65535)).toStrictEqual(Number.POSITIVE_INFINITY)
     })
   })
 
   describe('#unmarshalCollision()', () => {
     test('Converts Slice to Rect[].', () => {
-      const frameTag = {
-        name: 'stem ',
-        from: 0,
-        to: 0,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
       const slices = [
         {
           name: 'stem ',
@@ -394,12 +355,7 @@ describe('texture-atlas', () => {
     })
 
     test('Filters out unrelated Tags.', () => {
-      const frameTag = {
-        name: 'stem ',
-        from: 0,
-        to: 0,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
       const slices = [
         {
           name: 'unrelated ',
@@ -411,12 +367,7 @@ describe('texture-atlas', () => {
     })
 
     test('Filters out unrelated Frame number Keys.', () => {
-      const frameTag = {
-        name: 'stem ',
-        from: 0,
-        to: 2,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'stem ', from: 0, to: 2, direction: 'forward'}
       const slices = [
         {
           name: 'stem ',
@@ -434,12 +385,7 @@ describe('texture-atlas', () => {
     })
 
     test('Converts Slice with multiple Keys to Rect[].', () => {
-      const frameTag = {
-        name: 'stem ',
-        from: 0,
-        to: 1,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'stem ', from: 0, to: 1, direction: 'forward'}
       const slices = [
         {
           name: 'stem ',
@@ -456,23 +402,13 @@ describe('texture-atlas', () => {
     })
 
     test('Converts no Slices.', () => {
-      const frameTag = {
-        name: 'stem ',
-        from: 0,
-        to: 0,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
       const slices: Aseprite.Slice[] = []
       expect(unmarshalCollision(frameTag, 0, slices)).toStrictEqual([])
     })
 
     test('Converts multiple Slices.', () => {
-      const frameTag = {
-        name: 'stem ',
-        from: 0,
-        to: 1,
-        direction: <Aseprite.Direction>'forward'
-      }
+      const frameTag = {name: 'stem ', from: 0, to: 1, direction: 'forward'}
       const slices = [
         {
           name: 'stem ',
