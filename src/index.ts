@@ -242,7 +242,7 @@ function updatePlayer(
   const texture = actionState[Action.UP]
     ? TEXTURE.PLAYER_ASCEND
     : actionState[Action.DOWN]
-      ? sprite.position.y < 60
+      ? sprite.position.y < 70
         ? TEXTURE.PLAYER_DESCEND
         : TEXTURE.PLAYER_CROUCH
       : actionState[Action.LEFT] || actionState[Action.RIGHT]
