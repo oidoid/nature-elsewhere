@@ -15,7 +15,7 @@ export namespace Level0 {
           {x: I16_MAX, y: I16_MAX}
         )
       )
-      .concat(SpriteFactory.newPlayer({x: 35, y: 60}))
+      .concat(SpriteFactory.newPlayer({x: 35, y: 70}))
       .concat(SpriteFactory.newPond({x: 32, y: 64}, 1))
       .concat(
         SpriteFactory.newGrassL({x: -minRenderHeight * 8, y: 60}, {x: 66, y: 1})

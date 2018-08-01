@@ -232,7 +232,7 @@ function updatePlayer(
         (actionState[Action.RIGHT] ? pps : 0)
     ),
     y: Math.min(
-      60,
+      70,
       sprite.position.y -
         (actionState[Action.UP] ? pps : 0) +
         (actionState[Action.DOWN] ? pps : 0)
