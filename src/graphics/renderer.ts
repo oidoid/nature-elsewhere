@@ -23,11 +23,11 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
 
   gl.activeTexture(gl.TEXTURE0)
   gl.bindTexture(gl.TEXTURE_2D, texture)
-  gl.uniform1i(ctx.location('uSampler'), 0)
+  gl.uniform1i(ctx.location('sampler'), 0)
   const atlas = assets[TextureAssetID.ATLAS]
   // or atlas.animations[sprite.texture.textureID].size
   gl.uniform2f(
-    ctx.location('uAtlasSize'),
+    ctx.location('atlasSize'),
     atlas.naturalWidth,
     atlas.naturalHeight
   )
@@ -81,7 +81,7 @@ export function render(
   bounds: WH,
   minRenderHeight: number // hieght in peixels
 ): void {
-  resize(gl, ctx.location('uViewport'), camera, bounds, minRenderHeight)
+  resize(gl, ctx.location('viewport'), camera, bounds, minRenderHeight)
 
   const VERTS_PER_TRI = 3
   const TRIS_PER_RECT = 2
