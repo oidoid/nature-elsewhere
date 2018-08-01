@@ -11,7 +11,7 @@ export namespace Level0 {
     sprites: (<Sprite[]>[])
       .concat(
         SpriteFactory.newPalette3(
-          {x: I16_MIN, y: I16_MIN, z: DrawOrder.BACKGROUND},
+          {x: I16_MIN / 2, y: I16_MIN / 2, z: DrawOrder.BACKGROUND},
           {x: I16_MAX, y: I16_MAX}
         )
       )
@@ -21,7 +21,7 @@ export namespace Level0 {
         SpriteFactory.newGrassL({x: -minRenderHeight * 8, y: 60}, {x: 66, y: 1})
       )
       .concat(SpriteFactory.newGrassL({x: 208, y: 60}, {x: 2, y: 1}))
-      .concat(SpriteFactory.newTree({x: 185, y: 44}))
+      .concat(SpriteFactory.newTree({x: 185, y: 48}))
       .concat(SpriteFactory.newCloudS({x: 40, y: 20}))
       .concat(SpriteFactory.newCloudM({x: 58, y: 16}))
       .concat(SpriteFactory.newRainCloud('CLOUD_S', {x: 75, y: 18}, -0.08))

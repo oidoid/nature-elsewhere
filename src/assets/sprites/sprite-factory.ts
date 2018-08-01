@@ -100,8 +100,8 @@ export function newRainCloud(
       ...defaults(),
       texture: TEXTURE.RAIN,
       position: {
-        x: x + Math.round(i / 2),
-        y: y + 15 + i * 16 - Math.max(0, y + 16 + i * 16 - BOTTOM_Y),
+        x: x + Math.round((i + 1) / 2),
+        y: y + 6 + i * 16 - Math.max(0, y + 6 + i * 16 - BOTTOM_Y),
         z
       },
       speed: {x: speed, y: 0},
@@ -123,6 +123,7 @@ export function newRainCloud(
   return sprites
 }
 
+// todo: fix animation
 export function newTree({x, y}: XY): Sprite[] {
   const z = DrawOrder.BACKGROUND_SCENERY
   return [{...defaults(), texture: TEXTURE.TREE, position: {x, y, z}}]
