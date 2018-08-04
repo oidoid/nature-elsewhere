@@ -9,24 +9,17 @@
         /* Make the body flush with the window. */
         margin: 0;
 
-        /* Set the background color shown while waiting for the canvas to be
-           attached. */
+        /* The background color can be shown during quick resizes and context
+           loss. */
         background: #000;
-
-        /* The canvas is resized to the integer multiple needed to maintain
-           correct proportions. This may cause the canvas to slightly exceed the
-           viewport. Suppress scrollbars and crop it. */
-        overflow: hidden;
       }
-
       canvas {
         /* Prevent additional line height spacing by changing display type from
            inline to block. */
         display: block;
 
-        /* Scale using nearest-neighbor and proportional integer multiples to
-           keep rendering pixel perfect. */
-        image-rendering: optimizeSpeed; /* Firefox */
+        /* When the user scales, use nearest-neighbor to prevent blurriness. */
+        image-rendering: optimizeSpeed;
         image-rendering: pixelated;
       }
     </style>

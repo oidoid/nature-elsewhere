@@ -18,7 +18,7 @@ import {Rect, XYZ, XY} from './types/geo'
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
 // render width.
-const MIN_RENDER_HEIGHT = 128
+const MIN_CAM_HEIGHT = 128
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
 
@@ -157,18 +157,31 @@ function loop(
     }
   }
 
+  const multiple = Math.ceil(window.innerHeight / MIN_CAM_HEIGHT)
+  const ratio = window.innerWidth / window.innerHeight
+  // The viewport fills or exceeds the canvas at integer multiples of cam.h.
+  const viewport = {
+    w: Math.ceil(ratio * multiple * MIN_CAM_HEIGHT),
+    h: multiple * MIN_CAM_HEIGHT
+  } // px
+  const camWidth = Math.ceil(ratio * MIN_CAM_HEIGHT) // px
+
   renderer.render(
     gl,
     ctx,
     sprites,
     verts,
-    {
-      x:
-        Math.trunc(-playerUpdates.position.x) + Math.trunc(gl.canvas.width / 2),
-      y: Math.trunc(gl.canvas.height / 4)
-    },
+    // Shader pixels are 1:1 with the canvas. No canvas CSS scaling.
     {w: window.innerWidth, h: window.innerHeight},
-    MIN_RENDER_HEIGHT
+    {
+      x: Math.ceil(-playerUpdates.position.x) + Math.ceil(camWidth / 2),
+      y: Math.ceil(MIN_CAM_HEIGHT / 4),
+      w: camWidth,
+      h: MIN_CAM_HEIGHT
+    },
+    // The viewport fills or exceeds the canvas at integer multiples of cam.h.
+    // Excess is cropped from the lower-right corner.
+    viewport
   )
 }
 

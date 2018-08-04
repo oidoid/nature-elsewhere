@@ -2,7 +2,7 @@ import {GL, GLTexture, GLUniformLocation} from './gl'
 import {Assets, TextureAssetID} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
-import {WH, XY} from '../types/geo'
+import {WH, Rect} from '../types/geo'
 import {VERTEX_ATTRS_STRIDE, VERTEX_ATTRS} from './vertex'
 
 /** Creates, binds, and configures a texture. */
@@ -77,11 +77,11 @@ export function render(
   ctx: ShaderContext,
   sprites: Sprite[],
   verts: Int16Array,
-  camera: XY,
-  bounds: WH,
-  minRenderHeight: number // hieght in peixels
+  canvas: WH,
+  cam: Rect, // in pixels
+  viewport: WH
 ): void {
-  resize(gl, ctx.location('viewport'), camera, bounds, minRenderHeight)
+  resize(gl, ctx.location('cam'), canvas, cam, viewport)
 
   const VERTS_PER_TRI = 3
   const TRIS_PER_RECT = 2
@@ -90,47 +90,17 @@ export function render(
   gl.drawArrays(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length)
 }
 
-/**
- * Resizes the viewport and Canvas. Scaling is performed proportionally using
- * integer ratios to maintain pixel perfect accuracy which may yield a Canvas
- * slightly larger than window.
- */
 function resize(
   gl: GL,
-  viewportLocation: GLUniformLocation | null,
-  camera: XY,
-  bounds: WH,
-  minRenderHeight: number
+  camLocation: GLUniformLocation | null,
+  canvas: WH,
+  cam: Rect,
+  viewport: WH
 ): void {
-  // An integer multiple.
-  const scale = Math.max(1, Math.floor(bounds.h / minRenderHeight))
-  const renderWidth = Math.ceil(bounds.w / scale)
-  const renderHeight = Math.ceil(bounds.h / scale)
+  gl.canvas.width = canvas.w
+  gl.canvas.height = canvas.h
 
-  // Update the vertex shader's resolution and the viewport within the canvas to
-  // use the complete canvas area. For this game, the resolution is so low that
-  // the canvas's native dimensions within the window are like a postage stamp
-  // on an envelope.
-  gl.uniform4f(viewportLocation, camera.x, camera.y, renderWidth, renderHeight)
+  gl.uniform4f(camLocation, cam.x, cam.y, cam.w, cam.h)
 
-  // add cache layer for viewport and uniform4f
-  if (gl.canvas.width === renderWidth && gl.canvas.height === renderHeight) {
-    return
-  }
-
-  // Set the canvas' native dimensions.
-  gl.canvas.width = renderWidth
-  gl.canvas.height = renderHeight
-
-  gl.viewport(0, 0, renderWidth, renderHeight)
-
-  // Uniformly stretch the canvas to the window's bounds. Continuing the
-  // metaphor of the previous comment, the stamp now covers the envelope. These
-  // dimensions may slightly exceed the bounds to retain pixel perfect scaling.
-  // Excess is cropped from the lower-right corner. The maximum excess is equal
-  // to `scale` pixels in both axes.
-  const scaledWidth = renderWidth * scale
-  const scaledHeight = renderHeight * scale
-  gl.canvas.style.width = `${scaledWidth}px`
-  gl.canvas.style.height = `${scaledHeight}px`
+  gl.viewport(0, 0, viewport.w, viewport.h)
 }
