@@ -1,27 +1,47 @@
 import {Rect, XY} from '../types/geo'
+import {GL} from './gl'
 
-export type VertexAttr = Readonly<{
+export type VertAttr = Readonly<{
   name: string
-  itemType: number
-  itemSize: number
+  type: number
+  size: number
   length: number
+  offset: number
+  stride: number
+  divisor: number
 }>
 
-const SHORT = WebGLRenderingContext.SHORT
-const SHORT_SIZE = Int16Array.BYTES_PER_ELEMENT
-// This layout is tightly coupled to the vertex shader.
-export const VERTEX_ATTRS: VertexAttr[] = [
-  {name: 'uv', itemType: SHORT, itemSize: SHORT_SIZE, length: 2},
-  {name: 'texCoord', itemType: SHORT, itemSize: SHORT_SIZE, length: 4},
-  {name: 'texScroll', itemType: SHORT, itemSize: SHORT_SIZE, length: 2},
-  {name: 'texScale', itemType: SHORT, itemSize: SHORT_SIZE, length: 2},
-  {name: 'position', itemType: SHORT, itemSize: SHORT_SIZE, length: 3}
-]
+export type VertAttrs = Readonly<{
+  verts: VertAttr[]
+  instances: VertAttr[]
+}>
 
-export const VERTEX_ATTRS_STRIDE = VERTEX_ATTRS.reduce(
-  (sum, {itemSize, length}) => sum + itemSize * length,
-  0
-)
+function offset(attrs: {size: number; length: number}[]): number {
+  return attrs.reduce((sum, {size, length}) => sum + size * length, 0)
+}
+
+const SHORT_SIZE = Int16Array.BYTES_PER_ELEMENT
+// This layout is tightly coupled to the vertex shader and buffers.
+export const VERT_ATTRS: VertAttrs = {
+  verts: [
+    {name: 'uv', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 0},
+    {name: 'texCoord', type: GL.SHORT, size: SHORT_SIZE, length: 4, divisor: 0},
+    {
+      name: 'texScroll',
+      type: GL.SHORT,
+      size: SHORT_SIZE,
+      length: 2,
+      divisor: 0
+    },
+    {name: 'texScale', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 0},
+    {name: 'position', type: GL.SHORT, size: SHORT_SIZE, length: 3, divisor: 0}
+  ].map((attr, i, attrs) => ({
+    ...attr,
+    offset: offset(attrs.slice(0, i)),
+    stride: offset(attrs)
+  })),
+  instances: []
+}
 
 export function newVertex(
   uv: XY,

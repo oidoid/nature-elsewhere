@@ -3,7 +3,7 @@ import {Assets, TextureAssetID} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
 import {WH, Rect} from '../types/geo'
-import {VERTEX_ATTRS_STRIDE, VERTEX_ATTRS} from './vertex'
+import {VERT_ATTRS} from './vertex'
 
 /** Creates, binds, and configures a texture. */
 function createTexture(gl: GL): GLTexture | null {
@@ -35,18 +35,16 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
 
-  let offset = 0
-  for (const {name, itemType, length} of VERTEX_ATTRS) {
+  for (const {name, type, length, stride, offset} of VERT_ATTRS.verts) {
     gl.vertexAttribPointer(
       ctx.location(name),
       length,
-      itemType,
+      type,
       false,
-      VERTEX_ATTRS_STRIDE,
+      stride,
       offset
     )
     gl.enableVertexAttribArray(ctx.location(name))
-    offset += length * Int16Array.BYTES_PER_ELEMENT
   }
 
   gl.texImage2D(
@@ -66,7 +64,7 @@ export function deinit(
   buffer: WebGLBuffer | null
 ): void {
   gl.deleteBuffer(buffer)
-  for (const {name} of VERTEX_ATTRS)
+  for (const {name} of VERT_ATTRS.verts)
     gl.disableVertexAttribArray(ctx.location(name))
 
   gl.deleteTexture(texture)
@@ -87,7 +85,7 @@ export function render(
   const TRIS_PER_RECT = 2
   const VERTS_PER_SPRITE = VERTS_PER_TRI * TRIS_PER_RECT
   gl.bufferData(gl.ARRAY_BUFFER, verts, WebGLRenderingContext.STATIC_DRAW)
-  gl.drawArrays(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length)
+  gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length, 1)
 }
 
 function resize(
