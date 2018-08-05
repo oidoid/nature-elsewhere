@@ -12,7 +12,7 @@ import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {entries} from './util'
-import {newVertex} from './graphics/vertex'
+import {newVertex} from './graphics/vert'
 import {Rect, XYZ, XY} from './types/geo'
 
 // The minimum render height and expected minimum render width. The maximum

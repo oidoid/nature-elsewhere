@@ -3,7 +3,7 @@ import {Assets, TextureAssetID} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
 import {WH, Rect} from '../types/geo'
-import {VERT_ATTRS} from './vertex'
+import {VERT_ATTRS} from './vert'
 
 /** Creates, binds, and configures a texture. */
 function createTexture(gl: GL): GLTexture | null {
