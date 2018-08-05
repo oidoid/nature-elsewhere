@@ -5,6 +5,27 @@ export const ASSET_URL = {
 }
 
 export type CloudTextureKey = 'CLOUD_S' | 'CLOUD_M' | 'CLOUD_L' | 'CLOUD_XL'
+export const TALL_GRASS_TEXTURE_KEYS: TallGrassTextureKey[] = [
+  'TALL_GRASS_A',
+  'TALL_GRASS_B',
+  'TALL_GRASS_C',
+  'TALL_GRASS_D',
+  'TALL_GRASS_E',
+  'TALL_GRASS_F',
+  'TALL_GRASS_G',
+  'TALL_GRASS_H',
+  'TALL_GRASS_I'
+]
+export type TallGrassTextureKey =
+  | 'TALL_GRASS_A'
+  | 'TALL_GRASS_B'
+  | 'TALL_GRASS_C'
+  | 'TALL_GRASS_D'
+  | 'TALL_GRASS_E'
+  | 'TALL_GRASS_F'
+  | 'TALL_GRASS_G'
+  | 'TALL_GRASS_H'
+  | 'TALL_GRASS_I'
 
 export type Texture = typeof TEXTURE[keyof typeof TEXTURE]
 const atlas = {textureAssetID: TextureAssetID.ATLAS}
@@ -64,6 +85,15 @@ export const TEXTURE = {
   QUICKSAND: {...atlas, textureID: 'quicksand '},
   RAIN: {...atlas, textureID: 'rain '},
   SNAKE: {...atlas, textureID: 'snake '},
+  TALL_GRASS_A: {...atlas, textureID: 'tall-grass a'},
+  TALL_GRASS_B: {...atlas, textureID: 'tall-grass b'},
+  TALL_GRASS_C: {...atlas, textureID: 'tall-grass c'},
+  TALL_GRASS_D: {...atlas, textureID: 'tall-grass d'},
+  TALL_GRASS_E: {...atlas, textureID: 'tall-grass e'},
+  TALL_GRASS_F: {...atlas, textureID: 'tall-grass f'},
+  TALL_GRASS_G: {...atlas, textureID: 'tall-grass g'},
+  TALL_GRASS_H: {...atlas, textureID: 'tall-grass h'},
+  TALL_GRASS_I: {...atlas, textureID: 'tall-grass i'},
   TREE: {...atlas, textureID: 'tree '},
   WATER_S: {...atlas, textureID: 'water s'},
   WATER_M: {...atlas, textureID: 'water m'},

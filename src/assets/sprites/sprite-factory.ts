@@ -1,4 +1,8 @@
-import {TEXTURE, CloudTextureKey} from '../textures/texture'
+import {
+  TEXTURE,
+  CloudTextureKey,
+  TallGrassTextureKey
+} from '../textures/texture'
 import {XY, XYZ} from '../../types/geo'
 import {Sprite, SpriteType, DrawOrder} from './sprite'
 
@@ -121,6 +125,11 @@ export function newRainCloud(
     speed: {x: speed, y: 0}
   })
   return sprites
+}
+
+export function newTallGrass(grass: TallGrassTextureKey, {x, y}: XY): Sprite[] {
+  const z = DrawOrder.FOREGROUND_SCENERY
+  return [{...defaults(), texture: TEXTURE[grass], position: {x, y, z}}]
 }
 
 // todo: fix animation

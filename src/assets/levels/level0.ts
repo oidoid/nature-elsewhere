@@ -1,6 +1,8 @@
 import * as SpriteFactory from '../sprites/sprite-factory'
 import {I16_MIN, I16_MAX} from '../../limits'
 import {Sprite, DrawOrder} from '../sprites/sprite'
+import {TALL_GRASS_TEXTURE_KEYS} from '../textures/texture'
+import {range} from '../../util'
 
 const minRenderHeight = 128
 
@@ -21,6 +23,21 @@ export namespace Level0 {
         SpriteFactory.newGrassL({x: -minRenderHeight * 8, y: 60}, {x: 66, y: 1})
       )
       .concat(SpriteFactory.newGrassL({x: 208, y: 60}, {x: 2, y: 1}))
+      .concat(SpriteFactory.newTallGrass('TALL_GRASS_A', {x: 188, y: 71}))
+      .concat(SpriteFactory.newTallGrass('TALL_GRASS_B', {x: 208, y: 71}))
+      .concat(
+        range(0, 20)
+          .map(i =>
+            SpriteFactory.newTallGrass(
+              TALL_GRASS_TEXTURE_KEYS[
+                Math.floor(Math.random() * TALL_GRASS_TEXTURE_KEYS.length)
+              ],
+              {x: 228 + i * 4, y: 71}
+            )
+          )
+          .reduce((sum, val) => sum.concat(val), [])
+      )
+      .concat(SpriteFactory.newGrassL({x: 228, y: 60}, {x: 6, y: 1}))
       .concat(SpriteFactory.newTree({x: 185, y: 48}))
       .concat(SpriteFactory.newCloudS({x: 40, y: 20}))
       .concat(SpriteFactory.newCloudM({x: 58, y: 16}))
