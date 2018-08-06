@@ -73,10 +73,10 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => {
-      renderer.init(gl, ctx, assets)
+      const buffer = renderer.init(gl, ctx, assets)
       verts = new Int16Array(Level0.Map.sprites.length * 15 * 6)
       requestAnimationFrameID = requestAnimationFrame(now =>
-        loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites)
+        loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites, buffer)
       )
     })
     .catch(e => {
@@ -98,10 +98,14 @@ function loop(
   assets: assetsLoader.Assets,
   prev: number,
   next: number,
-  sprites: Sprite[]
+  sprites: Sprite[],
+  buffer: {
+    buffer: WebGLBuffer | null
+    vertexArray: WebGLVertexArrayObject | null
+  }
 ): void {
   requestAnimationFrameID = requestAnimationFrame(now =>
-    loop(gl, ctx, atlas, assets, next, now, sprites)
+    loop(gl, ctx, atlas, assets, next, now, sprites, buffer)
   )
 
   // If focus is lost, do not advance more than a second.
@@ -181,7 +185,8 @@ function loop(
     },
     // The viewport fills or exceeds the canvas at integer multiples of cam.h.
     // Excess is cropped from the lower-right corner.
-    viewport
+    viewport,
+    buffer
   )
 }
 

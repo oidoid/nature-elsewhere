@@ -3,7 +3,7 @@ import {Assets, TextureAssetID} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
 import {WH, Rect} from '../types/geo'
-import {VERT_ATTRS} from './vert'
+import {VERT_ATTRS, VertAttr} from './vert'
 
 /** Creates, binds, and configures a texture. */
 function createTexture(gl: GL): GLTexture | null {
@@ -18,7 +18,34 @@ function createTexture(gl: GL): GLTexture | null {
 // yo these will int16s so expect _truncation_
 // TypeScript gl. doesn't work but WebGLRenderingContext. does
 
-export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
+function initVertexAttrib(
+  gl: GL,
+  ctx: ShaderContext,
+  attr: VertAttr,
+  buffer: WebGLBuffer | null
+) {
+  const location = ctx.location(attr.name)
+  gl.enableVertexAttribArray(location)
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+  gl.vertexAttribPointer(
+    location,
+    attr.length,
+    attr.type,
+    false,
+    attr.stride,
+    attr.offset
+  )
+  gl.vertexAttribDivisor(location, attr.divisor)
+  gl.bindBuffer(gl.ARRAY_BUFFER, null)
+}
+
+function glBuffer(gl: GL, buffer: WebGLBuffer | null, data: Int16Array) {
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+  gl.bufferData(gl.ARRAY_BUFFER, data, GL.STATIC_DRAW)
+  gl.bindBuffer(gl.ARRAY_BUFFER, null)
+}
+
+export function init(gl: GL, ctx: ShaderContext, assets: Assets) {
   const texture = createTexture(gl)
 
   gl.activeTexture(gl.TEXTURE0)
@@ -32,20 +59,19 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
     atlas.naturalHeight
   )
 
+  const vertexArray = gl.createVertexArray()
+  gl.bindVertexArray(vertexArray)
+
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
 
-  for (const {name, type, length, stride, offset} of VERT_ATTRS.verts) {
-    gl.vertexAttribPointer(
-      ctx.location(name),
-      length,
-      type,
-      false,
-      stride,
-      offset
-    )
-    gl.enableVertexAttribArray(ctx.location(name))
-  }
+  VERT_ATTRS.vert.forEach(attr => initVertexAttrib(gl, ctx, attr, buffer))
+
+  const instanceBuffer = gl.createBuffer()
+  VERT_ATTRS.instance.forEach(attr =>
+    initVertexAttrib(gl, ctx, attr, instanceBuffer)
+  )
+  gl.bindVertexArray(null)
 
   gl.texImage2D(
     gl.TEXTURE_2D,
@@ -55,6 +81,8 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): void {
     gl.UNSIGNED_BYTE,
     assets[TextureAssetID.ATLAS]
   )
+
+  return {buffer, vertexArray, instanceBuffer}
 }
 
 export function deinit(
@@ -64,7 +92,7 @@ export function deinit(
   buffer: WebGLBuffer | null
 ): void {
   gl.deleteBuffer(buffer)
-  for (const {name} of VERT_ATTRS.verts)
+  for (const {name} of VERT_ATTRS.vert)
     gl.disableVertexAttribArray(ctx.location(name))
 
   gl.deleteTexture(texture)
@@ -77,15 +105,24 @@ export function render(
   verts: Int16Array,
   canvas: WH,
   cam: Rect, // in pixels
-  viewport: WH
+  viewport: WH,
+  {
+    buffer,
+    vertexArray
+  }: {buffer: WebGLBuffer | null; vertexArray: WebGLVertexArrayObject | null}
 ): void {
   resize(gl, ctx.location('cam'), canvas, cam, viewport)
 
   const VERTS_PER_TRI = 3
   const TRIS_PER_RECT = 2
   const VERTS_PER_SPRITE = VERTS_PER_TRI * TRIS_PER_RECT
-  gl.bufferData(gl.ARRAY_BUFFER, verts, WebGLRenderingContext.STATIC_DRAW)
+
+  gl.bindVertexArray(vertexArray)
+
+  glBuffer(gl, buffer, verts)
   gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length, 1)
+
+  gl.bindVertexArray(null)
 }
 
 function resize(

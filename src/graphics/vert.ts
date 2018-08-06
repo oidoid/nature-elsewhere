@@ -12,18 +12,27 @@ export type VertAttr = Readonly<{
 }>
 
 export type VertAttrs = Readonly<{
-  verts: VertAttr[]
-  instances: VertAttr[]
+  vert: VertAttr[]
+  instance: VertAttr[]
 }>
 
 function offset(attrs: {size: number; length: number}[]): number {
   return attrs.reduce((sum, {size, length}) => sum + size * length, 0)
 }
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+function mixOffsets(
+  attr: Omit<VertAttr, 'stride' | 'offset'>,
+  index: number,
+  attrs: {size: number; length: number}[]
+) {
+  return {...attr, offset: offset(attrs.slice(0, index)), stride: offset(attrs)}
+}
+
 const SHORT_SIZE = Int16Array.BYTES_PER_ELEMENT
 // This layout is tightly coupled to the vertex shader and buffers.
 export const VERT_ATTRS: VertAttrs = {
-  verts: [
+  vert: [
     {name: 'uv', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 0},
     {name: 'texCoord', type: GL.SHORT, size: SHORT_SIZE, length: 4, divisor: 0},
     {
@@ -35,12 +44,8 @@ export const VERT_ATTRS: VertAttrs = {
     },
     {name: 'texScale', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 0},
     {name: 'position', type: GL.SHORT, size: SHORT_SIZE, length: 3, divisor: 0}
-  ].map((attr, i, attrs) => ({
-    ...attr,
-    offset: offset(attrs.slice(0, i)),
-    stride: offset(attrs)
-  })),
-  instances: []
+  ].map(mixOffsets),
+  instance: [].map(mixOffsets)
 }
 
 export function newVertex(
