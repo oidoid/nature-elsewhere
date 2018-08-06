@@ -45,7 +45,12 @@ function glBuffer(gl: GL, buffer: WebGLBuffer | null, data: Int16Array) {
   gl.bindBuffer(gl.ARRAY_BUFFER, null)
 }
 
-export function init(gl: GL, ctx: ShaderContext, assets: Assets) {
+export type Gfx = {
+  vertArray: WebGLVertexArrayObject | null
+  buffer: {vert: WebGLBuffer | null, instance: WebGLBuffer | null}
+}
+
+export function init(gl: GL, ctx: ShaderContext, assets: Assets): Gfx {
   const texture = createTexture(gl)
 
   gl.activeTexture(gl.TEXTURE0)
@@ -59,8 +64,8 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets) {
     atlas.naturalHeight
   )
 
-  const vertexArray = gl.createVertexArray()
-  gl.bindVertexArray(vertexArray)
+  const vertArray = gl.createVertexArray()
+  gl.bindVertexArray(vertArray)
 
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
@@ -82,7 +87,7 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets) {
     assets[TextureAssetID.ATLAS]
   )
 
-  return {buffer, vertexArray, instanceBuffer}
+  return {buffer: {vert: buffer, instance: instanceBuffer}, vertArray}
 }
 
 export function deinit(
@@ -103,13 +108,11 @@ export function render(
   ctx: ShaderContext,
   sprites: Sprite[],
   verts: Int16Array,
+  instances: Int16Array,
   canvas: WH,
   cam: Rect, // in pixels
   viewport: WH,
-  {
-    buffer,
-    vertexArray
-  }: {buffer: WebGLBuffer | null; vertexArray: WebGLVertexArrayObject | null}
+  gfx: Gfx
 ): void {
   resize(gl, ctx.location('cam'), canvas, cam, viewport)
 
@@ -117,10 +120,11 @@ export function render(
   const TRIS_PER_RECT = 2
   const VERTS_PER_SPRITE = VERTS_PER_TRI * TRIS_PER_RECT
 
-  gl.bindVertexArray(vertexArray)
+  gl.bindVertexArray(gfx.vertArray)
 
-  glBuffer(gl, buffer, verts)
-  gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length, 1)
+  glBuffer(gl, gfx.buffer.instance, instances)
+  glBuffer(gl, gfx.buffer.vert, verts)
+  gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length, sprites.length)
 
   gl.bindVertexArray(null)
 }

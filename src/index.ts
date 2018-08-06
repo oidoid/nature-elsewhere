@@ -22,7 +22,7 @@ const MIN_CAM_HEIGHT = 128
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
 
-const textureUV = [
+const texUV = [
   {x: 0, y: 0},
   {x: 1, y: 0},
   {x: 0, y: 1},
@@ -31,6 +31,7 @@ const textureUV = [
   {x: 1, y: 1}
 ]
 let verts = new Int16Array()
+let instances = new Int16Array()
 
 // need to make those array changes!
 function main(window: Window) {
@@ -73,10 +74,11 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => {
-      const buffer = renderer.init(gl, ctx, assets)
-      verts = new Int16Array(Level0.Map.sprites.length * 15 * 6)
+      const gfx = renderer.init(gl, ctx, assets)
+      verts = new Int16Array(Level0.Map.sprites.length * 13 * 6)
+      instances = new Int16Array(Level0.Map.sprites.length * 2)
       requestAnimationFrameID = requestAnimationFrame(now =>
-        loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites, buffer)
+        loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites, gfx)
       )
     })
     .catch(e => {
@@ -99,13 +101,10 @@ function loop(
   prev: number,
   next: number,
   sprites: Sprite[],
-  buffer: {
-    buffer: WebGLBuffer | null
-    vertexArray: WebGLVertexArrayObject | null
-  }
+  gfx: renderer.Gfx
 ): void {
   requestAnimationFrameID = requestAnimationFrame(now =>
-    loop(gl, ctx, atlas, assets, next, now, sprites, buffer)
+    loop(gl, ctx, atlas, assets, next, now, sprites, gfx)
   )
 
   // If focus is lost, do not advance more than a second.
@@ -139,27 +138,24 @@ function loop(
   }
   sprites[playerIndex] = player
 
-  let i = 0
   // Load the images into the texture.
-  for (const sprite of sprites) {
+  sprites.forEach((sprite, i ) => {
     if (!sprite.invalidated) {
-      i += 15 * 6
-      continue
+      return
     }
 
     const tex = atlas.animations[sprite.texture.textureID]
-
-    for (const vert of rect(
+    const r = rect(
       tex.cels[sprite.celIndex].bounds,
-      textureUV,
+      texUV,
       sprite.position,
       sprite.scrollPosition,
       sprite.scale
-    )) {
-      verts[i] = vert
-      ++i
-    }
-  }
+    )
+    verts.set(r, i * 13 * 6)
+    instances[i * 2 + 0] = sprite.scale.x
+    instances[i * 2 + 1] = sprite.scale.y
+  })
 
   const multiple = Math.ceil(window.innerHeight / MIN_CAM_HEIGHT)
   const ratio = window.innerWidth / window.innerHeight
@@ -175,6 +171,7 @@ function loop(
     ctx,
     sprites,
     verts,
+    instances,
     // Shader pixels are 1:1 with the canvas. No canvas CSS scaling.
     {w: window.innerWidth, h: window.innerHeight},
     {
@@ -186,7 +183,7 @@ function loop(
     // The viewport fills or exceeds the canvas at integer multiples of cam.h.
     // Excess is cropped from the lower-right corner.
     viewport,
-    buffer
+    gfx
   )
 }
 

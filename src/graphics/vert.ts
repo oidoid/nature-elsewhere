@@ -45,7 +45,9 @@ export const VERT_ATTRS: VertAttrs = {
     {name: 'texScale', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 0},
     {name: 'position', type: GL.SHORT, size: SHORT_SIZE, length: 3, divisor: 0}
   ].map(mixOffsets),
-  instance: [].map(mixOffsets)
+  instance: [
+    // {name: 'texScale', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 1}
+  ].map(mixOffsets)
 }
 
 export function newVertex(
