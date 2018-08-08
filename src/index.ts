@@ -12,8 +12,7 @@ import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {entries} from './util'
-import {newVertex} from './graphics/vert'
-import {Rect, XYZ, XY} from './types/geo'
+import {VERT_ATTRS} from './graphics/vert'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -22,15 +21,7 @@ const MIN_CAM_HEIGHT = 128
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
 
-const texUV = [
-  {x: 0, y: 0},
-  {x: 1, y: 0},
-  {x: 0, y: 1},
-  {x: 0, y: 1},
-  {x: 1, y: 0},
-  {x: 1, y: 1}
-]
-let verts = new Int16Array()
+const verts = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
 let instances = new Int16Array()
 
 // need to make those array changes!
@@ -49,14 +40,10 @@ function main(window: Window) {
 
   // Allow translucent textures to be layered.
   gl.enable(gl.BLEND)
-  gl.blendEquation(gl.FUNC_ADD)
-  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+  gl.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
 
   const ctx = shaderLoader.load(gl, vertexSrc, fragmentSrc)
   gl.useProgram(ctx.program)
-
-  // Debug.
-  Object.assign(window, {gl, ctx})
 
   const onKeyChange = (event: KeyboardEvent) => {
     const action = keyboard.DEFAULT_KEY_MAP[event.key]
@@ -75,8 +62,10 @@ function main(window: Window) {
     .load(ASSET_URL)
     .then(assets => {
       const gfx = renderer.init(gl, ctx, assets)
-      verts = new Int16Array(Level0.Map.sprites.length * 13 * 6)
-      instances = new Int16Array(Level0.Map.sprites.length * 2)
+      instances = new Int16Array(
+        Level0.Map.sprites.length *
+          (VERT_ATTRS.instance[0].stride / VERT_ATTRS.instance[0].size)
+      )
       requestAnimationFrameID = requestAnimationFrame(now =>
         loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites, gfx)
       )
@@ -139,22 +128,24 @@ function loop(
   sprites[playerIndex] = player
 
   // Load the images into the texture.
-  sprites.forEach((sprite, i ) => {
+  sprites.forEach((sprite, i) => {
     if (!sprite.invalidated) {
       return
     }
 
     const tex = atlas.animations[sprite.texture.textureID]
-    const r = rect(
-      tex.cels[sprite.celIndex].bounds,
-      texUV,
-      sprite.position,
-      sprite.scrollPosition,
-      sprite.scale
-    )
-    verts.set(r, i * 13 * 6)
-    instances[i * 2 + 0] = sprite.scale.x
-    instances[i * 2 + 1] = sprite.scale.y
+    const o = i * (VERT_ATTRS.instance[0].stride / VERT_ATTRS.instance[0].size)
+    instances[o + 0] = tex.cels[sprite.celIndex].bounds.x
+    instances[o + 1] = tex.cels[sprite.celIndex].bounds.y
+    instances[o + 2] = tex.cels[sprite.celIndex].bounds.w
+    instances[o + 3] = tex.cels[sprite.celIndex].bounds.h
+    instances[o + 4] = sprite.scrollPosition.x
+    instances[o + 5] = sprite.scrollPosition.y
+    instances[o + 6] = sprite.position.x
+    instances[o + 7] = sprite.position.y
+    instances[o + 8] = sprite.position.z
+    instances[o + 9] = sprite.scale.x
+    instances[o + 10] = sprite.scale.y
   })
 
   const multiple = Math.ceil(window.innerHeight / MIN_CAM_HEIGHT)
@@ -184,26 +175,6 @@ function loop(
     // Excess is cropped from the lower-right corner.
     viewport,
     gfx
-  )
-}
-
-function rect(
-  textureRect: Rect,
-  textureUV: XY[],
-  {x, y, z}: XYZ,
-  scroll: XY,
-  scale: XY
-): number[] {
-  const x1 = x + textureRect.w
-  const y1 = y + textureRect.h
-  const v: [Rect, XY, XY] = [textureRect, scroll, scale]
-  return (<number[]>[]).concat(
-    newVertex(textureUV[0], x, y, z, ...v),
-    newVertex(textureUV[1], x1, y, z, ...v),
-    newVertex(textureUV[2], x, y1, z, ...v),
-    newVertex(textureUV[3], x, y1, z, ...v),
-    newVertex(textureUV[4], x1, y, z, ...v),
-    newVertex(textureUV[5], x1, y1, z, ...v)
   )
 }
 

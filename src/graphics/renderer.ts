@@ -8,10 +8,11 @@ import {VERT_ATTRS, VertAttr} from './vert'
 /** Creates, binds, and configures a texture. */
 function createTexture(gl: GL): GLTexture | null {
   const texture = gl.createTexture()
-  const target = gl.TEXTURE_2D
+  const target = GL.TEXTURE_2D
   gl.bindTexture(target, texture)
-  gl.texParameteri(target, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-  gl.texParameteri(target, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+  gl.texParameteri(target, GL.TEXTURE_MIN_FILTER, GL.NEAREST)
+  gl.texParameteri(target, GL.TEXTURE_MAG_FILTER, GL.NEAREST)
+  gl.bindTexture(target, null)
   return texture
 }
 
@@ -39,7 +40,7 @@ function initVertexAttrib(
   gl.bindBuffer(gl.ARRAY_BUFFER, null)
 }
 
-function glBuffer(gl: GL, buffer: WebGLBuffer | null, data: Int16Array) {
+function bufferData(gl: GL, buffer: WebGLBuffer | null, data: Int16Array) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
   gl.bufferData(gl.ARRAY_BUFFER, data, GL.STATIC_DRAW)
   gl.bindBuffer(gl.ARRAY_BUFFER, null)
@@ -47,47 +48,40 @@ function glBuffer(gl: GL, buffer: WebGLBuffer | null, data: Int16Array) {
 
 export type Gfx = {
   vertArray: WebGLVertexArrayObject | null
-  buffer: {vert: WebGLBuffer | null, instance: WebGLBuffer | null}
+  buffer: {vert: WebGLBuffer | null; instance: WebGLBuffer | null}
 }
 
 export function init(gl: GL, ctx: ShaderContext, assets: Assets): Gfx {
-  const texture = createTexture(gl)
-
-  gl.activeTexture(gl.TEXTURE0)
-  gl.bindTexture(gl.TEXTURE_2D, texture)
-  gl.uniform1i(ctx.location('sampler'), 0)
   const atlas = assets[TextureAssetID.ATLAS]
-  // or atlas.animations[sprite.texture.textureID].size
+  gl.uniform1i(ctx.location('sampler'), 0)
   gl.uniform2f(
     ctx.location('atlasSize'),
     atlas.naturalWidth,
     atlas.naturalHeight
   )
 
+  gl.activeTexture(gl.TEXTURE0)
+  const texture = createTexture(gl)
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+  gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, atlas)
+  // gl.bindTexture(gl.TEXTURE_2D, null)
+
+  // or atlas.animations[sprite.texture.textureID].size
+
   const vertArray = gl.createVertexArray()
   gl.bindVertexArray(vertArray)
 
-  const buffer = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-
-  VERT_ATTRS.vert.forEach(attr => initVertexAttrib(gl, ctx, attr, buffer))
+  const vertBuffer = gl.createBuffer()
+  VERT_ATTRS.vert.forEach(attr => initVertexAttrib(gl, ctx, attr, vertBuffer))
 
   const instanceBuffer = gl.createBuffer()
   VERT_ATTRS.instance.forEach(attr =>
     initVertexAttrib(gl, ctx, attr, instanceBuffer)
   )
+
   gl.bindVertexArray(null)
 
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    0,
-    gl.RGBA,
-    gl.RGBA,
-    gl.UNSIGNED_BYTE,
-    assets[TextureAssetID.ATLAS]
-  )
-
-  return {buffer: {vert: buffer, instance: instanceBuffer}, vertArray}
+  return {buffer: {vert: vertBuffer, instance: instanceBuffer}, vertArray}
 }
 
 export function deinit(
@@ -116,15 +110,11 @@ export function render(
 ): void {
   resize(gl, ctx.location('cam'), canvas, cam, viewport)
 
-  const VERTS_PER_TRI = 3
-  const TRIS_PER_RECT = 2
-  const VERTS_PER_SPRITE = VERTS_PER_TRI * TRIS_PER_RECT
-
   gl.bindVertexArray(gfx.vertArray)
 
-  glBuffer(gl, gfx.buffer.instance, instances)
-  glBuffer(gl, gfx.buffer.vert, verts)
-  gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTS_PER_SPRITE * sprites.length, sprites.length)
+  bufferData(gl, gfx.buffer.vert, verts)
+  bufferData(gl, gfx.buffer.instance, instances)
+  gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, verts.length / 2, sprites.length)
 
   gl.bindVertexArray(null)
 }
