@@ -1,5 +1,5 @@
-import {XY} from '../types/geo'
 import {GL} from './gl'
+import {XY} from '../types/geo'
 
 export type VertAttr = Readonly<{
   name: string

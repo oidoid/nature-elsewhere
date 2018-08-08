@@ -2,7 +2,7 @@ import * as SpriteFactory from '../sprites/sprite-factory'
 import {I16_MIN, I16_MAX} from '../../limits'
 import {Sprite, DrawOrder} from '../sprites/sprite'
 import {TALL_GRASS_TEXTURE_KEYS} from '../textures/texture'
-import {range} from '../../util'
+import {range, flatten} from '../../util'
 
 const minRenderHeight = 128
 
@@ -35,7 +35,7 @@ export namespace Level0 {
               {x: 228 + i * 4, y: 71}
             )
           )
-          .reduce((sum, val) => sum.concat(val), [])
+          .reduce(flatten)
       )
       .concat(SpriteFactory.newGrassL({x: 228, y: 60}, {x: 6, y: 1}))
       .concat(SpriteFactory.newTree({x: 185, y: 48}))

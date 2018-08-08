@@ -11,8 +11,8 @@ import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
-import {entries} from './util'
-import {VERT_ATTRS} from './graphics/vert'
+import {entries, flatten} from './util'
+import {VERT_ATTRS, newVertex} from './graphics/vert'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -21,7 +21,14 @@ const MIN_CAM_HEIGHT = 128
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
 
-const verts = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
+const verts = new Int16Array(
+  [
+    newVertex({x: 1, y: 1}),
+    newVertex({x: 0, y: 1}),
+    newVertex({x: 1, y: 0}),
+    newVertex({x: 0, y: 0})
+  ].reduce(flatten)
+)
 let instances = new Int16Array()
 
 // need to make those array changes!

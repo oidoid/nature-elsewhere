@@ -5,6 +5,10 @@ export function range(start: number, end: number, step?: number): number[] {
     .reduce((sum: number[], _, i) => [...sum, start + i * interval], [])
 }
 
+export function flatten<T>(arr: T[], item: T | T[]): T[] {
+  return arr.concat(item)
+}
+
 // https://github.com/Microsoft/TypeScript/pull/12253
 export function keys<T>(obj: T): (keyof T)[] {
   const keys: (keyof T)[] = []
