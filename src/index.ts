@@ -12,7 +12,7 @@ import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {entries, flatten} from './util'
-import {VERT_ATTRS, newVertex} from './graphics/vert'
+import {VERT_ATTRS, newVert, newInstance} from './graphics/vert'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -23,10 +23,10 @@ let requestAnimationFrameID: number | undefined
 
 const verts = new Int16Array(
   [
-    newVertex({x: 1, y: 1}),
-    newVertex({x: 0, y: 1}),
-    newVertex({x: 1, y: 0}),
-    newVertex({x: 0, y: 0})
+    newVert({x: 1, y: 1}),
+    newVert({x: 0, y: 1}),
+    newVert({x: 1, y: 0}),
+    newVert({x: 0, y: 0})
   ].reduce(flatten)
 )
 let instances = new Int16Array()
@@ -136,23 +136,15 @@ function loop(
 
   // Load the images into the texture.
   sprites.forEach((sprite, i) => {
-    if (!sprite.invalidated) {
-      return
-    }
+    if (!sprite.invalidated) return
 
-    const tex = atlas.animations[sprite.texture.textureID]
     const o = i * (VERT_ATTRS.instance[0].stride / VERT_ATTRS.instance[0].size)
-    instances[o + 0] = tex.cels[sprite.celIndex].bounds.x
-    instances[o + 1] = tex.cels[sprite.celIndex].bounds.y
-    instances[o + 2] = tex.cels[sprite.celIndex].bounds.w
-    instances[o + 3] = tex.cels[sprite.celIndex].bounds.h
-    instances[o + 4] = sprite.scrollPosition.x
-    instances[o + 5] = sprite.scrollPosition.y
-    instances[o + 6] = sprite.position.x
-    instances[o + 7] = sprite.position.y
-    instances[o + 8] = sprite.position.z
-    instances[o + 9] = sprite.scale.x
-    instances[o + 10] = sprite.scale.y
+    const tex = atlas.animations[sprite.texture.textureID]
+    const coord = tex.cels[sprite.celIndex].bounds
+    instances.set(
+      newInstance(coord, sprite.scrollPosition, sprite.position, sprite.scale),
+      o
+    )
   })
 
   const multiple = Math.ceil(window.innerHeight / MIN_CAM_HEIGHT)
@@ -265,16 +257,16 @@ function update(
       z: sprite.position.z
     },
     scrollPosition: {
-      x: sprite.scrollPosition.x + step * sprite.scroll.x,
-      y: sprite.scrollPosition.y + step * sprite.scroll.y
+      x: sprite.scrollPosition.x + step * sprite.scrollSpeed.x,
+      y: sprite.scrollPosition.y + step * sprite.scrollSpeed.y
     },
     invalidated: true
   }
 }
 
-function isSpriteUpdating({speed, scroll}: Sprite, step: number): boolean {
+function isSpriteUpdating({speed, scrollSpeed}: Sprite, step: number): boolean {
   const moving = speed.x || speed.y
-  const scrolling = scroll.x || scroll.y
+  const scrolling = scrollSpeed.x || scrollSpeed.y
   return !!(step && (moving || scrolling))
 }
 

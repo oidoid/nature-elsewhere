@@ -21,7 +21,7 @@ export type Sprite = Readonly<{
   type: SpriteType
   texture: Texture
   celIndex: number
-  scroll: XY
+  scrollSpeed: XY
   scrollPosition: XY
   position: XYZ
   speed: XY

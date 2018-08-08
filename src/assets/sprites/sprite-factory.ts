@@ -15,7 +15,7 @@ function defaults() {
     speed: {x: 0, y: 0},
     celIndex: 0,
     scale: {x: 1, y: 1},
-    scroll: {x: 0, y: 0},
+    scrollSpeed: {x: 0, y: 0},
     scrollPosition: {x: 0, y: 0}
   }
 }
@@ -75,7 +75,7 @@ export function newPond({x, y}: XY, flowRate: number): Sprite[] {
       ...defaults(),
       texture: TEXTURE.POND_REFLECTIONS,
       position,
-      scroll: {x: flowRate, y: 0}
+      scrollSpeed: {x: flowRate, y: 0}
     },
     {...defaults(), texture: TEXTURE.POND_MASK, position}
   ]
@@ -87,7 +87,7 @@ export function newQuicksand({x, y}: XY, flowRate: number): Sprite[] {
       ...defaults(),
       texture: TEXTURE.QUICKSAND,
       position: {x, y, z: DrawOrder.FOREGROUND},
-      scroll: {x: flowRate, y: 0}
+      scrollSpeed: {x: flowRate, y: 0}
     }
   ]
 }
@@ -109,7 +109,7 @@ export function newRainCloud(
         z
       },
       speed: {x: speed, y: 0},
-      scroll: {x: 0, y: -12}
+      scrollSpeed: {x: 0, y: -12}
     })
   }
   sprites.push({

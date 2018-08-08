@@ -1,5 +1,5 @@
 import {GL} from './gl'
-import {XY} from '../types/geo'
+import {XY, XYZ, Rect} from '../types/geo'
 
 export type VertAttr = Readonly<{
   name: string
@@ -37,12 +37,39 @@ export const VERT_ATTRS: VertAttrs = {
   ].map(mixOffsets),
   instance: [
     {name: 'coord', type: GL.SHORT, size: SHORT_SIZE, length: 4, divisor: 1},
-    {name: 'scroll', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 1},
+    {
+      name: 'scrollPosition',
+      type: GL.SHORT,
+      size: SHORT_SIZE,
+      length: 2,
+      divisor: 1
+    },
     {name: 'position', type: GL.SHORT, size: SHORT_SIZE, length: 3, divisor: 1},
     {name: 'scale', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 1}
   ].map(mixOffsets)
 }
 
-export function newVertex(uv: XY): number[] {
+export function newVert(uv: XY): number[] {
   return [uv.x, uv.y]
+}
+
+export function newInstance(
+  coord: Rect,
+  scrollPosition: XY,
+  position: XYZ,
+  scale: XY
+): number[] {
+  return [
+    coord.x,
+    coord.y,
+    coord.w,
+    coord.h,
+    scrollPosition.x,
+    scrollPosition.y,
+    position.x,
+    position.y,
+    position.z,
+    scale.x,
+    scale.y
+  ]
 }
