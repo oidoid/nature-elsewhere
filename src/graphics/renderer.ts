@@ -51,7 +51,12 @@ export type Gfx = {
   buffer: {vert: WebGLBuffer | null; instance: WebGLBuffer | null}
 }
 
-export function init(gl: GL, ctx: ShaderContext, assets: Assets): Gfx {
+export function init(
+  gl: GL,
+  ctx: ShaderContext,
+  assets: Assets,
+  verts: Int16Array
+): Gfx {
   const atlas = assets[TextureAssetID.ATLAS]
   gl.uniform1i(ctx.location('sampler'), 0)
   gl.uniform2f(
@@ -75,6 +80,7 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): Gfx {
   VERT_ATTRS.vert.attrs.forEach(attr =>
     initVertexAttrib(gl, ctx, attr, vertBuffer)
   )
+  bufferData(gl, vertBuffer, verts)
 
   const instanceBuffer = gl.createBuffer()
   VERT_ATTRS.instance.attrs.forEach(attr =>
@@ -114,7 +120,6 @@ export function render(
 
   gl.bindVertexArray(gfx.vertArray)
 
-  bufferData(gl, gfx.buffer.vert, verts)
   bufferData(gl, gfx.buffer.instance, instances)
   gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, verts.length / 2, sprites.length)
 

@@ -69,7 +69,7 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => {
-      const gfx = renderer.init(gl, ctx, assets)
+      const gfx = renderer.init(gl, ctx, assets, verts)
       instances = new Int16Array(
         Level0.Map.sprites.length * VERT_ATTRS.instance.length
       )
