@@ -12,30 +12,34 @@ export type VertAttr = Readonly<{
 }>
 
 export type VertAttrs = Readonly<{
-  vert: VertAttr[]
-  instance: VertAttr[]
+  vert: {attrs: VertAttr[]; length: number; stride: number}
+  instance: {attrs: VertAttr[]; length: number; stride: number}
 }>
 
-function offset(attrs: {size: number; length: number}[]): number {
+function offset(attrs: Omit<VertAttr, 'offset' | 'stride'>[]): number {
   return attrs.reduce((sum, {size, length}) => sum + size * length, 0)
+}
+
+function length(attrs: VertAttr[]): number {
+  return attrs.reduce((sum, attr) => sum + attr.length, 0)
 }
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 function mixOffsets(
-  attr: Omit<VertAttr, 'stride' | 'offset'>,
+  attr: Omit<VertAttr, 'offset' | 'stride'>,
   index: number,
-  attrs: {size: number; length: number}[]
-) {
+  attrs: Omit<VertAttr, 'offset' | 'stride'>[]
+): VertAttr {
   return {...attr, offset: offset(attrs.slice(0, index)), stride: offset(attrs)}
 }
 
 const SHORT_SIZE = Int16Array.BYTES_PER_ELEMENT
 // This layout is tightly coupled to the vertex shader and buffers.
-export const VERT_ATTRS: VertAttrs = {
-  vert: [
+export const VERT_ATTRS: VertAttrs = (() => {
+  const vertAttrs = [
     {name: 'uv', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 0}
-  ].map(mixOffsets),
-  instance: [
+  ].map(mixOffsets)
+  const instanceAttrs = [
     {name: 'coord', type: GL.SHORT, size: SHORT_SIZE, length: 4, divisor: 1},
     {
       name: 'scrollPosition',
@@ -47,7 +51,19 @@ export const VERT_ATTRS: VertAttrs = {
     {name: 'position', type: GL.SHORT, size: SHORT_SIZE, length: 3, divisor: 1},
     {name: 'scale', type: GL.SHORT, size: SHORT_SIZE, length: 2, divisor: 1}
   ].map(mixOffsets)
-}
+  return {
+    vert: {
+      attrs: vertAttrs,
+      length: length(vertAttrs),
+      stride: offset(vertAttrs)
+    },
+    instance: {
+      attrs: instanceAttrs,
+      length: length(instanceAttrs),
+      stride: offset(instanceAttrs)
+    }
+  }
+})()
 
 export function newVert(uv: XY): number[] {
   return [uv.x, uv.y]

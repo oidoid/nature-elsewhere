@@ -72,10 +72,12 @@ export function init(gl: GL, ctx: ShaderContext, assets: Assets): Gfx {
   gl.bindVertexArray(vertArray)
 
   const vertBuffer = gl.createBuffer()
-  VERT_ATTRS.vert.forEach(attr => initVertexAttrib(gl, ctx, attr, vertBuffer))
+  VERT_ATTRS.vert.attrs.forEach(attr =>
+    initVertexAttrib(gl, ctx, attr, vertBuffer)
+  )
 
   const instanceBuffer = gl.createBuffer()
-  VERT_ATTRS.instance.forEach(attr =>
+  VERT_ATTRS.instance.attrs.forEach(attr =>
     initVertexAttrib(gl, ctx, attr, instanceBuffer)
   )
 
@@ -91,7 +93,7 @@ export function deinit(
   buffer: WebGLBuffer | null
 ): void {
   gl.deleteBuffer(buffer)
-  for (const {name} of VERT_ATTRS.vert)
+  for (const {name} of VERT_ATTRS.vert.attrs)
     gl.disableVertexAttribArray(ctx.location(name))
 
   gl.deleteTexture(texture)

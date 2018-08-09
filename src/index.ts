@@ -13,6 +13,7 @@ import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {entries, flatten} from './util'
 import {VERT_ATTRS, newVert, newInstance} from './graphics/vert'
+import {isSpriteUpdating} from './assets/sprites/sprite-factory'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -70,8 +71,7 @@ function main(window: Window) {
     .then(assets => {
       const gfx = renderer.init(gl, ctx, assets)
       instances = new Int16Array(
-        Level0.Map.sprites.length *
-          (VERT_ATTRS.instance[0].stride / VERT_ATTRS.instance[0].size)
+        Level0.Map.sprites.length * VERT_ATTRS.instance.length
       )
       requestAnimationFrameID = requestAnimationFrame(now =>
         loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites, gfx)
@@ -138,12 +138,11 @@ function loop(
   sprites.forEach((sprite, i) => {
     if (!sprite.invalidated) return
 
-    const o = i * (VERT_ATTRS.instance[0].stride / VERT_ATTRS.instance[0].size)
     const tex = atlas.animations[sprite.texture.textureID]
     const coord = tex.cels[sprite.celIndex].bounds
     instances.set(
       newInstance(coord, sprite.scrollPosition, sprite.position, sprite.scale),
-      o
+      i * VERT_ATTRS.instance.length
     )
   })
 
@@ -262,12 +261,6 @@ function update(
     },
     invalidated: true
   }
-}
-
-function isSpriteUpdating({speed, scrollSpeed}: Sprite, step: number): boolean {
-  const moving = speed.x || speed.y
-  const scrolling = scrollSpeed.x || scrollSpeed.y
-  return !!(step && (moving || scrolling))
 }
 
 main(window)

@@ -20,6 +20,15 @@ function defaults() {
   }
 }
 
+export function isSpriteUpdating(
+  {speed, scrollSpeed}: Sprite,
+  step: number
+): boolean {
+  const moving = speed.x || speed.y
+  const scrolling = scrollSpeed.x || scrollSpeed.y
+  return !!(step && (moving || scrolling))
+}
+
 export function newCloudS({x, y}: XY): Sprite[] {
   const z = DrawOrder.CLOUDS
   return [{...defaults(), texture: TEXTURE.CLOUD_S, position: {x, y, z}}]
