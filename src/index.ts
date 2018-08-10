@@ -11,8 +11,8 @@ import * as atlasJSON from './assets/textures/atlas.json'
 import {ASSET_URL, TEXTURE} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
-import {entries, flatten} from './util'
-import {VERT_ATTRS, newVert, newInstance} from './graphics/vert'
+import {flatten} from './util'
+import {VERT_ATTRS, newVert, updateInstance} from './graphics/vert'
 import {update} from './assets/sprites/sprite-factory'
 
 // The minimum render height and expected minimum render width. The maximum
@@ -123,26 +123,19 @@ function loop(
   const playerIndex = sprites.findIndex(
     sprite => sprite.type === SpriteType.PLAYER
   )
-  const playerUpdates = updatePlayer(atlas, sprites[playerIndex], step)
-  const playerUpdated = entries(playerUpdates).some(
-    ([key, val]) => val !== sprites[playerIndex][key]
-  )
-  const player = {
-    ...sprites[playerIndex],
-    ...playerUpdates,
-    invalidated: playerUpdated
-  }
-  sprites[playerIndex] = player
+  updatePlayer(atlas, sprites[playerIndex], step)
 
   // Load the images into the texture.
   sprites.forEach((sprite, i) => {
-    if (!sprite.invalidated) return
-
     const texture = atlas.animations[sprite.texture.textureID]
     const coord = texture.cels[sprite.celIndex].bounds
-    instances.set(
-      newInstance(coord, sprite.scrollPosition, sprite.position, sprite.scale),
-      i * VERT_ATTRS.instance.length
+    updateInstance(
+      instances,
+      i,
+      coord,
+      sprite.scrollPosition,
+      sprite.position,
+      sprite.scale
     )
   })
 
@@ -164,7 +157,7 @@ function loop(
     // Shader pixels are 1:1 with the canvas. No canvas CSS scaling.
     {w: window.innerWidth, h: window.innerHeight},
     {
-      x: Math.ceil(-playerUpdates.position.x) + Math.ceil(camWidth / 2),
+      x: Math.ceil(-sprites[playerIndex].position.x) + Math.ceil(camWidth / 2),
       y: Math.ceil(MIN_CAM_HEIGHT / 4),
       w: camWidth,
       h: MIN_CAM_HEIGHT
@@ -190,40 +183,36 @@ function onGLContextRestored() {
   // init();
 }
 
-function updatePlayer(
+export function updatePlayer(
   atlas: textureAtlas.TextureAtlas,
   sprite: Sprite,
   step: number
-) {
+): void {
   // todo: add pixel per second doc.
   const pps = (actionState[Action.RUN] ? 48 : 16) * step
 
   // sprite.texture.
 
-  const scale = {
-    x: actionState[Action.LEFT]
-      ? -1
-      : actionState[Action.RIGHT]
-        ? 1
-        : sprite.scale.x,
-    y: sprite.scale.y
-  }
-  const position = {
-    x: Math.max(
-      0,
-      sprite.position.x -
-        (actionState[Action.LEFT] ? pps : 0) +
-        (actionState[Action.RIGHT] ? pps : 0)
-    ),
-    y: Math.min(
-      70,
-      sprite.position.y -
-        (actionState[Action.UP] ? pps : 0) +
-        (actionState[Action.DOWN] ? pps : 0)
-    ),
-    z: sprite.position.z
-  }
-  const texture = actionState[Action.UP]
+  sprite.scale.x = actionState[Action.LEFT]
+    ? -1
+    : actionState[Action.RIGHT]
+      ? 1
+      : sprite.scale.x
+
+  sprite.position.x = Math.max(
+    0,
+    sprite.position.x -
+      (actionState[Action.LEFT] ? pps : 0) +
+      (actionState[Action.RIGHT] ? pps : 0)
+  )
+  sprite.position.y = Math.min(
+    70,
+    sprite.position.y -
+      (actionState[Action.UP] ? pps : 0) +
+      (actionState[Action.DOWN] ? pps : 0)
+  )
+
+  sprite.texture = actionState[Action.UP]
     ? TEXTURE.PLAYER_ASCEND
     : actionState[Action.DOWN]
       ? sprite.position.y < 70
@@ -235,11 +224,10 @@ function updatePlayer(
           : TEXTURE.PLAYER_WALK
         : TEXTURE.PLAYER_IDLE
 
-  const celIndex =
-    Math.abs(Math.round(position.x / (actionState[Action.RUN] ? 6 : 2))) %
-    atlas.animations[texture.textureID].cels.length
-
-  return {scale, position, texture, celIndex}
+  sprite.celIndex =
+    Math.abs(
+      Math.round(sprite.position.x / (actionState[Action.RUN] ? 6 : 2))
+    ) % atlas.animations[sprite.texture.textureID].cels.length
 }
 
 main(window)

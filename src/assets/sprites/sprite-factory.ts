@@ -16,18 +16,8 @@ function defaults() {
     scale: {x: 1, y: 1},
     speed: {x: 0, y: 0},
     scrollSpeed: {x: 0, y: 0},
-    scrollPosition: {x: 0, y: 0},
-    invalidated: true
+    scrollPosition: {x: 0, y: 0}
   }
-}
-
-export function isSpriteUpdating(
-  {speed, scrollSpeed}: Sprite,
-  step: number
-): boolean {
-  const moving = speed.x || speed.y
-  const scrolling = scrollSpeed.x || scrollSpeed.y
-  return !!(step && (moving || scrolling))
 }
 
 export function update(
@@ -35,14 +25,12 @@ export function update(
   sprite: Sprite,
   step: number
 ): void {
-  if (!isSpriteUpdating(sprite, step)) return
-
-  sprite.invalidated = true
   sprite.position.x += step * sprite.speed.x
   sprite.position.y + step * sprite.speed.y
   sprite.scrollPosition.x += step * sprite.scrollSpeed.x
   sprite.scrollPosition.y += step * sprite.scrollSpeed.y
 }
+
 export function newCloudS({x, y}: XY): Sprite[] {
   const z = DrawOrder.CLOUDS
   return [{...defaults(), texture: TEXTURE.CLOUD_S, position: {x, y, z}}]

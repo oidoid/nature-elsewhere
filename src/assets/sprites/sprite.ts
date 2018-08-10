@@ -25,5 +25,4 @@ export type Sprite = {
   speed: XY
   scrollSpeed: XY
   scrollPosition: XY
-  invalidated: boolean
 }

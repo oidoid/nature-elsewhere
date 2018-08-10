@@ -67,23 +67,24 @@ export function newVert(uv: XY): number[] {
   return [uv.x, uv.y]
 }
 
-export function newInstance(
+export function updateInstance(
+  instances: Int16Array,
+  i: number,
   coord: Rect,
   scrollPosition: XY,
   position: XYZ,
   scale: XY
-): number[] {
-  return [
-    coord.x,
-    coord.y,
-    coord.w,
-    coord.h,
-    scrollPosition.x,
-    scrollPosition.y,
-    position.x,
-    position.y,
-    position.z,
-    scale.x,
-    scale.y
-  ]
+): void {
+  i *= VERT_ATTRS.instance.length
+  instances[i + 0] = coord.x
+  instances[i + 1] = coord.y
+  instances[i + 2] = coord.w
+  instances[i + 3] = coord.h
+  instances[i + 4] = scrollPosition.x
+  instances[i + 5] = scrollPosition.y
+  instances[i + 6] = position.x
+  instances[i + 7] = position.y
+  instances[i + 8] = position.z
+  instances[i + 9] = scale.x
+  instances[i + 10] = scale.y
 }

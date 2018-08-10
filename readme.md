@@ -4,10 +4,11 @@
 
 - Atlas: a composite texture
 - Bounds: having a position and size
+- Coord: a texture coordinate
 - Level: one or more sprite groups and behavior
-- Location: a WebGL shader program variable identifier
-- Position: a coordinate
-- Rect: a rectangular bounds
+- Location: a WebGL shader program variable index
+- Position: an X and Y length
+- Rect: a rectangular bounds type
 - Size: an area
 - Sprite: one or more textures and behavior
 - Sprite group: one or more sprites and behavior
