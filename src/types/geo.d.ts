@@ -15,9 +15,9 @@ export type XYZ = XY & {
 }
 
 /** A position given in x and y-coordinates. */
-export type XY = Readonly<{
+export type XY = {
   /** Distance along the x-axis. */
   x: number
   /** Distance along the y-axis. */
   y: number
-}>
+}

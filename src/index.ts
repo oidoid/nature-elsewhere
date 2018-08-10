@@ -13,7 +13,7 @@ import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {entries, flatten} from './util'
 import {VERT_ATTRS, newVert, newInstance} from './graphics/vert'
-import {isSpriteUpdating} from './assets/sprites/sprite-factory'
+import {update} from './assets/sprites/sprite-factory'
 
 // The minimum render height and expected minimum render width. The maximum
 // render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
@@ -119,7 +119,7 @@ function loop(
     }
   }
 
-  sprites = sprites.map(sprite => update(atlas, sprite, step))
+  sprites.forEach(sprite => update(atlas, sprite, step))
   const playerIndex = sprites.findIndex(
     sprite => sprite.type === SpriteType.PLAYER
   )
@@ -138,8 +138,8 @@ function loop(
   sprites.forEach((sprite, i) => {
     if (!sprite.invalidated) return
 
-    const tex = atlas.animations[sprite.texture.textureID]
-    const coord = tex.cels[sprite.celIndex].bounds
+    const texture = atlas.animations[sprite.texture.textureID]
+    const coord = texture.cels[sprite.celIndex].bounds
     instances.set(
       newInstance(coord, sprite.scrollPosition, sprite.position, sprite.scale),
       i * VERT_ATTRS.instance.length
@@ -240,27 +240,6 @@ function updatePlayer(
     atlas.animations[texture.textureID].cels.length
 
   return {scale, position, texture, celIndex}
-}
-
-function update(
-  _atlas: textureAtlas.TextureAtlas,
-  sprite: Sprite,
-  step: number
-): Sprite {
-  if (!isSpriteUpdating(sprite, step)) return sprite
-  return {
-    ...sprite,
-    position: {
-      x: sprite.position.x + step * sprite.speed.x,
-      y: sprite.position.y + step * sprite.speed.y,
-      z: sprite.position.z
-    },
-    scrollPosition: {
-      x: sprite.scrollPosition.x + step * sprite.scrollSpeed.x,
-      y: sprite.scrollPosition.y + step * sprite.scrollSpeed.y
-    },
-    invalidated: true
-  }
 }
 
 main(window)

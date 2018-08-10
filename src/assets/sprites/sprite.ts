@@ -16,14 +16,14 @@ export enum DrawOrder {
 }
 
 /** An instance of a texture. todo: revise terminology. */
-export type Sprite = Readonly<{
-  invalidated: boolean
+export type Sprite = {
   type: SpriteType
   texture: Texture
   celIndex: number
+  position: XYZ
+  scale: XY
+  speed: XY
   scrollSpeed: XY
   scrollPosition: XY
-  position: XYZ
-  speed: XY
-  scale: XY
-}>
+  invalidated: boolean
+}

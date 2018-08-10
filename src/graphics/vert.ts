@@ -12,8 +12,8 @@ export type VertAttr = Readonly<{
 }>
 
 export type VertAttrs = Readonly<{
-  vert: {attrs: VertAttr[]; length: number; stride: number}
-  instance: {attrs: VertAttr[]; length: number; stride: number}
+  vert: Readonly<{attrs: VertAttr[]; length: number}>
+  instance: Readonly<{attrs: VertAttr[]; length: number}>
 }>
 
 function offset(attrs: Omit<VertAttr, 'offset' | 'stride'>[]): number {
@@ -54,13 +54,11 @@ export const VERT_ATTRS: VertAttrs = (() => {
   return {
     vert: {
       attrs: vertAttrs,
-      length: length(vertAttrs),
-      stride: offset(vertAttrs)
+      length: length(vertAttrs)
     },
     instance: {
       attrs: instanceAttrs,
-      length: length(instanceAttrs),
-      stride: offset(instanceAttrs)
+      length: length(instanceAttrs)
     }
   }
 })()

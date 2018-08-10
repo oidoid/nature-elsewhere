@@ -5,18 +5,19 @@ import {
 } from '../textures/texture'
 import {XY, XYZ} from '../../types/geo'
 import {Sprite, SpriteType, DrawOrder} from './sprite'
+import {TextureAtlas} from '../textures/texture-atlas'
 
 const BOTTOM_Y = 60
 
 function defaults() {
   return {
-    invalidated: true,
     type: SpriteType.OTHER,
-    speed: {x: 0, y: 0},
     celIndex: 0,
     scale: {x: 1, y: 1},
+    speed: {x: 0, y: 0},
     scrollSpeed: {x: 0, y: 0},
-    scrollPosition: {x: 0, y: 0}
+    scrollPosition: {x: 0, y: 0},
+    invalidated: true
   }
 }
 
@@ -29,6 +30,19 @@ export function isSpriteUpdating(
   return !!(step && (moving || scrolling))
 }
 
+export function update(
+  _atlas: TextureAtlas,
+  sprite: Sprite,
+  step: number
+): void {
+  if (!isSpriteUpdating(sprite, step)) return
+
+  sprite.invalidated = true
+  sprite.position.x += step * sprite.speed.x
+  sprite.position.y + step * sprite.speed.y
+  sprite.scrollPosition.x += step * sprite.scrollSpeed.x
+  sprite.scrollPosition.y += step * sprite.scrollSpeed.y
+}
 export function newCloudS({x, y}: XY): Sprite[] {
   const z = DrawOrder.CLOUDS
   return [{...defaults(), texture: TEXTURE.CLOUD_S, position: {x, y, z}}]
