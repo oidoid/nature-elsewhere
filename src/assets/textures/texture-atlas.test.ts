@@ -29,11 +29,11 @@ describe('texture-atlas', () => {
       expect(Math.log2(atlas.size.h) % 1).toStrictEqual(0)
     })
 
-    test.each(tags)('Tag (%s) is unique within the sheet', (tag: string) => {
+    test.each(tags)('%# Tag (%s) is unique within the sheet', (tag: string) => {
       expect(tags.filter(val => val === tag)).toHaveLength(1)
     })
 
-    test.each(tags)('Tag (%s) has a Frame', (tag: string) => {
+    test.each(tags)('%# Tag (%s) has a Frame', (tag: string) => {
       const frameKeys = keys(file.frames)
         .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
         .filter(uniq(Object.is))
@@ -44,13 +44,13 @@ describe('texture-atlas', () => {
       const frameKeys = keys(file.frames)
         .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
         .filter(uniq(Object.is))
-      test.each(frameKeys)('Frame has a Tag (%s)', (frameKey: string) => {
+      test.each(frameKeys)('%# Frame has a Tag (%s)', (frameKey: string) => {
         expect(tags).toContainEqual(frameKey)
       })
     }
 
     test.each(file.meta.slices)(
-      'Slice name (%o) is a Tag',
+      '%# Slice name (%o) is a Tag',
       (slice: Aseprite.Slice) => expect(tags).toContainEqual(slice.name)
     )
   })
