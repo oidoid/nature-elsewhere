@@ -115,6 +115,8 @@ export function newRainCloud(
       ...defaults(),
       texture: TEXTURE.RAIN,
       position: {
+        // Round now to prevent rain from being an extra pixel off due to
+        // truncation later.
         x: x + Math.round((i + 1) / 2),
         y: y + 6 + i * 16 - Math.max(0, y + 6 + i * 16 - BOTTOM_Y),
         z

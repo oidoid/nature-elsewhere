@@ -15,10 +15,8 @@ import {flatten} from './util'
 import {VERT_ATTRS, newVert, updateInstance} from './graphics/vert'
 import {update} from './assets/sprites/sprite-factory'
 
-// The minimum render height and expected minimum render width. The maximum
-// render height is 2 * MIN_RENDER_SIZE - 1. There is no minimum or maximum
-// render width.
-const MIN_CAM_HEIGHT = 128
+// The minimum render width and height.
+const RESOLUTION = 192
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
 
@@ -139,14 +137,26 @@ function loop(
     )
   })
 
-  const multiple = Math.ceil(window.innerHeight / MIN_CAM_HEIGHT)
-  const ratio = window.innerWidth / window.innerHeight
-  // The viewport fills or exceeds the canvas at integer multiples of cam.h.
-  const viewport = {
-    w: Math.ceil(ratio * multiple * MIN_CAM_HEIGHT),
-    h: multiple * MIN_CAM_HEIGHT
-  } // px
-  const camWidth = Math.ceil(ratio * MIN_CAM_HEIGHT) // px
+  // Calculate the minimum integer multiple needed to fill or exceed the canvas
+  // in both directions.
+  const scale = Math.ceil(
+    Math.max(window.innerHeight, window.innerWidth) / RESOLUTION
+  )
+  const viewport = {w: scale * RESOLUTION, h: scale * RESOLUTION} // px
+
+  // Shader pixels are 1:1 with the canvas. No canvas CSS scaling.
+  const canvas = {w: window.innerWidth, h: window.innerHeight}
+
+  const cam = {
+    x:
+      Math.trunc(-sprites[playerIndex].position.x) +
+      Math.round(window.innerWidth / (scale * 2)),
+    y:
+      Math.trunc(-sprites[playerIndex].position.y) +
+      Math.round((7 * RESOLUTION) / 8),
+    w: RESOLUTION,
+    h: RESOLUTION
+  }
 
   renderer.render(
     gl,
@@ -154,14 +164,8 @@ function loop(
     sprites,
     verts,
     instances,
-    // Shader pixels are 1:1 with the canvas. No canvas CSS scaling.
-    {w: window.innerWidth, h: window.innerHeight},
-    {
-      x: Math.ceil(-sprites[playerIndex].position.x) + Math.ceil(camWidth / 2),
-      y: Math.ceil(MIN_CAM_HEIGHT / 4),
-      w: camWidth,
-      h: MIN_CAM_HEIGHT
-    },
+    canvas,
+    cam,
     // The viewport fills or exceeds the canvas at integer multiples of cam.h.
     // Excess is cropped from the lower-right corner.
     viewport,
