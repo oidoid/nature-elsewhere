@@ -18,7 +18,7 @@ export function init(
 ): Gfx {
   const atlas = assets[TextureAssetID.ATLAS]
   gl.uniform1i(shaderContext.location('sampler'), 0)
-  gl.uniform2f(
+  gl.uniform2i(
     shaderContext.location('atlasSize'),
     atlas.naturalWidth,
     atlas.naturalHeight
@@ -100,11 +100,10 @@ function initVertAttr(
   const location = shaderContext.location(attr.name)
   gl.enableVertexAttribArray(location)
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-  gl.vertexAttribPointer(
+  gl.vertexAttribIPointer(
     location,
     attr.length,
     attr.type,
-    false,
     attr.stride,
     attr.offset
   )
@@ -141,7 +140,7 @@ function resize(
   gl.canvas.width = canvas.w
   gl.canvas.height = canvas.h
 
-  gl.uniform4f(camLocation, cam.x, cam.y, cam.w, cam.h)
+  gl.uniform4i(camLocation, cam.x, cam.y, cam.w, cam.h)
 
   gl.viewport(0, 0, viewport.w, viewport.h)
 }

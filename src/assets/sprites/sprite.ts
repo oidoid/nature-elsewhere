@@ -7,11 +7,11 @@ export enum SpriteType {
 }
 
 export enum DrawOrder {
-  BACKGROUND = 1,
-  BACKGROUND_SCENERY = 0.4,
-  PLAYER = 0.3,
-  FOREGROUND_SCENERY = 0.2,
-  CLOUDS = 0.1,
+  BACKGROUND = 1000, // MAX_DEPTH in texture-atlas.vert.
+  BACKGROUND_SCENERY = 4,
+  PLAYER = 3,
+  FOREGROUND_SCENERY = 2,
+  CLOUDS = 1,
   FOREGROUND = 0
 }
 
