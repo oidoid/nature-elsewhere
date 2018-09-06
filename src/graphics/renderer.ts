@@ -1,9 +1,10 @@
-import {GL, GLTexture, GLUniformLocation} from './gl'
+import {GL, GLTexture} from './gl'
 import {Assets, TextureAssetID} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
-import {WH, Rect} from '../types/geo'
+import {WH, XY} from '../types/geo'
 import {VERT_ATTRS, VertAttr} from './vert'
+import {resize} from './cam'
 
 export type Gfx = {
   vertArray: WebGLVertexArrayObject | null
@@ -58,11 +59,10 @@ export function render(
   verts: Int16Array,
   instances: Int16Array,
   canvas: WH,
-  cam: Rect, // in pixels
-  viewport: WH,
+  position: XY,
   gfx: Gfx
 ): void {
-  resize(gl, shaderContext.location('cam'), canvas, cam, viewport)
+  resize(gl, shaderContext.location('cam'), canvas, position)
 
   gl.bindVertexArray(gfx.vertArray)
 
@@ -128,19 +128,4 @@ export function deinit(
     gl.disableVertexAttribArray(shaderContext.location(name))
 
   gl.deleteTexture(texture)
-}
-
-function resize(
-  gl: GL,
-  camLocation: GLUniformLocation | null,
-  canvas: WH,
-  cam: Rect,
-  viewport: WH
-): void {
-  gl.canvas.width = canvas.w
-  gl.canvas.height = canvas.h
-
-  gl.uniform4i(camLocation, cam.x, cam.y, cam.w, cam.h)
-
-  gl.viewport(0, 0, viewport.w, viewport.h)
 }

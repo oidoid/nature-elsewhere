@@ -14,10 +14,7 @@ import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {flatten} from './util'
 import {VERT_ATTRS, newVert, updateInstance} from './graphics/vert'
 import {update} from './assets/sprites/sprite-factory'
-import {Rect, WH} from './types/geo'
 
-// The render width and height of the viewport within the canvas.
-const RESOLUTION = 192
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
 
@@ -88,48 +85,6 @@ function main(window: Window) {
 // ReadOnly<array>
 // invalidate: updated ? true : false
 
-function cam(canvas: WH, scale: number, player: Sprite): Rect {
-  // The camera position is a function of the player position and the canvas'
-  // dimensions.
-  //
-  // The player's pixel position is rendered by implicitly truncating its model
-  // position. Similarly, it is necessary to truncate the model position prior
-  // to camera input to avoid rounding errors that cause the camera to lose
-  // synchronicity with the rendered location and create jitter.
-  //
-  // For example, the model position may be 0.1 and the camera at an offset from
-  // the player of 100.9. The rendered player position is truncated to 0.
-  // Consider the possible camera positions:
-  //
-  //   Formula                   Result  Player pixel  Camera pixel  Distance  Notes
-  //   0.1 + 100.9             =  101.0             0           101       101  No truncation.
-  //   Math.trunc(0.1) + 100.9 =  100.9             0           100       100  Truncate before input.
-  //   Math.trunc(0.1 + 100.9) =  101.0             0           101       101  Truncate after input.
-  //
-  // Now again when the model position has increased to 1.0 and the rendered
-  // position is also 1, one pixel forward:
-  //
-  //   1.0 + 100.9             =  101.9             1           101       100  No truncation.
-  //   Math.trunc(1.0) + 100.9 =  101.9             1           101       100  Truncate before input.
-  //   Math.trunc(1.0 + 100.9) =  101.0             1           101       100  Truncate after input.
-  //
-  // As shown above, when truncation is not performed or is occurs afterwards on
-  // the sum, rounding errors can cause the rendered distance between the center
-  // of the camera and the player to vary under different inputs instead of
-  // remaining a constant offset.
-  //
-  // The canvas offsets should be truncated by the call the GL.uniform4i() but
-  // these appear to use the ceiling instead so another distinct and independent
-  // call to Math.trunc() is made.
-  return {
-    // Center the camera on the player within the canvas bounds.
-    x: Math.trunc(-player.position.x) + Math.trunc(canvas.w / (scale * 2)),
-    y: Math.trunc(-player.position.y) + Math.trunc((7 * RESOLUTION) / 8),
-    w: RESOLUTION,
-    h: RESOLUTION
-  }
-}
-
 function loop(
   gl: GL,
   ctx: shaderLoader.ShaderContext,
@@ -184,12 +139,6 @@ function loop(
   // scaling.
   const canvas = {w: window.innerWidth, h: window.innerHeight}
 
-  // Calculate the minimum integer multiple needed for the viewport to fill or
-  // exceed the canvas in both directions, Excess is cropped from the
-  // lower-right corner.
-  const scale = Math.ceil(Math.max(canvas.w, canvas.h) / RESOLUTION)
-  const viewport = {w: scale * RESOLUTION, h: scale * RESOLUTION} // px
-
   renderer.render(
     gl,
     ctx,
@@ -197,8 +146,7 @@ function loop(
     verts,
     instances,
     canvas,
-    cam(canvas, scale, sprites[playerIndex]),
-    viewport,
+    sprites[playerIndex].position,
     gfx
   )
 }
