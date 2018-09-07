@@ -1,8 +1,14 @@
 import {WH, XY, Rect} from '../types/geo'
 import {GLUniformLocation, GL} from './gl'
 
-// scale had better be an integer. in pixells
-// canvas the desired resolution of the surface to render to.
+/**
+ * @param gl
+ * @param camLocation
+ * @param canvas The desired resolution of the canvas in CSS pixels. E.g.,
+ *               {w: window.innerWidth, h: window.innerHeight}.
+ * @param scale Positive integer zoom.
+ * @param position The position to center on in physical pixels.
+ */
 export function resize(
   gl: GL,
   camLocation: GLUniformLocation | null,
@@ -18,11 +24,13 @@ export function resize(
   gl.uniform4i(camLocation, cam.x, cam.y, cam.w, cam.h)
 
   // The viewport is a rendered in physical pixels. It's intentional to use the
-  // camera dimensions instead of canvas dimensions since the camera often exceeds the canvas. The viewport's dimensions are merely a scaled camera.
+  // camera dimensions instead of canvas dimensions since the camera often
+  // exceeds the canvas and the viewport's dimensions must be an integer
+  // multiple of the camera.
   gl.viewport(0, 0, scale * cam.w, scale * cam.h)
 }
 
-// in pixells
+/** @return Rectangle in physical pixels. */
 function camera(canvas: WH, scale: number, position: XY): Rect {
   // The camera position is a function of the position and the canvas'
   // dimensions.
