@@ -4,7 +4,7 @@ import {Sprite} from '../assets/sprites/sprite'
 import {ShaderContext} from './glsl/shader-loader'
 import {WH, XY} from '../types/geo'
 import {VERT_ATTRS, VertAttr} from './vert'
-import {resize} from './cam'
+import {resize} from './resizer'
 
 export type Gfx = {
   vertArray: WebGLVertexArrayObject | null
@@ -59,10 +59,11 @@ export function render(
   verts: Int16Array,
   instances: Int16Array,
   canvas: WH,
+  scale: number,
   position: XY,
   gfx: Gfx
 ): void {
-  resize(gl, shaderContext.location('cam'), canvas, position)
+  resize(gl, shaderContext.location('cam'), canvas, scale, position)
 
   gl.bindVertexArray(gfx.vertArray)
 

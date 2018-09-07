@@ -27,6 +27,7 @@ const verts = new Int16Array(
   ].reduce(flatten)
 )
 let instances = new Int16Array()
+const scale = 8
 
 // need to make those array changes!
 function main(window: Window) {
@@ -146,6 +147,7 @@ function loop(
     verts,
     instances,
     canvas,
+    scale,
     sprites[playerIndex].position,
     gfx
   )
