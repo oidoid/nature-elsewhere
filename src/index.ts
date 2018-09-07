@@ -71,7 +71,7 @@ function main(window: Window) {
         Level0.Map.sprites.length * VERT_ATTRS.instance.length
       )
       requestAnimationFrameID = requestAnimationFrame(now =>
-        loop(gl, ctx, atlas, assets, now, now, Level0.Map.sprites, gfx)
+        loop(gfx, atlas, assets, now, now, Level0.Map.sprites)
       )
     })
     .catch(e => {
@@ -87,26 +87,24 @@ function main(window: Window) {
 // invalidate: updated ? true : false
 
 function loop(
-  gl: GL,
-  ctx: shaderLoader.ShaderContext,
+  gfx: renderer.Renderer,
   atlas: textureAtlas.TextureAtlas,
   assets: assetsLoader.Assets,
   prev: number,
   next: number,
-  sprites: Sprite[],
-  gfx: renderer.Gfx
+  sprites: Sprite[]
 ): void {
   requestAnimationFrameID = requestAnimationFrame(now =>
-    loop(gl, ctx, atlas, assets, next, now, sprites, gfx)
+    loop(gfx, atlas, assets, next, now, sprites)
   )
 
   // If focus is lost, do not advance more than a second.
   const step = Math.min(1000, next - prev) / 1000
 
   if (actionState[Action.DEBUG_CONTEXT_LOSS]) {
-    const extension = gl.getExtension('WEBGL_lose_context')
+    const extension = gfx.gl.getExtension('WEBGL_lose_context')
     if (extension) {
-      if (gl.isContextLost()) {
+      if (gfx.gl.isContextLost()) {
         console.log('GL restore context.')
         extension.restoreContext()
       } else {
@@ -141,15 +139,13 @@ function loop(
   const canvas = {w: window.innerWidth, h: window.innerHeight}
 
   renderer.render(
-    gl,
-    ctx,
+    gfx,
     sprites,
     verts,
     instances,
     canvas,
     scale,
-    sprites[playerIndex].position,
-    gfx
+    sprites[playerIndex].position
   )
 }
 

@@ -6,9 +6,11 @@ import {WH, XY} from '../types/geo'
 import {VERT_ATTRS, VertAttr} from './vert'
 import {resize} from './resizer'
 
-export type Gfx = {
-  vertArray: WebGLVertexArrayObject | null
-  buffer: {vert: WebGLBuffer | null; instance: WebGLBuffer | null}
+export type Renderer = {
+  readonly gl: GL
+  readonly shaderContext: ShaderContext
+  readonly vertArray: WebGLVertexArrayObject | null
+  readonly buffer: {vert: WebGLBuffer | null; instance: WebGLBuffer | null}
 }
 
 export function init(
@@ -16,7 +18,7 @@ export function init(
   shaderContext: ShaderContext,
   assets: Assets,
   verts: Int16Array
-): Gfx {
+): Renderer {
   const atlas = assets[TextureAssetID.ATLAS]
   gl.uniform1i(shaderContext.location('sampler'), 0)
   gl.uniform2i(
@@ -49,33 +51,36 @@ export function init(
 
   gl.bindVertexArray(null)
 
-  return {buffer: {vert: vertBuffer, instance: instanceBuffer}, vertArray}
+  return {
+    gl,
+    shaderContext,
+    buffer: {vert: vertBuffer, instance: instanceBuffer},
+    vertArray
+  }
 }
 
 export function render(
-  gl: GL,
-  shaderContext: ShaderContext,
+  gfx: Renderer,
   sprites: Sprite[],
   verts: Int16Array,
   instances: Int16Array,
   canvas: WH,
   scale: number,
-  position: XY,
-  gfx: Gfx
+  position: XY
 ): void {
-  resize(gl, shaderContext.location('cam'), canvas, scale, position)
+  resize(gfx.gl, gfx.shaderContext.location('cam'), canvas, scale, position)
 
-  gl.bindVertexArray(gfx.vertArray)
+  gfx.gl.bindVertexArray(gfx.vertArray)
 
-  bufferData(gl, gfx.buffer.instance, instances)
-  gl.drawArraysInstanced(
-    gl.TRIANGLE_STRIP,
+  bufferData(gfx.gl, gfx.buffer.instance, instances)
+  gfx.gl.drawArraysInstanced(
+    GL.TRIANGLE_STRIP,
     0,
     verts.length / VERT_ATTRS.vert.length,
     sprites.length
   )
 
-  gl.bindVertexArray(null)
+  gfx.gl.bindVertexArray(null)
 }
 
 /** Creates, binds, and configures a texture. */
