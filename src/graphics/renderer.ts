@@ -1,7 +1,7 @@
 import {GL, GLTexture} from './gl'
 import {Assets, TextureAssetID} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
-import {ShaderContext} from './glsl/shader-loader'
+import {ShaderContext} from './shaders/shader-loader'
 import {WH, XY} from '../types/geo'
 import {VERT_ATTRS, VertAttr} from './vert'
 import {resize} from './resizer'
