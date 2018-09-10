@@ -47,8 +47,8 @@ function main(window: Window) {
   gl.enable(gl.BLEND)
   gl.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
 
-  const ctx = shaderLoader.load(gl, vertexSrc, fragmentSrc)
-  gl.useProgram(ctx.program)
+  const shader = shaderLoader.load(gl, vertexSrc, fragmentSrc)
+  gl.useProgram(shader.program)
 
   const onKeyChange = (event: KeyboardEvent) => {
     const action = keyboard.DEFAULT_KEY_MAP[event.key]
@@ -66,7 +66,7 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => {
-      const gfx = renderer.init(gl, ctx, assets, verts)
+      const gfx = renderer.init(gl, shader, assets, verts)
       instances = new Int16Array(
         Level0.Map.sprites.length * VERT_ATTRS.instance.length
       )
@@ -76,7 +76,7 @@ function main(window: Window) {
     })
     .catch(e => {
       console.error(e)
-      renderer.deinit(gl, ctx, null, null)
+      renderer.deinit(gl, shader, null, null)
       document.removeEventListener('keyup', onKeyChange)
       document.removeEventListener('keydown', onKeyChange)
     })

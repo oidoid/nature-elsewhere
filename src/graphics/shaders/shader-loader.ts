@@ -1,7 +1,7 @@
 import {GL, GLProgram, GLUniformLocation} from '../gl'
 import {range, keys} from '../../util'
 
-export type ShaderContext = {
+export type ShaderProgram = {
   readonly program: GLProgram | null
   location(name: string): number
   location(name: string): GLUniformLocation | null
@@ -14,7 +14,7 @@ export function load(
   gl: GL,
   vertexSource: string,
   fragmentSource: string
-): ShaderContext {
+): ShaderProgram {
   const program = loadShaders(gl, vertexSource, fragmentSource)
   const locations = getLocations(gl, program)
   return {

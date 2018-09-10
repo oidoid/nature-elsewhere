@@ -1,28 +1,28 @@
 import {GL, GLTexture} from './gl'
 import {Assets, TextureAssetID} from '../assets/asset-loader'
 import {Sprite} from '../assets/sprites/sprite'
-import {ShaderContext} from './shaders/shader-loader'
+import {ShaderProgram} from './shaders/shader-loader'
 import {WH, XY} from '../types/geo'
 import {VERT_ATTRS, VertAttr} from './vert'
 import {resize} from './resizer'
 
 export type Renderer = {
   readonly gl: GL
-  readonly shaderContext: ShaderContext
+  readonly shader: ShaderProgram
   readonly vertArray: WebGLVertexArrayObject | null
   readonly buffer: {vert: WebGLBuffer | null; instance: WebGLBuffer | null}
 }
 
 export function init(
   gl: GL,
-  shaderContext: ShaderContext,
+  shader: ShaderProgram,
   assets: Assets,
   verts: Int16Array
 ): Renderer {
   const atlas = assets[TextureAssetID.ATLAS]
-  gl.uniform1i(shaderContext.location('sampler'), 0)
+  gl.uniform1i(shader.location('sampler'), 0)
   gl.uniform2i(
-    shaderContext.location('atlasSize'),
+    shader.location('atlasSize'),
     atlas.naturalWidth,
     atlas.naturalHeight
   )
@@ -40,20 +40,20 @@ export function init(
 
   const vertBuffer = gl.createBuffer()
   VERT_ATTRS.vert.attrs.forEach(attr =>
-    initVertAttr(gl, shaderContext, attr, vertBuffer)
+    initVertAttr(gl, shader, attr, vertBuffer)
   )
   bufferData(gl, vertBuffer, verts)
 
   const instanceBuffer = gl.createBuffer()
   VERT_ATTRS.instance.attrs.forEach(attr =>
-    initVertAttr(gl, shaderContext, attr, instanceBuffer)
+    initVertAttr(gl, shader, attr, instanceBuffer)
   )
 
   gl.bindVertexArray(null)
 
   return {
     gl,
-    shaderContext,
+    shader,
     buffer: {vert: vertBuffer, instance: instanceBuffer},
     vertArray
   }
@@ -68,7 +68,7 @@ export function render(
   scale: number,
   position: XY
 ): void {
-  resize(gfx.gl, gfx.shaderContext.location('cam'), canvas, scale, position)
+  resize(gfx.gl, gfx.shader.location('cam'), canvas, scale, position)
 
   gfx.gl.bindVertexArray(gfx.vertArray)
 
@@ -99,11 +99,11 @@ function createTexture(gl: GL): GLTexture | null {
 
 function initVertAttr(
   gl: GL,
-  shaderContext: ShaderContext,
+  shader: ShaderProgram,
   attr: VertAttr,
   buffer: WebGLBuffer | null
 ) {
-  const location = shaderContext.location(attr.name)
+  const location = shader.location(attr.name)
   gl.enableVertexAttribArray(location)
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
   gl.vertexAttribIPointer(
@@ -125,13 +125,13 @@ function bufferData(gl: GL, buffer: WebGLBuffer | null, data: Int16Array) {
 
 export function deinit(
   gl: GL,
-  shaderContext: ShaderContext,
+  shader: ShaderProgram,
   texture: WebGLTexture | null,
   buffer: WebGLBuffer | null
 ): void {
   gl.deleteBuffer(buffer)
   for (const {name} of VERT_ATTRS.vert.attrs)
-    gl.disableVertexAttribArray(shaderContext.location(name))
+    gl.disableVertexAttribArray(shader.location(name))
 
   gl.deleteTexture(texture)
 }
