@@ -14,8 +14,10 @@ export enum DrawOrder {
   CLOUDS = 1,
   FOREGROUND = 0
 }
+// copy context saving, pasuing, and other 01 functionality
 
-/** An instance of a texture. todo: revise terminology. */
+/** An instance of a texture. todo: revise terminology.
+ * should this be called an instance and a sprite is a group of instances? */
 export type Sprite = {
   type: SpriteType
   texture: Texture

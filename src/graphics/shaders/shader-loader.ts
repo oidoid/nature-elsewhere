@@ -6,7 +6,7 @@ export type ShaderProgram = {
   location(name: string): number
   location(name: string): GLUniformLocation | null
 }
-type Locations = Readonly<Record<string, number | GLUniformLocation | null>>
+type Locations = UniformLocations | AttributeLocations
 type UniformLocations = Readonly<Record<string, GLUniformLocation | null>>
 type AttributeLocations = Readonly<Record<string, number>>
 

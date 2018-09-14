@@ -2,18 +2,19 @@ import {Level0} from './assets/levels/level0'
 import * as assetsLoader from './assets/asset-loader'
 import * as shaderLoader from './graphics/shaders/shader-loader'
 import * as renderer from './graphics/renderer'
-import {GL, check} from './graphics/gl'
+import {GL} from './graphics/gl'
 import * as vertexSrc from './graphics/shaders/texture-atlas.vert'
 import * as fragmentSrc from './graphics/shaders/texture-atlas.frag'
 import * as keyboard from './input/keyboard'
 import * as textureAtlas from './assets/textures/texture-atlas'
 import * as atlasJSON from './assets/textures/atlas.json'
-import {ASSET_URL, TEXTURE} from './assets/textures/texture'
+import {ASSET_URL} from './assets/textures/texture'
 import {Action, ActionState, newActionState} from './input/action'
 import {Sprite, SpriteType} from './assets/sprites/sprite'
 import {flatten} from './util'
 import {VERT_ATTRS, newVert, updateInstance} from './graphics/vert'
 import {update} from './assets/sprites/sprite-factory'
+import * as player from './entities/player'
 
 const actionState: ActionState = newActionState()
 let requestAnimationFrameID: number | undefined
@@ -34,14 +35,7 @@ function main(window: Window) {
   const canvas = window.document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing in document.')
 
-  const gl: GL = check(
-    canvas.getContext('webgl2', {
-      alpha: false,
-      depth: false,
-      antialias: false,
-      failIfMajorPerformanceCaveat: true
-    })
-  )
+  const gl = renderer.getGL(canvas)
 
   // Allow translucent textures to be layered.
   gl.enable(gl.BLEND)
@@ -66,7 +60,12 @@ function main(window: Window) {
   assetsLoader
     .load(ASSET_URL)
     .then(assets => {
-      const gfx = renderer.init(gl, shader, assets, verts)
+      const gfx = renderer.init(
+        gl,
+        shader,
+        assets[assetsLoader.TextureAssetID.ATLAS],
+        verts
+      )
       instances = new Int16Array(
         Level0.Map.sprites.length * VERT_ATTRS.instance.length
       )
@@ -81,6 +80,32 @@ function main(window: Window) {
       document.removeEventListener('keydown', onKeyChange)
     })
 }
+
+// function onPaused(state) {
+//   console.log('Paused.')
+//   cancelAnimationFrame(state.requestId)
+// }
+
+// function onResumed(state) {
+//   console.log('Resumed.')
+//   if (!state.gfx.gl.isContextLost()) {
+//     startLooping(state)
+//   }
+// }
+
+// function onContextLost(state, event) {
+//   console.log('GL context lost.')
+//   event.preventDefault()
+//   cancelAnimationFrame(state.requestId)
+// }
+
+// function onContextRestored(state) {
+//   console.log('GL context restored.')
+//   state.gfx = initGL(state, state.gfx.gl)
+//   if (!document.hidden) {
+//     startLooping(state)
+//   }
+// }
 
 // render
 // ReadOnly<array>
@@ -118,7 +143,7 @@ function loop(
   const playerIndex = sprites.findIndex(
     sprite => sprite.type === SpriteType.PLAYER
   )
-  updatePlayer(atlas, sprites[playerIndex], step)
+  player.update(atlas, actionState, sprites[playerIndex], step)
 
   // Load the images into the texture.
   sprites.forEach((sprite, i) => {
@@ -161,53 +186,6 @@ function onGLContextLost(event: Event) {
 function onGLContextRestored() {
   console.log('GL context restored')
   // init();
-}
-
-export function updatePlayer(
-  atlas: textureAtlas.TextureAtlas,
-  sprite: Sprite,
-  step: number
-): void {
-  // todo: add pixel per second doc.
-  const pps = (actionState[Action.RUN] ? 48 : 16) * step
-
-  // sprite.texture.
-
-  sprite.scale.x = actionState[Action.LEFT]
-    ? -1
-    : actionState[Action.RIGHT]
-      ? 1
-      : sprite.scale.x
-
-  sprite.position.x = Math.max(
-    0,
-    sprite.position.x -
-      (actionState[Action.LEFT] ? pps : 0) +
-      (actionState[Action.RIGHT] ? pps : 0)
-  )
-  sprite.position.y = Math.min(
-    70,
-    sprite.position.y -
-      (actionState[Action.UP] ? pps : 0) +
-      (actionState[Action.DOWN] ? pps : 0)
-  )
-
-  sprite.texture = actionState[Action.UP]
-    ? TEXTURE.PLAYER_ASCEND
-    : actionState[Action.DOWN]
-      ? sprite.position.y < 70
-        ? TEXTURE.PLAYER_DESCEND
-        : TEXTURE.PLAYER_CROUCH
-      : actionState[Action.LEFT] || actionState[Action.RIGHT]
-        ? actionState[Action.RUN]
-          ? TEXTURE.PLAYER_RUN
-          : TEXTURE.PLAYER_WALK
-        : TEXTURE.PLAYER_IDLE
-
-  sprite.celIndex =
-    Math.abs(
-      Math.round(sprite.position.x / (actionState[Action.RUN] ? 6 : 2))
-    ) % atlas.animations[sprite.texture.textureID].cels.length
 }
 
 main(window)

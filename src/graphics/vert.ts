@@ -63,6 +63,13 @@ export const VERT_ATTRS: VertAttrs = (() => {
   }
 })()
 
+// todo: uniforms.
+// export const uniforms = {
+//   cam: {},
+//   atlasSize: {},
+//   sampler: {}
+// }
+
 export function newVert(uv: XY): number[] {
   return [uv.x, uv.y]
 }

@@ -1,5 +1,4 @@
-import {GL, GLTexture} from './gl'
-import {Assets, TextureAssetID} from '../assets/asset-loader'
+import {GL, GLTexture, check} from './gl'
 import {Sprite} from '../assets/sprites/sprite'
 import {ShaderProgram} from './shaders/shader-loader'
 import {WH, XY} from '../types/geo'
@@ -13,13 +12,23 @@ export type Renderer = {
   readonly buffer: {vert: WebGLBuffer | null; instance: WebGLBuffer | null}
 }
 
+export function getGL(canvas: HTMLCanvasElement): GL {
+  return check(
+    canvas.getContext('webgl2', {
+      alpha: false,
+      depth: false,
+      antialias: false,
+      failIfMajorPerformanceCaveat: true
+    })
+  )
+}
+
 export function init(
   gl: GL,
   shader: ShaderProgram,
-  assets: Assets,
+  atlas: HTMLImageElement,
   verts: Int16Array
 ): Renderer {
-  const atlas = assets[TextureAssetID.ATLAS]
   gl.uniform1i(shader.location('sampler'), 0)
   gl.uniform2i(
     shader.location('atlasSize'),
@@ -60,7 +69,7 @@ export function init(
 }
 
 export function render(
-  gfx: Renderer,
+  {gl, shader, ...renderer}: Renderer,
   sprites: Sprite[],
   verts: Int16Array,
   instances: Int16Array,
@@ -68,19 +77,19 @@ export function render(
   scale: number,
   position: XY
 ): void {
-  resize(gfx.gl, gfx.shader.location('cam'), canvas, scale, position)
+  resize(gl, shader.location('cam'), canvas, scale, position)
 
-  gfx.gl.bindVertexArray(gfx.vertArray)
+  gl.bindVertexArray(renderer.vertArray)
 
-  bufferData(gfx.gl, gfx.buffer.instance, instances)
-  gfx.gl.drawArraysInstanced(
+  bufferData(gl, renderer.buffer.instance, instances)
+  gl.drawArraysInstanced(
     GL.TRIANGLE_STRIP,
     0,
     verts.length / VERT_ATTRS.vert.length,
     sprites.length
   )
 
-  gfx.gl.bindVertexArray(null)
+  gl.bindVertexArray(null)
 }
 
 /** Creates, binds, and configures a texture. */
@@ -105,7 +114,7 @@ function initVertAttr(
 ) {
   const location = shader.location(attr.name)
   gl.enableVertexAttribArray(location)
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+  gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
   gl.vertexAttribIPointer(
     location,
     attr.length,
@@ -114,7 +123,7 @@ function initVertAttr(
     attr.offset
   )
   gl.vertexAttribDivisor(location, attr.divisor)
-  gl.bindBuffer(gl.ARRAY_BUFFER, null)
+  gl.bindBuffer(GL.ARRAY_BUFFER, null)
 }
 
 function bufferData(gl: GL, buffer: WebGLBuffer | null, data: Int16Array) {

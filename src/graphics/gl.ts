@@ -5,7 +5,7 @@ export type GLShader = WebGLShader
 export type GLTexture = WebGLTexture
 export type GLUniformLocation = WebGLUniformLocation
 
-export function check(gl: GL | null) {
+export function check(gl: GL | null): GL {
   if (!gl) throw new Error('WebGL context unobtainable.')
 
   const proto: WebGLRenderingContext = Object.getPrototypeOf(gl)
@@ -15,6 +15,7 @@ export function check(gl: GL | null) {
       const log = gl.getShaderInfoLog(shader)
       if (log) console.error(log)
     },
+
     linkProgram(program) {
       proto.linkProgram.apply(gl, arguments)
       const log = gl.getProgramInfoLog(program)
