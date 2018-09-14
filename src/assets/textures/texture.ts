@@ -78,6 +78,7 @@ export const TEXTURE = {
   PLAYER_ASCEND_ARMED: {...atlas, textureID: 'player ascend-armed'},
   PLAYER_DESCEND: {...atlas, textureID: 'player descend'},
   PLAYER_DESCEND_ARMED: {...atlas, textureID: 'player descend-armed'},
+  PLAYER_SIT: {...atlas, textureID: 'player sit'},
   POND_MASK: {...atlas, textureID: 'pond mask'},
   POND_WATER: {...atlas, textureID: 'pond water'},
   POND_REFLECTIONS: {...atlas, textureID: 'pond reflections'},

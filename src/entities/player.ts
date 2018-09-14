@@ -10,6 +10,13 @@ function grounded(sprite: Sprite): boolean {
 function texture(sprite: Sprite, actionState: ActionState): Texture {
   if (actionState[Action.DOWN]) {
     if (!grounded(sprite)) return TEXTURE.PLAYER_DESCEND
+    if (
+      sprite.texture === TEXTURE.PLAYER_CROUCH ||
+      sprite.texture === TEXTURE.PLAYER_SIT
+    ) {
+      return TEXTURE.PLAYER_SIT
+    }
+
     return TEXTURE.PLAYER_CROUCH
   }
   if (actionState[Action.UP] || !grounded(sprite)) return TEXTURE.PLAYER_ASCEND
