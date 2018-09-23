@@ -1,98 +1,91 @@
-import {Action, ActionState} from '../input/action'
-import {Sprite} from '../assets/sprites/sprite'
-import {TextureAtlas} from '../assets/textures/texture-atlas'
-import {TEXTURE, Texture} from '../assets/textures/texture'
+import * as atlas from '../assets/atlas'
+import * as entity from './entity'
+import * as recorder from '../inputs/recorder'
+import * as texture from '../assets/texture'
 
-function grounded(sprite: Sprite): boolean {
-  return sprite.position.y >= 70
+export function nextStepState(
+  state: entity.State,
+  step: number,
+  atlas: atlas.State,
+  recorderState: recorder.State
+): void {
+  scale(state, recorderState)
+  position(state, recorderState, step)
+
+  state.textureID = textureID(state, recorderState)
+  const cel =
+    Math.abs(
+      Math.round(
+        state.position.x / (recorderState[recorder.Input.RUN].active ? 6 : 2)
+      )
+    ) % atlas.animations[state.textureID].cels.length
+  const coord = atlas.animations[state.textureID].cels[cel].bounds
+  state.coord.x = coord.x
+  state.coord.y = coord.y
+  state.coord.w = coord.w
+  state.coord.h = coord.h
 }
 
-function texture(sprite: Sprite, actionState: ActionState): Texture {
-  if (actionState[Action.DOWN]) {
-    if (!grounded(sprite)) return TEXTURE.PLAYER_DESCEND
+function grounded(state: entity.State): boolean {
+  return state.position.y >= -17
+}
+
+function textureID(
+  state: entity.State,
+  recorderState: recorder.State
+): texture.ID {
+  if (recorderState[recorder.Input.DOWN].active) {
+    if (!grounded(state)) return texture.ID.PLAYER_DESCEND
     if (
-      sprite.texture === TEXTURE.PLAYER_CROUCH ||
-      sprite.texture === TEXTURE.PLAYER_SIT
+      state.textureID === texture.ID.PLAYER_CROUCH ||
+      state.textureID === texture.ID.PLAYER_SIT
     ) {
-      return TEXTURE.PLAYER_SIT
+      return texture.ID.PLAYER_SIT
     }
 
-    return TEXTURE.PLAYER_CROUCH
+    return texture.ID.PLAYER_CROUCH
   }
-  if (actionState[Action.UP] || !grounded(sprite)) return TEXTURE.PLAYER_ASCEND
-
-  if (actionState[Action.LEFT] || actionState[Action.RIGHT]) {
-    if (actionState[Action.RUN]) return TEXTURE.PLAYER_RUN
-    return TEXTURE.PLAYER_WALK
+  if (recorderState[recorder.Input.UP].active || !grounded(state)) {
+    return texture.ID.PLAYER_ASCEND
   }
 
-  return TEXTURE.PLAYER_IDLE
+  if (
+    recorderState[recorder.Input.LEFT].active ||
+    recorderState[recorder.Input.RIGHT].active
+  ) {
+    if (recorderState[recorder.Input.RUN].active) return texture.ID.PLAYER_RUN
+    return texture.ID.PLAYER_WALK
+  }
+
+  return texture.ID.PLAYER_IDLE
 }
 
-function scale(sprite: Sprite, actionState: ActionState): void {
-  sprite.scale.x = actionState[Action.LEFT]
+function scale(state: entity.State, recorderState: recorder.State): void {
+  state.scale.x = recorderState[recorder.Input.LEFT].active
     ? -1
-    : actionState[Action.RIGHT]
+    : recorderState[recorder.Input.RIGHT].active
       ? 1
-      : sprite.scale.x
+      : state.scale.x
 }
 
 function position(
-  sprite: Sprite,
-  actionState: ActionState,
+  state: entity.State,
+  recorderState: recorder.State,
   step: number
 ): void {
-  if (grounded(sprite) && actionState[Action.DOWN]) return
+  if (grounded(state) && recorderState[recorder.Input.DOWN].active) return
   // todo: add pixel per second doc.
-  const pps = (actionState[Action.RUN] ? 48 : 16) * step
-  sprite.position.x = Math.max(
+  const pps = (recorderState[recorder.Input.RUN].active ? 48 : 16) * step
+  state.position.x = Math.max(
     0,
-    sprite.position.x -
-      (actionState[Action.LEFT] ? pps : 0) +
-      (actionState[Action.RIGHT] ? pps : 0)
+    state.position.x -
+      (recorderState[recorder.Input.LEFT].active ? pps : 0) +
+      (recorderState[recorder.Input.RIGHT].active ? pps : 0)
   )
-  sprite.position.y = Math.min(
-    70,
-    sprite.position.y -
-      (actionState[Action.UP] ? pps : 0) +
-      (actionState[Action.DOWN] ? pps : 0)
+  state.position.y = Math.min(
+    -17,
+    state.position.y -
+      (recorderState[recorder.Input.UP].active ? pps : 0) +
+      (recorderState[recorder.Input.DOWN].active ? pps : 0)
   )
-}
-
-// if undefined, identity
-
-// const player = {
-//   scale: {
-//     x: {[Action.LEFT]: -1, [Action.RIGHT]: 1}
-//   },
-//   texture: {
-//     [Action.UP]: TEXTURE.PLAYER_ASCEND,
-//     [Action.DOWN]:
-
-//     ? sprite.position.y < 70
-//         ? TEXTURE.PLAYER_DESCEND
-//         : TEXTURE.PLAYER_CROUCH
-//       : actionState[Action.LEFT] || actionState[Action.RIGHT]
-//         ? actionState[Action.RUN]
-//           ? TEXTURE.PLAYER_RUN
-//           : TEXTURE.PLAYER_WALK
-//         : TEXTURE.PLAYER_IDLE
-
-//   }
-// }
-
-export function update(
-  atlas: TextureAtlas,
-  actionState: ActionState,
-  sprite: Sprite,
-  step: number
-): void {
-  scale(sprite, actionState)
-  position(sprite, actionState, step)
-
-  sprite.texture = texture(sprite, actionState)
-  sprite.celIndex =
-    Math.abs(
-      Math.round(sprite.position.x / (actionState[Action.RUN] ? 6 : 2))
-    ) % atlas.animations[sprite.texture.textureID].cels.length
 }

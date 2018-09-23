@@ -6,16 +6,14 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/.bin/webpack-dev-server",
-      "args": ["-dw"],
-      "console": "integratedTerminal"
+      "args": ["-dw"]
     },
     {
-      "name": "npm run test:unit",
+      "name": "jest",
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-      "args": ["-i"],
-      "console": "integratedTerminal"
+      "args": ["-i"]
     }
   ]
 }

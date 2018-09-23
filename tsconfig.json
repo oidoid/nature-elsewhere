@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "lib": ["es2018", "dom"],
     "resolveJsonModule": true,
 
@@ -8,8 +7,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
 
-    "newLine": "lf",
-    "forceConsistentCasingInFileNames": true
+    "newLine": "lf"
   }
 }

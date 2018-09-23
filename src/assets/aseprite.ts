@@ -1,22 +1,11 @@
-import {U16_MAX} from '../../limits'
-import {XY, WH} from '../../types/geo'
-
 /**
  * This typing assumes the options specified in package.json and annotated
- * herein with **via CLI**. The JSON export format appears to not be documented
+ * herein with **via CLI**. The JSON export format appears to be undocumented
  * but the related [binary format] is. Types marked "**by convention**" are
  * supplemental to and unenforced by the JSON format. Any data of these types
  * should be validated as soon as possible. All numbers are integers. All
  * indices are zero-based. All geometry are described from the top left to the
- * bottom right in pixel units:
- *
- *       y
- *       |0 1 2 …
- *   x---+------>
- *     0 |
- *     1 |
- *     2 |
- *     : v
+ * bottom right in pixel units.
  *
  * [binary format]: https://github.com/aseprite/aseprite/blob/master/docs/ase-file-specs.md
  */
@@ -85,13 +74,13 @@ export type Frame = Readonly<{
    * calculated by subtracting member's WH dimensions from sourceSize and
    * dividing by 2.
    */
-  frame: XY & WH
+  frame: Rect
   rotated: boolean
   trimmed: boolean
   /**
    * The Frame's bounds within the file packed, not including padding.
    */
-  spriteSourceSize: XY & WH
+  spriteSourceSize: Rect
   sourceSize: WH
   duration: Duration
 }>
@@ -120,7 +109,7 @@ export type Duration = number
 /**
  * **By convention**, animations that should never end have this reserved value.
  */
-export const INFINITE_DURATION: Duration = U16_MAX
+export const INFINITE_DURATION: Duration = 0xffff
 
 /** An animation's looping behavior. */
 export enum Direction {
@@ -158,5 +147,5 @@ export type Key = Readonly<{
    */
   frame: number
   /** The Frame's collision boundary within the file packed. */
-  bounds: XY & WH
+  bounds: Rect
 }>

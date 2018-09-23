@@ -1,9 +1,9 @@
-declare module '*.frag' {
+declare module '*.vert' {
   const text: string
   export = text
 }
 
-declare module '*.vert' {
+declare module '*.frag' {
   const text: string
   export = text
 }

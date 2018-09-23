@@ -5,6 +5,8 @@ import * as webpack from 'webpack'
 const stats = {all: false, errors: true, warnings: true}
 
 const config: webpack.Configuration = {
+  stats,
+
   resolve: {extensions: ['.ts', '.js']},
 
   output: {filename: 'index.js'},
@@ -16,22 +18,16 @@ const config: webpack.Configuration = {
     ]
   },
 
-  stats,
-
-  devServer:
-    process.env.NODE_ENV === 'production'
-      ? undefined
-      : {
-          clientLogLevel: 'warning',
-          progress: false,
-          overlay: {warnings: true, errors: true},
-          stats
-        },
-
   plugins: [
     new CleanPlugin('dist', {verbose: false}),
     new CopyPlugin([{context: 'src', from: '**/*.{html,png}'}])
-  ]
+  ],
+
+  devServer: {
+    clientLogLevel: 'warning',
+    overlay: {warnings: true, errors: true},
+    stats
+  }
 }
 
 export default config
