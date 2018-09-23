@@ -2,6 +2,7 @@ import * as atlas from '../assets/atlas'
 import * as player from './player'
 import * as recorder from '../inputs/recorder'
 import * as texture from '../assets/texture'
+import * as util from '../util'
 
 export enum DrawOrder {
   BACKGROUND = 0,
@@ -103,8 +104,7 @@ export function newRainCloud(
 ): State[] {
   const entities: State[] = []
   const drawOrder = DrawOrder.CLOUDS
-  // range
-  for (let i = 0; i < (-27 - y) / 16; ++i) {
+  util.range(0, (-27 - y) / 16).forEach(i =>
     entities.push({
       ...newState(),
       coord: atlas.animations[texture.ID.RAIN].cels[0].bounds,
@@ -119,7 +119,7 @@ export function newRainCloud(
       speed: {x: speed, y: 0},
       scrollSpeed: {x: 0, y: -12}
     })
-  }
+  )
   entities.push({
     ...newState(),
     coord: atlas.animations[texture.ID.WATER_M].cels[0].bounds,

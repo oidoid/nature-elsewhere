@@ -1,5 +1,6 @@
 import * as atlas from './assets/atlas'
 import * as entity from './entities/entity'
+import * as random from './random'
 import * as texture from './assets/texture'
 import * as util from './util'
 
@@ -17,7 +18,7 @@ const tallGrassIDs = [
   texture.ID.TALL_GRASS_I
 ]
 
-export function newState(atlas: atlas.State): State {
+export function newState(atlas: atlas.State, randomState: random.State): State {
   const entities = [
     ...entity.newPalette3(
       atlas,
@@ -40,13 +41,17 @@ export function newState(atlas: atlas.State): State {
     ...entity.newGrass(atlas, texture.ID.TALL_GRASS_B, {x: 208, y: -15}),
     ...util
       .range(0, 20)
-      .map(i =>
-        entity.newGrass(
+      .map(i => {
+        randomState = random.nextIntState(randomState, 0, tallGrassIDs.length)
+        return entity.newGrass(
           atlas,
-          tallGrassIDs[util.rndInt(0, tallGrassIDs.length - 1)],
-          {x: 228 + i * 4, y: -15}
+          tallGrassIDs[(<random.NextState>randomState).result],
+          {
+            x: 228 + i * 4,
+            y: -16
+          }
         )
-      )
+      })
       .reduce(util.flatten),
     ...entity.newGrass(
       atlas,

@@ -1,11 +1,3 @@
-export function rnd(min: number, max: number): number {
-  return min + Math.random() * (max - min)
-}
-
-export function rndInt(min: number, max: number): number {
-  return Math.floor(rnd(min, max + 1))
-}
-
 export function flatten<T>(arr: T[], item: T | T[]): T[] {
   return arr.concat(item)
 }

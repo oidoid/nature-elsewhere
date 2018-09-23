@@ -4,6 +4,7 @@ import * as atlasJSON from './assets/atlas.json'
 import * as entity from './entities/entity'
 import * as level0 from './level0'
 import * as keyboard from './inputs/keyboard'
+import * as random from './random'
 import * as recorder from './inputs/recorder'
 import * as renderer from './graphics/renderer'
 import * as spawner from './entities/spawner'
@@ -18,6 +19,7 @@ type State = {
   renderer: renderer.State
   recorderState: recorder.State
   readonly scale: number
+  random: random.State
 }
 
 export function newState(
@@ -26,7 +28,8 @@ export function newState(
 ): State {
   const atlas = asepriteParser.parse(atlasJSON)
   const spawnerState = spawner.newState()
-  const level0State = level0.newState(atlas)
+  const randomState = random.newState(0)
+  const level0State = level0.newState(atlas, randomState)
   spawner.nextSpawnState(spawnerState, level0State.entities)
 
   const canvas = document.querySelector('canvas')
@@ -43,7 +46,8 @@ export function newState(
     frameID: 0,
     renderer: rendererState,
     recorderState: recorder.newState(),
-    scale: 8
+    scale: 8,
+    random: randomState
   }
 }
 
@@ -55,8 +59,8 @@ export function nextStartState(state: State, document: Document): State {
   state.canvas.addEventListener('webglcontextlost', event =>
     onContextLost(state, event)
   )
-  state.canvas.addEventListener('webglcontextrestored', _ =>
-    onContextRestored(document, state)
+  state.canvas.addEventListener('webglcontextrestored', event =>
+    onContextRestored(document, state, event)
   )
 
   document.addEventListener('keydown', event => onKeyChange(state, event))
@@ -79,8 +83,8 @@ function onPaused(state: State): void {
 
 function onContextLost(state: State, event: Event): void {
   console.log('Renderer context lost.')
-  event.preventDefault()
   cancelAnimationFrame(state.frameID)
+  event.preventDefault()
 }
 
 function onResumed(state: State): void {
@@ -90,12 +94,17 @@ function onResumed(state: State): void {
   }
 }
 
-function onContextRestored(document: Document, state: State): void {
+function onContextRestored(
+  document: Document,
+  state: State,
+  event: Event
+): void {
   console.log('Renderer context restored.')
   state.renderer = renderer.newState(state.canvas, state.atlasTexture)
   if (!document.hidden) {
     startLooping(state)
   }
+  event.preventDefault()
 }
 
 function onKeyChange(state: State, event: KeyboardEvent): void {
@@ -111,6 +120,8 @@ function onKeyChange(state: State, event: KeyboardEvent): void {
   // Since looping is paused during context loss, a check is performed whenever
   // a key is pressed.
   checkLoseContext(state)
+
+  event.preventDefault()
 }
 
 function onLoop(state: State, then: number, now: number): void {
