@@ -46,7 +46,7 @@ export function newState(
     frameID: 0,
     renderer: rendererState,
     recorderState: recorder.newState(),
-    scale: 8,
+    scale: 6,
     random: randomState
   }
 }
