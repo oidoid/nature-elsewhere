@@ -135,7 +135,10 @@ function onLoop(state: State, then: number, now: number): void {
   spawner.flushUpdatesToMemory(state.spawner)
   // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
   // scaling.
-  const canvas = {w: window.innerWidth, h: window.innerHeight}
+  const canvas = {
+    w: document.documentElement.clientWidth,
+    h: document.documentElement.clientHeight
+  }
   renderer.render(
     state.renderer,
     canvas,

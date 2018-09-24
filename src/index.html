@@ -12,6 +12,13 @@
         /* The background color can be shown during quick resizes and context
            loss. */
         background: #000;
+
+        /* document.documentElement.clientWidth/Height seems to give the most
+           accurate dimensions, as opposed to window.innerWidth/Height, but can
+           cause the scrollbars to enter an infinite on/off loop if not
+           initially disabled. This should only be necessary when the user
+           scaling is not 100%. */
+        overflow: hidden;
       }
       canvas {
         /* Prevent additional line height spacing by changing display type from
