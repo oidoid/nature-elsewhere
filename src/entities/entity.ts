@@ -83,7 +83,7 @@ export function newPalette3(
   position: XY,
   scale: XY
 ): State[] {
-  const textureID = texture.ID.PALETTE_3
+  const textureID = texture.ID.PALETTE_PALE
   const coord = atlas.animations[textureID].cels[0].bounds
   const drawOrder = DrawOrder.BACKGROUND
   return [{...newState(), coord, position, scale, textureID, drawOrder}]

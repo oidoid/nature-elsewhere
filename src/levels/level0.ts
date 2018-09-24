@@ -28,13 +28,13 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
     ...entity.newGrass(
       atlas,
       texture.ID.GRASS_L,
-      {x: -100, y: -27},
-      {x: 40, y: 1}
+      {x: -512, y: -12},
+      {x: 48, y: 1}
     ),
     ...entity.newGrass(
       atlas,
       texture.ID.GRASS_L,
-      {x: 208, y: -27},
+      {x: 208, y: -12},
       {x: 2, y: 1}
     ),
     ...entity.newGrass(atlas, texture.ID.TALL_GRASS_A, {x: 188, y: -15}),
