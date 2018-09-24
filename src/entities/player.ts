@@ -45,7 +45,7 @@ function textureID(
 
     return texture.ID.PLAYER_CROUCH
   }
-  if (recorderState[recorder.Input.UP].active || !grounded(state)) {
+  if (recorderState[recorder.Input.UP].active && !grounded(state)) {
     return texture.ID.PLAYER_ASCEND
   }
 

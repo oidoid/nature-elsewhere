@@ -6,7 +6,8 @@ import * as util from '../util'
 
 export enum DrawOrder {
   BACKGROUND = 0,
-  BACKGROUND_SCENERY = 1,
+  FAR_BACKGROUND_SCENERY = 1,
+  NEAR_BACKGROUND_SCENERY = 2,
   PLAYER = 5,
   FOREGROUND_SCENERY = 8,
   CLOUDS = 9,
@@ -146,13 +147,20 @@ export function newGrass(
   scale: XY = {x: 1, y: 1}
 ): State[] {
   const coord = atlas.animations[textureID].cels[0].bounds
-  const drawOrder = DrawOrder.FOREGROUND_SCENERY
+  const drawOrder = [
+    texture.ID.GRASS_XS,
+    texture.ID.GRASS_S,
+    texture.ID.GRASS_M,
+    texture.ID.GRASS_L
+  ].includes(textureID)
+    ? DrawOrder.FAR_BACKGROUND_SCENERY
+    : DrawOrder.FOREGROUND_SCENERY
   return [{...newState(), coord, position, scale, textureID, drawOrder}]
 }
 
 export function newTree(atlas: atlas.State, position: XY): State[] {
   const textureID = texture.ID.TREE
   const coord = atlas.animations[textureID].cels[0].bounds
-  const drawOrder = DrawOrder.BACKGROUND_SCENERY
+  const drawOrder = DrawOrder.NEAR_BACKGROUND_SCENERY
   return [{...newState(), coord, position, textureID, drawOrder}]
 }
