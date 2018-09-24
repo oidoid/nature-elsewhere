@@ -12,7 +12,7 @@ export enum ID {
   PALETTE_BLACK_TINT = 'palette black-tint',
 
   PALETTE_PALE = 'palette pale',
-  PALETTE_BRIGHT_GREEN = 'palette bright-green',
+  PALETTE_LIGHT_GREEN = 'palette light-green',
   PALETTE_LIGHT_BLUE = 'palette light-blue',
   PALETTE_LIGHT_BLUE_TINT = 'palette light-blue-tint',
   PALETTE_BRIGHT_GREEN_TINT = 'palette bright-green-tint',
@@ -20,7 +20,8 @@ export enum ID {
   PALETTE_WHITE = 'palette white',
   PALETTE_DARK_GREY = 'palette dark-grey',
   PALETTE_DARK_GREEN = 'palette dark-green',
-  PALETTE_LIGHT_GREEN = 'palette light-green',
+  PALETTE_BRIGHT_GREEN = 'palette bright-green',
+  PALETTE_PALE_GREEN = 'palette pale-green',
   PALETTE_LIGHT_YELLOW = 'palette light-yellow',
   PALETTE_GOLD = 'palette gold',
   PLAYER_IDLE = 'player idle',

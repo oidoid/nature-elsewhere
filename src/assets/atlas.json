@@ -73,7 +73,7 @@
       "duration": 65535
     },
     "palette black 0": {
-      "frame": {"x": 3, "y": 36, "w": 3, "h": 3},
+      "frame": {"x": 124, "y": 28, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
@@ -81,14 +81,6 @@
       "duration": 65535
     },
     "palette black-tint 1": {
-      "frame": {"x": 24, "y": 36, "w": 3, "h": 3},
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
-      "sourceSize": {"w": 1, "h": 1},
-      "duration": 65535
-    },
-    "palette pale 2": {
       "frame": {"x": 27, "y": 36, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
@@ -96,8 +88,16 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette bright-green 3": {
-      "frame": {"x": 124, "y": 12, "w": 3, "h": 3},
+    "palette pale 2": {
+      "frame": {"x": 30, "y": 36, "w": 3, "h": 3},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
+      "sourceSize": {"w": 1, "h": 1},
+      "duration": 65535
+    },
+    "palette light-green 3": {
+      "frame": {"x": 9, "y": 36, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
@@ -105,7 +105,7 @@
       "duration": 65535
     },
     "palette light-blue 4": {
-      "frame": {"x": 124, "y": 25, "w": 3, "h": 3},
+      "frame": {"x": 6, "y": 36, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
@@ -113,7 +113,7 @@
       "duration": 65535
     },
     "palette light-blue-tint 5": {
-      "frame": {"x": 124, "y": 28, "w": 3, "h": 3},
+      "frame": {"x": 3, "y": 36, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
@@ -129,7 +129,7 @@
       "duration": 65535
     },
     "palette black-light-tint 7": {
-      "frame": {"x": 6, "y": 36, "w": 3, "h": 3},
+      "frame": {"x": 124, "y": 25, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
@@ -137,7 +137,7 @@
       "duration": 65535
     },
     "palette white 8": {
-      "frame": {"x": 9, "y": 36, "w": 3, "h": 3},
+      "frame": {"x": 121, "y": 12, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
@@ -160,7 +160,7 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette light-green 11": {
+    "palette bright-green 11": {
       "frame": {"x": 18, "y": 36, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
@@ -168,7 +168,7 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette light-yellow 12": {
+    "palette pale-green 12": {
       "frame": {"x": 21, "y": 36, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
@@ -176,8 +176,16 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette gold 13": {
-      "frame": {"x": 121, "y": 12, "w": 3, "h": 3},
+    "palette light-yellow 13": {
+      "frame": {"x": 124, "y": 12, "w": 3, "h": 3},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
+      "sourceSize": {"w": 1, "h": 1},
+      "duration": 65535
+    },
+    "palette gold 14": {
+      "frame": {"x": 24, "y": 36, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 1, "h": 1},
@@ -257,7 +265,7 @@
       "duration": 100
     },
     "player run 9": {
-      "frame": {"x": 77, "y": 30, "w": 5, "h": 7},
+      "frame": {"x": 42, "y": 30, "w": 5, "h": 7},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 3, "h": 5},
@@ -265,7 +273,7 @@
       "duration": 200
     },
     "player run-armed 10": {
-      "frame": {"x": 42, "y": 30, "w": 5, "h": 7},
+      "frame": {"x": 77, "y": 30, "w": 5, "h": 7},
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {"x": 0, "y": 0, "w": 3, "h": 5},
@@ -467,7 +475,7 @@
       },
       {"name": "palette pale", "from": 2, "to": 2, "direction": "forward"},
       {
-        "name": "palette bright-green",
+        "name": "palette light-green",
         "from": 3,
         "to": 3,
         "direction": "forward"
@@ -505,18 +513,24 @@
         "direction": "forward"
       },
       {
-        "name": "palette light-green",
+        "name": "palette bright-green",
         "from": 11,
         "to": 11,
         "direction": "forward"
       },
       {
-        "name": "palette light-yellow",
+        "name": "palette pale-green",
         "from": 12,
         "to": 12,
         "direction": "forward"
       },
-      {"name": "palette gold", "from": 13, "to": 13, "direction": "forward"},
+      {
+        "name": "palette light-yellow",
+        "from": 13,
+        "to": 13,
+        "direction": "forward"
+      },
+      {"name": "palette gold", "from": 14, "to": 14, "direction": "forward"},
       {"name": "player idle", "from": 0, "to": 0, "direction": "forward"},
       {"name": "player idle-armed", "from": 1, "to": 1, "direction": "forward"},
       {"name": "player crouch", "from": 2, "to": 2, "direction": "forward"},
