@@ -20,7 +20,7 @@ const tallGrassIDs = [
 
 export function newState(atlas: atlas.State, randomState: random.State): State {
   const entities = [
-    ...entity.newPalette3(
+    ...entity.newBackground(
       atlas,
       {x: entity.Limits.HALF_MIN, y: entity.Limits.HALF_MIN},
       {x: entity.Limits.MAX, y: entity.Limits.MAX}
@@ -64,7 +64,8 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
     ...entity.newCloud(atlas, texture.ID.CLOUD_M, {x: 58, y: -76}),
     ...entity.newRainCloud(atlas, texture.ID.CLOUD_S, {x: 75, y: -65}, -0.08),
     ...entity.newCloud(atlas, texture.ID.CLOUD_XL, {x: 120, y: -60}),
-    ...entity.newRainCloud(atlas, texture.ID.CLOUD_L, {x: 20, y: -81}, -0.1)
+    ...entity.newRainCloud(atlas, texture.ID.CLOUD_L, {x: 20, y: -81}, -0.1),
+    ...entity.newSuperBall(atlas, {x: 10, y: -30}, {x: 0, y: 4})
   ]
 
   const player = entity.newPlayer(atlas, {
