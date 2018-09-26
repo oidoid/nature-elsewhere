@@ -33,19 +33,23 @@ export function nextStepState(
   )
 }
 
-export function flushUpdatesToMemory(state: State): void {
+export function flushUpdatesToMemory(
+  atlasState: atlas.State,
+  state: State
+): void {
   const length = state.entities.length
   if (state.memory.length < length * shaderLayout.perInstance.length) {
     state.memory = new Int16Array(length * shaderLayout.perInstance.length * 2)
   }
-  state.entities.forEach(({coord, scrollPosition, position, scale}, i) => {
-    // prettier-ignore
-    state.memory.set(
-      [coord.x, coord.y, coord.w, coord.h,
-       scrollPosition.x, scrollPosition.y,
-       position.x, position.y,
-       scale.x, scale.y],
-      i * shaderLayout.perInstance.length
-    )
-  })
+  state.entities.forEach(
+    ({scrollPosition, cel, position, scale, animationID}, i) => {
+      const coord = atlasState.animations[animationID].cels[cel].bounds
+      // prettier-ignore
+      state.memory.set([coord.x, coord.y, coord.w, coord.h,
+                        scrollPosition.x, scrollPosition.y,
+                        position.x, position.y,
+                        scale.x, scale.y],
+                       i * shaderLayout.perInstance.length)
+    }
+  )
 }

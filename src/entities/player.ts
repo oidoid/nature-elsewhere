@@ -1,7 +1,7 @@
 import * as atlas from '../assets/atlas'
 import * as entity from './entity'
 import * as recorder from '../inputs/recorder'
-import * as texture from '../assets/texture'
+import * as animation from '../assets/animation'
 
 export function nextStepState(
   state: entity.State,
@@ -12,52 +12,47 @@ export function nextStepState(
   scale(state, recorderState)
   position(state, recorderState, step)
 
-  state.textureID = textureID(state, recorderState)
-  const cel =
+  state.animationID = animationID(state, recorderState)
+  state.cel =
     Math.abs(
       Math.round(
         state.position.x / (recorderState[recorder.Input.RUN].active ? 6 : 2)
       )
-    ) % atlas.animations[state.textureID].cels.length
-  const coord = atlas.animations[state.textureID].cels[cel].bounds
-  state.coord.x = coord.x
-  state.coord.y = coord.y
-  state.coord.w = coord.w
-  state.coord.h = coord.h
+    ) % atlas.animations[state.animationID].cels.length
 }
 
 function grounded(state: entity.State): boolean {
   return state.position.y >= -17
 }
 
-function textureID(
+function animationID(
   state: entity.State,
   recorderState: recorder.State
-): texture.ID {
+): animation.ID {
   if (recorderState[recorder.Input.DOWN].active) {
-    if (!grounded(state)) return texture.ID.PLAYER_DESCEND
+    if (!grounded(state)) return animation.ID.PLAYER_DESCEND
     if (
-      state.textureID === texture.ID.PLAYER_CROUCH ||
-      state.textureID === texture.ID.PLAYER_SIT
+      state.animationID === animation.ID.PLAYER_CROUCH ||
+      state.animationID === animation.ID.PLAYER_SIT
     ) {
-      return texture.ID.PLAYER_SIT
+      return animation.ID.PLAYER_SIT
     }
 
-    return texture.ID.PLAYER_CROUCH
+    return animation.ID.PLAYER_CROUCH
   }
   if (recorderState[recorder.Input.UP].active && !grounded(state)) {
-    return texture.ID.PLAYER_ASCEND
+    return animation.ID.PLAYER_ASCEND
   }
 
   if (
     recorderState[recorder.Input.LEFT].active ||
     recorderState[recorder.Input.RIGHT].active
   ) {
-    if (recorderState[recorder.Input.RUN].active) return texture.ID.PLAYER_RUN
-    return texture.ID.PLAYER_WALK
+    if (recorderState[recorder.Input.RUN].active) return animation.ID.PLAYER_RUN
+    return animation.ID.PLAYER_WALK
   }
 
-  return texture.ID.PLAYER_IDLE
+  return animation.ID.PLAYER_IDLE
 }
 
 function scale(state: entity.State, recorderState: recorder.State): void {

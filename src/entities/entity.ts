@@ -2,8 +2,23 @@ import * as atlas from '../assets/atlas'
 import * as player from './player'
 import * as recorder from '../inputs/recorder'
 import * as superBall from './superBall'
-import * as texture from '../assets/texture'
+import * as animation from '../assets/animation'
 import * as util from '../util'
+
+export type NewState = {
+  readonly scrollPosition: XY
+  readonly scale: XY
+  readonly scrollSpeed: XY
+  readonly speed: XY
+  cel: number
+}
+
+export type State = NewState & {
+  readonly type: Type
+  readonly position: XY
+  animationID: animation.ID
+  readonly drawOrder: DrawOrder
+}
 
 export enum Type {
   BACKGROUND,
@@ -32,27 +47,13 @@ export enum Limits {
   MAX = 0x7fff
 }
 
-export type NewState = {
-  readonly scrollPosition: XY
-  readonly scale: XY
-  readonly scrollSpeed: XY
-  readonly speed: XY
-}
-
-export type State = NewState & {
-  readonly type: Type
-  readonly coord: Rect
-  readonly position: XY
-  textureID: texture.ID
-  readonly drawOrder: DrawOrder
-}
-
 export function newState(): NewState {
   return {
     scrollPosition: {x: 0, y: 0},
     scale: {x: 1, y: 1},
     scrollSpeed: {x: 0, y: 0},
-    speed: {x: 0, y: 0}
+    speed: {x: 0, y: 0},
+    cel: 0
   }
 }
 
@@ -74,57 +75,41 @@ export function nextStepState(
   state.scrollPosition.y += step * state.scrollSpeed.y
 }
 
-export function newCloud(
-  atlas: atlas.State,
-  textureID: texture.ID,
-  position: XY
-): State[] {
-  const coord = atlas.animations[textureID].cels[0].bounds
+export function newCloud(animationID: animation.ID, position: XY): State[] {
   return [
     {
       ...newState(),
       type: Type.CLOUD,
-      coord,
       position,
-      textureID,
+      animationID,
       drawOrder: DrawOrder.CLOUDS
     }
   ]
 }
 
-export function newBackground(
-  atlas: atlas.State,
-  position: XY,
-  scale: XY
-): State[] {
-  const textureID = texture.ID.PALETTE_PALE
-  const coord = atlas.animations[textureID].cels[0].bounds
+export function newBackground(position: XY, scale: XY): State[] {
+  const animationID = animation.ID.PALETTE_PALE
   const drawOrder = DrawOrder.BACKGROUND
   return [
     {
       ...newState(),
       type: Type.BACKGROUND,
-      coord,
       position,
       scale,
-      textureID,
+      animationID,
       drawOrder
     }
   ]
 }
 
-export function newPlayer(atlas: atlas.State, position: XY): State[] {
-  const textureID = texture.ID.PLAYER_IDLE
-  const coord = atlas.animations[textureID].cels[0].bounds
+export function newPlayer(position: XY): State[] {
+  const animationID = animation.ID.PLAYER_IDLE
   const drawOrder = DrawOrder.PLAYER
-  return [
-    {...newState(), type: Type.PLAYER, coord, position, textureID, drawOrder}
-  ]
+  return [{...newState(), type: Type.PLAYER, position, animationID, drawOrder}]
 }
 
 export function newRainCloud(
-  atlas: atlas.State,
-  textureID: texture.ID,
+  animationID: animation.ID,
   {x, y}: XY,
   speed: number
 ): State[] {
@@ -134,14 +119,13 @@ export function newRainCloud(
     entities.push({
       ...newState(),
       type: Type.CLOUD,
-      coord: atlas.animations[texture.ID.RAIN].cels[0].bounds,
       position: {
         // Round now to prevent rain from being an extra pixel off due to
         // truncation later.
         x: x + Math.round((i + 1) / 2),
         y: y + 6 + i * 16 - Math.max(0, y + 6 + i * 16 - -12)
       },
-      textureID: texture.ID.RAIN,
+      animationID: animation.ID.RAIN,
       drawOrder,
       speed: {x: speed, y: 0},
       scrollSpeed: {x: 0, y: -12}
@@ -150,18 +134,16 @@ export function newRainCloud(
   entities.push({
     ...newState(),
     type: Type.CLOUD,
-    coord: atlas.animations[texture.ID.WATER_M].cels[0].bounds,
     position: {x: x + 1, y: -12},
-    textureID: texture.ID.WATER_M,
+    animationID: animation.ID.WATER_M,
     drawOrder,
     speed: {x: speed, y: 0}
   })
   entities.push({
     ...newState(),
     type: Type.CLOUD,
-    coord: atlas.animations[textureID].cels[0].bounds,
     position: {x, y},
-    textureID,
+    animationID,
     drawOrder,
     speed: {x: speed, y: 0}
   })
@@ -169,57 +151,45 @@ export function newRainCloud(
 }
 
 export function newGrass(
-  atlas: atlas.State,
-  textureID: texture.ID,
+  animationID: animation.ID,
   position: XY,
   scale: XY = {x: 1, y: 1}
 ): State[] {
-  const coord = atlas.animations[textureID].cels[0].bounds
   const drawOrder = [
-    texture.ID.GRASS_XS,
-    texture.ID.GRASS_S,
-    texture.ID.GRASS_M,
-    texture.ID.GRASS_L
-  ].includes(textureID)
+    animation.ID.GRASS_XS,
+    animation.ID.GRASS_S,
+    animation.ID.GRASS_M,
+    animation.ID.GRASS_L
+  ].includes(animationID)
     ? DrawOrder.FAR_BACKGROUND_SCENERY
     : DrawOrder.FOREGROUND_SCENERY
   return [
     {
       ...newState(),
       type: Type.GRASS,
-      coord,
       position,
       scale,
-      textureID,
+      animationID,
       drawOrder
     }
   ]
 }
 
-export function newTree(atlas: atlas.State, position: XY): State[] {
-  const textureID = texture.ID.TREE
-  const coord = atlas.animations[textureID].cels[0].bounds
+export function newTree(position: XY): State[] {
+  const animationID = animation.ID.TREE
   const drawOrder = DrawOrder.NEAR_BACKGROUND_SCENERY
-  return [
-    {...newState(), type: Type.TREE, coord, position, textureID, drawOrder}
-  ]
+  return [{...newState(), type: Type.TREE, position, animationID, drawOrder}]
 }
 
-export function newSuperBall(
-  atlas: atlas.State,
-  position: XY,
-  speed: XY
-): State[] {
-  const textureID = texture.ID.PALETTE_GOLD
-  const coord = atlas.animations[textureID].cels[0].bounds
+export function newSuperBall(position: XY, speed: XY): State[] {
+  const animationID = animation.ID.PALETTE_GOLD
   return [
     {
       ...newState(),
       speed,
       type: Type.SUPER_BALL,
-      coord,
       position,
-      textureID,
+      animationID,
       drawOrder: DrawOrder.SUPER_BALL
     }
   ]

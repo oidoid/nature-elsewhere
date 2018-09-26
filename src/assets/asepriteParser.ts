@@ -50,10 +50,10 @@ export function parseAnimation(
 }
 
 export function marshalTagFrameNumber(
-  textureID: atlas.TextureID,
+  animationID: atlas.AnimationID,
   index?: number
 ): aseprite.TagFrameNumber {
-  return `${textureID} ${index === undefined ? '' : index}`
+  return `${animationID} ${index === undefined ? '' : index}`
 }
 
 export function parseCel(

@@ -132,7 +132,7 @@ function onLoop(state: State, then: number, now: number): void {
   state.frameID = requestAnimationFrame(now => onLoop(state, then, now))
 
   spawner.nextStepState(state.spawner, step, state.atlas, state.recorderState)
-  spawner.flushUpdatesToMemory(state.spawner)
+  spawner.flushUpdatesToMemory(state.atlas, state.spawner)
   // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
   // scaling.
   const canvas = {
