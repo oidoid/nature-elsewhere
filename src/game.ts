@@ -54,20 +54,20 @@ export function newState(
 export function nextStartState(state: State, document: Document): State {
   document.addEventListener(
     'visibilitychange',
-    _ => (document.hidden ? onPaused(state) : onResumed(state))
+    _ => (document.hidden ? onPaused(state) : onResumed(state, document))
   )
   state.canvas.addEventListener('webglcontextlost', event =>
     onContextLost(state, event)
   )
   state.canvas.addEventListener('webglcontextrestored', event =>
-    onContextRestored(document, state, event)
+    onContextRestored(state, document, event)
   )
 
   document.addEventListener('keydown', event => onKeyChange(state, event))
   document.addEventListener('keyup', event => onKeyChange(state, event))
 
   if (!document.hidden && !state.renderer.gl.isContextLost()) {
-    startLooping(state)
+    startLooping(state, document)
   }
 
   return state
@@ -87,22 +87,22 @@ function onContextLost(state: State, event: Event): void {
   event.preventDefault()
 }
 
-function onResumed(state: State): void {
+function onResumed(state: State, document: Document): void {
   console.log('Resumed.')
   if (!state.renderer.gl.isContextLost()) {
-    startLooping(state)
+    startLooping(state, document)
   }
 }
 
 function onContextRestored(
-  document: Document,
   state: State,
+  document: Document,
   event: Event
 ): void {
   console.log('Renderer context restored.')
   state.renderer = renderer.newState(state.canvas, state.atlasTexture)
   if (!document.hidden) {
-    startLooping(state)
+    startLooping(state, document)
   }
   event.preventDefault()
 }
@@ -124,20 +124,27 @@ function onKeyChange(state: State, event: KeyboardEvent): void {
   event.preventDefault()
 }
 
-function onLoop(state: State, then: number, now: number): void {
+function onLoop(
+  state: State,
+  document: Document,
+  then: number,
+  now: number
+): void {
   // Steps are measured in microseconds.
   const step = (now - then) / 1000
 
   then = now
-  state.frameID = requestAnimationFrame(now => onLoop(state, then, now))
+  state.frameID = requestAnimationFrame(now =>
+    onLoop(state, document, then, now)
+  )
 
   spawner.nextStepState(state.spawner, step, state.atlas, state.recorderState)
   spawner.flushUpdatesToMemory(state.atlas, state.spawner)
   // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
   // scaling.
   const canvas = {
-    w: document.documentElement.clientWidth,
-    h: document.documentElement.clientHeight
+    w: document.documentElement ? document.documentElement.clientWidth : 0,
+    h: document.documentElement ? document.documentElement.clientHeight : 0
   }
   renderer.render(
     state.renderer,
@@ -151,8 +158,10 @@ function onLoop(state: State, then: number, now: number): void {
   state.recorderState = recorder.nextTriggeredState(state.recorderState)
 }
 
-function startLooping(state: State): void {
-  state.frameID = requestAnimationFrame(now => onLoop(state, now, now))
+function startLooping(state: State, document: Document): void {
+  state.frameID = requestAnimationFrame(now =>
+    onLoop(state, document, now, now)
+  )
 }
 
 function checkLoseContext(state: State) {

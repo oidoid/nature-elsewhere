@@ -3,8 +3,8 @@ import * as fragmentShaderSource from './shader.frag'
 import * as shaderLayout from './shader.json'
 
 type GL = WebGL2RenderingContext
-type GLProgram = WebGLProgram | null
-type GLShader = WebGLShader | null
+type GLProgram = WebGLProgram
+type GLShader = WebGLShader
 type GLUniform = WebGLUniformLocation | null
 type GLBuffer = WebGLBuffer | null
 type GLLoseContext = WEBGL_lose_context | null
@@ -33,6 +33,7 @@ export function newState(
   if (!gl) throw new Error('WebGL 2 unsupported.')
 
   const program = gl.createProgram()
+  if (program === null) throw new Error('Unable to create WebGL program.')
   const vertexShader = loadShader(gl, GL.VERTEX_SHADER, vertexShaderSource)
   const fragmentShader = loadShader(
     gl,
@@ -130,6 +131,7 @@ export function render(
 
 function loadShader(gl: GL, type: number, src: string): GLShader {
   const shader = gl.createShader(type)
+  if (!shader) throw new Error('Unable to create shader.')
   gl.shaderSource(shader, src)
   gl.compileShader(shader)
   const log = gl.getShaderInfoLog(shader)
