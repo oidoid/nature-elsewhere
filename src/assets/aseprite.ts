@@ -103,7 +103,7 @@ export type FrameTag = Readonly<{
   direction: Direction | string
 }>
 
-/** Animation length in milliseconds. */
+/** Animation length in milliseconds or INFINITE_DURATION. */
 export type Duration = number
 
 /**

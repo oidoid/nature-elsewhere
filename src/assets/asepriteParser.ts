@@ -46,7 +46,7 @@ export function parseAnimation(
     cels.push(cel)
   }
 
-  return {cels, direction: parseDirection(frameTag.direction)}
+  return {cels, direction: parseAnimationDirection(frameTag.direction)}
 }
 
 export function marshalTagFrameNumber(
@@ -110,7 +110,7 @@ export function parseCollision(
 }
 
 // todo: remove string when type can be resolved as enum.
-function parseDirection(direction: string): atlas.Direction {
+function parseAnimationDirection(direction: string): atlas.AnimationDirection {
   if (isDirection(direction)) return direction
   throw new Error(`"${direction}" is not a Direction.`)
 }

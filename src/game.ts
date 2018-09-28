@@ -125,7 +125,7 @@ function onKeyChange(state: State, event: KeyboardEvent): void {
 }
 
 function onLoop(state: State, then: number, now: number): void {
-  // Steps are measured in .001 seconds.
+  // Steps are measured in microseconds.
   const step = (now - then) / 1000
 
   then = now
