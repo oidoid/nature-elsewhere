@@ -1,9 +1,8 @@
+import * as animation from './animation'
 import * as atlas from './atlas'
 import * as player from './player'
 import * as recorder from '../inputs/recorder'
 import * as superBall from './superBall'
-import * as animation from './animation'
-import * as util from '../util'
 
 export type NewState = {
   readonly scrollPosition: XY
@@ -91,7 +90,7 @@ export function stepAnimation(
 ): void {
   if (animation.cels.length === 0) return
 
-  const time = state.celTime + step * 1000 // step is in milliseconds.
+  const time = state.celTime + step * 1000 // step is in microseconds.
   const duration = animation.cels[cel(state, animation)].duration
   if (time < duration) {
     state.celTime = time
@@ -114,124 +113,4 @@ export function nextCel(
     case atlas.AnimationDirection.PING_PONG:
       return ((state.cel - 1 - (len - 1)) % (2 * (len - 1))) + (len - 1)
   }
-}
-
-export function newCloud(animationID: animation.ID, position: XY): State[] {
-  return [
-    {
-      ...newState(),
-      type: Type.CLOUD,
-      position,
-      animationID,
-      drawOrder: DrawOrder.CLOUDS
-    }
-  ]
-}
-
-export function newBackground(position: XY, scale: XY): State[] {
-  const animationID = animation.ID.PALETTE_PALE
-  const drawOrder = DrawOrder.BACKGROUND
-  return [
-    {
-      ...newState(),
-      type: Type.BACKGROUND,
-      position,
-      scale,
-      animationID,
-      drawOrder
-    }
-  ]
-}
-
-export function newPlayer(position: XY): State[] {
-  const animationID = animation.ID.PLAYER_IDLE
-  const drawOrder = DrawOrder.PLAYER
-  return [{...newState(), type: Type.PLAYER, position, animationID, drawOrder}]
-}
-
-export function newRainCloud(
-  animationID: animation.ID,
-  {x, y}: XY,
-  speed: number
-): State[] {
-  const entities: State[] = []
-  const drawOrder = DrawOrder.CLOUDS
-  util.range(0, (-27 - y) / 16).forEach(i =>
-    entities.push({
-      ...newState(),
-      type: Type.CLOUD,
-      position: {
-        // Round now to prevent rain from being an extra pixel off due to
-        // truncation later.
-        x: x + Math.round((i + 1) / 2),
-        y: y + 6 + i * 16 - Math.max(0, y + 6 + i * 16 - -12)
-      },
-      animationID: animation.ID.RAIN,
-      drawOrder,
-      speed: {x: speed, y: 0},
-      scrollSpeed: {x: 0, y: -12}
-    })
-  )
-  entities.push({
-    ...newState(),
-    type: Type.CLOUD,
-    position: {x: x + 1, y: -12},
-    animationID: animation.ID.WATER_M,
-    drawOrder,
-    speed: {x: speed, y: 0}
-  })
-  entities.push({
-    ...newState(),
-    type: Type.CLOUD,
-    position: {x, y},
-    animationID,
-    drawOrder,
-    speed: {x: speed, y: 0}
-  })
-  return entities
-}
-
-export function newGrass(
-  animationID: animation.ID,
-  position: XY,
-  scale: XY = {x: 1, y: 1}
-): State[] {
-  const drawOrder = [
-    animation.ID.GRASS_XS,
-    animation.ID.GRASS_S,
-    animation.ID.GRASS_M,
-    animation.ID.GRASS_L
-  ].includes(animationID)
-    ? DrawOrder.FAR_BACKGROUND_SCENERY
-    : DrawOrder.FOREGROUND_SCENERY
-  return [
-    {
-      ...newState(),
-      type: Type.GRASS,
-      position,
-      scale,
-      animationID,
-      drawOrder
-    }
-  ]
-}
-
-export function newTree(position: XY): State[] {
-  const animationID = animation.ID.TREE
-  const drawOrder = DrawOrder.NEAR_BACKGROUND_SCENERY
-  return [{...newState(), type: Type.TREE, position, animationID, drawOrder}]
-}
-
-export function newSuperBall(position: XY, speed: XY): State[] {
-  const animationID = animation.ID.PALETTE_GOLD
-  return [
-    {
-      ...newState(),
-      speed,
-      type: Type.SUPER_BALL,
-      position,
-      animationID,
-      drawOrder: DrawOrder.SUPER_BALL
-    }
-  ]
 }
