@@ -1,7 +1,7 @@
-import * as atlas from '../assets/atlas'
+import * as atlas from './atlas'
 import * as entity from './entity'
 import * as recorder from '../inputs/recorder'
-import * as animation from '../assets/animation'
+import * as animation from './animation'
 
 export function nextStepState(
   state: entity.State,

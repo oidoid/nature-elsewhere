@@ -1,4 +1,4 @@
-import * as aseprite from './aseprite'
+import * as aseprite from '../parsers/aseprite'
 
 export type State = Readonly<{size: WH; animations: AnimationMap}>
 

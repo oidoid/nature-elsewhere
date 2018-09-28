@@ -1,4 +1,4 @@
-import * as atlas from '../assets/atlas'
+import * as atlas from './atlas'
 import * as entity from './entity'
 import * as recorder from '../inputs/recorder'
 import * as shaderLayout from '../graphics/shader.json'

@@ -1,5 +1,5 @@
-import * as atlasJSON from './atlas.json'
-import * as asepriteParser from './asepriteParser'
+import * as atlasJSON from '../assets/atlas.json'
+import * as asepriteParser from '../parsers/asepriteParser'
 import * as animation from './animation'
 import * as util from '../util'
 

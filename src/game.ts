@@ -1,5 +1,5 @@
-import * as asepriteParser from './assets/asepriteParser'
-import * as atlas from './assets/atlas'
+import * as asepriteParser from './parsers/asepriteParser'
+import * as atlas from './entities/atlas'
 import * as atlasJSON from './assets/atlas.json'
 import * as entity from './entities/entity'
 import * as level0 from './levels/level0'

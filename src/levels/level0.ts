@@ -1,7 +1,7 @@
-import * as atlas from '../assets/atlas'
+import * as atlas from '../entities/atlas'
 import * as entity from '../entities/entity'
 import * as random from '../random'
-import * as animation from '../assets/animation'
+import * as animation from '../entities/animation'
 import * as util from '../util'
 
 type State = Readonly<{player: entity.State; entities: entity.State[]}>

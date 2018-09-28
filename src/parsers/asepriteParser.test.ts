@@ -1,6 +1,6 @@
 import * as aseprite from './aseprite'
 import * as asepriteParser from './asepriteParser'
-import * as atlasJSON from './atlas.json'
+import * as atlasJSON from '../assets/atlas.json'
 import * as expected from './asepriteParser.expect.test'
 import * as input from './asepriteParser.input.test.json'
 import * as util from '../util'

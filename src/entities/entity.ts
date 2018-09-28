@@ -1,8 +1,8 @@
-import * as atlas from '../assets/atlas'
+import * as atlas from './atlas'
 import * as player from './player'
 import * as recorder from '../inputs/recorder'
 import * as superBall from './superBall'
-import * as animation from '../assets/animation'
+import * as animation from './animation'
 import * as util from '../util'
 
 export type NewState = {

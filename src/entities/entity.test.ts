@@ -1,4 +1,4 @@
-import * as atlas from '../assets/atlas'
+import * as atlas from './atlas'
 import * as entity from './entity'
 import {values} from '../util'
 

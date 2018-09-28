@@ -1,5 +1,5 @@
 import * as aseprite from './aseprite'
-import * as atlas from './atlas'
+import * as atlas from '../entities/atlas'
 
 export function parse(file: aseprite.File): atlas.State {
   return {
