@@ -7,12 +7,12 @@ import * as keyboard from './inputs/keyboard'
 import * as random from './random'
 import * as recorder from './inputs/recorder'
 import * as renderer from './graphics/renderer'
-import * as spawner from './entities/spawner'
+import * as store from './entities/store'
 
 type State = {
   readonly atlas: atlas.State
   readonly atlasTexture: HTMLImageElement
-  readonly spawner: spawner.State
+  readonly store: store.State
   readonly player: entity.State
   readonly canvas: HTMLCanvasElement
   frameID: number
@@ -27,10 +27,10 @@ export function newState(
   atlasTexture: HTMLImageElement
 ): State {
   const atlas = asepriteParser.parse(atlasJSON)
-  const spawnerState = spawner.newState()
+  const storeState = store.newState()
   const randomState = random.newState(0)
   const level0State = level0.newState(atlas, randomState)
-  spawner.nextSpawnState(spawnerState, level0State.entities)
+  store.nextSpawnState(storeState, level0State.entities)
 
   const canvas = document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing.')
@@ -40,7 +40,7 @@ export function newState(
   return {
     atlas,
     atlasTexture,
-    spawner: spawnerState,
+    store: storeState,
     player: level0State.player,
     canvas,
     frameID: 0,
@@ -138,8 +138,8 @@ function onLoop(
     onLoop(state, document, then, now)
   )
 
-  spawner.nextStepState(state.spawner, step, state.atlas, state.recorderState)
-  spawner.flushUpdatesToMemory(state.atlas, state.spawner)
+  store.nextStepState(state.store, step, state.atlas, state.recorderState)
+  store.flushUpdatesToMemory(state.atlas, state.store)
   // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
   // scaling.
   const canvas = {
@@ -151,8 +151,8 @@ function onLoop(
     canvas,
     state.scale,
     {x: state.player.position.x, y: state.player.position.y + 20},
-    state.spawner.memory,
-    state.spawner.entities.length
+    state.store.memory,
+    state.store.entities.length
   )
 
   state.recorderState = recorder.nextTriggeredState(state.recorderState)

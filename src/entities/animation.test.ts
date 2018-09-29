@@ -14,9 +14,8 @@ test.each(textures)('%# animation %p ID has an Animation', (id: animation.ID) =>
   expect(atlas.animations).toHaveProperty(id)
 )
 
-{
-  const ids = util.keys(atlas.animations)
-  test.each(ids)('%# Animation ID %p has a animation ID', (id: string) =>
+test.each(util.keys(atlas.animations))(
+  '%# Animation ID %p has a animation ID',
+  (id: string) =>
     expect(textures.filter((val: animation.ID) => id === val)).toHaveLength(1)
-  )
-}
+)

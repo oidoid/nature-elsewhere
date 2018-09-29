@@ -1,6 +1,6 @@
 import * as atlas from './atlas'
 import * as entity from './entity'
-import {values} from '../util'
+import * as util from '../util'
 
 describe('stepAnimation()', () => {
   test('No cels', () => {
@@ -45,7 +45,7 @@ describe('stepAnimation()', () => {
 })
 
 describe('nextCel()', () => {
-  test.each(values(atlas.AnimationDirection))(
+  test.each(util.values(atlas.AnimationDirection))(
     '%# direction %p array start',
     (direction: atlas.AnimationDirection) => {
       const state = {cel: 0, celTime: 0}
@@ -58,7 +58,7 @@ describe('nextCel()', () => {
     }
   )
 
-  test.each(values(atlas.AnimationDirection))(
+  test.each(util.values(atlas.AnimationDirection))(
     '%# direction %p array end',
     (direction: atlas.AnimationDirection) => {
       const state = {cel: 1, celTime: 0}
@@ -69,7 +69,7 @@ describe('nextCel()', () => {
     }
   )
 
-  test.each(values(atlas.AnimationDirection))(
+  test.each(util.values(atlas.AnimationDirection))(
     '%# duration met direction %p cycles',
     (direction: atlas.AnimationDirection) => {
       const state = {cel: 0, celTime: 0}
