@@ -1,21 +1,21 @@
-import * as atlasJSON from '../assets/atlas.json'
 import * as asepriteParser from '../parsers/asepriteParser'
 import * as animation from './animation'
+import * as atlasJSON from '../assets/atlas.json'
 import * as util from '../util'
 
-const atlas = asepriteParser.parse(atlasJSON)
-const textures = Object.values(animation.ID)
+const state = asepriteParser.parse(atlasJSON)
+const ids = util.values(animation.ID)
 
-test.each(textures)('%# animation ID %p is unique', (id: animation.ID) =>
-  expect(textures.filter((val: animation.ID) => id === val)).toHaveLength(1)
+test.each(ids)('%# animation ID %p is unique', (id: animation.ID) =>
+  expect(ids.filter((val: animation.ID) => id === val)).toHaveLength(1)
 )
 
-test.each(textures)('%# animation %p ID has an Animation', (id: animation.ID) =>
-  expect(atlas.animations).toHaveProperty(id)
+test.each(ids)('%# animation %p ID has an Animation', (id: animation.ID) =>
+  expect(state.animations).toHaveProperty(id)
 )
 
-test.each(util.keys(atlas.animations))(
+test.each(util.keys(state.animations))(
   '%# Animation ID %p has a animation ID',
   (id: string) =>
-    expect(textures.filter((val: animation.ID) => id === val)).toHaveLength(1)
+    expect(ids.filter((val: animation.ID) => id === val)).toHaveLength(1)
 )

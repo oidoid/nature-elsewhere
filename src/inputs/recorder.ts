@@ -12,14 +12,16 @@ export enum Input {
 }
 
 export type State = Readonly<
-  Record<Input, {active: boolean; triggered: boolean}>
+  Record<Input, Readonly<{active: boolean; triggered: boolean}>>
 >
 
 export function newState(): State {
-  const ret = inputValues().reduce(
-    (sum, input) => ({...sum, [input]: {active: false, triggered: false}}),
-    <State>{}
-  )
+  const ret = util
+    .numericalValues(Input)
+    .reduce(
+      (sum, input) => ({...sum, [input]: {active: false, triggered: false}}),
+      <State>{}
+    )
   return ret
 }
 
@@ -37,13 +39,10 @@ export function nextActiveState(
 
 /** Clear all triggered Inputs. */
 export function nextTriggeredState(state: State): State {
-  return inputValues().reduce(
-    (sum, input) => ({...sum, [input]: {...state[input], triggered: false}}),
-    <State>{}
-  )
-}
-
-// Enums provide two mappings. This state machine only supports values.
-function inputValues(): Input[] {
-  return util.values(Input).filter(input => typeof input === 'number')
+  return util
+    .numericalValues(Input)
+    .reduce(
+      (sum, input) => ({...sum, [input]: {...state[input], triggered: false}}),
+      <State>{}
+    )
 }

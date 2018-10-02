@@ -1,8 +1,8 @@
 import * as game from './game'
 
-const atlasTexture = new Image()
-atlasTexture.onload = _ => {
-  const gameState = game.newState(document, atlasTexture)
+const atlas = new Image()
+atlas.onload = _ => {
+  const gameState = game.newState(document, atlas)
   game.nextStartState(gameState, document)
 }
-atlasTexture.src = '/assets/atlas.png'
+atlas.src = '/assets/atlas.png'

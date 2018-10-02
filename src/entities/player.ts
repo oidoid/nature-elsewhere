@@ -1,7 +1,7 @@
+import * as animation from './animation'
 import * as atlas from './atlas'
 import * as entity from './entity'
 import * as recorder from '../inputs/recorder'
-import * as animation from './animation'
 
 export function nextStepState(
   state: entity.State,

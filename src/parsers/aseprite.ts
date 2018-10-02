@@ -99,17 +99,16 @@ export type FrameTag = Readonly<{
    * index.
    */
   to: number
-  // todo: remove string when type can be resolved as enum.
   direction: Direction | string
 }>
 
 /** Animation length in milliseconds or INFINITE_DURATION. */
-export type Duration = number
+export type Duration = number | typeof INFINITE_DURATION
 
 /**
  * **By convention**, animations that should never end have this reserved value.
  */
-export const INFINITE_DURATION: Duration = 0xffff
+export const INFINITE_DURATION = 0xffff
 
 /** An animation's looping behavior. */
 export enum Direction {

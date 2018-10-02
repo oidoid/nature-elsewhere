@@ -1,8 +1,8 @@
+import * as animation from '../entities/animation'
 import * as atlas from '../entities/atlas'
 import * as entity from '../entities/entity'
 import * as factory from '../entities/factory'
 import * as random from '../random'
-import * as animation from '../entities/animation'
 import * as util from '../util'
 
 type State = Readonly<{player: entity.State; entities: entity.State[]}>
@@ -51,7 +51,7 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
 
   const player = factory.newPlayer({
     x: 0,
-    y: -atlas.animations['player idle'].cels[0].bounds.h - 12
+    y: -atlas.animations[animation.ID.PLAYER_IDLE].cels[0].bounds.h - 12
   })[0]
   entities.push(player)
   return {player, entities}

@@ -451,3 +451,28 @@ describe('parseCollision()', () => {
     ])
   })
 })
+
+describe('parseAnimationDirection()', () => {
+  test.each(util.values(aseprite.Direction))(
+    '%# Direction %p',
+    (direction: aseprite.Direction) =>
+      expect(asepriteParser.parseAnimationDirection(direction)).toBeTruthy()
+  )
+
+  test('Unknown.', () => {
+    expect(() =>
+      asepriteParser.parseAnimationDirection('unknown')
+    ).toThrowError(/Direction/)
+  })
+})
+
+describe('isAnimationDirection()', () => {
+  test.each(util.values(aseprite.Direction))(
+    '%# Direction %p',
+    (direction: aseprite.Direction) =>
+      expect(asepriteParser.isAnimationDirection(direction)).toStrictEqual(true)
+  )
+
+  test('Unknown.', () =>
+    expect(asepriteParser.isAnimationDirection('unknown')).toStrictEqual(false))
+})

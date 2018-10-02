@@ -1,5 +1,6 @@
 import * as aseprite from './aseprite'
 import * as atlas from '../entities/atlas'
+import * as util from '../util'
 
 export function parse(file: aseprite.File): atlas.State {
   return {
@@ -50,10 +51,10 @@ export function parseAnimation(
 }
 
 export function marshalTagFrameNumber(
-  animationID: atlas.AnimationID,
+  tag: aseprite.Tag,
   index?: number
 ): aseprite.TagFrameNumber {
-  return `${animationID} ${index === undefined ? '' : index}`
+  return `${tag} ${index === undefined ? '' : index}`
 }
 
 export function parseCel(
@@ -109,13 +110,15 @@ export function parseCollision(
   )
 }
 
-// todo: remove string when type can be resolved as enum.
-function parseAnimationDirection(direction: string): atlas.AnimationDirection {
-  if (isDirection(direction)) return direction
+export function parseAnimationDirection(
+  direction: aseprite.Direction | string
+): atlas.AnimationDirection {
+  if (isAnimationDirection(direction)) return direction
   throw new Error(`"${direction}" is not a Direction.`)
 }
 
-// todo: remove string when type can be resolved as enum.
-function isDirection(direction: string): direction is aseprite.Direction {
-  return Object.values(aseprite.Direction).includes(direction)
+export function isAnimationDirection(
+  direction: aseprite.Direction | string
+): direction is atlas.AnimationDirection {
+  return util.values(atlas.AnimationDirection).includes(<any>direction)
 }

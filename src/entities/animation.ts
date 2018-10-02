@@ -10,7 +10,6 @@ export enum ID {
   GRASS_L = 'grass l',
   PALETTE_BLACK = 'palette black',
   PALETTE_BLACK_TINT = 'palette black-tint',
-
   PALETTE_PALE = 'palette pale',
   PALETTE_LIGHT_GREEN = 'palette light-green',
   PALETTE_LIGHT_BLUE = 'palette light-blue',

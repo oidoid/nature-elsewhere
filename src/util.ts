@@ -23,6 +23,11 @@ export function entries<T>(obj: T): [keyof T, T[keyof T]][] {
   return keys
 }
 
+// Number enums provide two mappings.
+export function numericalValues<T>(obj: T): T[keyof T][] {
+  return values(obj).filter(input => typeof input === 'number')
+}
+
 // Keep enum typing.
 export function values<T>(obj: T): T[keyof T][] {
   const vals: T[keyof T][] = []
