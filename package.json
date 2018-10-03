@@ -9,10 +9,10 @@
   "bugs": "https://github.com/rndmem/nature-elsewhere/issues",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "webpack-dev-server -dw",
+    "start": "webpack-dev-server --mode=development -w",
     "test": "npm run -s formatter -- -l && npm run -s build && jest",
     "format": "npm -s run formatter -- --write",
-    "build": "webpack -p",
+    "build": "webpack --mode=production",
     "formatter": "prettier './**/*.{json,md,ts}'",
     "build:textures": "cd src/assets && aseprite -b ../../assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.json --sheet-pack --inner-padding 1 --sheet atlas.png",
     "palettize": "cd assets && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
