@@ -29,19 +29,30 @@ function animationID(
   state: entity.State,
   recorderState: recorder.State
 ): animation.ID {
+  if (!grounded(state)) {
+    if (recorderState[recorder.Input.UP].active) {
+      return animation.ID.PLAYER_ASCEND
+    }
+
+    return animation.ID.PLAYER_DESCEND
+  }
+
+  if (
+    recorderState[recorder.Input.DOWN].triggered &&
+    (state.animationID === animation.ID.PLAYER_CROUCH ||
+      state.animationID === animation.ID.PLAYER_SIT)
+  ) {
+    return animation.ID.PLAYER_SIT
+  }
+
   if (recorderState[recorder.Input.DOWN].active) {
-    if (!grounded(state)) return animation.ID.PLAYER_DESCEND
     if (
       state.animationID === animation.ID.PLAYER_CROUCH ||
       state.animationID === animation.ID.PLAYER_SIT
     ) {
-      return animation.ID.PLAYER_SIT
+      return state.animationID
     }
-
     return animation.ID.PLAYER_CROUCH
-  }
-  if (recorderState[recorder.Input.UP].active && !grounded(state)) {
-    return animation.ID.PLAYER_ASCEND
   }
 
   if (
@@ -50,6 +61,20 @@ function animationID(
   ) {
     if (recorderState[recorder.Input.RUN].active) return animation.ID.PLAYER_RUN
     return animation.ID.PLAYER_WALK
+  }
+
+  if (recorderState[recorder.Input.UP].active) {
+    if (state.animationID === animation.ID.PLAYER_SIT) {
+      return animation.ID.PLAYER_CROUCH
+    }
+    return animation.ID.PLAYER_IDLE
+  }
+
+  if (
+    state.animationID === animation.ID.PLAYER_CROUCH ||
+    state.animationID === animation.ID.PLAYER_SIT
+  ) {
+    return state.animationID
   }
 
   return animation.ID.PLAYER_IDLE

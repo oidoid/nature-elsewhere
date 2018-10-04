@@ -5,6 +5,7 @@ export enum Input {
   RIGHT,
   UP,
   DOWN,
+  JUMP,
   RUN,
   ZAP,
   MENU,
@@ -16,13 +17,13 @@ export type State = Readonly<
 >
 
 export function newState(): State {
-  const ret = util
-    .numericalValues(Input)
-    .reduce(
-      (sum, input) => ({...sum, [input]: {active: false, triggered: false}}),
-      <State>{}
-    )
-  return ret
+  return util.numericalValues(Input).reduce(
+    (sum, input) => ({
+      ...sum,
+      [input]: {active: false, triggered: false}
+    }),
+    <State>{}
+  )
 }
 
 /** Set or clear an Input state record. */
