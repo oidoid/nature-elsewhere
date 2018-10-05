@@ -27,6 +27,7 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
     ),
     ...factory.newGrass(animation.ID.GRASS_L, {x: -512, y: -12}, {x: 48, y: 1}),
     ...factory.newGrass(animation.ID.GRASS_L, {x: 208, y: -12}, {x: 2, y: 1}),
+    ...factory.newHill({x: 40, y: -28}),
     ...factory.newGrass(animation.ID.TALL_GRASS_A, {x: 188, y: -15}),
     ...factory.newGrass(animation.ID.TALL_GRASS_B, {x: 208, y: -15}),
     ...util
@@ -43,10 +44,22 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
     ...factory.newTree({x: 185, y: -39}),
     ...factory.newCloud(animation.ID.CLOUD_S, {x: 40, y: -60}),
     ...factory.newCloud(animation.ID.CLOUD_M, {x: 58, y: -76}),
-    ...factory.newRainCloud(animation.ID.CLOUD_S, {x: 75, y: -65}, -0.08),
+    ...factory.newRainCloud(animation.ID.CLOUD_S, {x: 75, y: -65}, -1),
     ...factory.newCloud(animation.ID.CLOUD_XL, {x: 120, y: -60}),
-    ...factory.newRainCloud(animation.ID.CLOUD_L, {x: 20, y: -81}, -0.1),
-    ...factory.newSuperBall({x: 10, y: -30}, {x: 0, y: 4})
+    ...factory.newRainCloud(animation.ID.CLOUD_L, {x: 20, y: -81}, -0.8),
+    ...util
+      .range(0, 1000)
+      .map(i => {
+        randomState = random.nextIntState(randomState, 0, 20)
+        return factory.newSuperBall(
+          {
+            x: (10 + i + (<random.NextState>randomState).result) % 80,
+            y: -100 + (<random.NextState>randomState).result
+          },
+          {x: 0, y: 4}
+        )
+      })
+      .reduce(util.flatten)
   ]
 
   const player = factory.newPlayer({

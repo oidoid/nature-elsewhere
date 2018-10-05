@@ -9,7 +9,6 @@ export const DEFAULT_KEY_MAP: KeyMap = {
   ArrowRight: recorder.Input.RIGHT,
   ArrowUp: recorder.Input.UP,
   ArrowDown: recorder.Input.DOWN,
-  ' ': recorder.Input.JUMP,
   Shift: recorder.Input.RUN,
   Control: recorder.Input.ZAP,
   Escape: recorder.Input.MENU,

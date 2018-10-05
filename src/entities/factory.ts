@@ -109,6 +109,18 @@ export function newGrass(
   ]
 }
 
+export function newHill(position: XY): entity.State[] {
+  return [
+    {
+      ...entity.newState(),
+      type: entity.Type.GRASS,
+      position,
+      animationID: animation.ID.HILL,
+      drawOrder: entity.DrawOrder.FAR_BACKGROUND_SCENERY
+    }
+  ]
+}
+
 export function newTree(position: XY): entity.State[] {
   const animationID = animation.ID.TREE
   const drawOrder = entity.DrawOrder.NEAR_BACKGROUND_SCENERY

@@ -5,7 +5,6 @@ export enum Input {
   RIGHT,
   UP,
   DOWN,
-  JUMP,
   RUN,
   ZAP,
   MENU,
@@ -14,7 +13,7 @@ export enum Input {
 
 export type State = Readonly<
   Record<Input, Readonly<{active: boolean; triggered: boolean}>>
->
+> // how to do combo here
 
 export function newState(): State {
   return util.numericalValues(Input).reduce(
