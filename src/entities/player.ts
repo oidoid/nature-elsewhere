@@ -38,7 +38,7 @@ function animationID(
   }
 
   if (
-    recorderState[recorder.Input.DOWN].triggered &&
+    recorderState[recorder.Input.DOWN].positive &&
     (state.animationID === animation.ID.PLAYER_CROUCH ||
       state.animationID === animation.ID.PLAYER_SIT)
   ) {

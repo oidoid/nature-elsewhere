@@ -155,7 +155,7 @@ function onLoop(
     state.store.entities.length
   )
 
-  state.recorderState = recorder.nextTriggeredState(state.recorderState)
+  state.recorderState = recorder.nextLoopState(state.recorderState)
 }
 
 function startLooping(state: State, document: Document): void {
@@ -166,7 +166,7 @@ function startLooping(state: State, document: Document): void {
 
 function checkLoseContext(state: State) {
   if (
-    state.recorderState[recorder.Input.DEBUG_CONTEXT_LOSS].triggered &&
+    state.recorderState[recorder.Input.DEBUG_CONTEXT_LOSS].positive &&
     state.renderer.loseContext
   ) {
     if (state.renderer.gl.isContextLost()) {

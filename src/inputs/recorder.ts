@@ -11,16 +11,15 @@ export enum Input {
   DEBUG_CONTEXT_LOSS
 }
 
-export type State = Readonly<
-  Record<Input, Readonly<{active: boolean; triggered: boolean}>>
-> // how to do combo here
+export type InputState = Readonly<{active: boolean; positive: boolean}>
+export type State = Readonly<Record<Input, InputState>>
 
 export function newState(): State {
   return util.numericalValues(Input).reduce(
-    (sum, input) => ({
-      ...sum,
-      [input]: {active: false, triggered: false}
-    }),
+    (sum, input) => {
+      const state: InputState = {active: false, positive: false}
+      return {...sum, [input]: state}
+    },
     <State>{}
   )
 }
@@ -31,18 +30,18 @@ export function nextActiveState(
   input: Input,
   active: boolean
 ): State {
-  return {
-    ...state,
-    [input]: {active, triggered: active && !state[input].active}
-  }
+  const positive = active && !state[input].active
+  const inputState: InputState = {active, positive}
+  return {...state, [input]: inputState}
 }
 
 /** Clear all triggered Inputs. */
-export function nextTriggeredState(state: State): State {
-  return util
-    .numericalValues(Input)
-    .reduce(
-      (sum, input) => ({...sum, [input]: {...state[input], triggered: false}}),
-      <State>{}
-    )
+export function nextLoopState(state: State): State {
+  return util.numericalValues(Input).reduce(
+    (sum, input) => {
+      const inputState: InputState = {...state[input], positive: false}
+      return {...sum, [input]: inputState}
+    },
+    <State>{}
+  )
 }
