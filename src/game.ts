@@ -155,7 +155,7 @@ function onLoop(
     state.store.entities.length
   )
 
-  state.recorderState = recorder.nextLoopState(state.recorderState)
+  state.recorderState = recorder.nextLoopState(state.recorderState, step)
 }
 
 function startLooping(state: State, document: Document): void {
