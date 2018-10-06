@@ -66,7 +66,7 @@ export function newRainCloud(
       animationID: animation.ID.RAIN,
       drawOrder,
       speed: {x: speed, y: 0},
-      scrollSpeed: {x: 0, y: -12}
+      scrollSpeed: {x: 0, y: -0.012}
     })
   )
   entities.push({

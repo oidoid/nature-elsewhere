@@ -130,8 +130,8 @@ function onLoop(
   then: number,
   now: number
 ): void {
-  // Steps are measured in microseconds.
-  const step = (now - then) / 1000
+  // Steps are measured in milliseconds.
+  const step = now - then
 
   then = now
   state.frameID = requestAnimationFrame(now =>

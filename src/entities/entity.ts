@@ -90,7 +90,7 @@ export function stepAnimation(
 ): void {
   if (animation.cels.length === 0) return
 
-  const time = state.celTime + step * 1000 // step is in microseconds.
+  const time = state.celTime + step
   const duration = animation.cels[cel(state, animation)].duration
   if (time < duration) {
     state.celTime = time

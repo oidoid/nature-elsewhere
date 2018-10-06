@@ -94,18 +94,18 @@ function position(
   step: number
 ): void {
   if (grounded(state) && recorderState[recorder.Input.DOWN].active) return
-  // todo: add pixel per second doc.
-  const pps = (recorderState[recorder.Input.RUN].active ? 48 : 16) * step
+  const speed =
+    (recorderState[recorder.Input.RUN].active ? 0.048 : 0.016) * step
   state.position.x = Math.max(
     0,
     state.position.x -
-      (recorderState[recorder.Input.LEFT].active ? pps : 0) +
-      (recorderState[recorder.Input.RIGHT].active ? pps : 0)
+      (recorderState[recorder.Input.LEFT].active ? speed : 0) +
+      (recorderState[recorder.Input.RIGHT].active ? speed : 0)
   )
   state.position.y = Math.min(
     -17,
     state.position.y -
-      (recorderState[recorder.Input.UP].active ? pps : 0) +
-      (recorderState[recorder.Input.DOWN].active ? pps : 0)
+      (recorderState[recorder.Input.UP].active ? speed : 0) +
+      (recorderState[recorder.Input.DOWN].active ? speed : 0)
   )
 }

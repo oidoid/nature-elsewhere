@@ -17,7 +17,7 @@ describe('stepAnimation()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    entity.stepAnimation(state, 0.001, animation)
+    entity.stepAnimation(state, 1, animation)
     expect(state).toStrictEqual({cel: 0, celTime: 1})
   })
 
@@ -28,7 +28,7 @@ describe('stepAnimation()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    entity.stepAnimation(state, 0.001, animation)
+    entity.stepAnimation(state, 1, animation)
     expect(state).toStrictEqual({cel: 1, celTime: 0})
   })
 
@@ -39,7 +39,7 @@ describe('stepAnimation()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    entity.stepAnimation(state, 0.002, animation)
+    entity.stepAnimation(state, 2, animation)
     expect(state).toStrictEqual({cel: 1, celTime: 1})
   })
 })

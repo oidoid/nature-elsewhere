@@ -44,9 +44,9 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
     ...factory.newTree({x: 185, y: -39}),
     ...factory.newCloud(animation.ID.CLOUD_S, {x: 40, y: -60}),
     ...factory.newCloud(animation.ID.CLOUD_M, {x: 58, y: -76}),
-    ...factory.newRainCloud(animation.ID.CLOUD_S, {x: 75, y: -65}, -1),
+    ...factory.newRainCloud(animation.ID.CLOUD_S, {x: 75, y: -65}, -0.0001),
     ...factory.newCloud(animation.ID.CLOUD_XL, {x: 120, y: -60}),
-    ...factory.newRainCloud(animation.ID.CLOUD_L, {x: 20, y: -81}, -0.8),
+    ...factory.newRainCloud(animation.ID.CLOUD_L, {x: 20, y: -81}, -0.00008),
     ...util
       .range(0, 1000)
       .map(i => {
@@ -56,7 +56,7 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
             x: (10 + i + (<random.NextState>randomState).result) % 80,
             y: -100 + (<random.NextState>randomState).result
           },
-          {x: 0, y: 4}
+          {x: 0, y: 0.004}
         )
       })
       .reduce(util.flatten)

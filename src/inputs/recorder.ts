@@ -14,7 +14,6 @@ export enum Input {
 export type InputState = Readonly<{
   active: boolean
   positive: boolean
-  doublePositive: boolean
   duration: number
 }>
 export type State = Readonly<Record<Input, InputState>>
@@ -25,7 +24,6 @@ export function newState(): State {
       const state: InputState = {
         active: false,
         positive: false,
-        doublePositive: false,
         duration: Number.POSITIVE_INFINITY
       }
       return {...sum, [input]: state}
@@ -43,7 +41,6 @@ export function nextActiveState(
   const inputState: InputState = {
     active,
     positive,
-    doublePositive: positive && state[input].duration < 1000,
     duration: positive ? 0 : state[input].duration
   }
   return {...state, [input]: inputState}
@@ -56,7 +53,7 @@ export function nextLoopState(state: State, step: number): State {
       const inputState: InputState = {
         ...state[input],
         positive: false,
-        duration: state[input].duration + step * 1000
+        duration: state[input].duration + step
       }
       return {...sum, [input]: inputState}
     },
