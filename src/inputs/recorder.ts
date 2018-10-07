@@ -101,13 +101,11 @@ export class ReadState {
   ) {}
 
   private input(input: number, triggered: boolean): boolean {
-    if (
-      triggered &&
-      (this._sampleAge ||
-        ((input & this._sample) === input &&
-          (input & this._sample) === (input & this._lastSample)))
-    )
+    const maskedSample = input & this._sample
+    const maskedLastSample = input & this._lastSample
+    if (triggered && (this._sampleAge || maskedSample === maskedLastSample)) {
       return false
-    return (input & this._sample) === input
+    }
+    return maskedSample === input
   }
 }
