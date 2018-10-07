@@ -67,7 +67,7 @@ export function nextStepState(
   state: State,
   step: number,
   atlasState: atlas.State,
-  recorderState: recorder.State
+  recorderState: recorder.ReadState
 ): void {
   switch (state.type) {
     case Type.PLAYER:

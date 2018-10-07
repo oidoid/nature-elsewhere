@@ -9,7 +9,7 @@ describe('atlas.json', () => {
   const file = atlasJSON
   const tags = file.meta.frameTags.map(frameTag => frameTag.name)
 
-  test('Converts current JSON and size is a reasonable power of 2.', () => {
+  test('Converts current JSON and size is a reasonable power of two', () => {
     const atlas = asepriteParser.parse(file)
     expect(atlas.size.w).toBeLessThanOrEqual(4096)
     expect(atlas.size.h).toBeLessThanOrEqual(4096)

@@ -26,7 +26,7 @@ export function nextStepState(
   state: State,
   step: number,
   atlas: atlas.State,
-  recorderState: recorder.State
+  recorderState: recorder.ReadState
 ): void {
   state.entities.forEach(val =>
     entity.nextStepState(val, step, atlas, recorderState)

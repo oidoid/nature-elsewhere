@@ -1,10 +1,11 @@
 import * as asepriteParser from '../parsers/asepriteParser'
 import * as animation from './animation'
+import * as atlas from './atlas'
 import * as atlasJSON from '../assets/atlas.json'
 import * as util from '../util'
 
-const state = asepriteParser.parse(atlasJSON)
-const ids = util.values(animation.ID)
+const state: atlas.State = asepriteParser.parse(atlasJSON)
+const ids: animation.ID[] = util.values(animation.ID)
 
 test.each(ids)('%# animation ID %p is unique', (id: animation.ID) =>
   expect(ids.filter((val: animation.ID) => id === val)).toHaveLength(1)

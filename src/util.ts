@@ -17,19 +17,19 @@ export function keys<T>(obj: T): (keyof T)[] {
 }
 
 // https://github.com/Microsoft/TypeScript/pull/12253
-export function entries<T>(obj: T): [keyof T, T[keyof T]][] {
+export function entries<T>(obj: T): [keyof T, ValueOf<T>][] {
   const keys: [keyof T, T[keyof T]][] = []
   for (const key in obj) if (obj.hasOwnProperty(key)) keys.push([key, obj[key]])
   return keys
 }
 
 // Number enums provide two mappings.
-export function numericalValues<T>(obj: T): T[keyof T][] {
+export function numericalValues<T>(obj: T): ValueOf<T>[] {
   return values(obj).filter(input => typeof input === 'number')
 }
 
 // Keep enum typing.
-export function values<T>(obj: T): T[keyof T][] {
+export function values<T>(obj: T): ValueOf<T>[] {
   const vals: T[keyof T][] = []
   for (const key in obj) if (obj.hasOwnProperty(key)) vals.push(obj[key])
   return vals
