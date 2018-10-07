@@ -11,7 +11,7 @@ import * as store from './entities/store'
 
 type State = {
   readonly atlas: atlas.State
-  readonly atlasTexture: HTMLImageElement
+  readonly atlasImage: HTMLImageElement
   readonly store: store.State
   readonly player: entity.State
   readonly canvas: HTMLCanvasElement
@@ -24,7 +24,7 @@ type State = {
 
 export function newState(
   document: Document,
-  atlasTexture: HTMLImageElement
+  atlasImage: HTMLImageElement
 ): State {
   const atlas = asepriteParser.parse(atlasJSON)
   const storeState = store.newState()
@@ -35,11 +35,11 @@ export function newState(
   const canvas = document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing.')
 
-  const rendererState = renderer.newState(canvas, atlasTexture)
+  const rendererState = renderer.newState(canvas, atlasImage)
 
   return {
     atlas,
-    atlasTexture,
+    atlasImage,
     store: storeState,
     player: level0State.player,
     canvas,
@@ -93,7 +93,7 @@ function onResumed(state: State, document: Document): void {
 
 function onContextRestored(state: State, event: Event): void {
   console.log('Renderer context restored.')
-  state.renderer = renderer.newState(state.canvas, state.atlasTexture)
+  state.renderer = renderer.newState(state.canvas, state.atlasImage)
   event.preventDefault()
 }
 
