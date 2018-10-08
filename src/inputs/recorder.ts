@@ -27,10 +27,10 @@ export class WriteState {
       sampleAge = 0
       combo = [this._sample, ...this._combo]
     } else if (!this._sample && sampleAge > WriteState._maxSampleAge) {
-      // Changed or expired.
-      combo = [this._sample]
+      // Released and expired.
+      combo = []
     } else {
-      // No change.
+      // Unchanged (held or released).
       combo = this._combo
     }
     return new ReadState(
@@ -42,9 +42,12 @@ export class WriteState {
   }
 
   constructor(
+    /** The age of the current sample. Cleared on nonzero triggers. */
     private readonly _sampleAge: number = 0,
+    /** The current sample and initial state of the next sample. */
     private readonly _sample: number = 0,
     private readonly _lastSample: number = 0,
+    /** Historical record of triggered nonzero samples. */
     private readonly _combo: ReadonlyArray<number> = []
   ) {}
 
