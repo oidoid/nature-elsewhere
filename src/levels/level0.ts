@@ -19,7 +19,10 @@ const tallGrassIDs = [
   animation.ID.TALL_GRASS_I
 ]
 
-export function newState(atlas: atlas.State, randomState: random.State): State {
+export function newState(
+  atlas: atlas.State,
+  randomState: random.Random
+): State {
   const entities = [
     ...factory.newBackground(
       {x: entity.Limits.HALF_MIN, y: entity.Limits.HALF_MIN},
@@ -33,9 +36,8 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
     ...util
       .range(0, 20)
       .map(i => {
-        randomState = random.nextIntState(randomState, 0, tallGrassIDs.length)
         return factory.newGrass(
-          tallGrassIDs[(<random.NextState>randomState).result],
+          tallGrassIDs[randomState.int(0, tallGrassIDs.length)],
           {x: 228 + i * 4, y: -16}
         )
       })
@@ -50,11 +52,10 @@ export function newState(atlas: atlas.State, randomState: random.State): State {
     ...util
       .range(0, 1000)
       .map(i => {
-        randomState = random.nextIntState(randomState, 0, 20)
         return factory.newSuperBall(
           {
-            x: (10 + i + (<random.NextState>randomState).result) % 80,
-            y: -100 + (<random.NextState>randomState).result
+            x: (10 + i + randomState.int(0, 20)) % 80,
+            y: -100 + randomState.int(0, 50)
           },
           {x: 0, y: 0.004}
         )

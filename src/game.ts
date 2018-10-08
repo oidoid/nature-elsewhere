@@ -19,7 +19,7 @@ type State = {
   renderer: renderer.State
   recorder: recorder.State
   readonly scale: number
-  random: random.State
+  readonly random: random.Random
 }
 
 export function newState(
@@ -28,7 +28,7 @@ export function newState(
 ): State {
   const atlas = asepriteParser.parse(atlasJSON)
   const storeState = store.newState()
-  const randomState = random.newState(0)
+  const randomState = new random.Random(0)
   const level0State = level0.newState(atlas, randomState)
   store.nextSpawnState(storeState, level0State.entities)
 
