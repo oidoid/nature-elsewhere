@@ -14,7 +14,7 @@ export class Random {
   }
 
   constructor(private _seed: number) {
-    this._seed = this._seed % 2147483647
+    this._seed = _seed % 2147483647
     if (this._seed <= 0) this._seed += 2147483646
   }
 }

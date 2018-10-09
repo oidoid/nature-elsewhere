@@ -16,7 +16,7 @@ type State = {
   readonly player: entity.State
   readonly canvas: HTMLCanvasElement
   frameID: number
-  renderer: renderer.State
+  renderer: renderer.Renderer
   recorder: recorder.State
   readonly scale: number
   readonly random: random.Random
@@ -35,7 +35,7 @@ export function newState(
   const canvas = document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing.')
 
-  const rendererState = renderer.newState(canvas, atlasImage)
+  const rendererState = renderer.init(canvas, atlasImage)
 
   return {
     atlas,
@@ -93,7 +93,7 @@ function onResumed(state: State, document: Document): void {
 
 function onContextRestored(state: State, event: Event): void {
   console.log('Renderer context restored.')
-  state.renderer = renderer.newState(state.canvas, state.atlasImage)
+  state.renderer = renderer.init(state.canvas, state.atlasImage)
   event.preventDefault()
 }
 
@@ -129,13 +129,13 @@ function onLoop(
   }
   state.recorder = state.recorder.read(step)
 
-  if (state.recorder.debugContextLoss(true) && state.renderer.loseContext) {
-    if (state.renderer.gl.isContextLost()) {
+  if (state.recorder.debugContextLoss(true)) {
+    if (state.renderer.isContextLost()) {
       console.log('Restore renderer context.')
-      state.renderer.loseContext.restoreContext()
+      state.renderer.debugRestoreContext()
     } else {
       console.log('Lose renderer context.')
-      state.renderer.loseContext.loseContext()
+      state.renderer.debugLoseContext()
     }
   }
 
@@ -147,8 +147,7 @@ function onLoop(
     w: document.documentElement ? document.documentElement.clientWidth : 0,
     h: document.documentElement ? document.documentElement.clientHeight : 0
   }
-  renderer.render(
-    state.renderer,
+  state.renderer.render(
     canvas,
     state.scale,
     {x: state.player.position.x, y: state.player.position.y + 20},

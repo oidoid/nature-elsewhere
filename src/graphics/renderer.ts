@@ -9,21 +9,13 @@ type GLUniform = WebGLUniformLocation | null
 type GLBuffer = WebGLBuffer | null
 type GLLoseContext = WEBGL_lose_context | null
 
-export type State = Readonly<{
-  gl: GL
-  program: GLProgram
-  projection: GLUniform
-  perInstanceBuffer: GLBuffer
-  loseContext: GLLoseContext
-}>
-
 const GL = WebGL2RenderingContext
-const perVertexData = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
+const perVertexData: Int16Array = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
 
-export function newState(
+export function init(
   canvas: HTMLCanvasElement,
   atlas: HTMLImageElement
-): State {
+): Renderer {
   const gl = canvas.getContext('webgl2', {
     alpha: false,
     depth: false,
@@ -106,37 +98,121 @@ export function newState(
 
   const loseContext = gl.getExtension('WEBGL_lose_context')
 
-  return {gl, program, projection, perInstanceBuffer, loseContext}
+  return new Renderer(gl, projection, perInstanceBuffer, loseContext)
 }
 
-export function render(
-  state: State,
-  canvas: WH,
-  scale: number,
-  position: XY,
-  perInstanceData: Int16Array,
-  instances: number
-): void {
-  resize(state, canvas, scale, position)
+export class Renderer {
+  render(
+    canvas: WH,
+    scale: number,
+    position: XY,
+    perInstanceData: Int16Array,
+    instances: number
+  ): void {
+    this.resize(canvas, scale, position)
 
-  bufferData(
-    state.gl,
-    state.perInstanceBuffer,
-    perInstanceData,
-    GL.DYNAMIC_READ
-  )
-  const vertices = perVertexData.length / shaderLayout.perVertex.length
-  state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
-}
+    bufferData(
+      this._gl,
+      this._perInstanceBuffer,
+      perInstanceData,
+      GL.DYNAMIC_READ
+    )
+    const vertices = perVertexData.length / shaderLayout.perVertex.length
+    this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
+  }
 
-function loadShader(gl: GL, type: number, src: string): GLShader {
-  const shader = gl.createShader(type)
-  if (!shader) throw new Error('Unable to create shader.')
-  gl.shaderSource(shader, src)
-  gl.compileShader(shader)
-  const log = gl.getShaderInfoLog(shader)
-  if (log) console.error(log)
-  return shader
+  isContextLost(): boolean {
+    return this._gl.isContextLost()
+  }
+
+  debugLoseContext(): void {
+    if (!this._loseContext) return
+    this._loseContext.restoreContext()
+  }
+
+  debugRestoreContext(): void {
+    if (!this._loseContext) return
+    this._loseContext.restoreContext()
+  }
+
+  constructor(
+    private readonly _gl: GL,
+    private readonly _projection: GLUniform,
+    private readonly _perInstanceBuffer: GLBuffer,
+    private readonly _loseContext: GLLoseContext
+  ) {}
+
+  /**
+   * @param canvas The desired resolution of the canvas in CSS pixels. E.g.,
+   *               {w: window.innerWidth, h: window.innerHeight}.
+   * @param scale Positive integer zoom.
+   * @param focus The position to center on in physical pixels.
+   */
+  private resize(canvas: WH, scale: number, focus: XY): void {
+    this._gl.canvas.width = canvas.w
+    this._gl.canvas.height = canvas.h
+
+    // The camera position is a function of the position and the canvas'
+    // dimensions.
+    //
+    // The pixel position is rendered by implicitly truncating the model
+    // position. Similarly, it is necessary to truncate the model position prior
+    // to camera input to avoid rounding errors that cause the camera to lose
+    // synchronicity with the rendered position and create jitter when the
+    // position updates.
+    //
+    // For example, the model position may be 0.1 and the camera at an offset
+    // from the position of 100.9. The rendered position is thus truncated to 0.
+    // Consider the possible camera positions:
+    //
+    //   Formula                   Result  Pixel position  Camera pixel  Distance  Notes
+    //   0.1 + 100.9             =  101.0               0           101       101  No truncation.
+    //   Math.trunc(0.1) + 100.9 =  100.9               0           100       100  Truncate before input.
+    //   Math.trunc(0.1 + 100.9) =  101.0               0           101       101  Truncate after input.
+    //
+    // Now again when the model position has increased to 1.0 and the rendered
+    // position is also 1, one pixel forward. The distance should be constant.
+    //
+    //   1.0 + 100.9             =  101.9               1           101       100  No truncation.
+    //   Math.trunc(1.0) + 100.9 =  101.9               1           101       100  Truncate before input.
+    //   Math.trunc(1.0 + 100.9) =  101.0               1           101       100  Truncate after input.
+    //
+    // As shown above, when truncation is not performed or it occurs afterwards
+    // on the sum, rounding errors can cause the rendered distance between the
+    // center of the camera and the position to vary under different inputs
+    // instead of remaining at a constant offset.
+    //
+    // The canvas offsets should be truncated by the call the GL.uniform4i() but
+    // these appear to use the ceiling instead so another distinct and
+    // independent call to Math.trunc() is made.
+    const cam = {
+      // Center the camera on the x-position within the canvas bounds.
+      x: Math.trunc(-focus.x) + Math.trunc(canvas.w / (scale * 2)),
+      // Align the y-position with the bottom of the canvas.
+      y: Math.trunc(focus.y),
+      w: Math.ceil(canvas.w / scale),
+      h: Math.ceil(canvas.h / scale)
+    }
+
+    // Convert the pixels to clipspace by taking them as a fraction of the cam
+    // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
+    // is downward, and translating to -1 to 1 and again by the camera position.
+    const ratio = {w: 2 / cam.w, h: 2 / cam.h}
+    // prettier-ignore
+    const projection = new Float32Array([
+      ratio.w,        0, 0, -1 + cam.x * ratio.w,
+            0, -ratio.h, 0, -1 + cam.y * ratio.h,
+            0,        0, 1,                    0,
+            0,        0, 0,                    1
+    ])
+    this._gl.uniformMatrix4fv(this._projection, false, projection)
+
+    // The viewport is a rendered in physical pixels. It's intentional to use
+    // the camera dimensions instead of canvas dimensions since the camera often
+    // exceeds the canvas and the viewport's dimensions must be an integer
+    // multiple of the camera.
+    this._gl.viewport(0, 0, scale * cam.w, scale * cam.h)
+  }
 }
 
 function initAttribute(
@@ -162,76 +238,14 @@ function initAttribute(
   gl.bindBuffer(GL.ARRAY_BUFFER, null)
 }
 
-/**
- * @param renderer
- * @param canvas The desired resolution of the canvas in CSS pixels. E.g.,
- *               {w: window.innerWidth, h: window.innerHeight}.
- * @param scale Positive integer zoom.
- * @param focus The position to center on in physical pixels.
- */
-function resize(renderer: State, canvas: WH, scale: number, focus: XY): void {
-  renderer.gl.canvas.width = canvas.w
-  renderer.gl.canvas.height = canvas.h
-
-  // The camera position is a function of the position and the canvas'
-  // dimensions.
-  //
-  // The pixel position is rendered by implicitly truncating the model position.
-  // Similarly, it is necessary to truncate the model position prior to camera
-  // input to avoid rounding errors that cause the camera to lose synchronicity
-  // with the rendered position and create jitter when the position updates.
-  //
-  // For example, the model position may be 0.1 and the camera at an offset from
-  // the position of 100.9. The rendered position is thus truncated to 0.
-  // Consider the possible camera positions:
-  //
-  //   Formula                   Result  Pixel position  Camera pixel  Distance  Notes
-  //   0.1 + 100.9             =  101.0               0           101       101  No truncation.
-  //   Math.trunc(0.1) + 100.9 =  100.9               0           100       100  Truncate before input.
-  //   Math.trunc(0.1 + 100.9) =  101.0               0           101       101  Truncate after input.
-  //
-  // Now again when the model position has increased to 1.0 and the rendered
-  // position is also 1, one pixel forward. The distance should be constant.
-  //
-  //   1.0 + 100.9             =  101.9               1           101       100  No truncation.
-  //   Math.trunc(1.0) + 100.9 =  101.9               1           101       100  Truncate before input.
-  //   Math.trunc(1.0 + 100.9) =  101.0               1           101       100  Truncate after input.
-  //
-  // As shown above, when truncation is not performed or it occurs afterwards on
-  // the sum, rounding errors can cause the rendered distance between the center
-  // of the camera and the position to vary under different inputs instead of
-  // remaining at a constant offset.
-  //
-  // The canvas offsets should be truncated by the call the GL.uniform4i() but
-  // these appear to use the ceiling instead so another distinct and independent
-  // call to Math.trunc() is made.
-  const cam = {
-    // Center the camera on the x-position within the canvas bounds.
-    x: Math.trunc(-focus.x) + Math.trunc(canvas.w / (scale * 2)),
-    // Align the y-position with the bottom of the canvas.
-    y: Math.trunc(focus.y),
-    w: Math.ceil(canvas.w / scale),
-    h: Math.ceil(canvas.h / scale)
-  }
-
-  // Convert the pixels to clipspace by taking them as a fraction of the cam
-  // resolution, scaling to 0-2, flipping the y-coordinate so that positive y is
-  // downward, and translating to -1 to 1 and again by the camera position.
-  const ratio = {w: 2 / cam.w, h: 2 / cam.h}
-  // prettier-ignore
-  const projection = new Float32Array([
-    ratio.w,        0, 0, -1 + cam.x * ratio.w,
-          0, -ratio.h, 0, -1 + cam.y * ratio.h,
-          0,        0, 1,                    0,
-          0,        0, 0,                    1
-  ])
-  renderer.gl.uniformMatrix4fv(renderer.projection, false, projection)
-
-  // The viewport is a rendered in physical pixels. It's intentional to use the
-  // camera dimensions instead of canvas dimensions since the camera often
-  // exceeds the canvas and the viewport's dimensions must be an integer
-  // multiple of the camera.
-  renderer.gl.viewport(0, 0, scale * cam.w, scale * cam.h)
+function loadShader(gl: GL, type: number, src: string): GLShader {
+  const shader = gl.createShader(type)
+  if (!shader) throw new Error('Unable to create shader.')
+  gl.shaderSource(shader, src)
+  gl.compileShader(shader)
+  const log = gl.getShaderInfoLog(shader)
+  if (log) console.error(log)
+  return shader
 }
 
 function bufferData(
