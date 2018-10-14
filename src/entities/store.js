@@ -36,9 +36,7 @@ export function nextSpawnState(state, entities) {
  * @return {void}
  */
 export function nextStepState(state, step, atlas, recorderState) {
-  state.entities.forEach(val =>
-    entity.nextStepState(val, step, atlas, recorderState)
-  )
+  state.entities.forEach(val => val.nextStepState(step, atlas, recorderState))
 }
 
 /**
@@ -56,9 +54,9 @@ export function flushUpdatesToMemory(state, atlasState) {
     const coord = cels[s.cel(atlasState.animations[s._animationID])].bounds
     // prettier-ignore
     state.memory.set([coord.x, coord.y, coord.w, coord.h,
-                        s._scrollPosition.x, s._scrollPosition.y,
-                        s._position.x, s._position.y,
-                        s._scale.x, s._scale.y],
-                       i * shader.layout.perInstance.length)
+                      s._scrollPosition.x, s._scrollPosition.y,
+                      s._position.x, s._position.y,
+                      s._scale.x, s._scale.y],
+                      i * shader.layout.perInstance.length)
   })
 }

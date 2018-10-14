@@ -1,15 +1,16 @@
 import * as atlas from './atlas.js'
 import * as entity from './entity.js'
 
-/**
- * @arg {entity.State} state
- * @arg {number} step
- * @arg {atlas.State} _atlas
- * @return {void}
- */
-export function nextStepState(state, step, _atlas) {
-  state._position.x += step * state._speed.x
-  state._position.y += step * state._speed.y
-  state._scrollPosition.x += step * state.scrollSpeed.x
-  state._scrollPosition.y += step * state.scrollSpeed.y
+export class SuperBall extends entity.State {
+  /**
+   * @arg {number} step
+   * @arg {atlas.State} _atlas
+   * @return {void}
+   */
+  nextStepState(step, _atlas) {
+    this._position.x += step * this._speed.x
+    this._position.y += step * this._speed.y
+    this._scrollPosition.x += step * this.scrollSpeed.x
+    this._scrollPosition.y += step * this.scrollSpeed.y
+  }
 }

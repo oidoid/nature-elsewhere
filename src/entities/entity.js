@@ -1,7 +1,5 @@
 import * as atlas from './atlas.js'
-import * as player from './player.js'
 import * as recorder from '../inputs/recorder.js'
-import * as superBall from './superBall.js'
 
 /** @typedef {import('./animation').ID} animation.ID */
 
@@ -126,26 +124,18 @@ export class State {
     }
     return fnc(this._cel, animation.cels.length)
   }
-}
 
-/**
- * @arg {State} state
- * @arg {number} step
- * @arg {atlas.State} atlasState
- * @arg {recorder.ReadState} recorderState
- * @return {void}
- */
-export function nextStepState(state, step, atlasState, recorderState) {
-  switch (state._type) {
-    case Type.PLAYER:
-      return player.nextStepState(state, step, atlasState, recorderState)
-    case Type.SUPER_BALL:
-      return superBall.nextStepState(state, step, atlasState)
+  /**
+   * @arg {number} step
+   * @arg {atlas.State} atlasState
+   * @arg {recorder.ReadState} _recorderState
+   * @return {void}
+   */
+  nextStepState(step, atlasState, _recorderState) {
+    this.stepAnimation(step, atlasState.animations[this._animationID])
+    this._position.x += step * this._speed.x
+    this._position.y += step * this._speed.y
+    this._scrollPosition.x += step * this.scrollSpeed.x
+    this._scrollPosition.y += step * this.scrollSpeed.y
   }
-
-  state.stepAnimation(step, atlasState.animations[state._animationID])
-  state._position.x += step * state._speed.x
-  state._position.y += step * state._speed.y
-  state._scrollPosition.x += step * state.scrollSpeed.x
-  state._scrollPosition.y += step * state.scrollSpeed.y
 }
