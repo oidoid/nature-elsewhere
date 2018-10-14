@@ -1,5 +1,7 @@
 # nature elsewhere
 
+`npm i && npm start`
+
 ## License (GPLv3)
 
 © Stephen Niedzielski.
