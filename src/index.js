@@ -1,7 +1,7 @@
-import * as game from './game'
+import * as game from './game.js'
 
 const atlas = new Image()
-atlas.onload = _ => {
+atlas.onload = () => {
   const gameState = game.newState(document, atlas)
   game.nextStartState(gameState, document)
 }

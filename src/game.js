@@ -1,32 +1,36 @@
-import * as asepriteParser from './parsers/asepriteParser'
-import * as atlas from './entities/atlas'
-import * as atlasJSON from './assets/atlas.json'
-import * as entity from './entities/entity'
-import * as level0 from './levels/level0'
-import * as keyboard from './inputs/keyboard'
-import * as random from './random'
-import * as recorder from './inputs/recorder'
-import * as renderer from './graphics/renderer'
-import * as store from './entities/store'
+import * as asepriteParser from './parsers/asepriteParser.js'
+import * as atlas from './entities/atlas.js'
+import * as atlasJSON from './assets/atlas.js'
+import * as entity from './entities/entity.js'
+import * as level0 from './levels/level0.js'
+import * as keyboard from './inputs/keyboard.js'
+import * as random from './random.js'
+import * as recorder from './inputs/recorder.js'
+import * as renderer from './graphics/renderer.js'
+import * as store from './entities/store.js'
 
-type State = {
-  readonly atlas: atlas.State
-  readonly atlasImage: HTMLImageElement
-  readonly store: store.State
-  readonly player: entity.State
-  readonly canvas: HTMLCanvasElement
-  frameID: number
-  renderer: renderer.Renderer
-  recorder: recorder.State
-  readonly scale: number
-  readonly random: random.Random
-}
+/** @typedef {{
+ *   atlas: atlas.State
+ *   atlasImage: HTMLImageElement
+ *   store: store.State
+ *   player: entity.State
+ *   canvas: HTMLCanvasElement
+ *   frameID: number
+ *   renderer: renderer.Renderer
+ *   recorder: recorder.State
+ *   readonly scale: number
+ *   readonly random: random.Random
+ * }} State
+ */
 
-export function newState(
-  document: Document,
-  atlasImage: HTMLImageElement
-): State {
-  const atlas = asepriteParser.parse(atlasJSON)
+/**
+ *
+ * @arg {Document} document
+ * @arg {HTMLImageElement} atlasImage
+ * @return {State}
+ */
+export function newState(document, atlasImage) {
+  const atlas = asepriteParser.parse(atlasJSON.default)
   const storeState = store.newState()
   const randomState = new random.Random(0)
   const level0State = level0.newState(atlas, randomState)
@@ -51,7 +55,12 @@ export function newState(
   }
 }
 
-export function nextStartState(state: State, document: Document): State {
+/**
+ * @arg {State} state
+ * @arg {Document} document
+ * @return {State}
+ */
+export function nextStartState(state, document) {
   document.addEventListener(
     'visibilitychange',
     _ => (document.hidden ? onPaused(state) : onResumed(state, document))
@@ -73,7 +82,11 @@ export function nextStartState(state: State, document: Document): State {
   return state
 }
 
-function onPaused(state: State): void {
+/**
+ * @arg {State} state
+ * @return {void}
+ */
+function onPaused(state) {
   console.log('Paused.')
   cancelAnimationFrame(state.frameID)
 
@@ -81,23 +94,42 @@ function onPaused(state: State): void {
   state.recorder = new recorder.WriteState()
 }
 
-function onContextLost(event: Event): void {
+/**
+ * @arg {Event} event
+ * @return {void}
+ */
+function onContextLost(event) {
   console.log('Renderer context lost.')
   event.preventDefault()
 }
 
-function onResumed(state: State, document: Document): void {
+/**
+ * @arg {State} state
+ * @arg {Document} document
+ * @return {void}
+ */
+function onResumed(state, document) {
   console.log('Resumed.')
   startLooping(state, document)
 }
 
-function onContextRestored(state: State, event: Event): void {
+/**
+ * @arg {State} state
+ * @arg {Event} event
+ * @return {void}
+ */
+function onContextRestored(state, event) {
   console.log('Renderer context restored.')
   state.renderer = renderer.init(state.canvas, state.atlasImage)
   event.preventDefault()
 }
 
-function onKeyChange(state: State, event: KeyboardEvent): void {
+/**
+ * @arg {State} state
+ * @arg {KeyboardEvent} event
+ * @return {void}
+ */
+function onKeyChange(state, event) {
   const key = keyboard.defaultKeyMap[event.key]
   if (key === undefined) return
   const active = event.type === 'keydown'
@@ -109,12 +141,14 @@ function onKeyChange(state: State, event: KeyboardEvent): void {
   event.preventDefault()
 }
 
-function onLoop(
-  state: State,
-  document: Document,
-  then: number,
-  now: number
-): void {
+/**
+ * @arg {State} state
+ * @arg {Document} document
+ * @arg {number} then
+ * @arg {number} now
+ * @return {void}
+ */
+function onLoop(state, document, then, now) {
   // Steps are measured in milliseconds.
   const step = now - then
 
@@ -140,7 +174,7 @@ function onLoop(
   }
 
   store.nextStepState(state.store, step, state.atlas, state.recorder)
-  store.flushUpdatesToMemory(state.atlas, state.store)
+  store.flushUpdatesToMemory(state.store, state.atlas)
   // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
   // scaling.
   const canvas = {
@@ -156,7 +190,12 @@ function onLoop(
   )
 }
 
-function startLooping(state: State, document: Document): void {
+/**
+ * @arg {State} state
+ * @arg {Document} document
+ * @return {void}
+ */
+function startLooping(state, document) {
   state.frameID = requestAnimationFrame(now =>
     onLoop(state, document, now, now)
   )

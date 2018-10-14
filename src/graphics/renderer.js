@@ -1,21 +1,23 @@
-import * as vertexShaderSource from './shader.vert'
-import * as fragmentShaderSource from './shader.frag'
-import * as shaderLayout from './shader.json'
+import * as shader from './shader.js'
+import fragmentShaderSource from './fragmentShader.js'
+import vertexShaderSource from './vertexShader.js'
 
-type GL = WebGL2RenderingContext
-type GLProgram = WebGLProgram
-type GLShader = WebGLShader
-type GLUniform = WebGLUniformLocation | null
-type GLBuffer = WebGLBuffer | null
-type GLLoseContext = WEBGL_lose_context | null
+/** @typedef {WebGL2RenderingContext} GL */
+/** @typedef {WebGLProgram} GLProgram */
+/** @typedef {WebGLShader} GLShader */
+/** @typedef {WebGLUniformLocation | null} GLUniform */
+/** @typedef {WebGLBuffer | null} GLBuffer */
+/** @typedef {WEBGL_lose_context | null} GLLoseContext */
 
-const GL = WebGL2RenderingContext
-const perVertexData: Int16Array = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
+const GLX = /** @type {typeof WebGL2RenderingContext} */ (WebGL2RenderingContext)
+const perVertexData = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
 
-export function init(
-  canvas: HTMLCanvasElement,
-  atlas: HTMLImageElement
-): Renderer {
+/**
+ * @arg {HTMLCanvasElement} canvas
+ * @arg {HTMLImageElement} atlas
+ * @return {Renderer}
+ */
+export function init(canvas, atlas) {
   const gl = canvas.getContext('webgl2', {
     alpha: false,
     depth: false,
@@ -26,10 +28,10 @@ export function init(
 
   const program = gl.createProgram()
   if (program === null) throw new Error('Unable to create WebGL program.')
-  const vertexShader = loadShader(gl, GL.VERTEX_SHADER, vertexShaderSource)
+  const vertexShader = loadShader(gl, GLX.VERTEX_SHADER, vertexShaderSource)
   const fragmentShader = loadShader(
     gl,
-    GL.FRAGMENT_SHADER,
+    GLX.FRAGMENT_SHADER,
     fragmentShaderSource
   )
   gl.attachShader(program, vertexShader)
@@ -49,7 +51,7 @@ export function init(
   // Allow translucent textures to be layered.
   gl.enable(gl.BLEND)
   gl.blendEquation(gl.FUNC_ADD)
-  gl.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
+  gl.blendFunc(GLX.SRC_ALPHA, GLX.ONE_MINUS_SRC_ALPHA)
 
   const projection = gl.getUniformLocation(program, 'projection')
   gl.uniform1i(gl.getUniformLocation(program, 'sampler'), 0)
@@ -60,40 +62,40 @@ export function init(
   gl.bindVertexArray(vertexArray)
 
   const perVertexBuffer = gl.createBuffer()
-  shaderLayout.perVertex.attributes.forEach(attr =>
+  shader.layout.perVertex.attributes.forEach(attr =>
     initAttribute(
       gl,
       program,
       attr,
-      shaderLayout.perVertex.type,
-      shaderLayout.perVertex.stride,
-      shaderLayout.perVertex.divisor,
+      shader.layout.perVertex.type,
+      shader.layout.perVertex.stride,
+      shader.layout.perVertex.divisor,
       perVertexBuffer
     )
   )
-  bufferData(gl, perVertexBuffer, perVertexData, GL.STATIC_READ)
+  bufferData(gl, perVertexBuffer, perVertexData, GLX.STATIC_READ)
 
   const perInstanceBuffer = gl.createBuffer()
-  shaderLayout.perInstance.attributes.forEach(attr =>
+  shader.layout.perInstance.attributes.forEach(attr =>
     initAttribute(
       gl,
       program,
       attr,
-      shaderLayout.perInstance.type,
-      shaderLayout.perInstance.stride,
-      shaderLayout.perInstance.divisor,
+      shader.layout.perInstance.type,
+      shader.layout.perInstance.stride,
+      shader.layout.perInstance.divisor,
       perInstanceBuffer
     )
   )
 
   // Leave vertexArray bound.
 
-  gl.activeTexture(GL.TEXTURE0)
+  gl.activeTexture(GLX.TEXTURE0)
   const texture = gl.createTexture()
-  gl.bindTexture(GL.TEXTURE_2D, texture)
-  gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST)
-  gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST)
-  gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, atlas)
+  gl.bindTexture(GLX.TEXTURE_2D, texture)
+  gl.texParameteri(GLX.TEXTURE_2D, GLX.TEXTURE_MIN_FILTER, GLX.NEAREST)
+  gl.texParameteri(GLX.TEXTURE_2D, GLX.TEXTURE_MAG_FILTER, GLX.NEAREST)
+  gl.texImage2D(GLX.TEXTURE_2D, 0, GLX.RGBA, GLX.RGBA, GLX.UNSIGNED_BYTE, atlas)
   // Leave texture bound.
 
   const loseContext = gl.getExtension('WEBGL_lose_context')
@@ -102,53 +104,68 @@ export function init(
 }
 
 export class Renderer {
-  render(
-    canvas: WH,
-    scale: number,
-    position: XY,
-    perInstanceData: Int16Array,
-    instances: number
-  ): void {
-    this.resize(canvas, scale, position)
+  /**
+   * @arg {WH} canvas
+   * @arg {number} scale
+   * @arg {XY} position
+   * @arg {Int16Array} perInstanceData
+   * @arg {number} instances
+   * @return {void}
+   */
+  render(canvas, scale, position, perInstanceData, instances) {
+    this._resize(canvas, scale, position)
 
     bufferData(
       this._gl,
       this._perInstanceBuffer,
       perInstanceData,
-      GL.DYNAMIC_READ
+      GLX.DYNAMIC_READ
     )
-    const vertices = perVertexData.length / shaderLayout.perVertex.length
-    this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
+    const vertices = perVertexData.length / shader.layout.perVertex.length
+    this._gl.drawArraysInstanced(GLX.TRIANGLE_STRIP, 0, vertices, instances)
   }
 
-  isContextLost(): boolean {
+  /** @return {boolean} */
+  isContextLost() {
     return this._gl.isContextLost()
   }
 
-  debugLoseContext(): void {
+  /** @return {void} */
+  debugLoseContext() {
     if (!this._loseContext) return
     this._loseContext.restoreContext()
   }
 
-  debugRestoreContext(): void {
+  /** @return {void} */
+  debugRestoreContext() {
     if (!this._loseContext) return
     this._loseContext.restoreContext()
   }
 
-  constructor(
-    private readonly _gl: GL,
-    private readonly _projection: GLUniform,
-    private readonly _perInstanceBuffer: GLBuffer,
-    private readonly _loseContext: GLLoseContext
-  ) {}
+  /** @prop {GL} _gl */
+  /** @prop {GLUniform} _projection */
+  /** @prop {GLBuffer} _perInstanceBuffer */
+  /** @prop {GLLoseContext} _loseContext */
+
+  /** @arg {GL} gl */
+  /** @arg {GLUniform} projection */
+  /** @arg {GLBuffer} perInstanceBuffer */
+  /** @arg {GLLoseContext} loseContext */
+  constructor(gl, projection, perInstanceBuffer, loseContext) {
+    this._gl = gl
+    this._projection = projection
+    this._perInstanceBuffer = perInstanceBuffer
+    this._loseContext = loseContext
+  }
 
   /**
-   * @param canvas The desired resolution of the canvas in CSS pixels. E.g.,
-   *               {w: window.innerWidth, h: window.innerHeight}.
-   * @param scale Positive integer zoom.
-   * @param focus The position to center on in physical pixels.
+   * @arg {WH} canvas The desired resolution of the canvas in CSS pixels.
+   *                    E.g., {w: window.innerWidth, h: window.innerHeight}.
+   * @arg {number} scale Positive integer zoom.
+   * @arg {XY} focus The position to center on in physical pixels.
+   * @return {void}
    */
-  private resize(canvas: WH, scale: number, focus: XY): void {
+  _resize(canvas, scale, focus) {
     this._gl.canvas.width = canvas.w
     this._gl.canvas.height = canvas.h
 
@@ -215,46 +232,56 @@ export class Renderer {
   }
 }
 
-function initAttribute(
-  gl: GL,
-  program: GLProgram,
-  attribute: typeof shaderLayout.perInstance.attributes[number],
-  type: string,
-  stride: number,
-  divisor: number,
-  buffer: GLBuffer
-): void {
+/**
+ * @arg {GL} gl
+ * @arg {GLProgram} program
+ * @arg {typeof shader.layout.perInstance.attributes[number]} attribute
+ * @arg {string} type
+ * @arg {number} stride
+ * @arg {number} divisor
+ * @arg {GLBuffer} buffer
+ * @return {void}
+ */
+function initAttribute(gl, program, attribute, type, stride, divisor, buffer) {
   const location = gl.getAttribLocation(program, attribute.name)
   gl.enableVertexAttribArray(location)
-  gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
+  gl.bindBuffer(GLX.ARRAY_BUFFER, buffer)
   gl.vertexAttribIPointer(
     location,
     attribute.length,
-    (<any>GL)[type],
+    /** @type {any} */ (GLX)[type],
     stride,
     attribute.offset
   )
   gl.vertexAttribDivisor(location, divisor)
-  gl.bindBuffer(GL.ARRAY_BUFFER, null)
+  gl.bindBuffer(GLX.ARRAY_BUFFER, null)
 }
 
-function loadShader(gl: GL, type: number, src: string): GLShader {
+/**
+ * @arg {GL} gl
+ * @arg {number} type
+ * @arg {string} src
+ * @return {GLShader}
+ */
+function loadShader(gl, type, src) {
   const shader = gl.createShader(type)
   if (!shader) throw new Error('Unable to create shader.')
-  gl.shaderSource(shader, src)
+  gl.shaderSource(shader, src.trim())
   gl.compileShader(shader)
   const log = gl.getShaderInfoLog(shader)
   if (log) console.error(log)
   return shader
 }
 
-function bufferData(
-  gl: GL,
-  buffer: GLBuffer,
-  data: Int16Array,
-  usage: number
-): void {
-  gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
-  gl.bufferData(GL.ARRAY_BUFFER, data, usage)
-  gl.bindBuffer(GL.ARRAY_BUFFER, null)
+/**
+ * @arg {GL} gl
+ * @arg {GLBuffer} buffer
+ * @arg {Int16Array} data
+ * @arg {number} usage
+ * @return {void}
+ */
+function bufferData(gl, buffer, data, usage) {
+  gl.bindBuffer(GLX.ARRAY_BUFFER, buffer)
+  gl.bufferData(GLX.ARRAY_BUFFER, data, usage)
+  gl.bindBuffer(GLX.ARRAY_BUFFER, null)
 }

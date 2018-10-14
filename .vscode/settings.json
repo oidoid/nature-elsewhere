@@ -2,7 +2,6 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.exclude": {
     "node_modules": true,
-    "package-lock.json": true,
-    "dist": true
+    "package-lock.json": true
   }
 }

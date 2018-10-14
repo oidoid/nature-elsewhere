@@ -1,3 +1,4 @@
+export default `
 #version 300 es
 precision mediump int;
 precision mediump float;
@@ -21,3 +22,4 @@ void main() {
   vCoord = coord;
   vScrollPosition = vec2((scrollPosition + uv * coord.zw) * sign(scale));
 }
+`

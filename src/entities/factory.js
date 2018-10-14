@@ -1,11 +1,13 @@
-import * as animation from './animation'
-import * as entity from './entity'
-import * as util from '../util'
+import * as animation from './animation.js'
+import * as entity from './entity.js'
+import * as util from '../util.js'
 
-export function newCloud(
-  animationID: animation.ID,
-  position: XY
-): entity.State[] {
+/**
+ * @arg {XY} position
+ * @arg {animation.ID} animationID
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newCloud(animationID, position) {
   return [
     {
       ...entity.newState(),
@@ -17,7 +19,12 @@ export function newCloud(
   ]
 }
 
-export function newBackground(position: XY, scale: XY): entity.State[] {
+/**
+ * @arg {XY} position
+ * @arg {XY} scale
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newBackground(position, scale) {
   const animationID = animation.ID.PALETTE_PALE
   const drawOrder = entity.DrawOrder.BACKGROUND
   return [
@@ -32,7 +39,11 @@ export function newBackground(position: XY, scale: XY): entity.State[] {
   ]
 }
 
-export function newPlayer(position: XY): entity.State[] {
+/**
+ * @arg {XY} position
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newPlayer(position) {
   const animationID = animation.ID.PLAYER_IDLE
   const drawOrder = entity.DrawOrder.PLAYER
   return [
@@ -46,12 +57,14 @@ export function newPlayer(position: XY): entity.State[] {
   ]
 }
 
-export function newRainCloud(
-  animationID: animation.ID,
-  {x, y}: XY,
-  speed: number
-): entity.State[] {
-  const entities: entity.State[] = []
+/**
+ * @arg {animation.ID} animationID
+ * @arg {XY} position
+ * @arg {number} speed
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newRainCloud(animationID, {x, y}, speed) {
+  /** @type {entity.State[]} */ const entities = []
   const drawOrder = entity.DrawOrder.CLOUDS
   util.range(0, (-27 - y) / 16).forEach(i =>
     entities.push({
@@ -88,11 +101,13 @@ export function newRainCloud(
   return entities
 }
 
-export function newGrass(
-  animationID: animation.ID,
-  position: XY,
-  scale: XY = {x: 1, y: 1}
-): entity.State[] {
+/**
+ * @arg {animation.ID} animationID
+ * @arg {XY} position
+ * @arg {XY} scale
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newGrass(animationID, position, scale = {x: 1, y: 1}) {
   const drawOrder =
     animationID >= animation.ID.GRASS_XS && animationID <= animation.ID.GRASS_L
       ? entity.DrawOrder.FAR_BACKGROUND_SCENERY
@@ -109,7 +124,11 @@ export function newGrass(
   ]
 }
 
-export function newHill(position: XY): entity.State[] {
+/**
+ * @arg {XY} position
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newHill(position) {
   return [
     {
       ...entity.newState(),
@@ -121,7 +140,11 @@ export function newHill(position: XY): entity.State[] {
   ]
 }
 
-export function newTree(position: XY): entity.State[] {
+/**
+ * @arg {XY} position
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newTree(position) {
   const animationID = animation.ID.TREE
   const drawOrder = entity.DrawOrder.NEAR_BACKGROUND_SCENERY
   return [
@@ -135,7 +158,12 @@ export function newTree(position: XY): entity.State[] {
   ]
 }
 
-export function newSuperBall(position: XY, speed: XY): entity.State[] {
+/**
+ * @arg {XY} position
+ * @arg {XY} speed
+ * @return {ReadonlyArray<entity.State>}
+ */
+export function newSuperBall(position, speed) {
   const animationID = animation.ID.PALETTE_GOLD
   return [
     {

@@ -1,7 +1,7 @@
 import * as aseprite from './aseprite'
 import * as asepriteParser from './asepriteParser'
-import * as atlasJSON from '../assets/atlas.json'
-import * as expected from './asepriteParser.expect.test'
+import atlasJSON from '../assets/atlas.js'
+import * as expected from './asepriteParser.expect.test.js'
 import * as input from './asepriteParser.input.test.json'
 import * as util from '../util'
 
@@ -17,11 +17,13 @@ describe('atlas.json', () => {
     expect(Math.log2(atlas.size.h) % 1).toStrictEqual(0)
   })
 
-  test.each(tags)('%# Tag %p is unique within the sheet', (tag: string) => {
+  test.each(tags)('%# Tag %p is unique within the sheet', (
+    /** @type {string} */ tag
+  ) => {
     expect(tags.filter(val => val === tag)).toHaveLength(1)
   })
 
-  test.each(tags)('%# Tag %p has a Frame', (tag: string) => {
+  test.each(tags)('%# Tag %p has a Frame', (/** @type {string} */ tag) => {
     const frameKeys = util
       .keys(file.frames)
       .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
@@ -34,15 +36,16 @@ describe('atlas.json', () => {
       .keys(file.frames)
       .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
       .filter(util.uniq(Object.is))
-    test.each(frameKeys)('%# Frame has a Tag %p', (frameKey: string) => {
+    test.each(frameKeys)('%# Frame has a Tag %p', (
+      /** @type {string} */ frameKey
+    ) => {
       expect(tags).toContainEqual(frameKey)
     })
   }
 
-  test.each(file.meta.slices)(
-    '%# Slice name %p is a Tag',
-    (slice: aseprite.Slice) => expect(tags).toContainEqual(slice.name)
-  )
+  test.each(file.meta.slices)('%# Slice name %p is a Tag', (
+    /** @type {aseprite.Slice} */ slice
+  ) => expect(tags).toContainEqual(slice.name))
 })
 
 describe('parse()', () => {
@@ -53,7 +56,7 @@ describe('parse()', () => {
 
 describe('parseAnimations()', () => {
   test('Converts Animations.', () => {
-    const frameTags = [
+    /** ReadonlyArray<aseprite.FrameTag> */ const frameTags = [
       {name: 'cactus s', from: 0, to: 0, direction: 'forward'},
       {name: 'cactus m', from: 1, to: 1, direction: 'forward'},
       {name: 'cactus l', from: 2, to: 2, direction: 'forward'},
@@ -413,7 +416,7 @@ describe('parseCollision()', () => {
 
   test('Converts no Slices.', () => {
     const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    const slices: aseprite.Slice[] = []
+    /** @type {ReadonlyArray<aseprite.Slice>} */ const slices = []
     expect(asepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
   })
 
@@ -453,10 +456,10 @@ describe('parseCollision()', () => {
 })
 
 describe('parseAnimationDirection()', () => {
-  test.each(util.values(aseprite.Direction))(
-    '%# Direction %p',
-    (direction: aseprite.Direction) =>
-      expect(asepriteParser.parseAnimationDirection(direction)).toBeTruthy()
+  test.each(
+    /** @type {aseprite.Direction[]} */ (util.values(aseprite.Direction))
+  )('%# Direction %p', (/** @type {aseprite.Direction} */ direction) =>
+    expect(asepriteParser.parseAnimationDirection(direction)).toBeTruthy()
   )
 
   test('Unknown.', () => {
@@ -467,10 +470,10 @@ describe('parseAnimationDirection()', () => {
 })
 
 describe('isAnimationDirection()', () => {
-  test.each(util.values(aseprite.Direction))(
-    '%# Direction %p',
-    (direction: aseprite.Direction) =>
-      expect(asepriteParser.isAnimationDirection(direction)).toStrictEqual(true)
+  test.each(
+    /** @type {aseprite.Direction[]} */ (util.values(aseprite.Direction))
+  )('%# Direction %p', (/** @type {aseprite.Direction} */ direction) =>
+    expect(asepriteParser.isAnimationDirection(direction)).toStrictEqual(true)
   )
 
   test('Unknown.', () =>

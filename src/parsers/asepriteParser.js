@@ -1,8 +1,12 @@
-import * as aseprite from './aseprite'
-import * as atlas from '../entities/atlas'
-import * as util from '../util'
+import * as aseprite from './aseprite.js'
+import * as atlas from '../entities/atlas.js'
+import * as util from '../util.js'
 
-export function parse(file: aseprite.File): atlas.State {
+/**
+ * @arg {aseprite.File} file
+ * @return {atlas.State}
+ */
+export function parse(file) {
   return {
     size: file.meta.size,
     animations: parseAnimations(
@@ -13,11 +17,13 @@ export function parse(file: aseprite.File): atlas.State {
   }
 }
 
-export function parseAnimations(
-  frameTags: aseprite.FrameTag[],
-  frames: aseprite.FrameMap,
-  slices: aseprite.Slice[]
-): atlas.AnimationMap {
+/**
+ * @arg {ReadonlyArray<aseprite.FrameTag>} frameTags
+ * @arg {aseprite.FrameMap} frames
+ * @arg {ReadonlyArray<aseprite.Slice>} slices
+ * @return {atlas.AnimationMap }
+ */
+export function parseAnimations(frameTags, frames, slices) {
   return frameTags
     .map(frameTag => ({
       [frameTag.name]: parseAnimation(frameTag, frames, slices)
@@ -25,11 +31,13 @@ export function parseAnimations(
     .reduce((sum, animations) => ({...sum, ...animations}), {})
 }
 
-export function parseAnimation(
-  frameTag: aseprite.FrameTag,
-  frames: aseprite.FrameMap,
-  slices: aseprite.Slice[]
-): atlas.Animation {
+/**
+ * @arg {aseprite.FrameTag} frameTag
+ * @arg {aseprite.FrameMap} frames
+ * @arg {ReadonlyArray<aseprite.Slice>} slices
+ * @return {atlas.Animation}
+ */
+export function parseAnimation(frameTag, frames, slices) {
   const cels = []
   for (
     let frameNumber = frameTag.from;
@@ -50,19 +58,24 @@ export function parseAnimation(
   return {cels, direction: parseAnimationDirection(frameTag.direction)}
 }
 
-export function marshalTagFrameNumber(
-  tag: aseprite.Tag,
-  index?: number
-): aseprite.TagFrameNumber {
+/**
+ * @arg {aseprite.Tag} tag
+ * @arg {number} [index]
+ * @return {aseprite.TagFrameNumber}
+ */
+export function marshalTagFrameNumber(tag, index) {
   return `${tag} ${index === undefined ? '' : index}`
 }
 
-export function parseCel(
-  frameTag: aseprite.FrameTag,
-  frame: aseprite.Frame,
-  frameNumber: number,
-  slices: aseprite.Slice[]
-): atlas.Cel {
+/**
+ *
+ * @arg {aseprite.FrameTag} frameTag
+ * @arg {aseprite.Frame} frame
+ * @arg {number} frameNumber
+ * @arg {ReadonlyArray<aseprite.Slice>} slices
+ * @return {atlas.Cel}
+ */
+export function parseCel(frameTag, frame, frameNumber, slices) {
   return {
     bounds: parseTexture(frame),
     duration: parseDuration(frame.duration),
@@ -70,7 +83,11 @@ export function parseCel(
   }
 }
 
-export function parseTexture(frame: aseprite.Frame): Rect {
+/**
+ * @arg {aseprite.Frame} frame
+ * @return {Rect}
+ */
+export function parseTexture(frame) {
   const padding = parsePadding(frame)
   return {
     x: frame.frame.x + padding.w / 2,
@@ -80,24 +97,34 @@ export function parseTexture(frame: aseprite.Frame): Rect {
   }
 }
 
-export function parsePadding(frame: aseprite.Frame): WH {
+/**
+ * @arg {aseprite.Frame} frame
+ * @return {WH}
+ */
+export function parsePadding(frame) {
   return {
     w: frame.frame.w - frame.sourceSize.w,
     h: frame.frame.h - frame.sourceSize.h
   }
 }
 
-export function parseDuration(duration: aseprite.Duration): number {
+/**
+ * @arg {aseprite.Duration} duration
+ * @return {number}
+ */
+export function parseDuration(duration) {
   return duration === aseprite.INFINITE_DURATION
     ? Number.POSITIVE_INFINITY
     : duration
 }
 
-export function parseCollision(
-  frameTag: aseprite.FrameTag,
-  frameNumber: number,
-  slices: aseprite.Slice[]
-): Rect[] {
+/**
+ * @arg {aseprite.FrameTag} frameTag
+ * @arg {number} frameNumber
+ * @arg {ReadonlyArray<aseprite.Slice>} slices
+ * @return {ReadonlyArray<Rect>}
+ */
+export function parseCollision(frameTag, frameNumber, slices) {
   const offset = frameNumber - frameTag.from
   return (
     slices
@@ -110,15 +137,19 @@ export function parseCollision(
   )
 }
 
-export function parseAnimationDirection(
-  direction: aseprite.Direction | string
-): atlas.AnimationDirection {
+/**
+ * @arg {aseprite.Direction} direction
+ * @return {atlas.AnimationDirection}
+ */
+export function parseAnimationDirection(direction) {
   if (isAnimationDirection(direction)) return direction
   throw new Error(`"${direction}" is not a Direction.`)
 }
 
-export function isAnimationDirection(
-  direction: aseprite.Direction | string
-): direction is atlas.AnimationDirection {
-  return util.values(atlas.AnimationDirection).includes(<any>direction)
+/**
+ * @arg {aseprite.Direction} direction
+ * @return {boolean}
+ */
+export function isAnimationDirection(direction) {
+  return util.values(atlas.AnimationDirection).includes(direction)
 }

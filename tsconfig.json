@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "lib": ["es2018", "dom"],
+    "allowJs": true,
+    "checkJs": true,
     "resolveJsonModule": true,
+    "lib": ["es2018", "dom"],
 
     "strict": true,
     "noUnusedLocals": true,
@@ -9,6 +11,6 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
 
-    "newLine": "lf"
+    "noEmit": true
   }
 }

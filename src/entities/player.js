@@ -1,14 +1,16 @@
-import * as animation from './animation'
-import * as atlas from './atlas'
-import * as entity from './entity'
-import * as recorder from '../inputs/recorder'
+import * as animation from './animation.js'
+import * as atlas from './atlas.js'
+import * as entity from './entity.js'
+import * as recorder from '../inputs/recorder.js'
 
-export function nextStepState(
-  state: entity.State,
-  step: number,
-  atlas: atlas.State,
-  recorderState: recorder.ReadState
-): void {
+/**
+ * @arg {entity.State} state
+ * @arg {number} step
+ * @arg {atlas.State} atlas
+ * @arg {recorder.ReadState} recorderState
+ * @return {void}
+ */
+export function nextStepState(state, step, atlas, recorderState) {
   scale(state, recorderState)
   position(state, recorderState, step)
 
@@ -21,14 +23,20 @@ export function nextStepState(
     atlas.animations[state.animationID].cels.length
 }
 
-function grounded(state: entity.State): boolean {
+/**
+ * @arg {entity.State} state
+ * @return {boolean}
+ */
+function grounded(state) {
   return state.position.y >= -17
 }
 
-function animationID(
-  state: entity.State,
-  recorderState: recorder.ReadState
-): animation.ID {
+/**
+ * @arg {entity.State} state
+ * @arg {recorder.ReadState} recorderState
+ * @return {animation.ID}
+ */
+function animationID(state, recorderState) {
   if (!grounded(state)) {
     if (recorderState.up()) {
       return animation.ID.PLAYER_ASCEND
@@ -81,7 +89,12 @@ function animationID(
   return animation.ID.PLAYER_IDLE
 }
 
-function scale(state: entity.State, recorderState: recorder.ReadState): void {
+/**
+ * @arg {entity.State} state
+ * @arg {recorder.ReadState} recorderState
+ * @return {void}
+ */
+function scale(state, recorderState) {
   state.scale.x = recorderState.left()
     ? -1
     : recorderState.right()
@@ -89,11 +102,13 @@ function scale(state: entity.State, recorderState: recorder.ReadState): void {
       : state.scale.x
 }
 
-function position(
-  state: entity.State,
-  recorderState: recorder.ReadState,
-  step: number
-): void {
+/**
+ * @arg {entity.State} state
+ * @arg {recorder.ReadState} recorderState
+ * @arg {number} step
+ * @return {void}
+ */
+function position(state, recorderState, step) {
   if (grounded(state) && recorderState.down()) return
   const run =
     recorderState.combo(false, recorder.Mask.LEFT, recorder.Mask.LEFT) ||

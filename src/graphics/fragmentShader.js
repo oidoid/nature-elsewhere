@@ -1,3 +1,4 @@
+export default `
 #version 300 es
 precision mediump int;
 precision mediump float;
@@ -15,3 +16,4 @@ void main() {
   vec2 px = vec2(vCoord.xy) + mod(vScrollPosition, vec2(vCoord.zw));
   frag = texture(sampler, px / vec2(atlasSize));
 }
+`

@@ -1,11 +1,11 @@
-import * as animation from '../entities/animation'
-import * as atlas from '../entities/atlas'
-import * as entity from '../entities/entity'
-import * as factory from '../entities/factory'
-import * as random from '../random'
-import * as util from '../util'
+import * as animation from '../entities/animation.js'
+import * as atlas from '../entities/atlas.js'
+import * as entity from '../entities/entity.js'
+import * as factory from '../entities/factory.js'
+import * as random from '../random.js'
+import * as util from '../util.js'
 
-type State = Readonly<{player: entity.State; entities: entity.State[]}>
+/** @typedef {Readonly<{player: entity.State; entities: ReadonlyArray<entity.State>}>} State */
 
 const tallGrassIDs = [
   animation.ID.TALL_GRASS_A,
@@ -19,10 +19,12 @@ const tallGrassIDs = [
   animation.ID.TALL_GRASS_I
 ]
 
-export function newState(
-  atlas: atlas.State,
-  randomState: random.Random
-): State {
+/**
+ * @arg {atlas.State} atlas
+ * @arg {random.Random} randomState
+ * @return {State}
+ */
+export function newState(atlas, randomState) {
   const entities = [
     ...factory.newBackground(
       {x: entity.Limits.HALF_MIN, y: entity.Limits.HALF_MIN},
