@@ -18,7 +18,7 @@ export function nextStepState(state, step, atlas, recorderState) {
   const run =
     recorderState.combo(false, recorder.Mask.LEFT, recorder.Mask.LEFT) ||
     recorderState.combo(false, recorder.Mask.RIGHT, recorder.Mask.RIGHT)
-  state.cel =
+  state._cel =
     Math.abs(Math.round(state.position.x / (run ? 6 : 2))) %
     atlas.animations[state.animationID].cels.length
 }

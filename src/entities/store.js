@@ -51,17 +51,14 @@ export function flushUpdatesToMemory(state, atlasState) {
   if (state.memory.length < length * shader.layout.perInstance.length) {
     state.memory = new Int16Array(length * shader.layout.perInstance.length * 2)
   }
-  state.entities.forEach(
-    ({scrollPosition, position, scale, animationID, cel}, i) => {
-      const cels = atlasState.animations[animationID].cels
-      const coord =
-        cels[entity.cel({cel}, atlasState.animations[animationID])].bounds
-      // prettier-ignore
-      state.memory.set([coord.x, coord.y, coord.w, coord.h,
-                        scrollPosition.x, scrollPosition.y,
-                        position.x, position.y,
-                        scale.x, scale.y],
+  state.entities.forEach((s, i) => {
+    const cels = atlasState.animations[s.animationID].cels
+    const coord = cels[s.cel(atlasState.animations[s.animationID])].bounds
+    // prettier-ignore
+    state.memory.set([coord.x, coord.y, coord.w, coord.h,
+                        s.scrollPosition.x, s.scrollPosition.y,
+                        s.position.x, s.position.y,
+                        s.scale.x, s.scale.y],
                        i * shader.layout.perInstance.length)
-    }
-  )
+  })
 }

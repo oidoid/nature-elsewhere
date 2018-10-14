@@ -9,13 +9,12 @@ import * as util from '../util.js'
  */
 export function newCloud(animationID, position) {
   return [
-    {
-      ...entity.newState(),
-      type: entity.Type.CLOUD,
+    new entity.State(
+      entity.Type.CLOUD,
       position,
       animationID,
-      drawOrder: entity.DrawOrder.CLOUDS
-    }
+      entity.DrawOrder.CLOUDS
+    )
   ]
 }
 
@@ -25,17 +24,15 @@ export function newCloud(animationID, position) {
  * @return {ReadonlyArray<entity.State>}
  */
 export function newBackground(position, scale) {
-  const animationID = animation.ID.PALETTE_PALE
-  const drawOrder = entity.DrawOrder.BACKGROUND
   return [
-    {
-      ...entity.newState(),
-      type: entity.Type.BACKGROUND,
+    new entity.State(
+      entity.Type.BACKGROUND,
       position,
-      scale,
-      animationID,
-      drawOrder
-    }
+      animation.ID.PALETTE_PALE,
+      entity.DrawOrder.BACKGROUND,
+      {x: 0, y: 0},
+      scale
+    )
   ]
 }
 
@@ -47,13 +44,7 @@ export function newPlayer(position) {
   const animationID = animation.ID.PLAYER_IDLE
   const drawOrder = entity.DrawOrder.PLAYER
   return [
-    {
-      ...entity.newState(),
-      type: entity.Type.PLAYER,
-      position,
-      animationID,
-      drawOrder
-    }
+    new entity.State(entity.Type.PLAYER, position, animationID, drawOrder)
   ]
 }
 
@@ -67,37 +58,51 @@ export function newRainCloud(animationID, {x, y}, speed) {
   /** @type {entity.State[]} */ const entities = []
   const drawOrder = entity.DrawOrder.CLOUDS
   util.range(0, (-27 - y) / 16).forEach(i =>
-    entities.push({
-      ...entity.newState(),
-      type: entity.Type.CLOUD,
-      position: {
-        // Round now to prevent rain from being an extra pixel off due to
-        // truncation later.
-        x: x + Math.round((i + 1) / 2),
-        y: y + 6 + i * 16 - Math.max(0, y + 6 + i * 16 - -12)
-      },
-      animationID: animation.ID.RAIN,
-      drawOrder,
-      speed: {x: speed, y: 0},
-      scrollSpeed: {x: 0, y: -0.012}
-    })
+    entities.push(
+      new entity.State(
+        entity.Type.CLOUD,
+        {
+          // Round now to prevent rain from being an extra pixel off due to
+          // truncation later.
+          x: x + Math.round((i + 1) / 2),
+          y: y + 6 + i * 16 - Math.max(0, y + 6 + i * 16 - -12)
+        },
+        animation.ID.RAIN,
+        drawOrder,
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+        {x: 0, y: -0.012},
+        {x: speed, y: 0}
+      )
+    )
   )
-  entities.push({
-    ...entity.newState(),
-    type: entity.Type.CLOUD,
-    position: {x: x + 1, y: -12},
-    animationID: animation.ID.WATER_M,
-    drawOrder,
-    speed: {x: speed, y: 0}
-  })
-  entities.push({
-    ...entity.newState(),
-    type: entity.Type.CLOUD,
-    position: {x, y},
-    animationID,
-    drawOrder,
-    speed: {x: speed, y: 0}
-  })
+  entities.push(
+    new entity.State(
+      entity.Type.CLOUD,
+      {x: x + 1, y: -12},
+      animation.ID.WATER_M,
+      drawOrder,
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+      {x: 0, y: 0},
+      {x: speed, y: 0}
+    )
+  )
+  entities.push(
+    new entity.State(
+      entity.Type.CLOUD,
+      {x, y},
+      animationID,
+      drawOrder,
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+      {x: 0, y: 0},
+      {
+        x: speed,
+        y: 0
+      }
+    )
+  )
   return entities
 }
 
@@ -113,14 +118,14 @@ export function newGrass(animationID, position, scale = {x: 1, y: 1}) {
       ? entity.DrawOrder.FAR_BACKGROUND_SCENERY
       : entity.DrawOrder.FOREGROUND_SCENERY
   return [
-    {
-      ...entity.newState(),
-      type: entity.Type.GRASS,
+    new entity.State(
+      entity.Type.GRASS,
       position,
-      scale,
       animationID,
-      drawOrder
-    }
+      drawOrder,
+      {x: 0, y: 0},
+      scale
+    )
   ]
 }
 
@@ -130,13 +135,12 @@ export function newGrass(animationID, position, scale = {x: 1, y: 1}) {
  */
 export function newHill(position) {
   return [
-    {
-      ...entity.newState(),
-      type: entity.Type.GRASS,
+    new entity.State(
+      entity.Type.GRASS,
       position,
-      animationID: animation.ID.HILL,
-      drawOrder: entity.DrawOrder.FAR_BACKGROUND_SCENERY
-    }
+      animation.ID.HILL,
+      entity.DrawOrder.FAR_BACKGROUND_SCENERY
+    )
   ]
 }
 
@@ -147,15 +151,7 @@ export function newHill(position) {
 export function newTree(position) {
   const animationID = animation.ID.TREE
   const drawOrder = entity.DrawOrder.NEAR_BACKGROUND_SCENERY
-  return [
-    {
-      ...entity.newState(),
-      type: entity.Type.TREE,
-      position,
-      animationID,
-      drawOrder
-    }
-  ]
+  return [new entity.State(entity.Type.TREE, position, animationID, drawOrder)]
 }
 
 /**
@@ -166,13 +162,15 @@ export function newTree(position) {
 export function newSuperBall(position, speed) {
   const animationID = animation.ID.PALETTE_GOLD
   return [
-    {
-      ...entity.newState(),
-      speed,
-      type: entity.Type.SUPER_BALL,
+    new entity.State(
+      entity.Type.SUPER_BALL,
       position,
       animationID,
-      drawOrder: entity.DrawOrder.SUPER_BALL
-    }
+      entity.DrawOrder.SUPER_BALL,
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+      {x: 0, y: 0},
+      speed
+    )
   ]
 }

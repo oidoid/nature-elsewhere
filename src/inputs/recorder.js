@@ -13,15 +13,6 @@ export const Mask = {
 /** @type {number} */ const maxComboLength = 8
 /** @type {number} */ const maxSampleAge = 200
 
-/**
- * @prop {number} _sampleAge The age of the current sample. Cleared on nonzero
- *                           triggers.
- * @prop {number} _sample The current sample and initial state of the next
- *                        sample.
- * @prop {number} _lastSample
- * @prop {ReadonlyArray<number>} _combo Historical record of triggered nonzero
- *                                      samples.
- */
 export class WriteState {
   /**
    * @arg {number} [sampleAge]
@@ -30,10 +21,13 @@ export class WriteState {
    * @arg {ReadonlyArray<number>} [combo]
    */
   constructor(sampleAge = 0, sample = 0, lastSample = 0, combo = []) {
-    this._sampleAge = sampleAge
-    this._sample = sample
-    this._lastSample = lastSample
-    this._combo = combo
+    /** @type {number} The age of the current sample. Cleared on nonzero
+     *                 triggers. */ this._sampleAge = sampleAge
+    /** @type {number} The current sample and initial state of the next sample.
+     *                 */ this._sample = sample
+    /** @type {number} */ this._lastSample = lastSample
+    /** @type {ReadonlyArray<number>} Historical record of triggered nonzero
+     *                                samples. */ this._combo = combo
   }
 
   /**
@@ -78,12 +72,6 @@ export class WriteState {
   }
 }
 
-/**
- * @prop {number} _sampleAge
- * @prop {number} _sample
- * @prop {number} _lastSample
- * @prop {ReadonlyArray<number>} _combo
- */
 export class ReadState {
   /**
    * @arg {number} sampleAge
@@ -92,10 +80,10 @@ export class ReadState {
    * @arg {ReadonlyArray<number>} combo
    */
   constructor(sampleAge, sample, lastSample, combo) {
-    this._sampleAge = sampleAge
-    this._sample = sample
-    this._lastSample = lastSample
-    this._combo = combo
+    /** @type {number} */ this._sampleAge = sampleAge
+    /** @type {number} */ this._sample = sample
+    /** @type {number} */ this._lastSample = lastSample
+    /** @type {ReadonlyArray<number>} */ this._combo = combo
   }
 
   /**

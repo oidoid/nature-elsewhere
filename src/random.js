@@ -1,7 +1,6 @@
 // https://gist.github.com/blixt/f17b47c62508be59987b
 // http://www.firstpr.com.au/dsp/rand31/
 
-/** @prop {number} _seed */
 export class Random {
   /** @arg {number} seed */
   constructor(seed) {

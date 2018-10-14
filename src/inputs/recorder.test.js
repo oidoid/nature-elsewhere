@@ -1,5 +1,5 @@
-import * as recorder from './recorder'
-import * as util from '../util'
+import * as recorder from './recorder.js'
+import * as util from '../util.js'
 
 const LEFT = recorder.Mask.LEFT
 const RIGHT = recorder.Mask.RIGHT

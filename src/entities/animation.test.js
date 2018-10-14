@@ -1,8 +1,8 @@
-import * as asepriteParser from '../parsers/asepriteParser'
-import * as animation from './animation'
-import * as atlas from './atlas'
+import * as asepriteParser from '../parsers/asepriteParser.js'
+import * as animation from './animation.js'
+import * as atlas from './atlas.js'
 import atlasJSON from '../assets/atlas.js'
-import * as util from '../util'
+import * as util from '../util.js'
 
 /** @type {atlas.State} */ const state = asepriteParser.parse(atlasJSON)
 const ids = /** @type {animation.ID[]}*/ (util.values(animation.ID))

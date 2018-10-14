@@ -103,12 +103,6 @@ export function init(canvas, atlas) {
   return new Renderer(gl, projection, perInstanceBuffer, loseContext)
 }
 
-/**
- * @prop {GL} _gl
- * @prop {GLUniform} _projection
- * @prop {GLBuffer} _perInstanceBuffer
- * @prop {GLLoseContext} _loseContext
- */
 export class Renderer {
   /**
    * @arg {GL} gl
@@ -117,10 +111,10 @@ export class Renderer {
    * @arg {GLLoseContext} loseContext
    */
   constructor(gl, projection, perInstanceBuffer, loseContext) {
-    this._gl = gl
-    this._projection = projection
-    this._perInstanceBuffer = perInstanceBuffer
-    this._loseContext = loseContext
+    /** @type {GL} */ this._gl = gl
+    /** @type {GLUniform} */ this._projection = projection
+    /** @type {GLBuffer} */ this._perInstanceBuffer = perInstanceBuffer
+    /** @type {GLLoseContext} */ this._loseContext = loseContext
   }
 
   /**
