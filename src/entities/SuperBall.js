@@ -1,5 +1,4 @@
 import * as animation from './animation.js'
-import * as atlas from './atlas.js'
 import * as entity from './entity.js'
 
 export default class SuperBall extends entity.State {
@@ -18,17 +17,5 @@ export default class SuperBall extends entity.State {
       {x: 0, y: 0},
       speed
     )
-  }
-
-  /**
-   * @arg {number} step
-   * @arg {atlas.State} _atlas
-   * @return {void}
-   */
-  nextStepState(step, _atlas) {
-    this._position.x += step * this._speed.x
-    this._position.y += step * this._speed.y
-    this._scrollPosition.x += step * this.scrollSpeed.x
-    this._scrollPosition.y += step * this.scrollSpeed.y
   }
 }
