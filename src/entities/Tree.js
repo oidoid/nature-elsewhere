@@ -1,7 +1,7 @@
 import * as animation from './animation.js'
 import * as entity from './entity.js'
 
-export class Tree extends entity.State {
+export default class Tree extends entity.State {
   /** @arg {XY} position */
   constructor(position) {
     super(

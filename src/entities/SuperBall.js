@@ -2,7 +2,7 @@ import * as animation from './animation.js'
 import * as atlas from './atlas.js'
 import * as entity from './entity.js'
 
-export class SuperBall extends entity.State {
+export default class SuperBall extends entity.State {
   /**
    * @arg {XY} position
    * @arg {XY} speed

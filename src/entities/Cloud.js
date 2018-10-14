@@ -1,7 +1,7 @@
 import * as animation from './animation.js'
 import * as entity from './entity.js'
 
-export class Cloud extends entity.State {
+export default class Cloud extends entity.State {
   /**
    * @arg {XY} position
    * @arg {animation.ID} animationID

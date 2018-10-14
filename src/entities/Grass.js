@@ -1,7 +1,7 @@
 import * as animation from './animation.js'
 import * as entity from './entity.js'
 
-export class Grass extends entity.State {
+export default class Grass extends entity.State {
   /**
    * @arg {animation.ID} animationID
    * @arg {XY} position

@@ -3,7 +3,7 @@ import * as atlas from './atlas.js'
 import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
 
-export class Player extends entity.State {
+export default class Player extends entity.State {
   /** @arg {XY} position */
   constructor(position) {
     super(

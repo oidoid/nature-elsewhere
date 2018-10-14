@@ -1,7 +1,7 @@
 import * as animation from './animation.js'
 import * as entity from './entity.js'
 
-export class Hill extends entity.State {
+export default class Hill extends entity.State {
   /** @arg {XY} position */
   constructor(position) {
     super(

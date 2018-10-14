@@ -1,7 +1,7 @@
 // https://gist.github.com/blixt/f17b47c62508be59987b
 // http://www.firstpr.com.au/dsp/rand31/
 
-export class Random {
+export default class Random {
   /** @arg {number} seed */
   constructor(seed) {
     /** @type {number} */ this._seed = seed % 2147483647

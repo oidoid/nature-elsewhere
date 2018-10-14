@@ -4,10 +4,10 @@ import * as atlasJSON from './assets/atlas.js'
 import * as entity from './entities/entity.js'
 import * as level0 from './assets/level0.js'
 import * as keyboard from './inputs/keyboard.js'
-import {Random} from './Random.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
 import * as store from './entities/store.js'
+import Random from './Random.js'
 
 /** @typedef {{
  *   atlas: atlas.State

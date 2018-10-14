@@ -1,7 +1,7 @@
 import * as animation from './animation.js'
 import * as entity from './entity.js'
 
-export class Background extends entity.State {
+export default class Background extends entity.State {
   /**
    * @arg {XY} position
    * @arg {XY} scale
