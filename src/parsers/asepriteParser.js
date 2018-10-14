@@ -142,14 +142,8 @@ export function parseCollision(frameTag, frameNumber, slices) {
  * @return {atlas.AnimationDirection}
  */
 export function parseAnimationDirection(direction) {
-  if (isAnimationDirection(direction)) return direction
+  if (util.values(atlas.AnimationDirection).includes(direction)) {
+    return direction
+  }
   throw new Error(`"${direction}" is not a Direction.`)
-}
-
-/**
- * @arg {aseprite.Direction} direction
- * @return {boolean}
- */
-export function isAnimationDirection(direction) {
-  return util.values(atlas.AnimationDirection).includes(direction)
 }

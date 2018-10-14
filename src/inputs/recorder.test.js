@@ -20,7 +20,9 @@ const inputs = /** @type {recorder.Mask[]} */ (util.values(recorder.Mask))
  *    | '_combo'
  * >} InputMethod
  */
-/** @typedef {Readonly<{method: InputMethod, mask: recorder.Mask}>} MaskMethod */
+/**
+ * @typedef {Readonly<{method: InputMethod, mask: recorder.Mask}>} MaskMethod
+ */
 
 /** @type {MaskMethod[]} */ const maskMethods = [
   {mask: LEFT, method: 'left'},

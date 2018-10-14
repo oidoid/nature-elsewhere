@@ -468,14 +468,3 @@ describe('parseAnimationDirection()', () => {
     ).toThrowError(/Direction/)
   })
 })
-
-describe('isAnimationDirection()', () => {
-  test.each(
-    /** @type {aseprite.Direction[]} */ (util.values(aseprite.Direction))
-  )('%# Direction %p', (/** @type {aseprite.Direction} */ direction) =>
-    expect(asepriteParser.isAnimationDirection(direction)).toStrictEqual(true)
-  )
-
-  test('Unknown.', () =>
-    expect(asepriteParser.isAnimationDirection('unknown')).toStrictEqual(false))
-})
