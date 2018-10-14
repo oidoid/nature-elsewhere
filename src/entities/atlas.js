@@ -9,8 +9,8 @@ import * as aseprite from '../parsers/aseprite.js'
 /**
  * Animation and collision frames.
  * @typedef {Readonly<{
- *  cels: ReadonlyArray<Cel>
- *  direction: AnimationDirection
+ *   cels: ReadonlyArray<Cel>
+ *   direction: AnimationDirection
  * }>} Animation
  */
 
