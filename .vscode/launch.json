@@ -5,8 +5,8 @@
       "name": "npm start",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceRoot}/node_modules/.bin/webpack-dev-server",
-      "args": ["--mode=development", "-w"]
+      "program": "${workspaceRoot}/node_modules/.bin/live-server",
+      "args": ["-q", "${workspaceRoot}/src"]
     },
     {
       "name": "jest",

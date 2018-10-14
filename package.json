@@ -12,7 +12,7 @@
     "start": "live-server -q src",
     "test": "npm run -s formatter -- -l && tsc && jest",
     "format": "npm -s run formatter -- --write",
-    "formatter": "prettier './**/*.{json,md,js}'",
+    "formatter": "prettier './**/*.{json,md,js,ts}'",
     "build:textures": "cd src/assets && aseprite -b ../../assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.js --sheet-pack --inner-padding 1 --sheet atlas.png",
     "palettize": "cd assets && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
