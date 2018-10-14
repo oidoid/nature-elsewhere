@@ -58,10 +58,10 @@ export function flushUpdatesToMemory(state, atlasState) {
         cels[entity.cel({cel}, atlasState.animations[animationID])].bounds
       // prettier-ignore
       state.memory.set([coord.x, coord.y, coord.w, coord.h,
-                      scrollPosition.x, scrollPosition.y,
-                      position.x, position.y,
-                      scale.x, scale.y],
-                     i * shader.layout.perInstance.length)
+                        scrollPosition.x, scrollPosition.y,
+                        position.x, position.y,
+                        scale.x, scale.y],
+                       i * shader.layout.perInstance.length)
     }
   )
 }

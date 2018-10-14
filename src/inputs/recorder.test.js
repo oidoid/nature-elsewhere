@@ -13,7 +13,7 @@ const inputs = /** @type {recorder.Mask[]} */ (util.values(recorder.Mask))
  *    keyof recorder.ReadState,
  *    | 'combo'
  *    | 'write'
- *    | 'input'
+ *    | '_input'
  *    | '_sampleAge'
  *    | '_sample'
  *    | '_lastSample'
@@ -22,8 +22,7 @@ const inputs = /** @type {recorder.Mask[]} */ (util.values(recorder.Mask))
  */
 /** @typedef {Readonly<{method: InputMethod, mask: recorder.Mask}>} MaskMethod */
 
-/** @type {MaskMethod[]} */
-const maskMethods = [
+/** @type {MaskMethod[]} */ const maskMethods = [
   {mask: LEFT, method: 'left'},
   {mask: RIGHT, method: 'right'},
   {mask: UP, method: 'up'},

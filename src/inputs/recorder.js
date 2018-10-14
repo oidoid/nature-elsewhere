@@ -1,3 +1,5 @@
+/** @typedef {WriteState | ReadState} State */
+
 /** @typedef {ValueOf<typeof Mask>} Mask */
 export const Mask = {
   LEFT: 0b00000001,
@@ -8,13 +10,32 @@ export const Mask = {
   DEBUG_CONTEXT_LOSS: 0b00100000
 }
 
-/** @type {number} */
-const _maxComboLength = 8
-/** @type {number} */
-const _maxSampleAge = 200
+/** @type {number} */ const maxComboLength = 8
+/** @type {number} */ const maxSampleAge = 200
 
-/** @typedef {WriteState | ReadState} State */
+/**
+ * @prop {number} _sampleAge The age of the current sample. Cleared on nonzero
+ *                           triggers.
+ * @prop {number} _sample The current sample and initial state of the next
+ *                        sample.
+ * @prop {number} _lastSample
+ * @prop {ReadonlyArray<number>} _combo Historical record of triggered nonzero
+ *                                      samples.
+ */
 export class WriteState {
+  /**
+   * @arg {number} [sampleAge]
+   * @arg {number} [sample]
+   * @arg {number} [lastSample]
+   * @arg {ReadonlyArray<number>} [combo]
+   */
+  constructor(sampleAge = 0, sample = 0, lastSample = 0, combo = []) {
+    this._sampleAge = sampleAge
+    this._sample = sample
+    this._lastSample = lastSample
+    this._combo = combo
+  }
+
   /**
    * @arg {Mask} input
    * @arg {boolean} active
@@ -41,7 +62,7 @@ export class WriteState {
       // Triggered.
       sampleAge = 0
       combo = [this._sample, ...this._combo]
-    } else if (!this._sample && sampleAge > _maxSampleAge) {
+    } else if (!this._sample && sampleAge > maxSampleAge) {
       // Released and expired.
       combo = []
     } else {
@@ -52,40 +73,37 @@ export class WriteState {
       sampleAge,
       this._sample,
       this._lastSample,
-      combo.slice(0, _maxComboLength)
+      combo.slice(0, maxComboLength)
     )
   }
+}
 
+/**
+ * @prop {number} _sampleAge
+ * @prop {number} _sample
+ * @prop {number} _lastSample
+ * @prop {ReadonlyArray<number>} _combo
+ */
+export class ReadState {
   /**
-   * @prop {number} _sampleAge The age of the current sample. Cleared on nonzero
-   *                           triggers.
-   * @prop {number} _sample The current sample and initial state of the next
-   *                        sample.
-   * @prop {number} _lastSample
-   * @prop {ReadonlyArray<number>} _combo Historical record of triggered nonzero
-   *                                      samples.
+   * @arg {number} sampleAge
+   * @arg {number} sample
+   * @arg {number} lastSample
+   * @arg {ReadonlyArray<number>} combo
    */
-  /**
-   * @arg {number} [sampleAge]
-   * @arg {number} [sample]
-   * @arg {number} [lastSample]
-   * @arg {ReadonlyArray<number>} [combo]
-   */
-  constructor(sampleAge = 0, sample = 0, lastSample = 0, combo = []) {
+  constructor(sampleAge, sample, lastSample, combo) {
     this._sampleAge = sampleAge
     this._sample = sample
     this._lastSample = lastSample
     this._combo = combo
   }
-}
 
-export class ReadState {
   /**
    * @arg {boolean} [triggered]
    * @return {boolean}
    */
   left(triggered = false) {
-    return this.input(Mask.LEFT, triggered)
+    return this._input(Mask.LEFT, triggered)
   }
 
   /**
@@ -93,7 +111,7 @@ export class ReadState {
    * @return {boolean}
    */
   right(triggered = false) {
-    return this.input(Mask.RIGHT, triggered)
+    return this._input(Mask.RIGHT, triggered)
   }
 
   /**
@@ -101,7 +119,7 @@ export class ReadState {
    * @return {boolean}
    */
   up(triggered = false) {
-    return this.input(Mask.UP, triggered)
+    return this._input(Mask.UP, triggered)
   }
 
   /**
@@ -109,7 +127,7 @@ export class ReadState {
    * @return {boolean}
    */
   down(triggered = false) {
-    return this.input(Mask.DOWN, triggered)
+    return this._input(Mask.DOWN, triggered)
   }
 
   /**
@@ -117,7 +135,7 @@ export class ReadState {
    * @return {boolean}
    */
   menu(triggered = false) {
-    return this.input(Mask.MENU, triggered)
+    return this._input(Mask.MENU, triggered)
   }
 
   /**
@@ -125,12 +143,12 @@ export class ReadState {
    * @return {boolean}
    */
   debugContextLoss(triggered = false) {
-    return this.input(Mask.DEBUG_CONTEXT_LOSS, triggered)
+    return this._input(Mask.DEBUG_CONTEXT_LOSS, triggered)
   }
 
   /**
    * @arg {boolean} [triggered]
-   * @arg {Mask[]} inputs
+   * @arg {...Mask} inputs
    * @return {boolean}
    */
   combo(triggered = false, ...inputs) {
@@ -151,30 +169,11 @@ export class ReadState {
   }
 
   /**
-   * @prop {number} _sampleAge
-   * @prop {number} _sample
-   * @prop {number} _lastSample
-   * @prop {ReadonlyArray<number>} _combo
-   */
-  /**
-   * @arg {number} sampleAge
-   * @arg {number} sample
-   * @arg {number} lastSample
-   * @arg {ReadonlyArray<number>} combo
-   */
-  constructor(sampleAge, sample, lastSample, combo) {
-    this._sampleAge = sampleAge
-    this._sample = sample
-    this._lastSample = lastSample
-    this._combo = combo
-  }
-
-  /**
    * @arg {number} input
    * @arg {boolean} triggered
    * @return {boolean}
    */
-  input(input, triggered) {
+  _input(input, triggered) {
     const maskedSample = input & this._sample
     const maskedLastSample = input & this._lastSample
     if (triggered && (this._sampleAge || maskedSample === maskedLastSample)) {

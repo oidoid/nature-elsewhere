@@ -9,8 +9,7 @@ import * as recorder from './recorder.js'
  * @typedef {Readonly<Record<Key, recorder.Mask>>} KeyMap
  */
 
-/** @type {KeyMap} */
-export const defaultKeyMap = {
+/** @type {KeyMap} */ export const defaultKeyMap = {
   ArrowLeft: recorder.Mask.LEFT,
   ArrowRight: recorder.Mask.RIGHT,
   ArrowUp: recorder.Mask.UP,
