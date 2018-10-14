@@ -5,7 +5,12 @@ import * as factory from '../entities/factory.js'
 import * as random from '../random.js'
 import * as util from '../util.js'
 
-/** @typedef {Readonly<{player: entity.State; entities: ReadonlyArray<entity.State>}>} State */
+/**
+ * @typedef {Readonly<{
+ *   player: entity.State
+ *   entities: ReadonlyArray<entity.State>
+ * }>} State
+ */
 
 const tallGrassIDs = [
   animation.ID.TALL_GRASS_A,
