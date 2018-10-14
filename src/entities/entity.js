@@ -16,12 +16,12 @@ import * as superBall from './superBall.js'
  */
 
 /**
- * @typedef {Object} _State
- * @prop {Type} type
- * @prop {Mutable<XY>} position
- * @prop {animation.ID} animationID
- * @prop {DrawOrder} drawOrder
- * @typedef {_State & NewState} State
+ * @typedef {NewState & {
+ *   readonly type: Type
+ *   readonly position: Mutable<XY>
+ *   animationID: animation.ID
+ *   readonly drawOrder: DrawOrder
+ * }} State
  */
 
 /** @enum {number} */
@@ -117,19 +117,31 @@ export function stepAnimation(state, step, animation) {
 }
 
 /**
+ * @type {Readonly<
+ *   Record<atlas.AnimationDirection, (cel: number, length: number) => number>
+ * >}
+ */
+const AnimationDirectionStep = {
+  [atlas.AnimationDirection.FORWARD](cel) {
+    return cel + 1
+  },
+  [atlas.AnimationDirection.REVERSE](cel, length) {
+    return cel - 1 + length
+  },
+  [atlas.AnimationDirection.PING_PONG](cel, length) {
+    return ((cel - 1 - (length - 1)) % (2 * (length - 1))) + (length - 1)
+  }
+}
+
+/**
  * @arg {{cel: number, celTime: number}} state
  * @arg {atlas.Animation} animation
  * @return {number}
  */
 export function nextCel(state, animation) {
-  const len = animation.cels.length
-  switch (animation.direction) {
-    case atlas.AnimationDirection.FORWARD:
-      return state.cel + 1
-    case atlas.AnimationDirection.REVERSE:
-      return state.cel - 1 + len
-    case atlas.AnimationDirection.PING_PONG:
-      return ((state.cel - 1 - (len - 1)) % (2 * (len - 1))) + (len - 1)
+  const fnc = AnimationDirectionStep[animation.direction]
+  if (!fnc) {
+    throw new Error(`Unknown AnimationDirection "${animation.direction}".`)
   }
-  throw new Error(`Unknown AnimationDirection "${animation.direction}".`)
+  return fnc(state.cel, animation.cels.length)
 }
