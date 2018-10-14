@@ -1,4 +1,4 @@
-/** @typedef {WriteState | ReadState} State */
+/** @typedef {WriteState | ReadState} Recorder */
 
 /** @enum {number} */
 export const Mask = {

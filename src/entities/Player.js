@@ -4,6 +4,16 @@ import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
 
 export class Player extends entity.State {
+  /** @arg {XY} position */
+  constructor(position) {
+    super(
+      entity.Type.PLAYER,
+      position,
+      animation.ID.PLAYER_IDLE,
+      entity.DrawOrder.PLAYER
+    )
+  }
+
   /**
    * @arg {number} step
    * @arg {atlas.State} atlas
