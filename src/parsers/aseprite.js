@@ -95,10 +95,7 @@
  */
 export const INFINITE_DURATION = 0xffff
 
-/**
- * An animation's looping behavior.
- * @typedef {ValueOf<typeof Direction>} Direction
- */
+/** @enum {string} */
 export const Direction = {
   /** Animate from start to end; when looping, return to start. */
   FORWARD: 'forward',

@@ -24,7 +24,7 @@ import * as superBall from './superBall.js'
  * @typedef {_State & NewState} State
  */
 
-/** @typedef {ValueOf<typeof Type>} Type */
+/** @enum {number} */
 export const Type = {
   BACKGROUND: 0,
   CLOUD: 1,
@@ -35,7 +35,7 @@ export const Type = {
   WATER: 6
 }
 
-/** @typedef {ValueOf<typeof DrawOrder>} DrawOrder */
+/** @enum {number} */
 export const DrawOrder = {
   BACKGROUND: 0,
   FAR_BACKGROUND_SCENERY: 1,
@@ -47,7 +47,7 @@ export const DrawOrder = {
   FOREGROUND: 10
 }
 
-/** @typedef {ValueOf<typeof Limits>} Limits */
+/** @enum {number} */
 export const Limits = {
   MIN: 0x8000,
   HALF_MIN: 0xc000,

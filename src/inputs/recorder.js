@@ -1,6 +1,6 @@
 /** @typedef {WriteState | ReadState} State */
 
-/** @typedef {ValueOf<typeof Mask>} Mask */
+/** @enum {number} */
 export const Mask = {
   LEFT: 0b00000001,
   RIGHT: 0b00000010,

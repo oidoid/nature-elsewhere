@@ -22,5 +22,5 @@ import * as aseprite from '../parsers/aseprite.js'
  * @prop {ReadonlyArray<Rect>} collision Collision bounds within the texture.
  */
 
-/** @typedef {ValueOf<typeof AnimationDirection>} AnimationDirection */
+/** @enum {string} */
 export const AnimationDirection = aseprite.Direction

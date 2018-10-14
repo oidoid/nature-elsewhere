@@ -1,4 +1,4 @@
-/** @typedef {ValueOf<typeof ID>} ID */
+/** @enum {string} */
 export const ID = {
   CLOUD_XS: 'cloud xs',
   CLOUD_S: 'cloud s',
