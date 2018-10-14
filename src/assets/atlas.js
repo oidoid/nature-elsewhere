@@ -238,7 +238,7 @@ export default {
       trimmed: false,
       spriteSourceSize: {x: 0, y: 0, w: 3, h: 5},
       sourceSize: {w: 3, h: 5},
-      duration: 1000
+      duration: 200
     },
     'player walk 5': {
       frame: {x: 40, y: 33, w: 5, h: 7},
@@ -246,7 +246,7 @@ export default {
       trimmed: false,
       spriteSourceSize: {x: 0, y: 0, w: 3, h: 5},
       sourceSize: {w: 3, h: 5},
-      duration: 1000
+      duration: 200
     },
     'player walk-armed 6': {
       frame: {x: 35, y: 33, w: 5, h: 7},
@@ -254,7 +254,7 @@ export default {
       trimmed: false,
       spriteSourceSize: {x: 0, y: 0, w: 3, h: 5},
       sourceSize: {w: 3, h: 5},
-      duration: 100
+      duration: 200
     },
     'player walk-armed 7': {
       frame: {x: 30, y: 33, w: 5, h: 7},
@@ -262,7 +262,7 @@ export default {
       trimmed: false,
       spriteSourceSize: {x: 0, y: 0, w: 3, h: 5},
       sourceSize: {w: 3, h: 5},
-      duration: 100
+      duration: 200
     },
     'player run 8': {
       frame: {x: 70, y: 36, w: 5, h: 7},

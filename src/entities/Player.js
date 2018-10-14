@@ -25,12 +25,8 @@ export default class Player extends entity.State {
     this.__position(recorderState, step)
 
     this._animationID = this.__animationID(recorderState)
-    const run =
-      recorderState.combo(false, recorder.Mask.LEFT, recorder.Mask.LEFT) ||
-      recorderState.combo(false, recorder.Mask.RIGHT, recorder.Mask.RIGHT)
-    this._cel =
-      Math.abs(Math.round(this._position.x / (run ? 6 : 2))) %
-      atlas.animations[this._animationID].cels.length
+    this._animationPlayer.animation = atlas.animations[this._animationID]
+    this._animationPlayer.step(step)
   }
 
   /** @return {boolean} */

@@ -174,7 +174,7 @@ function onLoop(state, document, then, now) {
   }
 
   store.nextStepState(state.store, step, state.atlas, state.recorder)
-  store.flushUpdatesToMemory(state.store, state.atlas)
+  store.flushUpdatesToMemory(state.store)
   // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
   // scaling.
   const canvas = {

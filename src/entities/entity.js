@@ -1,5 +1,6 @@
 import * as atlas from './atlas.js'
 import * as recorder from '../inputs/recorder.js'
+import AnimationPlayer from './AnimationPlayer.js'
 
 /** @typedef {import('./animation').ID} animation.ID */
 
@@ -33,23 +34,6 @@ export const Limits = {
   MAX: 0x7fff
 }
 
-/**
- * @type {Readonly<
- *   Record<atlas.AnimationDirection, (cel: number, length: number) => number>
- * >}
- */
-const AnimationDirectionStep = {
-  [atlas.AnimationDirection.FORWARD](cel) {
-    return cel + 1
-  },
-  [atlas.AnimationDirection.REVERSE](cel, length) {
-    return cel - 1 + length
-  },
-  [atlas.AnimationDirection.PING_PONG](cel, length) {
-    return ((cel - 1 - (length - 1)) % (2 * (length - 1))) + (length - 1)
-  }
-}
-
 export class State {
   /**
    * @arg {Type} type
@@ -60,8 +44,6 @@ export class State {
    * @arg {XY} scale
    * @arg {XY} scrollSpeed
    * @arg {XY} speed
-   * @arg {number} cel
-   * @arg {number} celTime
    */
   constructor(
     type,
@@ -78,6 +60,7 @@ export class State {
     /** @type {Type} */ this._type = type
     /** @type {Mutable<XY>} */ this._position = position
     /** @type {animation.ID} */ this._animationID = animationID
+    /** @type {AnimationPlayer} */ this._animationPlayer = new AnimationPlayer()
     /** @type {DrawOrder} */ this._drawOrder = drawOrder
     /** @type {Mutable<XY>} */ this._scrollPosition = scrollPosition
     /** @type {Mutable<XY>} */ this._scale = scale
@@ -88,54 +71,22 @@ export class State {
   }
 
   /**
-   * @arg {atlas.Animation} animation
-   * @return {number}
-   */
-  cel(animation) {
-    return Math.abs(this._cel % animation.cels.length)
-  }
-
-  /**
-   * @arg {number} step
-   * @arg {atlas.Animation} animation
-   * @return {void}
-   */
-  stepAnimation(step, animation) {
-    if (animation.cels.length === 0) return
-
-    const time = this._celTime + step
-    const duration = animation.cels[this.cel(animation)].duration
-    if (time < duration) {
-      this._celTime = time
-    } else {
-      this._celTime = time - duration
-      this._cel = this.nextCel(animation)
-    }
-  }
-
-  /**
-   * @arg {atlas.Animation} animation
-   * @return {number}
-   */
-  nextCel(animation) {
-    const fnc = AnimationDirectionStep[animation.direction]
-    if (!fnc) {
-      throw new Error(`Unknown AnimationDirection "${animation.direction}".`)
-    }
-    return fnc(this._cel, animation.cels.length)
-  }
-
-  /**
    * @arg {number} step
    * @arg {atlas.State} atlasState
    * @arg {recorder.ReadState} _recorderState
    * @return {void}
    */
   nextStepState(step, atlasState, _recorderState) {
-    this.stepAnimation(step, atlasState.animations[this._animationID])
+    this._animationPlayer.animation = atlasState.animations[this._animationID]
+    this._animationPlayer.step(step)
     this._position.x += step * this._speed.x
     this._position.y += step * this._speed.y
     this._scrollPosition.x += step * this.scrollSpeed.x
     this._scrollPosition.y += step * this.scrollSpeed.y
+  }
+
+  /** @return {Rect} */
+  get bounds() {
+    return this._animationPlayer.cel.bounds
   }
 }
