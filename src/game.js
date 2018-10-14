@@ -184,7 +184,7 @@ function onLoop(state, document, then, now) {
   state.renderer.render(
     canvas,
     state.scale,
-    {x: state.player.position.x, y: state.player.position.y + 20},
+    {x: state.player._position.x, y: state.player._position.y + 20},
     state.store.memory,
     state.store.entities.length
   )

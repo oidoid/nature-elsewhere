@@ -77,16 +77,16 @@ export class State {
     cel = 0,
     celTime = 0
   ) {
-    /** @type {Type} */ this.type = type
-    /** @type {Mutable<XY>} */ this.position = position
-    /** @type {animation.ID} */ this.animationID = animationID
-    /** @type {DrawOrder} */ this.drawOrder = drawOrder
-    /** @type {Mutable<XY>} */ this.scrollPosition = scrollPosition
-    /** @type {Mutable<XY>} */ this.scale = scale
+    /** @type {Type} */ this._type = type
+    /** @type {Mutable<XY>} */ this._position = position
+    /** @type {animation.ID} */ this._animationID = animationID
+    /** @type {DrawOrder} */ this._drawOrder = drawOrder
+    /** @type {Mutable<XY>} */ this._scrollPosition = scrollPosition
+    /** @type {Mutable<XY>} */ this._scale = scale
     /** @type {XY} */ this.scrollSpeed = scrollSpeed
-    /** @type {XY} */ this.speed = speed
+    /** @type {XY} */ this._speed = speed
     /** @type {number} */ this._cel = cel
-    /** @type {number} Cel exposure in milliseconds. */ this.celTime = celTime
+    /** @type {number} Cel exposure in milliseconds. */ this._celTime = celTime
   }
 
   /**
@@ -105,12 +105,12 @@ export class State {
   stepAnimation(step, animation) {
     if (animation.cels.length === 0) return
 
-    const time = this.celTime + step
+    const time = this._celTime + step
     const duration = animation.cels[this.cel(animation)].duration
     if (time < duration) {
-      this.celTime = time
+      this._celTime = time
     } else {
-      this.celTime = time - duration
+      this._celTime = time - duration
       this._cel = this.nextCel(animation)
     }
   }
@@ -136,16 +136,16 @@ export class State {
  * @return {void}
  */
 export function nextStepState(state, step, atlasState, recorderState) {
-  switch (state.type) {
+  switch (state._type) {
     case Type.PLAYER:
       return player.nextStepState(state, step, atlasState, recorderState)
     case Type.SUPER_BALL:
       return superBall.nextStepState(state, step, atlasState)
   }
 
-  state.stepAnimation(step, atlasState.animations[state.animationID])
-  state.position.x += step * state.speed.x
-  state.position.y += step * state.speed.y
-  state.scrollPosition.x += step * state.scrollSpeed.x
-  state.scrollPosition.y += step * state.scrollSpeed.y
+  state.stepAnimation(step, atlasState.animations[state._animationID])
+  state._position.x += step * state._speed.x
+  state._position.y += step * state._speed.y
+  state._scrollPosition.x += step * state.scrollSpeed.x
+  state._scrollPosition.y += step * state.scrollSpeed.y
 }

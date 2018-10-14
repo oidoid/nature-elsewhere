@@ -18,7 +18,7 @@ export function newState() {
 export function nextSpawnState(state, entities) {
   entities.forEach(entity => {
     let index = state.entities.findIndex(
-      val => entity.drawOrder <= val.drawOrder
+      val => entity._drawOrder <= val._drawOrder
     )
     state.entities.splice(
       index === -1 ? state.entities.length : index,
@@ -52,13 +52,13 @@ export function flushUpdatesToMemory(state, atlasState) {
     state.memory = new Int16Array(length * shader.layout.perInstance.length * 2)
   }
   state.entities.forEach((s, i) => {
-    const cels = atlasState.animations[s.animationID].cels
-    const coord = cels[s.cel(atlasState.animations[s.animationID])].bounds
+    const cels = atlasState.animations[s._animationID].cels
+    const coord = cels[s.cel(atlasState.animations[s._animationID])].bounds
     // prettier-ignore
     state.memory.set([coord.x, coord.y, coord.w, coord.h,
-                        s.scrollPosition.x, s.scrollPosition.y,
-                        s.position.x, s.position.y,
-                        s.scale.x, s.scale.y],
+                        s._scrollPosition.x, s._scrollPosition.y,
+                        s._position.x, s._position.y,
+                        s._scale.x, s._scale.y],
                        i * shader.layout.perInstance.length)
   })
 }

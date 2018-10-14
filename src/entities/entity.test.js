@@ -28,7 +28,7 @@ describe('stepAnimation()', () => {
     const state = newEntity(0, 0)
     const animation = {cels: [], direction: atlas.AnimationDirection.FORWARD}
     state.stepAnimation(1, animation)
-    expect(state).toMatchObject({_cel: 0, celTime: 0})
+    expect(state).toMatchObject({_cel: 0, _celTime: 0})
   })
 
   test('time < duration', () => {
@@ -39,7 +39,7 @@ describe('stepAnimation()', () => {
       direction: atlas.AnimationDirection.FORWARD
     }
     state.stepAnimation(1, animation)
-    expect(state).toMatchObject({_cel: 0, celTime: 1})
+    expect(state).toMatchObject({_cel: 0, _celTime: 1})
   })
 
   test('time === duration', () => {
@@ -50,7 +50,7 @@ describe('stepAnimation()', () => {
       direction: atlas.AnimationDirection.FORWARD
     }
     state.stepAnimation(1, animation)
-    expect(state).toMatchObject({_cel: 1, celTime: 0})
+    expect(state).toMatchObject({_cel: 1, _celTime: 0})
   })
 
   test('time > duration', () => {
@@ -61,7 +61,7 @@ describe('stepAnimation()', () => {
       direction: atlas.AnimationDirection.FORWARD
     }
     state.stepAnimation(2, animation)
-    expect(state).toMatchObject({_cel: 1, celTime: 1})
+    expect(state).toMatchObject({_cel: 1, _celTime: 1})
   })
 })
 

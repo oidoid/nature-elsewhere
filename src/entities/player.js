@@ -14,13 +14,13 @@ export function nextStepState(state, step, atlas, recorderState) {
   scale(state, recorderState)
   position(state, recorderState, step)
 
-  state.animationID = animationID(state, recorderState)
+  state._animationID = animationID(state, recorderState)
   const run =
     recorderState.combo(false, recorder.Mask.LEFT, recorder.Mask.LEFT) ||
     recorderState.combo(false, recorder.Mask.RIGHT, recorder.Mask.RIGHT)
   state._cel =
-    Math.abs(Math.round(state.position.x / (run ? 6 : 2))) %
-    atlas.animations[state.animationID].cels.length
+    Math.abs(Math.round(state._position.x / (run ? 6 : 2))) %
+    atlas.animations[state._animationID].cels.length
 }
 
 /**
@@ -28,7 +28,7 @@ export function nextStepState(state, step, atlas, recorderState) {
  * @return {boolean}
  */
 function grounded(state) {
-  return state.position.y >= -17
+  return state._position.y >= -17
 }
 
 /**
@@ -47,18 +47,18 @@ function animationID(state, recorderState) {
 
   if (
     recorderState.down(true) &&
-    (state.animationID === animation.ID.PLAYER_CROUCH ||
-      state.animationID === animation.ID.PLAYER_SIT)
+    (state._animationID === animation.ID.PLAYER_CROUCH ||
+      state._animationID === animation.ID.PLAYER_SIT)
   ) {
     return animation.ID.PLAYER_SIT
   }
 
   if (recorderState.down()) {
     if (
-      state.animationID === animation.ID.PLAYER_CROUCH ||
-      state.animationID === animation.ID.PLAYER_SIT
+      state._animationID === animation.ID.PLAYER_CROUCH ||
+      state._animationID === animation.ID.PLAYER_SIT
     ) {
-      return state.animationID
+      return state._animationID
     }
     return animation.ID.PLAYER_CROUCH
   }
@@ -73,17 +73,17 @@ function animationID(state, recorderState) {
   }
 
   if (recorderState.up()) {
-    if (state.animationID === animation.ID.PLAYER_SIT) {
+    if (state._animationID === animation.ID.PLAYER_SIT) {
       return animation.ID.PLAYER_CROUCH
     }
     return animation.ID.PLAYER_IDLE
   }
 
   if (
-    state.animationID === animation.ID.PLAYER_CROUCH ||
-    state.animationID === animation.ID.PLAYER_SIT
+    state._animationID === animation.ID.PLAYER_CROUCH ||
+    state._animationID === animation.ID.PLAYER_SIT
   ) {
-    return state.animationID
+    return state._animationID
   }
 
   return animation.ID.PLAYER_IDLE
@@ -95,11 +95,11 @@ function animationID(state, recorderState) {
  * @return {void}
  */
 function scale(state, recorderState) {
-  state.scale.x = recorderState.left()
+  state._scale.x = recorderState.left()
     ? -1
     : recorderState.right()
       ? 1
-      : state.scale.x
+      : state._scale.x
 }
 
 /**
@@ -114,15 +114,15 @@ function position(state, recorderState, step) {
     recorderState.combo(false, recorder.Mask.LEFT, recorder.Mask.LEFT) ||
     recorderState.combo(false, recorder.Mask.RIGHT, recorder.Mask.RIGHT)
   const speed = (run ? 0.048 : 0.016) * step
-  state.position.x = Math.max(
+  state._position.x = Math.max(
     0,
-    state.position.x -
+    state._position.x -
       (recorderState.left() ? speed : 0) +
       (recorderState.right() ? speed : 0)
   )
-  state.position.y = Math.min(
+  state._position.y = Math.min(
     -17,
-    state.position.y -
+    state._position.y -
       (recorderState.up() ? speed : 0) +
       (recorderState.down() ? speed : 0)
   )

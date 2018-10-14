@@ -8,8 +8,8 @@ import * as entity from './entity.js'
  * @return {void}
  */
 export function nextStepState(state, step, _atlas) {
-  state.position.x += step * state.speed.x
-  state.position.y += step * state.speed.y
-  state.scrollPosition.x += step * state.scrollSpeed.x
-  state.scrollPosition.y += step * state.scrollSpeed.y
+  state._position.x += step * state._speed.x
+  state._position.y += step * state._speed.y
+  state._scrollPosition.x += step * state.scrollSpeed.x
+  state._scrollPosition.y += step * state.scrollSpeed.y
 }
