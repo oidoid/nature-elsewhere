@@ -55,7 +55,7 @@ describe('celIndex', () => {
     const animation = {cels: [cel, cel], direction}
     const subject = new Animator(animation)
     subject.step(1)
-    const actual = subject.celIndex
+    const actual = subject._celIndex
     expect(actual).toStrictEqual(1)
   })
 
@@ -70,7 +70,7 @@ describe('celIndex', () => {
     const animation = {cels: [cel, cel], direction}
     const subject = new Animator(animation, 1)
     subject.step(1)
-    const actual = subject.celIndex
+    const actual = subject._celIndex
     expect(actual).toStrictEqual(0)
   })
 
@@ -87,7 +87,7 @@ describe('celIndex', () => {
     const actual = []
     for (let i = 0; i < animation.cels.length * 3; ++i) {
       subject.step(1)
-      actual.push(subject.celIndex)
+      actual.push(subject._celIndex)
     }
     // prettier-ignore
     const expected = {

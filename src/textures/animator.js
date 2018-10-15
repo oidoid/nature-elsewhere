@@ -34,7 +34,7 @@ export class Animator {
 
   /** @return {atlas.Cel} */
   get cel() {
-    return this._animation.cels[this.celIndex]
+    return this._animation.cels[this._celIndex]
   }
 
   /** @arg {atlas.Animation} animation */
@@ -45,11 +45,6 @@ export class Animator {
     this._celTime = 0
   }
 
-  /** @return {number} */
-  get celIndex() {
-    return Math.abs(this._cel % this._animation.cels.length)
-  }
-
   /**
    * @arg {number} step
    * @return {void}
@@ -58,7 +53,7 @@ export class Animator {
     if (this._animation.cels.length === 0) return
 
     const time = this._celTime + step
-    const duration = this._animation.cels[this.celIndex].duration
+    const duration = this._animation.cels[this._celIndex].duration
     if (time < duration) {
       this._celTime = time
     } else {
@@ -67,11 +62,16 @@ export class Animator {
     }
   }
 
+  /** @return {number} */
+  get _celIndex() {
+    return Math.abs(this._cel % this._animation.cels.length)
+  }
+
   /** @return {void} */
   _advance() {
-    const fnc = Advance[this._animation.direction]
+    const advance = Advance[this._animation.direction]
     const msg = `Unknown AnimationDirection "${this._animation.direction}".`
-    if (!fnc) throw new Error(msg)
-    this._cel = fnc(this._cel, this._animation.cels.length)
+    if (!advance) throw new Error(msg)
+    this._cel = advance(this._cel, this._animation.cels.length)
   }
 }
