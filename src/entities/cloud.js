@@ -1,9 +1,9 @@
-import * as animation from './animation.js'
+import * as animation from '../textures/animationID.js'
 import * as entity from './entity.js'
 
-export default class Cloud extends entity.State {
+export class Cloud extends entity.Entity {
   /**
-   * @arg {animation.ID} animationID
+   * @arg {animation.AnimationID} animationID
    * @arg {XY} position
    * @arg {XY} [speed]
    */

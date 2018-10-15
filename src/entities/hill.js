@@ -1,10 +1,10 @@
-import * as animation from './animation.js'
+import * as animation from '../textures/animationID.js'
 import * as entity from './entity.js'
 
-export default class Hill extends entity.State {
+export class Hill extends entity.Entity {
   /** @arg {XY} position */
   constructor(position) {
-    super(position, animation.ID.HILL)
+    super(position, animation.AnimationID.HILL)
   }
 
   /** @return {entity.DrawOrder} */

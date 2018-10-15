@@ -1,18 +1,18 @@
-import * as animation from './animation.js'
-import * as entity from './entity.js'
+import * as animation from '../textures/animationID.js'
 import * as util from '../util.js'
-import Rain from './Rain.js'
-import Cloud from './Cloud.js'
-import Water from './Water.js'
+import {Entity} from './entity.js'
+import {Rain} from './rain.js'
+import {Cloud} from './cloud.js'
+import {Water} from './water.js'
 
 /**
- * @arg {animation.ID} animationID
+ * @arg {animation.AnimationID} animationID
  * @arg {XY} position
  * @arg {number} speed
- * @return {ReadonlyArray<entity.State>}
+ * @return {ReadonlyArray<Entity>}
  */
 export function newRainCloud(animationID, {x, y}, speed) {
-  /** @type {entity.State[]} */ const entities = []
+  /** @type {Entity[]} */ const entities = []
   util.range(0, (-27 - y) / 16).forEach(i =>
     entities.push(
       new Rain(

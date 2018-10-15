@@ -1,7 +1,7 @@
-import * as animation from './animation.js'
+import * as animation from '../textures/animationID.js'
 import * as entity from './entity.js'
 
-export default class Water extends entity.State {
+export class Water extends entity.Entity {
   /**
    * @arg {XY} position
    * @arg {number} speed
@@ -9,7 +9,7 @@ export default class Water extends entity.State {
   constructor(position, speed) {
     super(
       position,
-      animation.ID.WATER_M,
+      animation.AnimationID.WATER_M,
       {x: 0, y: 0},
       {x: 1, y: 1},
       {x: 0, y: 0},

@@ -1,19 +1,20 @@
 import * as asepriteParser from './parsers/asepriteParser.js'
-import * as atlas from './entities/atlas.js'
-import * as atlasJSON from './assets/atlas.js'
-import * as entity from './entities/entity.js'
+import * as atlas from './textures/atlas.js'
 import * as level0 from './assets/level0.js'
 import * as keyboard from './inputs/keyboard.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
 import * as store from './entities/store.js'
-import Random from './Random.js'
+import {Entity} from './entities/entity.js'
+import {Random} from './random.js'
+import atlasJSON from './assets/atlas.js'
 
-/** @typedef {{
+/**
+ * @typedef {{
  *   atlas: atlas.State
  *   atlasImage: HTMLImageElement
  *   store: store.State
- *   player: entity.State
+ *   player: Entity
  *   canvas: HTMLCanvasElement
  *   frameID: number
  *   renderer: renderer.Renderer
@@ -30,7 +31,7 @@ import Random from './Random.js'
  * @return {State}
  */
 export function newState(document, atlasImage) {
-  const atlas = asepriteParser.parse(atlasJSON.default)
+  const atlas = asepriteParser.parse(atlasJSON)
   const storeState = store.newState()
   const randomState = new Random(0)
   const level0State = level0.newState(atlas, randomState)

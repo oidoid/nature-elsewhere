@@ -1,9 +1,9 @@
-import * as animation from './animation.js'
+import * as animation from '../textures/animationID.js'
 import * as entity from './entity.js'
 
-export default class Grass extends entity.State {
+export class Grass extends entity.Entity {
   /**
-   * @arg {animation.ID} animationID
+   * @arg {animation.AnimationID} animationID
    * @arg {XY} position
    * @arg {XY} scale
    */
@@ -13,8 +13,8 @@ export default class Grass extends entity.State {
 
   /** @return {entity.DrawOrder} */
   get drawOrder() {
-    return this._animationID >= animation.ID.GRASS_XS &&
-      this._animationID <= animation.ID.GRASS_L
+    return this._animationID >= animation.AnimationID.GRASS_XS &&
+      this._animationID <= animation.AnimationID.GRASS_L
       ? entity.DrawOrder.FAR_BACKGROUND_SCENERY
       : entity.DrawOrder.FOREGROUND_SCENERY
   }

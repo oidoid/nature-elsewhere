@@ -1,9 +1,9 @@
 import * as aseprite from './aseprite.js'
 import * as asepriteParser from './asepriteParser.js'
-import atlasJSON from '../assets/atlas.js'
-import * as expected from './asepriteParser.expect.test.js'
 import * as input from './asepriteParser.input.test.json'
 import * as util from '../util.js'
+import atlasJSON from '../assets/atlas.js'
+import expected from './asepriteParser.expect.test.js'
 
 describe('atlas.json', () => {
   const file = atlasJSON
@@ -50,7 +50,7 @@ describe('atlas.json', () => {
 
 describe('parse()', () => {
   test('Converts.', () => {
-    expect(asepriteParser.parse(input)).toStrictEqual(expected.default)
+    expect(asepriteParser.parse(input)).toStrictEqual(expected)
   })
 })
 

@@ -1,12 +1,12 @@
-import * as animation from './animation.js'
-import * as atlas from './atlas.js'
+import * as animation from '../textures/animationID.js'
+import * as atlas from '../textures/atlas.js'
 import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
 
-export default class Player extends entity.State {
+export class Player extends entity.Entity {
   /** @arg {XY} position */
   constructor(position) {
-    super(position, animation.ID.PLAYER_IDLE)
+    super(position, animation.AnimationID.PLAYER_IDLE)
   }
 
   /**
@@ -36,33 +36,33 @@ export default class Player extends entity.State {
 
   /**
    * @arg {recorder.ReadState} recorderState
-   * @return {animation.ID}
+   * @return {animation.AnimationID}
    */
   __animationID(recorderState) {
     if (!this._grounded()) {
       if (recorderState.up()) {
-        return animation.ID.PLAYER_ASCEND
+        return animation.AnimationID.PLAYER_ASCEND
       }
 
-      return animation.ID.PLAYER_DESCEND
+      return animation.AnimationID.PLAYER_DESCEND
     }
 
     if (
       recorderState.down(true) &&
-      (this._animationID === animation.ID.PLAYER_CROUCH ||
-        this._animationID === animation.ID.PLAYER_SIT)
+      (this._animationID === animation.AnimationID.PLAYER_CROUCH ||
+        this._animationID === animation.AnimationID.PLAYER_SIT)
     ) {
-      return animation.ID.PLAYER_SIT
+      return animation.AnimationID.PLAYER_SIT
     }
 
     if (recorderState.down()) {
       if (
-        this._animationID === animation.ID.PLAYER_CROUCH ||
-        this._animationID === animation.ID.PLAYER_SIT
+        this._animationID === animation.AnimationID.PLAYER_CROUCH ||
+        this._animationID === animation.AnimationID.PLAYER_SIT
       ) {
         return this._animationID
       }
-      return animation.ID.PLAYER_CROUCH
+      return animation.AnimationID.PLAYER_CROUCH
     }
 
     if (recorderState.left() || recorderState.right()) {
@@ -70,25 +70,25 @@ export default class Player extends entity.State {
         recorderState.combo(false, recorder.Mask.LEFT, recorder.Mask.LEFT) ||
         recorderState.combo(false, recorder.Mask.RIGHT, recorder.Mask.RIGHT)
 
-      if (run) return animation.ID.PLAYER_RUN
-      return animation.ID.PLAYER_WALK
+      if (run) return animation.AnimationID.PLAYER_RUN
+      return animation.AnimationID.PLAYER_WALK
     }
 
     if (recorderState.up()) {
-      if (this._animationID === animation.ID.PLAYER_SIT) {
-        return animation.ID.PLAYER_CROUCH
+      if (this._animationID === animation.AnimationID.PLAYER_SIT) {
+        return animation.AnimationID.PLAYER_CROUCH
       }
-      return animation.ID.PLAYER_IDLE
+      return animation.AnimationID.PLAYER_IDLE
     }
 
     if (
-      this._animationID === animation.ID.PLAYER_CROUCH ||
-      this._animationID === animation.ID.PLAYER_SIT
+      this._animationID === animation.AnimationID.PLAYER_CROUCH ||
+      this._animationID === animation.AnimationID.PLAYER_SIT
     ) {
       return this._animationID
     }
 
-    return animation.ID.PLAYER_IDLE
+    return animation.AnimationID.PLAYER_IDLE
   }
 
   /**

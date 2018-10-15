@@ -1,9 +1,9 @@
-import * as atlas from './atlas.js'
-import * as entity from './entity.js'
+import * as atlas from '../textures/atlas.js'
 import * as recorder from '../inputs/recorder.js'
 import * as shader from '../graphics/shader.js'
+import {Entity} from './entity.js'
 
-/** @typedef {{memory: Int16Array; readonly entities: entity.State[]}} State */
+/** @typedef {{memory: Int16Array; readonly entities: Entity[]}} State */
 
 /** @return {State} */
 export function newState() {
@@ -12,7 +12,7 @@ export function newState() {
 
 /**
  * @arg {State} state
- * @arg {ReadonlyArray<entity.State>} entities
+ * @arg {ReadonlyArray<Entity>} entities
  * @return {void}
  */
 export function nextSpawnState(state, entities) {

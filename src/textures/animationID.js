@@ -1,5 +1,5 @@
 /** @enum {string} */
-export const ID = {
+export const AnimationID = {
   CLOUD_XS: 'cloud xs',
   CLOUD_S: 'cloud s',
   CLOUD_M: 'cloud m',

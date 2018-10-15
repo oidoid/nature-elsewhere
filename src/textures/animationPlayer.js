@@ -20,7 +20,7 @@ const AdvanceAnimation = {
 /** @type {atlas.Animation} */
 const nullAnimation = {cels: [], direction: atlas.AnimationDirection.FORWARD}
 
-export default class AnimationPlayer {
+export class AnimationPlayer {
   /**
    * @arg {atlas.Animation} [animation]
    * @arg {number} [cel]

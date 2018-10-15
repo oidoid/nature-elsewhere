@@ -1,6 +1,6 @@
 import * as atlas from './atlas.js'
 import * as util from '../util.js'
-import AnimationPlayer from './AnimationPlayer.js'
+import {AnimationPlayer} from './animationPlayer.js'
 
 describe('step()', () => {
   test('No cels', () => {

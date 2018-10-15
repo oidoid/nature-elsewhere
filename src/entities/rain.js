@@ -1,7 +1,7 @@
-import * as animation from './animation.js'
+import * as animation from '../textures/animationID.js'
 import * as entity from './entity.js'
 
-export default class Rain extends entity.State {
+export class Rain extends entity.Entity {
   /**
    * @arg {XY} position
    * @arg {number} scrollSpeed
@@ -10,7 +10,7 @@ export default class Rain extends entity.State {
   constructor(position, scrollSpeed, speed) {
     super(
       position,
-      animation.ID.RAIN,
+      animation.AnimationID.RAIN,
       {x: 0, y: 0},
       {x: 1, y: 1},
       {x: 0, y: scrollSpeed},

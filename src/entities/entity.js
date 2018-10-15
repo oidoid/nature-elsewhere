@@ -1,8 +1,7 @@
-import * as atlas from './atlas.js'
+import * as animation from '../textures/animationID.js'
+import * as atlas from '../textures/atlas.js'
 import * as recorder from '../inputs/recorder.js'
-import AnimationPlayer from './AnimationPlayer.js'
-
-/** @typedef {import('./animation').ID} animation.ID */
+import {AnimationPlayer} from '../textures/animationPlayer.js'
 
 /** @enum {number} */
 export const DrawOrder = {
@@ -23,10 +22,10 @@ export const Limits = {
   MAX: 0x7fff
 }
 
-export class State {
+export class Entity {
   /**
    * @arg {XY} position
-   * @arg {animation.ID} animationID
+   * @arg {animation.AnimationID} animationID
    * @arg {XY} scrollPosition
    * @arg {XY} scale
    * @arg {XY} scrollSpeed
@@ -43,7 +42,7 @@ export class State {
     celTime = 0
   ) {
     /** @type {Mutable<XY>} */ this._position = position
-    /** @type {animation.ID} */ this._animationID = animationID
+    /** @type {animation.AnimationID} */ this._animationID = animationID
     /** @type {AnimationPlayer} */ this._animationPlayer = new AnimationPlayer()
     /** @type {Mutable<XY>} */ this._scrollPosition = scrollPosition
     /** @type {Mutable<XY>} */ this._scale = scale
