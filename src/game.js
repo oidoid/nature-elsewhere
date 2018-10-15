@@ -15,9 +15,10 @@ const scale = 6
 export class Game {
   /**
    * @arg {Window} window
+   * @arg {HTMLCanvasElement} canvas
    * @arg {HTMLImageElement} atlasImage
    */
-  constructor(window, atlasImage) {
+  constructor(window, canvas, atlasImage) {
     /** @type {Window} */ this._window = window
     /** @type {Document} */ this._document = window.document
     /** @type {HTMLImageElement} */ this._atlasImage = atlasImage
@@ -32,41 +33,33 @@ export class Game {
     /** @type {Entity} */ this._player = this._level0.player
     /** @type {Atlas} */ this._atlas = asepriteParser.parse(atlasJSON)
 
-    const canvas = document.querySelector('canvas')
-    if (!canvas) throw new Error('Canvas missing.')
     /** @type {HTMLCanvasElement} */ this._canvas = canvas
 
     /** @type {renderer.Renderer} */ this._renderer = renderer.newRenderer(
       canvas,
       atlasImage
     )
-
     /** @type {number} */ this._frameID = NaN
-
     /** @type {recorder.Recorder} */ this._recorder = new recorder.WriteState()
-
-    this._onContextLost = this._onContextLost.bind(this)
-    this._onContextRestored = this._onContextRestored.bind(this)
-    this._onKeyChange = this._onKeyChange.bind(this)
-    this._onLoop = this._onLoop.bind(this)
-    this._onVisibilityChanged = this._onVisibilityChanged.bind(this)
   }
 
   /** @return {void} */
   bind() {
-    this._document.addEventListener(
-      'visibilitychange',
-      this._onVisibilityChanged
+    this._document.addEventListener('visibilitychange', () =>
+      this._onVisibilityChanged()
     )
 
-    this._canvas.addEventListener('webglcontextlost', this._onContextLost)
-    this._canvas.addEventListener(
-      'webglcontextrestored',
-      this._onContextRestored
+    this._canvas.addEventListener('webglcontextlost', event =>
+      this._onContextLost(event)
+    )
+    this._canvas.addEventListener('webglcontextrestored', event =>
+      this._onContextRestored(event)
     )
 
-    this._document.addEventListener('keydown', this._onKeyChange)
-    this._document.addEventListener('keyup', this._onKeyChange)
+    this._document.addEventListener('keydown', event =>
+      this._onKeyChange(event)
+    )
+    this._document.addEventListener('keyup', event => this._onKeyChange(event))
   }
 
   /** @return {void} */
@@ -157,8 +150,12 @@ export class Game {
     // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
     // scaling.
     const canvas = {
-      w: document.documentElement ? document.documentElement.clientWidth : 0,
-      h: document.documentElement ? document.documentElement.clientHeight : 0
+      w: this._document.documentElement
+        ? this._document.documentElement.clientWidth
+        : 0,
+      h: this._document.documentElement
+        ? this._document.documentElement.clientHeight
+        : 0
     }
     this._renderer.render(
       canvas,
