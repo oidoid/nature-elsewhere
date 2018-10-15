@@ -1,7 +1,8 @@
 import * as animation from '../textures/animationID.js'
-import * as atlas from '../textures/atlas.js'
 import * as recorder from '../inputs/recorder.js'
 import {AnimationPlayer} from '../textures/animationPlayer.js'
+
+/** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
 
 /** @enum {number} */
 export const DrawOrder = {
@@ -54,12 +55,12 @@ export class Entity {
 
   /**
    * @arg {number} step
-   * @arg {atlas.Atlas} atlasState
+   * @arg {Atlas} atlas
    * @arg {recorder.ReadState} _recorderState
    * @return {void}
    */
-  nextStepState(step, atlasState, _recorderState) {
-    this._animationPlayer.animation = atlasState.animations[this._animationID]
+  step(step, atlas, _recorderState) {
+    this._animationPlayer.animation = atlas.animations[this._animationID]
     this._animationPlayer.step(step)
     this._position.x += step * this._speed.x
     this._position.y += step * this._speed.y

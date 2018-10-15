@@ -1,7 +1,8 @@
 import * as animation from '../textures/animationID.js'
-import * as atlas from '../textures/atlas.js'
 import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
+
+/** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
 
 export class Player extends entity.Entity {
   /** @arg {XY} position */
@@ -11,11 +12,11 @@ export class Player extends entity.Entity {
 
   /**
    * @arg {number} step
-   * @arg {atlas.Atlas} atlas
+   * @arg {Atlas} atlas
    * @arg {recorder.ReadState} recorderState
    * @return {void}
    */
-  nextStepState(step, atlas, recorderState) {
+  step(step, atlas, recorderState) {
     this.__scale(recorderState)
     this.__position(recorderState, step)
 

@@ -16,7 +16,7 @@ import {Tree} from '../entities/tree.js'
  * @typedef {Readonly<{
  *   player: entity.Entity
  *   entities: ReadonlyArray<entity.Entity>
- * }>} State
+ * }>} Level0
  */
 
 const tallGrassIDs = [
@@ -33,10 +33,10 @@ const tallGrassIDs = [
 
 /**
  * @arg {atlas.Atlas} atlas
- * @arg {Random} randomState
- * @return {State}
+ * @arg {Random} random
+ * @return {Level0}
  */
-export function newState(atlas, randomState) {
+export function newState(atlas, random) {
   const entities = [
     new Background(
       {x: entity.Limits.HALF_MIN, y: entity.Limits.HALF_MIN},
@@ -48,7 +48,7 @@ export function newState(atlas, randomState) {
     new Grass(AnimationID.TALL_GRASS_A, {x: 188, y: -15}),
     new Grass(AnimationID.TALL_GRASS_B, {x: 208, y: -15}),
     ...util.range(0, 20).map(i => {
-      return new Grass(tallGrassIDs[randomState.int(0, tallGrassIDs.length)], {
+      return new Grass(tallGrassIDs[random.int(0, tallGrassIDs.length)], {
         x: 228 + i * 4,
         y: -16
       })
@@ -63,8 +63,8 @@ export function newState(atlas, randomState) {
     ...util.range(0, 1000).map(i => {
       return new SuperBall(
         {
-          x: (10 + i + randomState.int(0, 20)) % 80,
-          y: -100 + randomState.int(0, 50)
+          x: (10 + i + random.int(0, 20)) % 80,
+          y: -100 + random.int(0, 50)
         },
         {x: 0, y: 0.004}
       )

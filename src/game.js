@@ -4,16 +4,16 @@ import * as level0 from './assets/level0.js'
 import * as keyboard from './inputs/keyboard.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
-import * as store from './entities/store.js'
 import {Entity} from './entities/entity.js'
 import {Random} from './random.js'
+import {Store} from './entities/store.js'
 import atlasJSON from './assets/atlas.js'
 
 /**
  * @typedef {{
  *   atlas: atlas.Atlas
  *   atlasImage: HTMLImageElement
- *   store: store.Store
+ *   store: Store
  *   player: Entity
  *   canvas: HTMLCanvasElement
  *   frameID: number
@@ -32,10 +32,10 @@ import atlasJSON from './assets/atlas.js'
  */
 export function newState(document, atlasImage) {
   const atlas = asepriteParser.parse(atlasJSON)
-  const storeState = store.newState()
-  const randomState = new Random(0)
-  const level0State = level0.newState(atlas, randomState)
-  store.nextSpawnState(storeState, level0State.entities)
+  const store = new Store()
+  const random = new Random(0)
+  const level0State = level0.newState(atlas, random)
+  store.spawn(level0State.entities)
 
   const canvas = document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing.')
@@ -45,14 +45,14 @@ export function newState(document, atlasImage) {
   return {
     atlas,
     atlasImage,
-    store: storeState,
+    store,
     player: level0State.player,
     canvas,
     frameID: 0,
     renderer: rendererState,
     recorder: new recorder.WriteState(),
     scale: 6,
-    random: randomState
+    random
   }
 }
 
@@ -174,8 +174,8 @@ function onLoop(state, document, then, now) {
     }
   }
 
-  store.nextStepState(state.store, step, state.atlas, state.recorder)
-  store.flushUpdatesToMemory(state.store)
+  state.store.step(step, state.atlas, state.recorder)
+  state.store.flushUpdatesToMemory()
   // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
   // scaling.
   const canvas = {
@@ -186,8 +186,8 @@ function onLoop(state, document, then, now) {
     canvas,
     state.scale,
     {x: state.player._position.x, y: state.player._position.y + 20},
-    state.store.memory,
-    state.store.entities.length
+    state.store._memory,
+    state.store._entities.length
   )
 }
 
