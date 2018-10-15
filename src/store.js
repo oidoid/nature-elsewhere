@@ -1,8 +1,8 @@
-import * as recorder from '../inputs/recorder.js'
-import * as shader from '../graphics/shader.js'
-import {Entity} from './entity.js'
+import * as recorder from './inputs/recorder.js'
+import * as shader from './graphics/shader.js'
+import {Entity} from './entities/entity.js'
 
-/** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
+/** @typedef {import('./textures/atlas.js').Atlas} Atlas} */
 
 export class Store {
   constructor() {

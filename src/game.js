@@ -6,7 +6,7 @@ import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
 import {Entity} from './entities/entity.js'
 import {Random} from './random.js'
-import {Store} from './entities/store.js'
+import {Store} from './store.js'
 import atlasJSON from './assets/atlas.js'
 
 /**
