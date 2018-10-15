@@ -1,6 +1,6 @@
 import * as animation from '../textures/animationID.js'
 import * as recorder from '../inputs/recorder.js'
-import {AnimationPlayer} from '../textures/animationPlayer.js'
+import {Animator} from '../textures/animator.js'
 
 /** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
 
@@ -44,7 +44,7 @@ export class Entity {
   ) {
     /** @type {Mutable<XY>} */ this._position = position
     /** @type {animation.AnimationID} */ this._animationID = animationID
-    /** @type {AnimationPlayer} */ this._animationPlayer = new AnimationPlayer()
+    /** @type {Animator} */ this._animator = new Animator()
     /** @type {Mutable<XY>} */ this._scrollPosition = scrollPosition
     /** @type {Mutable<XY>} */ this._scale = scale
     /** @type {XY} */ this.scrollSpeed = scrollSpeed
@@ -60,8 +60,8 @@ export class Entity {
    * @return {void}
    */
   step(step, atlas, _recorderState) {
-    this._animationPlayer.animation = atlas.animations[this._animationID]
-    this._animationPlayer.step(step)
+    this._animator.animation = atlas.animations[this._animationID]
+    this._animator.step(step)
     this._position.x += step * this._speed.x
     this._position.y += step * this._speed.y
     this._scrollPosition.x += step * this.scrollSpeed.x
@@ -70,7 +70,7 @@ export class Entity {
 
   /** @return {Rect} */
   get bounds() {
-    return this._animationPlayer.cel.bounds
+    return this._animator.cel.bounds
   }
 
   /** @return {DrawOrder} */

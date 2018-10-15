@@ -5,7 +5,7 @@ import * as atlas from './atlas.js'
  *   Record<atlas.AnimationDirection, (cel: number, length: number) => number>
  * >}
  */
-const AdvanceAnimation = {
+const Advance = {
   [atlas.AnimationDirection.FORWARD](cel) {
     return cel + 1
   },
@@ -20,7 +20,7 @@ const AdvanceAnimation = {
 /** @type {atlas.Animation} */
 const nullAnimation = {cels: [], direction: atlas.AnimationDirection.FORWARD}
 
-export class AnimationPlayer {
+export class Animator {
   /**
    * @arg {atlas.Animation} [animation]
    * @arg {number} [cel]
@@ -69,7 +69,7 @@ export class AnimationPlayer {
 
   /** @return {void} */
   _advance() {
-    const fnc = AdvanceAnimation[this._animation.direction]
+    const fnc = Advance[this._animation.direction]
     const msg = `Unknown AnimationDirection "${this._animation.direction}".`
     if (!fnc) throw new Error(msg)
     this._cel = fnc(this._cel, this._animation.cels.length)

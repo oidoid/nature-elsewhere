@@ -21,8 +21,8 @@ export class Player extends entity.Entity {
     this.__position(recorderState, step)
 
     this._animationID = this.__animationID(recorderState)
-    this._animationPlayer.animation = atlas.animations[this._animationID]
-    this._animationPlayer.step(step)
+    this._animator.animation = atlas.animations[this._animationID]
+    this._animator.step(step)
   }
 
   /** @return {entity.DrawOrder} */

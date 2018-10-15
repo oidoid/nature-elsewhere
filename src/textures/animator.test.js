@@ -1,10 +1,10 @@
 import * as atlas from './atlas.js'
 import * as util from '../util.js'
-import {AnimationPlayer} from './animationPlayer.js'
+import {Animator} from './animator.js'
 
 describe('step()', () => {
   test('No cels', () => {
-    const subject = new AnimationPlayer()
+    const subject = new Animator()
     subject.step(1)
     expect(subject).toMatchObject({_cel: 0, _celTime: 0})
   })
@@ -15,7 +15,7 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new AnimationPlayer(animation)
+    const subject = new Animator(animation)
     subject.step(1)
     expect(subject).toMatchObject({_cel: 0, _celTime: 1})
   })
@@ -26,7 +26,7 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new AnimationPlayer(animation)
+    const subject = new Animator(animation)
     subject.step(1)
     expect(subject).toMatchObject({_cel: 1, _celTime: 0})
   })
@@ -37,7 +37,7 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new AnimationPlayer(animation)
+    const subject = new Animator(animation)
     subject.step(2)
     expect(subject).toMatchObject({_cel: 1, _celTime: 1})
   })
@@ -53,7 +53,7 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel], direction}
-    const subject = new AnimationPlayer(animation)
+    const subject = new Animator(animation)
     subject.step(1)
     const actual = subject.celIndex
     expect(actual).toStrictEqual(1)
@@ -68,7 +68,7 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel], direction}
-    const subject = new AnimationPlayer(animation, 1)
+    const subject = new Animator(animation, 1)
     subject.step(1)
     const actual = subject.celIndex
     expect(actual).toStrictEqual(0)
@@ -83,7 +83,7 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel, cel, cel, cel], direction}
-    const subject = new AnimationPlayer(animation)
+    const subject = new Animator(animation)
     const actual = []
     for (let i = 0; i < animation.cels.length * 3; ++i) {
       subject.step(1)
