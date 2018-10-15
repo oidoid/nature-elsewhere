@@ -4,7 +4,7 @@ import * as util from '../util.js'
 
 /**
  * @arg {aseprite.File} file
- * @return {atlas.State}
+ * @return {atlas.Atlas}
  */
 export function parse(file) {
   return {

@@ -11,7 +11,7 @@ export class Player extends entity.Entity {
 
   /**
    * @arg {number} step
-   * @arg {atlas.State} atlas
+   * @arg {atlas.Atlas} atlas
    * @arg {recorder.ReadState} recorderState
    * @return {void}
    */

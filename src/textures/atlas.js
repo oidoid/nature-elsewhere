@@ -1,6 +1,6 @@
 import * as aseprite from '../parsers/aseprite.js'
 
-/** @typedef {Readonly<{size: WH; animations: AnimationMap}>} State */
+/** @typedef {Readonly<{size: WH; animations: AnimationMap}>} Atlas */
 
 /** @typedef {Readonly<Record<AnimationID, Animation>>} AnimationMap */
 

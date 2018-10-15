@@ -10,14 +10,14 @@ const inputs = /** @type {recorder.Mask[]} */ (util.values(recorder.Mask))
 
 /**
  * @typedef {Exclude<
- *    keyof recorder.ReadState,
- *    | 'combo'
- *    | 'write'
- *    | '_input'
- *    | '_sampleAge'
- *    | '_sample'
- *    | '_lastSample'
- *    | '_combo'
+ *   keyof recorder.ReadState,
+ *   | 'combo'
+ *   | 'write'
+ *   | '_input'
+ *   | '_sampleAge'
+ *   | '_sample'
+ *   | '_lastSample'
+ *   | '_combo'
  * >} InputMethod
  */
 /**

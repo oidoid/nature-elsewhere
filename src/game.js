@@ -11,9 +11,9 @@ import atlasJSON from './assets/atlas.js'
 
 /**
  * @typedef {{
- *   atlas: atlas.State
+ *   atlas: atlas.Atlas
  *   atlasImage: HTMLImageElement
- *   store: store.State
+ *   store: store.Store
  *   player: Entity
  *   canvas: HTMLCanvasElement
  *   frameID: number
@@ -21,14 +21,14 @@ import atlasJSON from './assets/atlas.js'
  *   recorder: recorder.Recorder
  *   readonly scale: number
  *   readonly random: Random
- * }} State
+ * }} Game
  */
 
 /**
  *
  * @arg {Document} document
  * @arg {HTMLImageElement} atlasImage
- * @return {State}
+ * @return {Game}
  */
 export function newState(document, atlasImage) {
   const atlas = asepriteParser.parse(atlasJSON)
@@ -57,9 +57,9 @@ export function newState(document, atlasImage) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Game} state
  * @arg {Document} document
- * @return {State}
+ * @return {Game}
  */
 export function nextStartState(state, document) {
   document.addEventListener(
@@ -84,7 +84,7 @@ export function nextStartState(state, document) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Game} state
  * @return {void}
  */
 function onPaused(state) {
@@ -105,7 +105,7 @@ function onContextLost(event) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Game} state
  * @arg {Document} document
  * @return {void}
  */
@@ -115,7 +115,7 @@ function onResumed(state, document) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Game} state
  * @arg {Event} event
  * @return {void}
  */
@@ -126,7 +126,7 @@ function onContextRestored(state, event) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Game} state
  * @arg {KeyboardEvent} event
  * @return {void}
  */
@@ -143,7 +143,7 @@ function onKeyChange(state, event) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Game} state
  * @arg {Document} document
  * @arg {number} then
  * @arg {number} now
@@ -192,7 +192,7 @@ function onLoop(state, document, then, now) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Game} state
  * @arg {Document} document
  * @return {void}
  */

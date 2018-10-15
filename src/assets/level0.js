@@ -32,7 +32,7 @@ const tallGrassIDs = [
 ]
 
 /**
- * @arg {atlas.State} atlas
+ * @arg {atlas.Atlas} atlas
  * @arg {Random} randomState
  * @return {State}
  */

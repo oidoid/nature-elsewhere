@@ -37,10 +37,7 @@ export class AnimationPlayer {
     return this._animation.cels[this.celIndex]
   }
 
-  /**
-   * @arg {atlas.Animation} animation
-   * @return {void}
-   */
+  /** @arg {atlas.Animation} animation */
   set animation(animation) {
     if (animation === this._animation) return
     this._animation = animation

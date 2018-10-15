@@ -3,15 +3,15 @@ import * as recorder from '../inputs/recorder.js'
 import * as shader from '../graphics/shader.js'
 import {Entity} from './entity.js'
 
-/** @typedef {{memory: Int16Array; readonly entities: Entity[]}} State */
+/** @typedef {{memory: Int16Array; readonly entities: Entity[]}} Store */
 
-/** @return {State} */
+/** @return {Store} */
 export function newState() {
   return {memory: new Int16Array(), entities: []}
 }
 
 /**
- * @arg {State} state
+ * @arg {Store} state
  * @arg {ReadonlyArray<Entity>} entities
  * @return {void}
  */
@@ -29,9 +29,9 @@ export function nextSpawnState(state, entities) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Store} state
  * @arg {number} step
- * @arg {atlas.State} atlas
+ * @arg {atlas.Atlas} atlas
  * @arg {recorder.ReadState} recorderState
  * @return {void}
  */
@@ -40,7 +40,7 @@ export function nextStepState(state, step, atlas, recorderState) {
 }
 
 /**
- * @arg {State} state
+ * @arg {Store} state
  * @return {void}
  */
 export function flushUpdatesToMemory(state) {

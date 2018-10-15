@@ -54,7 +54,7 @@ export class Entity {
 
   /**
    * @arg {number} step
-   * @arg {atlas.State} atlasState
+   * @arg {atlas.Atlas} atlasState
    * @arg {recorder.ReadState} _recorderState
    * @return {void}
    */
