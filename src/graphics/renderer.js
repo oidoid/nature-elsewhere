@@ -17,7 +17,7 @@ const perVertexData = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
  * @arg {HTMLImageElement} atlas
  * @return {Renderer}
  */
-export function init(canvas, atlas) {
+export function newRenderer(canvas, atlas) {
   const gl = canvas.getContext('webgl2', {
     alpha: false,
     depth: false,
