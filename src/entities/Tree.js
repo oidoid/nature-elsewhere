@@ -4,11 +4,11 @@ import * as entity from './entity.js'
 export default class Tree extends entity.State {
   /** @arg {XY} position */
   constructor(position) {
-    super(
-      entity.Type.TREE,
-      position,
-      animation.ID.TREE,
-      entity.DrawOrder.NEAR_BACKGROUND_SCENERY
-    )
+    super(position, animation.ID.TREE)
+  }
+
+  /** @return {entity.DrawOrder} */
+  get drawOrder() {
+    return entity.DrawOrder.NEAR_BACKGROUND_SCENERY
   }
 }

@@ -1,20 +1,20 @@
 import * as animation from './animation.js'
 import * as entity from './entity.js'
 
-export default class Cloud extends entity.State {
+export default class Rain extends entity.State {
   /**
-   * @arg {animation.ID} animationID
    * @arg {XY} position
-   * @arg {XY} [speed]
+   * @arg {number} scrollSpeed
+   * @arg {number} speed
    */
-  constructor(animationID, position, speed) {
+  constructor(position, scrollSpeed, speed) {
     super(
       position,
-      animationID,
+      animation.ID.RAIN,
       {x: 0, y: 0},
       {x: 1, y: 1},
-      {x: 0, y: 0},
-      speed
+      {x: 0, y: scrollSpeed},
+      {x: speed, y: 0}
     )
   }
 

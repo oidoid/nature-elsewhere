@@ -18,7 +18,7 @@ export function newState() {
 export function nextSpawnState(state, entities) {
   entities.forEach(entity => {
     let index = state.entities.findIndex(
-      val => entity._drawOrder <= val._drawOrder
+      val => entity.drawOrder <= val.drawOrder
     )
     state.entities.splice(
       index === -1 ? state.entities.length : index,

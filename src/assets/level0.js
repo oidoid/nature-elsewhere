@@ -55,10 +55,10 @@ export function newState(atlas, randomState) {
     }),
     new Grass(animation.ID.GRASS_L, {x: 228, y: -12}, {x: 6, y: 1}),
     new Tree({x: 185, y: -39}),
-    new Cloud({x: 40, y: -60}, animation.ID.CLOUD_S),
-    new Cloud({x: 58, y: -76}, animation.ID.CLOUD_M),
+    new Cloud(animation.ID.CLOUD_S, {x: 40, y: -60}),
+    new Cloud(animation.ID.CLOUD_M, {x: 58, y: -76}),
     ...factory.newRainCloud(animation.ID.CLOUD_S, {x: 75, y: -65}, -0.0001),
-    new Cloud({x: 120, y: -60}, animation.ID.CLOUD_XL),
+    new Cloud(animation.ID.CLOUD_XL, {x: 120, y: -60}),
     ...factory.newRainCloud(animation.ID.CLOUD_L, {x: 20, y: -81}, -0.00008),
     ...util.range(0, 1000).map(i => {
       return new SuperBall(

@@ -6,12 +6,7 @@ import * as recorder from '../inputs/recorder.js'
 export default class Player extends entity.State {
   /** @arg {XY} position */
   constructor(position) {
-    super(
-      entity.Type.PLAYER,
-      position,
-      animation.ID.PLAYER_IDLE,
-      entity.DrawOrder.PLAYER
-    )
+    super(position, animation.ID.PLAYER_IDLE)
   }
 
   /**
@@ -27,6 +22,11 @@ export default class Player extends entity.State {
     this._animationID = this.__animationID(recorderState)
     this._animationPlayer.animation = atlas.animations[this._animationID]
     this._animationPlayer.step(step)
+  }
+
+  /** @return {entity.DrawOrder} */
+  get drawOrder() {
+    return entity.DrawOrder.PLAYER
   }
 
   /** @return {boolean} */

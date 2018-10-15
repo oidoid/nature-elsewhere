@@ -8,14 +8,17 @@ export default class SuperBall extends entity.State {
    */
   constructor(position, speed) {
     super(
-      entity.Type.SUPER_BALL,
       position,
       animation.ID.PALETTE_GOLD,
-      entity.DrawOrder.SUPER_BALL,
       {x: 0, y: 0},
       {x: 1, y: 1},
       {x: 0, y: 0},
       speed
     )
+  }
+
+  /** @return {entity.DrawOrder} */
+  get drawOrder() {
+    return entity.DrawOrder.SUPER_BALL
   }
 }

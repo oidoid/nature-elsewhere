@@ -7,13 +7,6 @@ export default class Background extends entity.State {
    * @arg {XY} scale
    */
   constructor(position, scale) {
-    super(
-      entity.Type.BACKGROUND,
-      position,
-      animation.ID.PALETTE_PALE,
-      entity.DrawOrder.BACKGROUND,
-      {x: 0, y: 0},
-      scale
-    )
+    super(position, animation.ID.PALETTE_PALE, {x: 0, y: 0}, scale)
   }
 }
