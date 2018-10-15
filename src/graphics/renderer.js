@@ -146,7 +146,7 @@ export class Renderer {
   /** @return {void} */
   debugLoseContext() {
     if (!this._loseContext) return
-    this._loseContext.restoreContext()
+    this._loseContext.loseContext()
   }
 
   /** @return {void} */
