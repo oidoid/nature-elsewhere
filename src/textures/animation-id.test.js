@@ -1,7 +1,7 @@
-import * as asepriteParser from '../parsers/asepriteParser.js'
+import * as asepriteParser from '../parsers/aseprite-parser.js'
 import * as atlas from './atlas.js'
 import * as util from '../util.js'
-import {AnimationID} from './animationID.js'
+import {AnimationID} from './animation-id.js'
 import atlasJSON from '../assets/atlas.js'
 
 /** @type {atlas.Atlas} */ const state = asepriteParser.parse(atlasJSON)

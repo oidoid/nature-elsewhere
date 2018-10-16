@@ -1,4 +1,4 @@
-import * as animation from '../textures/animationID.js'
+import * as animation from '../textures/animation-id.js'
 import * as util from '../util.js'
 import {Entity} from './entity.js'
 import {Rain} from './rain.js'

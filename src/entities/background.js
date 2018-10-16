@@ -1,4 +1,4 @@
-import * as animation from '../textures/animationID.js'
+import * as animation from '../textures/animation-id.js'
 import {Entity} from './entity.js'
 
 export class Background extends Entity {

@@ -1,4 +1,4 @@
-import * as asepriteParser from './parsers/asepriteParser.js'
+import * as asepriteParser from './parsers/aseprite-parser.js'
 import * as level0 from './assets/level0.js'
 import * as keyboard from './inputs/keyboard.js'
 import * as recorder from './inputs/recorder.js'

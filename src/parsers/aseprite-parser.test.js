@@ -1,9 +1,9 @@
 import * as aseprite from './aseprite.js'
-import * as asepriteParser from './asepriteParser.js'
-import * as input from './asepriteParser.input.test.json'
+import * as asepriteParser from './aseprite-parser.js'
+import * as input from './aseprite-parser.input.test.json'
 import * as util from '../util.js'
 import atlasJSON from '../assets/atlas.js'
-import expected from './asepriteParser.expect.test.js'
+import expected from './aseprite-parser.expect.test.js'
 
 describe('atlas.json', () => {
   const file = atlasJSON
