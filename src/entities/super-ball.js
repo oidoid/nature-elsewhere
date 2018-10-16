@@ -1,5 +1,6 @@
 import * as animation from '../textures/animation-id.js'
 import * as entity from './entity.js'
+import {DrawOrder} from './draw-order.js'
 
 export class SuperBall extends entity.Entity {
   /**
@@ -9,7 +10,7 @@ export class SuperBall extends entity.Entity {
   constructor(position, speed) {
     super(
       position,
-      animation.AnimationID.PALETTE_GOLD,
+      animation.AnimationID.PALETTE_LIGHT_BLUE_TINT,
       {x: 0, y: 0},
       {x: 1, y: 1},
       {x: 0, y: 0},
@@ -17,8 +18,8 @@ export class SuperBall extends entity.Entity {
     )
   }
 
-  /** @return {entity.DrawOrder} */
+  /** @return {DrawOrder} */
   get drawOrder() {
-    return entity.DrawOrder.SUPER_BALL
+    return DrawOrder.SUPER_BALL
   }
 }

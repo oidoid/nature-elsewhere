@@ -1,5 +1,6 @@
 import * as animation from '../textures/animation-id.js'
 import * as entity from './entity.js'
+import {DrawOrder} from './draw-order.js'
 
 export class Tree extends entity.Entity {
   /** @arg {XY} position */
@@ -7,8 +8,8 @@ export class Tree extends entity.Entity {
     super(position, animation.AnimationID.TREE)
   }
 
-  /** @return {entity.DrawOrder} */
+  /** @return {DrawOrder} */
   get drawOrder() {
-    return entity.DrawOrder.NEAR_BACKGROUND_SCENERY
+    return DrawOrder.NEAR_BACKGROUND_SCENERY
   }
 }

@@ -1,5 +1,6 @@
 import * as animation from '../textures/animation-id.js'
 import * as entity from './entity.js'
+import {DrawOrder} from './draw-order.js'
 
 export class Hill extends entity.Entity {
   /** @arg {XY} position */
@@ -7,8 +8,8 @@ export class Hill extends entity.Entity {
     super(position, animation.AnimationID.HILL)
   }
 
-  /** @return {entity.DrawOrder} */
+  /** @return {DrawOrder} */
   get drawOrder() {
-    return entity.DrawOrder.FAR_BACKGROUND_SCENERY
+    return DrawOrder.FAR_BACKGROUND_SCENERY
   }
 }

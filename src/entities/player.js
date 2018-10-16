@@ -1,6 +1,7 @@
 import * as animation from '../textures/animation-id.js'
 import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
+import {DrawOrder} from './draw-order.js'
 
 /** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
 
@@ -25,9 +26,9 @@ export class Player extends entity.Entity {
     this._animator.step(step)
   }
 
-  /** @return {entity.DrawOrder} */
+  /** @return {DrawOrder} */
   get drawOrder() {
-    return entity.DrawOrder.PLAYER
+    return DrawOrder.PLAYER
   }
 
   /** @return {boolean} */

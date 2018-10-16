@@ -1,5 +1,6 @@
 import * as animation from '../textures/animation-id.js'
 import * as entity from './entity.js'
+import {DrawOrder} from './draw-order.js'
 
 export class Rain extends entity.Entity {
   /**
@@ -18,8 +19,8 @@ export class Rain extends entity.Entity {
     )
   }
 
-  /** @return {entity.DrawOrder} */
+  /** @return {DrawOrder} */
   get drawOrder() {
-    return entity.DrawOrder.CLOUDS
+    return DrawOrder.CLOUDS
   }
 }

@@ -1,17 +1,33 @@
 import * as recorder from './inputs/recorder.js'
 import * as shader from './graphics/shader.js'
+import * as util from './util.js'
 import {Entity} from './entities/entity.js'
+import {EntityGroup} from './entities/entity-group.js'
 
 /** @typedef {import('./textures/atlas.js').Atlas} Atlas} */
 
 export class Store {
   constructor() {
     /** @prop {Int16Array} */ this._memory = new Int16Array()
-    /** @prop {ReadonlyArray<Entity>} */ this._entities = /** @type {Entity[]} */ ([])
+    /** @prop {ReadonlyArray<Entity | EntityGroup>} */ this._entities = /** @type {(Entity | EntityGroup)[]} */ ([])
+  }
+
+  /** @return {Int16Array} */
+  get memory() {
+    return this._memory
+  }
+
+  /** @return {number} */
+  get length() {
+    return this._entities.reduce(
+      (sum, val) =>
+        sum + (val instanceof EntityGroup ? val.entities.length : 1),
+      0
+    )
   }
 
   /**
-   * @arg {ReadonlyArray<Entity>} entities
+   * @arg {ReadonlyArray<Entity | EntityGroup>} entities
    * @return {void}
    */
   spawn(entities) {
@@ -30,22 +46,23 @@ export class Store {
   /**
    * @arg {number} step
    * @arg {Atlas} atlas
-   * @arg {recorder.ReadState} recorderState
+   * @arg {recorder.ReadState} recorder
    * @return {void}
    */
-  step(step, atlas, recorderState) {
-    this._entities.forEach(entity => entity.step(step, atlas, recorderState))
+  step(step, atlas, recorder) {
+    this._entities.forEach(entity => entity.step(step, atlas, recorder))
   }
 
   /** @return {void} */
   flushUpdatesToMemory() {
-    const length = this._entities.length
-    if (this._memory.length < length * shader.layout.perInstance.length) {
-      this._memory = new Int16Array(
-        length * shader.layout.perInstance.length * 2
-      )
+    /** @type {ReadonlyArray<Entity>} */ const entities = this._entities
+      .map(entity => (entity instanceof EntityGroup ? entity.entities : entity))
+      .reduce(util.flatten, [])
+    const minMemory = entities.length * shader.layout.perInstance.length
+    if (this._memory.length < minMemory) {
+      this._memory = new Int16Array(minMemory * 2)
     }
-    this._entities.forEach((entity, i) => {
+    entities.forEach((entity, i) => {
       const coord = entity.bounds
       // prettier-ignore
       this._memory.set([coord.x, coord.y, coord.w, coord.h,

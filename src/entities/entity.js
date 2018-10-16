@@ -1,27 +1,9 @@
 import * as animation from '../textures/animation-id.js'
 import * as recorder from '../inputs/recorder.js'
 import {Animator} from '../textures/animator.js'
+import {DrawOrder} from './draw-order.js'
 
-/** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
-
-/** @enum {number} */
-export const DrawOrder = {
-  BACKGROUND: 0,
-  FAR_BACKGROUND_SCENERY: 1,
-  NEAR_BACKGROUND_SCENERY: 2,
-  SUPER_BALL: 4,
-  PLAYER: 5,
-  FOREGROUND_SCENERY: 8,
-  CLOUDS: 9,
-  FOREGROUND: 10
-}
-
-/** @enum {number} */
-export const Limits = {
-  MIN: 0x8000,
-  HALF_MIN: 0xc000,
-  MAX: 0x7fff
-}
+/** @typedef {import('./player.js').Atlas} Atlas */
 
 export class Entity {
   /**

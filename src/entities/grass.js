@@ -1,5 +1,6 @@
 import * as animation from '../textures/animation-id.js'
 import * as entity from './entity.js'
+import {DrawOrder} from './draw-order.js'
 
 export class Grass extends entity.Entity {
   /**
@@ -11,11 +12,11 @@ export class Grass extends entity.Entity {
     super(position, animationID, {x: 0, y: 0}, scale)
   }
 
-  /** @return {entity.DrawOrder} */
+  /** @return {DrawOrder} */
   get drawOrder() {
     return this._animationID >= animation.AnimationID.GRASS_XS &&
       this._animationID <= animation.AnimationID.GRASS_L
-      ? entity.DrawOrder.FAR_BACKGROUND_SCENERY
-      : entity.DrawOrder.FOREGROUND_SCENERY
+      ? DrawOrder.FAR_BACKGROUND_SCENERY
+      : DrawOrder.FOREGROUND_SCENERY
   }
 }

@@ -1,0 +1,12 @@
+/** @enum {number} */
+export const DrawOrder = {
+  DEFAULT: 0,
+  BACKGROUND: 1,
+  FAR_BACKGROUND_SCENERY: 2,
+  NEAR_BACKGROUND_SCENERY: 3,
+  SUPER_BALL: 4,
+  PLAYER: 5,
+  FOREGROUND_SCENERY: 8,
+  CLOUDS: 9,
+  FOREGROUND: 10
+}

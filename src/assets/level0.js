@@ -1,13 +1,15 @@
 import * as atlas from '../textures/atlas.js'
 import * as entity from '../entities/entity.js'
-import * as factory from '../entities/factory.js'
 import * as util from '../util.js'
 import {AnimationID} from '../textures/animation-id.js'
 import {Background} from '../entities/background.js'
 import {Cloud} from '../entities/cloud.js'
+import {EntityGroup} from '../entities/entity-group.js'
 import {Grass} from '../entities/grass.js'
 import {Hill} from '../entities/hill.js'
+import {Limits} from '../graphics/limits.js'
 import {Player} from '../entities/player.js'
+import {RainCloud} from '../entities/rain-cloud.js'
 import {Random} from '../random.js'
 import {SuperBall} from '../entities/super-ball.js'
 import {Tree} from '../entities/tree.js'
@@ -15,7 +17,7 @@ import {Tree} from '../entities/tree.js'
 /**
  * @typedef {Readonly<{
  *   player: entity.Entity
- *   entities: ReadonlyArray<entity.Entity>
+ *   entities: ReadonlyArray<entity.Entity|EntityGroup>
  * }>} Level0
  */
 
@@ -39,8 +41,8 @@ const tallGrassIDs = [
 export function newState(atlas, random) {
   const entities = [
     new Background(
-      {x: entity.Limits.HALF_MIN, y: entity.Limits.HALF_MIN},
-      {x: entity.Limits.MAX, y: entity.Limits.MAX}
+      {x: Limits.HALF_MIN, y: Limits.HALF_MIN},
+      {x: Limits.MAX, y: Limits.MAX}
     ),
     new Grass(AnimationID.GRASS_L, {x: -512, y: -12}, {x: 48, y: 1}),
     new Grass(AnimationID.GRASS_L, {x: 208, y: -12}, {x: 2, y: 1}),
@@ -57,9 +59,9 @@ export function newState(atlas, random) {
     new Tree({x: 185, y: -39}),
     new Cloud(AnimationID.CLOUD_S, {x: 40, y: -60}),
     new Cloud(AnimationID.CLOUD_M, {x: 58, y: -76}),
-    ...factory.newRainCloud(AnimationID.CLOUD_S, {x: 75, y: -65}, -0.0001),
+    new RainCloud(AnimationID.CLOUD_S, {x: 75, y: -65}, -0.0001),
     new Cloud(AnimationID.CLOUD_XL, {x: 120, y: -60}),
-    ...factory.newRainCloud(AnimationID.CLOUD_L, {x: 20, y: -81}, -0.00008),
+    new RainCloud(AnimationID.CLOUD_L, {x: 20, y: -81}, -0.00008),
     ...util.range(0, 1000).map(i => {
       return new SuperBall(
         {
