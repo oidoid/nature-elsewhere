@@ -14,14 +14,14 @@ export class PlayerAnimation extends Animation {
   /**
    * @arg {number} step
    * @arg {Atlas} atlas
-   * @arg {recorder.ReadState} recorderState
+   * @arg {recorder.ReadState} recorder
    * @return {void}
    */
-  step(step, atlas, recorderState) {
-    this.__scale(recorderState)
-    this.__position(recorderState, step)
+  step(step, atlas, recorder) {
+    this.__scale(recorder)
+    this.__position(recorder, step)
 
-    this._animationID = this.__animationID(recorderState)
+    this._animationID = this.__animationID(recorder)
     this._animator.animation = atlas.animations[this._animationID]
     this._animator.step(step)
   }
