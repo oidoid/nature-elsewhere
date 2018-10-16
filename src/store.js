@@ -20,7 +20,7 @@ export class Store {
   /** @return {number} */
   get length() {
     return this._entities.reduce(
-      (sum, val) => sum + (val instanceof Entity ? val.entities.length : 1),
+      (sum, val) => sum + (val instanceof Entity ? val.animations.length : 1),
       0
     )
   }
@@ -55,7 +55,7 @@ export class Store {
   /** @return {void} */
   flushUpdatesToMemory() {
     /** @type {ReadonlyArray<Animation>} */ const entities = this._entities
-      .map(entity => (entity instanceof Entity ? entity.entities : entity))
+      .map(entity => (entity instanceof Entity ? entity.animations : entity))
       .reduce(util.flatten, [])
     const minMemory = entities.length * shader.layout.perInstance.length
     if (this._memory.length < minMemory) {

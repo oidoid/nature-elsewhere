@@ -1,22 +1,16 @@
-import {Animation} from '../textures/animation.js'
 import {AnimationID} from '../textures/animation-id.js'
 import {DrawOrder} from '../textures/draw-order.js'
+import {Entity} from './entity.js'
+import {CloudAnimation} from '../textures/cloud-animation.js'
 
-export class Cloud extends Animation {
+export class Cloud extends Entity {
   /**
    * @arg {AnimationID} animationID
    * @arg {XY} position
    * @arg {XY} [speed]
    */
   constructor(animationID, position, speed) {
-    super(
-      position,
-      animationID,
-      {x: 0, y: 0},
-      {x: 1, y: 1},
-      {x: 0, y: 0},
-      speed
-    )
+    super([new CloudAnimation(animationID, position)], speed)
   }
 
   /** @return {DrawOrder} */

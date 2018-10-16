@@ -1,18 +1,19 @@
-import * as atlas from '../textures/atlas.js'
 import * as util from '../util.js'
 import {Animation} from '../textures/animation.js'
 import {AnimationID} from '../textures/animation-id.js'
-import {Background} from '../entities/background.js'
+import {BackgroundAnimation} from '../textures/background-animation.js'
 import {Cloud} from '../entities/cloud.js'
 import {Entity} from '../entities/entity.js'
-import {Grass} from '../entities/grass.js'
-import {Hill} from '../entities/hill.js'
+import {GrassAnimation} from '../textures/grass-animation.js'
+import {HillAnimation} from '../textures/hill-animation.js'
 import {Limits} from '../graphics/limits.js'
-import {Player} from '../entities/player.js'
+import {PlayerAnimation} from '../textures/player-animation.js'
 import {RainCloud} from '../entities/rain-cloud.js'
 import {Random} from '../random.js'
 import {SuperBall} from '../entities/super-ball.js'
-import {Tree} from '../entities/tree.js'
+import {TreeAnimation} from '../textures/tree-animation.js'
+
+/** @typedef {import('../textures/animation.js').Atlas} Atlas */
 
 /**
  * @typedef {Readonly<{
@@ -34,31 +35,34 @@ const tallGrassIDs = [
 ]
 
 /**
- * @arg {atlas.Atlas} atlas
+ * @arg {Atlas} atlas
  * @arg {Random} random
  * @return {Level0}
  */
 export function newState(atlas, random) {
   const entities = [
-    new Background(
+    new BackgroundAnimation(
       {x: Limits.HALF_MIN, y: Limits.HALF_MIN},
       {x: Limits.MAX, y: Limits.MAX}
     ),
-    new Grass(AnimationID.GRASS_L, {x: -512, y: -12}, {x: 48, y: 1}),
-    new Grass(AnimationID.GRASS_L, {x: 208, y: -12}, {x: 2, y: 1}),
-    new Hill({x: 40, y: -28}),
-    new Grass(AnimationID.TALL_GRASS_A, {x: 188, y: -15}),
-    new Grass(AnimationID.TALL_GRASS_B, {x: 208, y: -15}),
+    new GrassAnimation(AnimationID.GRASS_L, {x: -512, y: -12}, {x: 48, y: 1}),
+    new GrassAnimation(AnimationID.GRASS_L, {x: 208, y: -12}, {x: 2, y: 1}),
+    new HillAnimation({x: 40, y: -28}),
+    new GrassAnimation(AnimationID.TALL_GRASS_A, {x: 188, y: -15}),
+    new GrassAnimation(AnimationID.TALL_GRASS_B, {x: 208, y: -15}),
     ...util.range(0, 20).map(i => {
-      return new Grass(tallGrassIDs[random.int(0, tallGrassIDs.length)], {
-        x: 228 + i * 4,
-        y: -16
-      })
+      return new GrassAnimation(
+        tallGrassIDs[random.int(0, tallGrassIDs.length)],
+        {
+          x: 228 + i * 4,
+          y: -16
+        }
+      )
     }),
-    new Grass(AnimationID.GRASS_L, {x: 228, y: -12}, {x: 6, y: 1}),
-    new Tree({x: 185, y: -39}),
+    new GrassAnimation(AnimationID.GRASS_L, {x: 228, y: -12}, {x: 6, y: 1}),
+    new TreeAnimation({x: 185, y: -39}),
     new Cloud(AnimationID.CLOUD_S, {x: 40, y: -60}),
-    new Cloud(AnimationID.CLOUD_M, {x: 58, y: -76}),
+    new Cloud(AnimationID.CLOUD_M, {x: 58, y: -76}, {x: -0.0005, y: 0}),
     new RainCloud(AnimationID.CLOUD_S, {x: 75, y: -65}, -0.0001),
     new Cloud(AnimationID.CLOUD_XL, {x: 120, y: -60}),
     new RainCloud(AnimationID.CLOUD_L, {x: 20, y: -81}, -0.00008),
@@ -70,7 +74,7 @@ export function newState(atlas, random) {
     })
   ]
 
-  const player = new Player({
+  const player = new PlayerAnimation({
     x: 0,
     y: -atlas.animations[AnimationID.PLAYER_IDLE].cels[0].bounds.h - 12
   })

@@ -1,14 +1,14 @@
 import * as recorder from '../inputs/recorder.js'
-import {Animation} from '../textures/animation.js'
-import {AnimationID} from '../textures/animation-id.js'
-import {DrawOrder} from '../textures/draw-order.js'
+import {Animation} from './animation.js'
+import {AnimationID} from './animation-id.js'
+import {DrawOrder} from './draw-order.js'
 
-/** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
+/** @typedef {import('./atlas.js').Atlas} Atlas} */
 
-export class Player extends Animation {
+export class PlayerAnimation extends Animation {
   /** @arg {XY} position */
   constructor(position) {
-    super(position, AnimationID.PLAYER_IDLE)
+    super(AnimationID.PLAYER_IDLE, position)
   }
 
   /**
