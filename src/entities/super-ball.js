@@ -1,8 +1,8 @@
-import * as animation from '../textures/animation-id.js'
-import * as entity from './entity.js'
-import {DrawOrder} from './draw-order.js'
+import {Animation} from '../textures/animation.js'
+import {AnimationID} from '../textures/animation-id.js'
+import {DrawOrder} from '../textures/draw-order.js'
 
-export class SuperBall extends entity.Entity {
+export class SuperBall extends Animation {
   /**
    * @arg {XY} position
    * @arg {XY} speed
@@ -10,7 +10,7 @@ export class SuperBall extends entity.Entity {
   constructor(position, speed) {
     super(
       position,
-      animation.AnimationID.PALETTE_LIGHT_BLUE_TINT,
+      AnimationID.PALETTE_LIGHT_BLUE_TINT,
       {x: 0, y: 0},
       {x: 1, y: 1},
       {x: 0, y: 0},

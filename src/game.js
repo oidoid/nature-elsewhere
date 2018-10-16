@@ -3,7 +3,7 @@ import * as level0 from './assets/level0.js'
 import * as keyboard from './inputs/keyboard.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
-import {Entity} from './entities/entity.js'
+import {Animation} from './textures/animation.js'
 import {Random} from './random.js'
 import {Store} from './store.js'
 import atlasJSON from './assets/atlas.js'
@@ -30,7 +30,7 @@ export class Game {
     )
     /** @type {Store} */ this._store = new Store()
     this._store.spawn(this._level0.entities)
-    /** @type {Entity} */ this._player = this._level0.player
+    /** @type {Animation} */ this._player = this._level0.player
     /** @type {Atlas} */ this._atlas = asepriteParser.parse(atlasJSON)
 
     /** @type {HTMLCanvasElement} */ this._canvas = canvas

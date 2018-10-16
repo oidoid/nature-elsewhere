@@ -1,8 +1,8 @@
-import * as animation from '../textures/animation-id.js'
-import * as entity from './entity.js'
-import {DrawOrder} from './draw-order.js'
+import {Animation} from '../textures/animation.js'
+import {AnimationID} from '../textures/animation-id.js'
+import {DrawOrder} from '../textures/draw-order.js'
 
-export class Water extends entity.Entity {
+export class Water extends Animation {
   /**
    * @arg {XY} position
    * @arg {number} speed
@@ -10,7 +10,7 @@ export class Water extends entity.Entity {
   constructor(position, speed) {
     super(
       position,
-      animation.AnimationID.WATER_M,
+      AnimationID.WATER_M,
       {x: 0, y: 0},
       {x: 1, y: 1},
       {x: 0, y: 0},

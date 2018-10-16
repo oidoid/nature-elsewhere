@@ -1,8 +1,8 @@
-import * as animation from '../textures/animation-id.js'
-import * as entity from './entity.js'
-import {DrawOrder} from './draw-order.js'
+import {Animation} from '../textures/animation.js'
+import {AnimationID} from '../textures/animation-id.js'
+import {DrawOrder} from '../textures/draw-order.js'
 
-export class Rain extends entity.Entity {
+export class Rain extends Animation {
   /**
    * @arg {XY} position
    * @arg {number} scrollSpeed
@@ -11,7 +11,7 @@ export class Rain extends entity.Entity {
   constructor(position, scrollSpeed, speed) {
     super(
       position,
-      animation.AnimationID.RAIN,
+      AnimationID.RAIN,
       {x: 0, y: 0},
       {x: 1, y: 1},
       {x: 0, y: scrollSpeed},

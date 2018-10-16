@@ -1,20 +1,20 @@
-import * as animation from '../textures/animation-id.js'
 import * as util from '../util.js'
+import {Animation} from '../textures/animation.js'
+import {AnimationID} from '../textures/animation-id.js'
 import {Entity} from './entity.js'
-import {EntityGroup} from './entity-group.js'
 import {Cloud} from './cloud.js'
-import {DrawOrder} from './draw-order.js'
+import {DrawOrder} from '../textures/draw-order.js'
 import {Rain} from './rain.js'
 import {Water} from './water.js'
 
-export class RainCloud extends EntityGroup {
+export class RainCloud extends Entity {
   /**
-   * @arg {animation.AnimationID} animationID
+   * @arg {AnimationID} animationID
    * @arg {XY} position
    * @arg {number} speed
    */
   constructor(animationID, {x, y}, speed) {
-    /** @type {Entity[]} */ const entities = []
+    /** @type {Animation[]} */ const entities = []
     util.range(0, (-27 - y) / 16).forEach(i =>
       entities.push(
         new Rain(

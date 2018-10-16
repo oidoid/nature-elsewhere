@@ -1,10 +1,10 @@
-import * as animation from '../textures/animation-id.js'
-import * as entity from './entity.js'
-import {DrawOrder} from './draw-order.js'
+import {Animation} from '../textures/animation.js'
+import {AnimationID} from '../textures/animation-id.js'
+import {DrawOrder} from '../textures/draw-order.js'
 
-export class Cloud extends entity.Entity {
+export class Cloud extends Animation {
   /**
-   * @arg {animation.AnimationID} animationID
+   * @arg {AnimationID} animationID
    * @arg {XY} position
    * @arg {XY} [speed]
    */

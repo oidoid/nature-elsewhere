@@ -1,10 +1,10 @@
 import * as atlas from '../textures/atlas.js'
-import * as entity from '../entities/entity.js'
 import * as util from '../util.js'
+import {Animation} from '../textures/animation.js'
 import {AnimationID} from '../textures/animation-id.js'
 import {Background} from '../entities/background.js'
 import {Cloud} from '../entities/cloud.js'
-import {EntityGroup} from '../entities/entity-group.js'
+import {Entity} from '../entities/entity.js'
 import {Grass} from '../entities/grass.js'
 import {Hill} from '../entities/hill.js'
 import {Limits} from '../graphics/limits.js'
@@ -16,8 +16,8 @@ import {Tree} from '../entities/tree.js'
 
 /**
  * @typedef {Readonly<{
- *   player: entity.Entity
- *   entities: ReadonlyArray<entity.Entity|EntityGroup>
+ *   player: Animation
+ *   entities: ReadonlyArray<Animation|Entity>
  * }>} Level0
  */
 

@@ -1,7 +1,7 @@
 import * as animation from '../textures/animation-id.js'
-import {Entity} from './entity.js'
+import {Animation} from '../textures/animation.js'
 
-export class Background extends Entity {
+export class Background extends Animation {
   /**
    * @arg {XY} position
    * @arg {XY} scale
