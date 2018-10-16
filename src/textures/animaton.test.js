@@ -1,12 +1,17 @@
 import * as atlas from './atlas.js'
+import * as recorder from './../inputs/recorder.js'
 import * as util from '../util.js'
-import {Animator} from './animator.js'
+import {Animation} from './animation.js'
+import {AnimationID} from './animation-id.js'
+
+const recorderState = new recorder.WriteState().read(0)
 
 describe('step()', () => {
   test('No cels', () => {
-    const subject = new Animator()
-    subject.step(1)
-    expect(subject).toMatchObject({_cel: 0, _celTime: 0})
+    const subject = new Animation(AnimationID.HILL)
+    const animation = {cels: [], direction: atlas.AnimationDirection.FORWARD}
+    subject.step(1, animation, recorderState)
+    expect(subject).toMatchObject({_period: 0, _celTime: 0})
   })
 
   test('time < duration', () => {
@@ -15,9 +20,9 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(1)
-    expect(subject).toMatchObject({_cel: 0, _celTime: 1})
+    const subject = new Animation(AnimationID.HILL)
+    subject.step(1, animation, recorderState)
+    expect(subject).toMatchObject({_period: 0, _celTime: 1})
   })
 
   test('time === duration', () => {
@@ -26,9 +31,9 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(1)
-    expect(subject).toMatchObject({_cel: 1, _celTime: 0})
+    const subject = new Animation(AnimationID.HILL)
+    subject.step(1, animation, recorderState)
+    expect(subject).toMatchObject({_period: 1, _celTime: 0})
   })
 
   test('time > duration', () => {
@@ -37,9 +42,9 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(2)
-    expect(subject).toMatchObject({_cel: 1, _celTime: 1})
+    const subject = new Animation(AnimationID.HILL)
+    subject.step(2, animation, recorderState)
+    expect(subject).toMatchObject({_period: 1, _celTime: 1})
   })
 })
 
@@ -53,9 +58,9 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel], direction}
-    const subject = new Animator(animation)
-    subject.step(1)
-    const actual = subject._celIndex
+    const subject = new Animation(AnimationID.HILL)
+    subject.step(1, animation, recorderState)
+    const actual = subject._cel(animation)
     expect(actual).toStrictEqual(1)
   })
 
@@ -68,9 +73,16 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel], direction}
-    const subject = new Animator(animation, 1)
-    subject.step(1)
-    const actual = subject._celIndex
+    const subject = new Animation(
+      AnimationID.HILL,
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+      {x: 0, y: 0},
+      {x: 0, y: 0},
+      1
+    )
+    subject.step(1, animation, recorderState)
+    const actual = subject._cel(animation)
     expect(actual).toStrictEqual(0)
   })
 
@@ -83,11 +95,11 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel, cel, cel, cel], direction}
-    const subject = new Animator(animation)
+    const subject = new Animation(AnimationID.HILL)
     const actual = []
     for (let i = 0; i < animation.cels.length * 3; ++i) {
-      subject.step(1)
-      actual.push(subject._celIndex)
+      subject.step(1, animation, recorderState)
+      actual.push(subject._cel(animation))
     }
     // prettier-ignore
     const expected = {

@@ -1,3 +1,4 @@
+import * as atlas from './atlas.js'
 import * as recorder from '../inputs/recorder.js'
 import {Animation} from './animation.js'
 import {AnimationID} from './animation-id.js'
@@ -13,17 +14,16 @@ export class PlayerAnimation extends Animation {
 
   /**
    * @arg {number} step
-   * @arg {Atlas} atlas
+   * @arg {atlas.Animation} animation
    * @arg {recorder.ReadState} recorder
    * @return {void}
    */
-  step(step, atlas, recorder) {
+  step(step, animation, recorder) {
+    super.step(step, animation, recorder)
     this.__scale(recorder)
     this.__position(recorder, step)
 
     this._animationID = this.__animationID(recorder)
-    this._animator.animation = atlas.animations[this._animationID]
-    this._animator.step(step)
   }
 
   /** @return {DrawOrder} */

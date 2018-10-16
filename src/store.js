@@ -49,11 +49,20 @@ export class Store {
    * @return {void}
    */
   step(step, atlas, recorder) {
-    this._entities.forEach(entity => entity.step(step, atlas, recorder))
+    this._entities.forEach(entity => {
+      if (entity instanceof Entity) {
+        entity.step(step, atlas, recorder)
+      } else {
+        entity.step(step, atlas.animations[entity.animationID], recorder)
+      }
+    })
   }
 
-  /** @return {void} */
-  flushUpdatesToMemory() {
+  /**
+   * @arg {Atlas} atlas
+   * @return {void}
+   */
+  flushUpdatesToMemory(atlas) {
     /** @type {ReadonlyArray<Animation>} */ const entities = this._entities
       .map(entity => (entity instanceof Entity ? entity.animations : entity))
       .reduce(util.flatten, [])
@@ -62,7 +71,7 @@ export class Store {
       this._memory = new Int16Array(minMemory * 2)
     }
     entities.forEach((entity, i) => {
-      const coord = entity.bounds
+      const coord = entity.bounds(atlas.animations[entity.animationID])
       // prettier-ignore
       this._memory.set([coord.x, coord.y, coord.w, coord.h,
                         entity._scrollPosition.x, entity._scrollPosition.y,

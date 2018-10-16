@@ -32,7 +32,7 @@ export class Entity {
    */
   step(step, atlas, recorder) {
     this._animations.forEach(animation => {
-      animation.step(step, atlas, recorder)
+      animation.step(step, atlas.animations[animation.animationID], recorder)
       animation._position.x += step * this._speed.x
       animation._position.y += step * this._speed.y
     })

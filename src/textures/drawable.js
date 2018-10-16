@@ -1,8 +1,7 @@
+import * as atlas from './atlas.js'
 import * as recorder from '../inputs/recorder.js'
 import {AnimationID} from './animation-id.js'
 import {DrawOrder} from './draw-order.js'
-
-/** @typedef {import('./player-animation.js').Atlas} Atlas */
 
 export class Drawable {
   /**
@@ -66,11 +65,11 @@ export class Drawable {
 
   /**
    * @arg {number} step
-   * @arg {Atlas} _atlas
+   * @arg {atlas.Animation} _animation
    * @arg {recorder.ReadState} _recorder
    * @return {void}
    */
-  step(step, _atlas, _recorder) {
+  step(step, _animation, _recorder) {
     this._scrollPosition.x += step * this._scrollSpeed.x
     this._scrollPosition.y += step * this._scrollSpeed.y
   }
