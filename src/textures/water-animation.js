@@ -5,7 +5,12 @@ import {DrawOrder} from './draw-order.js'
 export class WaterAnimation extends Animation {
   /** @arg {XY} position */
   constructor(position) {
-    super(AnimationID.WATER_M, position)
+    super(position)
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return AnimationID.WATER_M
   }
 
   /** @return {DrawOrder} */

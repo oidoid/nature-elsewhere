@@ -1,6 +1,5 @@
 /** @enum {number} */
 export const DrawOrder = {
-  DEFAULT: 0,
   BACKGROUND: 1,
   FAR_BACKGROUND_SCENERY: 2,
   NEAR_BACKGROUND_SCENERY: 3,

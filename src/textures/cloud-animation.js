@@ -8,7 +8,13 @@ export class CloudAnimation extends Animation {
    * @arg {XY} position
    */
   constructor(animationID, position) {
-    super(animationID, position)
+    super(position)
+    /** @type {AnimationID} */ this._animationID = animationID
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return this._animationID
   }
 
   /** @return {DrawOrder} */

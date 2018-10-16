@@ -9,7 +9,13 @@ export class GrassAnimation extends Animation {
    * @arg {XY} scale
    */
   constructor(animationID, position, scale = {x: 1, y: 1}) {
-    super(animationID, position, scale)
+    super(position, scale)
+    /** @type {AnimationID} */ this._animationID = animationID
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return this._animationID
   }
 
   /** @return {DrawOrder} */

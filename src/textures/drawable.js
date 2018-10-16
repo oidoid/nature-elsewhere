@@ -5,20 +5,17 @@ import {DrawOrder} from './draw-order.js'
 
 export class Drawable {
   /**
-   * @arg {AnimationID} animationID
    * @arg {XY} [position]
    * @arg {XY} [scale]
    * @arg {XY} [scrollSpeed]
    * @arg {XY} [scrollPosition]
    */
   constructor(
-    animationID,
     position = {x: 0, y: 0},
     scale = {x: 1, y: 1},
     scrollSpeed = {x: 0, y: 0},
     scrollPosition = {x: 0, y: 0}
   ) {
-    /** @type {AnimationID} */ this._animationID = animationID
     /** @type {Mutable<XY>} */ this._position = position
     /** @type {Mutable<XY>} */ this._scale = scale
     /** @type {XY} */ this._scrollSpeed = scrollSpeed
@@ -27,7 +24,12 @@ export class Drawable {
 
   /** @return {AnimationID} */
   get animationID() {
-    return this._animationID
+    throw new Error('animationID unspecified.')
+  }
+
+  /** @return {DrawOrder} */
+  get drawOrder() {
+    throw new Error('drawOrder unspecified.')
   }
 
   /** @return {XY} */
@@ -56,11 +58,6 @@ export class Drawable {
   /** @return {XY} */
   get scrollPosition() {
     return this._scrollPosition
-  }
-
-  /** @return {DrawOrder} */
-  get drawOrder() {
-    return DrawOrder.BACKGROUND
   }
 
   /**

@@ -5,7 +5,12 @@ import {DrawOrder} from './draw-order.js'
 export class TreeAnimation extends Animation {
   /** @arg {XY} position */
   constructor(position) {
-    super(AnimationID.TREE, position)
+    super(position)
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return AnimationID.TREE
   }
 
   /** @return {DrawOrder} */

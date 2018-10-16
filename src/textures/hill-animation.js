@@ -5,7 +5,12 @@ import {DrawOrder} from './draw-order.js'
 export class HillAnimation extends Animation {
   /** @arg {XY} position */
   constructor(position) {
-    super(AnimationID.HILL, position)
+    super(position)
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return AnimationID.HILL
   }
 
   /** @return {DrawOrder} */

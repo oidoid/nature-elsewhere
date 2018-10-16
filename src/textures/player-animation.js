@@ -9,7 +9,18 @@ import {DrawOrder} from './draw-order.js'
 export class PlayerAnimation extends Animation {
   /** @arg {XY} position */
   constructor(position) {
-    super(AnimationID.PLAYER_IDLE, position)
+    super(position)
+    /** @type {AnimationID} */ this._animationID = AnimationID.PLAYER_IDLE
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return this._animationID
+  }
+
+  /** @return {DrawOrder} */
+  get drawOrder() {
+    return DrawOrder.PLAYER
   }
 
   /**
@@ -24,11 +35,6 @@ export class PlayerAnimation extends Animation {
     this.__position(recorder, step)
 
     this._animationID = this.__animationID(recorder)
-  }
-
-  /** @return {DrawOrder} */
-  get drawOrder() {
-    return DrawOrder.PLAYER
   }
 
   /** @return {boolean} */

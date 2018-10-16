@@ -21,7 +21,7 @@ export class Entity {
 
   /** @return {DrawOrder} */
   get drawOrder() {
-    return DrawOrder.DEFAULT
+    throw new Error('drawOrder unspecified.')
   }
 
   /**

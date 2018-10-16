@@ -5,7 +5,12 @@ import {DrawOrder} from '../textures/draw-order.js'
 export class SuperBallAnimation extends Animation {
   /** @arg {XY} position */
   constructor(position) {
-    super(AnimationID.PALETTE_LIGHT_BLUE_TINT, position)
+    super(position)
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return AnimationID.PALETTE_LIGHT_BLUE_TINT
   }
 
   /** @return {DrawOrder} */

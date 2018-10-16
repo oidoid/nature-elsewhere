@@ -1,6 +1,5 @@
 import * as atlas from './atlas.js'
 import * as recorder from '../inputs/recorder.js'
-import {AnimationID} from './animation-id.js'
 import {Drawable} from './drawable.js'
 
 /** @typedef {import('./player-animation.js').Atlas} Atlas */
@@ -24,7 +23,6 @@ const Advance = {
 
 export class Animation extends Drawable {
   /**
-   * @arg {AnimationID} animationID
    * @arg {XY} [position]
    * @arg {XY} [scale]
    * @arg {XY} [scrollSpeed]
@@ -33,7 +31,6 @@ export class Animation extends Drawable {
    * @arg {number} [celTime]
    */
   constructor(
-    animationID,
     position = {x: 0, y: 0},
     scale = {x: 1, y: 1},
     scrollSpeed = {x: 0, y: 0},
@@ -41,7 +38,7 @@ export class Animation extends Drawable {
     cel = 0,
     celTime = 0
   ) {
-    super(animationID, position, scale, scrollSpeed, scrollPosition)
+    super(position, scale, scrollSpeed, scrollPosition)
     /** @type {number} */ this._period = cel
     /** @type {number} Cel exposure in milliseconds. */ this._celTime = celTime
   }

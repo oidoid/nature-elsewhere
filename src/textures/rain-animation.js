@@ -8,7 +8,12 @@ export class RainAnimation extends Animation {
    * @arg {number} scrollSpeed
    */
   constructor(position, scrollSpeed) {
-    super(AnimationID.RAIN, position, {x: 1, y: 1}, {x: 0, y: scrollSpeed})
+    super(position, {x: 1, y: 1}, {x: 0, y: scrollSpeed})
+  }
+
+  /** @return {AnimationID} */
+  get animationID() {
+    return AnimationID.RAIN
   }
 
   /** @return {DrawOrder} */
