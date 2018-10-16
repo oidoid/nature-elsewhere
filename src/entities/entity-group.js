@@ -17,10 +17,7 @@ export class EntityGroup {
 
   /** @return {DrawOrder} */
   get drawOrder() {
-    return this._entities.reduce(
-      (drawOrder, entity) => Math.max(drawOrder, entity.drawOrder),
-      DrawOrder.DEFAULT
-    )
+    return DrawOrder.DEFAULT
   }
 
   /**

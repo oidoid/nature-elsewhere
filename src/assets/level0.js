@@ -64,10 +64,7 @@ export function newState(atlas, random) {
     new RainCloud(AnimationID.CLOUD_L, {x: 20, y: -81}, -0.00008),
     ...util.range(0, 1000).map(i => {
       return new SuperBall(
-        {
-          x: (10 + i + random.int(0, 20)) % 80,
-          y: -100 + random.int(0, 50)
-        },
+        {x: (10 + i + random.int(0, 20)) % 80, y: -100 + random.int(0, 50)},
         {x: 0, y: 0.004}
       )
     })

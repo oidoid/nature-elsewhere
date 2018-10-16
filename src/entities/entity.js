@@ -20,9 +20,7 @@ export class Entity {
     scrollPosition = {x: 0, y: 0},
     scale = {x: 1, y: 1},
     scrollSpeed = {x: 0, y: 0},
-    speed = {x: 0, y: 0},
-    cel = 0,
-    celTime = 0
+    speed = {x: 0, y: 0}
   ) {
     /** @type {Mutable<XY>} */ this._position = position
     /** @type {animation.AnimationID} */ this._animationID = animationID
@@ -31,8 +29,6 @@ export class Entity {
     /** @type {Mutable<XY>} */ this._scale = scale
     /** @type {XY} */ this.scrollSpeed = scrollSpeed
     /** @type {XY} */ this._speed = speed
-    /** @type {number} */ this._cel = cel
-    /** @type {number} Cel exposure in milliseconds. */ this._celTime = celTime
   }
 
   /**
