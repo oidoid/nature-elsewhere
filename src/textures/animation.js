@@ -1,46 +1,33 @@
 import * as atlas from './atlas.js'
 import * as recorder from '../inputs/recorder.js'
-import {Drawable} from './drawable.js'
+import {AnimationID} from './animation-id.js'
+import {Animator} from './animator.js'
+import {DrawOrder} from './draw-order.js'
+import {Texture} from './texture.js'
 
-/** @typedef {import('./player-animation.js').Atlas} Atlas */
-
-/**
- * @type {Readonly<
- *   Record<atlas.AnimationDirection, (cel: number, length: number) => number>
- * >}
- */
-const Advance = {
-  [atlas.AnimationDirection.FORWARD](cel) {
-    return cel + 1
-  },
-  [atlas.AnimationDirection.REVERSE](cel, length) {
-    return cel - 1 + length
-  },
-  [atlas.AnimationDirection.PING_PONG](cel, length) {
-    return ((cel - 1 - (length - 1)) % (2 * (length - 1))) + (length - 1)
-  }
-}
-
-export class Animation extends Drawable {
+export class Animation extends Texture {
   /**
-   * @arg {XY} [position]
-   * @arg {XY} [scale]
-   * @arg {XY} [scrollSpeed]
-   * @arg {XY} [scrollPosition]
-   * @arg {number} [cel]
-   * @arg {number} [celTime]
+   * @arg {AnimationID} animationID
+   * @arg {DrawOrder} drawOrder
    */
-  constructor(
-    position = {x: 0, y: 0},
-    scale = {x: 1, y: 1},
-    scrollSpeed = {x: 0, y: 0},
-    scrollPosition = {x: 0, y: 0},
-    cel = 0,
-    celTime = 0
-  ) {
-    super(position, scale, scrollSpeed, scrollPosition)
-    /** @type {number} */ this._period = cel
-    /** @type {number} Cel exposure in milliseconds. */ this._celTime = celTime
+  constructor(animationID, drawOrder) {
+    super(animationID, drawOrder)
+    /** @type {Mutable<XY>} */ this._scrollSpeed = {x: 0, y: 0}
+    /** @type {Animator|undefined} */ this._animator = undefined
+  }
+
+  /** @return {XY} */
+  getScrollSpeed() {
+    return this._scrollSpeed
+  }
+
+  /**
+   * @arg {XY} val
+   * @return {this}
+   */
+  setScrollSpeed(val) {
+    this._scrollSpeed = val
+    return this
   }
 
   /**
@@ -50,43 +37,16 @@ export class Animation extends Drawable {
    * @return {void}
    */
   step(step, animation, _recorder) {
-    super.step(step, animation, _recorder)
-    if (animation.cels.length === 0) return
-
-    const time = this._celTime + step
-    const duration = animation.cels[this._cel(animation)].duration
-    if (time < duration) {
-      this._celTime = time
-    } else {
-      this._celTime = time - duration
-      this._advance(animation)
+    this._scrollPosition.x += step * this._scrollSpeed.x
+    this._scrollPosition.y += step * this._scrollSpeed.y
+    if (!this._animator || this._animator.animation !== animation) {
+      this._animator = new Animator(animation)
     }
+    this._animator.step(step)
   }
 
-  /**
-   * @arg {atlas.Animation} animation
-   * @return {Rect}
-   */
-  bounds(animation) {
-    return animation.cels[this._cel(animation)].bounds
-  }
-
-  /**
-   * @arg {atlas.Animation} animation
-   * @return {number}
-   */
-  _cel(animation) {
-    return Math.abs(this._period % animation.cels.length)
-  }
-
-  /**
-   * @arg {atlas.Animation} animation
-   * @return {void}
-   */
-  _advance(animation) {
-    const advance = Advance[animation.direction]
-    const msg = `Unknown AnimationDirection "${animation.direction}".`
-    if (!advance) throw new Error(msg)
-    this._period = advance(this._period, animation.cels.length)
+  /** @return {Rect} */
+  get bounds() {
+    return this._animator ? this._animator.bounds : {x: 0, y: 0, w: 0, h: 0}
   }
 }

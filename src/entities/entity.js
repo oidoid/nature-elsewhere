@@ -15,12 +15,12 @@ export class Entity {
   }
 
   /** @return {ReadonlyArray<Animation>} */
-  get animations() {
+  getAnimations() {
     return this._animations
   }
 
   /** @return {DrawOrder} */
-  get drawOrder() {
+  getDrawOrder() {
     throw new Error('drawOrder unspecified.')
   }
 
@@ -32,7 +32,11 @@ export class Entity {
    */
   step(step, atlas, recorder) {
     this._animations.forEach(animation => {
-      animation.step(step, atlas.animations[animation.animationID], recorder)
+      animation.step(
+        step,
+        atlas.animations[animation.getAnimationID()],
+        recorder
+      )
       animation._position.x += step * this._speed.x
       animation._position.y += step * this._speed.y
     })

@@ -17,25 +17,28 @@ export class RainCloud extends Entity {
     /** @type {Animation[]} */ const animations = []
     util.range(0, (-27 - y) / 16).forEach(i =>
       animations.push(
-        new RainAnimation(
-          {
+        new RainAnimation()
+          .setPosition({
             // Round now to prevent rain from being an extra pixel off due to
             // truncation later.
             x: x + Math.round((i + 1) / 2),
             y: y + 6 + i * 16 - Math.max(0, y + 6 + i * 16 - -12)
-          },
-          -0.012
-        )
+          })
+          .setScrollSpeed({
+            x: 0,
+            y: -0.012
+          })
       )
     )
-    animations.push(new WaterAnimation({x: x + 1, y: -12}))
-    animations.push(new CloudAnimation(animationID, {x, y}))
+
+    animations.push(new WaterAnimation().setPosition({x: x + 1, y: -12}))
+    animations.push(new CloudAnimation(animationID).setPosition({x, y}))
 
     super(animations, {x: speed, y: 0})
   }
 
   /** @return {DrawOrder} */
-  get drawOrder() {
+  getDrawOrder() {
     return DrawOrder.CLOUDS
   }
 }

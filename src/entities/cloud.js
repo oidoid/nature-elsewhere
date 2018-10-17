@@ -10,11 +10,11 @@ export class Cloud extends Entity {
    * @arg {XY} [speed]
    */
   constructor(animationID, position, speed) {
-    super([new CloudAnimation(animationID, position)], speed)
+    super([new CloudAnimation(animationID).setPosition(position)], speed)
   }
 
   /** @return {DrawOrder} */
-  get drawOrder() {
+  getDrawOrder() {
     return DrawOrder.CLOUDS
   }
 }

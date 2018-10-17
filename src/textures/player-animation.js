@@ -7,20 +7,8 @@ import {DrawOrder} from './draw-order.js'
 /** @typedef {import('./atlas.js').Atlas} Atlas} */
 
 export class PlayerAnimation extends Animation {
-  /** @arg {XY} position */
-  constructor(position) {
-    super(position)
-    /** @type {AnimationID} */ this._animationID = AnimationID.PLAYER_IDLE
-  }
-
-  /** @return {AnimationID} */
-  get animationID() {
-    return this._animationID
-  }
-
-  /** @return {DrawOrder} */
-  get drawOrder() {
-    return DrawOrder.PLAYER
+  constructor() {
+    super(AnimationID.PLAYER_IDLE, DrawOrder.PLAYER)
   }
 
   /**
@@ -30,11 +18,10 @@ export class PlayerAnimation extends Animation {
    * @return {void}
    */
   step(step, animation, recorder) {
-    super.step(step, animation, recorder)
     this.__scale(recorder)
     this.__position(recorder, step)
-
     this._animationID = this.__animationID(recorder)
+    super.step(step, animation, recorder)
   }
 
   /** @return {boolean} */

@@ -146,7 +146,7 @@ export class Game {
     }
 
     this._store.step(step, this._atlas, this._recorder)
-    this._store.flushUpdatesToMemory(this._atlas)
+    this._store.flushUpdatesToMemory()
     // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
     // scaling.
     const canvas = {

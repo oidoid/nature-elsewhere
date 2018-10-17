@@ -20,7 +20,8 @@ export class Store {
   /** @return {number} */
   get length() {
     return this._entities.reduce(
-      (sum, val) => sum + (val instanceof Entity ? val.animations.length : 1),
+      (sum, val) =>
+        sum + (val instanceof Entity ? val.getAnimations().length : 1),
       0
     )
   }
@@ -32,7 +33,7 @@ export class Store {
   spawn(entities) {
     entities.forEach(entity => {
       let index = this._entities.findIndex(
-        val => entity.drawOrder <= val.drawOrder
+        val => entity.getDrawOrder() <= val.getDrawOrder()
       )
       this._entities.splice(
         index === -1 ? this._entities.length : index,
@@ -53,25 +54,24 @@ export class Store {
       if (entity instanceof Entity) {
         entity.step(step, atlas, recorder)
       } else {
-        entity.step(step, atlas.animations[entity.animationID], recorder)
+        entity.step(step, atlas.animations[entity.getAnimationID()], recorder)
       }
     })
   }
 
-  /**
-   * @arg {Atlas} atlas
-   * @return {void}
-   */
-  flushUpdatesToMemory(atlas) {
+  /** @return {void} */
+  flushUpdatesToMemory() {
     /** @type {ReadonlyArray<Animation>} */ const entities = this._entities
-      .map(entity => (entity instanceof Entity ? entity.animations : entity))
+      .map(
+        entity => (entity instanceof Entity ? entity.getAnimations() : entity)
+      )
       .reduce(util.flatten, [])
     const minMemory = entities.length * shader.layout.perInstance.length
     if (this._memory.length < minMemory) {
       this._memory = new Int16Array(minMemory * 2)
     }
     entities.forEach((entity, i) => {
-      const coord = entity.bounds(atlas.animations[entity.animationID])
+      const coord = entity.bounds
       // prettier-ignore
       this._memory.set([coord.x, coord.y, coord.w, coord.h,
                         entity._scrollPosition.x, entity._scrollPosition.y,

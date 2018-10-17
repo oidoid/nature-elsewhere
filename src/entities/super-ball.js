@@ -8,11 +8,11 @@ export class SuperBall extends Entity {
    * @arg {XY} speed
    */
   constructor(position, speed) {
-    super([new SuperBallAnimation(position)], speed)
+    super([new SuperBallAnimation().setPosition(position)], speed)
   }
 
   /** @return {DrawOrder} */
-  get drawOrder() {
+  getDrawOrder() {
     return DrawOrder.SUPER_BALL
   }
 }
