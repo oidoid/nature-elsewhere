@@ -39,14 +39,16 @@ export class Animation extends Texture {
   step(step, animation, _recorder) {
     this._scrollPosition.x += step * this._scrollSpeed.x
     this._scrollPosition.y += step * this._scrollSpeed.y
-    if (!this._animator || this._animator.animation !== animation) {
+    if (!this._animator || this._animator.getAnimation() !== animation) {
       this._animator = new Animator(animation)
     }
     this._animator.step(step)
   }
 
   /** @return {Rect} */
-  get bounds() {
-    return this._animator ? this._animator.bounds : {x: 0, y: 0, w: 0, h: 0}
+  getBounds() {
+    return this._animator
+      ? this._animator.getBounds()
+      : {x: 0, y: 0, w: 0, h: 0}
   }
 }

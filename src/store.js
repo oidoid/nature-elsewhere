@@ -13,12 +13,12 @@ export class Store {
   }
 
   /** @return {Int16Array} */
-  get memory() {
+  getMemory() {
     return this._memory
   }
 
   /** @return {number} */
-  get length() {
+  getLength() {
     return this._entities.reduce(
       (sum, val) =>
         sum + (val instanceof Entity ? val.getAnimations().length : 1),
@@ -71,7 +71,7 @@ export class Store {
       this._memory = new Int16Array(minMemory * 2)
     }
     entities.forEach((entity, i) => {
-      const coord = entity.bounds
+      const coord = entity.getBounds()
       // prettier-ignore
       this._memory.set([coord.x, coord.y, coord.w, coord.h,
                         entity._scrollPosition.x, entity._scrollPosition.y,

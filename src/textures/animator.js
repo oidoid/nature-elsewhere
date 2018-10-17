@@ -30,12 +30,12 @@ export class Animator {
   }
 
   /** @return {atlas.Animation} */
-  get animation() {
+  getAnimation() {
     return this._animation
   }
 
   /** @return {Rect} */
-  get bounds() {
+  getBounds() {
     return this._animation.cels[this._cel()].bounds
   }
 

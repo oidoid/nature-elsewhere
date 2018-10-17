@@ -161,8 +161,8 @@ export class Game {
       canvas,
       scale,
       {x: this._player._position.x, y: this._player._position.y + 20},
-      this._store.memory,
-      this._store.length
+      this._store.getMemory(),
+      this._store.getLength()
     )
   }
 
