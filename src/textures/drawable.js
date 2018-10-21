@@ -1,14 +1,11 @@
+import {AnimationDrawOrder} from './animation-draw-order.js'
 import {AnimationID} from './animation-id.js'
 import {DrawOrder} from './draw-order.js'
 
-export class Texture {
-  /**
-   * @param {AnimationID} animationID
-   * @param {DrawOrder} drawOrder
-   */
-  constructor(animationID, drawOrder) {
+export class Drawable {
+  /** @param {AnimationID} animationID */
+  constructor(animationID) {
     /** @type {AnimationID} */ this._animationID = animationID
-    /** @type {DrawOrder} */ this._drawOrder = drawOrder
     /** @type {Mutable<XY>} */ this._position = {x: 0, y: 0}
     /** @type {Mutable<XY>} */ this._scale = {x: 1, y: 1}
     /** @type {Mutable<XY>} */ this._scrollPosition = {x: 0, y: 0}
@@ -30,7 +27,7 @@ export class Texture {
 
   /** @return {DrawOrder} */
   getDrawOrder() {
-    return this._drawOrder
+    return AnimationDrawOrder[this._animationID]
   }
 
   /**

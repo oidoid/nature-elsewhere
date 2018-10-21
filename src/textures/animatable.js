@@ -2,16 +2,12 @@ import * as atlas from './atlas.js'
 import * as recorder from '../inputs/recorder.js'
 import {AnimationID} from './animation-id.js'
 import {Animator} from './animator.js'
-import {DrawOrder} from './draw-order.js'
-import {Texture} from './texture.js'
+import {Drawable} from './drawable.js'
 
-export class Animation extends Texture {
-  /**
-   * @arg {AnimationID} animationID
-   * @arg {DrawOrder} drawOrder
-   */
-  constructor(animationID, drawOrder) {
-    super(animationID, drawOrder)
+export class Animatable extends Drawable {
+  /** @arg {AnimationID} animationID */
+  constructor(animationID) {
+    super(animationID)
     /** @type {Mutable<XY>} */ this._scrollSpeed = {x: 0, y: 0}
     /** @type {Animator|undefined} */ this._animator = undefined
   }

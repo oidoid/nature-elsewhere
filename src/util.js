@@ -40,18 +40,6 @@ export function keys(obj) {
 }
 
 /**
- * https://github.com/Microsoft/TypeScript/pull/12253
- * @template T
- * @arg {T} obj
- * @return {ReadonlyArray<[keyof T, ValueOf<T>]>}
- */
-export function entries(obj) {
-  /** @type {[keyof T, ValueOf<T>][]} */ const keys = []
-  for (const key in obj) if (obj.hasOwnProperty(key)) keys.push([key, obj[key]])
-  return keys
-}
-
-/**
  * Keep enum typing.
  * @template T
  * @arg {T} obj

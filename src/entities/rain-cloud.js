@@ -1,11 +1,8 @@
 import * as util from '../util.js'
-import {Animation} from '../textures/animation.js'
+import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from '../textures/animation-id.js'
 import {Entity} from './entity.js'
-import {CloudAnimation} from '../textures/cloud-animation.js'
 import {DrawOrder} from '../textures/draw-order.js'
-import {RainAnimation} from '../textures/rain-animation.js'
-import {WaterAnimation} from '../textures/water-animation.js'
 
 export class RainCloud extends Entity {
   /**
@@ -14,10 +11,11 @@ export class RainCloud extends Entity {
    * @arg {number} speed
    */
   constructor(animationID, {x, y}, speed) {
-    /** @type {Animation[]} */ const animations = []
+    super()
+    /** @type {Animatable[]} */ const animatables = []
     util.range(0, (-27 - y) / 16).forEach(i =>
-      animations.push(
-        new RainAnimation()
+      animatables.push(
+        new Animatable(AnimationID.RAIN)
           .setPosition({
             // Round now to prevent rain from being an extra pixel off due to
             // truncation later.
@@ -31,10 +29,13 @@ export class RainCloud extends Entity {
       )
     )
 
-    animations.push(new WaterAnimation().setPosition({x: x + 1, y: -12}))
-    animations.push(new CloudAnimation(animationID).setPosition({x, y}))
+    animatables.push(
+      new Animatable(AnimationID.WATER_M).setPosition({x: x + 1, y: -12})
+    )
+    animatables.push(new Animatable(animationID).setPosition({x, y}))
 
-    super(animations, {x: speed, y: 0})
+    this.setAnimatables(animatables)
+    this.setSpeed({x: speed, y: 0})
   }
 
   /** @return {DrawOrder} */

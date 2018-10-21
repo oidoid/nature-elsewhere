@@ -1,7 +1,7 @@
 import * as recorder from './inputs/recorder.js'
 import * as shader from './graphics/shader.js'
 import * as util from './util.js'
-import {Animation} from './textures/animation.js'
+import {Animatable} from './textures/animatable.js'
 import {Entity} from './entities/entity.js'
 
 /** @typedef {import('./textures/atlas.js').Atlas} Atlas} */
@@ -9,7 +9,7 @@ import {Entity} from './entities/entity.js'
 export class Store {
   constructor() {
     /** @prop {Int16Array} */ this._memory = new Int16Array()
-    /** @prop {ReadonlyArray<Entity | EntityGroup>} */ this._entities = /** @type {(Animation | Entity)[]} */ ([])
+    /** @prop {ReadonlyArray<Entity | EntityGroup>} */ this._entities = /** @type {(Animatable | Entity)[]} */ ([])
   }
 
   /** @return {Int16Array} */
@@ -21,13 +21,13 @@ export class Store {
   getLength() {
     return this._entities.reduce(
       (sum, val) =>
-        sum + (val instanceof Entity ? val.getAnimations().length : 1),
+        sum + (val instanceof Entity ? val.getAnimatables().length : 1),
       0
     )
   }
 
   /**
-   * @arg {ReadonlyArray<Animation | Entity>} entities
+   * @arg {ReadonlyArray<Animatable | Entity>} entities
    * @return {void}
    */
   spawn(entities) {
@@ -61,9 +61,9 @@ export class Store {
 
   /** @return {void} */
   flushUpdatesToMemory() {
-    /** @type {ReadonlyArray<Animation>} */ const entities = this._entities
+    /** @type {ReadonlyArray<Animatable>} */ const entities = this._entities
       .map(
-        entity => (entity instanceof Entity ? entity.getAnimations() : entity)
+        entity => (entity instanceof Entity ? entity.getAnimatables() : entity)
       )
       .reduce(util.flatten, [])
     const minMemory = entities.length * shader.layout.perInstance.length

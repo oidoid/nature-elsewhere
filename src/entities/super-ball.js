@@ -1,6 +1,7 @@
 import {DrawOrder} from '../textures/draw-order.js'
-import {SuperBallAnimation} from '../textures/super-ball-animation.js'
 import {Entity} from './entity.js'
+import {Animatable} from '../textures/animatable.js'
+import {AnimationID} from '../textures/animation-id.js'
 
 export class SuperBall extends Entity {
   /**
@@ -8,7 +9,11 @@ export class SuperBall extends Entity {
    * @arg {XY} speed
    */
   constructor(position, speed) {
-    super([new SuperBallAnimation().setPosition(position)], speed)
+    super()
+    this.setAnimatables([
+      new Animatable(AnimationID.PALETTE_LIGHT_BLUE_TINT).setPosition(position)
+    ])
+    this.setSpeed(speed)
   }
 
   /** @return {DrawOrder} */

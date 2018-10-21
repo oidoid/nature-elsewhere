@@ -1,7 +1,7 @@
+import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from '../textures/animation-id.js'
 import {DrawOrder} from '../textures/draw-order.js'
 import {Entity} from './entity.js'
-import {CloudAnimation} from '../textures/cloud-animation.js'
 
 export class Cloud extends Entity {
   /**
@@ -10,7 +10,9 @@ export class Cloud extends Entity {
    * @arg {XY} [speed]
    */
   constructor(animationID, position, speed) {
-    super([new CloudAnimation(animationID).setPosition(position)], speed)
+    super()
+    this.setAnimatables([new Animatable(animationID).setPosition(position)])
+    if (speed) this.setSpeed(speed)
   }
 
   /** @return {DrawOrder} */

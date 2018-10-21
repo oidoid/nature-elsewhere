@@ -1,10 +1,9 @@
 import * as aseprite from '../parsers/aseprite.js'
+import {AnimationID} from './animation-id.js'
 
 /** @typedef {Readonly<{size: WH; animations: AnimationMap}>} Atlas */
 
 /** @typedef {Readonly<Record<AnimationID, Animation>>} AnimationMap */
-
-/** @typedef {aseprite.Tag} AnimationID */
 
 /**
  * Animation and collision frames.
