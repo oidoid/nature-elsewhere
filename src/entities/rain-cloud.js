@@ -1,6 +1,6 @@
 import * as util from '../util.js'
 import {Animatable} from '../textures/animatable.js'
-import {AnimationID} from '../textures/animation-id.js'
+import {AnimationID} from '../assets/animation-id.js'
 import {Entity} from './entity.js'
 import {DrawOrder} from '../textures/draw-order.js'
 

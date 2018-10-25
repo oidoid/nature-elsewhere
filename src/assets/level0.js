@@ -1,7 +1,7 @@
 import * as atlas from '../textures/atlas.js'
 import * as util from '../util.js'
 import {Animatable} from '../textures/animatable.js'
-import {AnimationID} from '../textures/animation-id.js'
+import {AnimationID} from './animation-id.js'
 import {Cloud} from '../entities/cloud.js'
 import {Entity} from '../entities/entity.js'
 import {Limits} from '../graphics/limits.js'

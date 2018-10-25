@@ -1,5 +1,5 @@
 import {AnimationID} from './animation-id.js'
-import {DrawOrder} from './draw-order.js'
+import {DrawOrder} from '../textures/draw-order.js'
 
 /** @type {Readonly<Record<AnimationID,DrawOrder>>} */
 export const AnimationDrawOrder = {

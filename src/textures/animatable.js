@@ -1,6 +1,6 @@
 import * as atlas from './atlas.js'
 import * as recorder from '../inputs/recorder.js'
-import {AnimationID} from './animation-id.js'
+import {AnimationID} from '../assets/animation-id.js'
 import {Animator} from './animator.js'
 import {Drawable} from './drawable.js'
 

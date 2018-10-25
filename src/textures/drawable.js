@@ -1,5 +1,5 @@
-import {AnimationDrawOrder} from './animation-draw-order.js'
-import {AnimationID} from './animation-id.js'
+import {AnimationDrawOrder} from '../assets/animation-draw-order.js'
+import {AnimationID} from '../assets/animation-id.js'
 import {DrawOrder} from './draw-order.js'
 
 export class Drawable {
