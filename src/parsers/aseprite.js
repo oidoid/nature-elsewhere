@@ -28,8 +28,8 @@
  * @prop {string} version E.g., '1.2.8.1'.
  * @prop {string} image  The associated output. E.g., 'atlas.png'.
  * @prop {string} format E.g., 'RGBA8888' or 'I8'.
- * @prop {WH} size Output dimensions. **Via CLI** `--sheet-pack`, uses
- *                           a power of 2.
+ * @prop {WH} size Output dimensions. **Via CLI** `--sheet-pack`, uses a power
+ *                 of 2.
  * @prop {string} scale E.g., '1'.
  * @prop {ReadonlyArray<FrameTag>} frameTags All FrameTags for all files packed
  *                                           **via CLI** `--list-tags`.
