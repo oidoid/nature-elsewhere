@@ -75,6 +75,68 @@ describe('celIndex', () => {
     expect(actual).toStrictEqual(0)
   })
 
+  test.each([
+    [
+      atlas.AnimationDirection.FORWARD,
+      Number.MIN_SAFE_INTEGER,
+      [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
+    ],
+    [
+      atlas.AnimationDirection.FORWARD,
+      0,
+      [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
+    ],
+    [
+      atlas.AnimationDirection.FORWARD,
+      Number.MAX_SAFE_INTEGER,
+      [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
+    ],
+    [
+      atlas.AnimationDirection.REVERSE,
+      Number.MIN_SAFE_INTEGER,
+      [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
+    ],
+    [
+      atlas.AnimationDirection.REVERSE,
+      0,
+      [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
+    ],
+    [
+      atlas.AnimationDirection.REVERSE,
+      Number.MIN_SAFE_INTEGER,
+      [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
+    ],
+    [
+      atlas.AnimationDirection.PING_PONG,
+      -2,
+      [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2]
+    ],
+    [
+      atlas.AnimationDirection.PING_PONG,
+      0,
+      [1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2]
+    ],
+    [
+      atlas.AnimationDirection.PING_PONG,
+      3,
+      [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
+    ]
+  ])('%# direction %p bounds %p', (
+    /** @type {atlas.AnimationDirection} */ direction,
+    /** @type {number} */ period,
+    /** @type {ReadonlyArray<number>} */ expected
+  ) => {
+    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
+    const animation = {cels: [cel, cel, cel, cel], direction}
+    const subject = animator.newState(animation, period)
+    const actual = []
+    for (let i = 0; i < animation.cels.length * 5; ++i) {
+      animator.step(subject, 1)
+      actual.push(animator.celIndex(subject))
+    }
+    expect(actual).toStrictEqual(expected)
+  })
+
   test.each(
     /** @type {atlas.AnimationDirection[]} */ (util.values(
       atlas.AnimationDirection

@@ -15,12 +15,13 @@ import * as atlas from './atlas.js'
  */
 const NextCel = {
   [atlas.AnimationDirection.FORWARD](period) {
-    return period + 1
+    return (period % Number.MAX_SAFE_INTEGER) + 1
   },
   [atlas.AnimationDirection.REVERSE](period, length) {
-    return period - 1 + length
+    return (period % Number.MIN_SAFE_INTEGER) - 1 + length
   },
   [atlas.AnimationDirection.PING_PONG](period, length) {
+    // The valid domain of period is [-(length - 2), length - 1].
     return ((period - 1 - (length - 1)) % (2 * (length - 1))) + (length - 1)
   }
 }
