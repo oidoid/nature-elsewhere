@@ -5,7 +5,7 @@ import * as atlas from './atlas.js'
  * @prop {atlas.Animation} animation
  * @prop {number} period Cel index oscillation state. This value may fall out of
  *                       animation bounds.
- * @prop {number} exposure Cel exposure in milliseconds.
+ * @prop {number} duration Cel exposure in milliseconds.
  */
 
 /**
@@ -28,11 +28,11 @@ const NextCel = {
 /**
  * @arg {atlas.Animation} animation
  * @arg {number} [period]
- * @arg {number} [exposure]
+ * @arg {number} [duration]
  * @return {State}
  */
-export function newState(animation, period = 0, exposure = 0) {
-  return {animation, period, exposure}
+export function newState(animation, period = 0, duration = 0) {
+  return {animation, period, duration}
 }
 
 /**
@@ -59,14 +59,13 @@ export function celIndex({animation, period}) {
 export function step(state, step) {
   if (state.animation.cels.length < 2) return
 
-  const exposure = state.exposure + step
-  const duration = cel(state).duration
-  if (exposure < duration) {
+  const duration = state.duration + step
+  if (duration < cel(state).duration) {
     // Hold cel.
-    state.exposure = exposure
+    state.duration = duration
   } else {
     // Advance cel.
-    state.exposure = exposure - duration
+    state.duration = duration - cel(state).duration
     state.period = NextCel[state.animation.direction](
       state.period,
       state.animation.cels.length
