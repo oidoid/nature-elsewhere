@@ -1,6 +1,6 @@
-import {AnimationDrawOrder} from '../assets/animation-draw-order.js'
+import {AnimationLayer} from '../assets/animation-layer.js'
 import {AnimationID} from '../assets/animation-id.js'
-import {DrawOrder} from './draw-order.js'
+import {Layer} from './layer.js'
 
 export class Drawable {
   /** @param {AnimationID} animationID */
@@ -25,13 +25,13 @@ export class Drawable {
     return this
   }
 
-  /** @return {DrawOrder} */
+  /** @return {Layer} */
   getDrawOrder() {
-    return AnimationDrawOrder[this._animationID]
+    return AnimationLayer[this._animationID]
   }
 
   /**
-   * @arg {DrawOrder} val
+   * @arg {Layer} val
    * @return {this}
    */
   setDrawOrder(val) {

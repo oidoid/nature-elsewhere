@@ -3,7 +3,7 @@ import * as recorder from '../inputs/recorder.js'
 import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from '../assets/animation-id.js'
 import {Entity} from './entity.js'
-import {DrawOrder} from '../textures/draw-order.js'
+import {Layer} from '../textures/layer.js'
 
 export class Player extends Entity {
   constructor() {
@@ -149,8 +149,8 @@ export class Player extends Entity {
     })
   }
 
-  /** @return {DrawOrder} */
+  /** @return {Layer} */
   getDrawOrder() {
-    return DrawOrder.PLAYER
+    return Layer.PLAYER
   }
 }

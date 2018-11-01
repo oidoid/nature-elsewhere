@@ -1,6 +1,6 @@
 import * as recorder from '../inputs/recorder.js'
 import {Animatable} from '../textures/animatable.js'
-import {DrawOrder} from '../textures/draw-order.js'
+import {Layer} from '../textures/layer.js'
 
 /** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
 
@@ -41,7 +41,7 @@ export class Entity {
     this._speed = speed
   }
 
-  /** @return {DrawOrder} */
+  /** @return {Layer} */
   getDrawOrder() {
     throw new Error('drawOrder unspecified.')
   }

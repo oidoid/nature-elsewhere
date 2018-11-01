@@ -1,4 +1,4 @@
-import {DrawOrder} from '../textures/draw-order.js'
+import {Layer} from '../textures/layer.js'
 import {Entity} from './entity.js'
 import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from '../assets/animation-id.js'
@@ -16,8 +16,8 @@ export class SuperBall extends Entity {
     this.setSpeed(speed)
   }
 
-  /** @return {DrawOrder} */
+  /** @return {Layer} */
   getDrawOrder() {
-    return DrawOrder.SUPER_BALL
+    return Layer.SUPER_BALL
   }
 }

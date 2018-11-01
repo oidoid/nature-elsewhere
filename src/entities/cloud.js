@@ -1,6 +1,6 @@
 import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from '../assets/animation-id.js'
-import {DrawOrder} from '../textures/draw-order.js'
+import {Layer} from '../textures/layer.js'
 import {Entity} from './entity.js'
 
 export class Cloud extends Entity {
@@ -15,8 +15,8 @@ export class Cloud extends Entity {
     if (speed) this.setSpeed(speed)
   }
 
-  /** @return {DrawOrder} */
+  /** @return {Layer} */
   getDrawOrder() {
-    return DrawOrder.CLOUDS
+    return Layer.CLOUDS
   }
 }

@@ -2,7 +2,7 @@ import * as util from '../util.js'
 import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from '../assets/animation-id.js'
 import {Entity} from './entity.js'
-import {DrawOrder} from '../textures/draw-order.js'
+import {Layer} from '../textures/layer.js'
 
 export class RainCloud extends Entity {
   /**
@@ -38,8 +38,8 @@ export class RainCloud extends Entity {
     this.setSpeed({x: speed, y: 0})
   }
 
-  /** @return {DrawOrder} */
+  /** @return {Layer} */
   getDrawOrder() {
-    return DrawOrder.CLOUDS
+    return Layer.CLOUDS
   }
 }

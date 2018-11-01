@@ -1,5 +1,5 @@
 /** @enum {number} */
-export const DrawOrder = {
+export const Layer = {
   BACKGROUND: 1,
   FAR_BACKGROUND_SCENERY: 2,
   NEAR_BACKGROUND_SCENERY: 3,
