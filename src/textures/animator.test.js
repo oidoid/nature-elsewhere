@@ -78,11 +78,6 @@ describe('celIndex', () => {
   test.each([
     [
       atlas.AnimationDirection.FORWARD,
-      Number.MIN_SAFE_INTEGER,
-      [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
-    ],
-    [
-      atlas.AnimationDirection.FORWARD,
       0,
       [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
     ],
@@ -99,11 +94,6 @@ describe('celIndex', () => {
     [
       atlas.AnimationDirection.REVERSE,
       0,
-      [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
-    ],
-    [
-      atlas.AnimationDirection.REVERSE,
-      Number.MIN_SAFE_INTEGER,
       [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
     ],
     [

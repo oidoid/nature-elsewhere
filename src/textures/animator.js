@@ -3,8 +3,8 @@ import * as atlas from './atlas.js'
 /**
  * @typedef {Object} State
  * @prop {atlas.Animation} animation
- * @prop {number} period Cel index oscillation state. This value may fall out of
- *                       animation bounds.
+ * @prop {number} period Cel index oscillation state. This integer may fall out
+ *                       of animation bounds.
  * @prop {number} duration Cel exposure in milliseconds.
  */
 
@@ -14,14 +14,19 @@ import * as atlas from './atlas.js'
  * >}
  */
 const NextCel = {
+  /** @arg {number} period An integer in the domain [0, +∞). */
   [atlas.AnimationDirection.FORWARD](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
+  /** @arg {number} period An integer in the domain (-∞, 0]. */
   [atlas.AnimationDirection.REVERSE](period, length) {
     return (period % Number.MIN_SAFE_INTEGER) - 1 + length
   },
+  /**
+   * @arg {number} period An integer in the domain
+   *                      [-animation.length + 2, animation.length - 1].
+   */
   [atlas.AnimationDirection.PING_PONG](period, length) {
-    // The valid domain of period is [-(length - 2), length - 1].
     return ((period - 1 - (length - 1)) % (2 * (length - 1))) + (length - 1)
   }
 }
