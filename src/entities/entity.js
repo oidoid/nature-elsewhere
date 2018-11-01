@@ -1,22 +1,23 @@
+import * as animatable from '../textures/animatable.js'
 import * as recorder from '../inputs/recorder.js'
-import {Animatable} from '../textures/animatable.js'
+import {AnimationLayer} from '../assets/animation-layer.js'
 import {Layer} from '../textures/layer.js'
 
-/** @typedef {import('../textures/atlas.js').Atlas} Atlas} */
+/** @typedef {import('../textures/atlas').Atlas} Atlas} */
 
 export class Entity {
   constructor() {
-    /** @type {ReadonlyArray<Animatable>} */ this._animatables = []
+    /** @type {ReadonlyArray<animatable.State>} */ this._animatables = []
     /** @type {XY} */ this._speed = {x: 0, y: 0}
   }
 
-  /** @return {ReadonlyArray<Animatable>} */
+  /** @return {ReadonlyArray<animatable.State>} */
   getAnimatables() {
     return this._animatables
   }
 
   /**
-   * @arg {ReadonlyArray<Animatable>} animatables
+   * @arg {ReadonlyArray<animatable.State>} animatables
    * @return {void}
    */
   setAnimatables(animatables) {
@@ -24,7 +25,7 @@ export class Entity {
   }
 
   getPosition() {
-    if (this._animatables.length) return this._animatables[0].getPosition()
+    if (this._animatables.length) return this._animatables[0].position
     throw new Error()
   }
 
@@ -42,25 +43,24 @@ export class Entity {
   }
 
   /** @return {Layer} */
-  getDrawOrder() {
-    throw new Error('drawOrder unspecified.')
+  getLayer() {
+    if (this._animatables.length) {
+      return AnimationLayer[this._animatables[0].animationID]
+    }
+    throw new Error()
   }
 
   /**
    * @arg {number} step
    * @arg {Atlas} atlas
-   * @arg {recorder.ReadState} recorder
+   * @arg {recorder.ReadState} _recorder
    * @return {void}
    */
-  step(step, atlas, recorder) {
-    this._animatables.forEach(animation => {
-      animation.step(
-        step,
-        atlas.animations[animation.getAnimationID()],
-        recorder
-      )
-      animation._position.x += step * this._speed.x
-      animation._position.y += step * this._speed.y
+  step(step, atlas, _recorder) {
+    this._animatables.forEach(val => {
+      animatable.step(val, step, atlas.animations[val.animationID])
+      val.position.x += step * this._speed.x
+      val.position.y += step * this._speed.y
     })
   }
 }

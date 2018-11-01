@@ -1,15 +1,16 @@
+import * as animatable from './textures/animatable.js'
 import * as recorder from './inputs/recorder.js'
 import * as shader from './graphics/shader.js'
 import * as util from './util.js'
-import {Animatable} from './textures/animatable.js'
 import {Entity} from './entities/entity.js'
+import {AnimationLayer} from './assets/animation-layer.js'
 
 /** @typedef {import('./textures/atlas.js').Atlas} Atlas} */
 
 export class Store {
   constructor() {
     /** @prop {Int16Array} */ this._memory = new Int16Array()
-    /** @prop {ReadonlyArray<Entity | EntityGroup>} */ this._entities = /** @type {(Animatable | Entity)[]} */ ([])
+    /** @prop {ReadonlyArray<Entity | EntityGroup>} */ this._entities = /** @type {(animatable.State | Entity)[]} */ ([])
   }
 
   /** @return {Int16Array} */
@@ -27,13 +28,19 @@ export class Store {
   }
 
   /**
-   * @arg {ReadonlyArray<Animatable | Entity>} entities
+   * @arg {ReadonlyArray<animatable.State | Entity>} entities
    * @return {void}
    */
   spawn(entities) {
     entities.forEach(entity => {
       let index = this._entities.findIndex(
-        val => entity.getDrawOrder() <= val.getDrawOrder()
+        val =>
+          (entity instanceof Entity
+            ? entity.getLayer()
+            : AnimationLayer[entity.animationID]) <=
+          (val instanceof Entity
+            ? val.getLayer()
+            : AnimationLayer[val.animationID])
       )
       this._entities.splice(
         index === -1 ? this._entities.length : index,
@@ -54,14 +61,14 @@ export class Store {
       if (entity instanceof Entity) {
         entity.step(step, atlas, recorder)
       } else {
-        entity.step(step, atlas.animations[entity.getAnimationID()], recorder)
+        animatable.step(entity, step, atlas.animations[entity.animationID])
       }
     })
   }
 
   /** @return {void} */
   flushUpdatesToMemory() {
-    /** @type {ReadonlyArray<Animatable>} */ const entities = this._entities
+    /** @type {ReadonlyArray<animatable.State>} */ const entities = this._entities
       .map(
         entity => (entity instanceof Entity ? entity.getAnimatables() : entity)
       )
@@ -71,12 +78,12 @@ export class Store {
       this._memory = new Int16Array(minMemory * 2)
     }
     entities.forEach((entity, i) => {
-      const coord = entity.getBounds()
+      const coord = animatable.bounds(entity)
       // prettier-ignore
       this._memory.set([coord.x, coord.y, coord.w, coord.h,
-                        entity._scrollPosition.x, entity._scrollPosition.y,
-                        entity._position.x, entity._position.y,
-                        entity._scale.x, entity._scale.y],
+                        entity.scrollPosition.x, entity.scrollPosition.y,
+                        entity.position.x, entity.position.y,
+                        entity.scale.x, entity.scale.y],
                         i * shader.layout.perInstance.length)
     })
   }

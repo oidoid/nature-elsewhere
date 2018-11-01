@@ -1,13 +1,13 @@
+import * as animator from './animator.js'
 import * as atlas from './atlas.js'
 import * as util from '../util.js'
-import {Animator} from './animator.js'
 
 describe('step()', () => {
   test('No cels', () => {
     const animation = {cels: [], direction: atlas.AnimationDirection.FORWARD}
-    const subject = new Animator(animation)
-    subject.step(1)
-    expect(subject).toMatchObject({_period: 0, _celTime: 0})
+    const subject = animator.newState(animation)
+    animator.step(subject, 1)
+    expect(subject).toMatchObject({period: 0, exposure: 0})
   })
 
   test('time < duration', () => {
@@ -16,9 +16,9 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(1)
-    expect(subject).toMatchObject({_period: 0, _celTime: 1})
+    const subject = animator.newState(animation)
+    animator.step(subject, 1)
+    expect(subject).toMatchObject({period: 0, exposure: 1})
   })
 
   test('time === duration', () => {
@@ -27,9 +27,9 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(1)
-    expect(subject).toMatchObject({_period: 1, _celTime: 0})
+    const subject = animator.newState(animation)
+    animator.step(subject, 1)
+    expect(subject).toMatchObject({period: 1, exposure: 0})
   })
 
   test('time > duration', () => {
@@ -38,9 +38,9 @@ describe('step()', () => {
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(2)
-    expect(subject).toMatchObject({_period: 1, _celTime: 1})
+    const subject = animator.newState(animation)
+    animator.step(subject, 2)
+    expect(subject).toMatchObject({period: 1, exposure: 1})
   })
 })
 
@@ -54,9 +54,9 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel], direction}
-    const subject = new Animator(animation)
-    subject.step(1)
-    const actual = subject._cel()
+    const subject = animator.newState(animation)
+    animator.step(subject, 1)
+    const actual = animator.celIndex(subject)
     expect(actual).toStrictEqual(1)
   })
 
@@ -69,9 +69,9 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel], direction}
-    const subject = new Animator(animation, 1)
-    subject.step(1)
-    const actual = subject._cel()
+    const subject = animator.newState(animation, 1)
+    animator.step(subject, 1)
+    const actual = animator.celIndex(subject)
     expect(actual).toStrictEqual(0)
   })
 
@@ -84,11 +84,11 @@ describe('celIndex', () => {
   ) => {
     const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
     const animation = {cels: [cel, cel, cel, cel, cel], direction}
-    const subject = new Animator(animation)
+    const subject = animator.newState(animation)
     const actual = []
     for (let i = 0; i < animation.cels.length * 3; ++i) {
-      subject.step(1)
-      actual.push(subject._cel())
+      animator.step(subject, 1)
+      actual.push(animator.celIndex(subject))
     }
     // prettier-ignore
     const expected = {

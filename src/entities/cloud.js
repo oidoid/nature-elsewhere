@@ -1,4 +1,5 @@
-import {Animatable} from '../textures/animatable.js'
+import * as animatable from '../textures/animatable.js'
+import * as drawable from '../textures/drawable.js'
 import {AnimationID} from '../assets/animation-id.js'
 import {Layer} from '../textures/layer.js'
 import {Entity} from './entity.js'
@@ -11,12 +12,14 @@ export class Cloud extends Entity {
    */
   constructor(animationID, position, speed) {
     super()
-    this.setAnimatables([new Animatable(animationID).setPosition(position)])
+    this.setAnimatables([
+      animatable.newState(drawable.newState(animationID, position))
+    ])
     if (speed) this.setSpeed(speed)
   }
 
   /** @return {Layer} */
-  getDrawOrder() {
+  getLayer() {
     return Layer.CLOUDS
   }
 }

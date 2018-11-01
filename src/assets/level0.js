@@ -1,6 +1,7 @@
+import * as animatable from '../textures/animatable.js'
 import * as atlas from '../textures/atlas.js'
+import * as drawable from '../textures/drawable.js'
 import * as util from '../util.js'
-import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from './animation-id.js'
 import {Cloud} from '../entities/cloud.js'
 import {Entity} from '../entities/entity.js'
@@ -13,7 +14,7 @@ import {SuperBall} from '../entities/super-ball.js'
 /**
  * @typedef {Readonly<{
  *   player: Entity
- *   entities: ReadonlyArray<Animatable|Entity>
+ *   entities: ReadonlyArray<animatable.State|Entity>
  * }>} Level0
  */
 
@@ -36,27 +37,38 @@ const tallGrassIDs = [
  */
 export function newState(atlas, random) {
   const entities = [
-    new Animatable(AnimationID.PALETTE_PALE)
-      .setPosition({x: Limits.HALF_MIN, y: Limits.HALF_MIN})
-      .setScale({x: Limits.MAX, y: Limits.MAX}),
-    new Animatable(AnimationID.GRASS_L)
-      .setPosition({x: -512, y: -12})
-      .setScale({x: 48, y: 1}),
-    new Animatable(AnimationID.GRASS_L)
-      .setPosition({x: 208, y: -12})
-      .setScale({x: 2, y: 1}),
-    new Animatable(AnimationID.HILL).setPosition({x: 40, y: -28}),
-    new Animatable(AnimationID.TALL_GRASS_A).setPosition({x: 188, y: -15}),
-    new Animatable(AnimationID.TALL_GRASS_B).setPosition({x: 208, y: -15}),
+    animatable.newState(
+      drawable.newState(
+        AnimationID.PALETTE_PALE,
+        {x: Limits.HALF_MIN, y: Limits.HALF_MIN},
+        {x: Limits.MAX, y: Limits.MAX}
+      )
+    ),
+    animatable.newState(
+      drawable.newState(AnimationID.GRASS_L, {x: -512, y: -12}, {x: 48, y: 1})
+    ),
+    animatable.newState(
+      drawable.newState(AnimationID.GRASS_L, {x: 208, y: -12}, {x: 2, y: 1})
+    ),
+    animatable.newState(drawable.newState(AnimationID.HILL, {x: 40, y: -28})),
+    animatable.newState(
+      drawable.newState(AnimationID.TALL_GRASS_A, {x: 188, y: -15})
+    ),
+    animatable.newState(
+      drawable.newState(AnimationID.TALL_GRASS_B, {x: 208, y: -15})
+    ),
     ...util.range(0, 20).map(i => {
-      return new Animatable(
-        tallGrassIDs[random.int(0, tallGrassIDs.length)]
-      ).setPosition({x: 228 + i * 4, y: -16})
+      return animatable.newState(
+        drawable.newState(tallGrassIDs[random.int(0, tallGrassIDs.length)], {
+          x: 228 + i * 4,
+          y: -16
+        })
+      )
     }),
-    new Animatable(AnimationID.GRASS_L)
-      .setPosition({x: 228, y: -12})
-      .setScale({x: 6, y: 1}),
-    new Animatable(AnimationID.TREE).setPosition({x: 185, y: -39}),
+    animatable.newState(
+      drawable.newState(AnimationID.GRASS_L, {x: 228, y: -12}, {x: 6, y: 1})
+    ),
+    animatable.newState(drawable.newState(AnimationID.TREE, {x: 185, y: -39})),
     new Cloud(AnimationID.CLOUD_S, {x: 40, y: -60}),
     new Cloud(AnimationID.CLOUD_M, {x: 58, y: -76}, {x: -0.0005, y: 0}),
     new RainCloud(AnimationID.CLOUD_S, {x: 75, y: -65}, -0.0001),

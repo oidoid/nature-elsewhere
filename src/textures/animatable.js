@@ -1,50 +1,45 @@
+import * as animator from './animator.js'
 import * as atlas from './atlas.js'
-import * as recorder from '../inputs/recorder.js'
-import {AnimationID} from '../assets/animation-id.js'
-import {Animator} from './animator.js'
-import {Drawable} from './drawable.js'
 
-export class Animatable extends Drawable {
-  /** @arg {AnimationID} animationID */
-  constructor(animationID) {
-    super(animationID)
-    /** @type {Mutable<XY>} */ this._scrollSpeed = {x: 0, y: 0}
-    /** @type {Animator|undefined} */ this._animator = undefined
-  }
+/** @typedef {import('./drawable').State} Drawable */
 
-  /** @return {XY} */
-  getScrollSpeed() {
-    return this._scrollSpeed
-  }
+/**
+ * @typedef {Drawable & {
+ *   readonly scrollSpeed: XY
+ *   animator?: animator.State
+ * }} State
+ */
 
-  /**
-   * @arg {XY} val
-   * @return {this}
-   */
-  setScrollSpeed(val) {
-    this._scrollSpeed = val
-    return this
-  }
+/**
+ * @arg {Drawable} drawable
+ * @arg {XY} scrollSpeed
+ * @return {State}
+ */
+export function newState(drawable, scrollSpeed = {x: 0, y: 0}) {
+  return {...drawable, scrollSpeed}
+}
 
-  /**
-   * @arg {number} step
-   * @arg {atlas.Animation} animation
-   * @arg {recorder.ReadState} _recorder
-   * @return {void}
-   */
-  step(step, animation, _recorder) {
-    this._scrollPosition.x += step * this._scrollSpeed.x
-    this._scrollPosition.y += step * this._scrollSpeed.y
-    if (!this._animator || this._animator.getAnimation() !== animation) {
-      this._animator = new Animator(animation)
-    }
-    this._animator.step(step)
+/**
+ * @arg {State} state
+ * @arg {number} step
+ * @arg {atlas.Animation} animation
+ * @return {void}
+ */
+export function step(state, step, animation) {
+  state.scrollPosition.x += step * state.scrollSpeed.x
+  state.scrollPosition.y += step * state.scrollSpeed.y
+  if (!state.animator || state.animator.animation !== animation) {
+    state.animator = animator.newState(animation)
   }
+  animator.step(state.animator, step)
+}
 
-  /** @return {Rect} */
-  getBounds() {
-    return this._animator
-      ? this._animator.getBounds()
-      : {x: 0, y: 0, w: 0, h: 0}
-  }
+/**
+ * @arg {{readonly animator?: animator.State}} state
+ * @return {Rect}
+ */
+export function bounds(state) {
+  return state.animator
+    ? animator.cel(state.animator).bounds
+    : {x: 0, y: 0, w: 0, h: 0}
 }

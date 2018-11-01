@@ -1,6 +1,7 @@
+import * as animatable from '../textures/animatable.js'
 import * as atlas from '../textures/atlas.js'
+import * as drawable from '../textures/drawable.js'
 import * as recorder from '../inputs/recorder.js'
-import {Animatable} from '../textures/animatable.js'
 import {AnimationID} from '../assets/animation-id.js'
 import {Entity} from './entity.js'
 import {Layer} from '../textures/layer.js'
@@ -9,7 +10,9 @@ export class Player extends Entity {
   constructor() {
     super()
     // This entity always has exactly one animation.
-    this.setAnimatables([new Animatable(AnimationID.PLAYER_IDLE)])
+    this.setAnimatables([
+      animatable.newState(drawable.newState(AnimationID.PLAYER_IDLE))
+    ])
   }
 
   /**
@@ -17,7 +20,10 @@ export class Player extends Entity {
    * @return {this}
    */
   setPosition(val) {
-    this.getAnimatables().forEach(animation => animation.setPosition(val))
+    this.getAnimatables().forEach(animatable => {
+      animatable.position.x = val.x
+      animatable.position.y = val.y
+    })
     return this
   }
 
@@ -31,11 +37,15 @@ export class Player extends Entity {
     this.__scale(recorder)
     this.__position(recorder, step)
     const animationID = this.__animationID(recorder)
-    if (animationID !== this.getAnimatables()[0].getAnimationID()) {
+    if (animationID !== this.getAnimatables()[0].animationID) {
       this.setAnimatables([
-        new Animatable(animationID)
-          .setPosition(this.getAnimatables()[0].getPosition())
-          .setScale(this.getAnimatables()[0].getScale())
+        animatable.newState(
+          drawable.newState(
+            animationID,
+            this.getAnimatables()[0].position,
+            this.getAnimatables()[0].scale
+          )
+        )
       ])
     }
     super.step(step, atlas, recorder)
@@ -43,7 +53,7 @@ export class Player extends Entity {
 
   /** @return {boolean} */
   _grounded() {
-    return this.getAnimatables()[0].getPosition().y >= -17
+    return this.getAnimatables()[0].position.y >= -17
   }
 
   /**
@@ -51,7 +61,7 @@ export class Player extends Entity {
    * @return {AnimationID}
    */
   __animationID(recorderState) {
-    const animationID = this.getAnimatables()[0].getAnimationID()
+    const animationID = this.getAnimatables()[0].animationID
     if (!this._grounded()) {
       if (recorderState.up()) {
         return AnimationID.PLAYER_ASCEND
@@ -110,14 +120,11 @@ export class Player extends Entity {
    */
   __scale(recorderState) {
     this.getAnimatables().forEach(animation => {
-      animation.setScale({
-        x: recorderState.left()
-          ? -1
-          : recorderState.right()
-            ? 1
-            : animation.getScale().x,
-        y: animation.getScale().y
-      })
+      animation.scale.x = recorderState.left()
+        ? -1
+        : recorderState.right()
+          ? 1
+          : animation.scale.x
     })
   }
 
@@ -135,22 +142,23 @@ export class Player extends Entity {
     this.getAnimatables().forEach(animatable => {
       const x = Math.max(
         0,
-        animatable.getPosition().x -
+        animatable.position.x -
           (recorderState.left() ? speed : 0) +
           (recorderState.right() ? speed : 0)
       )
       const y = Math.min(
         -17,
-        animatable.getPosition().y -
+        animatable.position.y -
           (recorderState.up() ? speed : 0) +
           (recorderState.down() ? speed : 0)
       )
-      animatable.setPosition({x, y})
+      animatable.position.x = x
+      animatable.position.y = y
     })
   }
 
   /** @return {Layer} */
-  getDrawOrder() {
+  getLayer() {
     return Layer.PLAYER
   }
 }
