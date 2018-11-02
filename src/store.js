@@ -26,7 +26,7 @@ export class Store {
    */
   spawn(entities) {
     entities.forEach(lhs => {
-      let index = this._entities.findIndex(rhs => lhs.layer() <= rhs.layer())
+      let index = this._entities.findIndex(rhs => lhs.layer <= rhs.layer)
       this._entities.splice(
         index === -1 ? this._entities.length : index,
         0,

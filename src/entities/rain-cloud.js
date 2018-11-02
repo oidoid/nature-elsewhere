@@ -32,9 +32,7 @@ export function newState(animationID, position, speed = 0) {
       drawable.newState(AnimationID.WATER_M, {x: 1, y: -position.y - 12})
     )
   )
-  animatables.push(
-    animatable.newState(drawable.newState(animationID))
-  )
+  animatables.push(animatable.newState(drawable.newState(animationID)))
 
   return entity.newState(animatables, Layer.CLOUDS, position, {x: speed, y: 0})
 }

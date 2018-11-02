@@ -10,7 +10,7 @@ import {Layer} from '../textures/layer.js'
  *   position: Mutable<XY>
  *   speed: Mutable<XY>
  *   step(step: number, atlas: Atlas, recorderState: recorder.ReadState): void
- *   layer(): Layer
+ *   layer: Layer
  * }>} State
  */
 
@@ -34,9 +34,7 @@ export function newState(
     step(stepState, atlas) {
       step(this, stepState, atlas)
     },
-    layer() {
-      return layer
-    }
+    layer
   }
 }
 

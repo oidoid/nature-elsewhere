@@ -34,9 +34,7 @@ export function newState(position = {x: 0, y: 0}) {
 
       entity.step(this, step, atlas)
     },
-    layer() {
-      return Layer.PLAYER
-    }
+    layer: Layer.PLAYER
   }
 }
 
