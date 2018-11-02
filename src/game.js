@@ -2,9 +2,9 @@ import * as asepriteParser from './parsers/aseprite-parser.js'
 import * as level0 from './assets/level0.js'
 import * as entity from './entities/entity.js'
 import * as keyboard from './inputs/keyboard.js'
+import * as random from './random.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
-import {Random} from './random.js'
 import {Store} from './store.js'
 import atlasJSON from './assets/atlas.js'
 
@@ -23,7 +23,7 @@ export class Game {
     /** @type {Document} */ this._document = window.document
     /** @type {HTMLImageElement} */ this._atlasImage = atlasImage
     /** @type {Atlas} */ this._atlas = asepriteParser.parse(atlasJSON)
-    /** @type {Random} */ this._random = new Random(0)
+    /** @type {random.State} */ this._random = random.newState(0)
     /** @type {level0.Level0} */ this._level0 = level0.newState(
       this._atlas,
       this._random

@@ -4,11 +4,11 @@ import * as drawable from '../textures/drawable.js'
 import * as entity from '../entities/entity.js'
 import * as player from '../entities/player.js'
 import * as rainCloud from '../entities/rain-cloud.js'
+import * as random from '../random.js'
 import * as superBall from '../entities/super-ball.js'
 import * as util from '../util.js'
 import {AnimationID} from './animation-id.js'
 import {Limits} from '../graphics/limits.js'
-import {Random} from '../random.js'
 import {Layer} from '../textures/layer.js'
 
 /**
@@ -32,10 +32,10 @@ const tallGrassIDs = [
 
 /**
  * @arg {atlas.Atlas} atlas
- * @arg {Random} random
+ * @arg {random.State} randomState
  * @return {Level0}
  */
-export function newState(atlas, random) {
+export function newState(atlas, randomState) {
   const animatables = [
     animatable.newState(
       drawable.newState(
@@ -59,10 +59,13 @@ export function newState(atlas, random) {
     ),
     ...util.range(0, 20).map(i => {
       return animatable.newState(
-        drawable.newState(tallGrassIDs[random.int(0, tallGrassIDs.length)], {
-          x: 228 + i * 4,
-          y: -16
-        })
+        drawable.newState(
+          tallGrassIDs[random.int(randomState, 0, tallGrassIDs.length)],
+          {
+            x: 228 + i * 4,
+            y: -16
+          }
+        )
       )
     }),
     animatable.newState(
@@ -92,7 +95,10 @@ export function newState(atlas, random) {
     rainCloud.newState(AnimationID.CLOUD_L, {x: 20, y: -81}, -0.00008),
     ...util.range(0, 1000).map(i => {
       return superBall.newState(
-        {x: (10 + i + random.int(0, 20)) % 80, y: -100 + random.int(0, 50)},
+        {
+          x: (10 + i + random.int(randomState, 0, 20)) % 80,
+          y: -100 + random.int(randomState, 0, 50)
+        },
         {x: 0, y: 0.004}
       )
     })
