@@ -1,16 +1,13 @@
-import * as animatable from './textures/animatable.js'
+import * as entity from './entities/entity.js'
 import * as recorder from './inputs/recorder.js'
 import * as shader from './graphics/shader.js'
-import * as util from './util.js'
-import {Entity} from './entities/entity.js'
-import {AnimationLayer} from './assets/animation-layer.js'
 
 /** @typedef {import('./textures/atlas.js').Atlas} Atlas} */
 
 export class Store {
   constructor() {
     /** @prop {Int16Array} */ this._memory = new Int16Array()
-    /** @prop {ReadonlyArray<Entity | EntityGroup>} */ this._entities = /** @type {(animatable.State | Entity)[]} */ ([])
+    /** @prop {ReadonlyArray<entity.State>} */ this._entities = /** @type {entity.State[]} */ ([])
   }
 
   /** @return {Int16Array} */
@@ -20,32 +17,20 @@ export class Store {
 
   /** @return {number} */
   getLength() {
-    return this._entities.reduce(
-      (sum, val) =>
-        sum + (val instanceof Entity ? val.getAnimatables().length : 1),
-      0
-    )
+    return this._entities.reduce((sum, val) => sum + val.animatables.length, 0)
   }
 
   /**
-   * @arg {ReadonlyArray<animatable.State | Entity>} entities
+   * @arg {ReadonlyArray<entity.State>} entities
    * @return {void}
    */
   spawn(entities) {
-    entities.forEach(entity => {
-      let index = this._entities.findIndex(
-        val =>
-          (entity instanceof Entity
-            ? entity.getLayer()
-            : AnimationLayer[entity.animationID]) <=
-          (val instanceof Entity
-            ? val.getLayer()
-            : AnimationLayer[val.animationID])
-      )
+    entities.forEach(lhs => {
+      let index = this._entities.findIndex(rhs => lhs.layer() <= rhs.layer())
       this._entities.splice(
         index === -1 ? this._entities.length : index,
         0,
-        entity
+        lhs
       )
     })
   }
@@ -57,34 +42,31 @@ export class Store {
    * @return {void}
    */
   step(step, atlas, recorder) {
-    this._entities.forEach(entity => {
-      if (entity instanceof Entity) {
-        entity.step(step, atlas, recorder)
-      } else {
-        animatable.step(entity, step, atlas.animations[entity.animationID])
-      }
-    })
+    this._entities.forEach(entity => entity.step(step, atlas, recorder))
   }
 
   /** @return {void} */
   flushUpdatesToMemory() {
-    /** @type {ReadonlyArray<animatable.State>} */ const entities = this._entities
-      .map(
-        entity => (entity instanceof Entity ? entity.getAnimatables() : entity)
-      )
-      .reduce(util.flatten, [])
-    const minMemory = entities.length * shader.layout.perInstance.length
+    const minMemory = this.getLength() * shader.layout.perInstance.length
     if (this._memory.length < minMemory) {
       this._memory = new Int16Array(minMemory * 2)
     }
-    entities.forEach((entity, i) => {
-      const coord = animatable.bounds(entity)
-      // prettier-ignore
-      this._memory.set([coord.x, coord.y, coord.w, coord.h,
-                        entity.scrollPosition.x, entity.scrollPosition.y,
-                        entity.position.x, entity.position.y,
-                        entity.scale.x, entity.scale.y],
-                        i * shader.layout.perInstance.length)
+    let index = 0
+
+    this._entities.forEach(val => {
+      val.animatables.forEach((_, i) => {
+        const coord = entity.coord(val, i)
+        const scrollPosition = entity.scrollPosition(val, i)
+        const position = entity.position(val, i)
+        const scale = entity.scale(val, i)
+        // prettier-ignore
+        this._memory.set([coord.x, coord.y, coord.w, coord.h,
+                        scrollPosition.x, scrollPosition.y,
+                        position.x, position.y,
+                        scale.x, scale.y],
+                        index * shader.layout.perInstance.length)
+        ++index
+      })
     })
   }
 }

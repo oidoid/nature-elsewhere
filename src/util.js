@@ -1,14 +1,4 @@
 /**
- * @template T
- * @arg {ReadonlyArray<T>} sum
- * @arg {T | ReadonlyArray<T>} val
- * @return {ReadonlyArray<T>}
- */
-export function flatten(sum, val) {
-  return sum.concat(val)
-}
-
-/**
  * @arg {number} start
  * @arg {number} end
  * @arg {number} [step]

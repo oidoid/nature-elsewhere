@@ -1,9 +1,9 @@
 import * as asepriteParser from './parsers/aseprite-parser.js'
 import * as level0 from './assets/level0.js'
+import * as entity from './entities/entity.js'
 import * as keyboard from './inputs/keyboard.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
-import {Entity} from './entities/entity.js'
 import {Random} from './random.js'
 import {Store} from './store.js'
 import atlasJSON from './assets/atlas.js'
@@ -30,7 +30,7 @@ export class Game {
     )
     /** @type {Store} */ this._store = new Store()
     this._store.spawn(this._level0.entities)
-    /** @type {Entity} */ this._player = this._level0.player
+    /** @type {entity.State} */ this._player = this._level0.player
     /** @type {Atlas} */ this._atlas = asepriteParser.parse(atlasJSON)
 
     /** @type {HTMLCanvasElement} */ this._canvas = canvas
@@ -160,7 +160,7 @@ export class Game {
     this._renderer.render(
       canvas,
       scale,
-      {x: this._player.getPosition().x, y: this._player.getPosition().y + 20},
+      {x: this._player.position.x, y: this._player.position.y + 20},
       this._store.getMemory(),
       this._store.getLength()
     )
