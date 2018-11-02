@@ -344,7 +344,7 @@ export default {
       sourceSize: {w: 7, h: 16},
       duration: 65535
     },
-    'tallGrass a 0': {
+    'tall-grass a 0': {
       frame: {x: 61, y: 30, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -352,7 +352,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass b 1': {
+    'tall-grass b 1': {
       frame: {x: 68, y: 30, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -360,7 +360,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass c 2': {
+    'tall-grass c 2': {
       frame: {x: 75, y: 30, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -368,7 +368,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass d 3': {
+    'tall-grass d 3': {
       frame: {x: 54, y: 30, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -376,7 +376,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass e 4': {
+    'tall-grass e 4': {
       frame: {x: 82, y: 32, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -384,7 +384,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass f 5': {
+    'tall-grass f 5': {
       frame: {x: 89, y: 32, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -392,7 +392,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass g 6': {
+    'tall-grass g 6': {
       frame: {x: 96, y: 32, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -400,7 +400,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass h 7': {
+    'tall-grass h 7': {
       frame: {x: 103, y: 32, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -408,7 +408,7 @@ export default {
       sourceSize: {w: 5, h: 4},
       duration: 65535
     },
-    'tallGrass i 8': {
+    'tall-grass i 8': {
       frame: {x: 110, y: 32, w: 7, h: 6},
       rotated: false,
       trimmed: false,
@@ -504,15 +504,15 @@ export default {
       {name: 'player descend-armed', from: 15, to: 15, direction: 'forward'},
       {name: 'player sit', from: 16, to: 16, direction: 'forward'},
       {name: 'rain ', from: 0, to: 0, direction: 'forward'},
-      {name: 'tallGrass a', from: 0, to: 0, direction: 'forward'},
-      {name: 'tallGrass b', from: 1, to: 1, direction: 'forward'},
-      {name: 'tallGrass c', from: 2, to: 2, direction: 'forward'},
-      {name: 'tallGrass d', from: 3, to: 3, direction: 'forward'},
-      {name: 'tallGrass e', from: 4, to: 4, direction: 'forward'},
-      {name: 'tallGrass f', from: 5, to: 5, direction: 'forward'},
-      {name: 'tallGrass g', from: 6, to: 6, direction: 'forward'},
-      {name: 'tallGrass h', from: 7, to: 7, direction: 'forward'},
-      {name: 'tallGrass i', from: 8, to: 8, direction: 'forward'},
+      {name: 'tall-grass a', from: 0, to: 0, direction: 'forward'},
+      {name: 'tall-grass b', from: 1, to: 1, direction: 'forward'},
+      {name: 'tall-grass c', from: 2, to: 2, direction: 'forward'},
+      {name: 'tall-grass d', from: 3, to: 3, direction: 'forward'},
+      {name: 'tall-grass e', from: 4, to: 4, direction: 'forward'},
+      {name: 'tall-grass f', from: 5, to: 5, direction: 'forward'},
+      {name: 'tall-grass g', from: 6, to: 6, direction: 'forward'},
+      {name: 'tall-grass h', from: 7, to: 7, direction: 'forward'},
+      {name: 'tall-grass i', from: 8, to: 8, direction: 'forward'},
       {name: 'tree ', from: 0, to: 1, direction: 'forward'},
       {name: 'water s', from: 0, to: 0, direction: 'forward'},
       {name: 'water m', from: 1, to: 1, direction: 'forward'},

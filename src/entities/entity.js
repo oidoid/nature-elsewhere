@@ -7,10 +7,10 @@ import {Layer} from '../textures/layer.js'
 /**
  * @typedef {Readonly<{
  *   animatables: animatable.State[]
+ *   layer: Layer
  *   position: Mutable<XY>
  *   speed: Mutable<XY>
  *   step(step: number, atlas: Atlas, recorderState: recorder.ReadState): void
- *   layer: Layer
  * }>} State
  */
 
@@ -29,12 +29,12 @@ export function newState(
 ) {
   return {
     animatables,
+    layer,
     position,
     speed,
     step(stepState, atlas) {
       step(this, stepState, atlas)
-    },
-    layer
+    }
   }
 }
 
