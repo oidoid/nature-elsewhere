@@ -34,13 +34,13 @@ export function newState(position = {x: 0, y: 0}) {
  * @return {void}
  */
 export function step(state, step, atlas, recorder) {
-  __scale(state, recorder)
-  __position(state, recorder, step)
-  const animationID = __animationID(state, recorder)
-  if (animationID !== state.animatables[0].animationID) {
+  scale(state, recorder)
+  position(state, recorder, step)
+  const id = animationID(state, recorder)
+  if (id !== state.animatables[0].animationID) {
     state.animatables[0] = animatable.newState(
       drawable.newState(
-        animationID,
+        id,
         state.animatables[0].position,
         state.animatables[0].scale
       )
@@ -54,7 +54,7 @@ export function step(state, step, atlas, recorder) {
  * @arg {{readonly position: XY}} state
  * @return {boolean}
  */
-function _grounded({position}) {
+function grounded({position}) {
   return position.y >= -17
 }
 
@@ -63,9 +63,9 @@ function _grounded({position}) {
  * @arg {recorder.ReadState} recorderState
  * @return {AnimationID}
  */
-function __animationID(state, recorderState) {
+function animationID(state, recorderState) {
   const animationID = state.animatables[0].animationID
-  if (!_grounded(state)) {
+  if (!grounded(state)) {
     if (recorderState.up()) {
       return AnimationID.PLAYER_ASCEND
     }
@@ -122,7 +122,7 @@ function __animationID(state, recorderState) {
  * @arg {recorder.ReadState} recorderState
  * @return {void}
  */
-function __scale({animatables}, recorderState) {
+function scale({animatables}, recorderState) {
   animatables.forEach(animation => {
     animation.scale.x = recorderState.left()
       ? -1
@@ -138,8 +138,8 @@ function __scale({animatables}, recorderState) {
  * @arg {number} step
  * @return {void}
  */
-function __position(state, recorderState, step) {
-  if (_grounded(state) && recorderState.down()) return
+function position(state, recorderState, step) {
+  if (grounded(state) && recorderState.down()) return
   const run =
     recorderState.combo(false, recorder.Mask.LEFT, recorder.Mask.LEFT) ||
     recorderState.combo(false, recorder.Mask.RIGHT, recorder.Mask.RIGHT)
