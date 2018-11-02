@@ -33,7 +33,7 @@ export function newState(animationID, position, speed = 0) {
     )
   )
   animatables.push(
-    animatable.newState(drawable.newState(animationID, {x: 0, y: 0}))
+    animatable.newState(drawable.newState(animationID))
   )
 
   return entity.newState(animatables, Layer.CLOUDS, position, {x: speed, y: 0})

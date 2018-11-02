@@ -1,6 +1,5 @@
 import * as animatable from '../textures/animatable.js'
 import * as atlas from '../textures/atlas.js'
-import * as cloud from '../entities/cloud.js'
 import * as drawable from '../textures/drawable.js'
 import * as entity from '../entities/entity.js'
 import * as player from '../entities/player.js'
@@ -73,10 +72,23 @@ export function newState(atlas, random) {
   ]
   const entities = [
     entity.newState(animatables, Layer.BACKGROUND),
-    cloud.newState(AnimationID.CLOUD_S, {x: 40, y: -60}),
-    cloud.newState(AnimationID.CLOUD_M, {x: 58, y: -76}, {x: -0.0005, y: 0}),
+    entity.newState(
+      [animatable.newState(drawable.newState(AnimationID.CLOUD_S))],
+      Layer.CLOUDS,
+      {x: 40, y: -60}
+    ),
+    entity.newState(
+      [animatable.newState(drawable.newState(AnimationID.CLOUD_M))],
+      Layer.CLOUDS,
+      {x: 58, y: -76},
+      {x: -0.0005, y: 0}
+    ),
+    entity.newState(
+      [animatable.newState(drawable.newState(AnimationID.CLOUD_XL))],
+      Layer.CLOUDS,
+      {x: 120, y: -60}
+    ),
     rainCloud.newState(AnimationID.CLOUD_S, {x: 75, y: -65}, -0.0001),
-    cloud.newState(AnimationID.CLOUD_XL, {x: 120, y: -60}),
     rainCloud.newState(AnimationID.CLOUD_L, {x: 20, y: -81}, -0.00008),
     ...util.range(0, 1000).map(i => {
       return superBall.newState(
