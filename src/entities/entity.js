@@ -1,15 +1,12 @@
 import * as animatable from '../drawables/animatable.js'
-import {Layer} from '../drawables/layer.js'
 
 /** @typedef {import('../drawables/atlas').Atlas} Atlas} */
 /** @typedef {import('./entity-id').EntityID} EntityID} */
-/** @typedef {import('../inputs/recorder').ReadState} Recorder} */
 
 /**
  * @typedef {Readonly<{
  *   id: EntityID
  *   animatables: animatable.State[]
- *   layer: Layer
  *   position: Mutable<XY>
  *   speed: Mutable<XY>
  * }>} State
@@ -18,7 +15,6 @@ import {Layer} from '../drawables/layer.js'
 /**
  * @arg {EntityID} id
  * @arg {animatable.State[]} animatables
- * @arg {Layer} layer
  * @arg {XY} [position]
  * @arg {XY} [speed]
  * @return {State}
@@ -26,11 +22,10 @@ import {Layer} from '../drawables/layer.js'
 export function newState(
   id,
   animatables,
-  layer,
   position = {x: 0, y: 0},
   speed = {x: 0, y: 0}
 ) {
-  return {id, animatables, layer, position, speed}
+  return {id, animatables, position, speed}
 }
 
 /**

@@ -4,12 +4,12 @@ import {AnimationLayer} from './animation-layer.js'
 
 const ids = /** @type {AnimationID[]}*/ (util.values(AnimationID))
 
-test.each(ids)('%# AnimationID %p has a DrawOrder', (
+test.each(ids)('%# AnimationID %p has a Layer', (
   /** @type {AnimationID}*/ id
 ) => expect(AnimationLayer).toHaveProperty(id))
 
 test.each(/** @type {string[]}*/ (util.keys(AnimationLayer)))(
-  '%# AnimationDrawOrder %p has a AnimationID',
+  '%# AnimationLayer %p has a AnimationID',
   (/** @type {string} */ id) =>
     expect(
       ids.filter((/** @type {AnimationID} */ val) => id === val)

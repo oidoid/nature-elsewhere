@@ -11,7 +11,6 @@ import * as util from '../util.js'
 import {AnimationID} from './animation-id.js'
 import {EntityID} from '../entities/entity-id.js'
 import {Limits} from '../graphics/limits.js'
-import {Layer} from '../drawables/layer.js'
 
 /**
  * @typedef {Readonly<{
@@ -48,24 +47,21 @@ export function newState(atlas, randomState) {
   ]
   const entities = [
     tallGrassPatch.newState({x: 188, y: -15}, 1000, randomState),
-    entity.newState(EntityID.BACKGROUND, animatables, Layer.BACKGROUND),
+    entity.newState(EntityID.BACKGROUND, animatables),
     entity.newState(
       EntityID.CLOUD,
       [animatable.newState(drawable.newState(AnimationID.CLOUD_S))],
-      Layer.CLOUDS,
       {x: 40, y: -60}
     ),
     entity.newState(
       EntityID.CLOUD,
       [animatable.newState(drawable.newState(AnimationID.CLOUD_M))],
-      Layer.CLOUDS,
       {x: 58, y: -76},
       {x: -0.0005, y: 0}
     ),
     entity.newState(
       EntityID.CLOUD,
       [animatable.newState(drawable.newState(AnimationID.CLOUD_XL))],
-      Layer.CLOUDS,
       {x: 120, y: -60}
     ),
     rainCloud.newState(AnimationID.CLOUD_S, {x: 75, y: -65}, -0.0001),

@@ -3,7 +3,6 @@ import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as random from '../random.js'
 import * as util from '../util.js'
-import {Layer} from '../drawables/layer.js'
 import {AnimationID} from '../assets/animation-id.js'
 import {EntityID} from './entity-id.js'
 
@@ -38,10 +37,5 @@ export function newState(position, width, randomState) {
         )
       )
     )
-  return entity.newState(
-    EntityID.TALL_GRASS_PATCH,
-    animatables,
-    Layer.FOREGROUND_SCENERY,
-    position
-  )
+  return entity.newState(EntityID.TALL_GRASS_PATCH, animatables, position)
 }

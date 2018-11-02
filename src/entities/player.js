@@ -5,7 +5,6 @@ import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
 import {AnimationID} from '../assets/animation-id.js'
 import {EntityID} from './entity-id.js'
-import {Layer} from '../drawables/layer.js'
 
 /**
  * @arg {XY} position
@@ -19,7 +18,6 @@ export function newState(position = {x: 0, y: 0}) {
         drawable.newState(AnimationID.PLAYER_IDLE, {x: 0, y: 0})
       )
     ],
-    Layer.PLAYER,
     position
   )
 }

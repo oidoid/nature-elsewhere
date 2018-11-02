@@ -2,6 +2,7 @@ import * as entity from './entities/entity.js'
 import * as recorder from './inputs/recorder.js'
 import * as shader from './graphics/shader.js'
 import {Behavior} from './entities/behavior.js'
+import {EntityLayer} from './entities/entity-layer.js'
 
 /** @typedef {import('./drawables/atlas.js').Atlas} Atlas} */
 
@@ -27,7 +28,9 @@ export class Store {
    */
   spawn(entities) {
     entities.forEach(lhs => {
-      let index = this._entities.findIndex(rhs => lhs.layer <= rhs.layer)
+      let index = this._entities.findIndex(
+        rhs => EntityLayer[lhs.id] <= EntityLayer[rhs.id]
+      )
       this._entities.splice(
         index === -1 ? this._entities.length : index,
         0,
