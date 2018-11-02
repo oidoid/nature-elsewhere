@@ -55,10 +55,14 @@ export function step(state, step, atlas) {
 /**
  * @arg {State} state
  * @arg {number} index
+ * @arg {Atlas} atlas
  * @return {Rect}
  */
-export function coord(state, index) {
-  return animatable.bounds(state.animatables[index])
+export function coord(state, index, atlas) {
+  return animatable.bounds(
+    state.animatables[index],
+    atlas.animations[state.animatables[index].animationID]
+  )
 }
 
 /**

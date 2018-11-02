@@ -3,7 +3,10 @@ import {AnimationID} from '../assets/animation-id.js'
 
 /** @typedef {Readonly<{size: WH; animations: AnimationMap}>} Atlas */
 
-/** @typedef {Readonly<Record<AnimationID, Animation>>} AnimationMap */
+/**
+ * AnimationIDs are aseprite.Tags.
+ * @typedef {Readonly<Record<AnimationID, Animation>>} AnimationMap
+ */
 
 /**
  * Animation and collision frames.

@@ -45,8 +45,11 @@ export class Store {
     this._entities.forEach(entity => entity.step(step, atlas, recorder))
   }
 
-  /** @return {void} */
-  flushUpdatesToMemory() {
+  /**
+   * @arg {Atlas} atlas
+   * @return {void}
+   */
+  flushUpdatesToMemory(atlas) {
     const minMemory = this.getLength() * shader.layout.perInstance.length
     if (this._memory.length < minMemory) {
       this._memory = new Int16Array(minMemory * 2)
@@ -55,7 +58,7 @@ export class Store {
 
     this._entities.forEach(val => {
       val.animatables.forEach((_, i) => {
-        const coord = entity.coord(val, i)
+        const coord = entity.coord(val, i, atlas)
         const scrollPosition = entity.scrollPosition(val, i)
         const position = entity.position(val, i)
         const scale = entity.scale(val, i)

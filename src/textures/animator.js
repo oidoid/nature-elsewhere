@@ -2,7 +2,6 @@ import * as atlas from './atlas.js'
 
 /**
  * @typedef {Object} State
- * @prop {atlas.Animation} animation
  * @prop {number} period Cel index oscillation state. This integer may fall out
  *                       of animation bounds.
  * @prop {number} duration Cel exposure in milliseconds.
@@ -32,49 +31,51 @@ const NextCel = {
 }
 
 /**
- * @arg {atlas.Animation} animation
  * @arg {number} [period]
  * @arg {number} [duration]
  * @return {State}
  */
-export function newState(animation, period = 0, duration = 0) {
-  return {animation, period, duration}
+export function newState(period = 0, duration = 0) {
+  return {period, duration}
 }
 
 /**
- * @arg {Readonly<{animation: atlas.Animation, period: number}>} state
+ * @arg {Readonly<{period: number}>} state
+ * @arg {atlas.Animation} animation
  * @return {atlas.Cel}
  */
-export function cel(state) {
-  return state.animation.cels[celIndex(state)]
+export function cel(state, animation) {
+  return animation.cels[celIndex(state, animation)]
 }
 
 /**
- * @arg {Readonly<{animation: atlas.Animation, period: number}>} state
+ * @arg {Readonly<{period: number}>} state
+ * @arg {atlas.Animation} animation
  * @return {number}
  */
-export function celIndex({animation, period}) {
+export function celIndex({period}, animation) {
   return Math.abs(period % animation.cels.length)
 }
 
 /**
  * @arg {State} state
  * @arg {number} step
+ * @arg {atlas.Animation} animation
  * @return {void}
  */
-export function step(state, step) {
-  if (state.animation.cels.length < 2) return
+export function step(state, step, animation) {
+  if (animation.cels.length < 2) return
 
   const duration = state.duration + step
-  if (duration < cel(state).duration) {
+  if (duration < cel(state, animation).duration) {
     // Hold cel.
     state.duration = duration
   } else {
     // Advance cel.
-    state.duration = duration - cel(state).duration
-    state.period = NextCel[state.animation.direction](
+    state.duration = duration - cel(state, animation).duration
+    state.period = NextCel[animation.direction](
       state.period,
-      state.animation.cels.length
+      animation.cels.length
     )
   }
 }
