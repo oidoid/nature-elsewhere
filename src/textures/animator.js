@@ -9,7 +9,10 @@ import * as atlas from './atlas.js'
 
 /**
  * @type {Readonly<
- *   Record<atlas.AnimationDirection, (period: number, length: number) => number>
+ *   Record<
+ *     atlas.AnimationDirection,
+ *     (period: number, length: number) => number
+ *   >
  * >}
  */
 const NextCel = {

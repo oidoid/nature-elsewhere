@@ -1,4 +1,5 @@
 import * as animatable from '../textures/animatable.js'
+import * as atlas from '../textures/atlas.js'
 import * as drawable from '../textures/drawable.js'
 import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
@@ -18,24 +19,35 @@ export function newState(position = {x: 0, y: 0}) {
     ],
     position,
     speed: {x: 0, y: 0},
-    step(step, atlas, recorder) {
-      __scale(this, recorder)
-      __position(this, recorder, step)
-      const animationID = __animationID(this, recorder)
-      if (animationID !== this.animatables[0].animationID) {
-        this.animatables[0] = animatable.newState(
-          drawable.newState(
-            animationID,
-            this.animatables[0].position,
-            this.animatables[0].scale
-          )
-        )
-      }
-
-      entity.step(this, step, atlas)
+    step(stepState, atlas, recorder) {
+      step(this, stepState, atlas, recorder)
     },
     layer: Layer.PLAYER
   }
+}
+
+/**
+ * @arg {entity.State} state
+ * @arg {number} step
+ * @arg {atlas.Atlas} atlas
+ * @arg {recorder.ReadState} recorder
+ * @return {void}
+ */
+export function step(state, step, atlas, recorder) {
+  __scale(state, recorder)
+  __position(state, recorder, step)
+  const animationID = __animationID(state, recorder)
+  if (animationID !== state.animatables[0].animationID) {
+    state.animatables[0] = animatable.newState(
+      drawable.newState(
+        animationID,
+        state.animatables[0].position,
+        state.animatables[0].scale
+      )
+    )
+  }
+
+  entity.step(state, step, atlas)
 }
 
 /**
