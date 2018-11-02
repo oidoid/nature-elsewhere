@@ -1,6 +1,7 @@
 import * as entity from './entities/entity.js'
 import * as recorder from './inputs/recorder.js'
 import * as shader from './graphics/shader.js'
+import {Behavior} from './entities/behavior.js'
 
 /** @typedef {import('./drawables/atlas.js').Atlas} Atlas} */
 
@@ -36,13 +37,16 @@ export class Store {
   }
 
   /**
-   * @arg {number} step
+   * @arg {number} stepState
    * @arg {Atlas} atlas
    * @arg {recorder.ReadState} recorder
    * @return {void}
    */
-  step(step, atlas, recorder) {
-    this._entities.forEach(entity => entity.step(step, atlas, recorder))
+  step(stepState, atlas, recorder) {
+    this._entities.forEach(val => {
+      const step = Behavior[val.id] || entity.step
+      step(val, stepState, atlas, recorder)
+    })
   }
 
   /**

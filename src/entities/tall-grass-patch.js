@@ -5,6 +5,7 @@ import * as random from '../random.js'
 import * as util from '../util.js'
 import {Layer} from '../drawables/layer.js'
 import {AnimationID} from '../assets/animation-id.js'
+import {EntityID} from './entity-id.js'
 
 const animationIDs = [
   AnimationID.TALL_GRASS_A,
@@ -27,22 +28,20 @@ const unitWidth = 4
  * @return {entity.State}
  */
 export function newState(position, width, randomState) {
-  return {
-    layer: Layer.FOREGROUND_SCENERY,
-    position,
-    speed: {x: 0, y: 0},
-    step(step, atlas) {
-      entity.step(this, step, atlas)
-    },
-    animatables: util
-      .range(0, Math.floor(width / unitWidth))
-      .map(i =>
-        animatable.newState(
-          drawable.newState(
-            animationIDs[random.int(randomState, 0, animationIDs.length)],
-            {x: i * 4, y: 0}
-          )
+  const animatables = util
+    .range(0, Math.floor(width / unitWidth))
+    .map(i =>
+      animatable.newState(
+        drawable.newState(
+          animationIDs[random.int(randomState, 0, animationIDs.length)],
+          {x: i * 4, y: 0}
         )
       )
-  }
+    )
+  return entity.newState(
+    EntityID.TALL_GRASS_PATCH,
+    animatables,
+    Layer.FOREGROUND_SCENERY,
+    position
+  )
 }

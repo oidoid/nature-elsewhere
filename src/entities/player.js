@@ -4,6 +4,7 @@ import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
 import {AnimationID} from '../assets/animation-id.js'
+import {EntityID} from './entity-id.js'
 import {Layer} from '../drawables/layer.js'
 
 /**
@@ -11,19 +12,16 @@ import {Layer} from '../drawables/layer.js'
  * @return {entity.State}
  */
 export function newState(position = {x: 0, y: 0}) {
-  return {
-    animatables: [
+  return entity.newState(
+    EntityID.PLAYER,
+    [
       animatable.newState(
         drawable.newState(AnimationID.PLAYER_IDLE, {x: 0, y: 0})
       )
     ],
-    position,
-    speed: {x: 0, y: 0},
-    step(stepState, atlas, recorder) {
-      step(this, stepState, atlas, recorder)
-    },
-    layer: Layer.PLAYER
-  }
+    Layer.PLAYER,
+    position
+  )
 }
 
 /**
