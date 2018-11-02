@@ -8,7 +8,7 @@ import * as random from '../random.js'
 import * as superBall from '../entities/super-ball.js'
 import * as tallGrassPatch from '../entities/tall-grass-patch.js'
 import * as util from '../util.js'
-import {AnimationID} from './animation-id.js'
+import {AnimationID} from '../drawables/animation-id.js'
 import {Limits} from '../graphics/limits.js'
 
 /**

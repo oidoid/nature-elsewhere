@@ -2,7 +2,7 @@ import * as animatable from '../drawables/animatable.js'
 import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as util from '../util.js'
-import {AnimationID} from '../assets/animation-id.js'
+import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from './entity-id.js'
 
 /**

@@ -1,4 +1,4 @@
-/** @typedef {import('../assets/animation-id').AnimationID} AnimationID */
+/** @typedef {import('./animation-id').AnimationID} AnimationID */
 
 /**
  * @typedef {Readonly<{

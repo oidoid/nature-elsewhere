@@ -1,5 +1,5 @@
 import * as util from '../util.js'
-import {AnimationID} from '../assets/animation-id.js'
+import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from './entity-id.js'
 
 const ids = /** @type {EntityID[]}*/ (util.values(EntityID))

@@ -1,5 +1,5 @@
 import * as aseprite from '../parsers/aseprite.js'
-import {AnimationID} from '../assets/animation-id.js'
+import {AnimationID} from './animation-id.js'
 
 /** @typedef {Readonly<{size: WH; animations: AnimationMap}>} Atlas */
 
