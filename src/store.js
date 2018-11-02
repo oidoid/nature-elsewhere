@@ -2,7 +2,7 @@ import * as entity from './entities/entity.js'
 import * as recorder from './inputs/recorder.js'
 import * as shader from './graphics/shader.js'
 
-/** @typedef {import('./textures/atlas.js').Atlas} Atlas} */
+/** @typedef {import('./drawables/atlas.js').Atlas} Atlas} */
 
 export class Store {
   constructor() {

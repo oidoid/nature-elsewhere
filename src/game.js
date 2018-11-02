@@ -8,7 +8,7 @@ import * as renderer from './graphics/renderer.js'
 import {Store} from './store.js'
 import atlasJSON from './assets/atlas.js'
 
-/** @typedef {import('./textures/atlas.js').Atlas} Atlas} */
+/** @typedef {import('./drawables/atlas.js').Atlas} Atlas} */
 
 const scale = 6
 

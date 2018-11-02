@@ -1,6 +1,6 @@
-import * as animatable from '../textures/animatable.js'
-import * as atlas from '../textures/atlas.js'
-import * as drawable from '../textures/drawable.js'
+import * as animatable from '../drawables/animatable.js'
+import * as atlas from '../drawables/atlas.js'
+import * as drawable from '../drawables/drawable.js'
 import * as entity from '../entities/entity.js'
 import * as player from '../entities/player.js'
 import * as rainCloud from '../entities/rain-cloud.js'
@@ -10,7 +10,7 @@ import * as tallGrassPatch from '../entities/tall-grass-patch.js'
 import * as util from '../util.js'
 import {AnimationID} from './animation-id.js'
 import {Limits} from '../graphics/limits.js'
-import {Layer} from '../textures/layer.js'
+import {Layer} from '../drawables/layer.js'
 
 /**
  * @typedef {Readonly<{

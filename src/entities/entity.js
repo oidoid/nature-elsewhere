@@ -1,8 +1,8 @@
-import * as animatable from '../textures/animatable.js'
-import * as recorder from '../inputs/recorder.js'
-import {Layer} from '../textures/layer.js'
+import * as animatable from '../drawables/animatable.js'
+import {Layer} from '../drawables/layer.js'
 
-/** @typedef {import('../textures/atlas').Atlas} Atlas} */
+/** @typedef {import('../drawables/atlas').Atlas} Atlas} */
+/** @typedef {import('../inputs/recorder').ReadState} Recorder} */
 
 /**
  * @typedef {Readonly<{
@@ -10,7 +10,7 @@ import {Layer} from '../textures/layer.js'
  *   layer: Layer
  *   position: Mutable<XY>
  *   speed: Mutable<XY>
- *   step(step: number, atlas: Atlas, recorderState: recorder.ReadState): void
+ *   step(step: number, atlas: Atlas, recorder: Recorder): void
  * }>} State
  */
 

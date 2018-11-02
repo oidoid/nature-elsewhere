@@ -1,9 +1,9 @@
-import * as animatable from '../textures/animatable.js'
-import * as drawable from '../textures/drawable.js'
+import * as animatable from '../drawables/animatable.js'
+import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as random from '../random.js'
 import * as util from '../util.js'
-import {Layer} from '../textures/layer.js'
+import {Layer} from '../drawables/layer.js'
 import {AnimationID} from '../assets/animation-id.js'
 
 const animationIDs = [

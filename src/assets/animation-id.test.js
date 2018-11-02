@@ -1,5 +1,5 @@
 import * as asepriteParser from '../parsers/aseprite-parser.js'
-import * as atlas from '../textures/atlas.js'
+import * as atlas from '../drawables/atlas.js'
 import * as util from '../util.js'
 import {AnimationID} from './animation-id.js'
 import atlasJSON from './atlas.js'

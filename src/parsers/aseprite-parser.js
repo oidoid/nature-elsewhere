@@ -1,5 +1,5 @@
 import * as aseprite from './aseprite.js'
-import * as atlas from '../textures/atlas.js'
+import * as atlas from '../drawables/atlas.js'
 import * as util from '../util.js'
 
 /**

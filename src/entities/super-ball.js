@@ -1,8 +1,8 @@
-import * as animatable from '../textures/animatable.js'
-import * as drawable from '../textures/drawable.js'
+import * as animatable from '../drawables/animatable.js'
+import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import {AnimationID} from '../assets/animation-id.js'
-import {Layer} from '../textures/layer.js'
+import {Layer} from '../drawables/layer.js'
 
 /**
  * @arg {XY} position

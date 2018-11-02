@@ -1,5 +1,5 @@
 import {AnimationID} from './animation-id.js'
-import {Layer} from '../textures/layer.js'
+import {Layer} from '../drawables/layer.js'
 
 /** @type {Readonly<Record<AnimationID,Layer>>} */
 export const AnimationLayer = {
