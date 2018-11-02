@@ -31,7 +31,9 @@ export function newState(position, width, randomState) {
     layer: Layer.FOREGROUND_SCENERY,
     position,
     speed: {x: 0, y: 0},
-    step() {},
+    step(step, atlas) {
+      entity.step(this, step, atlas)
+    },
     animatables: util
       .range(0, Math.floor(width / unitWidth))
       .map(i =>
