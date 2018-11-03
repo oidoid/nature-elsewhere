@@ -1,6 +1,6 @@
 import * as animator from './animator.js'
-import * as atlas from './atlas.js'
 
+/** @typedef {import('./atlas').Animation} Animation */
 /** @typedef {import('./drawable').State} Drawable */
 
 /**
@@ -27,20 +27,12 @@ export function newState(
 /**
  * @arg {State} state
  * @arg {number} step
- * @arg {atlas.Animation} animation
+ * @arg {Animation} animation
  * @return {void}
  */
 export function step(state, step, animation) {
   state.scrollPosition.x += step * state.scrollSpeed.x
   state.scrollPosition.y += step * state.scrollSpeed.y
   animator.step(state.animator, step, animation)
-}
-
-/**
- * @arg {{readonly animator: animator.State}} state
- * @arg {atlas.Animation} animation
- * @return {Rect}
- */
-export function bounds(state, animation) {
-  return animator.cel(state.animator, animation).bounds
+  state.cel = animator.celIndex(state.animator, animation)
 }

@@ -35,7 +35,7 @@ export class Store {
    */
   spawn(entities) {
     entities.forEach(lhs => {
-      let index = this._entities.findIndex(rhs => layer(lhs) <= layer(rhs))
+      const index = this._entities.findIndex(rhs => layer(lhs) <= layer(rhs))
       this._entities.splice(
         index === -1 ? this._entities.length : index,
         0,
@@ -83,13 +83,10 @@ export class Store {
           ++index
         })
       } else {
-        const animation = atlas.animations[val.animationID]
         flush(
           this,
           index,
-          isAnimatable(val)
-            ? animatable.bounds(val, animation)
-            : animation.cels[0].bounds,
+          atlas.animations[val.animationID].cels[val.cel].bounds,
           val.scrollPosition,
           val.position,
           val.scale

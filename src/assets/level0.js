@@ -10,6 +10,7 @@ import * as tallGrassPatch from '../entities/tall-grass-patch.js'
 import * as util from '../util.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {Limits} from '../graphics/limits.js'
+import {EntityID} from '../entities/entity-id.js'
 
 /**
  * @typedef {Readonly<{
@@ -37,8 +38,10 @@ export function newState(atlas, randomState) {
     drawable.newState(AnimationID.TREE, {x: 185, y: -39}),
     tallGrassPatch.newState({x: 188, y: -15}, 1000, randomState),
     drawable.newState(AnimationID.CLOUD_S, {x: 40, y: -60}),
-    animatable.newState(
-      drawable.newState(AnimationID.CLOUD_M, {x: 58, y: -76}),
+    entity.newState(
+      EntityID.CLOUD,
+      [animatable.newState(drawable.newState(AnimationID.CLOUD_M))],
+      {x: 58, y: -76},
       {x: -0.0005, y: 0}
     ),
     drawable.newState(AnimationID.CLOUD_XL, {x: 120, y: -60}),

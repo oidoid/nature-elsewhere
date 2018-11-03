@@ -49,10 +49,8 @@ export function step(state, step, atlas) {
  * @return {Rect}
  */
 export function coord(state, index, atlas) {
-  return animatable.bounds(
-    state.animatables[index],
-    atlas.animations[state.animatables[index].animationID]
-  )
+  const animatable = state.animatables[index]
+  return atlas.animations[animatable.animationID].cels[animatable.cel].bounds
 }
 
 /**
