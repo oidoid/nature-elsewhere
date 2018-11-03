@@ -10,7 +10,7 @@ import atlasJSON from './assets/atlas.js'
 
 /** @typedef {import('./drawables/atlas').Atlas} Atlas} */
 
-const scale = 9
+const defaultScale = 9
 
 export class Game {
   /**
@@ -41,6 +41,7 @@ export class Game {
     )
     /** @type {number} */ this._frameID = NaN
     /** @type {recorder.Recorder} */ this._recorder = new recorder.WriteState()
+    /** @type {number} */ this._scale = 9
   }
 
   /** @return {void} */
@@ -145,6 +146,16 @@ export class Game {
       }
     }
 
+    if (this._recorder.scaleIncrease(true)) {
+      this._scale = Math.min(40, this._scale + 1)
+    }
+    if (this._recorder.scaleDecrease(true)) {
+      this._scale = Math.max(1, this._scale - 1)
+    }
+    if (this._recorder.scaleReset(true)) {
+      this._scale = defaultScale
+    }
+
     this._store.step(step, this._atlas, this._recorder)
     this._store.flushUpdatesToMemory(this._atlas)
     // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
@@ -159,7 +170,7 @@ export class Game {
     }
     this._renderer.render(
       canvas,
-      scale,
+      this._scale,
       {x: this._player.position.x, y: this._player.position.y + 20},
       this._store.getMemory(),
       this._store.getLength()

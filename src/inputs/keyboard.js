@@ -15,5 +15,8 @@ import * as recorder from './recorder.js'
   ArrowUp: recorder.Mask.UP,
   ArrowDown: recorder.Mask.DOWN,
   Escape: recorder.Mask.MENU,
-  p: recorder.Mask.DEBUG_CONTEXT_LOSS
+  p: recorder.Mask.DEBUG_CONTEXT_LOSS,
+  0: recorder.Mask.SCALE_RESET,
+  '-': recorder.Mask.SCALE_DECREASE,
+  '+': recorder.Mask.SCALE_INCREASE
 }

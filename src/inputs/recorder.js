@@ -1,13 +1,16 @@
 /** @typedef {WriteState | ReadState} Recorder */
 
-/** @enum {number} */
+/** @enum {number} */ // prettier-ignore
 export const Mask = {
-  LEFT: 0b00000001,
-  RIGHT: 0b00000010,
-  UP: 0b00000100,
-  DOWN: 0b00001000,
-  MENU: 0b00010000,
-  DEBUG_CONTEXT_LOSS: 0b00100000
+  LEFT:               0b000000001,
+  RIGHT:              0b000000010,
+  UP:                 0b000000100,
+  DOWN:               0b000001000,
+  MENU:               0b000010000,
+  DEBUG_CONTEXT_LOSS: 0b000100000,
+  SCALE_RESET:        0b001000000,
+  SCALE_INCREASE:     0b010000000,
+  SCALE_DECREASE:     0b100000000
 }
 
 /** @type {number} */ const maxComboLength = 8
@@ -132,6 +135,30 @@ export class ReadState {
    */
   debugContextLoss(triggered = false) {
     return this._input(Mask.DEBUG_CONTEXT_LOSS, triggered)
+  }
+
+  /**
+   * @arg {boolean} [triggered]
+   * @return {boolean}
+   */
+  scaleReset(triggered = false) {
+    return this._input(Mask.SCALE_RESET, triggered)
+  }
+
+  /**
+   * @arg {boolean} [triggered]
+   * @return {boolean}
+   */
+  scaleIncrease(triggered = false) {
+    return this._input(Mask.SCALE_INCREASE, triggered)
+  }
+
+  /**
+   * @arg {boolean} [triggered]
+   * @return {boolean}
+   */
+  scaleDecrease(triggered = false) {
+    return this._input(Mask.SCALE_DECREASE, triggered)
   }
 
   /**
