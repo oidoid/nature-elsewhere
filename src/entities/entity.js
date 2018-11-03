@@ -4,6 +4,7 @@ import * as animatable from '../drawables/animatable.js'
 /** @typedef {import('./entity-id').EntityID} EntityID} */
 
 /**
+ * A group of Animatables with a behavior and relative position and speed.
  * @typedef {Readonly<{
  *   id: EntityID
  *   animatables: animatable.State[]

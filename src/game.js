@@ -7,8 +7,10 @@ import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
 import {Store} from './store.js'
 import atlasJSON from './assets/atlas.js'
+import {Limits} from './graphics/limits.js'
 
 /** @typedef {import('./drawables/atlas').Atlas} Atlas} */
+/** @typedef {import('./level').Level} Level */
 
 const defaultScale = 9
 
@@ -24,7 +26,7 @@ export class Game {
     /** @type {HTMLImageElement} */ this._atlasImage = atlasImage
     /** @type {Atlas} */ this._atlas = asepriteParser.parse(atlasJSON)
     /** @type {random.State} */ this._random = random.newState(0)
-    /** @type {level0.Level0} */ this._level0 = level0.newState(
+    /** @type {Level} */ this._level0 = level0.newState(
       this._atlas,
       this._random
     )
@@ -42,6 +44,12 @@ export class Game {
     /** @type {number} */ this._frameID = NaN
     /** @type {recorder.Recorder} */ this._recorder = new recorder.WriteState()
     /** @type {number} */ this._scale = 9
+    /** @type {Rect} */ this._cam = {
+      x: Limits.MIN,
+      y: Limits.MIN,
+      w: Limits.MAX,
+      h: Limits.MAX
+    }
   }
 
   /** @return {void} */
@@ -156,8 +164,6 @@ export class Game {
       this._scale = defaultScale
     }
 
-    this._store.step(step, this._atlas, this._recorder)
-    this._store.flushUpdatesToMemory(this._atlas)
     // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
     // scaling.
     const canvas = {
@@ -168,10 +174,18 @@ export class Game {
         ? this._document.documentElement.clientHeight
         : 0
     }
+
+    this._store.step(step, this._atlas, this._recorder, this._level0, this._cam)
+    this._store.flushUpdatesToMemory(this._atlas)
+
+    this._cam = this._renderer.cam(canvas, this._scale, {
+      x: this._player.position.x,
+      y: this._player.position.y + 20
+    })
     this._renderer.render(
       canvas,
       this._scale,
-      {x: this._player.position.x, y: this._player.position.y + 20},
+      this._cam,
       this._store.getMemory(),
       this._store.getLength()
     )

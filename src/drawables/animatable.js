@@ -11,6 +11,7 @@ import * as animator from './animator.js'
  */
 
 /**
+ * A Drawable with cel animation and scrolling.
  * @arg {Drawable} drawable
  * @arg {XY} scrollSpeed
  * @arg {animator.State} animatorState

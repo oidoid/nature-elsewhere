@@ -9,6 +9,7 @@ import {Layer} from './drawables/layer.js'
 
 /** @typedef {import('./drawables/atlas').Atlas} Atlas} */
 /** @typedef {import('./drawables/drawable').State} Drawable} */
+/** @typedef {import('./level').Level} Level */
 
 export class Store {
   constructor() {
@@ -48,13 +49,15 @@ export class Store {
    * @arg {number} stepState
    * @arg {Atlas} atlas
    * @arg {recorder.ReadState} recorder
+   * @arg {Level} level
+   * @arg {WH} cam
    * @return {void}
    */
-  step(stepState, atlas, recorder) {
+  step(stepState, atlas, recorder, level, cam) {
     this._entities.forEach(val => {
       if (isEntity(val)) {
         const step = Behavior[val.id] || entity.step
-        step(val, stepState, atlas, recorder)
+        step(val, stepState, atlas, recorder, level, cam)
       } else if (isAnimatable(val)) {
         animatable.step(val, stepState, atlas.animations[val.animationID])
       }

@@ -12,17 +12,12 @@ import {AnimationID} from '../drawables/animation-id.js'
 import {Limits} from '../graphics/limits.js'
 import {EntityID} from '../entities/entity-id.js'
 
-/**
- * @typedef {Readonly<{
- *   player: entity.State
- *   entities: ReadonlyArray<entity.State|animatable.State|drawable.State>
- * }>} Level0
- */
+/** @typedef {import('../level').Level} Level */
 
 /**
  * @arg {atlas.Atlas} atlas
  * @arg {random.State} randomState
- * @return {Level0}
+ * @return {Level}
  */
 export function newState(atlas, randomState) {
   const entities = [
@@ -63,5 +58,9 @@ export function newState(atlas, randomState) {
     y: -atlas.animations[AnimationID.PLAYER_IDLE].cels[0].bounds.h - 12
   })
   entities.push(playerState)
-  return {player: playerState, entities}
+  return {
+    bounds: {x: -512, y: 0, w: 2048, h: 200},
+    player: playerState,
+    entities
+  }
 }

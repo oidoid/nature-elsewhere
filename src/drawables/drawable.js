@@ -2,6 +2,8 @@
 /** @typedef {import('./atlas').Animation} Animation */
 
 /**
+ * A static texture region identified by AnimationID, positioned by position,
+ * scaled by scale, and offset by scrollPosition.
  * @typedef {{
  *   readonly animationID: AnimationID
  *   cel: number

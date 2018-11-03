@@ -118,54 +118,13 @@ export class Renderer {
   }
 
   /**
-   * @arg {WH} canvas
-   * @arg {number} scale
-   * @arg {XY} position
-   * @arg {Int16Array} perInstanceData
-   * @arg {number} instances
-   * @return {void}
-   */
-  render(canvas, scale, position, perInstanceData, instances) {
-    this._resize(canvas, scale, position)
-
-    bufferData(
-      this._gl,
-      this._perInstanceBuffer,
-      perInstanceData,
-      GLX.DYNAMIC_READ
-    )
-    const vertices = perVertexData.length / shader.layout.perVertex.length
-    this._gl.drawArraysInstanced(GLX.TRIANGLE_STRIP, 0, vertices, instances)
-  }
-
-  /** @return {boolean} */
-  isContextLost() {
-    return this._gl.isContextLost()
-  }
-
-  /** @return {void} */
-  debugLoseContext() {
-    if (!this._loseContext) return
-    this._loseContext.loseContext()
-  }
-
-  /** @return {void} */
-  debugRestoreContext() {
-    if (!this._loseContext) return
-    this._loseContext.restoreContext()
-  }
-
-  /**
    * @arg {WH} canvas The desired resolution of the canvas in CSS pixels.
    *                    E.g., {w: window.innerWidth, h: window.innerHeight}.
    * @arg {number} scale Positive integer zoom.
    * @arg {XY} focus The position to center on in physical pixels.
-   * @return {void}
+   * @return {Rect}
    */
-  _resize(canvas, scale, focus) {
-    this._gl.canvas.width = canvas.w
-    this._gl.canvas.height = canvas.h
-
+  cam(canvas, scale, focus) {
     // The camera position is a function of the position and the canvas'
     // dimensions.
     //
@@ -199,7 +158,7 @@ export class Renderer {
     // The canvas offsets should be truncated by the call the GL.uniform4i() but
     // these appear to use the ceiling instead so another distinct and
     // independent call to Math.trunc() is made.
-    const cam = {
+    return {
       // Center the camera on the x-position within the canvas bounds.
       x: Math.trunc(-focus.x) + Math.trunc(canvas.w / (scale * 2)),
       // Align the y-position with the bottom of the canvas.
@@ -207,6 +166,56 @@ export class Renderer {
       w: Math.ceil(canvas.w / scale),
       h: Math.ceil(canvas.h / scale)
     }
+  }
+
+  /**
+   * @arg {WH} canvas
+   * @arg {number} scale
+   * @arg {Rect} cam
+   * @arg {Int16Array} perInstanceData
+   * @arg {number} instances
+   * @return {void}
+   */
+  render(canvas, scale, cam, perInstanceData, instances) {
+    this._resize(canvas, scale, cam)
+
+    bufferData(
+      this._gl,
+      this._perInstanceBuffer,
+      perInstanceData,
+      GLX.DYNAMIC_READ
+    )
+    const vertices = perVertexData.length / shader.layout.perVertex.length
+    this._gl.drawArraysInstanced(GLX.TRIANGLE_STRIP, 0, vertices, instances)
+  }
+
+  /** @return {boolean} */
+  isContextLost() {
+    return this._gl.isContextLost()
+  }
+
+  /** @return {void} */
+  debugLoseContext() {
+    if (!this._loseContext) return
+    this._loseContext.loseContext()
+  }
+
+  /** @return {void} */
+  debugRestoreContext() {
+    if (!this._loseContext) return
+    this._loseContext.restoreContext()
+  }
+
+  /**
+   * @arg {WH} canvas The desired resolution of the canvas in CSS pixels.
+   *                    E.g., {w: window.innerWidth, h: window.innerHeight}.
+   * @arg {number} scale Positive integer zoom.
+   * @arg {Rect} cam
+   * @return {void}
+   */
+  _resize(canvas, scale, cam) {
+    this._gl.canvas.width = canvas.w
+    this._gl.canvas.height = canvas.h
 
     // Convert the pixels to clipspace by taking them as a fraction of the cam
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
