@@ -8,9 +8,9 @@ import * as renderer from './graphics/renderer.js'
 import {Store} from './store.js'
 import atlasJSON from './assets/atlas.js'
 
-/** @typedef {import('./drawables/atlas.js').Atlas} Atlas} */
+/** @typedef {import('./drawables/atlas').Atlas} Atlas} */
 
-const scale = 6
+const scale = 9
 
 export class Game {
   /**

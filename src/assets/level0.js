@@ -35,7 +35,7 @@ export function newState(atlas, randomState) {
     drawable.newState(AnimationID.GRASS_L, {x: 208, y: -12}, {x: 2, y: 1}),
     drawable.newState(AnimationID.HILL, {x: 40, y: -28}),
     drawable.newState(AnimationID.GRASS_L, {x: 228, y: -12}, {x: 6, y: 1}),
-    drawable.newState(AnimationID.TREE, {x: 185, y: -39}),
+    animatable.newState(drawable.newState(AnimationID.TREE, {x: 185, y: -39})),
     tallGrassPatch.newState({x: 188, y: -15}, 1000, randomState),
     drawable.newState(AnimationID.CLOUD_S, {x: 40, y: -60}),
     entity.newState(

@@ -13,13 +13,13 @@ import {EntityID} from './entity-id.js'
  */
 export function newState(animationID, position, speed = 0) {
   /** @type {animatable.State[]} */ const animatables = []
-  util.range(0, (position.y + 27) / 16).forEach(i =>
+  util.range(0, Math.trunc((position.y + 10) / 16)).forEach(i =>
     animatables.push(
       animatable.newState(
         drawable.newState(AnimationID.RAIN, {
           // Round now to prevent rain from being an extra pixel off due to
           // truncation later.
-          x: Math.round((-i + 2) / 2),
+          x: Math.trunc((-i + 2) / 2),
           y: 6 - i * 16
         }),
         {x: 0, y: -0.012}

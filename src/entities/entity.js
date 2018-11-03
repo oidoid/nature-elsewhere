@@ -35,10 +35,10 @@ export function newState(
  * @return {void}
  */
 export function step(state, step, atlas) {
+  state.position.x += step * state.speed.x
+  state.position.y += step * state.speed.y
   state.animatables.forEach(val => {
     animatable.step(val, step, atlas.animations[val.animationID])
-    val.position.x += step * state.speed.x
-    val.position.y += step * state.speed.y
   })
 }
 
@@ -69,8 +69,8 @@ export function scrollPosition(state, index) {
  */
 export function position(state, index) {
   return {
-    x: state.position.x + state.animatables[index].position.x,
-    y: state.position.y + state.animatables[index].position.y
+    x: Math.trunc(state.position.x) + state.animatables[index].position.x,
+    y: Math.trunc(state.position.y) + state.animatables[index].position.y
   }
 }
 
