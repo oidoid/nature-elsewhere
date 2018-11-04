@@ -1,4 +1,5 @@
 import * as animatable from '../drawables/animatable.js'
+import * as drawable from '../drawables/drawable.js'
 
 /** @typedef {import('../drawables/atlas').Atlas} Atlas} */
 /** @typedef {import('./entity-id').EntityID} EntityID} */
@@ -7,7 +8,7 @@ import * as animatable from '../drawables/animatable.js'
  * A group of Animatables with a behavior and relative position and speed.
  * @typedef {Readonly<{
  *   id: EntityID
- *   animatables: animatable.State[]
+ *   animatables: (drawable.State|animatable.State)[]
  *   position: Mutable<XY>
  *   speed: Mutable<XY>
  * }>} State
@@ -15,7 +16,7 @@ import * as animatable from '../drawables/animatable.js'
 
 /**
  * @arg {EntityID} id
- * @arg {animatable.State[]} animatables
+ * @arg {(drawable.State|animatable.State)[]} animatables
  * @arg {XY} [position]
  * @arg {XY} [speed]
  * @return {State}
@@ -39,7 +40,9 @@ export function step(state, step, atlas) {
   state.position.x += step * state.speed.x
   state.position.y += step * state.speed.y
   state.animatables.forEach(val => {
-    animatable.step(val, step, atlas.animations[val.animationID])
+    if ('animator' in val) {
+      animatable.step(val, step, atlas.animations[val.animationID])
+    }
   })
 }
 

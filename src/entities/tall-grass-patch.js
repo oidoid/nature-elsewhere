@@ -1,4 +1,3 @@
-import * as animatable from '../drawables/animatable.js'
 import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as random from '../random.js'
@@ -30,11 +29,9 @@ export function newState(position, width, randomState) {
   const animatables = util
     .range(0, Math.floor(width / unitWidth))
     .map(i =>
-      animatable.newState(
-        drawable.newState(
-          animationIDs[random.int(randomState, 0, animationIDs.length)],
-          {x: i * 4, y: 0}
-        )
+      drawable.newState(
+        animationIDs[random.int(randomState, 0, animationIDs.length)],
+        {x: i * 4, y: 0}
       )
     )
   return entity.newState(EntityID.TALL_GRASS_PATCH, animatables, position)

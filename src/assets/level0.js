@@ -20,6 +20,7 @@ import {EntityID} from '../entities/entity-id.js'
  * @return {Level}
  */
 export function newState(atlas, randomState) {
+  const bounds = {x: -512, y: 0, w: 2048, h: 200}
   const entities = [
     drawable.newState(
       AnimationID.PALETTE_PALE,
@@ -31,7 +32,11 @@ export function newState(atlas, randomState) {
     drawable.newState(AnimationID.HILL, {x: 40, y: -28}),
     drawable.newState(AnimationID.GRASS_L, {x: 228, y: -12}, {x: 6, y: 1}),
     animatable.newState(drawable.newState(AnimationID.TREE, {x: 185, y: -39})),
-    tallGrassPatch.newState({x: 188, y: -15}, 1000, randomState),
+    tallGrassPatch.newState(
+      {x: bounds.x - 1024, y: -15},
+      1024 + bounds.w + 1024,
+      randomState
+    ),
     drawable.newState(AnimationID.CLOUD_S, {x: 40, y: -60}),
     entity.newState(
       EntityID.CLOUD,
@@ -59,7 +64,7 @@ export function newState(atlas, randomState) {
   })
   entities.push(playerState)
   return {
-    bounds: {x: -512, y: 0, w: 2048, h: 200},
+    bounds,
     player: playerState,
     entities
   }

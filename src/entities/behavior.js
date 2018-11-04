@@ -16,7 +16,8 @@ import {EntityID} from './entity-id.js'
 export const Behavior = {
   [EntityID.PLAYER]: player.step,
   [EntityID.CLOUD]: wraparound,
-  [EntityID.RAIN_CLOUD]: wraparound
+  [EntityID.RAIN_CLOUD]: wraparound,
+  [EntityID.TALL_GRASS_PATCH]: () => {}
 }
 
 /** @type {Step} */

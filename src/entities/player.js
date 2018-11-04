@@ -114,7 +114,7 @@ function animationID(state, recorderState) {
 }
 
 /**
- * @arg {{readonly animatables: ReadonlyArray<animatable.State>}} state
+ * @arg {{readonly animatables: ReadonlyArray<animatable.State|drawable.State>}} state
  * @arg {recorder.ReadState} recorderState
  * @return {void}
  */
