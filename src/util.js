@@ -49,3 +49,14 @@ export function values(obj) {
 export function uniq(equals) {
   return (item, _, array) => array.findIndex(rhs => equals(item, rhs)) !== -1
 }
+
+/**
+ * @arg {number} x An integer.
+ * @arg {number} min An integer <= max
+ * @arg {number} max An integer >= min
+ * @return {number} An integer wrapped to the domain [min, max].
+ */
+export function wrap(x, min, max) {
+  const range = max - min + 1
+  return (((x % range) + range - min) % range) + min
+}
