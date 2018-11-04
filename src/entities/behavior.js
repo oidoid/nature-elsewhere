@@ -1,5 +1,6 @@
 import * as entity from './entity.js'
 import * as player from './player.js'
+import * as util from '../util.js'
 import {EntityID} from './entity-id.js'
 
 /** @typedef {import('../drawables/atlas').Atlas} Atlas} */
@@ -21,8 +22,7 @@ export const Behavior = {
 /** @type {Step} */
 export function wraparound(entityState, step, atlas, _recorder, level, cam) {
   entity.step(entityState, step, atlas)
-  const start = level.bounds.x - cam.w
-  const end = level.bounds.x + level.bounds.w + cam.w
-  entityState.position.x =
-    ((entityState.position.x - end) % (start - end)) + end
+  const min = level.bounds.x - cam.w
+  const max = level.bounds.x + level.bounds.w + cam.w
+  entityState.position.x = util.wrap(entityState.position.x, min, max)
 }

@@ -1,4 +1,5 @@
 import * as atlas from './atlas.js'
+import * as util from '../util.js'
 
 /**
  * @typedef {Object} State
@@ -26,10 +27,10 @@ const NextCel = {
   },
   /**
    * @arg {number} period An integer in the domain
-   *                      [-animation.length + 2, animation.length - 1].
+   *                      [2 - animation.length, animation.length - 1].
    */
   [atlas.AnimationDirection.PING_PONG](period, length) {
-    return ((period - 1 - (length - 1)) % (2 * (length - 1))) + (length - 1)
+    return util.wrap(period - 1, 2 - length, length)
   }
 }
 
