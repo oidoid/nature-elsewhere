@@ -12,7 +12,7 @@ import {Limits} from './graphics/limits.js'
 /** @typedef {import('./drawables/atlas').Atlas} Atlas} */
 /** @typedef {import('./level').Level} Level */
 
-const defaultScale = 9
+const defaultScale = 12
 
 export class Game {
   /**
@@ -43,7 +43,7 @@ export class Game {
     )
     /** @type {number} */ this._frameID = NaN
     /** @type {recorder.Recorder} */ this._recorder = new recorder.WriteState()
-    /** @type {number} */ this._scale = 9
+    /** @type {number} */ this._scale = defaultScale
     /** @type {Rect} */ this._cam = {
       x: Limits.MIN,
       y: Limits.MIN,
