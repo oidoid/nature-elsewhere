@@ -14,44 +14,62 @@ import {EntityID} from '../entities/entity-id.js'
 
 /** @typedef {import('../level').Level} Level */
 
+const ground = 96
+
 /**
  * @arg {atlas.Atlas} atlas
  * @arg {random.State} randomState
  * @return {Level}
  */
 export function newState(atlas, randomState) {
-  const bounds = {x: -512, y: 0, w: 2048, h: 200}
+  const bounds = {x: 0, y: 0, w: 2048, h: 128}
   const entities = [
     drawable.newState(
       AnimationID.PALETTE_PALE,
       {x: Limits.HALF_MIN, y: Limits.HALF_MIN},
       {x: Limits.MAX, y: Limits.MAX}
     ),
-    drawable.newState(AnimationID.GRASS_L, {x: -512, y: -12}, {x: 480, y: 1}),
-    drawable.newState(AnimationID.GRASS_L, {x: 208, y: -12}, {x: 2, y: 1}),
-    drawable.newState(AnimationID.HILL, {x: 40, y: -28}),
-    drawable.newState(AnimationID.GRASS_L, {x: 228, y: -12}, {x: 6, y: 1}),
-    animatable.newState(drawable.newState(AnimationID.TREE, {x: 185, y: -39})),
+    drawable.newState(
+      AnimationID.GRASS_L,
+      {
+        x: 0,
+        y: ground - atlas.animations[AnimationID.GRASS_L].cels[0].bounds.h
+      },
+      {x: Limits.MAX, y: 1}
+    ),
+    drawable.newState(AnimationID.HILL, {
+      x: 40,
+      y: ground - atlas.animations[AnimationID.HILL].cels[0].bounds.h
+    }),
+    animatable.newState(
+      drawable.newState(AnimationID.TREE, {
+        x: 185,
+        y: ground - atlas.animations[AnimationID.TREE].cels[0].bounds.h
+      })
+    ),
     tallGrassPatch.newState(
-      {x: bounds.x - 1024, y: -15},
-      1024 + bounds.w + 1024,
+      {
+        x: bounds.x,
+        y: ground - atlas.animations[AnimationID.TALL_GRASS_A].cels[0].bounds.h
+      },
+      bounds.x + bounds.w + 1024,
       randomState
     ),
-    drawable.newState(AnimationID.CLOUD_S, {x: 40, y: -60}),
+    drawable.newState(AnimationID.CLOUD_S, {x: 40, y: ground - 40}),
     entity.newState(
       EntityID.CLOUD,
       [animatable.newState(drawable.newState(AnimationID.CLOUD_M))],
-      {x: 58, y: -76},
+      {x: 58, y: ground - 48},
       {x: -0.0005, y: 0}
     ),
-    drawable.newState(AnimationID.CLOUD_XL, {x: 120, y: -60}),
-    rainCloud.newState(AnimationID.CLOUD_S, {x: 75, y: -65}, -0.0001),
-    rainCloud.newState(AnimationID.CLOUD_L, {x: 20, y: -81}, -0.00008),
+    drawable.newState(AnimationID.CLOUD_XL, {x: 120, y: ground - 32}),
+    rainCloud.newState(AnimationID.CLOUD_S, {x: 75, y: ground - 54}, -0.0001),
+    rainCloud.newState(AnimationID.CLOUD_L, {x: 140, y: ground - 60}, -0.00008),
     ...util.range(0, 1000).map(i => {
       return superBall.newState(
         {
           x: (10 + i + random.int(randomState, 0, 20)) % 80,
-          y: -100 + random.int(randomState, 0, 50)
+          y: ground - 140 + random.int(randomState, 0, 50)
         },
         {x: 0, y: 0.004}
       )
@@ -59,8 +77,8 @@ export function newState(atlas, randomState) {
   ]
 
   const playerState = player.newState({
-    x: 0,
-    y: -atlas.animations[AnimationID.PLAYER_IDLE].cels[0].bounds.h - 12
+    x: 16,
+    y: ground - atlas.animations[AnimationID.PLAYER_IDLE].cels[0].bounds.h - 1
   })
   entities.push(playerState)
   return {

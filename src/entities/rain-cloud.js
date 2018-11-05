@@ -5,6 +5,8 @@ import * as util from '../util.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from './entity-id.js'
 
+const ground = 96
+
 /**
  * @arg {AnimationID} animationID
  * @arg {XY} position
@@ -13,14 +15,14 @@ import {EntityID} from './entity-id.js'
  */
 export function newState(animationID, position, speed = 0) {
   /** @type {animatable.State[]} */ const animatables = []
-  util.range(0, Math.trunc((position.y + 10) / 16)).forEach(i =>
+  util.range(0, Math.ceil((ground - position.y) / 16)).forEach(i =>
     animatables.push(
       animatable.newState(
         drawable.newState(AnimationID.RAIN, {
           // Round now to prevent rain from being an extra pixel off due to
           // truncation later.
           x: Math.trunc((-i + 2) / 2),
-          y: 6 - i * 16
+          y: Math.min(ground - position.y - 16, 6 + i * 16)
         }),
         {x: 0, y: -0.012}
       )
@@ -29,7 +31,10 @@ export function newState(animationID, position, speed = 0) {
 
   animatables.push(
     animatable.newState(
-      drawable.newState(AnimationID.WATER_M, {x: 1, y: -position.y - 12})
+      drawable.newState(AnimationID.WATER_M, {
+        x: 1,
+        y: ground - position.y - 1
+      })
     )
   )
   animatables.push(animatable.newState(drawable.newState(animationID)))

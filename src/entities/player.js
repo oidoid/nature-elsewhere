@@ -6,6 +6,8 @@ import * as recorder from '../inputs/recorder.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from './entity-id.js'
 
+const ground = 90
+
 /**
  * @arg {XY} position
  * @return {entity.State}
@@ -51,7 +53,7 @@ export function step(state, step, atlas, recorder) {
  * @return {boolean}
  */
 function grounded({position}) {
-  return position.y >= -17
+  return position.y >= ground
 }
 
 /**
@@ -146,8 +148,8 @@ function position(state, recorderState, step) {
       (recorderState.left() ? speed : 0) +
       (recorderState.right() ? speed : 0)
   )
-  const y = Math.min(
-    -17,
+  const y = Math.max(
+    0,
     state.position.y -
       (recorderState.up() ? speed : 0) +
       (recorderState.down() ? speed : 0)

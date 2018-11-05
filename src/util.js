@@ -61,3 +61,13 @@ export function wrap(x, min, max) {
   if (range === 0) return min
   return ((((x + 2 * range) % range) + range - min) % range) + min
 }
+
+/**
+ * @arg {number} x
+ * @arg {number} min
+ * @arg {number} max
+ * @return {number}
+ */
+export function clamp(x, min, max) {
+  return Math.min(max, Math.max(x, min))
+}
