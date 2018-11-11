@@ -125,8 +125,8 @@ function scale({animatables}, recorderState) {
     animation.scale.x = recorderState.left()
       ? -1
       : recorderState.right()
-        ? 1
-        : animation.scale.x
+      ? 1
+      : animation.scale.x
   })
 }
 

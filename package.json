@@ -12,7 +12,7 @@
     "start": "live-server -q src& tsc -w& wait",
     "test": "npm run -s formatter -- -l && tsc && jest",
     "format": "npm -s run formatter -- --write",
-    "formatter": "prettier './**/*.{json,md,js,ts}'",
+    "formatter": "prettier './**/*.{json,html,md,js,ts}'",
     "build:textures": "cd src/assets && aseprite -b ../../assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.js --sheet-pack --inner-padding 1 --sheet atlas.png",
     "palettize": "cd assets && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
@@ -23,7 +23,7 @@
     "jest": "23.6.0",
     "live-server": "1.2.0",
     "pre-commit": "1.2.2",
-    "prettier": "1.14.3",
+    "prettier": "1.15.2",
     "typescript": "3.1.6"
   }
 }
