@@ -51,15 +51,18 @@ export function uniq(equals) {
 }
 
 /**
- * @arg {number} x A value.
+ * @arg {number} val A value.
  * @arg {number} min An integer <= max
  * @arg {number} max An integer >= min
  * @return {number} A value wrapped to the domain [min, max).
  */
-export function wrap(x, min, max) {
-  const range = max - min
-  if (range === 0) return min
-  return ((((x + 2 * range) % range) + range - min) % range) + min
+export function wrap(val, min, max) {
+  const range = max - min // range ∈ [0, +∞).
+  if (range === 0) return min // Empty range.
+  const x = (val - min) % range // Subtract min and wrap to x ∈ (-range, range).
+  const y = x + range // Translate to y ∈ (0, 2 * range).
+  const z = y % range // Wrap to z ∈ [0, range).
+  return z + min // Add min to return ∈ [min, max).
 }
 
 /**
