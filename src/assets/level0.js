@@ -68,8 +68,8 @@ export function newState(atlas, randomState) {
     ...util.range(0, 1000).map(i => {
       return superBall.newState(
         {
-          x: (10 + i + random.int(randomState, 0, 20)) % 80,
-          y: ground - 140 + random.int(randomState, 0, 50)
+          x: (i + random.int(randomState, 0, 20)) % 120,
+          y: ground - 70 + random.int(randomState, 0, 50)
         },
         {x: 0, y: 0.004}
       )

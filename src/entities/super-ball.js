@@ -1,4 +1,3 @@
-import * as animatable from '../drawables/animatable.js'
 import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import {AnimationID} from '../drawables/animation-id.js'
@@ -12,11 +11,7 @@ import {EntityID} from './entity-id.js'
 export function newState(position, speed = {x: 0, y: 0}) {
   return entity.newState(
     EntityID.SUPER_BALL,
-    [
-      animatable.newState(
-        drawable.newState(AnimationID.PALETTE_LIGHT_BLUE_TINT, position)
-      )
-    ],
+    [drawable.newState(AnimationID.PALETTE_LIGHT_BLUE_TINT)],
     position,
     speed
   )
