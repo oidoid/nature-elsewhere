@@ -39,8 +39,8 @@ describe('step()', () => {
       direction: atlas.AnimationDirection.FORWARD
     }
     const subject = animator.newState()
-    animator.step(subject, 2, animation)
-    expect(subject).toMatchObject({period: 1, duration: 1})
+    animator.step(subject, 1.5, animation)
+    expect(subject).toMatchObject({period: 1, duration: 0.5})
   })
 })
 
@@ -52,7 +52,7 @@ describe('celIndex', () => {
   )('%# direction %p array start', (
     /** @type {atlas.AnimationDirection} */ direction
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
+    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
     const animation = {cels: [cel, cel], direction}
     const subject = animator.newState()
     animator.step(subject, 1, animation)
@@ -67,7 +67,7 @@ describe('celIndex', () => {
   )('%# direction %p array end', (
     /** @type {atlas.AnimationDirection} */ direction
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
+    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
     const animation = {cels: [cel, cel], direction}
     const subject = animator.newState(1)
     animator.step(subject, 1, animation)
@@ -116,7 +116,7 @@ describe('celIndex', () => {
     /** @type {number} */ period,
     /** @type {ReadonlyArray<number>} */ expected
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
+    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
     const animation = {cels: [cel, cel, cel, cel], direction}
     const subject = animator.newState(period)
     const actual = []
@@ -134,7 +134,7 @@ describe('celIndex', () => {
   )('%# duration met direction %p cycles', (
     /** @type {atlas.AnimationDirection} */ direction
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 0, collision: []}
+    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
     const animation = {cels: [cel, cel, cel, cel, cel], direction}
     const subject = animator.newState()
     const actual = []

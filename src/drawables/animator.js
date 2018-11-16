@@ -68,15 +68,14 @@ export function celIndex({period}, animation) {
  * @return {void}
  */
 export function step(state, step, animation) {
-  if (animation.cels.length < 2) return
+  if (animation.cels.length < 2 || !cel(state, animation).duration) return
 
-  const duration = state.duration + step
-  if (duration < cel(state, animation).duration) {
-    // Hold cel.
-    state.duration = duration
-  } else {
-    // Advance cel.
-    state.duration = duration - cel(state, animation).duration
+  state.duration += step
+  while (state.duration >= cel(state, animation).duration) {
+    // Advance cel. It's possible that frames will be skipped but this is
+    // necessary in the event that the step time is consistently great and the
+    // frequency low.
+    state.duration -= cel(state, animation).duration
     state.period = NextCel[animation.direction](
       state.period,
       animation.cels.length
