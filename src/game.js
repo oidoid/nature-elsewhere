@@ -2,6 +2,7 @@ import * as asepriteParser from './parsers/aseprite-parser.js'
 import * as level0 from './assets/level0.js'
 import * as entity from './entities/entity.js'
 import * as keyboard from './inputs/keyboard.js'
+import * as mouse from './inputs/mouse.js'
 import * as random from './random.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
@@ -70,6 +71,16 @@ export class Game {
       this._onKeyChange(event)
     )
     this._document.addEventListener('keyup', event => this._onKeyChange(event))
+
+    this._canvas.addEventListener('mousemove', event =>
+      this._onMouseMove(event)
+    )
+    this._canvas.addEventListener('mousedown', event =>
+      this._onMouseClickChange(event)
+    )
+    this._canvas.addEventListener('mouseup', event =>
+      this._onMouseClickChange(event)
+    )
   }
 
   /** @return {void} */
@@ -126,6 +137,51 @@ export class Game {
   }
 
   /**
+   * @arg {MouseEvent} event
+   * @return {void}
+   */
+  _onMouseClickChange(event) {
+    const button = mouse.defaultButtonMap[event.button]
+    if (button === undefined) return
+    const active = event.type === 'mousedown'
+    if (this._recorder instanceof recorder.ReadState) {
+      this._recorder = this._recorder.write()
+    }
+    const xy = this._clientToWorldXY({x: event.clientX, y: event.clientY})
+    this._recorder = this._recorder.set(button, active, xy)
+
+    event.preventDefault()
+  }
+
+  /**
+   * @arg {MouseEvent} event
+   * @return {void}
+   */
+  _onMouseMove(event) {
+    const button = recorder.Mask.POINT
+    const active = true
+    if (this._recorder instanceof recorder.ReadState) {
+      this._recorder = this._recorder.write()
+    }
+    const xy = this._clientToWorldXY({x: event.clientX, y: event.clientY})
+    this._recorder = this._recorder.set(button, active, xy)
+
+    event.preventDefault()
+  }
+
+  /**
+   * @arg {XY} xy
+   * @return {XY}
+   */
+  _clientToWorldXY({x, y}) {
+    const canvas = this._canvasWH()
+    return {
+      x: this._cam.x + (x / canvas.w) * this._cam.w,
+      y: this._cam.y + (y / canvas.h) * this._cam.h
+    }
+  }
+
+  /**
    * @arg {number} then
    * @arg {number} now
    * @return {void}
@@ -165,21 +221,11 @@ export class Game {
       this._scale = defaultScale
     }
 
-    // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
-    // scaling.
-    const canvas = {
-      w: this._document.documentElement
-        ? this._document.documentElement.clientWidth
-        : 0,
-      h: this._document.documentElement
-        ? this._document.documentElement.clientHeight
-        : 0
-    }
-
     this._store.step(step, this._atlas, this._recorder, this._level0, this._cam)
     this._store.flushUpdatesToMemory(this._atlas)
 
-    this._cam = this._renderer.cam(canvas, this._scale, this._camXY(canvas))
+    const canvas = this._canvasWH()
+    this._cam = this._camRect(canvas)
     this._renderer.render(
       canvas,
       this._scale,
@@ -187,13 +233,31 @@ export class Game {
       this._store.getMemory(),
       this._store.getLength()
     )
+
+    // Clear point which has no off event.
+    this._recorder = this._recorder.write()
+    this._recorder = this._recorder.set(recorder.Mask.POINT, false)
+  }
+
+  /** @return {WH} */
+  _canvasWH() {
+    // Pixels rendered by the shader are 1:1 with the canvas. No canvas CSS
+    // scaling.
+    return {
+      w: this._document.documentElement
+        ? this._document.documentElement.clientWidth
+        : 0,
+      h: this._document.documentElement
+        ? this._document.documentElement.clientHeight
+        : 0
+    }
   }
 
   /**
    * @arg {WH} canvas
-   * @return {XY}
+   * @return {Rect}
    */
-  _camXY(canvas) {
+  _camRect(canvas) {
     // The camera's position is a function of the player position and the
     // canvas' dimensions.
     //
@@ -223,18 +287,24 @@ export class Game {
     // on the sum, rounding errors can cause the rendered distance between the
     // center of the camera and the position to vary under different inputs
     // instead of remaining at a constant offset.
-
     return {
-      x: util.clamp(
-        this._player.position.x - Math.trunc(canvas.w / (this._scale * 2)),
-        this._level0.bounds.x,
-        this._level0.bounds.x + this._level0.bounds.w
+      x: Math.trunc(
+        util.clamp(
+          this._player.position.x - Math.trunc(canvas.w / (this._scale * 2)),
+          this._level0.bounds.x,
+          this._level0.bounds.x + this._level0.bounds.w
+        )
       ),
-      y: util.clamp(
-        this._player.position.y - Math.trunc((7 * this._cam.h) / 8),
-        this._level0.bounds.y,
-        this._level0.bounds.y + this._level0.bounds.h
-      )
+      y: Math.trunc(
+        util.clamp(
+          this._player.position.y -
+            Math.trunc((7 * canvas.h) / (this._scale * 8)),
+          this._level0.bounds.y,
+          this._level0.bounds.y + this._level0.bounds.h
+        )
+      ),
+      w: Math.ceil(canvas.w / this._scale),
+      h: Math.ceil(canvas.h / this._scale)
     }
   }
 

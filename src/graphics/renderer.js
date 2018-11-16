@@ -121,25 +121,6 @@ export class Renderer {
    * @arg {WH} canvas The desired resolution of the canvas in CSS pixels. E.g.,
    *                  {w: window.innerWidth, h: window.innerHeight}.
    * @arg {number} scale Positive integer zoom.
-   * @arg {XY} position The camera view's upper left in physical pixels. The
-   *                    value will be truncated.
-   * @return {Rect}
-   */
-  cam(canvas, scale, position) {
-    // The canvas offsets should be truncated by the call the GL.uniform4i() but
-    // these appear to use the ceiling instead so another distinct and
-    // independent call to Math.trunc() is made.
-    return {
-      x: Math.trunc(position.x),
-      y: Math.trunc(position.y),
-      w: Math.ceil(canvas.w / scale),
-      h: Math.ceil(canvas.h / scale)
-    }
-  }
-
-  /**
-   * @arg {WH} canvas
-   * @arg {number} scale
    * @arg {Rect} cam
    * @arg {Int16Array} perInstanceData
    * @arg {number} instances
@@ -193,7 +174,7 @@ export class Renderer {
     // prettier-ignore
     const projection = new Float32Array([
       ratio.w,        0, 0, -1 - cam.x * ratio.w,
-            0, -ratio.h, 0, 1 + cam.y * ratio.h,
+            0, -ratio.h, 0,  1 + cam.y * ratio.h,
             0,        0, 1,                    0,
             0,        0, 0,                    1
     ])

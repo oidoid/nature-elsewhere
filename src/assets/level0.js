@@ -3,6 +3,7 @@ import * as atlas from '../drawables/atlas.js'
 import * as drawable from '../drawables/drawable.js'
 import * as entity from '../entities/entity.js'
 import * as player from '../entities/player.js'
+import * as pointer from '../entities/pointer.js'
 import * as rainCloud from '../entities/rain-cloud.js'
 import * as random from '../random.js'
 import * as superBall from '../entities/super-ball.js'
@@ -37,6 +38,7 @@ export function newState(atlas, randomState) {
       },
       {x: Limits.MAX, y: 1}
     ),
+    pointer.newState({x: 0, y: 0}),
     drawable.newState(AnimationID.HILL, {
       x: 40,
       y: ground - atlas.animations[AnimationID.HILL].cels[0].bounds.h

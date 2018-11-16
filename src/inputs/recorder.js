@@ -2,19 +2,21 @@
 
 /** @enum {number} */ // prettier-ignore
 export const Mask = {
-  LEFT:               0b000000001,
-  RIGHT:              0b000000010,
-  UP:                 0b000000100,
-  DOWN:               0b000001000,
-  MENU:               0b000010000,
-  DEBUG_CONTEXT_LOSS: 0b000100000,
-  SCALE_RESET:        0b001000000,
-  SCALE_INCREASE:     0b010000000,
-  SCALE_DECREASE:     0b100000000
+  LEFT:               0b00000000001,
+  RIGHT:              0b00000000010,
+  UP:                 0b00000000100,
+  DOWN:               0b00000001000,
+  MENU:               0b00000010000,
+  DEBUG_CONTEXT_LOSS: 0b00000100000,
+  SCALE_RESET:        0b00001000000,
+  SCALE_INCREASE:     0b00010000000,
+  SCALE_DECREASE:     0b00100000000,
+  POINT:              0b01000000000,
+  PICK:               0b10000000000
 }
 
-/** @type {number} */ const maxComboLength = 8
-/** @type {number} */ const maxSampleAge = 200
+/** @type {number} */ const maxComboLength = 64
+/** @type {number} */ const maxSampleAge = 500
 
 export class WriteState {
   /**
@@ -22,8 +24,15 @@ export class WriteState {
    * @arg {number} [sample]
    * @arg {number} [lastSample]
    * @arg {ReadonlyArray<number>} [combo]
+   * @arg {ReadonlyArray<XY|undefined>} [positions]
    */
-  constructor(sampleAge = 0, sample = 0, lastSample = 0, combo = []) {
+  constructor(
+    sampleAge = 0,
+    sample = 0,
+    lastSample = 0,
+    combo = [],
+    positions = []
+  ) {
     /** @type {number} The age of the current sample. Cleared on nonzero
      *                 triggers. */ this._sampleAge = sampleAge
     /** @type {number} The current sample and initial state of the next sample.
@@ -31,20 +40,25 @@ export class WriteState {
     /** @type {number} */ this._lastSample = lastSample
     /** @type {ReadonlyArray<number>} Historical record of triggered nonzero
      *                                samples. */ this._combo = combo
+    /** @type {ReadonlyArray<XY|undefined>} Historical record of positions.
+     */ this._positions = positions
   }
 
   /**
    * @arg {Mask} input
    * @arg {boolean} active
+   * @arg {XY} [xy]
    * @return {WriteState}
    */
-  set(input, active) {
+  set(input, active, xy) {
     const sample = active ? this._sample | input : this._sample & ~input
+    const positions = xy ? [xy, , ...this._positions] : this._positions
     return new WriteState(
       this._sampleAge,
       sample,
       this._lastSample,
-      this._combo
+      this._combo,
+      positions
     )
   }
 
@@ -54,14 +68,17 @@ export class WriteState {
    */
   read(step) {
     let sampleAge = this._sampleAge + step
+    let positions = this._positions
     /** @type {ReadonlyArray<number>} */ let combo
     if (this._sample && this._sample !== this._lastSample) {
       // Triggered.
       sampleAge = 0
       combo = [this._sample, ...this._combo]
+      positions = [this._positions[0], ...this._positions]
     } else if (!this._sample && sampleAge > maxSampleAge) {
       // Released and expired.
       combo = []
+      positions = []
     } else {
       // Unchanged (held or released).
       combo = this._combo
@@ -70,7 +87,8 @@ export class WriteState {
       sampleAge,
       this._sample,
       this._lastSample,
-      combo.slice(0, maxComboLength)
+      combo.slice(0, maxComboLength),
+      positions.slice(0, combo.length)
     )
   }
 }
@@ -81,12 +99,14 @@ export class ReadState {
    * @arg {number} sample
    * @arg {number} lastSample
    * @arg {ReadonlyArray<number>} combo
+   * @arg {ReadonlyArray<XY|undefined>} positions
    */
-  constructor(sampleAge, sample, lastSample, combo) {
+  constructor(sampleAge, sample, lastSample, combo, positions) {
     /** @type {number} */ this._sampleAge = sampleAge
     /** @type {number} */ this._sample = sample
     /** @type {number} */ this._lastSample = lastSample
     /** @type {ReadonlyArray<number>} */ this._combo = combo
+    /** @type {ReadonlyArray<XY|undefined>} */ this._positions = positions
   }
 
   /**
@@ -163,6 +183,22 @@ export class ReadState {
 
   /**
    * @arg {boolean} [triggered]
+   * @return {XY|undefined}
+   */
+  move(triggered = false) {
+    return this._input(Mask.POINT, triggered) ? this._positions[0] : undefined
+  }
+
+  /**
+   * @arg {boolean} [triggered]
+   * @return {XY|undefined}
+   */
+  pick(triggered = false) {
+    return this._input(Mask.PICK, triggered) ? this._positions[0] : undefined
+  }
+
+  /**
+   * @arg {boolean} [triggered]
    * @arg {...Mask} inputs
    * @return {boolean}
    */
@@ -179,7 +215,8 @@ export class ReadState {
       this._sampleAge,
       this._sample, // _sample starts as previous _sample, key up events will clear.
       this._sample, // _sample becomes new _lastSample.
-      this._combo
+      this._combo,
+      this._positions
     )
   }
 

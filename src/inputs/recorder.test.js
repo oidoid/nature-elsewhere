@@ -18,6 +18,7 @@ const inputs = /** @type {recorder.Mask[]} */ (util.values(recorder.Mask))
  *   | '_sample'
  *   | '_lastSample'
  *   | '_combo'
+ *   | '_positions'
  * >} InputMethod
  */
 /**

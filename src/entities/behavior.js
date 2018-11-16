@@ -1,5 +1,6 @@
 import * as entity from './entity.js'
 import * as player from './player.js'
+import * as pointer from './pointer.js'
 import * as util from '../util.js'
 import {EntityID} from './entity-id.js'
 
@@ -14,8 +15,9 @@ import {EntityID} from './entity-id.js'
 
 /** @type {Readonly<Partial<Record<EntityID, Step>>>} */
 export const Behavior = {
-  [EntityID.PLAYER]: player.step,
   [EntityID.CLOUD]: wraparound,
+  [EntityID.PLAYER]: player.step,
+  [EntityID.POINTER]: pointer.step,
   [EntityID.RAIN_CLOUD]: wraparound,
   [EntityID.TALL_GRASS_PATCH]: () => {}
 }
