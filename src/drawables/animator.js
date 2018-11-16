@@ -68,7 +68,7 @@ export function celIndex({period}, animation) {
  * @return {void}
  */
 export function step(state, step, animation) {
-  if (animation.cels.length < 2 || !cel(state, animation).duration) return
+  if (animation.cels.length < 2) return
 
   state.duration += step
   while (state.duration >= cel(state, animation).duration) {

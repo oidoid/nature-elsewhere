@@ -85,7 +85,7 @@
  */
 
 /**
- * Animation length in milliseconds or INFINITE_DURATION.
+ * Nonzero animation length in milliseconds or INFINITE_DURATION.
  * @typedef {number} Duration
  */
 

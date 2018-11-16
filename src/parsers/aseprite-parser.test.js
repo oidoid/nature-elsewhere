@@ -5,12 +5,14 @@ import * as util from '../util.js'
 import atlasJSON from '../assets/atlas.js'
 import expected from './aseprite-parser.expect.test.js'
 
+/** @typedef {import('../drawables/atlas').Cel} Cel */
+
 describe('atlas.json', () => {
   const file = atlasJSON
+  const atlas = asepriteParser.parse(file)
   const tags = file.meta.frameTags.map(frameTag => frameTag.name)
 
   test('Converts current JSON and size is a reasonable power of two', () => {
-    const atlas = asepriteParser.parse(file)
     expect(atlas.size.w).toBeLessThanOrEqual(4096)
     expect(atlas.size.h).toBeLessThanOrEqual(4096)
     expect(Math.log2(atlas.size.w) % 1).toStrictEqual(0)
@@ -46,6 +48,13 @@ describe('atlas.json', () => {
   test.each(file.meta.slices)('%# Slice name %p is a Tag', (
     /** @type {aseprite.Slice} */ slice
   ) => expect(tags).toContainEqual(slice.name))
+
+  const cels = util
+    .values(atlas.animations)
+    .reduce((sum, val) => sum.concat(val.cels), /** @type {Cel[]} */ ([]))
+  test.each(cels)('%# duration for Cel %p is > 0', (/** @type {Cel} */ cel) =>
+    expect(cel.duration).toBeGreaterThan(0)
+  )
 })
 
 describe('parse()', () => {
@@ -342,7 +351,7 @@ describe('parsePadding()', () => {
 
 describe('parseDuration()', () => {
   test('Converts Duration.', () => {
-    expect(asepriteParser.parseDuration(0)).toStrictEqual(0)
+    expect(asepriteParser.parseDuration(1)).toStrictEqual(1)
   })
 
   test('Converts infinite Duration.', () => {

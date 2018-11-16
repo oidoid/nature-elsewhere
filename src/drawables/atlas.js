@@ -20,7 +20,8 @@ import {AnimationID} from './animation-id.js'
  * A single cel of animation sequence.
  * @typedef {Object} Cel
  * @prop {Rect} bounds Texture bounds within the atlas.
- * @prop {number} duration Cel exposure in milliseconds, possibly infinite.
+ * @prop {number} duration Nonzero cel exposure in milliseconds, possibly
+ *                         infinite.
  * @prop {ReadonlyArray<Rect>} collision Collision bounds within the texture.
  */
 
