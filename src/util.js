@@ -9,10 +9,8 @@ export function range(start, end, step) {
   return Array(Math.ceil(Math.abs((start - end) / interval)))
     .fill(undefined)
     .reduce(
-      (/** @type ReadonlyArray<number> */ sum, _, i) => [
-        ...sum,
-        start + i * interval
-      ],
+      (/** @type ReadonlyArray<number> */ sum, _, i) =>
+        sum.concat(start + i * interval),
       []
     )
 }
@@ -65,11 +63,11 @@ export function wrap(val, min, max) {
 }
 
 /**
- * @arg {number} x
+ * @arg {number} val
  * @arg {number} min
  * @arg {number} max
  * @return {number}
  */
-export function clamp(x, min, max) {
-  return Math.min(max, Math.max(x, min))
+export function clamp(val, min, max) {
+  return Math.min(Math.max(val, min), max)
 }

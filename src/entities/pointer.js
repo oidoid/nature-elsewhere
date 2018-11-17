@@ -64,12 +64,12 @@ export function step(entity, _step, _atlas, recorder, _level, _cam, store) {
   }
 
   const anis = util.values(AnimationID)
-  entity.index = util.clamp(
+  entity.index = util.wrap(
     entity.index -
       (recorder.prevEntity(true) ? 1 : 0) +
       (recorder.nextEntity(true) ? 1 : 0),
     0,
-    anis.length - 1
+    anis.length
   )
 
   entity.animatables[0] = animatable.newState(

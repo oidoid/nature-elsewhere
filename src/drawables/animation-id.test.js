@@ -5,11 +5,11 @@ import {AnimationID} from './animation-id.js'
 import atlasJSON from '../assets/atlas.js'
 
 /** @type {atlas.Atlas} */ const state = asepriteParser.parse(atlasJSON)
-const ids = /** @type {AnimationID[]}*/ (util.values(AnimationID))
+const ids = /** @type {AnimationID[]} */ (util.values(AnimationID))
 
-test.each(ids)('%# AnimationID %p is unique', (/** @type {AnimationID}*/ id) =>
+test.each(ids)('%# AnimationID %p is unique', (/** @type {AnimationID} */ id) =>
   expect(
-    ids.filter((/** @type {AnimationID}*/ val) => id === val)
+    ids.filter((/** @type {AnimationID} */ val) => id === val)
   ).toHaveLength(1)
 )
 
