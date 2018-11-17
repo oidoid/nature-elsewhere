@@ -22,5 +22,7 @@ import * as recorder from './recorder.js'
   p: recorder.Mask.DEBUG_CONTEXT_LOSS,
   0: recorder.Mask.SCALE_RESET,
   '-': recorder.Mask.SCALE_DECREASE,
-  '+': recorder.Mask.SCALE_INCREASE
+  '+': recorder.Mask.SCALE_INCREASE,
+  1: recorder.Mask.PREV_ENTITY,
+  2: recorder.Mask.NEXT_ENTITY
 }

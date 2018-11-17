@@ -57,7 +57,7 @@ export class Store {
     this._entities.forEach(val => {
       if (isEntity(val)) {
         const step = Behavior[val.id] || entity.step
-        step(val, stepState, atlas, recorder, level, cam)
+        step(val, stepState, atlas, recorder, level, cam, this)
       } else if (isAnimatable(val)) {
         animatable.step(val, stepState, atlas.animations[val.animationID])
       }

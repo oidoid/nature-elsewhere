@@ -8,9 +8,10 @@ import {EntityID} from './entity-id.js'
 /** @typedef {import('./entity').State} Entity} */
 /** @typedef {import('../level').Level} Level */
 /** @typedef {import('../inputs/recorder').ReadState} Recorder} */
+/** @typedef {import('../store').Store} Store} */
 
 /**
- * @typedef {(entity: Entity, step: number, atlas: Atlas, recorder: Recorder, level: Level, cam: WH) => void} Step
+ * @typedef {(entity: Entity, step: number, atlas: Atlas, recorder: Recorder, level: Level, cam: WH, store: Store) => void} Step
  */
 
 /** @type {Readonly<Partial<Record<EntityID, Step>>>} */

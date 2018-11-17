@@ -2,17 +2,19 @@
 
 /** @enum {number} */ // prettier-ignore
 export const Mask = {
-  LEFT:               0b00000000001,
-  RIGHT:              0b00000000010,
-  UP:                 0b00000000100,
-  DOWN:               0b00000001000,
-  MENU:               0b00000010000,
-  DEBUG_CONTEXT_LOSS: 0b00000100000,
-  SCALE_RESET:        0b00001000000,
-  SCALE_INCREASE:     0b00010000000,
-  SCALE_DECREASE:     0b00100000000,
-  POINT:              0b01000000000,
-  PICK:               0b10000000000
+  LEFT:               0b0000000000001,
+  RIGHT:              0b0000000000010,
+  UP:                 0b0000000000100,
+  DOWN:               0b0000000001000,
+  MENU:               0b0000000010000,
+  DEBUG_CONTEXT_LOSS: 0b0000000100000,
+  SCALE_RESET:        0b0000001000000,
+  SCALE_INCREASE:     0b0000010000000,
+  SCALE_DECREASE:     0b0000100000000,
+  POINT:              0b0001000000000,
+  PICK:               0b0010000000000,
+  PREV_ENTITY:        0b0100000000000,
+  NEXT_ENTITY:        0b1000000000000
 }
 
 /** @type {number} */ const maxComboLength = 64
@@ -195,6 +197,22 @@ export class ReadState {
    */
   pick(triggered = false) {
     return this._input(Mask.PICK, triggered) ? this._positions[0] : undefined
+  }
+
+  /**
+   * @arg {boolean} [triggered]
+   * @return {boolean}
+   */
+  prevEntity(triggered = false) {
+    return this._input(Mask.PREV_ENTITY, triggered)
+  }
+
+  /**
+   * @arg {boolean} [triggered]
+   * @return {boolean}
+   */
+  nextEntity(triggered = false) {
+    return this._input(Mask.NEXT_ENTITY, triggered)
   }
 
   /**
