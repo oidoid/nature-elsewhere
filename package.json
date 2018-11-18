@@ -13,7 +13,7 @@
     "test": "npm run -s formatter -- -l && tsc && jest",
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{json,html,md,js,ts}'",
-    "build:textures": "cd src/assets && aseprite -b ../../assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.js --sheet-pack --inner-padding 1 --sheet atlas.png",
+    "build:textures": "cd src/assets && aseprite -b ../../assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data atlas.js --sheet-pack --inner-padding 1 --sheet atlas.png && sed -i '1iexport default' atlas.js",
     "palettize": "cd assets && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {
