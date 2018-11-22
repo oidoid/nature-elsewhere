@@ -18,12 +18,13 @@ const perVertexData = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
  * @return {Renderer}
  */
 export function newRenderer(canvas, atlas) {
-  const gl = canvas.getContext('webgl2', {
+  const gl = /** @type {GL|null} */ (canvas.getContext('webgl2', {
     alpha: false,
     depth: false,
     antialias: false,
-    failIfMajorPerformanceCaveat: true
-  })
+    failIfMajorPerformanceCaveat: true,
+    lowLatency: true // https://www.chromestatus.com/feature/6360971442388992
+  }))
   if (!gl) throw new Error('WebGL 2 unsupported.')
 
   const program = gl.createProgram()
