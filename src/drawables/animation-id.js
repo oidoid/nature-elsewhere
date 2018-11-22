@@ -1,5 +1,11 @@
 /** @enum {string} */
 export const AnimationID = {
+  BUNNY: 'bunny ',
+  CACTUS_S: 'cactus s',
+  CACTUS_M: 'cactus m',
+  CACTUS_L: 'cactus l',
+  CACTUS_XL: 'cactus xl',
+  CATTAILS: 'cattails ',
   CLOUD_XS: 'cloud xs',
   CLOUD_S: 'cloud s',
   CLOUD_M: 'cloud m',
@@ -168,6 +174,7 @@ export const AnimationID = {
   PLAYER_DESCEND_ARMED: 'player descend-armed',
   PLAYER_SIT: 'player sit',
   RAIN: 'rain ',
+  SNAKE: 'snake ',
   TALL_GRASS_A: 'tall-grass a',
   TALL_GRASS_B: 'tall-grass b',
   TALL_GRASS_C: 'tall-grass c',

@@ -3,6 +3,12 @@ import {Layer} from './layer.js'
 
 /** @type {Readonly<Record<AnimationID,Layer>>} */
 export const AnimationLayer = {
+  [AnimationID.BUNNY]: Layer.FOREGROUND_SCENERY,
+  [AnimationID.CACTUS_S]: Layer.NEAR_BACKGROUND_SCENERY,
+  [AnimationID.CACTUS_M]: Layer.FOREGROUND_SCENERY,
+  [AnimationID.CACTUS_L]: Layer.FOREGROUND_SCENERY,
+  [AnimationID.CACTUS_XL]: Layer.FOREGROUND_SCENERY,
+  [AnimationID.CATTAILS]: Layer.FOREGROUND_SCENERY,
   [AnimationID.CLOUD_XS]: Layer.CLOUDS,
   [AnimationID.CLOUD_S]: Layer.CLOUDS,
   [AnimationID.CLOUD_M]: Layer.CLOUDS,
@@ -171,6 +177,7 @@ export const AnimationLayer = {
   [AnimationID.PLAYER_DESCEND_ARMED]: Layer.PLAYER,
   [AnimationID.PLAYER_SIT]: Layer.PLAYER,
   [AnimationID.RAIN]: Layer.CLOUDS,
+  [AnimationID.SNAKE]: Layer.FOREGROUND_SCENERY,
   [AnimationID.TALL_GRASS_A]: Layer.FOREGROUND_SCENERY,
   [AnimationID.TALL_GRASS_B]: Layer.FOREGROUND_SCENERY,
   [AnimationID.TALL_GRASS_C]: Layer.FOREGROUND_SCENERY,
