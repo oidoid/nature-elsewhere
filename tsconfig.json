@@ -11,6 +11,7 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
 
+    "target": "es5",
     "noEmit": true
   }
 }

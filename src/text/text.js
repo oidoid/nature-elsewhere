@@ -36,17 +36,16 @@ export function newState(position, string) {
  * @return {(XY & {character: string})[][]}
  */
 function measure(string) {
-  const characters = string.split('')
   let i = 0
   let x = 0
   let y = 0
   /** @type {(XY & {character: string})[][]} */ const lines = [[]]
   let line = 0
-  for (const character of characters) {
+  for (const character of string) {
     if (
       (x &&
-        x + wordWidthPx(characters.slice(i)) > bounds.w &&
-        wordWidthPx(characters.slice(i)) <= bounds.w) ||
+        x + wordWidthPx(string.slice(i)) > bounds.w &&
+        wordWidthPx(string.slice(i)) <= bounds.w) ||
       x + memFont.characterWidthPx(character) > bounds.w
     ) {
       x = 0
@@ -59,7 +58,7 @@ function measure(string) {
           y: y + memFont.characterYOffsetPx(character),
           character
         })
-        x += incrementX(character, characters[i + 1])
+        x += incrementX(character, string[i + 1])
       }
     } else {
       lines[line].push({
@@ -67,7 +66,7 @@ function measure(string) {
         y: y + memFont.characterYOffsetPx(character),
         character
       })
-      x += incrementX(character, characters[i + 1])
+      x += incrementX(character, string[i + 1])
     }
     ++i
   }
@@ -84,15 +83,15 @@ function incrementX(lhs, rhs) {
 }
 
 /**
- * @arg {string[]} characters
+ * @arg {string} string
  * @return {number}
  */
-function wordWidthPx(characters) {
+function wordWidthPx(string) {
   let width = 0
   let i = 0
-  for (const character of characters) {
+  for (const character of string) {
     if (/\s/.test(character)) return width
-    width += incrementX(character, characters[i + 1])
+    width += incrementX(character, string[i + 1])
     ++i
   }
   return width
