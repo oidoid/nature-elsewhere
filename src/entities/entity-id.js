@@ -2,6 +2,7 @@
 export const EntityID = {
   BACKGROUND: 'background',
   CLOUD: 'cloud',
+  TEXT: 'text',
   PLAYER: 'player',
   POINTER: 'pointer',
   RAIN_CLOUD: 'rain-cloud',

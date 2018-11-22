@@ -9,5 +9,6 @@ export const EntityLayer = {
   [EntityID.POINTER]: Layer.FOREGROUND,
   [EntityID.RAIN_CLOUD]: Layer.CLOUDS,
   [EntityID.SUPER_BALL]: Layer.SUPER_BALL,
-  [EntityID.TALL_GRASS_PATCH]: Layer.FOREGROUND_SCENERY
+  [EntityID.TALL_GRASS_PATCH]: Layer.FOREGROUND_SCENERY,
+  [EntityID.TEXT]: Layer.FOREGROUND
 }

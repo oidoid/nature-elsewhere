@@ -8,6 +8,7 @@ import * as rainCloud from '../entities/rain-cloud.js'
 import * as random from '../random.js'
 import * as superBall from '../entities/super-ball.js'
 import * as tallGrassPatch from '../entities/tall-grass-patch.js'
+import * as text from '../text/text.js'
 import * as util from '../util.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {Limits} from '../graphics/limits.js'
@@ -48,6 +49,10 @@ export function newState(atlas, randomState) {
         x: 185,
         y: ground - atlas.animations[AnimationID.TREE].size.h
       })
+    ),
+    text.newState(
+      {x: 30, y: ground - 80},
+      '\n !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
     ),
     tallGrassPatch.newState(
       {
