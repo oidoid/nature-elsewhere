@@ -1,9 +1,7 @@
 import * as aseprite from './aseprite.js'
 import * as asepriteParser from './aseprite-parser.js'
-import * as input from './aseprite-parser.input.test.json'
 import * as util from '../util.js'
 import atlasJSON from '../assets/atlas.js'
-import expected from './aseprite-parser.expect.test.js'
 
 /** @typedef {import('../drawables/atlas').Cel} Cel */
 
@@ -55,12 +53,6 @@ describe('atlas.json', () => {
   test.each(cels)('%# duration for Cel %p is > 0', (/** @type {Cel} */ cel) =>
     expect(cel.duration).toBeGreaterThan(0)
   )
-})
-
-describe('parse()', () => {
-  test('Converts.', () => {
-    expect(asepriteParser.parse(input)).toStrictEqual(expected)
-  })
 })
 
 describe('parseAnimations()', () => {
@@ -131,9 +123,10 @@ describe('parseAnimations()', () => {
       asepriteParser.parseAnimations(frameTags, frames, slices)
     ).toStrictEqual({
       'cactus s': {
+        size: {w: 16, h: 16},
         cels: [
           {
-            bounds: {x: 221, y: 19, w: 16, h: 16},
+            position: {x: 221, y: 19},
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 8, y: 12, w: 2, h: 3}]
           }
@@ -141,9 +134,10 @@ describe('parseAnimations()', () => {
         direction: 'forward'
       },
       'cactus m': {
+        size: {w: 16, h: 16},
         cels: [
           {
-            bounds: {x: 91, y: 55, w: 16, h: 16},
+            position: {x: 91, y: 55},
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 7, y: 11, w: 3, h: 4}]
           }
@@ -151,9 +145,10 @@ describe('parseAnimations()', () => {
         direction: 'forward'
       },
       'cactus l': {
+        size: {w: 16, h: 16},
         cels: [
           {
-            bounds: {x: 73, y: 55, w: 16, h: 16},
+            position: {x: 73, y: 55},
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 7, y: 10, w: 3, h: 5}]
           }
@@ -161,9 +156,10 @@ describe('parseAnimations()', () => {
         direction: 'forward'
       },
       'cactus xl': {
+        size: {w: 16, h: 16},
         cels: [
           {
-            bounds: {x: 55, y: 55, w: 16, h: 16},
+            position: {x: 55, y: 55},
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 7, y: 9, w: 3, h: 6}]
           }
@@ -223,9 +219,10 @@ describe('parseAnimation()', () => {
     expect(
       asepriteParser.parseAnimation(frameTag, frames, slices)
     ).toStrictEqual({
+      size: {w: 16, h: 16},
       cels: [
         {
-          bounds: {x: 185, y: 37, w: 16, h: 16},
+          position: {x: 185, y: 37},
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 4, y: 11, w: 9, h: 4}]
         }
@@ -268,14 +265,14 @@ describe('parseCel()', () => {
       }
     ]
     expect(asepriteParser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
-      bounds: {x: 131, y: 19, w: 16, h: 16},
+      position: {x: 131, y: 19},
       duration: Number.POSITIVE_INFINITY,
       collision: [{x: 4, y: 4, w: 8, h: 12}]
     })
   })
 })
 
-describe('parseTexture()', () => {
+describe('parsePosition()', () => {
   test('Converts 1:1 texture mapping.', () => {
     const frame = {
       frame: {x: 1, y: 2, w: 3, h: 4},
@@ -285,12 +282,7 @@ describe('parseTexture()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(asepriteParser.parseTexture(frame)).toStrictEqual({
-      x: 1,
-      y: 2,
-      w: 3,
-      h: 4
-    })
+    expect(asepriteParser.parsePosition(frame)).toStrictEqual({x: 1, y: 2})
   })
 
   test('Converts texture mapping with padding.', () => {
@@ -302,12 +294,7 @@ describe('parseTexture()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(asepriteParser.parseTexture(frame)).toStrictEqual({
-      x: 2,
-      y: 3,
-      w: 3,
-      h: 4
-    })
+    expect(asepriteParser.parsePosition(frame)).toStrictEqual({x: 2, y: 3})
   })
 })
 

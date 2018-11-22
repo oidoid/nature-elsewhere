@@ -34,25 +34,25 @@ export function newState(atlas, randomState) {
       AnimationID.GRASS_L,
       {
         x: 0,
-        y: ground - atlas.animations[AnimationID.GRASS_L].cels[0].bounds.h
+        y: ground - atlas.animations[AnimationID.GRASS_L].size.h
       },
       {x: Limits.MAX, y: 1}
     ),
     pointer.newState({x: 0, y: 0}),
     drawable.newState(AnimationID.HILL, {
       x: 40,
-      y: ground - atlas.animations[AnimationID.HILL].cels[0].bounds.h
+      y: ground - atlas.animations[AnimationID.HILL].size.h
     }),
     animatable.newState(
       drawable.newState(AnimationID.TREE, {
         x: 185,
-        y: ground - atlas.animations[AnimationID.TREE].cels[0].bounds.h
+        y: ground - atlas.animations[AnimationID.TREE].size.h
       })
     ),
     tallGrassPatch.newState(
       {
         x: bounds.x,
-        y: ground - atlas.animations[AnimationID.TALL_GRASS_A].cels[0].bounds.h
+        y: ground - atlas.animations[AnimationID.TALL_GRASS_A].size.h
       },
       bounds.x + bounds.w + 1024,
       randomState
@@ -80,7 +80,7 @@ export function newState(atlas, randomState) {
 
   const playerState = player.newState({
     x: 16,
-    y: ground - atlas.animations[AnimationID.PLAYER_IDLE].cels[0].bounds.h - 1
+    y: ground - atlas.animations[AnimationID.PLAYER_IDLE].size.h - 1
   })
   entities.push(playerState)
   return {

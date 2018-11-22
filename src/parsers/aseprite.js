@@ -69,7 +69,7 @@
  * @prop {boolean} trimmed
  * @prop {Rect} spriteSourceSize The Frame's bounds within the file packed, not
  *                               including padding.
- * @prop {WH} sourceSize
+ * @prop {WH} sourceSize The width and height components of spriteSourceSize.
  * @prop {Duration} duration
  */
 

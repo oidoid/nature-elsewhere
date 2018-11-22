@@ -39,13 +39,14 @@ export function parseAnimations(frameTags, frames, slices) {
  */
 export function parseAnimation(frameTag, frames, slices) {
   const cels = []
+  let frame
   for (
     let frameNumber = frameTag.from;
     frameNumber <= frameTag.to;
     ++frameNumber
   ) {
     let tagFrameNumber = marshalTagFrameNumber(frameTag.name, frameNumber)
-    let frame = frames[tagFrameNumber]
+    frame = frames[tagFrameNumber]
     if (!frameNumber && frame === undefined) {
       // https://github.com/aseprite/aseprite/issues/1713
       tagFrameNumber = marshalTagFrameNumber(frameTag.name)
@@ -55,7 +56,8 @@ export function parseAnimation(frameTag, frames, slices) {
     cels.push(cel)
   }
 
-  return {cels, direction: parseAnimationDirection(frameTag.direction)}
+  let size = frame ? frame.sourceSize : {w: 0, h: 0}
+  return {size, cels, direction: parseAnimationDirection(frameTag.direction)}
 }
 
 /**
@@ -77,7 +79,7 @@ export function marshalTagFrameNumber(tag, index) {
  */
 export function parseCel(frameTag, frame, frameNumber, slices) {
   return {
-    bounds: parseTexture(frame),
+    position: parsePosition(frame),
     duration: parseDuration(frame.duration),
     collision: parseCollision(frameTag, frameNumber, slices)
   }
@@ -85,15 +87,13 @@ export function parseCel(frameTag, frame, frameNumber, slices) {
 
 /**
  * @arg {aseprite.Frame} frame
- * @return {Rect}
+ * @return {XY}
  */
-export function parseTexture(frame) {
+export function parsePosition(frame) {
   const padding = parsePadding(frame)
   return {
     x: frame.frame.x + padding.w / 2,
-    y: frame.frame.y + padding.h / 2,
-    w: frame.sourceSize.w,
-    h: frame.sourceSize.h
+    y: frame.frame.y + padding.h / 2
   }
 }
 

@@ -89,7 +89,10 @@ export class Store {
         flush(
           this,
           index,
-          atlas.animations[val.animationID].cels[val.cel].bounds,
+          {
+            ...atlas.animations[val.animationID].cels[val.cel].position,
+            ...atlas.animations[val.animationID].size
+          },
           val.scrollPosition,
           val.position,
           val.scale

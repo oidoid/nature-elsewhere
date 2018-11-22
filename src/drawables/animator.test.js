@@ -4,15 +4,20 @@ import * as util from '../util.js'
 
 describe('step()', () => {
   test('No cels', () => {
-    const animation = {cels: [], direction: atlas.AnimationDirection.FORWARD}
+    const animation = {
+      size: {w: 0, h: 0},
+      cels: [],
+      direction: atlas.AnimationDirection.FORWARD
+    }
     const subject = animator.newState()
     animator.step(subject, 1, animation)
     expect(subject).toMatchObject({period: 0, duration: 0})
   })
 
   test('time < duration', () => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 2, collision: []}
+    const cel = {position: {x: 0, y: 0}, duration: 2, collision: []}
     const animation = {
+      size: {w: 0, h: 0},
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
@@ -22,8 +27,9 @@ describe('step()', () => {
   })
 
   test('time === duration', () => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
     const animation = {
+      size: {w: 0, h: 0},
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
@@ -33,8 +39,9 @@ describe('step()', () => {
   })
 
   test('time > duration', () => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
     const animation = {
+      size: {w: 0, h: 0},
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
@@ -52,8 +59,8 @@ describe('celIndex', () => {
   )('%# direction %p array start', (
     /** @type {atlas.AnimationDirection} */ direction
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
-    const animation = {cels: [cel, cel], direction}
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+    const animation = {size: {w: 0, h: 0}, cels: [cel, cel], direction}
     const subject = animator.newState()
     animator.step(subject, 1, animation)
     const actual = animator.celIndex(subject, animation)
@@ -67,8 +74,8 @@ describe('celIndex', () => {
   )('%# direction %p array end', (
     /** @type {atlas.AnimationDirection} */ direction
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
-    const animation = {cels: [cel, cel], direction}
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+    const animation = {size: {w: 0, h: 0}, cels: [cel, cel], direction}
     const subject = animator.newState(1)
     animator.step(subject, 1, animation)
     const actual = animator.celIndex(subject, animation)
@@ -116,8 +123,12 @@ describe('celIndex', () => {
     /** @type {number} */ period,
     /** @type {ReadonlyArray<number>} */ expected
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
-    const animation = {cels: [cel, cel, cel, cel], direction}
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+    const animation = {
+      size: {w: 0, h: 0},
+      cels: [cel, cel, cel, cel],
+      direction
+    }
     const subject = animator.newState(period)
     const actual = []
     for (let i = 0; i < animation.cels.length * 5; ++i) {
@@ -134,8 +145,12 @@ describe('celIndex', () => {
   )('%# duration met direction %p cycles', (
     /** @type {atlas.AnimationDirection} */ direction
   ) => {
-    const cel = {bounds: {x: 0, y: 0, w: 0, h: 0}, duration: 1, collision: []}
-    const animation = {cels: [cel, cel, cel, cel, cel], direction}
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+    const animation = {
+      size: {w: 0, h: 0},
+      cels: [cel, cel, cel, cel, cel],
+      direction
+    }
     const subject = animator.newState()
     const actual = []
     for (let i = 0; i < animation.cels.length * 3; ++i) {

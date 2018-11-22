@@ -54,7 +54,8 @@ export function step(state, step, atlas) {
  */
 export function coord(state, index, atlas) {
   const animatable = state.animatables[index]
-  return atlas.animations[animatable.animationID].cels[animatable.cel].bounds
+  const animation = atlas.animations[animatable.animationID]
+  return {...animation.cels[animatable.cel].position, ...animation.size}
 }
 
 /**

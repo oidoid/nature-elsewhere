@@ -10,16 +10,16 @@ import {AnimationID} from './animation-id.js'
 
 /**
  * Animation and collision frames.
- * @typedef {Readonly<{
- *   cels: ReadonlyArray<Cel>
- *   direction: AnimationDirection
- * }>} Animation
+ * @typedef {Object} Animation
+ * @prop {WH} size Texture width and height for all cels.
+ * @prop {ReadonlyArray<Cel>} cels
+ * @prop {AnimationDirection} direction
  */
 
 /**
  * A single cel of animation sequence.
  * @typedef {Object} Cel
- * @prop {Rect} bounds Texture bounds within the atlas.
+ * @prop {XY} position Texture location within the atlas.
  * @prop {number} duration Nonzero cel exposure in milliseconds, possibly
  *                         infinite.
  * @prop {ReadonlyArray<Rect>} collision Collision bounds within the texture.
