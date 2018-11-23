@@ -188,6 +188,10 @@ export const AnimationLayer = {
   [AnimationID.TALL_GRASS_H]: Layer.FOREGROUND_SCENERY,
   [AnimationID.TALL_GRASS_I]: Layer.FOREGROUND_SCENERY,
   [AnimationID.TREE]: Layer.NEAR_BACKGROUND_SCENERY,
+  [AnimationID.UI_PICK]: Layer.FOREGROUND,
+  [AnimationID.UI_DECREASE]: Layer.FOREGROUND,
+  [AnimationID.UI_INCREASE]: Layer.FOREGROUND,
+  [AnimationID.UI_DELETE]: Layer.FOREGROUND,
   [AnimationID.WATER_S]: Layer.CLOUDS,
   [AnimationID.WATER_M]: Layer.CLOUDS,
   [AnimationID.WATER_L]: Layer.CLOUDS
