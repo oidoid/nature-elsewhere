@@ -34,7 +34,7 @@ export function newState(position) {
 
 /**
  * @arg {entity.State|State} entity
- * @arg {number} _step
+ * @arg {number} _milliseconds
  * @arg {Atlas} _atlas
  * @arg {Recorder} recorder
  * @arg {Level} _level
@@ -42,7 +42,15 @@ export function newState(position) {
  * @arg {Store} store
  * @return {void}
  */
-export function step(entity, _step, _atlas, recorder, _level, _cam, store) {
+export function step(
+  entity,
+  _milliseconds,
+  _atlas,
+  recorder,
+  _level,
+  _cam,
+  store
+) {
   if (!('index' in entity)) return
   {
     const xy = recorder.move()

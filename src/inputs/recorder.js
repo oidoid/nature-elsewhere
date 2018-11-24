@@ -65,11 +65,11 @@ export class WriteState {
   }
 
   /**
-   * @arg {number} step
+   * @arg {number} milliseconds
    * @return {ReadState}
    */
-  read(step) {
-    let sampleAge = this._sampleAge + step
+  read(milliseconds) {
+    let sampleAge = this._sampleAge + milliseconds
     let positions = this._positions
     /** @type {ReadonlyArray<number>} */ let combo
     if (this._sample && this._sample !== this._lastSample) {

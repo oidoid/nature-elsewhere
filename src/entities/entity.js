@@ -32,16 +32,16 @@ export function newState(
 
 /**
  * @arg {State} state
- * @arg {number} step
+ * @arg {number} milliseconds
  * @arg {Atlas} atlas
  * @return {void}
  */
-export function step(state, step, atlas) {
-  state.position.x += step * state.speed.x
-  state.position.y += step * state.speed.y
+export function step(state, milliseconds, atlas) {
+  state.position.x += milliseconds * state.speed.x
+  state.position.y += milliseconds * state.speed.y
   state.animatables.forEach(val => {
     if ('animator' in val) {
-      animatable.step(val, step, atlas.animations[val.animationID])
+      animatable.step(val, milliseconds, atlas.animations[val.animationID])
     }
   })
 }

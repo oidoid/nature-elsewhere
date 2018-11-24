@@ -26,14 +26,14 @@ export function newState(position = {x: 0, y: 0}) {
 
 /**
  * @arg {entity.State} state
- * @arg {number} step
- * @arg {atlas.Atlas} atlas
+ * @arg {number} milliseconds
+ * @arg {Atlas} atlas
  * @arg {recorder.ReadState} recorder
  * @return {void}
  */
-export function step(state, step, atlas, recorder) {
+export function step(state, milliseconds, atlas, recorder) {
   scale(state, recorder)
-  position(state, recorder, step)
+  position(state, recorder, milliseconds)
   const id = animationID(state, recorder)
   if (id !== state.animatables[0].animationID) {
     state.animatables[0] = animatable.newState(
@@ -45,7 +45,7 @@ export function step(state, step, atlas, recorder) {
     )
   }
 
-  entity.step(state, step, atlas)
+  entity.step(state, milliseconds, atlas)
 }
 
 /**

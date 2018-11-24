@@ -27,13 +27,13 @@ export function newState(
 
 /**
  * @arg {State} state
- * @arg {number} step
+ * @arg {number} milliseconds
  * @arg {Animation} animation
  * @return {void}
  */
-export function step(state, step, animation) {
-  state.scrollPosition.x += step * state.scrollSpeed.x
-  state.scrollPosition.y += step * state.scrollSpeed.y
-  animator.step(state.animator, step, animation)
+export function step(state, milliseconds, animation) {
+  state.scrollPosition.x += milliseconds * state.scrollSpeed.x
+  state.scrollPosition.y += milliseconds * state.scrollSpeed.y
+  animator.step(state.animator, milliseconds, animation)
   state.cel = animator.celIndex(state.animator, animation)
 }

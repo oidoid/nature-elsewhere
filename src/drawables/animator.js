@@ -5,7 +5,7 @@ import * as util from '../util.js'
  * @typedef {Object} State
  * @prop {number} period Cel index oscillation state. This integer may fall out
  *                       of animation bounds.
- * @prop {number} duration Cel exposure in milliseconds.
+ * @prop {number} durationMilliseconds Cel exposure in milliseconds.
  */
 
 /**
@@ -16,7 +16,7 @@ import * as util from '../util.js'
  *   >
  * >}
  */
-const NextCel = {
+const Animate = {
   /** @arg {number} period An integer in the domain [0, +∞). */
   [atlas.AnimationDirection.FORWARD](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
@@ -36,11 +36,11 @@ const NextCel = {
 
 /**
  * @arg {number} [period]
- * @arg {number} [duration]
+ * @arg {number} [durationMilliseconds]
  * @return {State}
  */
-export function newState(period = 0, duration = 0) {
-  return {period, duration}
+export function newState(period = 0, durationMilliseconds = 0) {
+  return {period, durationMilliseconds}
 }
 
 /**
@@ -63,20 +63,20 @@ export function celIndex({period}, animation) {
 
 /**
  * @arg {State} state
- * @arg {number} step
+ * @arg {number} milliseconds
  * @arg {atlas.Animation} animation
  * @return {void}
  */
-export function step(state, step, animation) {
+export function step(state, milliseconds, animation) {
   if (animation.cels.length < 2) return
 
-  state.duration += step
-  while (state.duration >= cel(state, animation).duration) {
+  state.durationMilliseconds += milliseconds
+  while (state.durationMilliseconds >= cel(state, animation).duration) {
     // Advance cel. It's possible that frames will be skipped but this is
     // necessary in the event that the step time is consistently great and the
     // frequency low.
-    state.duration -= cel(state, animation).duration
-    state.period = NextCel[animation.direction](
+    state.durationMilliseconds -= cel(state, animation).duration
+    state.period = Animate[animation.direction](
       state.period,
       animation.cels.length
     )

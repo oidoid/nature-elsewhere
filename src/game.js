@@ -187,8 +187,7 @@ export class Game {
    * @return {void}
    */
   _onLoop(then, now) {
-    // Steps are measured in milliseconds.
-    const step = now - then
+    const milliseconds = now - then
 
     then = now
     this._frameID = this._window.requestAnimationFrame(now =>
@@ -199,7 +198,7 @@ export class Game {
       // Input not pumped by event listener.
       this._recorder = this._recorder.write()
     }
-    this._recorder = this._recorder.read(step)
+    this._recorder = this._recorder.read(milliseconds)
 
     if (this._recorder.debugContextLoss(true)) {
       if (this._renderer.isContextLost()) {
