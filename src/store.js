@@ -82,7 +82,14 @@ export class Store {
           const scrollPosition = entity.scrollPosition(val, i)
           const position = entity.position(val, i)
           const scale = entity.scale(val, i)
-          flush(this, index, coord, scrollPosition, position, scale)
+          flush(
+            this,
+            index,
+            coord,
+            {...position, w: coord.w, h: coord.h},
+            scrollPosition,
+            scale
+          )
           ++index
         })
       } else {
@@ -93,8 +100,11 @@ export class Store {
             ...atlas.animations[val.animationID].cels[val.cel].position,
             ...atlas.animations[val.animationID].size
           },
+          {
+            ...val.position,
+            ...atlas.animations[val.animationID].size
+          },
           val.scrollPosition,
-          val.position,
           val.scale
         )
         ++index
@@ -106,17 +116,17 @@ export class Store {
 /**
  * @arg {Store} state
  * @arg {number} index
- * @arg {Rect} coord
+ * @arg {Rect} sourceCoord
+ * @arg {Rect} targetCoord
  * @arg {XY} scrollPosition
- * @arg {XY} position
  * @arg {XY} scale
  * @return {void}
  */
-function flush(state, index, coord, scrollPosition, position, scale) {
+function flush(state, index, sourceCoord, targetCoord, scrollPosition, scale) {
   // prettier-ignore
-  state._memory.set([coord.x, coord.y, coord.w, coord.h,
+  state._memory.set([sourceCoord.x, sourceCoord.y, sourceCoord.w, sourceCoord.h,
+                     targetCoord.x, targetCoord.y, targetCoord.w, targetCoord.h,
                      scrollPosition.x, scrollPosition.y,
-                     position.x, position.y,
                      scale.x, scale.y],
                      index * shader.layout.perInstance.length)
 }

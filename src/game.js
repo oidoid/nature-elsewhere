@@ -220,7 +220,13 @@ export class Game {
       this._scale = defaultScale
     }
 
-    this._store.step(step, this._atlas, this._recorder, this._level0, this._cam)
+    this._store.step(
+      milliseconds,
+      this._atlas,
+      this._recorder,
+      this._level0,
+      this._cam
+    )
     this._store.flushUpdatesToMemory(this._atlas)
 
     const canvas = this._canvasWH()

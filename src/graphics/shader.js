@@ -7,15 +7,15 @@ export const layout = {
     attributes: [{name: 'uv', length: 2, offset: 0}]
   },
   perInstance: {
-    length: 10,
-    stride: 20,
+    length: 12,
+    stride: 24,
     divisor: 1,
     type: 'SHORT',
     attributes: [
-      {name: 'coord', length: 4, offset: 0},
-      {name: 'scrollPosition', length: 2, offset: 8},
-      {name: 'position', length: 2, offset: 12},
-      {name: 'scale', length: 2, offset: 16}
+      {name: 'sourceCoord', length: 4, offset: 0},
+      {name: 'targetCoord', length: 4, offset: 8},
+      {name: 'scrollPosition', length: 2, offset: 16},
+      {name: 'scale', length: 2, offset: 20}
     ]
   }
 }

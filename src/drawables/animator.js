@@ -5,7 +5,7 @@ import * as util from '../util.js'
  * @typedef {Object} State
  * @prop {number} period Cel index oscillation state. This integer may fall out
  *                       of animation bounds.
- * @prop {number} durationMilliseconds Cel exposure in milliseconds.
+ * @prop {number} duration Cel exposure in milliseconds.
  */
 
 /**
@@ -36,11 +36,11 @@ const Animate = {
 
 /**
  * @arg {number} [period]
- * @arg {number} [durationMilliseconds]
+ * @arg {number} [duration]
  * @return {State}
  */
-export function newState(period = 0, durationMilliseconds = 0) {
-  return {period, durationMilliseconds}
+export function newState(period = 0, duration = 0) {
+  return {period, duration}
 }
 
 /**
@@ -70,12 +70,12 @@ export function celIndex({period}, animation) {
 export function step(state, milliseconds, animation) {
   if (animation.cels.length < 2) return
 
-  state.durationMilliseconds += milliseconds
-  while (state.durationMilliseconds >= cel(state, animation).duration) {
+  state.duration += milliseconds
+  while (state.duration >= cel(state, animation).duration) {
     // Advance cel. It's possible that frames will be skipped but this is
     // necessary in the event that the step time is consistently great and the
     // frequency low.
-    state.durationMilliseconds -= cel(state, animation).duration
+    state.duration -= cel(state, animation).duration
     state.period = Animate[animation.direction](
       state.period,
       animation.cels.length
