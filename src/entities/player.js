@@ -1,10 +1,11 @@
 import * as animatable from '../drawables/animatable.js'
-import * as atlas from '../drawables/atlas.js'
 import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as recorder from '../inputs/recorder.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from './entity-id.js'
+
+/** @typedef {import('../drawables/atlas').Atlas} Atlas} */
 
 const ground = 90
 
