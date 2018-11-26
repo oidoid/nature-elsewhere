@@ -1,5 +1,4 @@
 import * as animatable from '../drawables/animatable.js'
-import * as atlas from '../drawables/atlas.js'
 import * as drawable from '../drawables/drawable.js'
 import * as entity from '../entities/entity.js'
 import * as player from '../entities/player.js'
@@ -9,17 +8,19 @@ import * as random from '../random.js'
 import * as superBall from '../entities/super-ball.js'
 import * as tallGrassPatch from '../entities/tall-grass-patch.js'
 import * as text from '../text/text.js'
+import * as ui from '../entities/ui.js'
 import * as util from '../util.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {Limits} from '../graphics/limits.js'
 import {EntityID} from '../entities/entity-id.js'
 
+/** @typedef {import('../drawables/atlas').Atlas} Atlas */
 /** @typedef {import('../level').Level} Level */
 
 const ground = 96
 
 /**
- * @arg {atlas.Atlas} atlas
+ * @arg {Atlas} atlas
  * @arg {random.State} randomState
  * @return {Level}
  */

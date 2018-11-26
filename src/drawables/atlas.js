@@ -1,7 +1,12 @@
 import * as aseprite from '../parsers/aseprite.js'
-import {AnimationID} from './animation-id.js'
 
-/** @typedef {Readonly<{size: WH; animations: AnimationMap}>} Atlas */
+/** @typedef {import('./animation-id').AnimationID} AnimationID */
+
+/**
+ * @typedef {Object} Atlas
+ * @prop {WH} size Atlas dimensions in pixels.
+ * @prop {AnimationMap} animations
+ */
 
 /**
  * AnimationIDs are aseprite.Tags.
@@ -11,18 +16,18 @@ import {AnimationID} from './animation-id.js'
 /**
  * Animation and collision frames.
  * @typedef {Object} Animation
- * @prop {WH} size Texture width and height for all cels.
+ * @prop {WH} size Cel dimensions in pixels.
  * @prop {ReadonlyArray<Cel>} cels
  * @prop {AnimationDirection} direction
  */
 
 /**
- * A single cel of animation sequence.
+ * A single cel of an animation sequence.
  * @typedef {Object} Cel
- * @prop {XY} position Texture location within the atlas.
+ * @prop {XY} position Texture location within the atlas in pixels.
  * @prop {number} duration Nonzero cel exposure in milliseconds, possibly
  *                         infinite.
- * @prop {ReadonlyArray<Rect>} collision Collision bounds within the texture.
+ * @prop {ReadonlyArray<Rect>} collision Collision bounds within the texture in pixels.
  */
 
 /** @enum {string} */
