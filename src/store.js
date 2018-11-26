@@ -46,20 +46,20 @@ export class Store {
   }
 
   /**
-   * @arg {number} stepState
+   * @arg {number} milliseconds
    * @arg {Atlas} atlas
    * @arg {recorder.ReadState} recorder
    * @arg {Level} level
    * @arg {WH} cam
    * @return {void}
    */
-  step(stepState, atlas, recorder, level, cam) {
+  step(milliseconds, atlas, recorder, level, cam) {
     this._entities.forEach(val => {
       if (isEntity(val)) {
         const step = Behavior[val.id] || entity.step
-        step(val, stepState, atlas, recorder, level, cam, this)
+        step(val, milliseconds, atlas, recorder, level, cam, this)
       } else if (isAnimatable(val)) {
-        animatable.step(val, stepState, atlas.animations[val.animationID])
+        animatable.step(val, milliseconds, atlas.animations[val.animationID])
       }
     })
   }
@@ -127,7 +127,8 @@ function flush(state, index, sourceCoord, targetCoord, scrollPosition, scale) {
   state._memory.set([sourceCoord.x, sourceCoord.y, sourceCoord.w, sourceCoord.h,
                      targetCoord.x, targetCoord.y, targetCoord.w, targetCoord.h,
                      scrollPosition.x, scrollPosition.y,
-                     scale.x, scale.y],
+                     scale.x, scale.y,
+                     1],
                      index * shader.layout.perInstance.length)
 }
 

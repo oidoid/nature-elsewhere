@@ -9,15 +9,24 @@ import vertexShaderSource from './vertex-shader.js'
 /** @typedef {WebGLBuffer | null} GLBuffer */
 /** @typedef {WEBGL_lose_context | null} GLLoseContext */
 
+/**
+ * @typedef {Object} State
+ * @prop {GL} gl
+ * @prop {GLUniform} projectionLocation
+ * @prop {GLBuffer} perInstanceBuffer
+ * @prop {GLLoseContext} loseContext
+ */
+
 const GLX = /** @type {typeof WebGL2RenderingContext} */ (WebGL2RenderingContext)
 const perVertexData = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
 
 /**
  * @arg {HTMLCanvasElement} canvas
  * @arg {HTMLImageElement} atlas
- * @return {Renderer}
+ * @arg {HTMLImageElement} palettes
+ * @return {State}
  */
-export function newRenderer(canvas, atlas) {
+export function newState(canvas, atlas, palettes) {
   const gl = /** @type {GL|null} */ (canvas.getContext('webgl2', {
     alpha: false,
     depth: false,
@@ -28,9 +37,9 @@ export function newRenderer(canvas, atlas) {
   if (!gl) throw new Error('WebGL 2 unsupported.')
 
   const program = gl.createProgram()
-  if (program === null) throw new Error('Unable to create WebGL program.')
-  const vertexShader = loadShader(gl, GLX.VERTEX_SHADER, vertexShaderSource)
-  const fragmentShader = loadShader(
+  if (program === null) throw new Error('WebGL program creation failed.')
+  const vertexShader = compileShader(gl, GLX.VERTEX_SHADER, vertexShaderSource)
+  const fragmentShader = compileShader(
     gl,
     GLX.FRAGMENT_SHADER,
     fragmentShaderSource
@@ -40,24 +49,27 @@ export function newRenderer(canvas, atlas) {
   gl.linkProgram(program)
   gl.useProgram(program)
 
+  const log = gl.getProgramInfoLog(program)
+  if (log) console.error(log)
+
   // Mark shaders for deletion when unused.
   gl.detachShader(program, fragmentShader)
   gl.detachShader(program, vertexShader)
   gl.deleteShader(fragmentShader)
   gl.deleteShader(vertexShader)
 
-  const log = gl.getProgramInfoLog(program)
-  if (log) console.error(log)
-
   // Allow translucent textures to be layered.
   gl.enable(gl.BLEND)
   gl.blendEquation(gl.FUNC_ADD)
   gl.blendFunc(GLX.SRC_ALPHA, GLX.ONE_MINUS_SRC_ALPHA)
 
-  const projection = gl.getUniformLocation(program, 'projection')
-  gl.uniform1i(gl.getUniformLocation(program, 'sampler'), 0)
+  const projectionLocation = gl.getUniformLocation(program, 'projection')
+  gl.uniform1i(gl.getUniformLocation(program, 'atlas'), 0)
   const atlasSize = gl.getUniformLocation(program, 'atlasSize')
   gl.uniform2i(atlasSize, atlas.naturalWidth, atlas.naturalHeight)
+  gl.uniform1i(gl.getUniformLocation(program, 'palettes'), 1)
+  const palettesSize = gl.getUniformLocation(program, 'palettesSize')
+  gl.uniform2i(palettesSize, palettes.naturalWidth, palettes.naturalHeight)
 
   const vertexArray = gl.createVertexArray()
   gl.bindVertexArray(vertexArray)
@@ -92,101 +104,112 @@ export function newRenderer(canvas, atlas) {
   // Leave vertexArray bound.
 
   gl.activeTexture(GLX.TEXTURE0)
-  const texture = gl.createTexture()
-  gl.bindTexture(GLX.TEXTURE_2D, texture)
+  const atlasTexture = gl.createTexture()
+  gl.bindTexture(GLX.TEXTURE_2D, atlasTexture)
   gl.texParameteri(GLX.TEXTURE_2D, GLX.TEXTURE_MIN_FILTER, GLX.NEAREST)
   gl.texParameteri(GLX.TEXTURE_2D, GLX.TEXTURE_MAG_FILTER, GLX.NEAREST)
   gl.texImage2D(GLX.TEXTURE_2D, 0, GLX.RGBA, GLX.RGBA, GLX.UNSIGNED_BYTE, atlas)
   // Leave texture bound.
 
+  gl.activeTexture(GLX.TEXTURE1)
+  const palettesTexture = gl.createTexture()
+  gl.bindTexture(GLX.TEXTURE_2D, palettesTexture)
+  gl.texParameteri(GLX.TEXTURE_2D, GLX.TEXTURE_MIN_FILTER, GLX.NEAREST)
+  gl.texParameteri(GLX.TEXTURE_2D, GLX.TEXTURE_MAG_FILTER, GLX.NEAREST)
+  gl.texImage2D(
+    GLX.TEXTURE_2D,
+    0,
+    GLX.RGBA,
+    GLX.RGBA,
+    GLX.UNSIGNED_BYTE,
+    palettes
+  )
+  // Leave texture bound.
+
   const loseContext = gl.getExtension('WEBGL_lose_context')
 
-  return new Renderer(gl, projection, perInstanceBuffer, loseContext)
+  return {gl, projectionLocation, perInstanceBuffer, loseContext}
 }
 
-export class Renderer {
-  /**
-   * @arg {GL} gl
-   * @arg {GLUniform} projection
-   * @arg {GLBuffer} perInstanceBuffer
-   * @arg {GLLoseContext} loseContext
-   */
-  constructor(gl, projection, perInstanceBuffer, loseContext) {
-    /** @type {GL} */ this._gl = gl
-    /** @type {GLUniform} */ this._projection = projection
-    /** @type {GLBuffer} */ this._perInstanceBuffer = perInstanceBuffer
-    /** @type {GLLoseContext} */ this._loseContext = loseContext
-  }
+/**
+ * @arg {State} state
+ * @arg {WH} canvas The desired resolution of the canvas in CSS pixels. E.g.,
+ *                  {w: window.innerWidth, h: window.innerHeight}.
+ * @arg {number} scale Positive integer zoom.
+ * @arg {Rect} cam
+ * @arg {Int16Array} perInstanceData
+ * @arg {number} instances
+ * @return {void}
+ */
+export function render(state, canvas, scale, cam, perInstanceData, instances) {
+  resize(state, canvas, scale, cam)
 
-  /**
-   * @arg {WH} canvas The desired resolution of the canvas in CSS pixels. E.g.,
-   *                  {w: window.innerWidth, h: window.innerHeight}.
-   * @arg {number} scale Positive integer zoom.
-   * @arg {Rect} cam
-   * @arg {Int16Array} perInstanceData
-   * @arg {number} instances
-   * @return {void}
-   */
-  render(canvas, scale, cam, perInstanceData, instances) {
-    this._resize(canvas, scale, cam)
+  bufferData(
+    state.gl,
+    state.perInstanceBuffer,
+    perInstanceData,
+    GLX.DYNAMIC_READ
+  )
+  const vertices = perVertexData.length / shader.layout.perVertex.length
+  state.gl.drawArraysInstanced(GLX.TRIANGLE_STRIP, 0, vertices, instances)
+}
 
-    bufferData(
-      this._gl,
-      this._perInstanceBuffer,
-      perInstanceData,
-      GLX.DYNAMIC_READ
-    )
-    const vertices = perVertexData.length / shader.layout.perVertex.length
-    this._gl.drawArraysInstanced(GLX.TRIANGLE_STRIP, 0, vertices, instances)
-  }
+/**
+ * @arg {{gl: GL}} state
+ * @return {boolean}
+ */
+export function isContextLost({gl}) {
+  return gl.isContextLost()
+}
 
-  /** @return {boolean} */
-  isContextLost() {
-    return this._gl.isContextLost()
-  }
+/**
+ * @arg {{loseContext: GLLoseContext}} state
+ * @return {void}
+ */
+export function debugLoseContext({loseContext}) {
+  if (!loseContext) return
+  loseContext.loseContext()
+}
 
-  /** @return {void} */
-  debugLoseContext() {
-    if (!this._loseContext) return
-    this._loseContext.loseContext()
-  }
+/**
+ * @arg {{loseContext: GLLoseContext}} state
+ * @return {void}
+ */
+export function debugRestoreContext({loseContext}) {
+  if (!loseContext) return
+  loseContext.restoreContext()
+}
 
-  /** @return {void} */
-  debugRestoreContext() {
-    if (!this._loseContext) return
-    this._loseContext.restoreContext()
-  }
+/**
+ * @arg {{gl: GL, projectionLocation: GLUniform}} state
+ * @arg {WH} canvas The desired resolution of the canvas in CSS pixels. E.g.,
+ *                  {w: window.innerWidth, h: window.innerHeight}.
+ * @arg {number} scale Positive integer zoom.
+ * @arg {Rect} cam
+ * @return {void}
+ */
+function resize({gl, projectionLocation}, canvas, scale, cam) {
+  gl.canvas.width = canvas.w
+  gl.canvas.height = canvas.h
 
-  /**
-   * @arg {WH} canvas The desired resolution of the canvas in CSS pixels. E.g.,
-   *                  {w: window.innerWidth, h: window.innerHeight}.
-   * @arg {number} scale Positive integer zoom.
-   * @arg {Rect} cam
-   * @return {void}
-   */
-  _resize(canvas, scale, cam) {
-    this._gl.canvas.width = canvas.w
-    this._gl.canvas.height = canvas.h
+  // Convert the pixels to clipspace by taking them as a fraction of the cam
+  // resolution, scaling to 0-2, flipping the y-coordinate so that positive y is
+  // downward, and translating to -1 to 1 and again by the camera position.
+  const ratio = {w: 2 / cam.w, h: 2 / cam.h}
+  // prettier-ignore
+  const projection = new Float32Array([
+    ratio.w,        0, 0, -1 - cam.x * ratio.w,
+          0, -ratio.h, 0,  1 + cam.y * ratio.h,
+          0,        0, 1,                    0,
+          0,        0, 0,                    1
+  ])
+  gl.uniformMatrix4fv(projectionLocation, false, projection)
 
-    // Convert the pixels to clipspace by taking them as a fraction of the cam
-    // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
-    // is downward, and translating to -1 to 1 and again by the camera position.
-    const ratio = {w: 2 / cam.w, h: 2 / cam.h}
-    // prettier-ignore
-    const projection = new Float32Array([
-      ratio.w,        0, 0, -1 - cam.x * ratio.w,
-            0, -ratio.h, 0,  1 + cam.y * ratio.h,
-            0,        0, 1,                    0,
-            0,        0, 0,                    1
-    ])
-    this._gl.uniformMatrix4fv(this._projection, false, projection)
-
-    // The viewport is a rendered in physical pixels. It's intentional to use
-    // the camera dimensions instead of canvas dimensions since the camera often
-    // exceeds the canvas and the viewport's dimensions must be an integer
-    // multiple of the camera.
-    this._gl.viewport(0, 0, scale * cam.w, scale * cam.h)
-  }
+  // The viewport is a rendered in physical pixels. It's intentional to use the
+  // camera dimensions instead of canvas dimensions since the camera often
+  // exceeds the canvas and the viewport's dimensions must be an integer
+  // multiple of the camera.
+  gl.viewport(0, 0, scale * cam.w, scale * cam.h)
 }
 
 /**
@@ -217,13 +240,13 @@ function initAttribute(gl, program, attribute, type, stride, divisor, buffer) {
 /**
  * @arg {GL} gl
  * @arg {number} type
- * @arg {string} src
+ * @arg {string} source
  * @return {GLShader}
  */
-function loadShader(gl, type, src) {
+function compileShader(gl, type, source) {
   const shader = gl.createShader(type)
-  if (!shader) throw new Error('Unable to create shader.')
-  gl.shaderSource(shader, src.trim())
+  if (!shader) throw new Error('Shader creation failed.')
+  gl.shaderSource(shader, source.trim())
   gl.compileShader(shader)
   const log = gl.getShaderInfoLog(shader)
   if (log) console.error(log)

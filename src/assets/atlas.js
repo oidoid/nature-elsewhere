@@ -1588,8 +1588,8 @@ export default {
   meta: {
     app: 'http://www.aseprite.org/',
     version: '1.2.9',
-    image: 'atlas.png',
-    format: 'RGBA8888',
+    image: 'src/assets/atlas.png',
+    format: 'I8',
     size: {w: 128, h: 128},
     scale: '1',
     frameTags: [

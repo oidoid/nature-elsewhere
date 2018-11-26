@@ -8,8 +8,8 @@ import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
 import * as util from './util.js'
 import {Store} from './store.js'
-import atlasJSON from './assets/atlas.js'
 import {Limits} from './graphics/limits.js'
+import atlasJSON from './assets/atlas.js'
 
 /** @typedef {import('./drawables/atlas').Atlas} Atlas} */
 /** @typedef {import('./level').Level} Level */
@@ -21,11 +21,13 @@ export class Game {
    * @arg {Window} window
    * @arg {HTMLCanvasElement} canvas
    * @arg {HTMLImageElement} atlasImage
+   * @arg {HTMLImageElement} palettesImage
    */
-  constructor(window, canvas, atlasImage) {
+  constructor(window, canvas, atlasImage, palettesImage) {
     /** @type {Window} */ this._window = window
     /** @type {Document} */ this._document = window.document
     /** @type {HTMLImageElement} */ this._atlasImage = atlasImage
+    /** @type {HTMLImageElement} */ this._palettesImage = palettesImage
     /** @type {Atlas} */ this._atlas = asepriteParser.parse(atlasJSON)
     /** @type {random.State} */ this._random = random.newState(0)
     /** @type {Level} */ this._level0 = level0.newState(
@@ -39,9 +41,10 @@ export class Game {
 
     /** @type {HTMLCanvasElement} */ this._canvas = canvas
 
-    /** @type {renderer.Renderer} */ this._renderer = renderer.newRenderer(
+    /** @type {renderer.State} */ this._renderer = renderer.newState(
       canvas,
-      atlasImage
+      atlasImage,
+      palettesImage
     )
     /** @type {number} */ this._frameID = NaN
     /** @type {recorder.Recorder} */ this._recorder = new recorder.WriteState()
@@ -116,7 +119,11 @@ export class Game {
    */
   _onContextRestored(event) {
     console.log('Context restored.')
-    this._renderer = renderer.newRenderer(this._canvas, this._atlasImage)
+    this._renderer = renderer.newState(
+      this._canvas,
+      this._atlasImage,
+      this._palettesImage
+    )
     event.preventDefault()
   }
 
@@ -201,12 +208,12 @@ export class Game {
     this._recorder = this._recorder.read(milliseconds)
 
     if (this._recorder.debugContextLoss(true)) {
-      if (this._renderer.isContextLost()) {
+      if (renderer.isContextLost(this._renderer)) {
         console.log('Restore renderer context.')
-        this._renderer.debugRestoreContext()
+        renderer.debugRestoreContext(this._renderer)
       } else {
         console.log('Lose renderer context.')
-        this._renderer.debugLoseContext()
+        renderer.debugLoseContext(this._renderer)
       }
     }
 
@@ -231,7 +238,8 @@ export class Game {
 
     const canvas = this._canvasWH()
     this._cam = this._camRect(canvas)
-    this._renderer.render(
+    renderer.render(
+      this._renderer,
       canvas,
       this._scale,
       this._cam,
