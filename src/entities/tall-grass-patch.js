@@ -31,7 +31,10 @@ export function newState(position, width, randomState) {
     .map(i =>
       drawable.newState(
         animationIDs[random.int(randomState, 0, animationIDs.length)],
-        {x: i * 4, y: 0}
+        {x: i * unitWidth, y: 0},
+        {x: 1, y: 1},
+        {x: random.int(randomState, 0, 4), y: 0},
+        random.int(randomState, 0, 2)
       )
     )
   return entity.newState(EntityID.TALL_GRASS_PATCH, animatables, position)

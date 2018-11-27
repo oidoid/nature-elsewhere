@@ -82,13 +82,15 @@ export class Store {
           const scrollPosition = entity.scrollPosition(val, i)
           const position = entity.position(val, i)
           const scale = entity.scale(val, i)
+          const palette = entity.palette(val, i)
           flush(
             this,
             index,
             coord,
             {...position, w: coord.w, h: coord.h},
             scrollPosition,
-            scale
+            scale,
+            palette
           )
           ++index
         })
@@ -105,7 +107,8 @@ export class Store {
             ...atlas.animations[val.animationID].size
           },
           val.scrollPosition,
-          val.scale
+          val.scale,
+          val.palette
         )
         ++index
       }
@@ -120,15 +123,24 @@ export class Store {
  * @arg {Rect} targetCoord
  * @arg {XY} scrollPosition
  * @arg {XY} scale
+ * @arg {number} palette
  * @return {void}
  */
-function flush(state, index, sourceCoord, targetCoord, scrollPosition, scale) {
+function flush(
+  state,
+  index,
+  sourceCoord,
+  targetCoord,
+  scrollPosition,
+  scale,
+  palette
+) {
   // prettier-ignore
   state._memory.set([sourceCoord.x, sourceCoord.y, sourceCoord.w, sourceCoord.h,
                      targetCoord.x, targetCoord.y, targetCoord.w, targetCoord.h,
                      scrollPosition.x, scrollPosition.y,
                      scale.x, scale.y,
-                     1],
+                     palette],
                      index * shader.layout.perInstance.length)
 }
 

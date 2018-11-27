@@ -87,3 +87,12 @@ export function position(state, index) {
 export function scale(state, index) {
   return state.animatables[index].scale
 }
+
+/**
+ * @arg {State} state
+ * @arg {number} index
+ * @return {number}
+ */
+export function palette(state, index) {
+  return state.animatables[index].palette
+}
