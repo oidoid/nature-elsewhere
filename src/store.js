@@ -83,11 +83,12 @@ export class Store {
           const position = entity.position(val, i)
           const scale = entity.scale(val, i)
           const palette = entity.palette(val, i)
+          const wh = entity.wh(val, i, atlas)
           flush(
             this,
             index,
             coord,
-            {...position, w: coord.w, h: coord.h},
+            {...position, ...wh},
             scrollPosition,
             scale,
             palette
@@ -104,7 +105,7 @@ export class Store {
           },
           {
             ...val.position,
-            ...atlas.animations[val.animationID].size
+            ...(val.wh ? val.wh : atlas.animations[val.animationID].size)
           },
           val.scrollPosition,
           val.scale,

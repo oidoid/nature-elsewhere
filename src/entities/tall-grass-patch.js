@@ -1,7 +1,6 @@
 import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as random from '../random.js'
-import * as util from '../util.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from './entity-id.js'
 
@@ -17,7 +16,8 @@ const animationIDs = [
   AnimationID.TALL_GRASS_I
 ]
 
-const unitWidth = 4
+const unitWidth = 5
+const unitHeight = 4
 
 /**
  * @arg {XY} position
@@ -26,16 +26,22 @@ const unitWidth = 4
  * @return {entity.State}
  */
 export function newState(position, width, randomState) {
-  const animatables = util
-    .range(0, Math.floor(width / unitWidth))
-    .map(i =>
+  const drawables = []
+  for (let x = 0; x < width; ) {
+    let randomWidth = random.int(randomState, unitWidth, 3 * unitWidth + 1)
+    if (x + randomWidth > width) randomWidth = width - randomWidth
+    drawables.push(
       drawable.newState(
         animationIDs[random.int(randomState, 0, animationIDs.length)],
-        {x: i * unitWidth, y: 0},
+        {x, y: 0},
         {x: 1, y: 1},
-        {x: random.int(randomState, 0, 4), y: 0},
-        random.int(randomState, 0, 2)
+        {x: random.int(randomState, 0, unitWidth), y: 0},
+        random.int(randomState, 0, 2),
+        0,
+        {w: randomWidth, h: unitHeight}
       )
     )
-  return entity.newState(EntityID.TALL_GRASS_PATCH, animatables, position)
+    x += randomWidth
+  }
+  return entity.newState(EntityID.TALL_GRASS_PATCH, drawables, position)
 }

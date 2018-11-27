@@ -96,3 +96,17 @@ export function scale(state, index) {
 export function palette(state, index) {
   return state.animatables[index].palette
 }
+
+/**
+ * @arg {State} state
+ * @arg {number} index
+ * @arg {Atlas} atlas
+ * @return {WH}
+ */
+export function wh(state, index, atlas) {
+  const wh = state.animatables[index].wh
+  if (wh) return wh
+  const animatable = state.animatables[index]
+  const animation = atlas.animations[animatable.animationID]
+  return animation.size
+}
