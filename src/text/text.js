@@ -4,16 +4,27 @@ import * as memFont from './mem-font.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from '../entities/entity-id.js'
 
-const bounds = {x: 0, y: 0, w: 80, h: 80}
-
 /**
  * @arg {XY} position
  * @arg {string} string
  * @return {entity.State}
  */
 export function newState(position, string) {
+  return entity.newState(
+    EntityID.TEXT,
+    drawables(string, {x: 0, y: 0, w: 80, h: 80}),
+    position
+  )
+}
+
+/**
+ * @arg {string} string
+ * @arg {Rect} bounds
+ * @return {ReadonlyArray<drawable.State>}
+ */
+export function drawables(string, bounds) {
   const drawables = []
-  const measurement = measure(string)
+  const measurement = measure(string, bounds)
   loop: for (const line of measurement) {
     for (const character of line) {
       if (character.y + (memFont.lineHeightPx + memFont.leadingPx) < bounds.y)
@@ -28,14 +39,15 @@ export function newState(position, string) {
       drawables.push(d)
     }
   }
-  return entity.newState(EntityID.TEXT, drawables, position)
+  return drawables
 }
 
 /**
  * @arg {string} string
+ * @arg {Rect} bounds
  * @return {(XY & {character: string})[][]}
  */
-function measure(string) {
+function measure(string, bounds) {
   let i = 0
   let x = 0
   let y = 0

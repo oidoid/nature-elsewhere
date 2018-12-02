@@ -16,7 +16,7 @@ import * as drawable from '../drawables/drawable.js'
 
 /**
  * @arg {EntityID} id
- * @arg {(drawable.State|animatable.State)[]} animatables
+ * @arg {ReadonlyArray<drawable.State|animatable.State>} animatables
  * @arg {XY} [position]
  * @arg {XY} [speed]
  * @return {State}
@@ -27,7 +27,7 @@ export function newState(
   position = {x: 0, y: 0},
   speed = {x: 0, y: 0}
 ) {
-  return {id, animatables, position, speed}
+  return {id, animatables: [...animatables], position, speed}
 }
 
 /**
