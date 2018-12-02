@@ -23,7 +23,7 @@
     "jest": "23.6.0",
     "live-server": "1.2.1",
     "pre-commit": "1.2.2",
-    "prettier": "1.15.2",
+    "prettier": "1.15.3",
     "typescript": "3.2.1"
   }
 }
