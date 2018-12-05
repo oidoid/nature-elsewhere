@@ -15,15 +15,15 @@ describe('step()', () => {
   })
 
   test('time < duration', () => {
-    const cel = {position: {x: 0, y: 0}, duration: 2, collision: []}
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
     const animation = {
       size: {w: 0, h: 0},
       cels: [cel, cel],
       direction: atlas.AnimationDirection.FORWARD
     }
     const subject = animator.newState()
-    animator.step(subject, 1, animation)
-    expect(subject).toMatchObject({period: 0, duration: 1})
+    animator.step(subject, 0.5, animation)
+    expect(subject).toMatchObject({period: 0, duration: 0.5})
   })
 
   test('time === duration', () => {
@@ -47,7 +47,7 @@ describe('step()', () => {
     }
     const subject = animator.newState()
     animator.step(subject, 1.5, animation)
-    expect(subject).toMatchObject({period: 1, duration: 0.5})
+    expect(subject).toMatchObject({period: 1, duration: 0})
   })
 })
 

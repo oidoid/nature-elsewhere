@@ -71,11 +71,12 @@ export function step(state, milliseconds, animation) {
   if (animation.cels.length < 2) return
 
   state.duration += milliseconds
-  while (state.duration >= cel(state, animation).duration) {
-    // Advance cel. It's possible that frames will be skipped but this is
-    // necessary in the event that the step time is consistently great and the
-    // frequency low.
-    state.duration -= cel(state, animation).duration
+  if (state.duration >= cel(state, animation).duration) {
+    // Advance cel. It's possible that more than one cel should be advanced.
+    // However, it's necessary to assume not so that in the event that the step
+    // delta is great and the frequency low, the cel isn't advanced every frame
+    // which would create a fast-forward effect.
+    state.duration = 0
     state.period = Animate[animation.direction](
       state.period,
       animation.cels.length
