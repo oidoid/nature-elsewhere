@@ -46,15 +46,6 @@ export function newState(period = 0, duration = 0) {
 /**
  * @arg {Readonly<{period: number}>} state
  * @arg {atlas.Animation} animation
- * @return {atlas.Cel}
- */
-export function cel(state, animation) {
-  return animation.cels[celIndex(state, animation)]
-}
-
-/**
- * @arg {Readonly<{period: number}>} state
- * @arg {atlas.Animation} animation
  * @return {number}
  */
 export function celIndex({period}, animation) {
@@ -71,7 +62,8 @@ export function step(state, milliseconds, animation) {
   if (animation.cels.length < 2) return
 
   state.duration += milliseconds
-  if (state.duration >= cel(state, animation).duration) {
+  const duration = animation.cels[celIndex(state, animation)].duration
+  if (state.duration >= duration) {
     // Advance cel. It's possible that more than one cel should be advanced.
     // However, it's necessary to assume not so that in the event that the step
     // delta is great and the frequency low, the cel isn't advanced every frame
