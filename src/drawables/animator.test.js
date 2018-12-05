@@ -165,4 +165,60 @@ describe('celIndex', () => {
     }
     expect(actual).toStrictEqual(expected[direction])
   })
+
+  test.each(
+    /** @type {atlas.AnimationDirection[]} */ (util.values(
+      atlas.AnimationDirection
+    ))
+  )('%# fractional duration met direction %p cycles', (
+    /** @type {atlas.AnimationDirection} */ direction
+  ) => {
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+    const animation = {
+      size: {w: 0, h: 0},
+      cels: [cel, cel, cel, cel, cel],
+      direction
+    }
+    const subject = animator.newState()
+    const actual = []
+    for (let i = 0; i < animation.cels.length * 6; ++i) {
+      animator.step(subject, 0.5, animation)
+      actual.push(animator.celIndex(subject, animation))
+    }
+    // prettier-ignore
+    const expected = {
+      [atlas.AnimationDirection.FORWARD]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+      [atlas.AnimationDirection.REVERSE]: [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+      [atlas.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1],
+    }
+    expect(actual).toStrictEqual(expected[direction])
+  })
+
+  test.each(
+    /** @type {atlas.AnimationDirection[]} */ (util.values(
+      atlas.AnimationDirection
+    ))
+  )('%# excessive duration met direction %p cycles', (
+    /** @type {atlas.AnimationDirection} */ direction
+  ) => {
+    const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+    const animation = {
+      size: {w: 0, h: 0},
+      cels: [cel, cel, cel, cel, cel],
+      direction
+    }
+    const subject = animator.newState()
+    const actual = []
+    for (let i = 0; i < animation.cels.length * 6; ++i) {
+      animator.step(subject, 0.9, animation)
+      actual.push(animator.celIndex(subject, animation))
+    }
+    // prettier-ignore
+    const expected = {
+      [atlas.AnimationDirection.FORWARD]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+      [atlas.AnimationDirection.REVERSE]: [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+      [atlas.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1],
+    }
+    expect(actual).toStrictEqual(expected[direction])
+  })
 })
