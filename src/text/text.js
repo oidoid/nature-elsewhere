@@ -56,8 +56,8 @@ function measure(string, bounds) {
   for (const character of string) {
     if (
       (x &&
-        x + wordWidthPx(string.slice(i)) > bounds.w &&
-        wordWidthPx(string.slice(i)) <= bounds.w) ||
+        x + measureWord(string.slice(i)) > bounds.w &&
+        measureWord(string.slice(i)) <= bounds.w) ||
       x + memFont.characterWidthPx(character) > bounds.w
     ) {
       x = 0
@@ -70,7 +70,7 @@ function measure(string, bounds) {
           y: y + memFont.characterYOffsetPx(character),
           character
         })
-        x += incrementX(character, string[i + 1])
+        x += measureCharacter(character, string[i + 1])
       }
     } else {
       lines[line].push({
@@ -78,7 +78,7 @@ function measure(string, bounds) {
         y: y + memFont.characterYOffsetPx(character),
         character
       })
-      x += incrementX(character, string[i + 1])
+      x += measureCharacter(character, string[i + 1])
     }
     ++i
   }
@@ -86,25 +86,23 @@ function measure(string, bounds) {
 }
 
 /**
- * @arg {string} lhs
- * @arg {string} rhs
- * @return {number}
+ * @arg {string} string
+ * @return {number} The width in pixels of the first word in string excluding
+ *                  whitespace.
  */
-function incrementX(lhs, rhs) {
-  return memFont.characterWidthPx(lhs) + memFont.kerningPx(lhs, rhs)
+export function measureWord(string) {
+  let width = 0
+  for (let i = 0; i < string.length && !/\s/.test(string[i]); ++i) {
+    width += measureCharacter(string[i], string[i + 1])
+  }
+  return width
 }
 
 /**
- * @arg {string} string
- * @return {number}
+ * @arg {string} lhs
+ * @arg {string} [rhs]
+ * @return {number} The distance in pixels to the next character.
  */
-function wordWidthPx(string) {
-  let width = 0
-  let i = 0
-  for (const character of string) {
-    if (/\s/.test(character)) return width
-    width += incrementX(character, string[i + 1])
-    ++i
-  }
-  return width
+function measureCharacter(lhs, rhs) {
+  return memFont.characterWidthPx(lhs) + memFont.kerningPx(lhs, rhs)
 }

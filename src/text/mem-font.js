@@ -10,7 +10,9 @@ export const leadingPx = 1
  * @return {number}
  */
 export function kerningPx(lhs, rhs) {
-  if (lhs === '\n' || rhs === '\n' || rhs === undefined || rhs === ',') return 0
+  if (/\s/.test(lhs) || rhs === undefined || rhs === ',' || /\s/.test(rhs)) {
+    return 0
+  }
   switch (lhs + rhs) {
     case ",'":
     case ',"':
