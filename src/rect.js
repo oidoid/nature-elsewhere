@@ -12,9 +12,9 @@ export function intersects(lhs, rhs) {
 /**
  * @arg {Rect} lhs
  * @arg {Rect} rhs
- * @return {Rect} Area is less than zero if no intersection, equal to zero if
- *                touching but not overlapping, or greater than zero if
- *                overlapping.
+ * @return {Rect} Width and / or height is less than zero if no intersection,
+ *                equal to zero if touching but not overlapping, or greater than
+ *                zero if overlapping.
  */
 export function intersection(lhs, rhs) {
   const upperLeft = maximumXY(lhs, rhs)
