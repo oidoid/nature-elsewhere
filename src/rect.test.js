@@ -726,7 +726,7 @@ describe('intersects()', () => {
   )
 })
 
-describe('maximumXY()', () => {
+describe('maxXY()', () => {
   test.each([
     [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}],
 
@@ -746,5 +746,5 @@ describe('maximumXY()', () => {
     /** @type {XY} */ lhs,
     /** @type {XY} */ rhs,
     /** @type {XY} */ expected
-  ) => expect(rect.maximumXY(lhs, rhs)).toStrictEqual(expected))
+  ) => expect(rect.maxXY(lhs, rhs)).toStrictEqual(expected))
 })

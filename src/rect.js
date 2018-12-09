@@ -17,7 +17,7 @@ export function intersects(lhs, rhs) {
  *                zero if overlapping.
  */
 export function intersection(lhs, rhs) {
-  const upperLeft = maximumXY(lhs, rhs)
+  const upperLeft = maxXY(lhs, rhs)
   return {
     x: upperLeft.x,
     y: upperLeft.y,
@@ -31,6 +31,6 @@ export function intersection(lhs, rhs) {
  * @arg {XY} rhs
  * @return {XY} The bottom-rightmost coordinates.
  */
-export function maximumXY(lhs, rhs) {
+export function maxXY(lhs, rhs) {
   return {x: Math.max(lhs.x, rhs.x), y: Math.max(lhs.y, rhs.y)}
 }
