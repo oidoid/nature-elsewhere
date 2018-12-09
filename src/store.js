@@ -105,7 +105,7 @@ export class Store {
           },
           {
             ...val.position,
-            ...(val.wh ? val.wh : atlas.animations[val.animationID].size)
+            ...(val.size ? val.size : atlas.animations[val.animationID].size)
           },
           val.scrollPosition,
           val.scale,

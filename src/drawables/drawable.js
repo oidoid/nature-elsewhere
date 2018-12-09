@@ -11,7 +11,7 @@
  *   readonly scale: Mutable<XY>
  *   readonly scrollPosition: Mutable<XY>
  *   palette: number
- *   wh?: WH
+ size?: WH
  * }} State
  */
 
@@ -22,7 +22,7 @@
  * @arg {XY} [scrollPosition]
  * @arg {number} [palette]
  * @arg {number} [cel]
- * @arg {WH} [wh]
+ * @arg {WH} [size]
  * @return {State}
  */
 export function newState(
@@ -32,7 +32,7 @@ export function newState(
   scrollPosition = {x: 0, y: 0},
   palette = 0,
   cel = 0,
-  wh
+  size
 ) {
-  return {animationID, position, scale, scrollPosition, palette, cel, wh}
+  return {animationID, position, scale, scrollPosition, palette, cel, size}
 }

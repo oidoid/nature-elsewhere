@@ -104,7 +104,7 @@ export function palette(state, index) {
  * @return {WH}
  */
 export function wh(state, index, atlas) {
-  const wh = state.animatables[index].wh
+  const wh = state.animatables[index].size
   if (wh) return wh
   const animatable = state.animatables[index]
   const animation = atlas.animations[animatable.animationID]
