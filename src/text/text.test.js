@@ -62,6 +62,34 @@ describe('layout()', () =>
         cursor: {x: 3, y: 30}
       }
     ],
+    [
+      'abc def ghi jkl mno',
+      20,
+      {
+        positions: [
+          {x: 0, y: 0},
+          {x: 4, y: 0},
+          {x: 8, y: 0},
+          undefined,
+          {x: 0, y: 5},
+          {x: 4, y: 5},
+          {x: 8, y: 5},
+          undefined,
+          {x: 11, y: 6},
+          {x: 15, y: 5},
+          {x: 19, y: 5},
+          undefined,
+          {x: 0, y: 11},
+          {x: 4, y: 10},
+          {x: 8, y: 10},
+          undefined,
+          {x: 0, y: 15},
+          {x: 4, y: 15},
+          {x: 8, y: 15}
+        ],
+        cursor: {x: 11, y: 15}
+      }
+    ],
 
     [
       'a  b',
@@ -237,14 +265,14 @@ describe('layoutWord()', () =>
       0,
       {
         positions: [
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined
+          {x: 0, y: 0},
+          {x: 0, y: 5},
+          {x: 0, y: 10},
+          {x: 0, y: 15},
+          {x: 0, y: 20},
+          {x: 0, y: 25},
+          {x: 0, y: 31},
+          {x: 0, y: 35}
         ],
         cursor: {x: 3, y: 35}
       }
@@ -256,14 +284,14 @@ describe('layoutWord()', () =>
       0,
       {
         positions: [
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined
+          {x: 0, y: 0},
+          {x: 0, y: 5},
+          {x: 0, y: 10},
+          {x: 0, y: 15},
+          {x: 0, y: 20},
+          {x: 0, y: 25},
+          {x: 0, y: 31},
+          {x: 0, y: 35}
         ],
         cursor: {x: 3, y: 35}
       }
@@ -275,14 +303,14 @@ describe('layoutWord()', () =>
       0,
       {
         positions: [
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined
+          {x: 0, y: 0},
+          {x: 0, y: 5},
+          {x: 0, y: 10},
+          {x: 0, y: 15},
+          {x: 0, y: 20},
+          {x: 0, y: 25},
+          {x: 0, y: 31},
+          {x: 0, y: 35}
         ],
         cursor: {x: 3, y: 35}
       }

@@ -19,7 +19,7 @@ import {EntityID} from '../entities/entity-id.js'
 export function newState(position, string) {
   return entity.newState(
     EntityID.TEXT,
-    drawables(string, 20, {w: 80, h: 80}),
+    drawables(string, 0, {w: 80, h: 80}),
     position
   )
 }
@@ -71,7 +71,7 @@ export function layout(string, width) {
       layout = layoutWord(cursor, width, string, i)
       if (
         cursor.x &&
-        layout.cursor.y === memFont.lineHeight + memFont.leading
+        layout.cursor.y - cursor.y === memFont.lineHeight + memFont.leading
       ) {
         const wordWidth = width - cursor.x + layout.cursor.x
         if (wordWidth <= width) {
@@ -113,7 +113,7 @@ function layoutSpace({x, y}, width, interLetterWidth) {
   return {
     positions: [undefined],
     cursor:
-      x + interLetterWidth >= width
+      x && x + interLetterWidth >= width
         ? {x: 0, y: y + memFont.lineHeight + memFont.leading}
         : {x: x + interLetterWidth, y}
   }
@@ -134,9 +134,7 @@ export function layoutWord({x, y}, width, string, index) {
       x = 0
       y += memFont.lineHeight + memFont.leading
     }
-    positions.push(
-      iLW < width ? {x, y: y + memFont.letterOffset(string[index])} : undefined
-    )
+    positions.push({x, y: y + memFont.letterOffset(string[index])})
     x += iLW
     ++index
   }
