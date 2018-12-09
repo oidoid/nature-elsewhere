@@ -6,6 +6,7 @@ import {AnimationLayer} from './drawables/animation-layer.js'
 import {Behavior} from './entities/behavior.js'
 import {EntityLayer} from './entities/entity-layer.js'
 import {Layer} from './drawables/layer.js'
+import {EntityID} from './entities/entity-id.js'
 
 /** @typedef {import('./drawables/atlas').Atlas} Atlas} */
 /** @typedef {import('./drawables/drawable').State} Drawable} */
@@ -50,14 +51,16 @@ export class Store {
    * @arg {Atlas} atlas
    * @arg {recorder.ReadState} recorder
    * @arg {Level} level
-   * @arg {WH} cam
+   * @arg {Rect} cam
    * @return {void}
    */
   step(milliseconds, atlas, recorder, level, cam) {
     this._entities.forEach(val => {
       if (isEntity(val)) {
-        const step = Behavior[val.id] || entity.step
-        step(val, milliseconds, atlas, recorder, level, cam, this)
+        if (val.id !== EntityID.PLAYER) {
+          const step = Behavior[val.id] || entity.step
+          step(val, milliseconds, atlas, recorder, level, cam, this)
+        }
       } else if (isAnimatable(val)) {
         animatable.step(val, milliseconds, atlas.animations[val.animationID])
       }

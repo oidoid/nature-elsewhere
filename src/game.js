@@ -3,6 +3,7 @@ import * as level0 from './assets/level0.js'
 import * as entity from './entities/entity.js'
 import * as keyboard from './inputs/keyboard.js'
 import * as mouse from './inputs/mouse.js'
+import * as player from './entities/player.js'
 import * as random from './random.js'
 import * as recorder from './inputs/recorder.js'
 import * as renderer from './graphics/renderer.js'
@@ -227,6 +228,11 @@ export class Game {
       this._scale = defaultScale
     }
 
+    player.step(this._player, milliseconds, this._atlas, this._recorder)
+
+    const canvas = this._canvasWH()
+    this._cam = this._camRect(canvas)
+
     this._store.step(
       milliseconds,
       this._atlas,
@@ -236,8 +242,6 @@ export class Game {
     )
     this._store.flushUpdatesToMemory(this._atlas)
 
-    const canvas = this._canvasWH()
-    this._cam = this._camRect(canvas)
     renderer.render(
       this._renderer,
       canvas,

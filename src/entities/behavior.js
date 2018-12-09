@@ -11,7 +11,7 @@ import {EntityID} from './entity-id.js'
 /** @typedef {import('../store').Store} Store} */
 
 /**
- * @typedef {(entity: Entity, milliseconds: number, atlas: Atlas, recorder: Recorder, level: Level, cam: WH, store: Store) => void} Step
+ * @typedef {(entity: Entity, milliseconds: number, atlas: Atlas, recorder: Recorder, level: Level, cam: Rect, store: Store) => void} Step
  */
 
 /** @type {Readonly<Partial<Record<EntityID, Step>>>} */
