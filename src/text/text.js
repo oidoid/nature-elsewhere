@@ -5,6 +5,13 @@ import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from '../entities/entity-id.js'
 
 /**
+ * @typedef {Object} Layout
+ * @prop {ReadonlyArray<XY|undefined>} positions The length of this array
+ *                                               matches the string length.
+ * @prop {XY} cursor The offset in pixels.
+ */
+
+/**
  * @arg {XY} position
  * @arg {string} string
  * @return {entity.State}
@@ -12,97 +19,136 @@ import {EntityID} from '../entities/entity-id.js'
 export function newState(position, string) {
   return entity.newState(
     EntityID.TEXT,
-    drawables(string, {x: 0, y: 0, w: 80, h: 80}),
+    drawables(string, 20, {w: 80, h: 80}),
     position
   )
 }
 
 /**
  * @arg {string} string
- * @arg {Rect} bounds
+ * @arg {number} y The vertical scroll offset in pixels.
+ * @arg {WH} size The window size in pixels.
  * @return {ReadonlyArray<drawable.State>}
  */
-export function drawables(string, bounds) {
+export function drawables(string, y, size) {
   const drawables = []
-  const measurement = measure(string, bounds)
-  loop: for (const line of measurement) {
-    for (const character of line) {
-      if (character.y + (memFont.lineHeightPx + memFont.leadingPx) < bounds.y)
-        continue
+  const positions = layout(string, size.w).positions
+  for (let i = 0; i < positions.length; ++i) {
+    const position = positions[i]
+    if (!position) continue
+    if (position.y + memFont.lineHeight + memFont.leading < y) continue
+    if (position.y > y + size.h) break
 
-      const id = 'MEM_FONT_' + character.character.charCodeAt(0)
-      const d = drawable.newState(
-        /** @type {Record<string, string>} */ (AnimationID)[id],
-        {x: character.x, y: character.y - bounds.y}
-      )
-      if (character.y >= bounds.y + bounds.h) break loop
-      drawables.push(d)
-    }
+    const id = 'MEM_FONT_' + string.charCodeAt(i)
+    const d = drawable.newState(
+      /** @type {Record<string, string>} */ (AnimationID)[id],
+      {x: position.x, y: position.y - y}
+    )
+    drawables.push(d)
   }
   return drawables
 }
 
 /**
  * @arg {string} string
- * @arg {Rect} bounds
- * @return {(XY & {character: string})[][]}
+ * @arg {number} width The allowed layout width in pixels.
+ * @return {Layout}
  */
-function measure(string, bounds) {
-  let i = 0
-  let x = 0
-  let y = 0
-  /** @type {(XY & {character: string})[][]} */ const lines = [[]]
-  let line = 0
-  for (const character of string) {
-    if (
-      (x &&
-        x + measureWord(string.slice(i)) > bounds.w &&
-        measureWord(string.slice(i)) <= bounds.w) ||
-      x + memFont.characterWidthPx(character) > bounds.w
-    ) {
-      x = 0
-      y += memFont.lineHeightPx + memFont.leadingPx
-      ++line
-      lines[line] = []
-      if (!/\s/.test(character)) {
-        lines[line].push({
-          x,
-          y: y + memFont.characterYOffsetPx(character),
-          character
-        })
-        x += measureCharacter(character, string[i + 1])
-      }
+export function layout(string, width) {
+  /** @type {(XY|undefined)[]} */ const positions = []
+  let cursor = {x: 0, y: 0}
+  for (let i = 0; i < string.length; ) {
+    let layout
+    if (string[i] === '\n') {
+      layout = layoutNewline(cursor)
+    } else if (/\s/.test(string[i])) {
+      layout = layoutSpace(
+        cursor,
+        width,
+        interLetterWidth(string[i], string[i + 1])
+      )
     } else {
-      lines[line].push({
-        x,
-        y: y + memFont.characterYOffsetPx(character),
-        character
-      })
-      x += measureCharacter(character, string[i + 1])
+      layout = layoutWord(cursor, width, string, i)
+      if (
+        cursor.x &&
+        layout.cursor.y === memFont.lineHeight + memFont.leading
+      ) {
+        const wordWidth = width - cursor.x + layout.cursor.x
+        if (wordWidth <= width) {
+          // Word can fit on one line if cursor is reset to the start of the
+          // line.
+          cursor.x = 0
+          cursor.y += memFont.lineHeight + memFont.leading
+          layout = layoutWord(cursor, width, string, i)
+        }
+      }
     }
-    ++i
+    positions.push(...layout.positions)
+    cursor.x = layout.cursor.x
+    cursor.y = layout.cursor.y
+    i += layout.positions.length
   }
-  return lines
+  return {positions, cursor}
 }
 
 /**
- * @arg {string} string
- * @return {number} The width in pixels of the first word in string excluding
- *                  whitespace.
+ * @arg {XY} cursor The current offset in pixels.
+ * @return {Layout}
  */
-export function measureWord(string) {
-  let width = 0
-  for (let i = 0; i < string.length && !/\s/.test(string[i]); ++i) {
-    width += measureCharacter(string[i], string[i + 1])
+function layoutNewline({y}) {
+  return {
+    positions: [undefined],
+    cursor: {x: 0, y: y + memFont.lineHeight + memFont.leading}
   }
-  return width
+}
+
+/**
+ * @arg {XY} cursor The current offset in pixels.
+ * @arg {number} width The allowed layout width in pixels.
+ * @arg {number} interLetterWidth The distance in pixels from the start of the
+ *                                current letter to the start of the next.
+ * @return {Layout}
+ */
+function layoutSpace({x, y}, width, interLetterWidth) {
+  return {
+    positions: [undefined],
+    cursor:
+      x + interLetterWidth >= width
+        ? {x: 0, y: y + memFont.lineHeight + memFont.leading}
+        : {x: x + interLetterWidth, y}
+  }
+}
+
+/**
+ * @arg {XY} cursor The current offset in pixels.
+ * @arg {number} width The allowed layout width in pixels.
+ * @arg {string} string
+ * @arg {number} index
+ * @return {Layout}
+ */
+export function layoutWord({x, y}, width, string, index) {
+  const positions = []
+  while (index < string.length && !/\s/.test(string[index])) {
+    const iLW = interLetterWidth(string[index], string[index + 1])
+    if (x && x + iLW > width) {
+      x = 0
+      y += memFont.lineHeight + memFont.leading
+    }
+    positions.push(
+      iLW < width ? {x, y: y + memFont.letterOffset(string[index])} : undefined
+    )
+    x += iLW
+    ++index
+  }
+  return {positions, cursor: {x, y}}
 }
 
 /**
  * @arg {string} lhs
  * @arg {string} [rhs]
- * @return {number} The distance in pixels to the next character.
+ * @return {number} The distance in pixels from the start of lhs to the start of
+ *                  rhs.
  */
-function measureCharacter(lhs, rhs) {
-  return memFont.characterWidthPx(lhs) + memFont.kerningPx(lhs, rhs)
+function interLetterWidth(lhs, rhs) {
+  return memFont.letterWidth(lhs) + memFont.kerning(lhs, rhs)
 }

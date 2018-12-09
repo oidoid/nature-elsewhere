@@ -1,15 +1,17 @@
-/** @type {number} */
-export const lineHeightPx = 4
+/** @type {number} Height of lines, not including descenders, in pixels. */
+export const lineHeight = 4
 
-/** @type {number} */
-export const leadingPx = 1
+/**
+ * @type {number} Distance between lines, not including descenders, in pixels.
+ */
+export const leading = 1
 
 /**
  * @arg {string} lhs
  * @arg {string} [rhs]
- * @return {number}
+ * @return {number} Distance between letters in pixels.
  */
-export function kerningPx(lhs, rhs) {
+export function kerning(lhs, rhs) {
   if (/\s/.test(lhs) || rhs === undefined || rhs === ',' || /\s/.test(rhs)) {
     return 0
   }
@@ -51,11 +53,11 @@ export function kerningPx(lhs, rhs) {
 }
 
 /**
- * @arg {string} character
- * @return {number}
+ * @arg {string} letter
+ * @return {number} Vertical top offset in pixels.
  */
-export function characterYOffsetPx(character) {
-  switch (character) {
+export function letterOffset(letter) {
+  switch (letter) {
     case ',':
     case ';':
     case 'g':
@@ -68,12 +70,12 @@ export function characterYOffsetPx(character) {
 }
 
 /**
- * @arg {string} character
- * @return {number}
+ * @arg {string} letter
+ * @return {number} Character width in pixels.
  */
-export function characterWidthPx(character) {
+export function letterWidth(letter) {
   // prettier-ignore
-  switch (character) {
+  switch (letter) {
     case '\n': return 1
     case ' ' : return 1
     case '!' : return 1
