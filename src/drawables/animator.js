@@ -21,14 +21,11 @@ const Animate = {
   [atlas.AnimationDirection.FORWARD](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
-  /** @arg {number} period An integer in the domain (-∞, 0]. */
+  /** @arg {number} period An integer in the domain (-∞, length - 1]. */
   [atlas.AnimationDirection.REVERSE](period, length) {
     return (period % Number.MIN_SAFE_INTEGER) - 1 + length
   },
-  /**
-   * @arg {number} period An integer in the domain
-   *                      [2 - animation.length, animation.length - 1].
-   */
+  /** @arg {number} period An integer in the domain [2 - length, length - 1]. */
   [atlas.AnimationDirection.PING_PONG](period, length) {
     return util.wrap(period - 1, 2 - length, length)
   }

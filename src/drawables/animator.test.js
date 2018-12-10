@@ -100,8 +100,8 @@ describe('celIndex', () => {
     ],
     [
       atlas.AnimationDirection.REVERSE,
-      0,
-      [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
+      3,
+      [2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3]
     ],
     [
       atlas.AnimationDirection.PING_PONG,
