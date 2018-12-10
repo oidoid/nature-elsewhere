@@ -233,14 +233,14 @@ export class Game {
     const canvas = this._canvasWH()
     this._cam = this._camRect(canvas)
 
-    this._store.step(
+    const entities = this._store.step(
       milliseconds,
       this._atlas,
       this._recorder,
       this._level0,
       this._cam
     )
-    this._store.flushUpdatesToMemory(this._atlas)
+    const len = this._store.flushUpdatesToMemory(this._atlas, entities)
 
     renderer.render(
       this._renderer,
@@ -248,7 +248,7 @@ export class Game {
       this._scale,
       this._cam,
       this._store.getMemory(),
-      this._store.getLength()
+      len
     )
 
     // Clear point which has no off event.

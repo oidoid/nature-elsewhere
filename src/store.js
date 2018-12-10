@@ -7,6 +7,7 @@ import {Behavior} from './entities/behavior.js'
 import {EntityLayer} from './entities/entity-layer.js'
 import {Layer} from './drawables/layer.js'
 import {EntityID} from './entities/entity-id.js'
+import {intersects} from './rect.js'
 
 /** @typedef {import('./drawables/atlas').Atlas} Atlas} */
 /** @typedef {import('./drawables/drawable').State} Drawable} */
@@ -52,33 +53,38 @@ export class Store {
    * @arg {recorder.ReadState} recorder
    * @arg {Level} level
    * @arg {Rect} cam
-   * @return {void}
+   * @return {ReadonlyArray<entity.State|animatable.State|Drawable>}
    */
   step(milliseconds, atlas, recorder, level, cam) {
-    this._entities.forEach(val => {
+    return this._entities.filter(val => {
       if (isEntity(val)) {
         if (val.id !== EntityID.PLAYER) {
           const step = Behavior[val.id] || entity.step
           step(val, milliseconds, atlas, recorder, level, cam, this)
         }
-      } else if (isAnimatable(val)) {
-        animatable.step(val, milliseconds, atlas.animations[val.animationID])
+        return onCam(cam, atlas, val.position, ...val.animatables)
       }
+      if (isAnimatable(val) && onCam(cam, atlas, {x: 0, y: 0}, val)) {
+        animatable.step(val, milliseconds, atlas.animations[val.animationID])
+        return true
+      }
+      return onCam(cam, atlas, {x: 0, y: 0}, val)
     })
   }
 
   /**
    * @arg {Atlas} atlas
-   * @return {void}
+   * @arg {ReadonlyArray<entity.State|animatable.State|Drawable>} entities
+   * @return {number}
    */
-  flushUpdatesToMemory(atlas) {
+  flushUpdatesToMemory(atlas, entities) {
     const minMemory = this.getLength() * shader.layout.perInstance.length
     if (this._memory.length < minMemory) {
       this._memory = new Int16Array(minMemory * 2)
     }
 
     let index = 0
-    this._entities.forEach(val => {
+    entities.forEach(val => {
       if (isEntity(val)) {
         val.animatables.forEach((_, i) => {
           const coord = entity.coord(val, i, atlas)
@@ -108,7 +114,7 @@ export class Store {
           },
           {
             ...val.position,
-            ...(val.size ? val.size : atlas.animations[val.animationID].size)
+            ...size(atlas, val)
           },
           val.scrollPosition,
           val.scale,
@@ -117,6 +123,7 @@ export class Store {
         ++index
       }
     })
+    return index
   }
 }
 
@@ -170,4 +177,44 @@ function isEntity(val) {
  */
 function isAnimatable(val) {
   return 'animator' in val
+}
+
+/**
+ * @arg {Rect} cam
+ * @arg {Atlas} atlas
+ * @arg {XY} position
+ * @arg {...Drawable} drawables
+ * @return {boolean}
+ */
+function onCam(cam, atlas, position, ...drawables) {
+  return drawables.some(drawable =>
+    intersects(rect(atlas, position, drawable), cam)
+  )
+}
+
+/**
+ * @arg {Atlas} atlas
+ * @arg {XY} position
+ * @arg {Drawable} drawable
+ * @return {Rect}
+ */
+function rect(atlas, position, drawable) {
+  const {w, h} = size(atlas, drawable)
+  return {
+    x: position.x + drawable.position.x,
+    y: position.y + drawable.position.y,
+    w: Math.abs(drawable.scale.x * w),
+    h: Math.abs(drawable.scale.y * h)
+  }
+}
+
+/**
+ * @arg {Atlas} atlas
+ * @arg {Drawable} drawable
+ * @return {WH}
+ */
+function size(atlas, drawable) {
+  return drawable.size
+    ? drawable.size
+    : atlas.animations[drawable.animationID].size
 }
