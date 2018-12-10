@@ -1,8 +1,10 @@
 import * as drawable from '../drawables/drawable.js'
 import * as entity from './entity.js'
 import * as random from '../random.js'
+import * as util from '../util.js'
 import {AnimationID} from '../drawables/animation-id.js'
 import {EntityID} from './entity-id.js'
+import {Palette} from '../assets/palette.js'
 
 const animationIDs = [
   AnimationID.TALL_GRASS_A,
@@ -36,7 +38,7 @@ export function newState(position, width, randomState) {
         {x, y: 0},
         {x: 1, y: 1},
         {x: random.int(randomState, 0, unitWidth), y: 0},
-        random.int(randomState, 0, 2),
+        random.int(randomState, 0, util.keys(Palette).length),
         0,
         {w: randomWidth, h: unitHeight}
       )

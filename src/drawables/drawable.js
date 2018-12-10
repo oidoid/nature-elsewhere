@@ -1,3 +1,5 @@
+import {Palette} from '../assets/palette.js'
+
 /** @typedef {import('./animation-id').AnimationID} AnimationID */
 /** @typedef {import('./atlas').Animation} Animation */
 
@@ -10,7 +12,7 @@
  *   readonly position: Mutable<XY>
  *   readonly scale: Mutable<XY>
  *   readonly scrollPosition: Mutable<XY>
- *   palette: number
+ *   palette: Palette
  size?: WH
  * }} State
  */
@@ -20,7 +22,7 @@
  * @arg {XY} [position]
  * @arg {XY} [scale]
  * @arg {XY} [scrollPosition]
- * @arg {number} [palette]
+ * @arg {Palette} [palette]
  * @arg {number} [cel]
  * @arg {WH} [size]
  * @return {State}
@@ -30,7 +32,7 @@ export function newState(
   position = {x: 0, y: 0},
   scale = {x: 1, y: 1},
   scrollPosition = {x: 0, y: 0},
-  palette = 0,
+  palette = Palette.PALETTE_DEFAULT,
   cel = 0,
   size
 ) {
