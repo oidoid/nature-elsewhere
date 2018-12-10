@@ -304,12 +304,14 @@ export class Game {
     // on the sum, rounding errors can cause the rendered distance between the
     // center of the camera and the position to vary under different inputs
     // instead of remaining at a constant offset.
+    const w = Math.ceil(canvas.w / this._scale)
+    const h = Math.ceil(canvas.h / this._scale)
     return {
       x: Math.trunc(
         util.clamp(
           this._player.position.x - Math.trunc(canvas.w / (this._scale * 2)),
           this._level0.bounds.x,
-          this._level0.bounds.x + this._level0.bounds.w
+          this._level0.bounds.x + this._level0.bounds.w - w
         )
       ),
       y: Math.trunc(
@@ -317,11 +319,11 @@ export class Game {
           this._player.position.y -
             Math.trunc((7 * canvas.h) / (this._scale * 8)),
           this._level0.bounds.y,
-          this._level0.bounds.y + this._level0.bounds.h
+          this._level0.bounds.y + this._level0.bounds.h - h
         )
       ),
-      w: Math.ceil(canvas.w / this._scale),
-      h: Math.ceil(canvas.h / this._scale)
+      w,
+      h
     }
   }
 

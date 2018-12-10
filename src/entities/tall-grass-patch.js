@@ -29,7 +29,7 @@ export function newState(position, width, randomState) {
   const drawables = []
   for (let x = 0; x < width; ) {
     let randomWidth = random.int(randomState, unitWidth, 3 * unitWidth + 1)
-    if (x + randomWidth > width) randomWidth = width - (randomWidth + x)
+    if (x + randomWidth > width) randomWidth = width - x
     drawables.push(
       drawable.newState(
         animationIDs[random.int(randomState, 0, animationIDs.length)],

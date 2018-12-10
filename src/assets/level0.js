@@ -24,7 +24,7 @@ const ground = 96
  * @return {Level}
  */
 export function newState(atlas, randomState) {
-  const bounds = {x: 0, y: 0, w: 2048, h: 128}
+  const bounds = {x: 0, y: 0, w: 512, h: 128}
   const entities = [
     drawable.newState(
       AnimationID.PALETTE_PALE,
@@ -59,7 +59,7 @@ export function newState(atlas, randomState) {
         x: bounds.x,
         y: ground - atlas.animations[AnimationID.TALL_GRASS_A].size.h
       },
-      bounds.x + bounds.w + 1024,
+      bounds.w,
       randomState
     ),
     drawable.newState(AnimationID.CLOUD_S, {x: 40, y: ground - 40}),
