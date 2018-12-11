@@ -1,6 +1,6 @@
 import * as shader from './shader.js'
-import fragmentShaderSource from './fragment-shader.js'
-import vertexShaderSource from './vertex-shader.js'
+import fragmentShaderSource from './shader.frag.js'
+import vertexShaderSource from './shader.vert.js'
 
 /** @typedef {WebGL2RenderingContext} GL */
 /** @typedef {WebGLProgram} GLProgram */
