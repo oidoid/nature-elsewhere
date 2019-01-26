@@ -3,17 +3,5 @@
   "files.exclude": {
     "node_modules": true,
     "package-lock.json": true
-  },
-  "cSpell.words": [
-    "animatable",
-    "animatables",
-    "aseprite",
-    "cels",
-    "clipspace",
-    "coord",
-    "rrggbbaa",
-    "truthy",
-    "vals",
-    "viewport's"
-  ]
+  }
 }

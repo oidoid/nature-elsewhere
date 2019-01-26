@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "resolveJsonModule": true,
     "lib": ["es2018", "dom"],
 
@@ -12,6 +10,6 @@
     "forceConsistentCasingInFileNames": true,
 
     "target": "es5",
-    "noEmit": true
+    "noEmitOnError": true
   }
 }
