@@ -1,4 +1,5 @@
 import {AtlasDefinition} from '../images/atlas-definition'
+import {Image} from '../images/image'
 
 const littleEndian = new Int8Array(new Int16Array([1]).buffer)[0] === 1
 
@@ -38,43 +39,34 @@ export function packInstance(
   {animations}: AtlasDefinition,
   dataView: DataView,
   index: number,
-  {
-    animationID,
-    cel,
-    target,
-    maskAnimationID,
-    maskCel,
-    offset,
-    scale,
-    palette
-  }: Image
+  image: Image
 ) {
-  const animation = animations[animationID]
-  const maskAnimation = animations[maskAnimationID]
+  const animation = animations[image.animationID()]
+  const maskAnimation = animations[image.maskAnimationID()]
   const i = index * layout.perInstance.stride
-  dataView.setInt16(i + 0, animation.cels[cel].position.x, littleEndian)
-  dataView.setInt16(i + 2, animation.cels[cel].position.y, littleEndian)
+  dataView.setInt16(i + 0, animation.cels[image.cel()].position.x, littleEndian)
+  dataView.setInt16(i + 2, animation.cels[image.cel()].position.y, littleEndian)
   dataView.setInt16(i + 4, animation.size.w, littleEndian)
   dataView.setInt16(i + 6, animation.size.h, littleEndian)
-  dataView.setInt16(i + 8, target.x, littleEndian)
-  dataView.setInt16(i + 10, target.y, littleEndian)
-  dataView.setInt16(i + 12, target.w, littleEndian)
-  dataView.setInt16(i + 14, target.h, littleEndian)
+  dataView.setInt16(i + 8, image.target().x, littleEndian)
+  dataView.setInt16(i + 10, image.target().y, littleEndian)
+  dataView.setInt16(i + 12, image.target().w, littleEndian)
+  dataView.setInt16(i + 14, image.target().h, littleEndian)
   dataView.setInt16(
     i + 16,
-    maskAnimation.cels[maskCel].position.x,
+    maskAnimation.cels[image.maskCel()].position.x,
     littleEndian
   )
   dataView.setInt16(
     i + 18,
-    maskAnimation.cels[maskCel].position.y,
+    maskAnimation.cels[image.maskCel()].position.y,
     littleEndian
   )
   dataView.setInt16(i + 20, maskAnimation.size.w, littleEndian)
   dataView.setInt16(i + 22, maskAnimation.size.h, littleEndian)
-  dataView.setInt8(i + 24, offset.x)
-  dataView.setInt8(i + 25, offset.y)
-  dataView.setInt16(i + 26, scale.x, littleEndian)
-  dataView.setInt16(i + 28, scale.y, littleEndian)
-  dataView.setUint8(i + 30, palette)
+  dataView.setInt8(i + 24, image.offset().x)
+  dataView.setInt8(i + 25, image.offset().y)
+  dataView.setInt16(i + 26, image.scale().x, littleEndian)
+  dataView.setInt16(i + 28, image.scale().y, littleEndian)
+  dataView.setUint8(i + 30, image.palette())
 }

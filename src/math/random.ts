@@ -2,16 +2,15 @@
 // http://www.firstpr.com.au/dsp/rand31/
 
 export class Random {
-  private seed: number
-  constructor(seed = 0) {
-    this.seed = seed % 2147483647
-    if (this.seed <= 0) this.seed += 2147483646
+  constructor(private _seed = 0) {
+    this._seed = _seed % 2147483647
+    if (this._seed <= 0) this._seed += 2147483646
   }
 
   /** @return {number} [min, max) */
   float(min = 0, max = 1) {
-    this.seed = (this.seed * 16807) % 2147483647
-    return min + ((max - min) * (this.seed - 1)) / 2147483646
+    this._seed = (this._seed * 16807) % 2147483647
+    return min + ((max - min) * (this._seed - 1)) / 2147483646
   }
 
   /** @return {number} An integer [min, max). */

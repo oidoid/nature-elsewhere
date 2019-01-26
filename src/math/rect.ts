@@ -1,3 +1,5 @@
+import * as xy from './xy'
+
 declare global {
   /**
    * Where XY describes the upper-left corner, or minimum, and XY + WH the
@@ -21,16 +23,12 @@ export function intersects(lhs: Rect, rhs: Rect) {
  *                zero if overlapping.
  */
 export function intersection(lhs: Rect, rhs: Rect) {
-  const upperLeft = maxXY(lhs, rhs)
+  // The bottom-rightmost coordinates.
+  const upperLeft = xy.max(lhs, rhs)
   return {
     x: upperLeft.x,
     y: upperLeft.y,
     w: Math.min(lhs.x + lhs.w, rhs.x + rhs.w) - upperLeft.x,
     h: Math.min(lhs.y + lhs.h, rhs.y + rhs.h) - upperLeft.y
   }
-}
-
-/** @return {XY} The bottom-rightmost coordinates. */
-export function maxXY(lhs: XY, rhs: XY) {
-  return {x: Math.max(lhs.x, rhs.x), y: Math.max(lhs.y, rhs.y)}
 }

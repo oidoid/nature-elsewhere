@@ -85,23 +85,18 @@ export class Renderer {
     )
   }
 
-  private gl: GL
-  private projection: Float32Array
-  private projectionLocation: GLUniform
-  private perInstanceBuffer: GLBuffer
-  private loseContext: GLLoseContext
   private constructor(
-    gl: GL,
-    projection: Float32Array,
-    projectionLocation: GLUniform,
-    perInstanceBuffer: GLBuffer,
-    loseContext: GLLoseContext
+    private _gl: GL,
+    private _projection: Float32Array,
+    private _projectionLocation: GLUniform,
+    private _perInstanceBuffer: GLBuffer,
+    private _loseContext: GLLoseContext
   ) {
-    this.gl = gl
-    this.projection = projection
-    this.projectionLocation = projectionLocation
-    this.perInstanceBuffer = perInstanceBuffer
-    this.loseContext = loseContext
+    this._gl = _gl
+    this._projection = _projection
+    this._projectionLocation = _projectionLocation
+    this._perInstanceBuffer = _perInstanceBuffer
+    this._loseContext = _loseContext
   }
 
   /**
@@ -120,22 +115,22 @@ export class Renderer {
     this.resize(canvas, scale, cam)
 
     util.bufferData(
-      this.gl,
-      this.perInstanceBuffer,
+      this._gl,
+      this._perInstanceBuffer,
       perInstanceData,
       GL.DYNAMIC_READ
     )
     const vertices = perVertexData.length / shader.layout.perVertex.length
-    this.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
+    this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
   }
 
   isContextLost() {
-    return this.gl.isContextLost()
+    return this._gl.isContextLost()
   }
 
   debugLoseContext() {
-    if (!this.loseContext) return
-    this.loseContext.loseContext()
+    if (!this._loseContext) return
+    this._loseContext.loseContext()
   }
 
   /**
@@ -143,8 +138,8 @@ export class Renderer {
    * @return {void}
    */
   debugRestoreContext() {
-    if (!this.loseContext) return
-    this.loseContext.restoreContext()
+    if (!this._loseContext) return
+    this._loseContext.restoreContext()
   }
 
   /**
@@ -155,26 +150,26 @@ export class Renderer {
    * @return {void}
    */
   resize(canvas: WH, scale: number, cam: Rect) {
-    this.gl.canvas.width = canvas.w
-    this.gl.canvas.height = canvas.h
+    this._gl.canvas.width = canvas.w
+    this._gl.canvas.height = canvas.h
 
     // Convert the pixels to clipspace by taking them as a fraction of the cam
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y is
     // downward, and translating to -1 to 1 and again by the camera position.
     const ratio = {w: 2 / cam.w, h: 2 / cam.h}
     // prettier-ignore
-    this.projection.set([
+    this._projection.set([
       ratio.w,        0, 0, -1 - cam.x * ratio.w,
             0, -ratio.h, 0,  1 + cam.y * ratio.h,
             0,        0, 1,                    0,
             0,        0, 0,                    1
     ])
-    this.gl.uniformMatrix4fv(this.projectionLocation, false, this.projection)
+    this._gl.uniformMatrix4fv(this._projectionLocation, false, this._projection)
 
     // The viewport is a rendered in physical pixels. It's intentional to use the
     // camera dimensions instead of canvas dimensions since the camera often
     // exceeds the canvas and the viewport's dimensions must be an integer
     // multiple of the camera.
-    this.gl.viewport(0, 0, scale * cam.w, scale * cam.h)
+    this._gl.viewport(0, 0, scale * cam.w, scale * cam.h)
   }
 }

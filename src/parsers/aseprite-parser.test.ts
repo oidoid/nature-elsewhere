@@ -1,12 +1,12 @@
 import * as array from '../array'
-import * as aseprite from './aseprite-format'
+import * as asepriteFormat from './aseprite-format'
 import * as atlasAseprite from '../assets/atlas.json'
-import * as parser from './aseprite-parser'
+import * as asepriteParser from './aseprite-parser'
 import {AtlasCel} from '../images/atlas-definition'
 
 describe('atlas.json', () => {
   const file = atlasAseprite
-  const atlas = parser.parse(file)
+  const atlas = asepriteParser.parse(file)
   const tags = file.meta.frameTags.map(frameTag => frameTag.name)
 
   test('Converts current JSON and size is a reasonable power of two', () => {
@@ -18,14 +18,14 @@ describe('atlas.json', () => {
 
   test.each(tags)(
     '%# Tag %p is unique within the sheet',
-    (tag: aseprite.Tag) => {
+    (tag: asepriteFormat.Tag) => {
       expect(tags.filter(val => val === tag)).toHaveLength(1)
     }
   )
 
-  test.each(tags)('%# Tag %p has a Frame', (tag: aseprite.Tag) => {
+  test.each(tags)('%# Tag %p has a Frame', (tag: asepriteFormat.Tag) => {
     const frameKeys = Object.keys(file.frames)
-      .map((tagFrameNumber: aseprite.TagFrameNumber) =>
+      .map((tagFrameNumber: asepriteFormat.TagFrameNumber) =>
         tagFrameNumber.replace(/ [0-9]*$/, '')
       )
       .filter(array.uniq(Object.is))
@@ -34,7 +34,7 @@ describe('atlas.json', () => {
 
   {
     const frameKeys = Object.keys(file.frames)
-      .map((tagFrameNumber: aseprite.TagFrameNumber) =>
+      .map((tagFrameNumber: asepriteFormat.TagFrameNumber) =>
         tagFrameNumber.replace(/ [0-9]*$/, '')
       )
       .filter(array.uniq(Object.is))
@@ -45,7 +45,7 @@ describe('atlas.json', () => {
 
   test.each([...file.meta.slices])(
     '%# Slice name %p is a Tag',
-    (slice: aseprite.Slice) => expect(tags).toContainEqual(slice.name)
+    (slice: asepriteFormat.Slice) => expect(tags).toContainEqual(slice.name)
   )
 
   const cels = Object.values(atlas.animations).reduce(
@@ -121,7 +121,9 @@ describe('parseAnimations()', () => {
         keys: [{frame: 0, bounds: {x: 7, y: 9, w: 3, h: 6}}]
       }
     ]
-    expect(parser.parseAnimations(frameTags, frames, slices)).toStrictEqual({
+    expect(
+      asepriteParser.parseAnimations(frameTags, frames, slices)
+    ).toStrictEqual({
       'cactus s': {
         size: {w: 16, h: 16},
         cels: [
@@ -216,7 +218,9 @@ describe('parseAnimation()', () => {
         keys: [{frame: 0, bounds: {x: 3, y: 11, w: 10, h: 4}}]
       }
     ]
-    expect(parser.parseAnimation(frameTag, frames, slices)).toStrictEqual({
+    expect(
+      asepriteParser.parseAnimation(frameTag, frames, slices)
+    ).toStrictEqual({
       size: {w: 16, h: 16},
       cels: [
         {
@@ -248,7 +252,7 @@ describe('parseCel()', () => {
         keys: [{frame: 0, bounds: {x: 4, y: 4, w: 8, h: 12}}]
       }
     ]
-    expect(parser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
+    expect(asepriteParser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
       position: {x: 131, y: 19},
       duration: Number.POSITIVE_INFINITY,
       collision: [{x: 4, y: 4, w: 8, h: 12}]
@@ -266,7 +270,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(parser.parsePosition(frame)).toStrictEqual({x: 1, y: 2})
+    expect(asepriteParser.parsePosition(frame)).toStrictEqual({x: 1, y: 2})
   })
 
   test('Converts texture mapping with padding.', () => {
@@ -278,7 +282,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(parser.parsePosition(frame)).toStrictEqual({x: 2, y: 3})
+    expect(asepriteParser.parsePosition(frame)).toStrictEqual({x: 2, y: 3})
   })
 })
 
@@ -292,7 +296,7 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(parser.parsePadding(frame)).toStrictEqual({w: 0, h: 0})
+    expect(asepriteParser.parsePadding(frame)).toStrictEqual({w: 0, h: 0})
   })
 
   test('Converts nonzero padding.', () => {
@@ -304,7 +308,7 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(parser.parsePadding(frame)).toStrictEqual({w: 1, h: 1})
+    expect(asepriteParser.parsePadding(frame)).toStrictEqual({w: 1, h: 1})
   })
 
   test('Converts mixed padding.', () => {
@@ -316,17 +320,19 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(parser.parsePadding(frame)).toStrictEqual({w: 1, h: 2})
+    expect(asepriteParser.parsePadding(frame)).toStrictEqual({w: 1, h: 2})
   })
 })
 
 describe('parseDuration()', () => {
   test('Converts Duration.', () => {
-    expect(parser.parseDuration(1)).toStrictEqual(1)
+    expect(asepriteParser.parseDuration(1)).toStrictEqual(1)
   })
 
   test('Converts infinite Duration.', () => {
-    expect(parser.parseDuration(65535)).toStrictEqual(Number.POSITIVE_INFINITY)
+    expect(asepriteParser.parseDuration(65535)).toStrictEqual(
+      Number.POSITIVE_INFINITY
+    )
   })
 })
 
@@ -340,7 +346,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
       }
     ]
-    expect(parser.parseCollision(frameTag, 0, slices)).toStrictEqual([
+    expect(asepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
       {x: 0, y: 1, w: 2, h: 3}
     ])
   })
@@ -354,7 +360,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
       }
     ]
-    expect(parser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
+    expect(asepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
   })
 
   test('Filters out unrelated Frame number Keys.', () => {
@@ -370,7 +376,7 @@ describe('parseCollision()', () => {
         ]
       }
     ]
-    expect(parser.parseCollision(frameTag, 1, slices)).toStrictEqual([
+    expect(asepriteParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
       {x: 4, y: 5, w: 6, h: 7}
     ])
   })
@@ -387,15 +393,15 @@ describe('parseCollision()', () => {
         ]
       }
     ]
-    expect(parser.parseCollision(frameTag, 0, slices)).toStrictEqual([
+    expect(asepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
       {x: 0, y: 1, w: 2, h: 3}
     ])
   })
 
   test('Converts no Slices.', () => {
     const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    const slices = <ReadonlyArray<aseprite.Slice>>[]
-    expect(parser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
+    const slices = <ReadonlyArray<asepriteFormat.Slice>>[]
+    expect(asepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
   })
 
   test('Converts multiple Slices.', () => {
@@ -425,7 +431,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 8, y: 9, w: 10, h: 11}}]
       }
     ]
-    expect(parser.parseCollision(frameTag, 1, slices)).toStrictEqual([
+    expect(asepriteParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
       {x: 4, y: 5, w: 6, h: 7},
       {x: 0, y: 1, w: 2, h: 3},
       {x: 8, y: 9, w: 10, h: 11}

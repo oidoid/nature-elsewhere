@@ -1,7 +1,7 @@
 import * as font from './mem-font'
 import {AnimationID} from '../images/animation-id'
 import {AtlasDefinition} from '../images/atlas-definition'
-import {newImage} from '../images/image'
+import {Image} from '../images/image'
 
 interface Layout {
   /** The length of this array matches the string length. */
@@ -29,7 +29,7 @@ export function toImages(
     if (position.y > y + target.h) break
 
     const id = 'MEM_FONT_' + string.charCodeAt(i)
-    const d = newImage(atlas, AnimationID[<keyof typeof AnimationID>id], 10, {
+    const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], 10, {
       x: target.x + position.x,
       y: target.y + position.y - y
     })
