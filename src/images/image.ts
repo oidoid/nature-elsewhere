@@ -51,14 +51,17 @@ export class Image {
   }
 
   constructor(
+    // how i transition between animations? includin the AtlasAnimation here would save a lot of lookup eveyrwhere else.
+    // private readonly animation: AtlasAnimation
+    // private readonly maskAnimation: AtlasAnimation
     private readonly _animationID: AnimationID,
-    private readonly _cel: number,
+    private readonly _cel: number, // Does Animator just reach in and change this or does image know about Animator?
     private readonly _target: Mutable<XY> & WH,
     private readonly _maskAnimationID: AnimationID,
     private readonly _maskCel: number,
-    private readonly _offset: Mutable<XY>,
+    private readonly _offset: Mutable<XY>, // Does Animator change this?
     private readonly _scale: XY,
-    private readonly _palette: Palette,
+    private readonly _palette: Palette, // Does Animator change this?
     private readonly _layer: number
   ) {}
 

@@ -5,6 +5,7 @@ import {
   AtlasCel
 } from './atlas-definition'
 
+// Animates AtlasAnimations by providing the correct cel for a given time.
 export class Animator {
   constructor(
     private _animation: AtlasAnimation,
@@ -18,7 +19,8 @@ export class Animator {
   }
 
   // todo: can state be replaced by passing in total time? I would have to walk
-  //       the loop a lot more.
+  //       the loop a lot more but it would drop a lot of state and potential
+  //       bugs. A class is the right choice here if mutating state is needed.
   step(milliseconds: number): void {
     this._duration += milliseconds % this._animation.duration
     while (this._duration >= this.cel().duration) {
