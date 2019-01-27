@@ -9,9 +9,8 @@ export class Recorder {
   }
 
   set(input: InputMask, active: boolean, xy?: XY): this {
-    if (this.state instanceof WriteState) {
-      this.state = this.state.set(input, active, xy)
-    }
+    if (this.state instanceof ReadState) this.state = this.state.write()
+    this.state = this.state.set(input, active, xy)
     return this
   }
 
