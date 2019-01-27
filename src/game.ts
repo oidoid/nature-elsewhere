@@ -1,5 +1,3 @@
-import * as keyboard from './inputs/keyboard'
-import * as mouse from './inputs/mouse'
 import * as rendererStateMachine from './graphics/renderer-state-machine'
 import {AtlasDefinition} from './images/atlas-definition'
 import {Random} from './math/random'
@@ -7,6 +5,7 @@ import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {Title} from './levels/00-title'
 import {InputMask} from './inputs/input-mask'
+import {InputEventListener} from './inputs/input-event-listener'
 
 export class Game {
   private random: Random = new Random()
@@ -14,17 +13,23 @@ export class Game {
   private level: Level
   private rendererStateMachine: rendererStateMachine.RendererStateMachine
   private _recorder: Recorder = new Recorder()
+  private _inputEventListener: InputEventListener
   constructor(
     private readonly _window: Window,
-    private readonly _canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement,
     atlasImage: HTMLImageElement,
     atlas: AtlasDefinition,
     palettesImage: HTMLImageElement
   ) {
+    this._inputEventListener = new InputEventListener(
+      _window,
+      canvas,
+      this._recorder
+    )
     this.level = new Title(atlas, this.random)
     this.rendererStateMachine = rendererStateMachine.newRendererStateMachine(
       _window,
-      _canvas,
+      canvas,
       atlasImage,
       palettesImage,
       this.onAnimationFrame.bind(this)
@@ -33,58 +38,17 @@ export class Game {
 
   start() {
     this.rendererStateMachine.start()
-    this._window.document.addEventListener('keydown', event =>
-      keyboard.onKeyChange(this._recorder, event)
-    )
-    this._window.document.addEventListener('keyup', event =>
-      keyboard.onKeyChange(this._recorder, event)
-    )
-
-    this._canvas.addEventListener('mousemove', event =>
-      mouse.onMouseMove(
-        this._recorder,
-        canvasSize(this._window),
-        cam(this._window, this.scale),
-        event
-      )
-    )
-    this._canvas.addEventListener('mousedown', event =>
-      mouse.onMouseClickChange(
-        this._recorder,
-        canvasSize(this._window),
-        cam(this._window, this.scale),
-        event
-      )
-    )
-    this._canvas.addEventListener('mouseup', event =>
-      mouse.onMouseClickChange(
-        this._recorder,
-        canvasSize(this._window),
-        cam(this._window, this.scale),
-        event
-      )
-    )
+    this._inputEventListener.register()
   }
 
   stop() {
+    this._inputEventListener.deregister()
     this.rendererStateMachine.stop()
   }
 
   private onAnimationFrame(renderer: Renderer, then: number, now: number) {
     const milliseconds = now - then
-    // Verify input is pumped here or by event listener.
-    this._recorder.write()
-    this._recorder.read(milliseconds)
-
-    if (this._recorder.debugContextLoss(true)) {
-      if (renderer.isContextLost()) {
-        console.log('Restore renderer context.')
-        renderer.debugRestoreContext()
-      } else {
-        console.log('Lose renderer context.')
-        renderer.debugLoseContext()
-      }
-    }
+    this.processInput(renderer, milliseconds)
 
     const camRect = cam(this._window, this.scale)
     const {nextLevel, dataView, length} = this.level.update(then, now, camRect)
@@ -101,6 +65,22 @@ export class Game {
     // Clear point which has no off event.
     this._recorder = this._recorder.set(InputMask.POINT, false)
   }
+
+  private processInput(renderer: Renderer, milliseconds: number): void {
+    // Verify input is pumped here or by event listener.
+    this._recorder.write()
+    this._recorder.read(milliseconds)
+
+    if (this._recorder.debugContextLoss(true)) {
+      if (renderer.isContextLost()) {
+        console.log('Restore renderer context.')
+        renderer.debugRestoreContext()
+      } else {
+        console.log('Lose renderer context.')
+        renderer.debugLoseContext()
+      }
+    }
+  }
 }
 
 function canvasSize(window: Window) {
@@ -114,6 +94,16 @@ function cam(window: Window, scale: number): Rect {
   const {w, h} = canvasSize(window)
   return {x: 0, y: 0, w: Math.ceil(w / scale), h: Math.ceil(h / scale)}
 }
+
+// canvasSize(this._window),
+// cam(this._window, this.scale),
+
+//   const xy = clientToWorld({x: event.clientX, y: event.clientY}, canvas, cam)
+
+// function clientToWorld({x, y}: XY, canvas: WH, cam: Rect): XY {
+//   return {x: cam.x + (x / canvas.w) * cam.w, y: cam.y + (y / canvas.h) * cam.h}
+// }
+
 // The camera's position is a function of the player position and the
 // canvas' dimensions.
 //
