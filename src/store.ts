@@ -14,9 +14,7 @@ export class Store {
   }
 
   addImage(image: Image): void {
-    const index = this.images.findIndex(
-      val => image.drawOrder() <= val.drawOrder()
-    )
+    const index = this.images.findIndex(val => image.layer() <= val.layer())
     this.images.splice(index === -1 ? this.images.length : index, 0, image)
   }
 

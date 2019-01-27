@@ -14,7 +14,7 @@ export class Image {
   static new(
     {animations}: AtlasDefinition,
     animationID: AnimationID,
-    drawOrder: number,
+    layer: number,
     position: XY,
     {
       scale = {x: 1, y: 1},
@@ -46,7 +46,7 @@ export class Image {
       offset,
       scale,
       palette,
-      drawOrder
+      layer
     )
   }
 
@@ -59,7 +59,7 @@ export class Image {
     private readonly _offset: Mutable<XY>,
     private readonly _scale: XY,
     private readonly _palette: Palette,
-    private readonly _drawOrder: number
+    private readonly _layer: number
   ) {}
 
   // For the renderer. In general, it should be unnecessary to obtain
@@ -112,7 +112,7 @@ export class Image {
     return this._palette
   }
 
-  drawOrder(): number {
-    return this._drawOrder
+  layer(): number {
+    return this._layer
   }
 }

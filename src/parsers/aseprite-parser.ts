@@ -36,6 +36,7 @@ export function parseAnimation(
   slices: ReadonlyArray<aseprite.Slice>
 ): AtlasAnimation {
   const cels = []
+  let duration = 0
   let frame
   for (
     let frameNumber = frameTag.from;
@@ -45,11 +46,24 @@ export function parseAnimation(
     const tagFrameNumber = `${frameTag.name} ${frameNumber}`
     frame = frames[tagFrameNumber]
     const cel = parseCel(frameTag, frame, frameNumber, slices)
+    duration += cel.duration
     cels.push(cel)
   }
 
+  if (
+    frameTag.direction === aseprite.AnimationDirection.PING_PONG &&
+    cels.length > 2
+  ) {
+    duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
+  }
+
   let size = frame ? frame.sourceSize : {w: 0, h: 0}
-  return {size, cels, direction: <AtlasAnimationDirection>frameTag.direction}
+  return {
+    size,
+    cels,
+    duration,
+    direction: <AtlasAnimationDirection>frameTag.direction
+  }
 }
 
 export function parseCel(

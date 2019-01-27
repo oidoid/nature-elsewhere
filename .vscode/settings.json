@@ -4,5 +4,5 @@
     "node_modules": true,
     "package-lock.json": true
   },
-  "cSpell.words": ["aseprite", "cels", "rrggbbaa"]
+  "cSpell.words": ["aseprite", "rrggbbaa"]
 }

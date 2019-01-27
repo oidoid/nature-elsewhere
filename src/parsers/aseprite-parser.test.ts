@@ -72,7 +72,7 @@ describe('parseAnimations()', () => {
         trimmed: false,
         spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
         sourceSize: {w: 16, h: 16},
-        duration: 65535
+        duration: 1
       },
       'cactus m 1': {
         frame: {x: 90, y: 54, w: 18, h: 18},
@@ -129,10 +129,11 @@ describe('parseAnimations()', () => {
         cels: [
           {
             position: {x: 221, y: 19},
-            duration: Number.POSITIVE_INFINITY,
+            duration: 1,
             collision: [{x: 8, y: 12, w: 2, h: 3}]
           }
         ],
+        duration: 1,
         direction: 'forward'
       },
       'cactus m': {
@@ -144,6 +145,7 @@ describe('parseAnimations()', () => {
             collision: [{x: 7, y: 11, w: 3, h: 4}]
           }
         ],
+        duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
       'cactus l': {
@@ -155,6 +157,7 @@ describe('parseAnimations()', () => {
             collision: [{x: 7, y: 10, w: 3, h: 5}]
           }
         ],
+        duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
       'cactus xl': {
@@ -166,6 +169,7 @@ describe('parseAnimations()', () => {
             collision: [{x: 7, y: 9, w: 3, h: 6}]
           }
         ],
+        duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       }
     })
@@ -229,6 +233,7 @@ describe('parseAnimation()', () => {
           collision: [{x: 4, y: 11, w: 9, h: 4}]
         }
       ],
+      duration: Number.POSITIVE_INFINITY,
       direction: 'forward'
     })
   })

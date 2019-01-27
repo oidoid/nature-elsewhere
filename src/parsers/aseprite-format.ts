@@ -103,7 +103,7 @@ export interface FrameTag {
   readonly direction: AnimationDirection | string
 }
 
-/** Nonzero animation length in milliseconds or INFINITE_DURATION. */
+/** Positive animation length in milliseconds or INFINITE_DURATION. */
 export type Duration = number
 
 /**
@@ -119,8 +119,8 @@ export enum AnimationDirection {
   /**
    * Animate from start to end - 1 or start, whichever is greater; when looping,
    * change direction (initially, end to start + 1 or end, whichever is lesser.
-   * Traversals from start to end - 1 and end to start + 1 are each considered
-   * complete loops.
+   * A traversal from start to end - 1 then end to start + 1 is considered a
+   * complete loop.
    */
   PING_PONG = 'pingpong'
 }

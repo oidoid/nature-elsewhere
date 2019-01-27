@@ -14,6 +14,8 @@ export interface AtlasAnimation {
   /** Cel dimensions in pixels. */
   readonly size: WH
   readonly cels: ReadonlyArray<AtlasCel>
+  /** Positive animation length in milliseconds, possibly infinite. */
+  readonly duration: number
   readonly direction: AtlasAnimationDirection
 }
 
@@ -21,7 +23,7 @@ export interface AtlasAnimation {
 export interface AtlasCel {
   /** Texture location within the atlas in pixels. */
   readonly position: XY
-  /** Nonzero cel exposure in milliseconds, possibly infinite. */
+  /** Positive cel exposure in milliseconds, possibly infinite. */
   readonly duration: number
   /** Collision bounds within the texture in pixels. */
   readonly collision: ReadonlyArray<Rect>
