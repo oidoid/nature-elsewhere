@@ -9,8 +9,8 @@ describe('step()', () => {
       duration: 0,
       direction: AtlasAnimationDirection.FORWARD
     }
-    const subject = new Animator()
-    subject.step(1, animation)
+    const subject = new Animator(animation)
+    subject.step(1)
     expect(subject).toMatchObject({_period: 0, _duration: 0})
   })
 
@@ -22,8 +22,8 @@ describe('step()', () => {
       duration: 2,
       direction: AtlasAnimationDirection.FORWARD
     }
-    const subject = new Animator()
-    subject.step(0.5, animation)
+    const subject = new Animator(animation)
+    subject.step(0.5)
     expect(subject).toMatchObject({_period: 0, _duration: 0.5})
   })
 
@@ -35,8 +35,8 @@ describe('step()', () => {
       duration: 2,
       direction: AtlasAnimationDirection.FORWARD
     }
-    const subject = new Animator()
-    subject.step(1, animation)
+    const subject = new Animator(animation)
+    subject.step(1)
     expect(subject).toMatchObject({_period: 1, _duration: 0})
   })
 
@@ -48,8 +48,8 @@ describe('step()', () => {
       duration: 2,
       direction: AtlasAnimationDirection.FORWARD
     }
-    const subject = new Animator()
-    subject.step(1.5, animation)
+    const subject = new Animator(animation)
+    subject.step(1.5)
     expect(subject).toMatchObject({_period: 1, _duration: 0.5})
   })
 })
@@ -65,9 +65,9 @@ describe('celIndex', () => {
         duration: 2,
         direction
       }
-      const subject = new Animator()
-      subject.step(1, animation)
-      const actual = subject.celIndex(animation)
+      const subject = new Animator(animation)
+      subject.step(1)
+      const actual = subject.celIndex()
       expect(actual).toStrictEqual(1)
     }
   )
@@ -82,9 +82,9 @@ describe('celIndex', () => {
         duration: 2,
         direction
       }
-      const subject = new Animator(1)
-      subject.step(1, animation)
-      const actual = subject.celIndex(animation)
+      const subject = new Animator(animation, 1)
+      subject.step(1)
+      const actual = subject.celIndex()
       expect(actual).toStrictEqual(0)
     }
   )
@@ -139,11 +139,11 @@ describe('celIndex', () => {
         duration: 4,
         direction
       }
-      const subject = new Animator(period)
+      const subject = new Animator(animation, period)
       const actual = []
       for (let i = 0; i < animation.cels.length * 5; ++i) {
-        subject.step(1, animation)
-        actual.push(subject.celIndex(animation))
+        subject.step(1)
+        actual.push(subject.celIndex())
       }
       expect(actual).toStrictEqual(expected)
     }
@@ -159,11 +159,11 @@ describe('celIndex', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator()
+      const subject = new Animator(animation)
       const actual = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
-        subject.step(1, animation)
-        actual.push(subject.celIndex(animation))
+        subject.step(1)
+        actual.push(subject.celIndex())
       }
       // prettier-ignore
       const expected = {
@@ -185,11 +185,11 @@ describe('celIndex', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator()
+      const subject = new Animator(animation)
       const actual = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        subject.step(0.5, animation)
-        actual.push(subject.celIndex(animation))
+        subject.step(0.5)
+        actual.push(subject.celIndex())
       }
       // prettier-ignore
       const expected = {
@@ -211,11 +211,11 @@ describe('celIndex', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator()
+      const subject = new Animator(animation)
       const actual = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        subject.step(0.9, animation)
-        actual.push(subject.celIndex(animation))
+        subject.step(0.9)
+        actual.push(subject.celIndex())
       }
       // prettier-ignore
       const expected = {

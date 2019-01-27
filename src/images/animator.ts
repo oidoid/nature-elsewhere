@@ -7,34 +7,35 @@ import {
 
 export class Animator {
   constructor(
+    private _animation: AtlasAnimation,
     /** Cel index oscillation state. This integer may fall out of animation
         bounds. */
     private _period = 0,
     /** Cel exposure in milliseconds. */
     private _duration = 0
-  ) {}
+  ) {
+    if (this._animation.cels.length < 2) this.step = () => {}
+  }
 
   // todo: can state be replaced by passing in total time? I would have to walk
   //       the loop a lot more.
-  step(milliseconds: number, animation: AtlasAnimation): void {
-    if (animation.cels.length < 2) return
-
-    this._duration += milliseconds % animation.duration
-    while (this._duration >= this.cel(animation).duration) {
-      this._duration -= this.cel(animation).duration
-      this._period = Animate[animation.direction](
+  step(milliseconds: number): void {
+    this._duration += milliseconds % this._animation.duration
+    while (this._duration >= this.cel().duration) {
+      this._duration -= this.cel().duration
+      this._period = Animate[this._animation.direction](
         this._period,
-        animation.cels.length
+        this._animation.cels.length
       )
     }
   }
 
-  cel(animation: AtlasAnimation): AtlasCel {
-    return animation.cels[this.celIndex(animation)]
+  cel(): AtlasCel {
+    return this._animation.cels[this.celIndex()]
   }
 
-  celIndex(animation: AtlasAnimation): number {
-    return Math.abs(this._period % animation.cels.length)
+  celIndex(): number {
+    return Math.abs(this._period % this._animation.cels.length)
   }
 }
 
