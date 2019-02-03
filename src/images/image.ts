@@ -1,5 +1,6 @@
 import {AtlasDefinition} from './atlas-definition'
 import {AnimationID} from './animation-id'
+import {Animator} from './animator'
 import {Palette} from './palette'
 
 /**
@@ -19,6 +20,7 @@ export class Image {
     {
       scale = {x: 1, y: 1},
       offset = {x: 0, y: 0},
+      offsetRate = {x: 0, y: 0},
       palette = Palette.DEFAULT,
       cel = 0,
       maskAnimationID = animationID,
@@ -30,39 +32,43 @@ export class Image {
       maskCel?: number
       scale?: XY
       offset?: XY
+      offsetRate?: XY
       palette?: Palette
       cel?: number
       preScale?: XY
       wh?: WH
     } = {}
-  ) {
+  ): Image {
     const target = {...position, w: wh.w * preScale.x, h: wh.h * preScale.y}
     return new Image(
       animationID,
-      cel,
       target,
       maskAnimationID,
       maskCel,
       offset,
+      offsetRate,
       scale,
       palette,
-      layer
+      layer,
+      new Animator(animations[animationID], cel)
     )
   }
 
   constructor(
     // how i transition between animations? includin the AtlasAnimation here would save a lot of lookup eveyrwhere else.
-    // private readonly animation: AtlasAnimation
-    // private readonly maskAnimation: AtlasAnimation
     private readonly _animationID: AnimationID,
-    private readonly _cel: number, // Does Animator just reach in and change this or does image know about Animator?
+    /** Width and height do not change on AtlasAnimation change. */
     private readonly _target: Mutable<XY> & WH,
     private readonly _maskAnimationID: AnimationID,
     private readonly _maskCel: number,
-    private readonly _offset: Mutable<XY>, // Does Animator change this?
+    /** The current offset in pixels. */
+    private readonly _offset: Mutable<XY>,
+    /** The offset speed in pixels per millisecond. */
+    private readonly _offsetRate: XY,
     private readonly _scale: XY,
-    private readonly _palette: Palette, // Does Animator change this?
-    private readonly _layer: number
+    private readonly _palette: Palette,
+    private readonly _layer: number,
+    private readonly _animator: Animator
   ) {}
 
   // For the renderer. In general, it should be unnecessary to obtain
@@ -73,7 +79,13 @@ export class Image {
   }
 
   cel(): number {
-    return this._cel
+    return this._animator.celIndex()
+  }
+
+  update(milliseconds: number): void {
+    this._animator.step(milliseconds)
+    this._offset.x += milliseconds * this._offsetRate.x
+    this._offset.y += milliseconds * this._offsetRate.y
   }
 
   target(): Rect {
@@ -83,6 +95,11 @@ export class Image {
   moveTo(target: XY): void {
     this._target.x = target.x
     this._target.y = target.y
+  }
+
+  moveBy(offset: XY): void {
+    this._target.x += offset.x
+    this._target.y += offset.y
   }
 
   centerOn(target: Rect): void {
@@ -100,11 +117,6 @@ export class Image {
 
   offset(): XY {
     return this._offset
-  }
-
-  addOffset({x, y}: XY): void {
-    this._offset.x += x
-    this._offset.y += y
   }
 
   scale(): XY {

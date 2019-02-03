@@ -4,7 +4,7 @@ import * as util from './gl-util'
 import * as vertexShaderSource from './shader.vert'
 
 const GL = WebGL2RenderingContext
-const perVertexData = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
+const perVertexData: Int16Array = new Int16Array([1, 1, 0, 1, 1, 0, 0, 0])
 
 export class Renderer {
   static new(
@@ -86,11 +86,11 @@ export class Renderer {
   }
 
   private constructor(
-    private _gl: GL,
-    private _projection: Float32Array,
-    private _projectionLocation: GLUniform,
-    private _perInstanceBuffer: GLBuffer,
-    private _loseContext: GLLoseContext
+    private readonly _gl: GL,
+    private readonly _projection: Float32Array,
+    private readonly _projectionLocation: GLUniform,
+    private readonly _perInstanceBuffer: GLBuffer,
+    private readonly _loseContext: GLLoseContext
   ) {
     this._gl = _gl
     this._projection = _projection
@@ -100,10 +100,9 @@ export class Renderer {
   }
 
   /**
-   * @arg {WH} canvas The desired resolution of the canvas in CSS pixels. E.g.,
-   *                  {w: window.innerWidth, h: window.innerHeight}.
-   * @arg {number} scale Positive integer zoom.
-   * @return {void}
+   * @arg canvas The desired resolution of the canvas in CSS pixels. E.g.,
+   *             {w: window.innerWidth, h: window.innerHeight}.
+   * @arg scale Positive integer zoom.
    */
   render(
     canvas: WH,
@@ -111,7 +110,7 @@ export class Renderer {
     cam: Rect,
     perInstanceData: GLBufferData,
     instances: number
-  ) {
+  ): void {
     this.resize(canvas, scale, cam)
 
     util.bufferData(
@@ -124,32 +123,22 @@ export class Renderer {
     this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
   }
 
-  isContextLost() {
-    return this._gl.isContextLost()
-  }
-
-  debugLoseContext() {
+  debugLoseContext(): void {
     if (!this._loseContext) return
     this._loseContext.loseContext()
   }
 
-  /**
-   * @arg {{loseContext: GLLoseContext}} state
-   * @return {void}
-   */
-  debugRestoreContext() {
+  debugRestoreContext(): void {
     if (!this._loseContext) return
     this._loseContext.restoreContext()
   }
 
   /**
-   * @arg {WH} canvas The desired resolution of the canvas in CSS pixels. E.g.,
-   *                  {w: window.innerWidth, h: window.innerHeight}.
-   * @arg {number} scale Positive integer zoom.
-   * @arg {Rect} cam
-   * @return {void}
+   * @arg canvas The desired resolution of the canvas in CSS pixels. E.g.,
+   *             {w: window.innerWidth, h: window.innerHeight}.
+   * @arg scale Positive integer zoom.
    */
-  resize(canvas: WH, scale: number, cam: Rect) {
+  resize(canvas: WH, scale: number, cam: Rect): void {
     this._gl.canvas.width = canvas.w
     this._gl.canvas.height = canvas.h
 

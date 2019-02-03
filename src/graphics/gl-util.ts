@@ -9,7 +9,7 @@ export function initAttribute(
   stride: number,
   divisor: number,
   buffer: GLBuffer
-) {
+): void {
   const location = gl.getAttribLocation(program, attribute.name)
   gl.enableVertexAttribArray(location)
   gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
@@ -28,7 +28,7 @@ export function buildProgram(
   gl: GL,
   vertexShaderSource: string,
   fragmentShaderSource: string
-) {
+): GLProgram {
   const program = gl.createProgram()
   if (program === null) throw new Error('WebGL program creation failed.')
 
@@ -55,7 +55,7 @@ export function buildProgram(
   return program
 }
 
-export function compileShader(gl: GL, type: number, source: string) {
+export function compileShader(gl: GL, type: number, source: string): GLShader {
   const shader = gl.createShader(type)
   if (!shader) throw new Error('Shader creation failed.')
 
@@ -73,7 +73,7 @@ export function bufferData(
   buffer: GLBuffer,
   data: GLBufferData,
   usage: number
-) {
+): void {
   gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
   gl.bufferData(GL.ARRAY_BUFFER, data, usage)
   gl.bindBuffer(GL.ARRAY_BUFFER, null)
@@ -83,7 +83,7 @@ export function loadTexture(
   gl: GL,
   textureUnit: number,
   image: HTMLImageElement
-) {
+): GLTexture {
   gl.activeTexture(textureUnit)
   const texture = gl.createTexture()
   gl.bindTexture(GL.TEXTURE_2D, texture)

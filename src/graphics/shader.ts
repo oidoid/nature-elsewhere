@@ -1,11 +1,11 @@
 import {AtlasDefinition} from '../images/atlas-definition'
 import {Image} from '../images/image'
 
-const littleEndian = new Int8Array(new Int16Array([1]).buffer)[0] === 1
+const littleEndian: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1
 
-const I16 = WebGLRenderingContext.SHORT
-const I8 = WebGLRenderingContext.BYTE
-const U8 = WebGLRenderingContext.UNSIGNED_BYTE
+const I16: number = WebGLRenderingContext.SHORT
+const I8: number = WebGLRenderingContext.BYTE
+const U8: number = WebGLRenderingContext.UNSIGNED_BYTE
 
 export type Attribute = typeof layout.perInstance.attributes[number]
 
@@ -31,7 +31,7 @@ export const layout = {
   }
 }
 
-export function newInstanceBuffer(length: number) {
+export function newInstanceBuffer(length: number): ArrayBuffer {
   return new ArrayBuffer(layout.perInstance.stride * length)
 }
 
@@ -40,7 +40,7 @@ export function packInstance(
   dataView: DataView,
   index: number,
   image: Image
-) {
+): void {
   const animation = animations[image.animationID()]
   const maskAnimation = animations[image.maskAnimationID()]
   const i = index * layout.perInstance.stride

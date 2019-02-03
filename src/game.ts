@@ -4,16 +4,16 @@ import {Random} from './math/random'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {Title} from './levels/00-title'
-import {InputMask} from './inputs/input-mask'
 import {InputEventListener} from './inputs/input-event-listener'
+import {InputMask} from './inputs/input-mask'
 
 export class Game {
-  private random: Random = new Random()
-  private scale: number = 12
-  private level: Level
-  private rendererStateMachine: rendererStateMachine.RendererStateMachine
-  private _recorder: Recorder = new Recorder()
-  private _inputEventListener: InputEventListener
+  private readonly _random: Random = new Random()
+  private readonly _scale: number = 12
+  private _level: Level
+  private readonly rendererStateMachine: rendererStateMachine.RendererStateMachine
+  private readonly _recorder: Recorder = new Recorder()
+  private readonly _inputEventListener: InputEventListener
   constructor(
     private readonly _window: Window,
     canvas: HTMLCanvasElement,
@@ -26,7 +26,7 @@ export class Game {
       canvas,
       this._recorder
     )
-    this.level = new Title(atlas, this.random)
+    this._level = new Title(atlas, this._random)
     this.rendererStateMachine = rendererStateMachine.newRendererStateMachine(
       _window,
       canvas,
@@ -36,34 +36,42 @@ export class Game {
     )
   }
 
-  start() {
+  start(): void {
     this.rendererStateMachine.start()
     this._inputEventListener.register()
   }
 
-  stop() {
+  stop(): void {
     this._inputEventListener.deregister()
     this.rendererStateMachine.stop()
   }
 
-  private onAnimationFrame(renderer: Renderer, then: number, now: number) {
+  private onAnimationFrame(
+    renderer: Renderer,
+    then: number,
+    now: number
+  ): void {
     const milliseconds = now - then
     this.processInput(renderer, milliseconds)
 
-    const camRect = cam(this._window, this.scale)
-    const {nextLevel, dataView, length} = this.level.update(then, now, camRect)
-    this.level = nextLevel
+    const camRect = cam(this._window, this._scale)
+    const {nextLevel, data: dataView, length} = this._level.update(
+      then,
+      now,
+      camRect
+    )
+    this._level = nextLevel
 
     renderer.render(
       canvasSize(this._window),
-      this.scale,
+      this._scale,
       camRect,
       dataView,
       length
     )
 
     // Clear point which has no off event.
-    this._recorder = this._recorder.set(InputMask.POINT, false)
+    this._recorder.set(InputMask.POINT, false)
   }
 
   private processInput(renderer: Renderer, milliseconds: number): void {
@@ -72,22 +80,19 @@ export class Game {
     this._recorder.read(milliseconds)
 
     if (this._recorder.debugContextLoss(true)) {
-      if (renderer.isContextLost()) {
+      console.log('Lose renderer context.')
+      renderer.debugLoseContext()
+      setTimeout(() => {
         console.log('Restore renderer context.')
         renderer.debugRestoreContext()
-      } else {
-        console.log('Lose renderer context.')
-        renderer.debugLoseContext()
-      }
+      }, 3 * 1000)
     }
   }
 }
 
-function canvasSize(window: Window) {
-  return {
-    w: window.document.documentElement.clientWidth,
-    h: window.document.documentElement.clientHeight
-  }
+function canvasSize(window: Window): WH {
+  const {clientWidth, clientHeight} = window.document.documentElement
+  return {w: clientWidth, h: clientHeight}
 }
 
 function cam(window: Window, scale: number): Rect {

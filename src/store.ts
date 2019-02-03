@@ -2,12 +2,17 @@ import * as shader from './graphics/shader'
 import {AtlasDefinition} from './images/atlas-definition'
 import {Image} from './images/image'
 
-const maxLen = 1000
-const dataView = new DataView(shader.newInstanceBuffer(maxLen))
+const maxLen: number = 1000
+const data: DataView = new DataView(shader.newInstanceBuffer(maxLen))
+
+export interface StoreUpdate {
+  readonly data: DataView
+  readonly length: number
+}
 
 export class Store {
-  private images: Image[] = []
-  constructor(private _atlas: AtlasDefinition) {}
+  private readonly images: Image[] = []
+  constructor(private readonly _atlas: AtlasDefinition) {}
 
   addImages(...images: Image[]): void {
     images.forEach(image => this.addImage(image))
@@ -18,11 +23,11 @@ export class Store {
     this.images.splice(index === -1 ? this.images.length : index, 0, image)
   }
 
-  update(_milliseconds: number) {
-    // const step = milliseconds / 1000
-    this.images.forEach((image, i) =>
-      shader.packInstance(this._atlas, dataView, i, image)
-    )
-    return {dataView, length: this.images.length}
+  update(milliseconds: number): StoreUpdate {
+    this.images.forEach((image, i) => {
+      image.update(milliseconds)
+      shader.packInstance(this._atlas, data, i, image)
+    })
+    return {data, length: this.images.length}
   }
 }

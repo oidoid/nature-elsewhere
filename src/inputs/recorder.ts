@@ -3,83 +3,80 @@ import {InputMask} from './input-mask'
 export class Recorder {
   private state: ReadState | WriteState = new WriteState()
 
-  write(): this {
+  write(): void {
     if (this.state instanceof ReadState) this.state = this.state.write()
-    return this
   }
 
-  set(input: InputMask, active: boolean, xy?: XY): this {
+  set(input: InputMask, active: boolean, xy?: XY): void {
     if (this.state instanceof ReadState) this.state = this.state.write()
     this.state = this.state.set(input, active, xy)
-    return this
   }
 
-  read(milliseconds: number): this {
+  read(milliseconds: number): void {
     if (this.state instanceof WriteState) {
       this.state = this.state.read(milliseconds)
     }
-    return this
   }
 
-  left(triggered = false): boolean {
+  left(triggered: boolean = false): boolean {
     return this.active(InputMask.LEFT, triggered)
   }
 
-  right(triggered = false): boolean {
+  right(triggered: boolean = false): boolean {
     return this.active(InputMask.RIGHT, triggered)
   }
 
-  up(triggered = false): boolean {
+  up(triggered: boolean = false): boolean {
     return this.active(InputMask.UP, triggered)
   }
 
-  down(triggered = false): boolean {
+  down(triggered: boolean = false): boolean {
     return this.active(InputMask.DOWN, triggered)
   }
 
-  menu(triggered = false): boolean {
+  menu(triggered: boolean = false): boolean {
     return this.active(InputMask.MENU, triggered)
   }
 
-  debugContextLoss(triggered = false): boolean {
+  debugContextLoss(triggered: boolean = false): boolean {
     return this.active(InputMask.DEBUG_CONTEXT_LOSS, triggered)
   }
 
-  scaleReset(triggered = false): boolean {
+  scaleReset(triggered: boolean = false): boolean {
     return this.active(InputMask.SCALE_RESET, triggered)
   }
 
-  scaleIncrease(triggered = false): boolean {
+  scaleIncrease(triggered: boolean = false): boolean {
     return this.active(InputMask.SCALE_INCREASE, triggered)
   }
 
-  scaleDecrease(triggered = false): boolean {
+  scaleDecrease(triggered: boolean = false): boolean {
     return this.active(InputMask.SCALE_DECREASE, triggered)
   }
 
-  move(triggered = false): XY | undefined {
+  move(triggered: boolean = false): XY | undefined {
     return this.state instanceof ReadState &&
       this.active(InputMask.POINT, triggered)
       ? this.state.positions()[0]
       : undefined
   }
 
-  pick(triggered = false): XY | undefined {
+  pick(triggered: boolean = false): XY | undefined {
     return this.state instanceof ReadState &&
       this.active(InputMask.PICK, triggered)
       ? this.state.positions()[0]
       : undefined
   }
 
-  prevEntity(triggered = false): boolean {
+  prevEntity(triggered: boolean = false): boolean {
     return this.active(InputMask.PREV_ENTITY, triggered)
   }
 
-  nextEntity(triggered = false): boolean {
+  nextEntity(triggered: boolean = false): boolean {
     return this.active(InputMask.NEXT_ENTITY, triggered)
   }
 
-  combo(triggered = false, ...inputs: InputMask[]): boolean {
+  combo(triggered: boolean = false, ...inputs: InputMask[]): boolean {
     return (
       this.state instanceof ReadState && this.state.combo(triggered, ...inputs)
     )
@@ -156,7 +153,7 @@ class ReadState {
     private readonly _positions: ReadonlyArray<XY | undefined>
   ) {}
 
-  write() {
+  write(): WriteState {
     return new WriteState(
       this._sampleAge,
       this._sample, // _sample starts as previous _sample, key up events will clear.
@@ -166,7 +163,7 @@ class ReadState {
     )
   }
 
-  combo(triggered = false, ...inputs: InputMask[]): boolean {
+  combo(triggered: boolean = false, ...inputs: InputMask[]): boolean {
     if (triggered && this._sampleAge) return false
     return inputs.every(
       (input, i) => this._combo[inputs.length - 1 - i] === input
@@ -182,7 +179,7 @@ class ReadState {
     return maskedSample === input
   }
 
-  positions() {
+  positions(): ReadonlyArray<XY | undefined> {
     return this._positions
   }
 }

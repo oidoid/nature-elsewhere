@@ -14,7 +14,7 @@ export class InputEventListener {
     this.onMouseClickChange = this.onMouseClickChange.bind(this)
   }
 
-  register() {
+  register(): void {
     if (this._registered) return
     this._window.document.addEventListener('keydown', this.onKeyChange)
     this._window.document.addEventListener('keyup', this.onKeyChange)
@@ -24,7 +24,7 @@ export class InputEventListener {
     this._registered = true
   }
 
-  deregister() {
+  deregister(): void {
     if (!this._registered) return
     this._canvas.addEventListener('mousemove', this.onMouseMove)
     this._canvas.addEventListener('mouseup', this.onMouseClickChange)

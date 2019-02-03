@@ -5,12 +5,13 @@ import * as rect from './rect'
  *   diagram: string,
  *   lhs: Rect,
  *   rhs: Rect,
- *   intersections: Rect,
+ *   intersection: Rect,
  *   intersects: boolean,
+ *   union: Rect,
  *   flip: boolean
  * ]
  */
-const intersections = [
+const tests = [
   [
     `
       0   │    Overlapping Square
@@ -22,7 +23,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 0, y: -1, w: 2, h: 2},
     {x: 0, y: -1, w: 1, h: 2},
-    true
+    true,
+    {x: -1, y: -1, w: 3, h: 2}
   ],
   [
     `
@@ -35,7 +37,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 0, y: -2, w: 2, h: 2},
     {x: 0, y: -1, w: 1, h: 1},
-    true
+    true,
+    {x: -1, y: -2, w: 3, h: 3}
   ],
   [
     `
@@ -48,7 +51,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: -2, w: 2, h: 2},
     {x: -1, y: -1, w: 2, h: 1},
-    true
+    true,
+    {x: -1, y: -2, w: 2, h: 3}
   ],
   [
     `
@@ -61,7 +65,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -2, y: -2, w: 2, h: 2},
     {x: -1, y: -1, w: 1, h: 1},
-    true
+    true,
+    {x: -2, y: -2, w: 3, h: 3}
   ],
   [
     `
@@ -74,7 +79,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -2, y: -1, w: 2, h: 2},
     {x: -1, y: -1, w: 1, h: 2},
-    true
+    true,
+    {x: -2, y: -1, w: 3, h: 2}
   ],
   [
     `
@@ -87,7 +93,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -2, y: 0, w: 2, h: 2},
     {x: -1, y: 0, w: 1, h: 1},
-    true
+    true,
+    {x: -2, y: -1, w: 3, h: 3}
   ],
   [
     `
@@ -100,7 +107,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: 0, w: 2, h: 2},
     {x: -1, y: 0, w: 2, h: 1},
-    true
+    true,
+    {x: -1, y: -1, w: 2, h: 3}
   ],
   [
     `
@@ -113,7 +121,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 0, y: 0, w: 2, h: 2},
     {x: 0, y: 0, w: 1, h: 1},
-    true
+    true,
+    {x: -1, y: -1, w: 3, h: 3}
   ],
   [
     `
@@ -128,7 +137,8 @@ const intersections = [
     {x: -1, y: -2, w: 2, h: 4},
     {x: -2, y: -3, w: 4, h: 2},
     {x: -1, y: -2, w: 2, h: 1},
-    true
+    true,
+    {x: -2, y: -3, w: 4, h: 5}
   ],
   [
     `
@@ -143,7 +153,8 @@ const intersections = [
     {x: -1, y: -2, w: 2, h: 4},
     {x: -2, y: -1, w: 4, h: 2},
     {x: -1, y: -1, w: 2, h: 2},
-    true
+    true,
+    {x: -2, y: -2, w: 4, h: 4}
   ],
   [
     `
@@ -158,7 +169,8 @@ const intersections = [
     {x: -1, y: -2, w: 2, h: 4},
     {x: -2, y: 1, w: 4, h: 2},
     {x: -1, y: 1, w: 2, h: 1},
-    true
+    true,
+    {x: -2, y: -2, w: 4, h: 5}
   ],
   [
     `
@@ -172,7 +184,8 @@ const intersections = [
     {x: -3, y: -4, w: 5, h: 5},
     {x: -2, y: -2, w: 1, h: 2},
     {x: -2, y: -2, w: 1, h: 2},
-    true
+    true,
+    {x: -3, y: -4, w: 5, h: 5}
   ],
   [
     `
@@ -185,7 +198,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: -1, w: 2, h: 2},
-    true
+    true,
+    {x: -1, y: -1, w: 2, h: 2}
   ],
   [
     `
@@ -198,7 +212,8 @@ const intersections = [
     {x: 0, y: 0, w: 0, h: 0},
     {x: 0, y: 0, w: 0, h: 0},
     {x: 0, y: 0, w: 0, h: 0},
-    true
+    true,
+    {x: 0, y: 0, w: 0, h: 0}
   ],
   [
     `
@@ -213,7 +228,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 1, y: -1, w: 2, h: 2},
     {x: 1, y: -1, w: 0, h: 2},
-    true
+    true,
+    {x: -1, y: -1, w: 4, h: 2}
   ],
   [
     `
@@ -228,7 +244,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 1, y: -2, w: 2, h: 2},
     {x: 1, y: -1, w: 0, h: 1},
-    true
+    true,
+    {x: -1, y: -2, w: 4, h: 3}
   ],
   [
     `
@@ -243,7 +260,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 1, y: -3, w: 2, h: 2},
     {x: 1, y: -1, w: 0, h: 0},
-    true
+    true,
+    {x: -1, y: -3, w: 4, h: 4}
   ],
   [
     `
@@ -258,7 +276,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 0, y: -3, w: 2, h: 2},
     {x: 0, y: -1, w: 1, h: 0},
-    true
+    true,
+    {x: -1, y: -3, w: 3, h: 4}
   ],
   [
     `
@@ -273,7 +292,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: -3, w: 2, h: 2},
     {x: -1, y: -1, w: 2, h: 0},
-    true
+    true,
+    {x: -1, y: -3, w: 2, h: 4}
   ],
   [
     `
@@ -288,7 +308,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -2, y: -3, w: 2, h: 2},
     {x: -1, y: -1, w: 1, h: 0},
-    true
+    true,
+    {x: -2, y: -3, w: 3, h: 4}
   ],
   [
     `
@@ -303,7 +324,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -3, y: -3, w: 2, h: 2},
     {x: -1, y: -1, w: 0, h: 0},
-    true
+    true,
+    {x: -3, y: -3, w: 4, h: 4}
   ],
   [
     `
@@ -318,7 +340,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -3, y: -2, w: 2, h: 2},
     {x: -1, y: -1, w: 0, h: 1},
-    true
+    true,
+    {x: -3, y: -2, w: 4, h: 3}
   ],
   [
     `
@@ -333,7 +356,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -3, y: -1, w: 2, h: 2},
     {x: -1, y: -1, w: 0, h: 2},
-    true
+    true,
+    {x: -3, y: -1, w: 4, h: 2}
   ],
   [
     `
@@ -348,7 +372,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -3, y: 0, w: 2, h: 2},
     {x: -1, y: 0, w: 0, h: 1},
-    true
+    true,
+    {x: -3, y: -1, w: 4, h: 3}
   ],
   [
     `
@@ -363,7 +388,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -3, y: 1, w: 2, h: 2},
     {x: -1, y: 1, w: 0, h: 0},
-    true
+    true,
+    {x: -3, y: -1, w: 4, h: 4}
   ],
   [
     `
@@ -378,7 +404,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -2, y: 1, w: 2, h: 2},
     {x: -1, y: 1, w: 1, h: 0},
-    true
+    true,
+    {x: -2, y: -1, w: 3, h: 4}
   ],
   [
     `
@@ -393,7 +420,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: 1, w: 2, h: 2},
     {x: -1, y: 1, w: 2, h: 0},
-    true
+    true,
+    {x: -1, y: -1, w: 2, h: 4}
   ],
   [
     `
@@ -408,7 +436,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 0, y: 1, w: 2, h: 2},
     {x: 0, y: 1, w: 1, h: 0},
-    true
+    true,
+    {x: -1, y: -1, w: 3, h: 4}
   ],
   [
     `
@@ -423,7 +452,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 1, y: 1, w: 2, h: 2},
     {x: 1, y: 1, w: 0, h: 0},
-    true
+    true,
+    {x: -1, y: -1, w: 4, h: 4}
   ],
   [
     `
@@ -438,7 +468,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 1, y: 0, w: 2, h: 2},
     {x: 1, y: 0, w: 0, h: 1},
-    true
+    true,
+    {x: -1, y: -1, w: 4, h: 3}
   ],
   [
     `
@@ -455,7 +486,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 2, y: -1, w: 2, h: 2},
     {x: 2, y: -1, w: -1, h: 2},
-    false
+    false,
+    {x: -1, y: -1, w: 5, h: 2}
   ],
   [
     `
@@ -472,7 +504,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 2, y: -2, w: 2, h: 2},
     {x: 2, y: -1, w: -1, h: 1},
-    false
+    false,
+    {x: -1, y: -2, w: 5, h: 3}
   ],
   [
     `
@@ -489,7 +522,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 0, y: -4, w: 2, h: 2},
     {x: 0, y: -1, w: 1, h: -1},
-    false
+    false,
+    {x: -1, y: -4, w: 3, h: 5}
   ],
   [
     `
@@ -506,7 +540,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: -4, w: 2, h: 2},
     {x: -1, y: -1, w: 2, h: -1},
-    false
+    false,
+    {x: -1, y: -4, w: 2, h: 5}
   ],
   [
     `
@@ -523,7 +558,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -2, y: -4, w: 2, h: 2},
     {x: -1, y: -1, w: 1, h: -1},
-    false
+    false,
+    {x: -2, y: -4, w: 3, h: 5}
   ],
   [
     `
@@ -540,7 +576,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -4, y: -2, w: 2, h: 2},
     {x: -1, y: -1, w: -1, h: 1},
-    false
+    false,
+    {x: -4, y: -2, w: 5, h: 3}
   ],
   [
     `
@@ -557,7 +594,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -4, y: -1, w: 2, h: 2},
     {x: -1, y: -1, w: -1, h: 2},
-    false
+    false,
+    {x: -4, y: -1, w: 5, h: 2}
   ],
   [
     `
@@ -574,7 +612,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -4, y: 0, w: 2, h: 2},
     {x: -1, y: 0, w: -1, h: 1},
-    false
+    false,
+    {x: -4, y: -1, w: 5, h: 3}
   ],
   [
     `
@@ -591,7 +630,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -2, y: 2, w: 2, h: 2},
     {x: -1, y: 2, w: 1, h: -1},
-    false
+    false,
+    {x: -2, y: -1, w: 3, h: 5}
   ],
   [
     `
@@ -608,7 +648,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: -1, y: 2, w: 2, h: 2},
     {x: -1, y: 2, w: 2, h: -1},
-    false
+    false,
+    {x: -1, y: -1, w: 2, h: 5}
   ],
   [
     `
@@ -625,7 +666,8 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 0, y: 2, w: 2, h: 2},
     {x: 0, y: 2, w: 1, h: -1},
-    false
+    false,
+    {x: -1, y: -1, w: 3, h: 5}
   ],
   [
     `
@@ -642,77 +684,87 @@ const intersections = [
     {x: -1, y: -1, w: 2, h: 2},
     {x: 2, y: 0, w: 2, h: 2},
     {x: 2, y: 0, w: -1, h: 1},
-    false
+    false,
+    {x: -1, y: -1, w: 5, h: 3}
   ],
   [
     `0 Distant Disjoint`,
     {x: 0, y: 0, w: 10, h: 10},
     {x: 17, y: -22, w: 8, h: 5},
     {x: 17, y: 0, w: -7, h: -17},
-    false
+    false,
+    {x: 0, y: -22, w: 25, h: 32}
   ],
   [
     `1 Distant Disjoint`,
     {x: 0, y: 0, w: 10, h: 10},
     {x: -17, y: -22, w: 8, h: 5},
     {x: 0, y: 0, w: -9, h: -17},
-    false
+    false,
+    {x: -17, y: -22, w: 27, h: 32}
   ],
   [
     `2 Distant Disjoint`,
     {x: 0, y: 0, w: 10, h: 10},
     {x: -17, y: 22, w: 8, h: 5},
     {x: 0, y: 22, w: -9, h: -12},
-    false
+    false,
+    {x: -17, y: 0, w: 27, h: 27}
   ],
   [
     `3 Distant Disjoint`,
     {x: 0, y: 0, w: 10, h: 10},
     {x: 17, y: 22, w: 8, h: 5},
     {x: 17, y: 22, w: -7, h: -12},
-    false
+    false,
+    {x: 0, y: 0, w: 25, h: 27}
   ],
   [
     `0 Disparate Disjoint`,
     {x: 100, y: 100, w: 400, h: 1000},
     {x: 20, y: -39, w: 12, h: 38},
     {x: 100, y: 100, w: -68, h: -101},
-    false
+    false,
+    {x: 20, y: -39, w: 480, h: 1139}
   ],
   [
     `1 Disparate Disjoint`,
     {x: 100, y: 100, w: 400, h: 1000},
     {x: -20, y: -39, w: 12, h: 38},
     {x: 100, y: 100, w: -108, h: -101},
-    false
+    false,
+    {x: -20, y: -39, w: 520, h: 1139}
   ],
   [
     `2 Disparate Disjoint`,
     {x: 100, y: 100, w: 400, h: 1000},
     {x: -20, y: 39, w: 12, h: 38},
     {x: 100, y: 100, w: -108, h: -23},
-    false
+    false,
+    {x: -20, y: 39, w: 520, h: 1061}
   ],
   [
     `3 Disparate Disjoint`,
     {x: 100, y: 100, w: 400, h: 1000},
     {x: 20, y: 39, w: 12, h: 38},
     {x: 100, y: 100, w: -68, h: -23},
-    false
+    false,
+    {x: 20, y: 39, w: 480, h: 1061}
   ]
 ].reduce((sum, val) => [...sum, [...val, false], [...val, true]], <
   (string | Rect | boolean)[][]
 >[])
 
 describe('intersection()', () => {
-  test.each(intersections)(
-    '%#) %s (%p, %p) => %p %p, %p',
+  test.each(tests)(
+    '%#) %s (%p, %p) => %p %p, %p, %p',
     (
       _diagram: string,
       lhs: Rect,
       rhs: Rect,
       intersection: Rect,
-      _intersects: Rect,
+      _intersects: boolean,
+      _union: Rect,
       flip: boolean
     ) =>
       expect(
@@ -722,18 +774,37 @@ describe('intersection()', () => {
 })
 
 describe('intersects()', () => {
-  test.each(intersections)(
-    '%#) %s (%p, %p) => %p %p, %p',
+  test.each(tests)(
+    '%#) %s (%p, %p) => %p %p, %p, %p',
     (
       _diagram: string,
       lhs: Rect,
       rhs: Rect,
       _intersection: Rect,
-      intersects: Rect,
+      intersects: boolean,
+      _union: Rect,
       flip: boolean
     ) =>
       expect(rect.intersects(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
         intersects
+      )
+  )
+})
+
+describe('union()', () => {
+  test.each(tests)(
+    '%#) %s (%p, %p) => %p %p, %p, %p',
+    (
+      _diagram: string,
+      lhs: Rect,
+      rhs: Rect,
+      _intersection: Rect,
+      _intersects: boolean,
+      union: Rect,
+      flip: boolean
+    ) =>
+      expect(rect.union(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
+        union
       )
   )
 })

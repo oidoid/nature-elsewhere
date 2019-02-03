@@ -8,12 +8,12 @@ import {
 // Animates AtlasAnimations by providing the correct cel for a given time.
 export class Animator {
   constructor(
-    private _animation: AtlasAnimation,
+    private readonly _animation: AtlasAnimation,
     /** Cel index oscillation state. This integer may fall out of animation
         bounds. */
-    private _period = 0,
+    private _period: number = 0,
     /** Cel exposure in milliseconds. */
-    private _duration = 0
+    private _duration: number = 0
   ) {
     if (this._animation.cels.length < 2) this.step = () => {}
   }
