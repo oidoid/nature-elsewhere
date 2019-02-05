@@ -19,11 +19,11 @@ out vec2 vOffset;
 flat out uint vPalette;
 
 void main() {
-  ivec2 wh = uv * target.zw * abs(scale);
+  ivec2 wh = uv * target.zw;
   gl_Position = vec4(target.xy + wh, 0, 1) * projection;
 
   vSource = source;
   vMask = vec2(mask.xy + uv * mask.zw);
-  vOffset = vec2((offset + uv * target.zw) * sign(scale));
+  vOffset = vec2(offset + uv * target.zw / scale);
   vPalette = palette;
 }

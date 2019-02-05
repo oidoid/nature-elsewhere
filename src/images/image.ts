@@ -39,7 +39,11 @@ export class Image {
       wh?: WH
     } = {}
   ): Image {
-    const target = {...position, w: wh.w * preScale.x, h: wh.h * preScale.y}
+    const target = {
+      ...position,
+      w: wh.w * preScale.x * scale.x,
+      h: wh.h * preScale.y * scale.y
+    }
     return new Image(
       animationID,
       target,
