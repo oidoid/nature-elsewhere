@@ -6,7 +6,7 @@ import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
 import {Palette} from '../images/palette'
 import {Random} from '../math/random'
-import {Store} from '../store'
+import {Store} from '../entities/store'
 
 export class Title implements Level {
   private readonly _store: Store
@@ -65,6 +65,6 @@ export class Title implements Level {
     // pass recorder in here or do i have my own recorder?
     // restore context when hidden is broken
     // if any input, nextLevel = fields
-    return {nextLevel: this, ...this._store.update(now - then)}
+    return {nextLevel: this, ...this._store.update(now - then, cam)}
   }
 }

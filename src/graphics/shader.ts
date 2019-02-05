@@ -1,38 +1,91 @@
+import * as number from '../math/number'
 import {AtlasDefinition} from '../images/atlas-definition'
 import {Image} from '../images/image'
 
+export interface AttributeLayout {
+  readonly perVertex: DivisorLayout
+  readonly perInstance: DivisorLayout
+}
+
+export interface DivisorLayout {
+  readonly length: number
+  readonly stride: number
+  readonly divisor: number
+  readonly attributes: ReadonlyArray<Attribute>
+}
+
+export interface Attribute {
+  readonly type: number
+  readonly name: string
+  readonly length: number
+  readonly offset: number
+}
+
+type PartialAttribute = Omit<Attribute, 'offset'>
+
 const littleEndian: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1
 
-const I16: number = WebGLRenderingContext.SHORT
-const I8: number = WebGLRenderingContext.BYTE
 const U8: number = WebGLRenderingContext.UNSIGNED_BYTE
+const I8: number = WebGLRenderingContext.BYTE
+const I16: number = WebGLRenderingContext.SHORT
+const sizeOfType: Readonly<Record<number, number>> = {
+  [U8]: 1,
+  [I8]: 1,
+  [I16]: 2
+}
 
-export type Attribute = typeof layout.perInstance.attributes[number]
+export const layout: AttributeLayout = {
+  perVertex: newDivisorLayout(0, {name: 'uv', type: I16, length: 2}),
+  perInstance: newDivisorLayout(
+    1,
+    {name: 'source', type: I16, length: 4},
+    {name: 'target', type: I16, length: 4},
+    {name: 'mask', type: I16, length: 4},
+    {name: 'offset', type: I8, length: 2},
+    {name: 'scale', type: I16, length: 2},
+    {name: 'palette', type: U8, length: 1}
+  )
+}
 
-export const layout = {
-  perVertex: {
-    length: 2,
-    stride: 4,
-    divisor: 0,
-    attributes: [{type: I16, name: 'uv', length: 2, offset: 0}]
-  },
-  perInstance: {
-    length: 17,
-    stride: 31 + 1,
-    divisor: 1,
-    attributes: [
-      {type: I16, name: 'source', length: 4, offset: 0},
-      {type: I16, name: 'target', length: 4, offset: 8},
-      {type: I16, name: 'mask', length: 4, offset: 16},
-      {type: I8, name: 'offset', length: 2, offset: 24},
-      {type: I16, name: 'scale', length: 2, offset: 26},
-      {type: U8, name: 'palette', length: 1, offset: 30}
-    ]
+function newDivisorLayout(
+  divisor: number,
+  ...partialAttributes: PartialAttribute[]
+): DivisorLayout {
+  const attributes = partialAttributes.reduce(reducePartialAttribute, [])
+  const maxSize = attributes.reduce(
+    (max, {type}) => Math.max(sizeOfType[type], max),
+    0
+  )
+  return {
+    length: attributes.reduce((sum, {length}) => sum + length, 0),
+    stride: number.roundMultiple(
+      maxSize,
+      nextOffset(attributes[attributes.length - 1])
+    ),
+    divisor,
+    attributes
   }
 }
 
-export function newInstanceBuffer(length: number): ArrayBuffer {
-  return new ArrayBuffer(layout.perInstance.stride * length)
+function reducePartialAttribute(
+  attributes: ReadonlyArray<Attribute>,
+  {type, name, length}: PartialAttribute,
+  index: number
+): ReadonlyArray<Attribute> {
+  return attributes.concat({
+    type,
+    name,
+    length,
+    offset: index ? nextOffset(attributes[index - 1]) : 0
+  })
+}
+
+function nextOffset(attribute: Attribute): number {
+  return attribute.offset + sizeOfType[attribute.type] * attribute.length
+}
+
+export function newInstanceBuffer(length: number): DataView {
+  return new DataView(new ArrayBuffer(layout.perInstance.stride * length))
 }
 
 export function packInstance(

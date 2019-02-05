@@ -14,3 +14,7 @@ export function wrap(val: number, min: number, max: number): number {
 export function clamp(val: number, min: number, max: number): number {
   return Math.min(Math.max(val, min), max)
 }
+
+export function roundMultiple(multiple: number, val: number): number {
+  return Math.ceil(val / multiple) * multiple
+}

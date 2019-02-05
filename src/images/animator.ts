@@ -18,10 +18,10 @@ export class Animator {
     if (this._animation.cels.length < 2) this.step = () => {}
   }
 
-  // todo: can state be replaced by passing in total time? I would have to walk
-  //       the loop a lot more but it would drop a lot of state and potential
-  //       bugs. A class is the right choice here if mutating state is needed.
   step(milliseconds: number): void {
+    // The next frame is a function of the current cel exposure (_duration),
+    // the time since the last step measured (milliseconds), and the current
+    // frame index within the animation interval (_period).
     this._duration += milliseconds % this._animation.duration
     while (this._duration >= this.cel().duration) {
       this._duration -= this.cel().duration

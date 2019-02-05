@@ -55,7 +55,7 @@ export class Game {
     this.processInput(renderer, milliseconds)
 
     const camRect = cam(this._window, this._scale)
-    const {nextLevel, data: dataView, length} = this._level.update(
+    const {nextLevel, instances: dataView, length} = this._level.update(
       then,
       now,
       camRect
