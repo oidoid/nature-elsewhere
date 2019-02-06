@@ -1,6 +1,6 @@
-import * as rect from '../math/rect'
 import * as xy from '../math/xy'
 import {Image} from './image'
+import {Palette} from './palette'
 
 // A proxy with caching for keeping and manipulating multiple images relative an
 // origin.
@@ -9,6 +9,9 @@ export class ImageGroup {
   private _target: Rect = {x: 0, y: 0, w: 0, h: 0}
   constructor(private readonly _images: ReadonlyArray<Image>) {
     this.invalidate()
+  }
+  images(): ReadonlyArray<Image> {
+    return this._images
   }
   moveTo(target: XY): void {
     if (xy.equal(this._origin, target)) return
@@ -19,13 +22,19 @@ export class ImageGroup {
     this._images.forEach(image => image.moveBy(offset))
     this.invalidate()
   }
+  centerOn(target: Rect): void {
+    this.moveTo({
+      x: target.x + target.w / 2 - this._target.w / 2,
+      y: this._origin.y
+    })
+  }
   target() {
     return this._target
   }
+  setPalette(palette: Palette): void {
+    Image.setPalette(palette, this._images)
+  }
   private invalidate() {
-    this._target = this._images.reduce(
-      (union, image) => rect.union(union, image.target()),
-      (this._images[0] && this._images[0].target()) || {x: 0, y: 0, w: 0, h: 0}
-    )
+    this._target = Image.target(this._images)
   }
 }

@@ -1,6 +1,5 @@
 import * as rendererStateMachine from './graphics/renderer-state-machine'
 import {AtlasDefinition} from './images/atlas-definition'
-import {Random} from './math/random'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {Title} from './levels/00-title'
@@ -8,8 +7,6 @@ import {InputEventListener} from './inputs/input-event-listener'
 import {InputMask} from './inputs/input-mask'
 
 export class Game {
-  private readonly _random: Random = new Random()
-  private readonly _scale: number = 12
   private _level: Level
   private readonly rendererStateMachine: rendererStateMachine.RendererStateMachine
   private readonly _recorder: Recorder = new Recorder()
@@ -26,7 +23,7 @@ export class Game {
       canvas,
       this._recorder
     )
-    this._level = new Title(atlas, this._random)
+    this._level = new Title(atlas)
     this.rendererStateMachine = rendererStateMachine.newRendererStateMachine(
       _window,
       canvas,
@@ -54,7 +51,8 @@ export class Game {
     const milliseconds = now - then
     this.processInput(renderer, milliseconds)
 
-    const camRect = cam(this._window, this._scale)
+    const scale = this._level.scale()
+    const camRect = cam(this._window, scale)
     const {nextLevel, instances: dataView, length} = this._level.update(
       then,
       now,
@@ -62,13 +60,7 @@ export class Game {
     )
     this._level = nextLevel
 
-    renderer.render(
-      canvasSize(this._window),
-      this._scale,
-      camRect,
-      dataView,
-      length
-    )
+    renderer.render(canvasSize(this._window), scale, camRect, dataView, length)
 
     // Clear point which has no off event.
     this._recorder.set(InputMask.POINT, false)

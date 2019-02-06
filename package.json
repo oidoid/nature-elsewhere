@@ -14,7 +14,7 @@
     "build": "webpack --mode=production",
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{json,html,md,ts}'",
-    "build:textures": "aseprite -b assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data src/assets/atlas.json --sheet-pack --inner-padding 1 --sheet src/assets/atlas.png && aseprite -b src/assets/atlas.png --palette assets/index-lut.gpl --save-as src/assets/atlas.png",
+    "build:textures": "aseprite -b assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data src/assets/atlas.json --sheet-pack --inner-padding 1 --sheet src/assets/images/atlas.png && aseprite -b src/assets/images/atlas.png --palette assets/index-lut.gpl --save-as src/assets/images/atlas.png",
     "palettize": "cd assets && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {

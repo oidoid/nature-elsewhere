@@ -1588,7 +1588,7 @@
   "meta": {
     "app": "http://www.aseprite.org/",
     "version": "1.2.10-beta4-x64",
-    "image": "src/assets/atlas.png",
+    "image": "src/assets/images/atlas.png",
     "format": "I8",
     "size": {"w": 128, "h": 128},
     "scale": "1",

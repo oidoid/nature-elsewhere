@@ -1,3 +1,4 @@
+import * as rect from '../math/rect'
 import {AtlasDefinition} from './atlas-definition'
 import {AnimationID} from './animation-id'
 import {Animator} from './animator'
@@ -15,9 +16,9 @@ export class Image {
   static new(
     {animations}: AtlasDefinition,
     animationID: AnimationID,
-    layer: number,
-    position: XY,
     {
+      layer = 0,
+      position = {x: 0, y: 0},
       scale = {x: 1, y: 1},
       offset = {x: 0, y: 0},
       offsetRate = {x: 0, y: 0},
@@ -28,6 +29,8 @@ export class Image {
       preScale = {x: 1, y: 1},
       wh = animations[maskAnimationID].size
     }: {
+      layer?: number
+      position?: XY
       maskAnimationID?: AnimationID
       maskCel?: number
       scale?: XY
@@ -58,6 +61,21 @@ export class Image {
     )
   }
 
+  static moveBy(offset: XY, images: ReadonlyArray<Image>): void {
+    images.forEach(image => image.moveBy(offset))
+  }
+
+  static target(images: ReadonlyArray<Image>): Rect {
+    return images.reduce(
+      (union, image) => rect.union(union, image.target()),
+      images[0] ? images[0].target() : {x: 0, y: 0, w: 0, h: 0}
+    )
+  }
+
+  static setPalette(palette: Palette, images: ReadonlyArray<Image>): void {
+    images.forEach(image => image.setPalette(palette))
+  }
+
   constructor(
     // how i transition between animations? includin the AtlasAnimation here would save a lot of lookup eveyrwhere else.
     private readonly _animationID: AnimationID,
@@ -70,7 +88,7 @@ export class Image {
     /** The offset speed in pixels per millisecond. */
     private readonly _offsetRate: XY,
     private readonly _scale: XY,
-    private readonly _palette: Palette,
+    private _palette: Palette,
     private readonly _layer: number,
     private readonly _animator: Animator
   ) {}
@@ -108,6 +126,9 @@ export class Image {
 
   centerOn(target: Rect): void {
     this._target.x = target.x + target.w / 2 - this._target.w / 2
+  }
+
+  middleOn(target: Rect): void {
     this._target.y = target.y + target.h / 2 - this._target.h / 2
   }
 
@@ -129,6 +150,10 @@ export class Image {
 
   palette(): Palette {
     return this._palette
+  }
+
+  setPalette(palette: Palette): void {
+    this._palette = palette
   }
 
   layer(): number {

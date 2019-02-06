@@ -17,21 +17,21 @@ interface Layout {
 export function toImages(
   atlas: AtlasDefinition,
   string: string,
-  y: number,
-  target: Rect
+  y: number = 0,
+  {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
 ): ReadonlyArray<Image> {
   const images = []
-  const positions = layout(string, target.w).positions
+  const positions = layout(string, w).positions
   for (let i = 0; i < positions.length; ++i) {
     const position = positions[i]
     if (!position) continue
     if (position.y + font.lineHeight + font.leading < y) continue
-    if (position.y > y + target.h) break
+    if (position.y > y + h) break
 
     const id = 'MEM_FONT_' + string.charCodeAt(i)
-    const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], 10, {
-      x: target.x + position.x,
-      y: target.y + position.y - y
+    const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], {
+      layer: 10,
+      position: {x: position.x, y: position.y - y}
     })
     images.push(d)
   }

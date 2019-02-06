@@ -5,5 +5,6 @@ interface LevelUpdate {
 }
 
 interface Level {
+  scale(): number
   update(then: number, now: number, cam: Rect): LevelUpdate
 }

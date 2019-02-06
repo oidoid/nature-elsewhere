@@ -10,7 +10,7 @@ if (!canvas) throw new Error('Canvas missing.')
 const atlas: AtlasDefinition = asepriteParser.parse(atlasAseprite)
 
 imageLoader
-  .loadImages('assets/atlas.png', 'assets/palettes.png')
+  .loadImages('assets/images/atlas.png', 'assets/images/palettes.png')
   .then(([atlasImage, palettesImage]) => {
     const game = new Game(window, canvas, atlasImage, atlas, palettesImage)
     game.start()

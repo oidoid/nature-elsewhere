@@ -30,14 +30,14 @@ export class Store {
       this._instances = shader.newInstanceBuffer(this.images.length * 2)
     }
 
-    let length = 0
-    this.images.forEach((image, i) => {
+    let i = 0
+    this.images.forEach(image => {
       image.update(milliseconds)
       if (rect.intersects(image.target(), cam)) {
         shader.packInstance(this._atlas, this._instances, i, image)
-        ++length
+        ++i
       }
     })
-    return {instances: this._instances, length}
+    return {instances: this._instances, length: i}
   }
 }
