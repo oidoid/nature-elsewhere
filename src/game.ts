@@ -23,7 +23,7 @@ export class Game {
       canvas,
       this._recorder
     )
-    this._level = new Title(atlas)
+    this._level = new Title(atlas, this._recorder)
     this.rendererStateMachine = rendererStateMachine.newRendererStateMachine(
       _window,
       canvas,

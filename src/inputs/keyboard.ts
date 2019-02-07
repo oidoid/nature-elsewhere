@@ -13,6 +13,7 @@ export const defaultKeyMap: KeyMap = {
   w: InputMask.UP,
   ArrowDown: InputMask.DOWN,
   s: InputMask.DOWN,
+  ' ': InputMask.ACTION,
   Escape: InputMask.MENU,
   p: InputMask.DEBUG_CONTEXT_LOSS,
   0: InputMask.SCALE_RESET,

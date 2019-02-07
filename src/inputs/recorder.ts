@@ -34,6 +34,10 @@ export class Recorder {
     return this.active(InputMask.DOWN, triggered)
   }
 
+  action(triggered: boolean = false): boolean {
+    return this.active(InputMask.ACTION, triggered)
+  }
+
   menu(triggered: boolean = false): boolean {
     return this.active(InputMask.MENU, triggered)
   }

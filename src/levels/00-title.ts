@@ -1,22 +1,31 @@
 import * as limits from '../math/limits'
+import * as number from '../math/number'
 import * as text from '../text/text'
 import {AnimationID} from '../images/animation-id'
 import {AtlasDefinition} from '../images/atlas-definition'
+import {Fields} from './01-fields'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
-import {Palette} from '../images/palette'
-import {Store} from '../entities/store'
 import {newLogo} from '../entities/logo'
+import {Palette} from '../images/palette'
+import {Recorder} from '../inputs/recorder'
+import {Store} from '../entities/store'
 
 export class Title implements Level {
   private readonly _scale: number = 9
   private readonly _store: Store
   private readonly _logo: ImageGroup
   private readonly _footer: ImageGroup
-  constructor(atlas: AtlasDefinition) {
-    this._store = new Store(atlas)
-    let logo = newLogo(atlas, 1, {x: 0, y: 6})
-    const chars = text.toImages(atlas, 'episode 0                rndmem')
+  private readonly _cursor: Image
+  private readonly _cursorReference: Image
+  private _cursorState: Select = Select.START
+  constructor(
+    private readonly _atlas: AtlasDefinition,
+    private readonly _recorder: Recorder
+  ) {
+    this._store = new Store(_atlas)
+    let logo = newLogo(_atlas, 1, {x: 0, y: 6})
+    const chars = text.toImages(_atlas, 'episode 0                rndmem')
     Image.setPalette(Palette.ALTERNATE, chars)
     Image.moveBy(
       {x: 0, y: Image.target(logo).y + Image.target(logo).h + 3},
@@ -27,10 +36,11 @@ export class Title implements Level {
     const menuText = `
 > start
   level editor
-  settings
   exit
     `.trim()
-    const menuChars = text.toImages(atlas, menuText)
+    const menuChars = text.toImages(_atlas, menuText)
+    this._cursor = menuChars[0]
+    this._cursorReference = menuChars[1]
     Image.moveBy(
       {
         x:
@@ -46,14 +56,14 @@ export class Title implements Level {
     this._logo = new ImageGroup(logo)
 
     const footer = text.toImages(
-      atlas,
+      _atlas,
       `${process.env.date}  v${process.env.version} (${process.env.hash})`
     )
     this._footer = new ImageGroup(footer)
     this._footer.setPalette(Palette.ALTERNATE)
 
     this._store.addImages(
-      Image.new(atlas, AnimationID.PALETTE_PALE, {preScale: limits.MAX_XY}),
+      Image.new(_atlas, AnimationID.PALETTE_PALE, {preScale: limits.MAX_XY}),
       ...this._logo.images()
     )
     this._store.addImages(...footer)
@@ -64,11 +74,37 @@ export class Title implements Level {
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {
+    let nextLevel: Level = this
     this._logo.centerOn(cam)
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
-    // pass recorder in here or do i have my own recorder?
-    // restore context when hidden is broken
-    // if any input, nextLevel = fields
-    return {nextLevel: this, ...this._store.update(now - then, cam)}
+    if (this._recorder.down(true)) {
+      this._cursorState = number.wrap(
+        this._cursorState + 1,
+        Select.START,
+        Select.END + 1
+      )
+    }
+    if (this._recorder.up(true)) {
+      this._cursorState = number.wrap(
+        this._cursorState - 1,
+        Select.START,
+        Select.END + 1
+      )
+    }
+    if (this._cursorState === Select.START && this._recorder.action(true)) {
+      nextLevel = new Fields(this._atlas)
+    }
+    this._cursor.moveTo({
+      x: this._cursor.target().x,
+      y: this._cursorReference.target().y + this._cursorState * 5
+    })
+    return {nextLevel, ...this._store.update(now - then, cam)}
   }
+}
+
+enum Select {
+  START = 0,
+  LEVEL_EDITOR = 1,
+  EXIT = 2,
+  END = EXIT
 }
