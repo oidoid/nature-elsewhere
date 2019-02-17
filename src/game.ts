@@ -1,10 +1,7 @@
 import {AtlasDefinition} from './images/atlas-definition'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
-import {
-  newRendererStateMachine,
-  RendererStateMachine
-} from './graphics/renderer-state-machine'
+import {RendererStateMachine} from './graphics/renderer-state-machine'
 import {Title} from './levels/00-title'
 import {InputEventListener} from './inputs/input-event-listener'
 import {InputMask} from './inputs/input-mask'
@@ -27,7 +24,7 @@ export class Game {
       this._recorder
     )
     this._level = new Title(atlas, this._recorder)
-    this._rendererStateMachine = newRendererStateMachine(
+    this._rendererStateMachine = new RendererStateMachine(
       _window,
       canvas,
       atlasImage,
@@ -54,7 +51,7 @@ export class Game {
     const milliseconds = now - then
     this.processInput(renderer, milliseconds)
 
-    const scale = this._level.scale()
+    const scale = this._level.scale(canvasSize(window))
     const camRect = cam(this._window, scale)
     const {nextLevel, instances: dataView, length} = this._level.update(
       then,

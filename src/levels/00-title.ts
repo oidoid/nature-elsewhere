@@ -1,3 +1,4 @@
+import * as autoscale from '../autoscale'
 import * as limits from '../math/limits'
 import * as number from '../utils/number'
 import * as text from '../text/text'
@@ -12,7 +13,6 @@ import {Recorder} from '../inputs/recorder'
 import {Store} from '../entities/store'
 
 export class Title implements Level {
-  private readonly _scale: number = 9
   private readonly _store: Store
   private readonly _logo: ImageGroup
   private readonly _footer: ImageGroup
@@ -69,8 +69,8 @@ export class Title implements Level {
     this._store.addImages(...footer)
   }
 
-  scale() {
-    return this._scale
+  scale(canvas: WH) {
+    return autoscale.max(canvas, {w: 105, h: 81})
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {

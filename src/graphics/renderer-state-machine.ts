@@ -48,37 +48,37 @@ interface OnAnimationFrame {
   (renderer: Renderer, then: number, now: number): void
 }
 
-export type RendererStateMachine = ReturnType<typeof newRendererStateMachine>
-
-export function newRendererStateMachine(
-  window: Window,
-  canvas: HTMLCanvasElement,
-  atlas: HTMLImageElement,
-  palettes: HTMLImageElement,
-  onAnimationFrame: OnAnimationFrame
-) {
-  let state: State
-
-  function transition(input: Input) {
-    state =
-      input in state ? (<Record<Input, () => State>>state)[input]() : state
+export class RendererStateMachine {
+  private _state: State
+  constructor(
+    window: Window,
+    canvas: HTMLCanvasElement,
+    atlas: HTMLImageElement,
+    palettes: HTMLImageElement,
+    onAnimationFrame: OnAnimationFrame
+  ) {
+    this._state = newIdleState({
+      window,
+      canvas,
+      atlas,
+      palettes,
+      onAnimationFrame,
+      transition: this.transition.bind(this)
+    })
   }
 
-  state = newIdleState({
-    window,
-    canvas,
-    atlas,
-    palettes,
-    onAnimationFrame,
-    transition
-  })
-  return {
-    start() {
-      transition('start')
-    },
-    stop() {
-      transition('stop')
-    }
+  start() {
+    this.transition('start')
+  }
+  stop() {
+    this.transition('stop')
+  }
+
+  private transition(input: Input): void {
+    this._state =
+      input in this._state
+        ? (<Record<Input, () => State>>this._state)[input]()
+        : this._state
   }
 }
 
