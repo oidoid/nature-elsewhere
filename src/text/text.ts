@@ -41,7 +41,7 @@ export function toImages(
 /** @arg width The allowed layout width in pixels. */
 export function layout(string: string, width: number): Layout {
   const positions: (XY | undefined)[] = []
-  let cursor = {x: 0, y: 0}
+  const cursor = {x: 0, y: 0}
   for (let i = 0; i < string.length; ) {
     let layout
     if (string[i] === '\n') {

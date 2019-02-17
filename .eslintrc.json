@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    // Disable rules that would conflict with Prettier.
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-parameter-properties": 0,
+    "@typescript-eslint/no-angle-bracket-type-assertion": 0,
+    "@typescript-eslint/explicit-member-accessibility": 0,
+    "@typescript-eslint/no-inferrable-types": 0,
+    "@typescript-eslint/no-use-before-define": 0,
+
+    "prettier/prettier": 1,
+
+    "max-len": [
+      1,
+      {
+        "tabWidth": 2,
+        "ignoreUrls": true,
+        // Note: exclude all eslint- directives except for max-len itself since
+        //       `// eslint-disable-line max-len` would cause this line to be
+        //       ignored AND this rule to be disabled which would trigger
+        //       --report-unused-disable-directives. By excluding max-len, the
+        //       effect is to consider the line but disable this rule.
+        "ignorePattern": "// (?!eslint-.+max-len)eslint-.+"
+      }
+    ],
+
+    "no-console": 1
+  }
+}

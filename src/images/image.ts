@@ -77,7 +77,8 @@ export class Image {
   }
 
   constructor(
-    // how i transition between animations? includin the AtlasAnimation here would save a lot of lookup eveyrwhere else.
+    // how i transition between animations? includin the AtlasAnimation here
+    // would save a lot of lookup eveyrwhere else.
     private readonly _animationID: AnimationID,
     /** Width and height do not change on AtlasAnimation change. */
     private readonly _target: Mutable<XY> & WH,

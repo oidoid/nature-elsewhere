@@ -28,13 +28,13 @@ export class ImageGroup {
       y: this._origin.y
     })
   }
-  target() {
+  target(): Rect {
     return this._target
   }
   setPalette(palette: Palette): void {
     Image.setPalette(palette, this._images)
   }
-  private invalidate() {
+  private invalidate(): void {
     this._target = Image.target(this._images)
   }
 }

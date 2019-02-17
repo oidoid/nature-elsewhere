@@ -160,7 +160,8 @@ class ReadState {
   write(): WriteState {
     return new WriteState(
       this._sampleAge,
-      this._sample, // _sample starts as previous _sample, key up events will clear.
+      // _sample starts as previous _sample, key up events will clear.
+      this._sample,
       this._sample, // _sample becomes new _lastSample.
       this._combo,
       this._positions

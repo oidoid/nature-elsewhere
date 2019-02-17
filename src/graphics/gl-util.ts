@@ -44,7 +44,7 @@ export function buildProgram(
   gl.useProgram(program)
 
   const log = gl.getProgramInfoLog(program)
-  if (log) console.error(log)
+  if (log) console.error(log) // eslint-disable-line no-console
 
   // Mark shaders for deletion when unused.
   gl.detachShader(program, fragmentShader)
@@ -63,7 +63,7 @@ export function compileShader(gl: GL, type: number, source: string): GLShader {
   gl.compileShader(shader)
 
   const log = gl.getShaderInfoLog(shader)
-  if (log) console.error(log)
+  if (log) console.error(log) // eslint-disable-line no-console
 
   return shader
 }

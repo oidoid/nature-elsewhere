@@ -57,7 +57,7 @@ export function parseAnimation(
     duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
   }
 
-  let size = frame ? frame.sourceSize : {w: 0, h: 0}
+  const size = frame ? frame.sourceSize : {w: 0, h: 0}
   return {
     size,
     cels,

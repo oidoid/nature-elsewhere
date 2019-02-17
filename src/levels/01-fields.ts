@@ -20,7 +20,7 @@ export class Fields implements Level {
     )
   }
 
-  scale() {
+  scale(): number {
     return this._scale
   }
 
