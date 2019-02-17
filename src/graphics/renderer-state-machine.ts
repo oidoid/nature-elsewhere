@@ -50,7 +50,6 @@ interface OnAnimationFrame {
 
 export type RendererStateMachine = ReturnType<typeof newRendererStateMachine>
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function newRendererStateMachine(
   window: Window,
   canvas: HTMLCanvasElement,
@@ -60,7 +59,7 @@ export function newRendererStateMachine(
 ) {
   let state: State
 
-  function transition(input: Input): void {
+  function transition(input: Input) {
     state =
       input in state ? (<Record<Input, () => State>>state)[input]() : state
   }
@@ -83,7 +82,6 @@ export function newRendererStateMachine(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function newIdleState(context: IdleContext) {
   return {
     start() {
@@ -96,7 +94,6 @@ function newIdleState(context: IdleContext) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function newPausedState(context: PausedContext) {
   return {
     stop() {
@@ -104,7 +101,7 @@ function newPausedState(context: PausedContext) {
       return newIdleState(context)
     },
     onContextRestored() {
-      console.log('WebGL context restored.') // eslint-disable-line no-console
+      console.log('WebGL context restored.')
       const rendererContext = {
         ...context,
         renderer: Renderer.new(context.canvas, context.atlas, context.palettes)
@@ -114,27 +111,26 @@ function newPausedState(context: PausedContext) {
         : enterLoopingState(rendererContext)
     },
     onContextLost() {
-      console.log('WebGL context lost.') // eslint-disable-line no-console
+      console.log('WebGL context lost.')
       return newIdleState({...context, renderer: undefined})
     },
     onVisible() {
-      console.log('Document visible.') // eslint-disable-line no-console
+      console.log('Document visible.')
       return context.renderer
         ? enterLoopingState(<PausedContext & {renderer: Renderer}>context)
         : this
     },
     onHidden() {
-      console.log('Document hidden.') // eslint-disable-line no-console
+      console.log('Document hidden.')
       return this
     }
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function enterLoopingState(context: PausedContext & {renderer: Renderer}) {
   let loopingContext: LoopingContext
 
-  function onLoop(then: number, now: number): void {
+  function onLoop(then: number, now: number) {
     loopingContext.frameID = context.window.requestAnimationFrame(then =>
       onLoop(now, then)
     )
@@ -148,7 +144,6 @@ function enterLoopingState(context: PausedContext & {renderer: Renderer}) {
   return newLoopingState(loopingContext)
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function newLoopingState(context: LoopingContext) {
   return {
     stop() {
@@ -157,19 +152,18 @@ function newLoopingState(context: LoopingContext) {
       return newIdleState(context)
     },
     onContextLost() {
-      console.log('WebGL context lost.') // eslint-disable-line no-console
+      console.log('WebGL context lost.')
       context.window.cancelAnimationFrame(context.frameID)
       return newPausedState({...context, renderer: undefined})
     },
     onHidden() {
-      console.log('Document hidden.') // eslint-disable-line no-console
+      console.log('Document hidden.')
       context.window.cancelAnimationFrame(context.frameID)
       return newPausedState(context)
     }
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function newPausedContext(context: IdleContext) {
   return {
     ...context,

@@ -69,7 +69,7 @@ export class Title implements Level {
     this._store.addImages(...footer)
   }
 
-  scale(): number {
+  scale() {
     return this._scale
   }
 
