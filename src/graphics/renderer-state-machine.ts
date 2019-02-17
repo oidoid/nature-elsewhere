@@ -107,12 +107,12 @@ function newPausedState(context: PausedContext) {
         renderer: Renderer.new(context.canvas, context.atlas, context.palettes)
       }
       return context.window.document.hidden
-        ? newIdleState(rendererContext)
+        ? newPausedState(rendererContext)
         : enterLoopingState(rendererContext)
     },
     onContextLost() {
       console.log('WebGL context lost.')
-      return newIdleState({...context, renderer: undefined})
+      return newPausedState({...context, renderer: undefined})
     },
     onVisible() {
       console.log('Document visible.')
