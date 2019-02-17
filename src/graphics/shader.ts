@@ -1,4 +1,5 @@
-import * as number from '../math/number'
+import * as number from '../utils/number'
+import * as object from '../utils/object'
 import {AtlasDefinition} from '../images/atlas-definition'
 import {Image} from '../images/image'
 
@@ -28,13 +29,13 @@ const littleEndian: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1
 const U8: number = WebGLRenderingContext.UNSIGNED_BYTE
 const I8: number = WebGLRenderingContext.BYTE
 const I16: number = WebGLRenderingContext.SHORT
-const sizeOfType: Readonly<Record<number, number>> = {
+const sizeOfType: Readonly<Record<number, number>> = object.freeze({
   [U8]: 1,
   [I8]: 1,
   [I16]: 2
-}
+})
 
-export const layout: AttributeLayout = {
+export const layout: AttributeLayout = object.freeze({
   perVertex: newDivisorLayout(0, {name: 'uv', type: I16, length: 2}),
   perInstance: newDivisorLayout(
     1,
@@ -45,7 +46,7 @@ export const layout: AttributeLayout = {
     {name: 'scale', type: I16, length: 2},
     {name: 'palette', type: U8, length: 1}
   )
-}
+})
 
 function newDivisorLayout(
   divisor: number,

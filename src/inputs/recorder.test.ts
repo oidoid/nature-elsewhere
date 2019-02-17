@@ -1,3 +1,4 @@
+import * as object from '../utils/object'
 import {InputMask} from './input-mask'
 import {Recorder} from './recorder'
 
@@ -6,37 +7,36 @@ const RIGHT = InputMask.RIGHT
 const UP = InputMask.UP
 const DOWN = InputMask.DOWN
 
-const inputs: InputMask[] = Object.values(InputMask).filter(
-  val => typeof val === 'number'
+const inputs: ReadonlyArray<InputMask> = object.freeze(
+  object.values(InputMask).filter(val => typeof val === 'number')
 )
 type InputMethod = Exclude<
   keyof Recorder,
   'write' | 'set' | 'read' | 'combo' | 'active'
 >
-type MaskMethod = Readonly<{method: InputMethod; mask: InputMask}>
+type MaskMethod = Readonly<{mask: InputMask; method: InputMethod}>
 
-const maskMethods: MaskMethod[] = [
+const maskMethods: ReadonlyArray<MaskMethod> = object.freeze(<MaskMethod[]>[
   {mask: LEFT, method: 'left'},
   {mask: RIGHT, method: 'right'},
   {mask: UP, method: 'up'},
   {mask: DOWN, method: 'down'},
   {mask: InputMask.MENU, method: 'menu'},
   {mask: InputMask.DEBUG_CONTEXT_LOSS, method: 'debugContextLoss'}
-]
+])
 
 describe('Mask', () => {
-  test.each(inputs)('%# Mask %p is unique', (input: InputMask) =>
+  test.each(inputs)('%# Mask %p is unique', input =>
     expect(inputs.filter((val: InputMask) => input === val)).toHaveLength(1)
   )
 
-  test.each(inputs)(
-    '%# Mask %p is a nonzero power of two',
-    (input: InputMask) => expect(Math.log2(input) % 1).toStrictEqual(0)
+  test.each(inputs)('%# Mask %p is a nonzero power of two', input =>
+    expect(Math.log2(input) % 1).toStrictEqual(0)
   )
 })
 
 describe('State', () => {
-  test.each(maskMethods)('%# no input %p', ({method}: MaskMethod) => {
+  test.each(maskMethods)('%# no input %p', ({method}) => {
     const subject = new Recorder()
     subject.read(1)
     expect(subject[method]()).toStrictEqual(false)
@@ -45,7 +45,7 @@ describe('State', () => {
     expect(subject.combo(true)).toStrictEqual(false)
   })
 
-  test.each(maskMethods)('%# tapped input %p', ({mask, method}: MaskMethod) => {
+  test.each(maskMethods)('%# tapped input %p', ({mask, method}) => {
     const subject = new Recorder()
     subject.set(mask, true)
     subject.read(1)
@@ -55,20 +55,17 @@ describe('State', () => {
     expect(subject.combo(true, mask)).toStrictEqual(true)
   })
 
-  test.each(maskMethods)(
-    '%# old tapped input %p',
-    ({mask, method}: MaskMethod) => {
-      const subject = new Recorder()
-      subject.set(mask, true)
-      subject.read(1000)
-      expect(subject[method]()).toStrictEqual(true)
-      expect(subject[method](true)).toStrictEqual(true)
-      expect(subject.combo(false, mask)).toStrictEqual(true)
-      expect(subject.combo(true, mask)).toStrictEqual(true)
-    }
-  )
+  test.each(maskMethods)('%# old tapped input %p', ({mask, method}) => {
+    const subject = new Recorder()
+    subject.set(mask, true)
+    subject.read(1000)
+    expect(subject[method]()).toStrictEqual(true)
+    expect(subject[method](true)).toStrictEqual(true)
+    expect(subject.combo(false, mask)).toStrictEqual(true)
+    expect(subject.combo(true, mask)).toStrictEqual(true)
+  })
 
-  test.each(maskMethods)('%# held input %p', ({mask, method}: MaskMethod) => {
+  test.each(maskMethods)('%# held input %p', ({mask, method}) => {
     const subject = new Recorder()
     subject.set(mask, true)
     subject.read(1)
@@ -80,24 +77,21 @@ describe('State', () => {
     expect(subject.combo(true, mask)).toStrictEqual(false)
   })
 
-  test.each(maskMethods)(
-    '%# long held input %p',
-    ({mask, method}: MaskMethod) => {
-      const subject = new Recorder()
-      subject.set(mask, true)
-      subject.read(1)
-      subject.write()
-      subject.read(1000)
-      expect(subject[method]()).toStrictEqual(true)
-      expect(subject[method](true)).toStrictEqual(false)
-      expect(subject.combo(false, mask)).toStrictEqual(true)
-      expect(subject.combo(true, mask)).toStrictEqual(false)
-    }
-  )
+  test.each(maskMethods)('%# long held input %p', ({mask, method}) => {
+    const subject = new Recorder()
+    subject.set(mask, true)
+    subject.read(1)
+    subject.write()
+    subject.read(1000)
+    expect(subject[method]()).toStrictEqual(true)
+    expect(subject[method](true)).toStrictEqual(false)
+    expect(subject.combo(false, mask)).toStrictEqual(true)
+    expect(subject.combo(true, mask)).toStrictEqual(false)
+  })
 
   test.each(maskMethods)(
     '%# tapped and released input %p',
-    ({mask, method}: MaskMethod) => {
+    ({mask, method}) => {
       const subject = new Recorder()
       subject.set(mask, true)
       subject.read(1)
@@ -111,24 +105,21 @@ describe('State', () => {
     }
   )
 
-  test.each(maskMethods)(
-    '%# toggled 3x input %p',
-    ({mask, method}: MaskMethod) => {
-      const subject = new Recorder()
-      subject.set(mask, true)
-      subject.read(1)
-      subject.write()
-      subject.set(mask, false)
-      subject.read(1)
-      subject.write()
-      subject.set(mask, true)
-      subject.read(1)
-      expect(subject[method]()).toStrictEqual(true)
-      expect(subject[method](true)).toStrictEqual(true)
-      expect(subject.combo(false, mask, mask)).toStrictEqual(true)
-      expect(subject.combo(true, mask, mask)).toStrictEqual(true)
-    }
-  )
+  test.each(maskMethods)('%# toggled 3x input %p', ({mask, method}) => {
+    const subject = new Recorder()
+    subject.set(mask, true)
+    subject.read(1)
+    subject.write()
+    subject.set(mask, false)
+    subject.read(1)
+    subject.write()
+    subject.set(mask, true)
+    subject.read(1)
+    expect(subject[method]()).toStrictEqual(true)
+    expect(subject[method](true)).toStrictEqual(true)
+    expect(subject.combo(false, mask, mask)).toStrictEqual(true)
+    expect(subject.combo(true, mask, mask)).toStrictEqual(true)
+  })
 
   test('Changed input without release', () => {
     const subject = new Recorder()
@@ -153,40 +144,34 @@ describe('State', () => {
     expect(subject.combo(true, UP, UP | DOWN)).toStrictEqual(true)
   })
 
-  test.each(maskMethods)(
-    '%# missed input release %p',
-    ({mask, method}: MaskMethod) => {
-      const subject = new Recorder()
-      subject.set(mask, true)
-      subject.read(1)
-      subject.write()
-      subject.set(mask, true)
-      subject.read(1)
-      expect(subject[method]()).toStrictEqual(true)
-      expect(subject[method](true)).toStrictEqual(false)
-      expect(subject.combo(false, mask)).toStrictEqual(true)
-      expect(subject.combo(true, mask)).toStrictEqual(false)
-    }
-  )
+  test.each(maskMethods)('%# missed input release %p', ({mask, method}) => {
+    const subject = new Recorder()
+    subject.set(mask, true)
+    subject.read(1)
+    subject.write()
+    subject.set(mask, true)
+    subject.read(1)
+    expect(subject[method]()).toStrictEqual(true)
+    expect(subject[method](true)).toStrictEqual(false)
+    expect(subject.combo(false, mask)).toStrictEqual(true)
+    expect(subject.combo(true, mask)).toStrictEqual(false)
+  })
 
-  test.each(maskMethods)(
-    '%# missed input tapped %p',
-    ({mask, method}: MaskMethod) => {
-      const subject = new Recorder()
-      subject.set(mask, true)
-      subject.read(1)
-      subject.write()
-      subject.set(mask, false)
-      subject.read(1)
-      subject.write()
-      subject.set(mask, false)
-      subject.read(1)
-      expect(subject[method]()).toStrictEqual(false)
-      expect(subject[method](true)).toStrictEqual(false)
-      expect(subject.combo(false, mask)).toStrictEqual(true)
-      expect(subject.combo(true, mask)).toStrictEqual(false)
-    }
-  )
+  test.each(maskMethods)('%# missed input tapped %p', ({mask, method}) => {
+    const subject = new Recorder()
+    subject.set(mask, true)
+    subject.read(1)
+    subject.write()
+    subject.set(mask, false)
+    subject.read(1)
+    subject.write()
+    subject.set(mask, false)
+    subject.read(1)
+    expect(subject[method]()).toStrictEqual(false)
+    expect(subject[method](true)).toStrictEqual(false)
+    expect(subject.combo(false, mask)).toStrictEqual(true)
+    expect(subject.combo(true, mask)).toStrictEqual(false)
+  })
 
   test('1x combo', () => {
     const subject = new Recorder()

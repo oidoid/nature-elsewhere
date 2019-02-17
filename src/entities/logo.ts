@@ -17,7 +17,7 @@ export function newLogo(
     Image.new(atlas, AnimationID.RAIN, {
       layer,
       position,
-      offsetRate: {x: 0, y: -0.0003},
+      offsetRate: {x: 0, y: -0.0005},
       maskAnimationID: AnimationID.NATURE_ELSEWHERE,
       palette: Palette.ALTERNATE,
       scale: {x: 2, y: 2}

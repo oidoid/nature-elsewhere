@@ -1,10 +1,11 @@
+import * as object from '../utils/object'
 import {InputMask} from './input-mask'
 import {Recorder} from './recorder'
 
 export type Key = KeyboardEvent['key']
 export type KeyMap = Readonly<Record<Key, InputMask>>
 
-export const defaultKeyMap: KeyMap = {
+export const defaultKeyMap: KeyMap = object.freeze({
   ArrowLeft: InputMask.LEFT,
   a: InputMask.LEFT,
   ArrowRight: InputMask.RIGHT,
@@ -21,7 +22,7 @@ export const defaultKeyMap: KeyMap = {
   '+': InputMask.SCALE_INCREASE,
   1: InputMask.PREV_ENTITY,
   2: InputMask.NEXT_ENTITY
-}
+})
 
 export function onKeyChange(recorder: Recorder, event: KeyboardEvent): void {
   const key = defaultKeyMap[event.key]

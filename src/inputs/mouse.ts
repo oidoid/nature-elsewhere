@@ -1,3 +1,4 @@
+import * as object from '../utils/object'
 import {InputMask} from './input-mask'
 import {Recorder} from './recorder'
 
@@ -5,9 +6,9 @@ export type Button = MouseEvent['button']
 
 export type ButtonMap = Readonly<Record<Button, InputMask>>
 
-export const defaultButtonMap: ButtonMap = {
+export const defaultButtonMap: ButtonMap = object.freeze({
   0: InputMask.PICK
-}
+})
 
 export function onMouseClickChange(
   recorder: Recorder,

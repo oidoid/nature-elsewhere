@@ -3,7 +3,7 @@ import {AnimationID} from '../images/animation-id'
 import {AtlasDefinition} from '../images/atlas-definition'
 import {Image} from '../images/image'
 
-interface Layout {
+export interface Layout {
   /** The length of this array matches the string length. */
   readonly positions: ReadonlyArray<XY | undefined>
   /** The offset in pixels. */

@@ -1,5 +1,5 @@
 import * as limits from '../math/limits'
-import * as number from '../math/number'
+import * as number from '../utils/number'
 import * as text from '../text/text'
 import {AnimationID} from '../images/animation-id'
 import {AtlasDefinition} from '../images/atlas-definition'

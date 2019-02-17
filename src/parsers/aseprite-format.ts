@@ -108,6 +108,7 @@ export type Duration = number
 
 /**
  * **By convention**, animations that should never end have this reserved value.
+ * Multi-Frame animations should never use this value.
  */
 export const INFINITE_DURATION: Duration = 0xffff
 

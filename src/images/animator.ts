@@ -1,4 +1,5 @@
-import * as number from '../math/number'
+import * as number from '../utils/number'
+import * as object from '../utils/object'
 import {
   AtlasAnimation,
   AtlasAnimationDirection,
@@ -43,17 +44,17 @@ export class Animator {
 
 const Animate: Readonly<
   Record<AtlasAnimationDirection, (period: number, length: number) => number>
-> = {
+> = object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
-  [AtlasAnimationDirection.FORWARD](period) {
+  [AtlasAnimationDirection.FORWARD](period: number) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
   /** @arg period An integer in the domain (-∞, length - 1]. */
-  [AtlasAnimationDirection.REVERSE](period, length) {
+  [AtlasAnimationDirection.REVERSE](period: number, length: number) {
     return (period % Number.MIN_SAFE_INTEGER) - 1 + length
   },
   /** @arg period An integer in the domain [2 - length, length - 1]. */
-  [AtlasAnimationDirection.PING_PONG](period, length) {
+  [AtlasAnimationDirection.PING_PONG](period: number, length: number) {
     return number.wrap(period - 1, 2 - length, length)
   }
-}
+})

@@ -16,7 +16,7 @@ describe('max()', () => {
     [{x: 1, y: 2}, {x: 3, y: 4}, {x: 3, y: 4}],
     [{x: 1, y: 4}, {x: 3, y: 2}, {x: 3, y: 4}],
     [{x: 3, y: 2}, {x: 1, y: 4}, {x: 3, y: 4}]
-  ])('%#) (%p, %p) => %p', (lhs: XY, rhs: XY, expected: XY) =>
+  ])('%#) (%p, %p) => %p', (lhs, rhs, expected) =>
     expect(xy.max(lhs, rhs)).toStrictEqual(expected)
   )
 })

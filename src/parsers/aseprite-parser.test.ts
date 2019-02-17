@@ -1,13 +1,16 @@
-import * as array from '../array'
+import * as array from '../utils/array'
 import * as asepriteFormat from './aseprite-format'
 import * as atlasAseprite from '../assets/atlas.json'
 import * as asepriteParser from './aseprite-parser'
-import {AtlasCel} from '../images/atlas-definition'
+import * as object from '../utils/object'
+import {AtlasCel, AtlasDefinition} from '../images/atlas-definition'
 
 describe('atlas.json', () => {
-  const file = atlasAseprite
-  const atlas = asepriteParser.parse(file)
-  const tags = file.meta.frameTags.map(frameTag => frameTag.name)
+  const file: asepriteFormat.File = object.freeze(atlasAseprite)
+  const atlas: AtlasDefinition = object.freeze(asepriteParser.parse(file))
+  const tags: ReadonlyArray<asepriteFormat.Tag> = object.freeze(
+    file.meta.frameTags.map(frameTag => frameTag.name)
+  )
 
   test('Converts current JSON and size is a reasonable power of two', () => {
     expect(atlas.size.w).toBeLessThanOrEqual(4096)
@@ -16,44 +19,49 @@ describe('atlas.json', () => {
     expect(Math.log2(atlas.size.h) % 1).toStrictEqual(0)
   })
 
-  test.each(tags)(
-    '%# Tag %p is unique within the sheet',
-    (tag: asepriteFormat.Tag) => {
-      expect(tags.filter(val => val === tag)).toHaveLength(1)
-    }
-  )
+  test.each(tags)('%# Tag %p is unique within the sheet', tag => {
+    expect(tags.filter(val => val === tag)).toHaveLength(1)
+  })
 
-  test.each(tags)('%# Tag %p has a Frame', (tag: asepriteFormat.Tag) => {
-    const frameKeys = Object.keys(file.frames)
-      .map((tagFrameNumber: asepriteFormat.TagFrameNumber) =>
-        tagFrameNumber.replace(/ [0-9]*$/, '')
-      )
+  test.each(tags)('%# Tag %p has a Frame', tag => {
+    const frameKeys = object
+      .keys(file.frames)
+      .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
       .filter(array.uniq(Object.is))
     expect(frameKeys).toContainEqual(tag)
   })
 
   {
-    const frameKeys = Object.keys(file.frames)
-      .map((tagFrameNumber: asepriteFormat.TagFrameNumber) =>
-        tagFrameNumber.replace(/ [0-9]*$/, '')
-      )
+    const frameKeys = object
+      .keys(file.frames)
+      .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
       .filter(array.uniq(Object.is))
-    test.each(frameKeys)('%# Frame has a Tag %p', (frameKey: string) => {
+    test.each(frameKeys)('%# Frame has a Tag %p', frameKey => {
       expect(tags).toContainEqual(frameKey)
     })
   }
 
-  test.each([...file.meta.slices])(
-    '%# Slice name %p is a Tag',
-    (slice: asepriteFormat.Slice) => expect(tags).toContainEqual(slice.name)
+  test.each([...file.meta.slices])('%# Slice name %p is a Tag', slice =>
+    expect(tags).toContainEqual(slice.name)
   )
 
-  const cels = Object.values(atlas.animations).reduce(
-    (sum, val) => (val ? sum.concat(val.cels) : sum),
-    <AtlasCel[]>[]
-  )
-  test.each(cels)('%# duration for Cel %p is > 0', (cel: AtlasCel) =>
+  test.each(
+    object
+      .values(atlas.animations)
+      .reduce((sum, val) => sum.concat(val.cels), <AtlasCel[]>[])
+  )('%# duration for Cel %p is > 0', (cel: AtlasCel) =>
     expect(cel.duration).toBeGreaterThan(0)
+  )
+
+  test.each(
+    object
+      .values(atlas.animations)
+      .reduce(
+        (sum, val) => (val.cels.length > 1 ? sum.concat(val.cels) : sum),
+        <AtlasCel[]>[]
+      )
+  )('%# multi-Cel duration for Cel %p is < ∞', cel =>
+    expect(cel.duration).toBeLessThan(Number.POSITIVE_INFINITY)
   )
 })
 

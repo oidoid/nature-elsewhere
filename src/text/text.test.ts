@@ -1,7 +1,7 @@
 import * as text from './text'
 
 describe('layout()', () =>
-  test.each([
+  test.each(<ReadonlyArray<Readonly<[string, number, text.Layout]>>>[
     ['', Number.MAX_VALUE, {positions: [], cursor: {x: 0, y: 0}}],
     [' ', Number.MAX_VALUE, {positions: [undefined], cursor: {x: 2, y: 0}}],
     ['\n', Number.MAX_VALUE, {positions: [undefined], cursor: {x: 0, y: 5}}],
@@ -141,12 +141,14 @@ describe('layout()', () =>
         cursor: {x: 0, y: 15}
       }
     ]
-  ])('%#) %p %p => %p', (string: string, width: number, expected: number) =>
+  ])('%#) %p %p => %p', (string, width, expected) =>
     expect(text.layout(string, width)).toStrictEqual(expected)
   ))
 
 describe('layoutWord()', () =>
-  test.each([
+  test.each(<
+    ReadonlyArray<Readonly<[XY, number, string, number, text.Layout]>>
+  >[
     [
       {x: 0, y: 0},
       Number.MAX_VALUE,
@@ -552,16 +554,8 @@ describe('layoutWord()', () =>
         cursor: {x: 3, y: 41}
       }
     ]
-  ])(
-    '%#) %p %p %p %p => %p',
-    (
-      cursor: XY,
-      width: number,
-      string: string,
-      index: number,
-      expected: number
-    ) =>
-      expect(text.layoutWord(cursor, width, string, index)).toStrictEqual(
-        expected
-      )
+  ])('%#) %p %p %p %p => %p', (cursor, width, string, index, expected) =>
+    expect(text.layoutWord(cursor, width, string, index)).toStrictEqual(
+      expected
+    )
   ))

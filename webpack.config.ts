@@ -4,13 +4,19 @@ import * as CopyPlugin from 'copy-webpack-plugin'
 import * as pkg from './package.json'
 import * as webpack from 'webpack'
 
-const stats = {all: false, errors: true, warnings: true}
-const [date, hash]: string[] = childProcess
+const stats: Readonly<webpack.Stats.ToJsonOptionsObject> = Object.freeze({
+  all: false,
+  errors: true,
+  warnings: true
+})
+const [date, hash]: ReadonlyArray<string> = childProcess
   .execSync('git --no-pager log -1 --date=format:%F --pretty=%ad,%h')
   .toString()
   .trim()
   .split(',')
 
+// Webpack will modify this export. Object.freeze() produces a warning: "...The
+// 'mode' option has not been set..."
 const config: webpack.Configuration = {
   stats,
 

@@ -1,4 +1,6 @@
-export function loadImages(...urls: string[]): Promise<HTMLImageElement[]> {
+export function loadImages(
+  ...urls: string[]
+): Promise<ReadonlyArray<HTMLImageElement>> {
   return Promise.all(urls.map(url => loadImage(url)))
 }
 
