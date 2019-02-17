@@ -1,6 +1,11 @@
+import * as array from '../utils/array'
+
 import {Attribute} from './shader'
 
 const GL = WebGLRenderingContext
+
+export type UniformLocations = Readonly<Record<string, GLUniformLocation>>
+export type AttributeLocations = Readonly<Record<string, number>>
 
 export function initAttribute(
   gl: GL,
@@ -92,4 +97,29 @@ export function loadTexture(
   gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, image)
   gl.bindTexture(GL.TEXTURE_2D, null)
   return texture
+}
+
+export function getUniformLocations(
+  gl: GL,
+  program: GLProgram
+): UniformLocations {
+  const length = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS) || 0
+  return array.range(0, length).reduce((sum, i) => {
+    const uniform = gl.getActiveUniform(program, i)
+    const name = uniform ? uniform.name : null
+    const location = name ? gl.getUniformLocation(program, name) : null
+    return {...sum, [name || i]: location}
+  }, {})
+}
+
+export function getAttributeLocations(
+  gl: GL,
+  program: GLProgram
+): AttributeLocations {
+  const length = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES) || 0
+  return array.range(0, length).reduce((sum, i) => {
+    const attr = gl.getActiveAttrib(program, i)
+    const location = attr ? gl.getAttribLocation(program, attr.name) : i
+    return {...sum, [attr ? attr.name : location]: location}
+  }, {})
 }

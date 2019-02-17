@@ -3,6 +3,26 @@ import * as object from '../utils/object'
 import {AtlasDefinition} from '../images/atlas-definition'
 import {Image} from '../images/image'
 
+export enum Variable {
+  // Uniforms
+  ATLAS = 'atlas',
+  ATLAS_SIZE = 'atlasSize',
+  PALETTES = 'palettes',
+  PALETTE_SIZE = 'palettesSize',
+  PROJECTION = 'projection',
+
+  // Per vertex attributes
+  UV = 'uv',
+
+  // Per instance attributes
+  SOURCE = 'source',
+  TARGET = 'target',
+  MASK = 'mask',
+  OFFSET = 'offset',
+  SCALE = 'scale',
+  PALETTE = 'palette'
+}
+
 export interface AttributeLayout {
   readonly perVertex: DivisorLayout
   readonly perInstance: DivisorLayout
@@ -17,7 +37,7 @@ export interface DivisorLayout {
 
 export interface Attribute {
   readonly type: number
-  readonly name: string
+  readonly name: Variable
   readonly length: number
   readonly offset: number
 }
@@ -36,15 +56,15 @@ const sizeOfType: Readonly<Record<number, number>> = object.freeze({
 })
 
 export const layout: AttributeLayout = object.freeze({
-  perVertex: newDivisorLayout(0, {name: 'uv', type: I16, length: 2}),
+  perVertex: newDivisorLayout(0, {name: Variable.UV, type: I16, length: 2}),
   perInstance: newDivisorLayout(
     1,
-    {name: 'source', type: I16, length: 4},
-    {name: 'target', type: I16, length: 4},
-    {name: 'mask', type: I16, length: 4},
-    {name: 'offset', type: I8, length: 2},
-    {name: 'scale', type: I16, length: 2},
-    {name: 'palette', type: U8, length: 1}
+    {name: Variable.SOURCE, type: I16, length: 4},
+    {name: Variable.TARGET, type: I16, length: 4},
+    {name: Variable.MASK, type: I16, length: 4},
+    {name: Variable.OFFSET, type: I8, length: 2},
+    {name: Variable.SCALE, type: I16, length: 2},
+    {name: Variable.PALETTE, type: U8, length: 1}
   )
 })
 
