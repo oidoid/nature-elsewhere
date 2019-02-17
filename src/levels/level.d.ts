@@ -1,5 +1,5 @@
 interface LevelUpdate {
-  readonly nextLevel: Level
+  readonly nextLevel?: Level
   readonly instances: DataView
   readonly length: number
 }

@@ -11,7 +11,7 @@ import {InputMask} from './inputs/input-mask'
 
 export class Game {
   private _level: Level
-  private readonly rendererStateMachine: RendererStateMachine
+  private readonly _rendererStateMachine: RendererStateMachine
   private readonly _recorder: Recorder = new Recorder()
   private readonly _inputEventListener: InputEventListener
   constructor(
@@ -27,7 +27,7 @@ export class Game {
       this._recorder
     )
     this._level = new Title(atlas, this._recorder)
-    this.rendererStateMachine = newRendererStateMachine(
+    this._rendererStateMachine = newRendererStateMachine(
       _window,
       canvas,
       atlasImage,
@@ -37,13 +37,13 @@ export class Game {
   }
 
   start(): void {
-    this.rendererStateMachine.start()
+    this._rendererStateMachine.start()
     this._inputEventListener.register()
   }
 
   stop(): void {
     this._inputEventListener.deregister()
-    this.rendererStateMachine.stop()
+    this._rendererStateMachine.stop()
   }
 
   private onAnimationFrame(
@@ -61,12 +61,22 @@ export class Game {
       now,
       camRect
     )
-    this._level = nextLevel
+    if (nextLevel) {
+      this._level = nextLevel
 
-    renderer.render(canvasSize(this._window), scale, camRect, dataView, length)
+      renderer.render(
+        canvasSize(this._window),
+        scale,
+        camRect,
+        dataView,
+        length
+      )
 
-    // Clear point which has no off event.
-    this._recorder.set(InputMask.POINT, false)
+      // Clear point which has no off event.
+      this._recorder.set(InputMask.POINT, false)
+    } else {
+      this.stop()
+    }
   }
 
   private processInput(renderer: Renderer, milliseconds: number): void {

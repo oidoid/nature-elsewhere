@@ -74,7 +74,7 @@ export class Title implements Level {
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {
-    let nextLevel: Level = this
+    let nextLevel: Level | undefined = this
     this._logo.centerOn(cam)
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
     if (this._recorder.down(true)) {
@@ -91,8 +91,15 @@ export class Title implements Level {
         Select.END + 1
       )
     }
-    if (this._cursorState === Select.START && this._recorder.action(true)) {
-      nextLevel = new Fields(this._atlas)
+    if (this._recorder.action(true)) {
+      switch (this._cursorState) {
+        case Select.START:
+          nextLevel = new Fields(this._atlas)
+          break
+        case Select.EXIT:
+          nextLevel = undefined
+          break
+      }
     }
     this._cursor.moveTo({
       x: this._cursor.target().x,
