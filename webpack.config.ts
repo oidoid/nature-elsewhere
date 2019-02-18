@@ -48,7 +48,8 @@ const config: webpack.Configuration = {
   devServer: {
     clientLogLevel: 'warning',
     overlay: {warnings: true, errors: true},
-    stats
+    stats,
+    proxy: {'/favicon': {target: '/src/favicon'}}
   }
 }
 
