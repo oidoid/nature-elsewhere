@@ -1,4 +1,4 @@
-import * as autoscale from '../autoscale'
+import * as autoscale from '../graphics/screen'
 import * as limits from '../math/limits'
 import * as number from '../utils/number'
 import * as text from '../text/text'
@@ -70,7 +70,7 @@ export class Title implements Level {
   }
 
   scale(canvas: WH) {
-    return autoscale.max(canvas, {w: 105, h: 81})
+    return autoscale.scale(canvas, {w: 105, h: 81})
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {

@@ -1,3 +1,4 @@
+import * as screen from './graphics/screen'
 import {AtlasDefinition} from './images/atlas-definition'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
@@ -12,20 +13,20 @@ export class Game {
   private readonly _recorder: Recorder = new Recorder()
   private readonly _inputEventListener: InputEventListener
   constructor(
-    private readonly _window: Window,
+    window: Window,
     canvas: HTMLCanvasElement,
     atlasImage: HTMLImageElement,
     atlas: AtlasDefinition,
     palettesImage: HTMLImageElement
   ) {
     this._inputEventListener = new InputEventListener(
-      _window,
+      window,
       canvas,
       this._recorder
     )
     this._level = new Title(atlas, this._recorder)
     this._rendererStateMachine = new RendererStateMachine(
-      _window,
+      window,
       canvas,
       atlasImage,
       palettesImage,
@@ -51,23 +52,18 @@ export class Game {
     const milliseconds = now - then
     this.processInput(renderer, milliseconds)
 
-    const scale = this._level.scale(canvasSize(window))
-    const camRect = cam(this._window, scale)
+    const canvas = screen.canvas(window)
+    const scale = this._level.scale(canvas)
+    const cam = screen.cam(canvas, scale)
     const {nextLevel, instances: dataView, length} = this._level.update(
       then,
       now,
-      camRect
+      cam
     )
     if (nextLevel) {
       this._level = nextLevel
 
-      renderer.render(
-        canvasSize(this._window),
-        scale,
-        camRect,
-        dataView,
-        length
-      )
+      renderer.render(canvas, scale, cam, dataView, length)
 
       // Clear point which has no off event.
       this._recorder.set(InputMask.POINT, false)
@@ -91,52 +87,3 @@ export class Game {
     }
   }
 }
-
-function canvasSize(window: Window): WH {
-  const {clientWidth, clientHeight} = window.document.documentElement
-  return {w: clientWidth, h: clientHeight}
-}
-
-function cam(window: Window, scale: number): Rect {
-  const {w, h} = canvasSize(window)
-  return {x: 0, y: 0, w: Math.ceil(w / scale), h: Math.ceil(h / scale)}
-}
-
-// canvasSize(this._window),
-// cam(this._window, this.scale),
-
-//   const xy = clientToWorld({x: event.clientX, y: event.clientY}, canvas, cam)
-
-// function clientToWorld({x, y}: XY, canvas: WH, cam: Rect): XY {
-//   return {x: cam.x + (x / canvas.w) * cam.w, y: cam.y + (y / canvas.h) * cam.h}
-// }
-
-// The camera's position is a function of the player position and the
-// canvas' dimensions.
-//
-// The pixel position is rendered by implicitly truncating the model
-// position. Similarly, it is necessary to truncate the model position prior
-// to camera input to avoid rounding errors that cause the camera to lose
-// synchronicity with the rendered position and create jitter when the
-// position updates.
-//
-// For example, the model position may be 0.1 and the camera at an offset
-// from the position of 100.9. The rendered position is thus truncated to 0.
-// Consider the possible camera positions:
-//
-//   Formula                   Result  Pixel position  Camera pixel  Distance  Notes
-//   0.1 + 100.9             =  101.0               0           101       101  No truncation.
-//   Math.trunc(0.1) + 100.9 =  100.9               0           100       100  Truncate before input.
-//   Math.trunc(0.1 + 100.9) =  101.0               0           101       101  Truncate after input.
-//
-// Now again when the model position has increased to 1.0 and the rendered
-// position is also 1, one pixel forward. The distance should be constant.
-//
-//   1.0 + 100.9             =  101.9               1           101       100  No truncation.
-//   Math.trunc(1.0) + 100.9 =  101.9               1           101       100  Truncate before input.
-//   Math.trunc(1.0 + 100.9) =  101.0               1           101       100  Truncate after input.
-//
-// As shown above, when truncation is not performed or it occurs afterwards
-// on the sum, rounding errors can cause the rendered distance between the
-// center of the camera and the position to vary under different inputs
-// instead of remaining at a constant offset.
