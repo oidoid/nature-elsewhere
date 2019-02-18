@@ -1,6 +1,5 @@
 {
   "name": "nature elsewhere",
-  "short_name": "nature elsewhere",
   "icons": [
     {
       "src": "/favicon/android-chrome-192x192.png",
@@ -15,6 +14,7 @@
   ],
   "theme_color": "#f4f4ed",
   "background_color": "#f4f4ed",
-  "display": "standalone",
-  "orientation": "landscape"
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "start_url": "/"
 }
