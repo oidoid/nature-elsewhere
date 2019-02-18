@@ -33,7 +33,9 @@ const config: webpack.Configuration = {
 
   plugins: [
     new CleanPlugin('dist', {verbose: false}),
-    new CopyPlugin([{context: 'src', from: '**/*.{html,png}'}]),
+    new CopyPlugin([
+      {context: 'src', from: '**/*.{html,ico,png,svg,webmanifest,xml}'}
+    ]),
     new webpack.DefinePlugin({
       'process.env': {
         date: JSON.stringify(date),
