@@ -2,6 +2,7 @@ import * as font from './mem-font'
 import {AnimationID} from '../images/animation-id'
 import {AtlasDefinition} from '../images/atlas-definition'
 import {Image} from '../images/image'
+import {Palette} from '../images/palette'
 
 export interface Layout {
   /** The length of this array matches the string length. */
@@ -29,10 +30,12 @@ export function toImages(
     if (position.y > y + h) break
 
     const id = 'MEM_FONT_' + string.charCodeAt(i)
-    const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], {
-      layer: 10,
-      position: {x: position.x, y: position.y - y}
-    })
+    const d = Image.new(
+      atlas,
+      AnimationID[<keyof typeof AnimationID>id],
+      Palette.GREYS,
+      {layer: 10, position: {x: position.x, y: position.y - y}}
+    )
     images.push(d)
   }
   return images

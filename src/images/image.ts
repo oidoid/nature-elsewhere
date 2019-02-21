@@ -16,13 +16,13 @@ export class Image {
   static new(
     {animations}: AtlasDefinition,
     animationID: AnimationID,
+    palette: Palette,
     {
       layer = 0,
       position = {x: 0, y: 0},
       scale = {x: 1, y: 1},
       offset = {x: 0, y: 0},
       offsetRate = {x: 0, y: 0},
-      palette = Palette.DEFAULT,
       cel = 0,
       maskAnimationID = animationID,
       maskCel = 0,
@@ -36,7 +36,6 @@ export class Image {
       scale?: XY
       offset?: XY
       offsetRate?: XY
-      palette?: Palette
       cel?: number
       preScale?: XY
       wh?: WH

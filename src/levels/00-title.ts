@@ -7,8 +7,8 @@ import {AtlasDefinition} from '../images/atlas-definition'
 import {Fields} from './01-fields'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
-import {newLogo} from '../entities/logo'
-import {Palette} from '../images/palette'
+import {newNatureElsewhere} from '../entities/nature-elsewhere'
+import {Palette, Tone} from '../images/palette'
 import {Recorder} from '../inputs/recorder'
 import {Store} from '../entities/store'
 
@@ -24,9 +24,9 @@ export class Title implements Level {
     private readonly _recorder: Recorder
   ) {
     this._store = new Store(_atlas)
-    let logo = newLogo(_atlas, 1, {x: 0, y: 6})
+    let logo = newNatureElsewhere(_atlas, 1, {x: 0, y: 6})
     const chars = text.toImages(_atlas, 'episode 0                rndmem')
-    Image.setPalette(Palette.ALTERNATE, chars)
+    Image.setPalette(Palette.GREYS + Tone.HALF, chars)
     Image.moveBy(
       {x: 0, y: Image.target(logo).y + Image.target(logo).h + 3},
       chars
@@ -60,10 +60,13 @@ export class Title implements Level {
       `${process.env.date}  v${process.env.version} (${process.env.hash})`
     )
     this._footer = new ImageGroup(footer)
-    this._footer.setPalette(Palette.ALTERNATE)
+    this._footer.setPalette(Palette.GREYS + Tone.HALF)
 
     this._store.addImages(
-      Image.new(_atlas, AnimationID.PALETTE_PALE, {preScale: limits.MAX_XY}),
+      Image.new(_atlas, AnimationID.PIXEL, Palette.GREYS, {
+        // todo: yellows
+        preScale: limits.MAX_XY
+      }),
       ...this._logo.images()
     )
     this._store.addImages(...footer)
