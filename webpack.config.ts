@@ -9,11 +9,13 @@ const stats: Readonly<webpack.Stats.ToJsonOptionsObject> = Object.freeze({
   errors: true,
   warnings: true
 })
-const [date, hash]: ReadonlyArray<string> = childProcess
-  .execSync('git --no-pager log -1 --date=format:%F --pretty=%ad,%h')
-  .toString()
-  .trim()
-  .split(',')
+const [date, hash]: ReadonlyArray<string> = Object.freeze(
+  childProcess
+    .execSync('git --no-pager log -1 --date=format:%F --pretty=%ad,%h')
+    .toString()
+    .trim()
+    .split(',')
+)
 
 // Webpack will modify this export. Object.freeze() produces a warning: "...The
 // 'mode' option has not been set..."
@@ -34,7 +36,8 @@ const config: webpack.Configuration = {
   plugins: [
     new CleanPlugin('dist', {verbose: false}),
     new CopyPlugin([
-      {context: 'src', from: '**/*.{html,ico,png,svg,webmanifest,xml}'}
+      {context: 'src', from: '**/*.{css,html,ico,png,svg,xml}'},
+      {context: 'src', from: 'manifest.json'}
     ]),
     new webpack.DefinePlugin({
       'process.env': {
