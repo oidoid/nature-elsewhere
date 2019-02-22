@@ -14,8 +14,8 @@
     "build": "webpack --mode=production",
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{css,json,html,md,ts}'",
-    "build:textures": "aseprite -b assets/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data src/assets/atlas.json --sheet-pack --inner-padding 1 --sheet src/assets/images/atlas.png && aseprite -b src/assets/images/atlas.png --palette assets/index-lut.gpl --save-as src/assets/images/atlas.png",
-    "palettize": "cd assets && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
+    "build:textures": "aseprite -b assets/images/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data src/assets/atlas.json --sheet-pack --inner-padding 1 --sheet src/assets/images/atlas.png && aseprite -b src/assets/images/atlas.png --palette assets/index-lut.gpl --save-as src/assets/images/atlas.png",
+    "palettize": "cd assets && find images -name \\*.aseprite -exec aseprite '{}' -b --palette palettes.aseprite --save-as '{}' \\; && aseprite -b palettes.aseprite --save-as ../src/assets/images/palettes.png"
   },
   "devDependencies": {
     "@types/clean-webpack-plugin": "0.1.2",
