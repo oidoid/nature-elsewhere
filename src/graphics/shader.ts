@@ -7,8 +7,8 @@ export enum Variable {
   // Uniforms
   ATLAS = 'atlas',
   ATLAS_SIZE = 'atlasSize',
-  PALETTES = 'palettes',
-  PALETTE_SIZE = 'palettesSize',
+  PALETTE = 'palette',
+  PALETTE_SIZE = 'paletteSize',
   PROJECTION = 'projection',
 
   // Per vertex attributes
@@ -21,7 +21,7 @@ export enum Variable {
   SCALE = 'scale',
   MASK_SOURCE = 'maskSource',
   MASK_OFFSET = 'maskOffset',
-  PALETTE = 'palette'
+  PALETTE_INDEX = 'paletteIndex'
 }
 
 export interface AttributeLayout {
@@ -66,7 +66,7 @@ export const layout: AttributeLayout = object.freeze({
     {name: Variable.SCALE, type: I16, length: 2},
     {name: Variable.MASK_SOURCE, type: I16, length: 4},
     {name: Variable.MASK_OFFSET, type: I8, length: 2},
-    {name: Variable.PALETTE, type: U8, length: 1}
+    {name: Variable.PALETTE_INDEX, type: U8, length: 1}
   )
 })
 

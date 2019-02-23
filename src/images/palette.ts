@@ -14,5 +14,3 @@ export enum Tone {
   HALF = 1
   // todo: other colors
 }
-
-// todo: don't need a 256 tall grid palettes.png

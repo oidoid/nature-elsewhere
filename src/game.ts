@@ -17,7 +17,7 @@ export class Game {
     canvas: HTMLCanvasElement,
     atlasImage: HTMLImageElement,
     atlas: AtlasDefinition,
-    palettesImage: HTMLImageElement
+    paletteImage: HTMLImageElement
   ) {
     this._inputEventListener = new InputEventListener(
       window,
@@ -29,7 +29,7 @@ export class Game {
       window,
       canvas,
       atlasImage,
-      palettesImage,
+      paletteImage,
       this.onAnimationFrame.bind(this)
     )
   }

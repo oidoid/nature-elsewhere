@@ -14,7 +14,7 @@ export class Renderer {
   static new(
     canvas: HTMLCanvasElement,
     atlas: HTMLImageElement,
-    palettes: HTMLImageElement
+    palette: HTMLImageElement
   ): Renderer {
     const gl = canvas.getContext('webgl2', {
       alpha: false,
@@ -43,11 +43,11 @@ export class Renderer {
       atlas.naturalWidth,
       atlas.naturalHeight
     )
-    gl.uniform1i(shaderCache.location(shader.Variable.PALETTES), 1)
+    gl.uniform1i(shaderCache.location(shader.Variable.PALETTE), 1)
     gl.uniform2i(
       shaderCache.location(shader.Variable.PALETTE_SIZE),
-      palettes.naturalWidth,
-      palettes.naturalHeight
+      palette.naturalWidth,
+      palette.naturalHeight
     )
 
     const vertexArray = gl.createVertexArray()
@@ -81,7 +81,7 @@ export class Renderer {
     // Leave vertexArray bound.
 
     gl.bindTexture(GL.TEXTURE_2D, glUtil.loadTexture(gl, GL.TEXTURE0, atlas))
-    gl.bindTexture(GL.TEXTURE_2D, glUtil.loadTexture(gl, GL.TEXTURE1, palettes))
+    gl.bindTexture(GL.TEXTURE_2D, glUtil.loadTexture(gl, GL.TEXTURE1, palette))
     // Leave textures bound.
 
     const loseContext = gl.getExtension('WEBGL_lose_context')

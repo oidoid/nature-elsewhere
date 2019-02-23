@@ -6,7 +6,7 @@ import {Renderer} from './renderer'
  * │window                   ┌──────────────────────────────────────────┐│
  * │canvas                   │onVisibilityChanged                       ││
  * │atlas                    │onWebGLContextRestored                    ││
- * │palettes                 │onWebGLContextLost              ┌────────┐││
+ * │palette                  │onWebGLContextLost              ┌────────┐││
  * │onAnimationFrame         │┌─────────┐ renderer && visible │Looping │││
  * │╔════════════════╗ start ││Paused   ├────────────────────▶│renderer│││
  * │║Idle            ╟──────▶││renderer?│ !renderer || hidden │frameID │││
@@ -19,7 +19,7 @@ interface IdleContext {
   readonly window: Window
   readonly canvas: HTMLCanvasElement
   readonly atlas: HTMLImageElement
-  readonly palettes: HTMLImageElement
+  readonly palette: HTMLImageElement
   readonly onAnimationFrame: OnAnimationFrame
   /** Undefined when context is lost. */
   readonly renderer?: Renderer
@@ -54,14 +54,14 @@ export class RendererStateMachine {
     window: Window,
     canvas: HTMLCanvasElement,
     atlas: HTMLImageElement,
-    palettes: HTMLImageElement,
+    palette: HTMLImageElement,
     onAnimationFrame: OnAnimationFrame
   ) {
     this._state = newIdleState({
       window,
       canvas,
       atlas,
-      palettes,
+      palette,
       onAnimationFrame,
       transition: this.transition.bind(this)
     })
@@ -104,7 +104,7 @@ function newPausedState(context: PausedContext) {
       console.log('WebGL context restored.')
       const rendererContext = {
         ...context,
-        renderer: Renderer.new(context.canvas, context.atlas, context.palettes)
+        renderer: Renderer.new(context.canvas, context.atlas, context.palette)
       }
       return context.window.document.hidden
         ? newPausedState(rendererContext)
@@ -169,7 +169,7 @@ function newPausedContext(context: IdleContext) {
     ...context,
     renderer: context.renderer
       ? context.renderer
-      : Renderer.new(context.canvas, context.atlas, context.palettes),
+      : Renderer.new(context.canvas, context.atlas, context.palette),
     onVisibilityChanged(event: Event) {
       event.preventDefault()
       context.transition(

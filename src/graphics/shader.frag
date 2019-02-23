@@ -8,14 +8,14 @@ const mediump int paletteBankSize = 8;
 
 uniform sampler2D atlas;
 uniform ivec2 atlasSize; // x (width), y (height) (px).
-uniform sampler2D palettes;
-uniform ivec2 palettesSize; // x (width), y (height) (px).
+uniform sampler2D palette;
+uniform ivec2 paletteSize; // x (width), y (height) (px).
 
 flat in ivec4 vSource;
 flat in ivec4 vMaskSource;
 in vec2 vMaskOffset;
 in vec2 vOffset;
-flat in uint vPalette;
+flat in uint vPaletteIndex;
 
 out vec4 frag;
 
@@ -26,10 +26,10 @@ void main() {
 
   // Each component of px is a fraction in [0, 1]. Multiply by 256 to convert to
   // the palette color index.
-  vec2 index = vec2(int(256. * px.a) % paletteBankSize + int(vPalette), 0) / vec2(palettesSize);
+  vec2 index = vec2(int(256. * px.a) % paletteBankSize + int(vPaletteIndex), 0) / vec2(paletteSize);
 
   // Convert the index number to a renderable RGBA pixel color from the palette.
-  vec4 color = texture(palettes, index);
+  vec4 color = texture(palette, index);
 
   // Multiply alpha by one (no-op) when inside mask, zero when outside.
   vec2 maskPosition = vec2(vMaskSource) + mod(vMaskOffset, vec2(vMaskSource.zw));

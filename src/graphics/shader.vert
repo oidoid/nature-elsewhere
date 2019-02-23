@@ -13,13 +13,13 @@ in ivec2 scale; // x, y. Divide target width and height by scale to obtain
                 // prescaled dimensions.
 in ivec4 maskSource;  // x, y, z (width), and w (height) in pixels.
 in ivec2 maskOffset; // x, y (px).
-in uint palette;
+in uint paletteIndex;
 
 flat out ivec4 vSource;
 out vec2 vOffset;
 flat out ivec4 vMaskSource;
 out vec2 vMaskOffset;
-flat out uint vPalette;
+flat out uint vPaletteIndex;
 
 void main() {
   ivec2 wh = uv * target.zw;
@@ -29,5 +29,5 @@ void main() {
   vOffset = vec2(offset + uv * target.zw / scale);
   vMaskSource = maskSource;
   vMaskOffset = vec2(maskOffset + uv * target.zw / scale);
-  vPalette = palette;
+  vPaletteIndex = paletteIndex;
 }
