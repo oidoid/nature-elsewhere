@@ -26,6 +26,8 @@ export class Image {
       cel = 0,
       maskAnimationID = animationID,
       maskCel = 0,
+      maskOffset = offset,
+      maskOffsetRate = offsetRate,
       preScale = {x: 1, y: 1},
       wh = animations[maskAnimationID].size
     }: {
@@ -33,6 +35,8 @@ export class Image {
       position?: XY
       maskAnimationID?: AnimationID
       maskCel?: number
+      maskOffset?: XY
+      maskOffsetRate?: XY
       scale?: XY
       offset?: XY
       offsetRate?: XY
@@ -51,6 +55,8 @@ export class Image {
       target,
       maskAnimationID,
       maskCel,
+      maskOffset,
+      maskOffsetRate,
       offset,
       offsetRate,
       scale,
@@ -83,6 +89,8 @@ export class Image {
     private readonly _target: Mutable<XY> & WH,
     private readonly _maskAnimationID: AnimationID,
     private readonly _maskCel: number,
+    private readonly _maskOffset: Mutable<XY>,
+    private readonly _maskOffsetRate: XY,
     /** The current offset in pixels. */
     private readonly _offset: Mutable<XY>,
     /** The offset speed in pixels per millisecond. */
@@ -108,6 +116,8 @@ export class Image {
     this._animator.step(milliseconds)
     this._offset.x += milliseconds * this._offsetRate.x
     this._offset.y += milliseconds * this._offsetRate.y
+    this._maskOffset.x += milliseconds * this._maskOffsetRate.x
+    this._maskOffset.y += milliseconds * this._maskOffsetRate.y
   }
 
   target(): Rect {
@@ -138,6 +148,14 @@ export class Image {
 
   maskCel(): number {
     return this._maskCel
+  }
+
+  maskOffset(): XY {
+    return this._maskOffset
+  }
+
+  maskOffsetRate(): XY {
+    return this._maskOffsetRate
   }
 
   offset(): XY {

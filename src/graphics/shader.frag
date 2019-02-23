@@ -12,7 +12,8 @@ uniform sampler2D palettes;
 uniform ivec2 palettesSize; // x (width), y (height) (px).
 
 flat in ivec4 vSource;
-in vec2 vMask;
+flat in ivec4 vMaskSource;
+in vec2 vMaskOffset;
 in vec2 vOffset;
 flat in uint vPalette;
 
@@ -20,14 +21,19 @@ out vec4 frag;
 
 void main() {
   vec2 position = vec2(vSource) + mod(vOffset, vec2(vSource.zw));
+  // Obtain the pixel for position. Its RGBA color encodes the color index.
   vec4 px = texture(atlas, position / vec2(atlasSize));
-  vec4 maskPx = texture(atlas, vMask / vec2(atlasSize));
+
   // Each component of px is a fraction in [0, 1]. Multiply by 256 to convert to
   // the palette color index.
   vec2 index = vec2(int(256. * px.a) % paletteBankSize + int(vPalette), 0) / vec2(palettesSize);
 
+  // Convert the index number to a renderable RGBA pixel color from the palette.
   vec4 color = texture(palettes, index);
-  // Multiply by one when inside mask, zero when outside.
+
+  // Multiply alpha by one (no-op) when inside mask, zero when outside.
+  vec2 maskPosition = vec2(vMaskSource) + mod(vMaskOffset, vec2(vMaskSource.zw));
+  vec4 maskPx = texture(atlas, maskPosition / vec2(atlasSize));
   color.a *= sign(maskPx.a);
 
   frag = color;

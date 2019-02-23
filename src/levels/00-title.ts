@@ -69,6 +69,40 @@ export class Title implements Level {
       ...this._logo.images()
     )
     this._store.addImages(...footer)
+    this._store.addImages(
+      Image.new(_atlas, AnimationID.CLOUD_M, Palette.GREYS, {
+        layer: 3,
+        position: {x: 105 + 10 - 40, y: 2}
+      }),
+      Image.new(_atlas, AnimationID.RAIN, Palette.BLUES, {
+        layer: 3,
+        position: {x: 105 + 10 - 40 + 1, y: 2 + 6},
+        preScale: {x: 1, y: 100},
+        offsetRate: {x: 0, y: -0.004}
+      }),
+
+      Image.new(_atlas, AnimationID.CLOUD_S, Palette.GREYS, {
+        layer: 3,
+        position: {x: 65 + 10 - 40, y: 22}
+      }),
+      Image.new(_atlas, AnimationID.RAIN, Palette.BLUES, {
+        layer: 3,
+        position: {x: 65 + 10 - 40 + 1, y: 22 + 6},
+        preScale: {x: 1, y: 100},
+        offsetRate: {x: 0, y: -0.004}
+      }),
+
+      Image.new(_atlas, AnimationID.CLOUD_XL, Palette.GREYS, {
+        layer: 3,
+        position: {x: 120 + 10 - 40, y: 36}
+      }),
+      Image.new(_atlas, AnimationID.RAIN, Palette.BLUES, {
+        layer: 3,
+        position: {x: 120 + 10 - 40 + 1, y: 36 + 6},
+        preScale: {x: 1, y: 100},
+        offsetRate: {x: 0, y: -0.004}
+      })
+    )
   }
 
   scale(canvas: WH) {

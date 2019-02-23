@@ -19,6 +19,8 @@ export function newNatureElsewhere(
       position,
       offsetRate: {x: 0, y: -0.0005},
       maskAnimationID: AnimationID.NATURE_ELSEWHERE,
+      maskOffset: {x: 0, y: 0},
+      maskOffsetRate: {x: 0, y: 0},
       scale: {x: 2, y: 2}
     }),
     Image.new(atlas, AnimationID.RAIN, Palette.BLUES, {
@@ -27,6 +29,8 @@ export function newNatureElsewhere(
       offset: {x: 1, y: 3},
       offsetRate: {x: 0, y: -0.001},
       maskAnimationID: AnimationID.NATURE_ELSEWHERE,
+      maskOffset: {x: 0, y: 0},
+      maskOffsetRate: {x: 0, y: 0},
       scale: {x: 2, y: 2}
     })
   ]
