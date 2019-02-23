@@ -3,6 +3,9 @@ precision mediump int;
 precision mediump float;
 precision mediump sampler2D;
 
+// The maximum number of colors in a sub-texture / sub-image / tile.
+const mediump int paletteBankSize = 8;
+
 uniform sampler2D atlas;
 uniform ivec2 atlasSize; // x (width), y (height) (px).
 uniform sampler2D palettes;
@@ -21,7 +24,7 @@ void main() {
   vec4 maskPx = texture(atlas, vMask / vec2(atlasSize));
   // Each component of px is a fraction in [0, 1]. Multiply by 256 to convert to
   // the palette color index.
-  vec2 index = vec2(int(256. * px.a) % 8 + int(vPalette), 0) / vec2(palettesSize);
+  vec2 index = vec2(int(256. * px.a) % paletteBankSize + int(vPalette), 0) / vec2(palettesSize);
 
   vec4 color = texture(palettes, index);
   // Multiply by one when inside mask, zero when outside.
