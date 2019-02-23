@@ -11,7 +11,7 @@ export class Fields implements Level {
   constructor(atlas: AtlasDefinition) {
     this._store = new Store(atlas)
     this._store.addImages(
-      Image.new(atlas, AnimationID.PIXEL, Palette.GREYS, {
+      Image.new(atlas, AnimationID.PIXEL, Palette.YELLOWS, {
         preScale: limits.MAX_XY
       }),
       Image.new(atlas, AnimationID.TREE, Palette.TREE, {

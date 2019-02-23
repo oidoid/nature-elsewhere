@@ -63,8 +63,7 @@ export class Title implements Level {
     this._footer.setPalette(Palette.GREYS + Tone.HALF)
 
     this._store.addImages(
-      Image.new(_atlas, AnimationID.PIXEL, Palette.GREYS, {
-        // todo: yellows
+      Image.new(_atlas, AnimationID.PIXEL, Palette.YELLOWS, {
         preScale: limits.MAX_XY
       }),
       ...this._logo.images()

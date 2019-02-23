@@ -1,12 +1,13 @@
-const size: number = 8
+const bankSize: number = 8
 export enum Palette {
-  GREYS = 0 * size,
-  GREENS = 1 * size,
-  BLUES = 2 * size,
-  TREE = 3 * size,
-  FROG = 4 * size,
-  SNAKE = 5 * size,
-  CATTAILS = 6 * size
+  GREYS = 0 * bankSize,
+  GREENS = 1 * bankSize,
+  BLUES = 2 * bankSize,
+  TREE = 3 * bankSize,
+  FROG = 4 * bankSize,
+  SNAKE = 5 * bankSize,
+  CATTAILS = 6 * bankSize,
+  YELLOWS = 7 * bankSize
 }
 
 export enum Tone {
