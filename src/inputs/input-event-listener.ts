@@ -1,5 +1,5 @@
 import * as keyboard from './keyboard'
-import * as mouse from './mouse'
+import * as pointer from './pointer'
 import {Recorder} from './recorder'
 
 export class InputEventListener {
@@ -10,25 +10,25 @@ export class InputEventListener {
     private readonly _recorder: Recorder
   ) {
     this.onKeyChange = this.onKeyChange.bind(this)
-    this.onMouseMove = this.onMouseMove.bind(this)
-    this.onMouseClickChange = this.onMouseClickChange.bind(this)
+    this.onPointerMove = this.onPointerMove.bind(this)
+    this.onPointerPick = this.onPointerPick.bind(this)
   }
 
   register(): void {
     if (this._registered) return
     this._window.document.addEventListener('keydown', this.onKeyChange)
     this._window.document.addEventListener('keyup', this.onKeyChange)
-    this._canvas.addEventListener('mousedown', this.onMouseClickChange)
-    this._canvas.addEventListener('mouseup', this.onMouseClickChange)
-    this._canvas.addEventListener('mousemove', this.onMouseMove)
+    this._canvas.addEventListener('pointerdown', this.onPointerPick)
+    this._canvas.addEventListener('pointerup', this.onPointerPick)
+    this._canvas.addEventListener('pointermove', this.onPointerMove)
     this._registered = true
   }
 
   deregister(): void {
     if (!this._registered) return
-    this._canvas.addEventListener('mousemove', this.onMouseMove)
-    this._canvas.addEventListener('mouseup', this.onMouseClickChange)
-    this._canvas.addEventListener('mousedown', this.onMouseClickChange)
+    this._canvas.addEventListener('pointermove', this.onPointerMove)
+    this._canvas.addEventListener('pointerup', this.onPointerPick)
+    this._canvas.addEventListener('pointerdown', this.onPointerPick)
     this._window.document.addEventListener('keyup', this.onKeyChange)
     this._window.document.addEventListener('keydown', this.onKeyChange)
     this._registered = false
@@ -38,11 +38,11 @@ export class InputEventListener {
     keyboard.onKeyChange(this._recorder, event)
   }
 
-  private onMouseMove(event: MouseEvent): void {
-    mouse.onMouseMove(this._recorder, event)
+  private onPointerMove(event: PointerEvent): void {
+    pointer.onPointerMove(this._recorder, event)
   }
 
-  private onMouseClickChange(event: MouseEvent): void {
-    mouse.onMouseClickChange(this._recorder, event)
+  private onPointerPick(event: PointerEvent): void {
+    pointer.onPointerPick(this._recorder, event)
   }
 }
