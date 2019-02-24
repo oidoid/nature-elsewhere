@@ -7,7 +7,7 @@
   "homepage": "https://github.com/rndmem/nature-elsewhere",
   "repository": "github:rndmem/nature-elsewhere",
   "bugs": "https://github.com/rndmem/nature-elsewhere/issues",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-only WITH CC-BY-SA-4.0",
   "scripts": {
     "start": "webpack-dev-server --mode=development -w",
     "test": "npm run -s formatter -- -l && npm -s run build && jest",
