@@ -99,10 +99,13 @@ class WriteState {
 
   constructor(
     /** The age of the current sample. Cleared on nonzero triggers. */
-    private readonly _sampleAge = 0,
+    private readonly _sampleAge: number = 0,
     /** The current sample and initial state of the next sample. */
-    private readonly _sample = 0,
-    private readonly _lastSample = 0,
+    private readonly _sample: number = 0,
+    private readonly _lastSample: number = 0,
+    /** The sample within a write. Cleared on read. This sample's initial state
+        from a read is 0. */
+    private readonly _currentRead: number = 0,
     /** Historical record of triggered nonzero samples. */
     private readonly _combo: ReadonlyArray<number> = [],
     /** Historical record of positions. */
@@ -110,12 +113,16 @@ class WriteState {
   ) {}
 
   set(input: InputMask, active: boolean, xy?: XY): WriteState {
+    if ((input & this._currentRead) === input) return this
+
+    const currentRead = this._currentRead | (active ? input : 0)
     const sample = active ? this._sample | input : this._sample & ~input
     const positions = xy ? [xy, , ...this._positions] : this._positions
     return new WriteState(
       this._sampleAge,
       sample,
       this._lastSample,
+      currentRead,
       this._combo,
       positions
     )
@@ -162,6 +169,7 @@ class ReadState {
       this._sampleAge,
       this._sample, // _sample starts as previous _sample, key up events will clear.
       this._sample, // _sample becomes new _lastSample.
+      0,
       this._combo,
       this._positions
     )

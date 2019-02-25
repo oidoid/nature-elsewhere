@@ -1,3 +1,4 @@
+import * as gamepad from './inputs/gamepads/gamepad'
 import * as screen from './graphics/screen'
 import {AtlasDefinition} from './images/atlas-definition'
 import {Recorder} from './inputs/recorder'
@@ -73,6 +74,8 @@ export class Game {
   }
 
   private processInput(renderer: Renderer, milliseconds: number): void {
+    gamepad.pollGamepads(this._recorder)
+
     // Verify input is pumped here or by event listener.
     this._recorder.write()
     this._recorder.read(milliseconds)

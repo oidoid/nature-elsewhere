@@ -27,7 +27,7 @@ const maskMethods: ReadonlyArray<MaskMethod> = object.freeze(<MaskMethod[]>[
 
 describe('Mask', () => {
   test.each(inputs)('%# Mask %p is unique', input =>
-    expect(inputs.filter((val: InputMask) => input === val)).toHaveLength(1)
+    expect(inputs.filter(val => input === val)).toHaveLength(1)
   )
 
   test.each(inputs)('%# Mask %p is a nonzero power of two', input =>
@@ -429,5 +429,41 @@ describe('State', () => {
     expect(subject.down(true)).toStrictEqual(false)
     expect(subject.combo(false, UP | DOWN, UP | DOWN, UP)).toStrictEqual(true)
     expect(subject.combo(true, UP | DOWN, UP | DOWN, UP)).toStrictEqual(true)
+  })
+
+  test('Any mapping sets input', () => {
+    const subject = new Recorder()
+    subject.set(UP, true)
+    subject.set(UP, false)
+    subject.read(1)
+    expect(subject.up()).toStrictEqual(true)
+    expect(subject.up(true)).toStrictEqual(true)
+    expect(subject.combo(false, UP)).toStrictEqual(true)
+    expect(subject.combo(true, UP)).toStrictEqual(true)
+  })
+
+  test('Any mapping sets input in any order', () => {
+    const subject = new Recorder()
+    subject.set(UP, false)
+    subject.set(UP, true)
+    subject.read(1)
+    expect(subject.up()).toStrictEqual(true)
+    expect(subject.up(true)).toStrictEqual(true)
+    expect(subject.combo(false, UP)).toStrictEqual(true)
+    expect(subject.combo(true, UP)).toStrictEqual(true)
+  })
+
+  test('Any mapping sets input and clears', () => {
+    const subject = new Recorder()
+    subject.set(UP, true)
+    subject.set(UP, false)
+    subject.read(1)
+    subject.write()
+    subject.set(UP, false)
+    subject.read(1)
+    expect(subject.up()).toStrictEqual(false)
+    expect(subject.up(true)).toStrictEqual(false)
+    expect(subject.combo(false, UP)).toStrictEqual(true)
+    expect(subject.combo(true, UP)).toStrictEqual(false)
   })
 })
