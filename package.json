@@ -9,7 +9,7 @@
   "bugs": "https://github.com/rndmem/nature-elsewhere/issues",
   "license": "GPL-3.0-only WITH CC-BY-SA-4.0",
   "scripts": {
-    "start": "webpack-dev-server --mode=development -w",
+    "start": "webpack-dev-server",
     "test": "npm run -s formatter -- -l && npm -s run build && jest",
     "build": "webpack --mode=production",
     "format": "npm -s run formatter -- --write",
@@ -20,21 +20,21 @@
   "devDependencies": {
     "@types/clean-webpack-plugin": "0.1.2",
     "@types/copy-webpack-plugin": "4.4.3",
-    "@types/jest": "24.0.5",
+    "@types/jest": "24.0.9",
     "@types/webgl2": "0.0.4",
     "@types/webpack-dev-server": "3.1.2",
     "clean-webpack-plugin": "1.0.1",
-    "copy-webpack-plugin": "4.6.0",
+    "copy-webpack-plugin": "5.0.0",
     "jest": "24.1.0",
     "pre-commit": "1.2.2",
     "prettier": "1.16.4",
     "raw-loader": "1.0.0",
-    "ts-jest": "23.10.5",
+    "ts-jest": "24.0.0",
     "ts-loader": "5.3.3",
     "ts-node": "8.0.2",
-    "typescript": "3.3.3",
-    "webpack": "4.29.4",
+    "typescript": "3.3.3333",
+    "webpack": "4.29.5",
     "webpack-cli": "3.2.3",
-    "webpack-dev-server": "3.1.14"
+    "webpack-dev-server": "3.2.1"
   }
 }
