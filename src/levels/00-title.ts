@@ -144,8 +144,9 @@ export class Title implements Level {
 }
 
 enum Select {
-  START = 0,
-  LEVEL_EDITOR = 1,
-  EXIT = 2,
+  START,
+  SETTINGS,
+  LEVEL_EDITOR,
+  EXIT,
   END = EXIT
 }
