@@ -19,7 +19,10 @@ export class Title implements Level {
   private readonly _cursor: Image
   private readonly _cursorReference: Image
   private _cursorState: Select = Select.START
-  constructor(private readonly _atlas: AtlasDefinition) {
+  constructor(
+    private readonly _atlas: AtlasDefinition,
+    private readonly _recorder: Recorder
+  ) {
     this._store = new Store(_atlas)
     let logo = newNatureElsewhere(_atlas, 1, {x: 0, y: 6})
     const chars = text.toImages(_atlas, 'episode 0                rndmem')
@@ -106,30 +109,25 @@ export class Title implements Level {
     return autoscale.scale(canvas, {w: 105, h: 81})
   }
 
-  update(
-    then: number,
-    now: number,
-    cam: Rect,
-    recorder: Recorder
-  ): LevelUpdate {
+  update(then: number, now: number, cam: Rect): LevelUpdate {
     let nextLevel: Level | undefined = this
     this._logo.centerOn(cam)
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
-    if (recorder.down(true)) {
+    if (this._recorder.down(true)) {
       this._cursorState = number.wrap(
         this._cursorState + 1,
         Select.START,
         Select.END + 1
       )
     }
-    if (recorder.up(true)) {
+    if (this._recorder.up(true)) {
       this._cursorState = number.wrap(
         this._cursorState - 1,
         Select.START,
         Select.END + 1
       )
     }
-    if (recorder.action(true)) {
+    if (this._recorder.action(true)) {
       switch (this._cursorState) {
         case Select.START:
           nextLevel = new Fields(this._atlas)
@@ -153,6 +151,3 @@ enum Select {
   EXIT = 2,
   END = EXIT
 }
-// if ((<any>module).hot) {
-//   ;(<any>module).hot.accept()
-// }

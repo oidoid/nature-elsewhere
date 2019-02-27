@@ -20,11 +20,6 @@ const [date, hash]: ReadonlyArray<string> = Object.freeze(
 // Webpack will modify this export. Object.freeze() produces a warning: "...The
 // 'mode' option has not been set..."
 const config: webpack.Configuration = {
-  entry: [
-    `webpack-dev-server/client?http://localhost:8080`,
-    'webpack/hot/only-dev-server',
-    './src/index.ts'
-  ],
   stats,
 
   resolve: {extensions: ['.js', '.ts']},
@@ -33,10 +28,7 @@ const config: webpack.Configuration = {
 
   module: {
     rules: [
-      {
-        test: /\.ts$/,
-        use: [{loader: 'ts-loader', options: {transpileOnly: true}}]
-      },
+      {test: /\.ts$/, use: 'ts-loader'},
       {test: /\.(frag|vert)$/, use: 'raw-loader'}
     ]
   },
@@ -53,21 +45,13 @@ const config: webpack.Configuration = {
         version: JSON.stringify(pkg.version),
         hash: JSON.stringify(hash)
       }
-    }),
-    new webpack.HotModuleReplacementPlugin()
+    })
   ],
 
   devServer: {
-    hotOnly: true,
     clientLogLevel: 'warning',
     overlay: {warnings: true, errors: true},
     stats
-  },
-
-  // Polyfill filenames.
-  node: {
-    __dirname: true,
-    __filename: true
   }
 }
 
