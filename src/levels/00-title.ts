@@ -44,10 +44,8 @@ export class Title implements Level {
     Image.moveBy(
       {
         x:
-          Image.target(logo).x +
-          Image.target(logo).w / 2 -
-          Image.target(menuChars).w / 2 +
-          3,
+          Math.trunc(Image.target(logo).x + Image.target(logo).w / 2) -
+          Math.trunc(Image.target(menuChars).w / 2 + 3),
         y: Image.target(logo).y + Image.target(logo).h + 6
       },
       menuChars

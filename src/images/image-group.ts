@@ -24,7 +24,7 @@ export class ImageGroup {
   }
   centerOn(target: Rect): void {
     this.moveTo({
-      x: target.x + target.w / 2 - this._target.w / 2,
+      x: Math.trunc(target.x + target.w / 2) - Math.trunc(this._target.w / 2),
       y: this._origin.y
     })
   }
