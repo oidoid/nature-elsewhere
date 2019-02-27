@@ -8,10 +8,29 @@ const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
 if (!canvas) throw new Error('Canvas missing.')
 
 const atlas: AtlasDefinition = asepriteParser.parse(atlasAseprite)
+let game: Game
 
-imageLoader
-  .loadImages('assets/images/atlas.png', 'assets/images/palette.png')
-  .then(([atlasImage, paletteImage]) => {
-    const game = new Game(window, canvas, atlasImage, atlas, paletteImage)
-    game.start()
+function load(GameConstructor: typeof Game, level?: Level): void {
+  imageLoader
+    .loadImages('assets/images/atlas.png', 'assets/images/palette.png')
+    .then(([atlasImage, paletteImage]) => {
+      game = new GameConstructor(
+        window,
+        canvas,
+        atlasImage,
+        atlas,
+        paletteImage,
+        level
+      )
+      game.start()
+    })
+}
+
+load(Game)
+
+if (module.hot) {
+  module.hot.accept('./game', () => {
+    if (game) game.stop()
+    load(require('./game').Game, game.level())
   })
+}

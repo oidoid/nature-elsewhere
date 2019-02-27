@@ -9,23 +9,24 @@ import {InputEventListener} from './inputs/input-event-listener'
 import {InputMask} from './inputs/input-mask'
 
 export class Game {
-  private _level: Level
   private readonly _rendererStateMachine: RendererStateMachine
   private readonly _recorder: Recorder = new Recorder()
   private readonly _inputEventListener: InputEventListener
+  private _level: Level
   constructor(
     window: Window,
     canvas: HTMLCanvasElement,
     atlasImage: HTMLImageElement,
     atlas: AtlasDefinition,
-    paletteImage: HTMLImageElement
+    paletteImage: HTMLImageElement,
+    level?: Level
   ) {
     this._inputEventListener = new InputEventListener(
       window,
       canvas,
       this._recorder
     )
-    this._level = new Title(atlas, this._recorder)
+    this._level = level || new Title(atlas)
     this._rendererStateMachine = new RendererStateMachine(
       window,
       canvas,
@@ -33,6 +34,10 @@ export class Game {
       paletteImage,
       this.onAnimationFrame.bind(this)
     )
+  }
+
+  level(): Level {
+    return this._level
   }
 
   start(): void {
@@ -59,7 +64,8 @@ export class Game {
     const {nextLevel, instances: dataView, length} = this._level.update(
       then,
       now,
-      cam
+      cam,
+      this._recorder
     )
     if (nextLevel) {
       this._level = nextLevel
@@ -71,6 +77,11 @@ export class Game {
     } else {
       this.stop()
     }
+    // this.stop()
+  }
+
+  foo() {
+    return 'bao'
   }
 
   private processInput(renderer: Renderer, milliseconds: number): void {

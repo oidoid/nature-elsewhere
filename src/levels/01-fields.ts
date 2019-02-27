@@ -34,3 +34,7 @@ export class Fields implements Level {
     return {nextLevel: this, ...this._store.update(now - then, cam)}
   }
 }
+
+// if ((<any>module).hot) {
+//   ;(<any>module).hot.accept()
+// }
