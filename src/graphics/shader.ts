@@ -1,6 +1,7 @@
 import * as number from '../utils/number'
 import * as object from '../utils/object'
 import {AtlasDefinition} from '../images/atlas-definition'
+import {GL} from './gl-util'
 import {Image} from '../images/image'
 
 export enum Variable {
@@ -47,9 +48,9 @@ type PartialAttribute = Omit<Attribute, 'offset'>
 
 const littleEndian: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1
 
-const U8: number = WebGLRenderingContext.UNSIGNED_BYTE
-const I8: number = WebGLRenderingContext.BYTE
-const I16: number = WebGLRenderingContext.SHORT
+const U8: number = GL.UNSIGNED_BYTE
+const I8: number = GL.BYTE
+const I16: number = GL.SHORT
 const sizeOfType: Readonly<Record<number, number>> = object.freeze({
   [U8]: 1,
   [I8]: 1,

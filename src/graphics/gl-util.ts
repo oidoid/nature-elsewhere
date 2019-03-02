@@ -2,7 +2,7 @@ import * as array from '../utils/array'
 
 import {Attribute} from './shader'
 
-const GL = WebGLRenderingContext
+export const GL = WebGL2RenderingContext
 
 export type UniformLocations = Readonly<Record<string, GLUniformLocation>>
 export type AttributeLocations = Readonly<Record<string, number>>

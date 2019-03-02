@@ -3,9 +3,9 @@ import * as glUtil from './gl-util'
 import * as object from '../utils/object'
 import * as shader from './shader'
 import * as vertexShaderSource from './shader.vert'
+import {GL} from './gl-util'
 import {ShaderCache} from './shader-cache'
 
-const GL = WebGL2RenderingContext
 const perVertexData: Int16Array = new Int16Array(
   object.freeze([1, 1, 0, 1, 1, 0, 0, 0])
 )
