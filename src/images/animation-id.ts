@@ -6,6 +6,7 @@ export enum AnimationID {
   CACTUS_L = 'cactus l',
   CACTUS_XL = 'cactus xl',
   CATTAILS = 'cattails ',
+  CHECKERBOARD = 'checkerboard ',
   CLOUD_XS = 'cloud xs',
   CLOUD_S = 'cloud s',
   CLOUD_M = 'cloud m',
