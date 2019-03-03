@@ -1,10 +1,9 @@
-import {ArrayUtil} from '../utils/array-util'
 import {Shader} from './shader'
-
-export const GL = WebGL2RenderingContext
 
 export type UniformLocations = Readonly<Record<string, GLUniformLocation>>
 export type AttributeLocations = Readonly<Record<string, number>>
+
+export const GL = WebGL2RenderingContext
 
 export namespace GLUtil {
   export function initAttribute(
@@ -108,12 +107,14 @@ export namespace GLUtil {
     program: GLProgram
   ): UniformLocations {
     const length = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS) || 0
-    return ArrayUtil.range(0, length).reduce((sum, i) => {
+    const locations: Mutable<UniformLocations> = {}
+    for (let i = 0; i < length; ++i) {
       const uniform = gl.getActiveUniform(program, i)
       const name = uniform ? uniform.name : null
       const location = name ? gl.getUniformLocation(program, name) : null
-      return {...sum, [name || i]: location}
-    }, {})
+      locations[name || i] = location
+    }
+    return locations
   }
 
   export function getAttributeLocations(
@@ -121,10 +122,12 @@ export namespace GLUtil {
     program: GLProgram
   ): AttributeLocations {
     const length = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES) || 0
-    return ArrayUtil.range(0, length).reduce((sum, i) => {
+    const locations: Mutable<AttributeLocations> = {}
+    for (let i = 0; i < length; ++i) {
       const attr = gl.getActiveAttrib(program, i)
       const location = attr ? gl.getAttribLocation(program, attr.name) : i
-      return {...sum, [attr ? attr.name : location]: location}
-    }, {})
+      locations[attr ? attr.name : location] = location
+    }
+    return locations
   }
 }
