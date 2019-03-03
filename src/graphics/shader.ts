@@ -4,6 +4,64 @@ import {Image} from '../images/image'
 import {NumberUtil} from '../utils/number-util'
 import {ObjectUtil} from '../utils/object-util'
 
+// All variables passed from JavaScript are integral derived by truncation. When
+// passing an independent variable, implicit truncation by converting to shader
+// inputs is acceptable. However, when deriving a variable from another
+// variable, the first must be truncated independently to avoid possible jitter.
+//
+// For example, consider deriving camera position at an offset from the player's
+// position. The player may be at 0.1 and the camera at an offset of 100.9. The
+// rendered player's position is implicitly truncated to 0. Depending on
+// calculation choice, the rendered camera's position may be:
+//
+//   Formula                    Result  Player pixel  Camera pixel  Distance  Notes
+//   0.1 + 100.9             =   101.0             0           101       101  No truncation.
+//   Math.trunc(0.1) + 100.9 =   100.9             0           100       100  Truncate before player input.
+//   Math.trunc(0.1 + 100.9) =   101.0             0           101       101  Truncate after player input.
+//
+// Now when the player's position has increased to 1.0 and the rendered position
+// is 1, one pixel forward. The rendered distance between the camera and the
+// player should be constant and not change regardless of where the player is.
+//
+//   1.0 + 100.9             =   101.9             1           101       100  No truncation.
+//   Math.trunc(1.0) + 100.9 =   101.9             1           101       100  Truncate before player input.
+//   Math.trunc(1.0 + 100.9) =   101.0             1           101       100  Truncate after player input.
+//
+// As shown above, when truncation is not performed or it occurs afterwards
+// on the sum, rounding errors can cause the rendered distance between the
+// the camera and the position to vary under different inputs instead of
+// remaining at a constant offset from the player. This causes a jarring jitter
+// effect.
+//
+// Because truncation is always implied, any intermediate truncation is
+// strongly preferred to rounding, flooring, or ceiling. Consider:
+//
+//   Math.trunc(0.1) + 100.9 =   100.9             0           100       100  Truncate.
+//   Math.round(0.1) + 100.9 =   100.9             0           100       100  Round.
+//   Math.floor(0.1) + 100.9 =   100.9             0           100       100  Floor.
+//   Math.ceil(0.1)  + 100.9 =   101.9             0           101       101  Ceil.
+//
+// Now that the player has moved to 0.5:
+//
+//   Math.trunc(0.5) + 100.9 =   100.9             0           100       100  Truncate.
+//   Math.round(0.5) + 100.9 =   101.9             0           101       101  Round.
+//   Math.floor(0.5) + 100.9 =   100.9             0           100       100  Floor.
+//   Math.ceil(0.5)  + 100.9 =   101.9             0           101       101  Ceil.
+//
+// Now that the player has moved to 1.0:
+//
+//   Math.trunc(1.0) + 100.9 =   101.9             1           101       100  Truncate.
+//   Math.round(1.0) + 100.9 =   101.9             1           101       100  Round.
+//   Math.floor(1.0) + 100.9 =   101.9             1           101       100  Floor.
+//   Math.ceil(1.0)  + 100.9 =   101.9             1           101       100  Ceil.
+//
+// Now that the player has moved to -0.5:
+//
+//   Math.trunc(-0.5) + 100.9 =  100.9             0           100       100  Truncate.
+//   Math.round(-0.5) + 100.9 =  100.9             0           100       100  Round.
+//   Math.floor(-0.5) + 100.9 =   99.9             0            99        99  Floor.
+//   Math.ceil(-0.5)  + 100.9 =  100.9             0           100       100  Ceil.
+
 export namespace Shader {
   export enum Variable {
     // Uniforms
