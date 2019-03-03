@@ -1,10 +1,10 @@
-import * as glUtil from './gl-util'
 import {AttributeLocations, UniformLocations} from './gl-util'
+import {GLUtil} from './gl-util'
 
 export class ShaderCache {
   static new(gl: GL, program: GLProgram): ShaderCache {
-    const uniforms = glUtil.getUniformLocations(gl, program)
-    const attributes = glUtil.getAttributeLocations(gl, program)
+    const uniforms = GLUtil.getUniformLocations(gl, program)
+    const attributes = GLUtil.getAttributeLocations(gl, program)
     return new ShaderCache(program, uniforms, attributes)
   }
 

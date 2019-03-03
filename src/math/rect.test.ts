@@ -1,5 +1,5 @@
-import * as object from '../utils/object'
-import * as rect from './rect'
+import {ObjectUtil} from '../utils/object-util'
+import {Rect} from './rect'
 
 /**
  * [
@@ -13,7 +13,7 @@ import * as rect from './rect'
  * ]
  */
 type Test = Readonly<[string, Rect, Rect, Rect, boolean, Rect, boolean]>
-const tests: ReadonlyArray<Test> = object.freeze(
+const tests: ReadonlyArray<Test> = ObjectUtil.freeze(
   [
     [
       `
@@ -765,7 +765,7 @@ describe('intersection()', () => {
     '%#) %s (%p, %p) => %p %p, %p, %p',
     (_diagram, lhs, rhs, intersection, _intersects, _union, flip) =>
       expect(
-        rect.intersection(flip ? rhs : lhs, flip ? lhs : rhs)
+        Rect.intersection(flip ? rhs : lhs, flip ? lhs : rhs)
       ).toStrictEqual(intersection)
   )
 })
@@ -774,7 +774,7 @@ describe('intersects()', () => {
   test.each(tests)(
     '%#) %s (%p, %p) => %p %p, %p, %p',
     (_diagram, lhs, rhs, _intersection, intersects, _union, flip) =>
-      expect(rect.intersects(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
+      expect(Rect.intersects(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
         intersects
       )
   )
@@ -784,7 +784,7 @@ describe('union()', () => {
   test.each(tests)(
     '%#) %s (%p, %p) => %p %p, %p, %p',
     (_diagram, lhs, rhs, _intersection, _intersects, union, flip) =>
-      expect(rect.union(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
+      expect(Rect.union(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
         union
       )
   )

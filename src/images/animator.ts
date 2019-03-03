@@ -1,15 +1,11 @@
-import * as number from '../utils/number'
-import * as object from '../utils/object'
-import {
-  AtlasAnimation,
-  AtlasAnimationDirection,
-  AtlasCel
-} from './atlas-definition'
+import {Atlas} from './atlas'
+import {NumberUtil} from '../utils/number-util'
+import {ObjectUtil} from '../utils/object-util'
 
 // Animates AtlasAnimations by providing the correct cel for a given time.
 export class Animator {
   constructor(
-    private readonly _animation: AtlasAnimation,
+    private readonly _animation: Atlas.Animation,
     /** Cel index oscillation state. This integer may fall out of animation
         bounds. */
     private _period: number = 0,
@@ -33,7 +29,7 @@ export class Animator {
     }
   }
 
-  cel(): AtlasCel {
+  cel(): Atlas.Cel {
     return this._animation.cels[this.celIndex()]
   }
 
@@ -43,18 +39,18 @@ export class Animator {
 }
 
 const Animate: Readonly<
-  Record<AtlasAnimationDirection, (period: number, length: number) => number>
-> = object.freeze({
+  Record<Atlas.AnimationDirection, (period: number, length: number) => number>
+> = ObjectUtil.freeze({
   /** @arg period An integer in the domain [0, +∞). */
-  [AtlasAnimationDirection.FORWARD](period: number) {
+  [Atlas.AnimationDirection.FORWARD](period: number) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
   /** @arg period An integer in the domain (-∞, length - 1]. */
-  [AtlasAnimationDirection.REVERSE](period: number, length: number) {
+  [Atlas.AnimationDirection.REVERSE](period: number, length: number) {
     return (period % Number.MIN_SAFE_INTEGER) - 1 + length
   },
   /** @arg period An integer in the domain [2 - length, length - 1]. */
-  [AtlasAnimationDirection.PING_PONG](period: number, length: number) {
-    return number.wrap(period - 1, 2 - length, length)
+  [Atlas.AnimationDirection.PING_PONG](period: number, length: number) {
+    return NumberUtil.wrap(period - 1, 2 - length, length)
   }
 })

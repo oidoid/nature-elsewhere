@@ -1,16 +1,17 @@
-import * as autoscale from '../graphics/screen'
-import * as limits from '../math/limits'
-import * as number from '../utils/number'
-import * as text from '../text/text'
 import {AnimationID} from '../images/animation-id'
-import {AtlasDefinition} from '../images/atlas-definition'
+import {Atlas} from '../images/atlas'
+import {Defaults} from './defaults'
 import {Fields} from './01-fields'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
-import {newNatureElsewhere} from '../entities/nature-elsewhere'
+import {Limits} from '../math/limits'
+import {NatureElsewhere} from '../entities/nature-elsewhere'
+import {NumberUtil} from '../utils/number-util'
 import {Palette, Tone} from '../images/palette'
 import {Recorder} from '../inputs/recorder'
 import {Store} from '../entities/store'
+import {Text} from '../text/text'
+import {Viewport} from '../graphics/viewport'
 
 export class Title implements Level {
   private readonly _store: Store
@@ -20,12 +21,12 @@ export class Title implements Level {
   private readonly _cursorReference: Image
   private _cursorState: Select = Select.START
   constructor(
-    private readonly _atlas: AtlasDefinition,
+    private readonly _atlas: Atlas.Definition,
     private readonly _recorder: Recorder
   ) {
     this._store = new Store(_atlas)
-    let logo = newNatureElsewhere(_atlas, 1, {x: 0, y: 6})
-    const chars = text.toImages(_atlas, 'episode 0                rndmem')
+    let logo = NatureElsewhere.create(_atlas, 1, {x: 0, y: 6})
+    const chars = Text.toImages(_atlas, 'episode 0                rndmem')
     Image.setPalette(Palette.GREYS + Tone.HALF, chars)
     Image.moveBy(
       {x: 0, y: Image.target(logo).y + Image.target(logo).h + 3},
@@ -38,7 +39,7 @@ export class Title implements Level {
   level editor
   exit
     `.trim()
-    const menuChars = text.toImages(_atlas, menuText)
+    const menuChars = Text.toImages(_atlas, menuText)
     this._cursor = menuChars[0]
     this._cursorReference = menuChars[1]
     Image.moveBy(
@@ -53,7 +54,7 @@ export class Title implements Level {
     logo = logo.concat(menuChars)
     this._logo = new ImageGroup(logo)
 
-    const footer = text.toImages(
+    const footer = Text.toImages(
       _atlas,
       `${process.env.date}  v${process.env.version} (${process.env.hash})`
     )
@@ -62,7 +63,7 @@ export class Title implements Level {
 
     this._store.addImages(
       Image.new(_atlas, AnimationID.PIXEL, Palette.YELLOWS, {
-        preScale: limits.MAX_XY
+        preScale: Limits.MAX_XY
       }),
       ...this._logo.images()
     )
@@ -104,7 +105,7 @@ export class Title implements Level {
   }
 
   scale(canvas: WH) {
-    return autoscale.scale(canvas, {w: 105, h: 81})
+    return Viewport.scale(canvas, Defaults.minScreenSize)
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {
@@ -112,14 +113,14 @@ export class Title implements Level {
     this._logo.centerOn(cam)
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
     if (this._recorder.down(true)) {
-      this._cursorState = number.wrap(
+      this._cursorState = NumberUtil.wrap(
         this._cursorState + 1,
         Select.START,
         Select.END + 1
       )
     }
     if (this._recorder.up(true)) {
-      this._cursorState = number.wrap(
+      this._cursorState = NumberUtil.wrap(
         this._cursorState - 1,
         Select.START,
         Select.END + 1

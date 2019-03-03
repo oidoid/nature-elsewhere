@@ -1,7 +1,7 @@
-import * as object from '../utils/object'
 import {Animator} from './animator'
-import {AtlasAnimationDirection} from './atlas-definition'
-import {AnimationDirection} from '../parsers/aseprite-format'
+import {Aseprite} from '../parsers/aseprite'
+import {Atlas} from './atlas'
+import {ObjectUtil} from '../utils/object-util'
 
 describe('step()', () => {
   test('No cels', () => {
@@ -9,7 +9,7 @@ describe('step()', () => {
       size: {w: 0, h: 0},
       cels: [],
       duration: 0,
-      direction: AtlasAnimationDirection.FORWARD
+      direction: Atlas.AnimationDirection.FORWARD
     }
     const subject = new Animator(animation)
     subject.step(1)
@@ -22,7 +22,7 @@ describe('step()', () => {
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: AtlasAnimationDirection.FORWARD
+      direction: Atlas.AnimationDirection.FORWARD
     }
     const subject = new Animator(animation)
     subject.step(0.5)
@@ -35,7 +35,7 @@ describe('step()', () => {
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: AtlasAnimationDirection.FORWARD
+      direction: Atlas.AnimationDirection.FORWARD
     }
     const subject = new Animator(animation)
     subject.step(1)
@@ -48,7 +48,7 @@ describe('step()', () => {
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: AtlasAnimationDirection.FORWARD
+      direction: Atlas.AnimationDirection.FORWARD
     }
     const subject = new Animator(animation)
     subject.step(1.5)
@@ -57,7 +57,7 @@ describe('step()', () => {
 })
 
 describe('celIndex', () => {
-  test.each(object.values(AtlasAnimationDirection))(
+  test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# direction %p array start',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
@@ -74,7 +74,7 @@ describe('celIndex', () => {
     }
   )
 
-  test.each(object.values(AtlasAnimationDirection))(
+  test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# direction %p array end',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
@@ -92,40 +92,42 @@ describe('celIndex', () => {
   )
 
   test.each(<
-    ReadonlyArray<Readonly<[AnimationDirection, number, ReadonlyArray<number>]>>
+    ReadonlyArray<
+      Readonly<[Aseprite.AnimationDirection, number, ReadonlyArray<number>]>
+    >
   >[
     [
-      AtlasAnimationDirection.FORWARD,
+      Atlas.AnimationDirection.FORWARD,
       0,
       [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
     ],
     [
-      AtlasAnimationDirection.FORWARD,
+      Atlas.AnimationDirection.FORWARD,
       Number.MAX_SAFE_INTEGER,
       [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
     ],
     [
-      AtlasAnimationDirection.REVERSE,
+      Atlas.AnimationDirection.REVERSE,
       Number.MIN_SAFE_INTEGER,
       [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
     ],
     [
-      AtlasAnimationDirection.REVERSE,
+      Atlas.AnimationDirection.REVERSE,
       3,
       [2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3]
     ],
     [
-      AtlasAnimationDirection.PING_PONG,
+      Atlas.AnimationDirection.PING_PONG,
       -2,
       [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2]
     ],
     [
-      AtlasAnimationDirection.PING_PONG,
+      Atlas.AnimationDirection.PING_PONG,
       0,
       [1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2]
     ],
     [
-      AtlasAnimationDirection.PING_PONG,
+      Atlas.AnimationDirection.PING_PONG,
       3,
       [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
     ]
@@ -146,7 +148,7 @@ describe('celIndex', () => {
     expect(actual).toStrictEqual(expected)
   })
 
-  test.each(object.values(AtlasAnimationDirection))(
+  test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration met direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
@@ -164,15 +166,15 @@ describe('celIndex', () => {
       }
       // prettier-ignore
       const expected = {
-        [AtlasAnimationDirection.FORWARD]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
-        [AtlasAnimationDirection.REVERSE]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        [AtlasAnimationDirection.PING_PONG]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
+        [Atlas.AnimationDirection.FORWARD]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
+        [Atlas.AnimationDirection.REVERSE]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
+        [Atlas.AnimationDirection.PING_PONG]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
       expect(actual).toStrictEqual(expected[direction])
     }
   )
 
-  test.each(object.values(AtlasAnimationDirection))(
+  test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# fractional duration met direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
@@ -190,15 +192,15 @@ describe('celIndex', () => {
       }
       // prettier-ignore
       const expected = {
-        [AtlasAnimationDirection.FORWARD]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        [AtlasAnimationDirection.REVERSE]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        [AtlasAnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+        [Atlas.AnimationDirection.FORWARD]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+        [Atlas.AnimationDirection.REVERSE]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+        [Atlas.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
       expect(actual).toStrictEqual(expected[direction])
     }
   )
 
-  test.each(object.values(AtlasAnimationDirection))(
+  test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration not met direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
@@ -216,9 +218,9 @@ describe('celIndex', () => {
       }
       // prettier-ignore
       const expected = {
-        [AtlasAnimationDirection.FORWARD]:   [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
-        [AtlasAnimationDirection.REVERSE]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
-        [AtlasAnimationDirection.PING_PONG]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
+        [Atlas.AnimationDirection.FORWARD]:   [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
+        [Atlas.AnimationDirection.REVERSE]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
+        [Atlas.AnimationDirection.PING_PONG]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
       }
       expect(actual).toStrictEqual(expected[direction])
     }

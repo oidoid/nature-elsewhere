@@ -1,5 +1,5 @@
-import * as object from '../utils/object'
 import {InputMask} from './input-mask'
+import {ObjectUtil} from '../utils/object-util'
 import {Recorder} from './recorder'
 
 const LEFT = InputMask.LEFT
@@ -7,8 +7,8 @@ const RIGHT = InputMask.RIGHT
 const UP = InputMask.UP
 const DOWN = InputMask.DOWN
 
-const inputs: ReadonlyArray<InputMask> = object.freeze(
-  object.values(InputMask).filter(val => typeof val === 'number')
+const inputs: ReadonlyArray<InputMask> = ObjectUtil.freeze(
+  ObjectUtil.values(InputMask).filter(val => typeof val === 'number')
 )
 type InputMethod = Exclude<
   keyof Recorder,
@@ -16,7 +16,7 @@ type InputMethod = Exclude<
 >
 type MaskMethod = Readonly<{mask: InputMask; method: InputMethod}>
 
-const maskMethods: ReadonlyArray<MaskMethod> = object.freeze(<MaskMethod[]>[
+const maskMethods: ReadonlyArray<MaskMethod> = ObjectUtil.freeze(<MaskMethod[]>[
   {mask: LEFT, method: 'left'},
   {mask: RIGHT, method: 'right'},
   {mask: UP, method: 'up'},

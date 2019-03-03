@@ -1,7 +1,7 @@
-import * as rect from '../math/rect'
-import * as shader from '../graphics/shader'
-import {AtlasDefinition} from '../images/atlas-definition'
+import {Atlas} from '../images/atlas'
 import {Image} from '../images/image'
+import {Rect} from '../math/rect'
+import {Shader} from '../graphics/shader'
 
 export interface StoreUpdate {
   /** instances.byteLength may exceed bytes to be rendered. length is the only
@@ -12,8 +12,8 @@ export interface StoreUpdate {
 
 export class Store {
   private readonly images: Image[] = []
-  private _instances: DataView = shader.newInstanceBuffer(1024)
-  constructor(private readonly _atlas: AtlasDefinition) {}
+  private _instances: DataView = Shader.newInstanceBuffer(1024)
+  constructor(private readonly _atlas: Atlas.Definition) {}
 
   addImages(...images: Image[]): void {
     images.forEach(image => this.addImage(image))
@@ -25,16 +25,16 @@ export class Store {
   }
 
   update(milliseconds: number, cam: Rect): StoreUpdate {
-    const minBytes = this.images.length * shader.layout.perInstance.stride
+    const minBytes = this.images.length * Shader.layout.perInstance.stride
     if (this._instances.byteLength < minBytes) {
-      this._instances = shader.newInstanceBuffer(this.images.length * 2)
+      this._instances = Shader.newInstanceBuffer(this.images.length * 2)
     }
 
     let i = 0
     this.images.forEach(image => {
       image.update(milliseconds)
-      if (rect.intersects(image.target(), cam)) {
-        shader.packInstance(this._atlas, this._instances, i, image)
+      if (Rect.intersects(image.target(), cam)) {
+        Shader.packInstance(this._atlas, this._instances, i, image)
         ++i
       }
     })

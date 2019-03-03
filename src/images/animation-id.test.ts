@@ -1,14 +1,14 @@
-import * as asepriteParser from '../parsers/aseprite-parser'
-import * as atlasAseprite from '../assets/atlas.json'
-import * as object from '../utils/object'
+import * as atlasJSON from '../assets/atlas.json'
 import {AnimationID} from './animation-id'
-import {AtlasDefinition} from './atlas-definition'
+import {AsepriteParser} from '../parsers/aseprite-parser'
+import {Atlas} from './atlas'
+import {ObjectUtil} from '../utils/object-util'
 
-const state: AtlasDefinition = object.freeze(
-  asepriteParser.parse(atlasAseprite)
+const state: Atlas.Definition = ObjectUtil.freeze(
+  AsepriteParser.parse(atlasJSON)
 )
-const ids: ReadonlyArray<AnimationID> = object.freeze(
-  object.values(AnimationID)
+const ids: ReadonlyArray<AnimationID> = ObjectUtil.freeze(
+  ObjectUtil.values(AnimationID)
 )
 
 test.each(ids)('%# AnimationID %p is unique', id =>
@@ -19,7 +19,7 @@ test.each(ids)('%# AnimationID %p has an Animation', id =>
   expect(state.animations).toHaveProperty(id)
 )
 
-test.each(object.keys(state.animations))(
+test.each(ObjectUtil.keys(state.animations))(
   '%# animation ID %p has a AnimationID',
   id => expect(ids.filter(val => id === val)).toHaveLength(1)
 )

@@ -1,8 +1,8 @@
-import * as rect from '../math/rect'
-import {AtlasDefinition} from './atlas-definition'
 import {AnimationID} from './animation-id'
 import {Animator} from './animator'
+import {Atlas} from './atlas'
 import {Palette} from './palette'
+import {Rect} from '../math/rect'
 
 /**
  * A projection from a source rectangle on an atlas to a target rectangle on a
@@ -14,7 +14,7 @@ import {Palette} from './palette'
 export class Image {
   // preScale is multiplied by target dimensions to repeat source.
   static new(
-    {animations}: AtlasDefinition,
+    {animations}: Atlas.Definition,
     animationID: AnimationID,
     palette: Palette,
     {
@@ -72,7 +72,7 @@ export class Image {
 
   static target(images: ReadonlyArray<Image>): Rect {
     return images.reduce(
-      (union, image) => rect.union(union, image.target()),
+      (union, image) => Rect.union(union, image.target()),
       images[0] ? images[0].target() : {x: 0, y: 0, w: 0, h: 0}
     )
   }

@@ -1,18 +1,18 @@
-import * as limits from '../math/limits'
 import {AnimationID} from '../images/animation-id'
-import {AtlasDefinition} from '../images/atlas-definition'
+import {Atlas} from '../images/atlas'
 import {Image} from '../images/image'
-import {Store} from '../entities/store'
+import {Limits} from '../math/limits'
 import {Palette} from '../images/palette'
+import {Store} from '../entities/store'
 
 export class Fields implements Level {
   private readonly _scale: number = 9
   private readonly _store: Store
-  constructor(atlas: AtlasDefinition) {
+  constructor(atlas: Atlas.Definition) {
     this._store = new Store(atlas)
     this._store.addImages(
       Image.new(atlas, AnimationID.PIXEL, Palette.YELLOWS, {
-        preScale: limits.MAX_XY
+        preScale: Limits.MAX_XY
       }),
       Image.new(atlas, AnimationID.TREE, Palette.TREE, {
         layer: 1,

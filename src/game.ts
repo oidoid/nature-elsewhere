@@ -1,12 +1,12 @@
-import * as gamepad from './inputs/gamepads/gamepad'
-import * as screen from './graphics/screen'
-import {AtlasDefinition} from './images/atlas-definition'
+import {Atlas} from './images/atlas'
+import {Gamepad} from './inputs/gamepads/gamepad'
+import {InputEventListener} from './inputs/input-event-listener'
+import {InputMask} from './inputs/input-mask'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {RendererStateMachine} from './graphics/renderer-state-machine'
 import {Title} from './levels/00-title'
-import {InputEventListener} from './inputs/input-event-listener'
-import {InputMask} from './inputs/input-mask'
+import {Viewport} from './graphics/viewport'
 
 export class Game {
   private _level: Level
@@ -17,7 +17,7 @@ export class Game {
     window: Window,
     canvas: HTMLCanvasElement,
     atlasImage: HTMLImageElement,
-    atlas: AtlasDefinition,
+    atlas: Atlas.Definition,
     paletteImage: HTMLImageElement
   ) {
     this._inputEventListener = new InputEventListener(
@@ -53,9 +53,9 @@ export class Game {
     const milliseconds = now - then
     this.processInput(renderer, milliseconds)
 
-    const canvas = screen.canvas(window)
+    const canvas = Viewport.canvas(window)
     const scale = this._level.scale(canvas)
-    const cam = screen.cam(canvas, scale)
+    const cam = Viewport.cam(canvas, scale)
     const {nextLevel, instances: dataView, length} = this._level.update(
       then,
       now,
@@ -74,7 +74,7 @@ export class Game {
   }
 
   private processInput(renderer: Renderer, milliseconds: number): void {
-    gamepad.pollGamepads(this._recorder)
+    Gamepad.poll(this._recorder)
 
     // Verify input is pumped here or by event listener.
     this._recorder.write()

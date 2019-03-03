@@ -1,17 +1,18 @@
-import * as asepriteParser from './parsers/aseprite-parser'
-import * as atlasAseprite from './assets/atlas.json'
-import * as imageLoader from './loaders/image-loader'
-import {AtlasDefinition} from './images/atlas-definition'
+import * as atlasJSON from './assets/atlas.json'
+import {AsepriteParser} from './parsers/aseprite-parser'
+import {Atlas} from './images/atlas'
 import {Game} from './game'
+import {ImageLoader} from './loaders/image-loader'
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
 if (!canvas) throw new Error('Canvas missing.')
 
-const atlas: AtlasDefinition = asepriteParser.parse(atlasAseprite)
+const atlas: Atlas.Definition = AsepriteParser.parse(atlasJSON)
 
-imageLoader
-  .loadImages('assets/images/atlas.png', 'assets/images/palette.png')
-  .then(([atlasImage, paletteImage]) => {
-    const game = new Game(window, canvas, atlasImage, atlas, paletteImage)
-    game.start()
-  })
+ImageLoader.loadImages(
+  'assets/images/atlas.png',
+  'assets/images/palette.png'
+).then(([atlasImage, paletteImage]) => {
+  const game = new Game(window, canvas, atlasImage, atlas, paletteImage)
+  game.start()
+})

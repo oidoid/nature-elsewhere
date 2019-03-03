@@ -1,13 +1,12 @@
 import * as fragmentShaderSource from './shader.frag'
-import * as glUtil from './gl-util'
-import * as object from '../utils/object'
-import * as shader from './shader'
 import * as vertexShaderSource from './shader.vert'
-import {GL} from './gl-util'
+import {GL, GLUtil} from './gl-util'
+import {ObjectUtil} from '../utils/object-util'
 import {ShaderCache} from './shader-cache'
+import {Shader} from './shader'
 
 const perVertexData: Int16Array = new Int16Array(
-  object.freeze([1, 1, 0, 1, 1, 0, 0, 0])
+  ObjectUtil.freeze([1, 1, 0, 1, 1, 0, 0, 0])
 )
 
 export class Renderer {
@@ -30,22 +29,22 @@ export class Renderer {
     gl.blendEquation(GL.FUNC_ADD)
     gl.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
 
-    const program = glUtil.buildProgram(
+    const program = GLUtil.buildProgram(
       gl,
       vertexShaderSource,
       fragmentShaderSource
     )
     const shaderCache = ShaderCache.new(gl, program)
 
-    gl.uniform1i(shaderCache.location(shader.Variable.ATLAS), 0)
+    gl.uniform1i(shaderCache.location(Shader.Variable.ATLAS), 0)
     gl.uniform2i(
-      shaderCache.location(shader.Variable.ATLAS_SIZE),
+      shaderCache.location(Shader.Variable.ATLAS_SIZE),
       atlas.naturalWidth,
       atlas.naturalHeight
     )
-    gl.uniform1i(shaderCache.location(shader.Variable.PALETTE), 1)
+    gl.uniform1i(shaderCache.location(Shader.Variable.PALETTE), 1)
     gl.uniform2i(
-      shaderCache.location(shader.Variable.PALETTE_SIZE),
+      shaderCache.location(Shader.Variable.PALETTE_SIZE),
       palette.naturalWidth,
       palette.naturalHeight
     )
@@ -54,34 +53,34 @@ export class Renderer {
     gl.bindVertexArray(vertexArray)
 
     const perVertexBuffer = gl.createBuffer()
-    shader.layout.perVertex.attributes.forEach(attr =>
-      glUtil.initAttribute(
+    Shader.layout.perVertex.attributes.forEach(attr =>
+      GLUtil.initAttribute(
         gl,
         program,
         attr,
-        shader.layout.perVertex.stride,
-        shader.layout.perVertex.divisor,
+        Shader.layout.perVertex.stride,
+        Shader.layout.perVertex.divisor,
         perVertexBuffer
       )
     )
-    glUtil.bufferData(gl, perVertexBuffer, perVertexData, GL.STATIC_READ)
+    GLUtil.bufferData(gl, perVertexBuffer, perVertexData, GL.STATIC_READ)
 
     const perInstanceBuffer = gl.createBuffer()
-    shader.layout.perInstance.attributes.forEach(attr =>
-      glUtil.initAttribute(
+    Shader.layout.perInstance.attributes.forEach(attr =>
+      GLUtil.initAttribute(
         gl,
         program,
         attr,
-        shader.layout.perInstance.stride,
-        shader.layout.perInstance.divisor,
+        Shader.layout.perInstance.stride,
+        Shader.layout.perInstance.divisor,
         perInstanceBuffer
       )
     )
 
     // Leave vertexArray bound.
 
-    gl.bindTexture(GL.TEXTURE_2D, glUtil.loadTexture(gl, GL.TEXTURE0, atlas))
-    gl.bindTexture(GL.TEXTURE_2D, glUtil.loadTexture(gl, GL.TEXTURE1, palette))
+    gl.bindTexture(GL.TEXTURE_2D, GLUtil.loadTexture(gl, GL.TEXTURE0, atlas))
+    gl.bindTexture(GL.TEXTURE_2D, GLUtil.loadTexture(gl, GL.TEXTURE1, palette))
     // Leave textures bound.
 
     const loseContext = gl.getExtension('WEBGL_lose_context')
@@ -117,13 +116,13 @@ export class Renderer {
   ): void {
     this.resize(canvas, scale, cam)
 
-    glUtil.bufferData(
+    GLUtil.bufferData(
       this._gl,
       this._perInstanceBuffer,
       perInstanceData,
       GL.DYNAMIC_READ
     )
-    const vertices = perVertexData.length / shader.layout.perVertex.length
+    const vertices = perVertexData.length / Shader.layout.perVertex.length
     this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
   }
 
@@ -158,7 +157,7 @@ export class Renderer {
             0,        0, 0,                    1
     ])
     this._gl.uniformMatrix4fv(
-      this._shaderCache.location(shader.Variable.PROJECTION),
+      this._shaderCache.location(Shader.Variable.PROJECTION),
       false,
       this._projection
     )

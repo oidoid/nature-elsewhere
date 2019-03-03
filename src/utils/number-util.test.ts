@@ -1,4 +1,4 @@
-import * as number from './number'
+import {NumberUtil} from './number-util'
 
 describe('wrap()', () => {
   test.each(
@@ -301,6 +301,6 @@ describe('wrap()', () => {
       [ 20  , -3,  3,  2  ]
     ]
   )('%#) %p wrap [%p,%p]', (x, min, max, expected) =>
-    expect(number.wrap(x, min, max)).toStrictEqual(expected)
+    expect(NumberUtil.wrap(x, min, max)).toStrictEqual(expected)
   )
 })
