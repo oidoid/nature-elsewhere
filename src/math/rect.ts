@@ -1,4 +1,5 @@
-import * as xy from './xy'
+import {XY} from './xy'
+import {WH} from './wh'
 
 declare global {
   /**
@@ -9,6 +10,10 @@ declare global {
 }
 
 export namespace Rect {
+  export function add(lhs: Rect, rhs: Rect): Rect {
+    return {...XY.add(lhs, rhs), ...WH.add(lhs, rhs)}
+  }
+
   /**
    * @return True if lhs and rhs are touching or overlapping, false if
    *         independent.
@@ -25,7 +30,7 @@ export namespace Rect {
    */
   export function intersection(lhs: Rect, rhs: Rect): Rect {
     // The bottom-rightmost coordinates.
-    const upperLeft = xy.max(lhs, rhs)
+    const upperLeft = XY.max(lhs, rhs)
     return {
       x: upperLeft.x,
       y: upperLeft.y,
@@ -35,7 +40,7 @@ export namespace Rect {
   }
 
   export function union(lhs: Rect, rhs: Rect): Rect {
-    const min = xy.min(lhs, rhs)
+    const min = XY.min(lhs, rhs)
     return {
       ...min,
       w: Math.max(lhs.x + lhs.w, rhs.x + rhs.w) - min.x,

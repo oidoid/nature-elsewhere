@@ -1,7 +1,7 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
 import {Defaults} from './defaults'
-import {Fields} from './01-fields'
+import {FieldsLevel} from './1-fields-level'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
 import {Limits} from '../math/limits'
@@ -14,7 +14,7 @@ import {Store} from '../entities/store'
 import {Text} from '../text/text'
 import {Viewport} from '../graphics/viewport'
 
-export class Title implements Level {
+export class TitleLevel implements Level {
   private readonly _store: Store
   private readonly _logo: ImageGroup
   private readonly _footer: ImageGroup
@@ -113,7 +113,7 @@ export class Title implements Level {
   }
 
   scale(canvas: WH) {
-    return Viewport.scale(canvas, Defaults.minScreenSize)
+    return Viewport.scale(canvas, Defaults.minScreenSize, 1)
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {
@@ -137,7 +137,7 @@ export class Title implements Level {
     if (this._recorder.action(true)) {
       switch (this._cursorState) {
         case Select.START:
-          nextLevel = new Fields(this._atlas)
+          nextLevel = new FieldsLevel(this._atlas)
           break
         case Select.SETTINGS:
           nextLevel = new SettingsLevel(this._atlas)

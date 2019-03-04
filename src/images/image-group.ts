@@ -1,6 +1,6 @@
-import * as xy from '../math/xy'
 import {Image} from './image'
 import {Palette} from './palette'
+import {XY} from '../math/xy'
 
 // A proxy with caching for keeping and manipulating multiple images relative an
 // origin.
@@ -14,11 +14,11 @@ export class ImageGroup {
     return this._images
   }
   moveTo(target: XY): void {
-    if (xy.equal(this._origin, target)) return
-    this.moveBy(xy.sub(target, this._origin))
+    if (XY.equal(this._origin, target)) return
+    this.moveBy(XY.sub(target, this._origin))
   }
   moveBy(offset: XY): void {
-    this._origin = xy.add(offset, this._origin)
+    this._origin = XY.add(offset, this._origin)
     this._images.forEach(image => image.moveBy(offset))
     this.invalidate()
   }

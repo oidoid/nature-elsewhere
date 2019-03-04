@@ -5,7 +5,7 @@ import {Limits} from '../math/limits'
 import {Palette} from '../images/palette'
 import {Store} from '../entities/store'
 
-export class Fields implements Level {
+export class FieldsLevel implements Level {
   private readonly _scale: number = 9
   private readonly _store: Store
   constructor(atlas: Atlas.Definition) {

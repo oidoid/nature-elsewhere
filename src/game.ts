@@ -5,7 +5,7 @@ import {InputMask} from './inputs/input-mask'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {RendererStateMachine} from './graphics/renderer-state-machine'
-import {Title} from './levels/00-title'
+import {TitleLevel} from './levels/0-title-level'
 import {Viewport} from './graphics/viewport'
 
 export class Game {
@@ -25,7 +25,7 @@ export class Game {
       canvas,
       this._recorder
     )
-    this._level = new Title(atlas, this._recorder)
+    this._level = new TitleLevel(atlas, this._recorder)
     this._rendererStateMachine = new RendererStateMachine(
       window,
       canvas,

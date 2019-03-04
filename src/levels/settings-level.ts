@@ -7,6 +7,7 @@ import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
 import {Limits} from '../math/limits'
 import {Palette} from '../images/palette'
+import {Rect} from '../math/rect'
 import {Store} from '../entities/store'
 import {Text} from '../text/text'
 import {Viewport} from '../graphics/viewport'
@@ -71,7 +72,11 @@ export class SettingsLevel implements Level {
   }
 
   scale(canvas: WH) {
-    return Viewport.scale(canvas, this._ui.target())
+    return Viewport.scale(
+      canvas,
+      Rect.add(this._ui.target(), {x: 0, y: 0, w: 4, h: 4}),
+      1
+    )
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {

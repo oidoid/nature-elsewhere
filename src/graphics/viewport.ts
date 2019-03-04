@@ -1,9 +1,9 @@
 export namespace Viewport {
   /** @return The maximum scale possible. */
-  export function scale(canvas: WH, minSize: WH): number {
+  export function scale(canvas: WH, minSize: WH, zoomOut: number): number {
     const x = canvas.w / minSize.w
     const y = canvas.h / minSize.h
-    return Math.max(1, Math.floor(Math.min(x, y)))
+    return Math.max(1, Math.floor(Math.min(x, y)) - zoomOut)
   }
 
   export function canvas(window: Window): WH {

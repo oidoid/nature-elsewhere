@@ -1,4 +1,4 @@
-import * as xy from './xy'
+import {XY} from './xy'
 
 describe('max()', () => {
   test.each([
@@ -17,6 +17,6 @@ describe('max()', () => {
     [{x: 1, y: 4}, {x: 3, y: 2}, {x: 3, y: 4}],
     [{x: 3, y: 2}, {x: 1, y: 4}, {x: 3, y: 4}]
   ])('%#) (%p, %p) => %p', (lhs, rhs, expected) =>
-    expect(xy.max(lhs, rhs)).toStrictEqual(expected)
+    expect(XY.max(lhs, rhs)).toStrictEqual(expected)
   )
 })
