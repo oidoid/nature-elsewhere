@@ -4,6 +4,22 @@ import {Atlas} from './atlas'
 import {Palette} from './palette'
 import {Rect} from '../math/rect'
 
+export class ImageOptions {
+  palette?: Palette
+  layer?: number
+  position?: XY
+  maskAnimationID?: AnimationID
+  maskCel?: number
+  maskOffset?: XY
+  maskOffsetRate?: XY
+  scale?: XY
+  offset?: XY
+  offsetRate?: XY
+  cel?: number
+  preScale?: XY
+  wh?: WH
+}
+
 /**
  * A projection from a source rectangle on an atlas to a target rectangle on a
  * rendered image. A target lesser than source will truncate. A target greater
@@ -16,8 +32,8 @@ export class Image {
   static new(
     {animations}: Atlas.Definition,
     animationID: AnimationID,
-    palette: Palette,
     {
+      palette = Palette.GREYS,
       layer = 0,
       position = {x: 0, y: 0},
       scale = {x: 1, y: 1},
@@ -30,20 +46,7 @@ export class Image {
       maskOffsetRate = offsetRate,
       preScale = {x: 1, y: 1},
       wh = animations[maskAnimationID].size
-    }: {
-      layer?: number
-      position?: XY
-      maskAnimationID?: AnimationID
-      maskCel?: number
-      maskOffset?: XY
-      maskOffsetRate?: XY
-      scale?: XY
-      offset?: XY
-      offsetRate?: XY
-      cel?: number
-      preScale?: XY
-      wh?: WH
-    } = {}
+    }: ImageOptions = {}
   ): Image {
     const target = {
       ...position,
@@ -66,8 +69,12 @@ export class Image {
     )
   }
 
-  static moveBy(offset: XY, images: ReadonlyArray<Image>): void {
+  static moveBy(
+    offset: XY,
+    images: ReadonlyArray<Image>
+  ): ReadonlyArray<Image> {
     images.forEach(image => image.moveBy(offset))
+    return images
   }
 
   static target(images: ReadonlyArray<Image>): Rect {

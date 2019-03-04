@@ -1,0 +1,16 @@
+{
+  "ui/settings/controller-mapping/title": "Controller Mapping",
+  "ui/settings/controller-mapping/source/gamepad": "Gamepad",
+  "ui/settings/controller-mapping/input/up": "Up",
+  "ui/settings/controller-mapping/input/right": "Right",
+  "ui/settings/controller-mapping/input/down": "Down",
+  "ui/settings/controller-mapping/input/left": "Left",
+  "ui/settings/controller-mapping/input/menu": "Menu",
+  "ui/settings/controller-mapping/source/keyboard": "Keyboard",
+  "ui/settings/controller-mapping/cancel": "Cancel",
+  "ui/settings/controller-mapping/save": "Save",
+  "ui/settings/controller-mapping/set-defaults": "Set Defaults",
+  "ui/settings/title": "Settings",
+  "ui/settings/window-mode/title": "Window Mode",
+  "ui/settings/zoom-multiplier/title": "Zoom Multiplier"
+}

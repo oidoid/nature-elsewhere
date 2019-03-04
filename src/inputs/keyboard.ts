@@ -16,6 +16,7 @@ export namespace Keyboard {
     ArrowDown: InputMask.DOWN,
     s: InputMask.DOWN,
     ' ': InputMask.ACTION,
+    Enter: InputMask.ACTION,
     Escape: InputMask.MENU,
     p: InputMask.DEBUG_CONTEXT_LOSS,
     0: InputMask.SCALE_RESET,

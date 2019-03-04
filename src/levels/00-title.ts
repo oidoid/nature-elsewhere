@@ -9,6 +9,7 @@ import {NatureElsewhere} from '../entities/nature-elsewhere'
 import {NumberUtil} from '../utils/number-util'
 import {Palette, Tone} from '../images/palette'
 import {Recorder} from '../inputs/recorder'
+import {SettingsLevel} from './settings-level'
 import {Store} from '../entities/store'
 import {Text} from '../text/text'
 import {Viewport} from '../graphics/viewport'
@@ -36,6 +37,7 @@ export class Title implements Level {
 
     const menuText = `
 > start
+  settings
   level editor
   exit
     `.trim()
@@ -54,48 +56,54 @@ export class Title implements Level {
     logo = logo.concat(menuChars)
     this._logo = new ImageGroup(logo)
 
-    const footer = Text.toImages(
-      _atlas,
-      `${process.env.date}  v${process.env.version} (${process.env.hash})`
+    this._footer = new ImageGroup(
+      Text.toImages(
+        _atlas,
+        `${process.env.date}  v${process.env.version} (${process.env.hash})`
+      )
     )
-    this._footer = new ImageGroup(footer)
     this._footer.setPalette(Palette.GREYS + Tone.HALF)
 
     this._store.addImages(
-      Image.new(_atlas, AnimationID.PIXEL, Palette.YELLOWS, {
+      Image.new(_atlas, AnimationID.PIXEL, {
+        palette: Palette.YELLOWS,
         preScale: Limits.MAX_XY
       }),
-      ...this._logo.images()
-    )
-    this._store.addImages(...footer)
-    this._store.addImages(
-      Image.new(_atlas, AnimationID.CLOUD_M, Palette.GREYS, {
+      ...this._logo.images(),
+      ...this._footer.images(),
+      Image.new(_atlas, AnimationID.CLOUD_M, {
+        palette: Palette.GREYS,
         layer: 3,
         position: {x: 105 + 10 - 40, y: 2}
       }),
-      Image.new(_atlas, AnimationID.RAIN, Palette.BLUES, {
+      Image.new(_atlas, AnimationID.RAIN, {
+        palette: Palette.BLUES,
         layer: 3,
         position: {x: 105 + 10 - 40 + 1, y: 2 + 6},
         preScale: {x: 1, y: 100},
         offsetRate: {x: 0, y: -0.004}
       }),
 
-      Image.new(_atlas, AnimationID.CLOUD_S, Palette.GREYS, {
+      Image.new(_atlas, AnimationID.CLOUD_S, {
+        palette: Palette.GREYS,
         layer: 3,
         position: {x: 65 + 10 - 40, y: 22}
       }),
-      Image.new(_atlas, AnimationID.RAIN, Palette.BLUES, {
+      Image.new(_atlas, AnimationID.RAIN, {
+        palette: Palette.BLUES,
         layer: 3,
         position: {x: 65 + 10 - 40 + 1, y: 22 + 6},
         preScale: {x: 1, y: 100},
         offsetRate: {x: 0, y: -0.004}
       }),
 
-      Image.new(_atlas, AnimationID.CLOUD_XL, Palette.GREYS, {
+      Image.new(_atlas, AnimationID.CLOUD_XL, {
+        palette: Palette.GREYS,
         layer: 3,
         position: {x: 120 + 10 - 40, y: 36}
       }),
-      Image.new(_atlas, AnimationID.RAIN, Palette.BLUES, {
+      Image.new(_atlas, AnimationID.RAIN, {
+        palette: Palette.BLUES,
         layer: 3,
         position: {x: 120 + 10 - 40 + 1, y: 36 + 6},
         preScale: {x: 1, y: 100},
@@ -116,20 +124,23 @@ export class Title implements Level {
       this._cursorState = NumberUtil.wrap(
         this._cursorState + 1,
         Select.START,
-        Select.END + 1
+        Select.END
       )
     }
     if (this._recorder.up(true)) {
       this._cursorState = NumberUtil.wrap(
         this._cursorState - 1,
         Select.START,
-        Select.END + 1
+        Select.END
       )
     }
     if (this._recorder.action(true)) {
       switch (this._cursorState) {
         case Select.START:
           nextLevel = new Fields(this._atlas)
+          break
+        case Select.SETTINGS:
+          nextLevel = new SettingsLevel(this._atlas)
           break
         case Select.EXIT:
           nextLevel = undefined
@@ -149,5 +160,5 @@ enum Select {
   SETTINGS,
   LEVEL_EDITOR,
   EXIT,
-  END = EXIT
+  END
 }

@@ -142,7 +142,7 @@ describe('layout()', () =>
       }
     ]
   ])('%#) %p %p => %p', (string, width, expected) =>
-    expect(Text.layout(string, width)).toStrictEqual(expected)
+    expect(Text.layout(string, width, {x: 1, y: 1})).toStrictEqual(expected)
   ))
 
 describe('layoutWord()', () =>
@@ -555,7 +555,7 @@ describe('layoutWord()', () =>
       }
     ]
   ])('%#) %p %p %p %p => %p', (cursor, width, string, index, expected) =>
-    expect(Text.layoutWord(cursor, width, string, index)).toStrictEqual(
-      expected
-    )
+    expect(
+      Text.layoutWord(cursor, width, string, index, {x: 1, y: 1})
+    ).toStrictEqual(expected)
   ))

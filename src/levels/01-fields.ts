@@ -11,14 +11,17 @@ export class Fields implements Level {
   constructor(atlas: Atlas.Definition) {
     this._store = new Store(atlas)
     this._store.addImages(
-      Image.new(atlas, AnimationID.PIXEL, Palette.YELLOWS, {
+      Image.new(atlas, AnimationID.PIXEL, {
+        palette: Palette.YELLOWS,
         preScale: Limits.MAX_XY
       }),
-      Image.new(atlas, AnimationID.TREE, Palette.TREE, {
+      Image.new(atlas, AnimationID.TREE, {
+        palette: Palette.TREE,
         layer: 1,
         position: {x: 120, y: 4}
       }),
-      Image.new(atlas, AnimationID.GRASS_L, Palette.GREENS, {
+      Image.new(atlas, AnimationID.GRASS_L, {
+        palette: Palette.GREENS,
         layer: 1,
         position: {x: -1024, y: 31},
         preScale: {x: 100, y: 100}

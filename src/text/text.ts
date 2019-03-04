@@ -1,6 +1,6 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
-import {Image} from '../images/image'
+import {Image, ImageOptions} from '../images/image'
 import {MemFont} from './mem-font'
 import {Palette} from '../images/palette'
 
@@ -19,52 +19,55 @@ export namespace Text {
   export function toImages(
     atlas: Atlas.Definition,
     string: string,
+    options: ImageOptions = {},
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
   ): ReadonlyArray<Image> {
     const images = []
-    const positions = layout(string, w).positions
+    const scale = options.scale || {x: 1, y: 1}
+    const positions = layout(string, w, scale).positions
     for (let i = 0; i < positions.length; ++i) {
       const position = positions[i]
       if (!position) continue
-      if (position.y + MemFont.lineHeight + MemFont.leading < y) continue
+      if (nextLine(position.y, scale).y < y) continue
       if (position.y > y + h) break
 
       const id = 'MEM_FONT_' + string.charCodeAt(i)
-      const d = Image.new(
-        atlas,
-        AnimationID[<keyof typeof AnimationID>id],
-        Palette.GREYS,
-        {layer: 10, position: {x: position.x, y: position.y - y}}
-      )
+      const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], {
+        palette: Palette.GREYS,
+        layer: 10,
+        position: {x: position.x, y: position.y - y},
+        ...options
+      })
       images.push(d)
     }
     return images
   }
 
   /** @arg width The allowed layout width in pixels. */
-  export function layout(string: string, width: number): Layout {
+  export function layout(string: string, width: number, scale: XY): Layout {
     const positions: (XY | undefined)[] = []
-    const cursor = {x: 0, y: 0}
+    let cursor = {x: 0, y: 0}
     for (let i = 0; i < string.length; ) {
       let layout
       if (string[i] === '\n') {
-        layout = layoutNewline(cursor)
+        layout = layoutNewline(cursor, scale)
       } else if (/\s/.test(string[i])) {
-        layout = layoutSpace(cursor, width, tracking(string[i], string[i + 1]))
+        layout = layoutSpace(
+          cursor,
+          width,
+          tracking(string[i], scale, string[i + 1]),
+          scale
+        )
       } else {
-        layout = layoutWord(cursor, width, string, i)
-        if (
-          cursor.x &&
-          layout.cursor.y - cursor.y === MemFont.lineHeight + MemFont.leading
-        ) {
+        layout = layoutWord(cursor, width, string, i, scale)
+        if (cursor.x && layout.cursor.y === nextLine(cursor.y, scale).y) {
           const wordWidth = width - cursor.x + layout.cursor.x
           if (wordWidth <= width) {
             // Word can fit on one line if cursor is reset to the start of the
             // line.
-            cursor.x = 0
-            cursor.y += MemFont.lineHeight + MemFont.leading
-            layout = layoutWord(cursor, width, string, i)
+            cursor = nextLine(cursor.y, scale)
+            layout = layoutWord(cursor, width, string, i, scale)
           }
         }
       }
@@ -84,16 +87,16 @@ export namespace Text {
     {x, y}: XY,
     width: number,
     string: string,
-    index: number
+    index: number,
+    scale: XY
   ): Layout {
     const positions = []
     while (index < string.length && !/\s/.test(string[index])) {
-      const span = tracking(string[index], string[index + 1])
+      const span = tracking(string[index], scale, string[index + 1])
       if (x && x + span > width) {
-        x = 0
-        y += MemFont.lineHeight + MemFont.leading
+        ;({x, y} = nextLine(y, scale))
       }
-      positions.push({x, y: y + MemFont.letterOffset(string[index])})
+      positions.push({x, y: y + scale.y * MemFont.letterOffset(string[index])})
       x += span
       ++index
     }
@@ -101,31 +104,34 @@ export namespace Text {
   }
 
   /** @arg cursor The current offset in pixels. */
-  function layoutNewline({y}: XY): Layout {
-    return {
-      positions: [undefined],
-      cursor: {x: 0, y: y + MemFont.lineHeight + MemFont.leading}
-    }
+  function layoutNewline({y}: XY, scale: XY): Layout {
+    return {positions: [undefined], cursor: nextLine(y, scale)}
   }
 
   /**
    * @arg cursor The current offset in pixels.
    * @arg width The allowed layout width in pixels.
    * @arg span The distance in pixels from the start of the current letter to the
-   *           start of the next.
+   *           start of the next including scale.
    */
-  function layoutSpace({x, y}: XY, width: number, span: number): Layout {
+  function layoutSpace(
+    {x, y}: XY,
+    width: number,
+    span: number,
+    scale: XY
+  ): Layout {
     return {
       positions: [undefined],
-      cursor:
-        x && x + span >= width
-          ? {x: 0, y: y + MemFont.lineHeight + MemFont.leading}
-          : {x: x + span, y}
+      cursor: x && x + span >= width ? nextLine(y, scale) : {x: x + span, y}
     }
   }
 
   /** @return The distance in pixels from the start of lhs to the start of rhs. */
-  function tracking(lhs: string, rhs?: string): number {
-    return MemFont.letterWidth(lhs) + MemFont.kerning(lhs, rhs)
+  function tracking(lhs: string, scale: XY, rhs?: string): number {
+    return scale.x * (MemFont.letterWidth(lhs) + MemFont.kerning(lhs, rhs))
+  }
+
+  function nextLine(y: number, scale: XY): XY {
+    return {x: 0, y: y + scale.y * (MemFont.lineHeight + MemFont.leading)}
   }
 }

@@ -10,12 +10,14 @@ export namespace NatureElsewhere {
     position: XY
   ): ReadonlyArray<Image> {
     return [
-      Image.new(atlas, AnimationID.NATURE_ELSEWHERE, Palette.GREENS, {
+      Image.new(atlas, AnimationID.NATURE_ELSEWHERE, {
+        palette: Palette.GREENS,
         layer: layer + 1,
         position,
         scale: {x: 2, y: 2}
       }),
-      Image.new(atlas, AnimationID.RAIN, Palette.BLUES, {
+      Image.new(atlas, AnimationID.RAIN, {
+        palette: Palette.BLUES,
         layer,
         position,
         offsetRate: {x: 0, y: -0.0005},
@@ -24,7 +26,8 @@ export namespace NatureElsewhere {
         maskOffsetRate: {x: 0, y: 0},
         scale: {x: 2, y: 2}
       }),
-      Image.new(atlas, AnimationID.RAIN, Palette.BLUES, {
+      Image.new(atlas, AnimationID.RAIN, {
+        palette: Palette.BLUES,
         layer,
         position,
         offset: {x: 1, y: 3},
