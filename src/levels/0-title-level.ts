@@ -113,7 +113,7 @@ export class TitleLevel implements Level {
   }
 
   scale(canvas: WH) {
-    return Viewport.scale(canvas, Defaults.minScreenSize, 1)
+    return Viewport.scale(canvas, Defaults.minScreenSize, 0)
   }
 
   update(then: number, now: number, cam: Rect): LevelUpdate {
