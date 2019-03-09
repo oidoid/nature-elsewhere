@@ -1,8 +1,8 @@
 import * as childProcess from 'child_process'
-import * as CleanPlugin from 'clean-webpack-plugin'
 import * as CopyPlugin from 'copy-webpack-plugin'
 import * as pkg from './package.json'
 import * as webpack from 'webpack'
+import CleanPlugin from 'clean-webpack-plugin'
 
 const stats: Readonly<webpack.Stats.ToJsonOptionsObject> = Object.freeze({
   all: false,
@@ -34,7 +34,7 @@ const config: webpack.Configuration = {
   },
 
   plugins: [
-    new CleanPlugin('dist', {verbose: false}),
+    new CleanPlugin(),
     new CopyPlugin([
       {context: 'src', from: '**/*.{css,html,ico,png,svg,xml}'},
       {context: 'src', from: 'manifest.json'}
