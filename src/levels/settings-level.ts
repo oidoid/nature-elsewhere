@@ -74,7 +74,7 @@ export class SettingsLevel implements Level {
   scale(canvas: WH) {
     return Viewport.scale(
       canvas,
-      Rect.add(this._ui.target(), {x: 0, y: 0, w: 4, h: 4}),
+      Rect.add(this._ui.target(), {x: 0, y: 0, w: 16, h: 16}),
       0
     )
   }
