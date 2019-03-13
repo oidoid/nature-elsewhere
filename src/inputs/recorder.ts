@@ -1,4 +1,4 @@
-import {InputMask} from './input-mask'
+import {InputBit} from './input-bit'
 
 export class Recorder {
   private state: ReadState | WriteState = new WriteState()
@@ -7,7 +7,7 @@ export class Recorder {
     if (this.state instanceof ReadState) this.state = this.state.write()
   }
 
-  set(input: InputMask, active: boolean, xy?: XY): void {
+  set(input: number, active: boolean, xy?: XY): void {
     if (this.state instanceof ReadState) this.state = this.state.write()
     this.state = this.state.set(input, active, xy)
   }
@@ -19,74 +19,74 @@ export class Recorder {
   }
 
   left(triggered: boolean = false): boolean {
-    return this.active(InputMask.LEFT, triggered)
+    return this.active(InputBit.LEFT, triggered)
   }
 
   right(triggered: boolean = false): boolean {
-    return this.active(InputMask.RIGHT, triggered)
+    return this.active(InputBit.RIGHT, triggered)
   }
 
   up(triggered: boolean = false): boolean {
-    return this.active(InputMask.UP, triggered)
+    return this.active(InputBit.UP, triggered)
   }
 
   down(triggered: boolean = false): boolean {
-    return this.active(InputMask.DOWN, triggered)
+    return this.active(InputBit.DOWN, triggered)
   }
 
   action(triggered: boolean = false): boolean {
-    return this.active(InputMask.ACTION, triggered)
+    return this.active(InputBit.ACTION, triggered)
   }
 
   menu(triggered: boolean = false): boolean {
-    return this.active(InputMask.MENU, triggered)
+    return this.active(InputBit.MENU, triggered)
   }
 
   debugContextLoss(triggered: boolean = false): boolean {
-    return this.active(InputMask.DEBUG_CONTEXT_LOSS, triggered)
+    return this.active(InputBit.DEBUG_CONTEXT_LOSS, triggered)
   }
 
   scaleReset(triggered: boolean = false): boolean {
-    return this.active(InputMask.SCALE_RESET, triggered)
+    return this.active(InputBit.SCALE_RESET, triggered)
   }
 
   scaleIncrease(triggered: boolean = false): boolean {
-    return this.active(InputMask.SCALE_INCREASE, triggered)
+    return this.active(InputBit.SCALE_INCREASE, triggered)
   }
 
   scaleDecrease(triggered: boolean = false): boolean {
-    return this.active(InputMask.SCALE_DECREASE, triggered)
+    return this.active(InputBit.SCALE_DECREASE, triggered)
   }
 
   move(triggered: boolean = false): XY | undefined {
     return this.state instanceof ReadState &&
-      this.active(InputMask.POINT, triggered)
+      this.active(InputBit.POINT, triggered)
       ? this.state.positions()[0]
       : undefined
   }
 
   pick(triggered: boolean = false): XY | undefined {
     return this.state instanceof ReadState &&
-      this.active(InputMask.PICK, triggered)
+      this.active(InputBit.PICK, triggered)
       ? this.state.positions()[0]
       : undefined
   }
 
   prevEntity(triggered: boolean = false): boolean {
-    return this.active(InputMask.PREV_ENTITY, triggered)
+    return this.active(InputBit.PREV_ENTITY, triggered)
   }
 
   nextEntity(triggered: boolean = false): boolean {
-    return this.active(InputMask.NEXT_ENTITY, triggered)
+    return this.active(InputBit.NEXT_ENTITY, triggered)
   }
 
-  combo(triggered: boolean = false, ...inputs: InputMask[]): boolean {
+  combo(triggered: boolean = false, ...inputs: number[]): boolean {
     return (
       this.state instanceof ReadState && this.state.combo(triggered, ...inputs)
     )
   }
 
-  active(input: InputMask, triggered: boolean): boolean {
+  active(input: number, triggered: boolean): boolean {
     return (
       this.state instanceof ReadState && this.state.active(input, triggered)
     )
@@ -112,7 +112,7 @@ class WriteState {
     private readonly _positions: ReadonlyArray<XY | undefined> = []
   ) {}
 
-  set(input: InputMask, active: boolean, xy?: XY): WriteState {
+  set(input: InputBit, active: boolean, xy?: XY): WriteState {
     if ((input & this._currentRead) === input) return this
 
     const currentRead = this._currentRead | (active ? input : 0)
@@ -175,14 +175,14 @@ class ReadState {
     )
   }
 
-  combo(triggered: boolean = false, ...inputs: InputMask[]): boolean {
+  combo(triggered: boolean = false, ...inputs: number[]): boolean {
     if (triggered && this._sampleAge) return false
     return inputs.every(
       (input, i) => this._combo[inputs.length - 1 - i] === input
     )
   }
 
-  active(input: InputMask, triggered: boolean): boolean {
+  active(input: number, triggered: boolean): boolean {
     const maskedSample = input & this._sample
     const maskedLastSample = input & this._lastSample
     if (triggered && (this._sampleAge || maskedSample === maskedLastSample)) {

@@ -1,40 +1,40 @@
-import {InputMask} from '../input-mask'
+import {InputBit} from '../input-bit'
 import {ObjectUtil} from '../../utils/object-util'
 import {Recorder} from '../recorder'
 import {StandardGamepad} from './standard-gamepad'
 
 export namespace Gamepad {
-  export type ButtonMap = Readonly<Record<number, InputMask>>
+  export type ButtonMap = Readonly<Record<number, InputBit>>
   export type AxisMap = Readonly<
-    Record<number, (direction: StandardGamepad.AxisDirection) => InputMask>
+    Record<number, (direction: StandardGamepad.AxisDirection) => InputBit>
   >
 
   export const defaultButtonMap: ButtonMap = ObjectUtil.freeze({
-    [StandardGamepad.Button.DPAD_LEFT]: InputMask.LEFT,
-    [StandardGamepad.Button.DPAD_RIGHT]: InputMask.RIGHT,
-    [StandardGamepad.Button.DPAD_UP]: InputMask.UP,
-    [StandardGamepad.Button.DPAD_DOWN]: InputMask.DOWN,
-    [StandardGamepad.Button.X]: InputMask.ACTION,
-    [StandardGamepad.Button.START]: InputMask.MENU
+    [StandardGamepad.Button.DPAD_LEFT]: InputBit.LEFT,
+    [StandardGamepad.Button.DPAD_RIGHT]: InputBit.RIGHT,
+    [StandardGamepad.Button.DPAD_UP]: InputBit.UP,
+    [StandardGamepad.Button.DPAD_DOWN]: InputBit.DOWN,
+    [StandardGamepad.Button.X]: InputBit.ACTION,
+    [StandardGamepad.Button.START]: InputBit.MENU
   })
 
   export const defaultAxisMap: AxisMap = ObjectUtil.freeze(<AxisMap>{
     [StandardGamepad.Axis.LEFT_HORIZONTAL]: direction =>
       direction === StandardGamepad.AxisDirection.LEFT
-        ? InputMask.LEFT
-        : InputMask.RIGHT,
+        ? InputBit.LEFT
+        : InputBit.RIGHT,
     [StandardGamepad.Axis.RIGHT_HORIZONTAL]: direction =>
       direction === StandardGamepad.AxisDirection.LEFT
-        ? InputMask.LEFT
-        : InputMask.RIGHT,
+        ? InputBit.LEFT
+        : InputBit.RIGHT,
     [StandardGamepad.Axis.LEFT_VERTICAL]: direction =>
       direction === StandardGamepad.AxisDirection.UP
-        ? InputMask.UP
-        : InputMask.DOWN,
+        ? InputBit.UP
+        : InputBit.DOWN,
     [StandardGamepad.Axis.RIGHT_VERTICAL]: direction =>
       direction === StandardGamepad.AxisDirection.UP
-        ? InputMask.UP
-        : InputMask.DOWN
+        ? InputBit.UP
+        : InputBit.DOWN
   })
 
   export function poll(recorder: Recorder) {

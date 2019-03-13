@@ -1,7 +1,7 @@
 import {Atlas} from './images/atlas'
 import {Gamepad} from './inputs/gamepads/gamepad'
 import {InputEventListener} from './inputs/input-event-listener'
-import {InputMask} from './inputs/input-mask'
+import {InputBit} from './inputs/input-bit'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {RendererStateMachine} from './graphics/renderer-state-machine'
@@ -67,7 +67,7 @@ export class Game {
       renderer.render(canvas, scale, cam, dataView, length)
 
       // Clear point which has no off event.
-      this._recorder.set(InputMask.POINT, false)
+      this._recorder.set(InputBit.POINT, false)
     } else {
       this.stop()
     }

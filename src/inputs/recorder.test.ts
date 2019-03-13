@@ -1,42 +1,42 @@
-import {InputMask} from './input-mask'
+import {InputBit} from './input-bit'
 import {ObjectUtil} from '../utils/object-util'
 import {Recorder} from './recorder'
 
-const LEFT = InputMask.LEFT
-const RIGHT = InputMask.RIGHT
-const UP = InputMask.UP
-const DOWN = InputMask.DOWN
+const LEFT = InputBit.LEFT
+const RIGHT = InputBit.RIGHT
+const UP = InputBit.UP
+const DOWN = InputBit.DOWN
 
-const inputs: ReadonlyArray<InputMask> = ObjectUtil.freeze(
-  ObjectUtil.values(InputMask).filter(val => typeof val === 'number')
+const inputs: ReadonlyArray<InputBit> = ObjectUtil.freeze(
+  ObjectUtil.values(InputBit).filter(val => typeof val === 'number')
 )
 type InputMethod = Exclude<
   keyof Recorder,
   'write' | 'set' | 'read' | 'combo' | 'active'
 >
-type MaskMethod = Readonly<{mask: InputMask; method: InputMethod}>
+type BitMethod = Readonly<{bit: InputBit; method: InputMethod}>
 
-const maskMethods: ReadonlyArray<MaskMethod> = ObjectUtil.freeze(<MaskMethod[]>[
-  {mask: LEFT, method: 'left'},
-  {mask: RIGHT, method: 'right'},
-  {mask: UP, method: 'up'},
-  {mask: DOWN, method: 'down'},
-  {mask: InputMask.MENU, method: 'menu'},
-  {mask: InputMask.DEBUG_CONTEXT_LOSS, method: 'debugContextLoss'}
+const bitMethods: ReadonlyArray<BitMethod> = ObjectUtil.freeze(<BitMethod[]>[
+  {bit: LEFT, method: 'left'},
+  {bit: RIGHT, method: 'right'},
+  {bit: UP, method: 'up'},
+  {bit: DOWN, method: 'down'},
+  {bit: InputBit.MENU, method: 'menu'},
+  {bit: InputBit.DEBUG_CONTEXT_LOSS, method: 'debugContextLoss'}
 ])
 
-describe('Mask', () => {
-  test.each(inputs)('%# Mask %p is unique', input =>
+describe('InputBit', () => {
+  test.each(inputs)('%# InputBit %p is unique', input =>
     expect(inputs.filter(val => input === val)).toHaveLength(1)
   )
 
-  test.each(inputs)('%# Mask %p is a nonzero power of two', input =>
+  test.each(inputs)('%# InputBit %p is a nonzero power of two', input =>
     expect(Math.log2(input) % 1).toStrictEqual(0)
   )
 })
 
 describe('State', () => {
-  test.each(maskMethods)('%# no input %p', ({method}) => {
+  test.each(bitMethods)('%# no input %p', ({method}) => {
     const subject = new Recorder()
     subject.read(1)
     expect(subject[method]()).toStrictEqual(false)
@@ -45,80 +45,77 @@ describe('State', () => {
     expect(subject.combo(true)).toStrictEqual(false)
   })
 
-  test.each(maskMethods)('%# tapped input %p', ({mask, method}) => {
+  test.each(bitMethods)('%# tapped input %p', ({bit, method}) => {
     const subject = new Recorder()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1)
     expect(subject[method]()).toStrictEqual(true)
     expect(subject[method](true)).toStrictEqual(true)
-    expect(subject.combo(false, mask)).toStrictEqual(true)
-    expect(subject.combo(true, mask)).toStrictEqual(true)
+    expect(subject.combo(false, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit)).toStrictEqual(true)
   })
 
-  test.each(maskMethods)('%# old tapped input %p', ({mask, method}) => {
+  test.each(bitMethods)('%# old tapped input %p', ({bit, method}) => {
     const subject = new Recorder()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1000)
     expect(subject[method]()).toStrictEqual(true)
     expect(subject[method](true)).toStrictEqual(true)
-    expect(subject.combo(false, mask)).toStrictEqual(true)
-    expect(subject.combo(true, mask)).toStrictEqual(true)
+    expect(subject.combo(false, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit)).toStrictEqual(true)
   })
 
-  test.each(maskMethods)('%# held input %p', ({mask, method}) => {
+  test.each(bitMethods)('%# held input %p', ({bit, method}) => {
     const subject = new Recorder()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1)
     subject.write()
     subject.read(1)
     expect(subject[method]()).toStrictEqual(true)
     expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, mask)).toStrictEqual(true)
-    expect(subject.combo(true, mask)).toStrictEqual(false)
+    expect(subject.combo(false, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit)).toStrictEqual(false)
   })
 
-  test.each(maskMethods)('%# long held input %p', ({mask, method}) => {
+  test.each(bitMethods)('%# long held input %p', ({bit, method}) => {
     const subject = new Recorder()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1)
     subject.write()
     subject.read(1000)
     expect(subject[method]()).toStrictEqual(true)
     expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, mask)).toStrictEqual(true)
-    expect(subject.combo(true, mask)).toStrictEqual(false)
+    expect(subject.combo(false, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit)).toStrictEqual(false)
   })
 
-  test.each(maskMethods)(
-    '%# tapped and released input %p',
-    ({mask, method}) => {
-      const subject = new Recorder()
-      subject.set(mask, true)
-      subject.read(1)
-      subject.write()
-      subject.set(mask, false)
-      subject.read(1)
-      expect(subject[method]()).toStrictEqual(false)
-      expect(subject[method](true)).toStrictEqual(false)
-      expect(subject.combo(false, mask)).toStrictEqual(true)
-      expect(subject.combo(true, mask)).toStrictEqual(false)
-    }
-  )
-
-  test.each(maskMethods)('%# toggled 3x input %p', ({mask, method}) => {
+  test.each(bitMethods)('%# tapped and released input %p', ({bit, method}) => {
     const subject = new Recorder()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1)
     subject.write()
-    subject.set(mask, false)
+    subject.set(bit, false)
+    subject.read(1)
+    expect(subject[method]()).toStrictEqual(false)
+    expect(subject[method](true)).toStrictEqual(false)
+    expect(subject.combo(false, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit)).toStrictEqual(false)
+  })
+
+  test.each(bitMethods)('%# toggled 3x input %p', ({bit, method}) => {
+    const subject = new Recorder()
+    subject.set(bit, true)
     subject.read(1)
     subject.write()
-    subject.set(mask, true)
+    subject.set(bit, false)
+    subject.read(1)
+    subject.write()
+    subject.set(bit, true)
     subject.read(1)
     expect(subject[method]()).toStrictEqual(true)
     expect(subject[method](true)).toStrictEqual(true)
-    expect(subject.combo(false, mask, mask)).toStrictEqual(true)
-    expect(subject.combo(true, mask, mask)).toStrictEqual(true)
+    expect(subject.combo(false, bit, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit, bit)).toStrictEqual(true)
   })
 
   test('Changed input without release', () => {
@@ -144,33 +141,33 @@ describe('State', () => {
     expect(subject.combo(true, UP, UP | DOWN)).toStrictEqual(true)
   })
 
-  test.each(maskMethods)('%# missed input release %p', ({mask, method}) => {
+  test.each(bitMethods)('%# missed input release %p', ({bit, method}) => {
     const subject = new Recorder()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1)
     subject.write()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1)
     expect(subject[method]()).toStrictEqual(true)
     expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, mask)).toStrictEqual(true)
-    expect(subject.combo(true, mask)).toStrictEqual(false)
+    expect(subject.combo(false, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit)).toStrictEqual(false)
   })
 
-  test.each(maskMethods)('%# missed input tapped %p', ({mask, method}) => {
+  test.each(bitMethods)('%# missed input tapped %p', ({bit, method}) => {
     const subject = new Recorder()
-    subject.set(mask, true)
+    subject.set(bit, true)
     subject.read(1)
     subject.write()
-    subject.set(mask, false)
+    subject.set(bit, false)
     subject.read(1)
     subject.write()
-    subject.set(mask, false)
+    subject.set(bit, false)
     subject.read(1)
     expect(subject[method]()).toStrictEqual(false)
     expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, mask)).toStrictEqual(true)
-    expect(subject.combo(true, mask)).toStrictEqual(false)
+    expect(subject.combo(false, bit)).toStrictEqual(true)
+    expect(subject.combo(true, bit)).toStrictEqual(false)
   })
 
   test('1x combo', () => {

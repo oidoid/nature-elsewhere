@@ -1,29 +1,29 @@
-import {InputMask} from './input-mask'
+import {InputBit} from './input-bit'
 import {ObjectUtil} from '../utils/object-util'
 import {Recorder} from './recorder'
 
 export namespace Keyboard {
   export type Key = KeyboardEvent['key']
-  export type KeyMap = Readonly<Record<Key, InputMask>>
+  export type KeyMap = Readonly<Record<Key, InputBit>>
 
   export const defaultKeyMap: KeyMap = ObjectUtil.freeze({
-    ArrowLeft: InputMask.LEFT,
-    a: InputMask.LEFT,
-    ArrowRight: InputMask.RIGHT,
-    d: InputMask.RIGHT,
-    ArrowUp: InputMask.UP,
-    w: InputMask.UP,
-    ArrowDown: InputMask.DOWN,
-    s: InputMask.DOWN,
-    ' ': InputMask.ACTION,
-    Enter: InputMask.ACTION,
-    Escape: InputMask.MENU,
-    p: InputMask.DEBUG_CONTEXT_LOSS,
-    0: InputMask.SCALE_RESET,
-    '-': InputMask.SCALE_DECREASE,
-    '+': InputMask.SCALE_INCREASE,
-    1: InputMask.PREV_ENTITY,
-    2: InputMask.NEXT_ENTITY
+    ArrowLeft: InputBit.LEFT,
+    a: InputBit.LEFT,
+    ArrowRight: InputBit.RIGHT,
+    d: InputBit.RIGHT,
+    ArrowUp: InputBit.UP,
+    w: InputBit.UP,
+    ArrowDown: InputBit.DOWN,
+    s: InputBit.DOWN,
+    ' ': InputBit.ACTION,
+    Enter: InputBit.ACTION,
+    Escape: InputBit.MENU,
+    p: InputBit.DEBUG_CONTEXT_LOSS,
+    0: InputBit.SCALE_RESET,
+    '-': InputBit.SCALE_DECREASE,
+    '+': InputBit.SCALE_INCREASE,
+    1: InputBit.PREV_ENTITY,
+    2: InputBit.NEXT_ENTITY
   })
 
   export function onKey(recorder: Recorder, event: KeyboardEvent): void {

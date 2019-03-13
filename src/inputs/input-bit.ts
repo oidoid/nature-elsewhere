@@ -1,5 +1,5 @@
 // prettier-ignore
-export enum InputMask {
+export enum InputBit {
   LEFT =               0b00_0000_0000_0001,
   RIGHT =              0b00_0000_0000_0010,
   UP =                 0b00_0000_0000_0100,
