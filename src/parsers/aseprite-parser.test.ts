@@ -45,8 +45,8 @@ describe('atlas.json', () => {
 
   test.each(
     ObjectUtil.values(atlas.animations).reduce(
-      (sum, val) => sum.concat(val.cels),
-      <Atlas.Cel[]>[]
+      (sum: Atlas.Cel[], val) => sum.concat(val.cels),
+      []
     )
   )('%# duration for Cel %p is > 0', (cel: Atlas.Cel) =>
     expect(cel.duration).toBeGreaterThan(0)
@@ -54,8 +54,9 @@ describe('atlas.json', () => {
 
   test.each(
     ObjectUtil.values(atlas.animations).reduce(
-      (sum, val) => (val.cels.length > 1 ? sum.concat(val.cels) : sum),
-      <Atlas.Cel[]>[]
+      (sum: Atlas.Cel[], val) =>
+        val.cels.length > 1 ? sum.concat(val.cels) : sum,
+      []
     )
   )('%# multi-Cel duration for Cel %p is < ∞', cel =>
     expect(cel.duration).toBeLessThan(Number.POSITIVE_INFINITY)
