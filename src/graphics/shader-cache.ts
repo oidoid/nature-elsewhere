@@ -1,5 +1,4 @@
-import {AttributeLocations, UniformLocations} from './gl-util'
-import {GLUtil} from './gl-util'
+import {AttributeLocations, GLUtil, UniformLocations} from './gl-util'
 
 export class ShaderCache {
   static new(gl: GL, program: GLProgram): ShaderCache {
