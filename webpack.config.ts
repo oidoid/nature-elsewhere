@@ -17,14 +17,10 @@ const [date, hash]: ReadonlyArray<string> = Object.freeze(
     .split(',')
 )
 
-// Webpack will modify this export. Object.freeze() produces a warning: "...The
-// 'mode' option has not been set..."
-const config: webpack.Configuration = {
+export default (): webpack.Configuration => ({
   stats,
 
   resolve: {extensions: ['.js', '.ts']},
-
-  output: {filename: 'index.js'},
 
   module: {
     rules: [
@@ -53,6 +49,4 @@ const config: webpack.Configuration = {
     overlay: {warnings: true, errors: true},
     stats
   }
-}
-
-export default config
+})
