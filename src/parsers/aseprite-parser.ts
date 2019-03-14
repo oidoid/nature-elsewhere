@@ -2,15 +2,9 @@ import {Aseprite} from './aseprite'
 import {Atlas} from '../images/atlas'
 
 export namespace AsepriteParser {
-  export function parse(file: Aseprite.File): Atlas.Definition {
-    return {
-      size: file.meta.size,
-      animations: parseAnimations(
-        file.meta.frameTags,
-        file.frames,
-        file.meta.slices
-      )
-    }
+  export function parse({meta, frames}: Aseprite.File): Atlas.Definition {
+    const animations = parseAnimations(meta.frameTags, frames, meta.slices)
+    return {size: meta.size, animations}
   }
 
   export function parseAnimations(
@@ -18,11 +12,13 @@ export namespace AsepriteParser {
     frames: Aseprite.FrameMap,
     slices: ReadonlyArray<Aseprite.Slice>
   ): Atlas.AnimationMap {
-    return <Atlas.AnimationMap>frameTags
-      .map(frameTag => ({
+    return frameTags.reduce(
+      (sum, frameTag) => ({
+        ...sum,
         [frameTag.name]: parseAnimation(frameTag, frames, slices)
-      }))
-      .reduce((sum, animations) => ({...sum, ...animations}), {})
+      }),
+      <Atlas.AnimationMap>{}
+    )
   }
 
   export function parseAnimation(
@@ -53,12 +49,8 @@ export namespace AsepriteParser {
     }
 
     const size = frame ? frame.sourceSize : {w: 0, h: 0}
-    return {
-      size,
-      cels,
-      duration,
-      direction: <Atlas.AnimationDirection>frameTag.direction
-    }
+    const direction = <Atlas.AnimationDirection>frameTag.direction
+    return {size, cels, duration, direction}
   }
 
   export function parseCel(
@@ -76,23 +68,16 @@ export namespace AsepriteParser {
 
   export function parsePosition(frame: Aseprite.Frame): XY {
     const padding = parsePadding(frame)
-    return {
-      x: frame.frame.x + padding.w / 2,
-      y: frame.frame.y + padding.h / 2
-    }
+    return {x: frame.frame.x + padding.w / 2, y: frame.frame.y + padding.h / 2}
   }
 
-  export function parsePadding(frame: Aseprite.Frame): WH {
-    return {
-      w: frame.frame.w - frame.sourceSize.w,
-      h: frame.frame.h - frame.sourceSize.h
-    }
+  export function parsePadding({frame, sourceSize}: Aseprite.Frame): WH {
+    return {w: frame.w - sourceSize.w, h: frame.h - sourceSize.h}
   }
 
   export function parseDuration(duration: Aseprite.Duration): number {
-    return duration === Aseprite.INFINITE_DURATION
-      ? Number.POSITIVE_INFINITY
-      : duration
+    const infinite = duration === Aseprite.INFINITE_DURATION
+    return infinite ? Number.POSITIVE_INFINITY : duration
   }
 
   export function parseCollision(
@@ -106,9 +91,10 @@ export namespace AsepriteParser {
         // Filter out Slices not for this Tag.
         .filter(slice => slice.name === frameTag.name)
         // For each Slice, get the greatest relevant Key (as a Key[]).
-        .map(slice => slice.keys.filter(key => key.frame <= offset).slice(-1))
-        .reduce((sum, keys) => sum.concat(keys), []) // Key[]
-        .map(key => key.bounds) // Bounds
+        .map(
+          slice =>
+            slice.keys.filter(key => key.frame <= offset).slice(-1)[0].bounds
+        )
     )
   }
 }
