@@ -24,12 +24,11 @@ export namespace ObjectUtil {
 
   /** Recursively freeze obj. */
   export function freeze<T extends object>(obj: T): Readonly<T> {
-    for (const key in obj) {
-      if (!obj.hasOwnProperty(key)) continue
-      const val = obj[name]
-      const mutable = typeof val === 'object' || typeof val === 'function'
-      obj[name] = mutable ? ObjectUtil.freeze(val) : val
-    }
+    keys(obj)
+      .filter(key => typeof obj[key] === 'object')
+      .forEach(key => {
+        obj[key] = <T[keyof T] & object>freeze(<T[keyof T] & object>obj[key])
+      })
     return Object.freeze(obj)
   }
 }
