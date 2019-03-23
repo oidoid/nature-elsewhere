@@ -1,466 +1,276 @@
 import {InputBit} from './input-bit'
-import {ObjectUtil} from '../utils/object-util'
+import {InputSource} from './input-source'
 import {Recorder} from './recorder'
 
-const LEFT = InputBit.LEFT
-const RIGHT = InputBit.RIGHT
-const UP = InputBit.UP
-const DOWN = InputBit.DOWN
+const LEFT: InputBit = InputBit.LEFT
+const RIGHT: InputBit = InputBit.RIGHT
+const UP: InputBit = InputBit.UP
+const DOWN: InputBit = InputBit.DOWN
 
-const inputs: ReadonlyArray<InputBit> = ObjectUtil.freeze(
-  ObjectUtil.values(InputBit).filter(val => typeof val === 'number')
-)
-type InputMethod = Exclude<
-  keyof Recorder,
-  'write' | 'set' | 'read' | 'combo' | 'active'
->
-type BitMethod = Readonly<{bit: InputBit; method: InputMethod}>
+const keyboardRight = {source: InputSource.KEYBOARD, bits: RIGHT}
+const keyboardUp = {source: InputSource.KEYBOARD, bits: UP}
+const keyboardDown = {source: InputSource.KEYBOARD, bits: DOWN}
 
-const bitMethods: ReadonlyArray<BitMethod> = ObjectUtil.freeze(<BitMethod[]>[
-  {bit: LEFT, method: 'left'},
-  {bit: RIGHT, method: 'right'},
-  {bit: UP, method: 'up'},
-  {bit: DOWN, method: 'down'},
-  {bit: InputBit.MENU, method: 'menu'},
-  {bit: InputBit.DEBUG_CONTEXT_LOSS, method: 'debugContextLoss'}
-])
-
-describe('InputBit', () => {
-  test.each(inputs)('%# InputBit %p is unique', input =>
-    expect(inputs.filter(val => input === val)).toHaveLength(1)
-  )
-
-  test.each(inputs)('%# InputBit %p is a nonzero power of two', input =>
-    expect(Math.log2(input) % 1).toStrictEqual(0)
-  )
-})
-
-describe('State', () => {
-  test.each(bitMethods)('%# no input %p', ({method}) => {
+describe('Recorder', () => {
+  test('Inputs are initially inactive and not triggered', () => {
     const subject = new Recorder()
-    subject.read(1)
-    expect(subject[method]()).toStrictEqual(false)
-    expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo()).toStrictEqual(true)
-    expect(subject.combo(true)).toStrictEqual(false)
+    subject.update(1)
+    expect(subject.active(UP)).toStrictEqual(false)
+    expect(subject.triggered(UP)).toStrictEqual(false)
+    expectKeyboardCombo(subject)
   })
 
-  test.each(bitMethods)('%# tapped input %p', ({bit, method}) => {
+  test('Recorded inputs are active and triggered', () => {
     const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1)
-    expect(subject[method]()).toStrictEqual(true)
-    expect(subject[method](true)).toStrictEqual(true)
-    expect(subject.combo(false, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit)).toStrictEqual(true)
+    subject.record(keyboardUp)
+    subject.update(1)
+    expect(subject.active(UP)).toStrictEqual(true)
+    expect(subject.triggered(UP)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP)
   })
 
-  test.each(bitMethods)('%# old tapped input %p', ({bit, method}) => {
+  test('Held input is active but not triggered', () => {
     const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1000)
-    expect(subject[method]()).toStrictEqual(true)
-    expect(subject[method](true)).toStrictEqual(true)
-    expect(subject.combo(false, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit)).toStrictEqual(true)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+    expect(subject.triggered(UP)).toStrictEqual(true)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+    expect(subject.active(UP)).toStrictEqual(true)
+    expect(subject.triggered(UP)).toStrictEqual(false)
+    expectKeyboardCombo(subject, UP)
   })
 
-  test.each(bitMethods)('%# held input %p', ({bit, method}) => {
+  test('Recorded inputs are checked from the end', () => {
     const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1)
-    subject.write()
-    subject.read(1)
-    expect(subject[method]()).toStrictEqual(true)
-    expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit)).toStrictEqual(false)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+    expect(subject.active(UP)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP)
+
+    subject.record(keyboardDown)
+    subject.update(1)
+    expect(subject.active(UP)).toStrictEqual(false)
+    expect(subject.active(DOWN)).toStrictEqual(true)
+    expect(subject.active(UP, DOWN)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP, DOWN)
+
+    subject.record(keyboardRight)
+    subject.update(1)
+    expect(subject.active(UP)).toStrictEqual(false)
+    expect(subject.active(DOWN)).toStrictEqual(false)
+    expect(subject.active(RIGHT)).toStrictEqual(true)
+    expect(subject.active(DOWN, RIGHT)).toStrictEqual(true)
+    expect(subject.active(UP, DOWN, RIGHT)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP, DOWN, RIGHT)
   })
 
-  test.each(bitMethods)('%# long held input %p', ({bit, method}) => {
+  test('Simultaneous recorded input bits are active and triggered', () => {
     const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1)
-    subject.write()
-    subject.read(1000)
-    expect(subject[method]()).toStrictEqual(true)
-    expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit)).toStrictEqual(false)
+    subject.record({source: InputSource.KEYBOARD, bits: UP | DOWN})
+    subject.update(1)
+    expect(subject.active(UP | DOWN)).toStrictEqual(true)
+    expect(subject.triggered(UP | DOWN)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP | DOWN)
   })
 
-  test.each(bitMethods)('%# tapped and released input %p', ({bit, method}) => {
+  test('Short recorded combo is active and triggered', () => {
     const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1)
-    subject.write()
-    subject.set(bit, false)
-    subject.read(1)
-    expect(subject[method]()).toStrictEqual(false)
-    expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit)).toStrictEqual(false)
+    subject.record(keyboardUp)
+    subject.update(1)
+    subject.record(keyboardDown)
+    subject.update(1)
+    subject.record(keyboardUp)
+    subject.update(1)
+    expect(subject.active(UP, DOWN, UP)).toStrictEqual(true)
+    expect(subject.triggered(UP, DOWN, UP)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP, DOWN, UP)
   })
 
-  test.each(bitMethods)('%# toggled 3x input %p', ({bit, method}) => {
+  test('Long recorded combo is active and triggered', () => {
     const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1)
-    subject.write()
-    subject.set(bit, false)
-    subject.read(1)
-    subject.write()
-    subject.set(bit, true)
-    subject.read(1)
-    expect(subject[method]()).toStrictEqual(true)
-    expect(subject[method](true)).toStrictEqual(true)
-    expect(subject.combo(false, bit, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit, bit)).toStrictEqual(true)
-  })
-
-  test('Changed input without release', () => {
-    const subject = new Recorder()
-    subject.set(UP, true)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, true)
-    subject.read(1)
-
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.down()).toStrictEqual(true)
-    expect(subject.down(true)).toStrictEqual(true)
-
-    expect(subject.combo(false, UP)).toStrictEqual(false)
-    expect(subject.combo(true, UP)).toStrictEqual(false)
-    expect(subject.combo(false, DOWN)).toStrictEqual(false)
-    expect(subject.combo(true, DOWN)).toStrictEqual(false)
-    expect(subject.combo(false, UP | DOWN)).toStrictEqual(true)
-    expect(subject.combo(true, UP | DOWN)).toStrictEqual(true)
-    expect(subject.combo(false, UP, UP | DOWN)).toStrictEqual(true)
-    expect(subject.combo(true, UP, UP | DOWN)).toStrictEqual(true)
-  })
-
-  test.each(bitMethods)('%# missed input release %p', ({bit, method}) => {
-    const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1)
-    subject.write()
-    subject.set(bit, true)
-    subject.read(1)
-    expect(subject[method]()).toStrictEqual(true)
-    expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit)).toStrictEqual(false)
-  })
-
-  test.each(bitMethods)('%# missed input tapped %p', ({bit, method}) => {
-    const subject = new Recorder()
-    subject.set(bit, true)
-    subject.read(1)
-    subject.write()
-    subject.set(bit, false)
-    subject.read(1)
-    subject.write()
-    subject.set(bit, false)
-    subject.read(1)
-    expect(subject[method]()).toStrictEqual(false)
-    expect(subject[method](true)).toStrictEqual(false)
-    expect(subject.combo(false, bit)).toStrictEqual(true)
-    expect(subject.combo(true, bit)).toStrictEqual(false)
-  })
-
-  test('1x combo', () => {
-    const subject = new Recorder()
-    subject.set(UP, true)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(true)
-    expect(subject.combo(false, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP)).toStrictEqual(true)
-  })
-
-  test('2x combo', () => {
-    const subject = new Recorder()
-    subject.set(UP, true)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(true)
-    expect(subject.combo(false, UP, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP, UP)).toStrictEqual(true)
-  })
-
-  test('Long combo', () => {
-    const subject = new Recorder()
-    subject.set(UP, true)
-    subject.read(100)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(100)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(100)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(100)
-    subject.write()
-    subject.set(DOWN, true)
-    subject.read(100)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(100)
-    subject.write()
-    subject.set(DOWN, true)
-    subject.read(100)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(100)
-    subject.write()
-    subject.set(LEFT, true)
-    subject.read(100)
-    subject.write()
-    subject.set(LEFT, false)
-    subject.read(100)
-    subject.write()
-    subject.set(RIGHT, true)
-    subject.read(100)
-    subject.write()
-    subject.set(RIGHT, false)
-    subject.read(100)
-    subject.write()
-    subject.set(LEFT, true)
-    subject.read(100)
-    subject.write()
-    subject.set(LEFT, false)
-    subject.read(100)
-    subject.write()
-    subject.set(RIGHT, true)
-    subject.read(100)
-
-    expect(subject.up()).toStrictEqual(false)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.down()).toStrictEqual(false)
-    expect(subject.down(true)).toStrictEqual(false)
-    expect(subject.left()).toStrictEqual(false)
-    expect(subject.left(true)).toStrictEqual(false)
-    expect(subject.right()).toStrictEqual(true)
-    expect(subject.right(true)).toStrictEqual(true)
 
     const combo = [UP, UP, DOWN, DOWN, LEFT, RIGHT, LEFT, RIGHT]
-    expect(subject.combo(false, ...combo)).toStrictEqual(true)
-    expect(subject.combo(true, ...combo)).toStrictEqual(true)
+    combo.forEach(bits => {
+      // Record zero so that all keys are repeated instead of held. E.g., UP, UP
+      // is recorded as two inputs instead of one.
+      subject.update(1)
+      subject.record({source: InputSource.KEYBOARD, bits})
+      subject.update(1)
+    })
+
+    expect(subject.active(...combo)).toStrictEqual(true)
+    expect(subject.triggered(...combo)).toStrictEqual(true)
+    expectKeyboardCombo(subject, ...combo)
   })
 
-  test('After combo', () => {
+  test('Combo is inactive and not triggered', () => {
     const subject = new Recorder()
-    subject.set(UP, true)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(false)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.combo(false, UP, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP, UP)).toStrictEqual(false)
+    subject.update(1)
+    expect(subject.active(UP, DOWN, UP)).toStrictEqual(false)
+    expect(subject.triggered(UP, DOWN, UP)).toStrictEqual(false)
+    expectKeyboardCombo(subject)
   })
 
-  test('Around the world combo', () => {
+  test('Recorded around the world combo is active and triggered', () => {
     const subject = new Recorder()
-    subject.set(UP, true)
-    subject.read(1)
-    subject.write()
-    subject.set(LEFT, true)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, true)
-    subject.read(1)
-    subject.write()
-    subject.set(LEFT, false)
-    subject.read(1)
-    subject.write()
-    subject.set(RIGHT, true)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(1)
+    // prettier-ignore
+    const combo = [
+      UP, UP | LEFT, LEFT, LEFT | DOWN, DOWN, DOWN | RIGHT, RIGHT, UP | RIGHT
+    ]
 
-    expect(subject.up()).toStrictEqual(false)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.left()).toStrictEqual(false)
-    expect(subject.left(true)).toStrictEqual(false)
-    expect(subject.down()).toStrictEqual(false)
-    expect(subject.down(true)).toStrictEqual(false)
-    expect(subject.right()).toStrictEqual(true)
-    expect(subject.right(true)).toStrictEqual(false)
+    combo.forEach(bits => {
+      // Inputs are always active with no pause in between.
+      subject.record({source: InputSource.KEYBOARD, bits})
+      subject.update(1)
+    })
 
-    const combo = [UP, UP | LEFT, LEFT, LEFT | DOWN, DOWN, DOWN | RIGHT, RIGHT]
-    expect(subject.combo(false, ...combo)).toStrictEqual(true)
-    expect(subject.combo(true, ...combo)).toStrictEqual(true)
+    expect(subject.active(...combo)).toStrictEqual(true)
+    expect(subject.triggered(...combo)).toStrictEqual(true)
+    expectKeyboardCombo(subject, ...combo)
+  })
+
+  test('Recorded combo expired', () => {
+    const subject = new Recorder()
+
+    expect(subject.active(UP)).toStrictEqual(false)
+    expect(subject.triggered(UP)).toStrictEqual(false)
+    subject.record(keyboardUp)
+    subject.update(1)
+    expect(subject.active(UP)).toStrictEqual(true)
+    expect(subject.triggered(UP)).toStrictEqual(true)
+
+    subject.record(keyboardDown)
+    subject.update(1000)
+    expect(subject.active(UP, DOWN)).toStrictEqual(false)
+    expect(subject.triggered(UP, DOWN)).toStrictEqual(false)
+    expect(subject.active(DOWN)).toStrictEqual(true)
+    expect(subject.triggered(DOWN)).toStrictEqual(true)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+    expect(subject.active(UP, DOWN, UP)).toStrictEqual(false)
+    expect(subject.triggered(UP, DOWN, UP)).toStrictEqual(false)
+    expect(subject.active(DOWN, UP)).toStrictEqual(true)
+    expect(subject.triggered(DOWN, UP)).toStrictEqual(true)
+    expect(subject.active(UP)).toStrictEqual(true)
+    expect(subject.triggered(UP)).toStrictEqual(true)
+    expectKeyboardCombo(subject, DOWN, UP)
   })
 
   test('Combo missed', () => {
     const subject = new Recorder()
-    subject.set(UP, true)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(1000)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(true)
-    expect(subject.combo(false, UP, UP)).toStrictEqual(false)
-    expect(subject.combo(true, UP, UP)).toStrictEqual(false)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+
+    subject.record(keyboardRight)
+    subject.update(1)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+
+    expect(subject.active(UP)).toStrictEqual(true)
+    expect(subject.triggered(UP)).toStrictEqual(true)
+    expect(subject.active(UP, DOWN, UP)).toStrictEqual(false)
+    expect(subject.triggered(UP, DOWN, UP)).toStrictEqual(false)
+    expectKeyboardCombo(subject, UP, RIGHT, UP)
   })
 
-  test('Combo subset', () => {
+  test('Unreleased held and expired combo is active but not triggered', () => {
     const subject = new Recorder()
-    subject.set(DOWN, true)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(true)
-    expect(subject.combo(false, DOWN, UP, UP)).toStrictEqual(true)
-    expect(subject.combo(true, DOWN, UP, UP)).toStrictEqual(true)
-    expect(subject.combo(false, UP, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP, UP)).toStrictEqual(true)
-    expect(subject.combo(false, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP)).toStrictEqual(true)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+
+    subject.record(keyboardDown)
+    subject.update(1)
+
+    subject.record(keyboardUp)
+    subject.update(1)
+
+    subject.record(keyboardUp)
+    subject.update(1000)
+    expect(subject.active(UP, DOWN, UP)).toStrictEqual(true)
+    expect(subject.triggered(UP, DOWN, UP)).toStrictEqual(false)
+    expectKeyboardCombo(subject, UP, DOWN, UP)
+
+    subject.record(keyboardUp)
+    subject.update(1000)
+    expect(subject.active(UP, DOWN, UP)).toStrictEqual(true)
+    expect(subject.triggered(UP, DOWN, UP)).toStrictEqual(false)
+    expectKeyboardCombo(subject, UP, DOWN, UP)
   })
 
-  test('Held combo', () => {
+  test('Held and expired', () => {
     const subject = new Recorder()
-    subject.set(DOWN, true)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1000)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(true)
-    expect(subject.combo(false, DOWN, UP)).toStrictEqual(true)
-    expect(subject.combo(true, DOWN, UP)).toStrictEqual(true)
+
+    subject.record(keyboardUp)
+    subject.update(1000)
+    expect(subject.active(UP)).toStrictEqual(true)
+    expect(subject.triggered(UP)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP)
   })
 
-  test('After held combo', () => {
+  test('Held and expired, changed, held and expired', () => {
     const subject = new Recorder()
-    subject.set(DOWN, true)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1000)
-    subject.write()
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.combo(false, DOWN, UP)).toStrictEqual(true)
-    expect(subject.combo(true, DOWN, UP)).toStrictEqual(false)
+
+    subject.record(keyboardUp)
+    subject.update(1000)
+
+    subject.record(keyboardDown)
+    subject.update(1)
+    expect(subject.active(UP, DOWN)).toStrictEqual(true)
+    expect(subject.triggered(UP, DOWN)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP, DOWN)
+
+    subject.record(keyboardUp)
+    subject.update(1000)
+    expect(subject.active(UP)).toStrictEqual(true)
+    expect(subject.triggered(UP)).toStrictEqual(true)
+    expectKeyboardCombo(subject, UP)
   })
 
-  test('Long after held combo', () => {
+  test('Repeated input from single source overwrites previous', () => {
     const subject = new Recorder()
-    subject.set(DOWN, true)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, true)
-    subject.read(1000)
-    subject.write()
-    subject.read(1000)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.combo(false, DOWN, UP)).toStrictEqual(true)
-    expect(subject.combo(true, DOWN, UP)).toStrictEqual(false)
+
+    subject.record(keyboardUp)
+    subject.record(keyboardDown)
+    subject.update(1)
+
+    expect(subject.active(DOWN)).toStrictEqual(true)
+    expect(subject.triggered(DOWN)).toStrictEqual(true)
+    expectKeyboardCombo(subject, DOWN)
   })
 
-  test('Simultaneous input combo', () => {
+  test('Multiple input sources are coalesced', () => {
     const subject = new Recorder()
-    subject.set(UP | DOWN, true)
-    subject.read(1)
-    subject.write()
-    subject.set(UP | DOWN, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP | DOWN, true)
-    subject.read(1)
-    subject.write()
-    subject.set(DOWN, false)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.down()).toStrictEqual(false)
-    expect(subject.down(true)).toStrictEqual(false)
-    expect(subject.combo(false, UP | DOWN, UP | DOWN, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP | DOWN, UP | DOWN, UP)).toStrictEqual(true)
-  })
 
-  test('Any mapping sets input', () => {
-    const subject = new Recorder()
-    subject.set(UP, true)
-    subject.set(UP, false)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(true)
-    expect(subject.combo(false, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP)).toStrictEqual(true)
-  })
+    subject.record({source: InputSource.GAMEPAD, bits: DOWN})
+    subject.record(keyboardUp)
+    subject.record({source: InputSource.MOUSE_PICK, bits: InputBit.PICK})
+    subject.update(1)
 
-  test('Any mapping sets input in any order', () => {
-    const subject = new Recorder()
-    subject.set(UP, false)
-    subject.set(UP, true)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(true)
-    expect(subject.up(true)).toStrictEqual(true)
-    expect(subject.combo(false, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP)).toStrictEqual(true)
-  })
-
-  test('Any mapping sets input and clears', () => {
-    const subject = new Recorder()
-    subject.set(UP, true)
-    subject.set(UP, false)
-    subject.read(1)
-    subject.write()
-    subject.set(UP, false)
-    subject.read(1)
-    expect(subject.up()).toStrictEqual(false)
-    expect(subject.up(true)).toStrictEqual(false)
-    expect(subject.combo(false, UP)).toStrictEqual(true)
-    expect(subject.combo(true, UP)).toStrictEqual(false)
+    expect(subject.active(UP | DOWN | InputBit.PICK)).toStrictEqual(true)
+    expect(subject.triggered(UP | DOWN | InputBit.PICK)).toStrictEqual(true)
+    expect(subject.combo()).toStrictEqual([
+      {
+        [InputSource.GAMEPAD]: {source: InputSource.GAMEPAD, bits: DOWN},
+        [InputSource.KEYBOARD]: {source: InputSource.KEYBOARD, bits: UP},
+        [InputSource.MOUSE_PICK]: {
+          source: InputSource.MOUSE_PICK,
+          bits: InputBit.PICK
+        }
+      }
+    ])
   })
 })
+
+function expectKeyboardCombo(subject: Recorder, ...inputs: InputBit[]): void {
+  const source = InputSource.KEYBOARD
+  const combo = inputs.map(bits => ({[source]: {source, bits}}))
+  expect(subject.combo()).toStrictEqual(combo)
+}

@@ -6,12 +6,22 @@ declare global {
 }
 
 export namespace XY {
-  export function add(lhs: XY, rhs: XY): XY {
+  export function add(lhs: XY, rhs: XY | number): XY {
+    if (typeof rhs === 'number') return {x: lhs.x + rhs, y: lhs.x + rhs}
     return {x: lhs.x + rhs.x, y: lhs.y + rhs.y}
   }
 
   export function sub(lhs: XY, rhs: XY): XY {
     return {x: lhs.x - rhs.x, y: lhs.y - rhs.y}
+  }
+
+  export function mul(lhs: XY, rhs: XY | number): XY {
+    if (typeof rhs === 'number') return {x: lhs.x * rhs, y: lhs.x * rhs}
+    return {x: lhs.x * rhs.x, y: lhs.y * rhs.y}
+  }
+
+  export function div(lhs: XY, rhs: XY): XY {
+    return {x: lhs.x / rhs.x, y: lhs.y / rhs.y}
   }
 
   export function equal(lhs: XY, rhs: XY): boolean {

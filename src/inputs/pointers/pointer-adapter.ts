@@ -1,0 +1,155 @@
+import {ArrayUtil} from '../../utils/array-util'
+import {InputBit} from '../input-bit'
+import {InputSource} from '../input-source'
+import {MousePickInput, MousePointInput} from './mouse-input'
+import {Viewport} from '../../graphics/viewport'
+import {
+  VirtualJoystickAxesInput,
+  VirtualJoystickPositionInput
+} from './virtual-gamepad-input'
+import {XY} from '../../math/xy'
+
+type DownInput = MousePickInput | VirtualJoystickPositionInput
+type MoveInput = MousePointInput | VirtualJoystickAxesInput
+
+/** Converts PointerEvents to MouseInputs or virtual gamepad Inputs. For
+    non-signal, active / inactive DownInputs, the Event is converted to a polled
+    Input. Without this adapter, the Recorder must track which inputs to persist
+    (roll over to prime the next sample) every update loop which complicates its
+    logic. When all inputs are polled like Gamepad, the Recorder can safely
+    start with a zeroed sample each loop since any carryover status will be
+    provided by the underlying adapters. DownInputs persist until cleared by
+    reset or pointerup. Only one DownInput and one MoveInput permitted per
+    recording. If a bit is set and unset in the same frame, it is lost. */
+export class PointerAdapter {
+  static down(
+    viewport: WH,
+    cam: Rect,
+    {pointerType, type, clientX, clientY}: PointerEvent
+  ): DownInput {
+    const mouse = pointerType === 'pen' || pointerType === 'mouse'
+    const source =
+      InputSource[mouse ? 'MOUSE_PICK' : 'VIRTUAL_GAMEPAD_JOYSTICK_POSITION']
+    const active = type === 'pointerdown'
+    const bits = InputBit[mouse ? 'PICK' : 'POSITION_VIRTUAL_JOYSTICK']
+    const xy = Viewport.toLevelXY({x: clientX, y: clientY}, viewport, cam)
+    return <DownInput>{source, bits: active ? bits : 0, xy}
+  }
+
+  /**
+   * Converts a pointermove PointerEvent to a mouse record if the source is a
+   * pen or mouse, otherwise a virtual joystick record.
+   * @arg viewport The viewport dimensions in pixels.
+   * @arg cam The coordinates and dimensions of the camera the input was made
+   *          through.
+   * @arg origin For virtual joystick inputs only, the fractional center of the
+   *             joystick base in the level coordinate-system, usually the last
+   *             pointerdown event.
+   */
+  static move(
+    viewport: WH,
+    cam: Rect,
+    origin: XY,
+    {pointerType, clientX, clientY}: PointerEvent
+  ): MoveInput {
+    let xy = Viewport.toLevelXY({x: clientX, y: clientY}, viewport, cam)
+
+    if (pointerType === 'pen' || pointerType === 'mouse') {
+      return {source: InputSource.MOUSE_POINT, bits: InputBit.POINT, xy}
+    }
+
+    // A point, xy, representing the stick is within or likely outside the
+    // virtual joystick's base.
+    //
+    //   ─┼─────────▶ x
+    //    │ o base
+    //    │
+    //    │
+    //    │   . xy (stick)
+    //    ▼ y
+    //
+    // Translate xy so that it's relative the center of the joystick's base.
+    xy = XY.sub(xy, origin)
+
+    // The magnitude or hypotenuse of the stick's position is |±√(x² + y²)|. The
+    // division of each component's length by the magnitude is the normalized or
+    // proportional length.
+    //
+    //   o base
+    //   |\
+    //   | \
+    //   |  \
+    //   |___\. xy
+    //
+    const magnitude = Math.sqrt(Math.pow(xy.x, 2) + Math.pow(xy.y, 2))
+    const normal = magnitude ? XY.mul(xy, 1 / magnitude) : xy
+
+    const source = InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES
+    const horizontal =
+      Math.abs(normal.x) > 0.1
+        ? normal.x < 0
+          ? InputBit.LEFT
+          : InputBit.RIGHT
+        : 0
+    const vertical =
+      Math.abs(normal.y) > 0.1
+        ? normal.y < 0
+          ? InputBit.DOWN
+          : InputBit.UP
+        : 0
+    const bits = horizontal | vertical
+    return {source, bits, normal, magnitude}
+  }
+
+  /** DownInputs persist until overwritten by the next DownInput. MoveInputs are
+      singular signals with no inverse and do not persist. */
+  private _downInput?: DownInput
+  private _moveInput?: MoveInput
+
+  /** The last origin of the virtual joystick. */
+  private _origin?: XY
+
+  toInput(): ReadonlyArray<DownInput | MoveInput> {
+    const inputs = [this._downInput, this._moveInput].filter(ArrayUtil.nonEmpty)
+
+    // MoveInputs do not persist.
+    this._moveInput = undefined
+
+    return inputs
+  }
+
+  adapt(viewport: WH, cam: Rect, event: PointerEvent, defaultOrigin: XY): void {
+    if (event.type === 'pointermove') {
+      this.onMove(viewport, cam, event, defaultOrigin)
+    } else this.onDown(viewport, cam, event)
+  }
+
+  onDown(viewport: WH, cam: Rect, event: PointerEvent) {
+    const input = PointerAdapter.down(viewport, cam, event)
+    if (
+      input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION &&
+      input.bits
+    ) {
+      // There is no reason to clear the last known origin when inactive. If for
+      // some reason a new origin is not received before the next joystick axes
+      // event, the last known position will presumably be far better than the
+      // default.
+      this._origin = input.xy
+    }
+    this._downInput = input
+  }
+
+  onMove(
+    viewport: WH,
+    cam: Rect,
+    event: PointerEvent,
+    defaultOrigin: XY
+  ): void {
+    this._moveInput = PointerAdapter.move(
+      viewport,
+      cam,
+      this._origin || defaultOrigin,
+      event
+    )
+  }
+}

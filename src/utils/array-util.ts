@@ -5,4 +5,9 @@ export namespace ArrayUtil {
     return (item: T, _: number, array: ReadonlyArray<T>) =>
       array.findIndex(rhs => equals(item, rhs)) !== -1
   }
+
+  /** Type guard. */
+  export function nonEmpty<T>(val: T | null | undefined): val is T {
+    return val !== null && val !== undefined
+  }
 }

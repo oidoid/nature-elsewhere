@@ -13,6 +13,7 @@ import {SettingsLevel} from './settings-level'
 import {Store} from '../entities/store'
 import {Text} from '../text/text'
 import {Viewport} from '../graphics/viewport'
+import {InputBit} from '../inputs/input-bit'
 
 export class TitleLevel implements Level {
   private readonly _store: Store
@@ -120,21 +121,21 @@ export class TitleLevel implements Level {
     let nextLevel: Level | undefined = this
     this._logo.centerOn(cam)
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
-    if (this._recorder.down(true)) {
+    if (this._recorder.triggered(InputBit.DOWN)) {
       this._cursorState = NumberUtil.wrap(
         this._cursorState + 1,
         Select.START,
         Select.END
       )
     }
-    if (this._recorder.up(true)) {
+    if (this._recorder.triggered(InputBit.UP)) {
       this._cursorState = NumberUtil.wrap(
         this._cursorState - 1,
         Select.START,
         Select.END
       )
     }
-    if (this._recorder.action(true)) {
+    if (this._recorder.triggered(InputBit.ACTION)) {
       switch (this._cursorState) {
         case Select.START:
           nextLevel = new FieldsLevel(this._atlas)
