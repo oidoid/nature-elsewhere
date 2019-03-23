@@ -10,8 +10,7 @@
   "license": "GPL-3.0-only WITH CC-BY-SA-4.0",
   "scripts": {
     "start": "webpack-dev-server",
-    "test": "npm run -s formatter -- -l && npm -s run build && npm -s run test:unit",
-    "test:unit": "jest",
+    "test": "npm run -s formatter -- -l && npm -s run build && jest",
     "build": "webpack -p",
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{css,json,html,md,ts}'",
