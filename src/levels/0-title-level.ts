@@ -128,26 +128,21 @@ export class TitleLevel implements Level {
   }
 
   update(then: number, now: number, _canvas: Rect, cam: Rect): LevelUpdate {
-    if (this._recorder.triggered(InputBit.POSITION_VIRTUAL_JOYSTICK)) {
+    if (this._recorder.triggeredSet(InputBit.POSITION_VIRTUAL_JOYSTICK)) {
       const [set] = this._recorder.combo().slice(-1)
       const input = set[InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION]
-      if (input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION) {
-        const xy = (<VirtualJoystickPositionInput>input).xy
-        this._virtualJoystick.setPosition(xy)
-      } // else timeout and remove
-    }
+      const xy = (<VirtualJoystickPositionInput>input).xy
+      this._virtualJoystick.setPosition(xy)
+    } // else timeout and remove
 
-    // this._virtualJoystick.centerStick()
-    ;[...this._recorder.combo()].reverse().some(set => {
-      const input = <VirtualJoystickAxesInput | undefined>(
-        set[InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES]
-      )
-      if (input && input.bits) {
-        this._virtualJoystick.setStick(input.normal, input.magnitude)
-        return true
-      }
-      return false
-    })
+    const [set] = this._recorder.combo().slice(-1)
+    const input = set
+      ? <VirtualJoystickAxesInput | undefined>(
+          set[InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES]
+        )
+      : undefined
+    if (input) this._virtualJoystick.setStick(input.normal, input.magnitude)
+    else this._virtualJoystick.centerStick()
 
     let nextLevel: Level | undefined = this
     this._logo.centerOn(cam)

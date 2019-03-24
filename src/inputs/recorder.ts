@@ -25,22 +25,25 @@ export class Recorder {
     private _lastInput: InputSet = <InputSet>{},
     /** A sequence of nonzero input sets ordered from oldest (first) to latest
         (last). Combos are terminated only by expiration. */
-    private readonly _combo: Mutable<InputSet>[] = []
+    private readonly _combo: InputSet[] = []
   ) {}
 
   /** @param combo A sequence of one or more InputBits. */
-  active(...combo: InputBit[]): boolean {
-    const offset = this._combo.length - combo.length
-    if (offset < 0) return false
-    // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
-    return combo.every(
-      (bits, i) => this._toBits(this._combo[offset + i]) === bits
-    )
+  equal(...combo: InputBit[]): boolean {
+    return this.active(true, combo)
+  }
+
+  set(...combo: InputBit[]): boolean {
+    return this.active(false, combo)
   }
 
   /** Identical to active() but only true if combo is new. */
   triggered(...combo: InputBit[]): boolean {
-    return !this._timer && this.active(...combo)
+    return !this._timer && this.equal(...combo)
+  }
+
+  triggeredSet(...combo: InputBit[]): boolean {
+    return !this._timer && this.set(...combo)
   }
 
   combo(): ReadonlyArray<InputSet> {
@@ -57,7 +60,7 @@ export class Recorder {
     const bits = this._toBits(this._input)
     const lastBits = this._toBits(this._lastInput)
 
-    if (interval >= Recorder._maxInterval && bits !== lastBits) {
+    if (interval >= Recorder._maxInterval && (!bits || bits !== lastBits)) {
       // Expired and changed.
       this._timer = 0
       this._combo.length = 0
@@ -71,12 +74,28 @@ export class Recorder {
     } else {
       // Held, possibly expired, or unchanged and unexpired.
       this._timer = interval
+
+      if (bits && bits === lastBits) {
+        // Update combo with the latest input.
+        this._combo.pop()
+        this._combo.push(this._input)
+      }
     }
 
     // Input is now last input and will not be be modified. Next input starts
     // empty. No carryovers.
     this._lastInput = this._input
     this._input = <InputSet>{}
+  }
+
+  private active(exact: boolean, combo: InputBit[]): boolean {
+    const offset = this._combo.length - combo.length
+    if (offset < 0) return false
+    // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
+    return combo.every(
+      (bits, i) =>
+        ((exact ? ~0 : bits) & this._toBits(this._combo[offset + i])) === bits
+    )
   }
 
   /** Coalesces and returns the bits for the inputs at combo index. A set bit

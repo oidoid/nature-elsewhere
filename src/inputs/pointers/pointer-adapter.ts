@@ -12,10 +12,9 @@ import {XY} from '../../math/xy'
 type DownInput = MousePickInput | VirtualJoystickPositionInput
 type MoveInput = MousePointInput | VirtualJoystickAxesInput
 
-/** Converts PointerEvents to MouseInputs or virtual gamepad Inputs. For
-    non-signal, active / inactive DownInputs, the Event is converted to a polled
-    Input. Without this adapter, the Recorder must track which inputs to persist
-    (roll over to prime the next sample) every update loop which complicates its
+/** Converts PointerEvents to polled MouseInputs or virtual gamepad Inputs.
+    Without this adapter, the Recorder must track which inputs to persist (roll
+    over to prime the next sample) every update loop which complicates its
     logic. When all inputs are polled like Gamepad, the Recorder can safely
     start with a zeroed sample each loop since any carryover status will be
     provided by the underlying adapters. DownInputs persist until cleared by
@@ -86,23 +85,22 @@ export class PointerAdapter {
 
     const source = InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES
     const horizontal =
-      Math.abs(normal.x) > 0.1
+      Math.abs(normal.x) > 0.5 && magnitude > 10
         ? normal.x < 0
           ? InputBit.LEFT
           : InputBit.RIGHT
         : 0
     const vertical =
-      Math.abs(normal.y) > 0.1
+      Math.abs(normal.y) > 0.5 && magnitude > 10
         ? normal.y < 0
-          ? InputBit.DOWN
-          : InputBit.UP
+          ? InputBit.UP
+          : InputBit.DOWN
         : 0
     const bits = horizontal | vertical
     return {source, bits, normal, magnitude}
   }
 
-  /** DownInputs persist until overwritten by the next DownInput. MoveInputs are
-      singular signals with no inverse and do not persist. */
+  /** Inputs persist until overwritten by the next input. */
   private _downInput?: DownInput
   private _moveInput?: MoveInput
 
@@ -110,12 +108,7 @@ export class PointerAdapter {
   private _origin?: XY
 
   toInput(): ReadonlyArray<DownInput | MoveInput> {
-    const inputs = [this._downInput, this._moveInput].filter(ArrayUtil.nonEmpty)
-
-    // MoveInputs do not persist.
-    this._moveInput = undefined
-
-    return inputs
+    return [this._downInput, this._moveInput].filter(ArrayUtil.nonEmpty)
   }
 
   adapt(viewport: WH, cam: Rect, event: PointerEvent, defaultOrigin: XY): void {
@@ -126,15 +119,13 @@ export class PointerAdapter {
 
   onDown(viewport: WH, cam: Rect, event: PointerEvent) {
     const input = PointerAdapter.down(viewport, cam, event)
-    if (
-      input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION &&
-      input.bits
-    ) {
+    if (input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION) {
       // There is no reason to clear the last known origin when inactive. If for
       // some reason a new origin is not received before the next joystick axes
       // event, the last known position will presumably be far better than the
       // default.
-      this._origin = input.xy
+      if (input.bits) this._origin = input.xy
+      else this._moveInput = undefined
     }
     this._downInput = input
   }

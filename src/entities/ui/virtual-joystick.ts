@@ -34,8 +34,8 @@ export class VirtualJoystick {
 
   setStick(normal: XY, magnitude: number): void {
     const length = Math.min(this._radiusPx, magnitude)
-    const stick = XY.trunc(XY.mul(normal, length))
-    this._stick.moveTo(XY.add(stick, this._base.target()))
+    const target = XY.trunc(XY.mul(normal, length))
+    this._stick.moveTo(XY.add(target, this._base.target()))
   }
 
   // update (reset hidden timer, set new origin)
