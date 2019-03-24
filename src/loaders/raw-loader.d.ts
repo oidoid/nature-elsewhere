@@ -1,9 +1,9 @@
 declare module '*.vert' {
-  const text: string
-  export = text
+  const vertexShaderSource: string
+  export default vertexShaderSource
 }
 
 declare module '*.frag' {
-  const text: string
-  export = text
+  const fragmentShaderSource: string
+  export default fragmentShaderSource
 }
