@@ -147,21 +147,21 @@ export class TitleLevel implements Level {
     let nextLevel: Level | undefined = this
     this._logo.centerOn(cam)
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
-    if (this._recorder.triggered(InputBit.DOWN)) {
+    if (this._recorder.triggeredSet(InputBit.DOWN)) {
       this._cursorState = NumberUtil.wrap(
         this._cursorState + 1,
         Select.START,
         Select.END
       )
     }
-    if (this._recorder.triggered(InputBit.UP)) {
+    if (this._recorder.triggeredSet(InputBit.UP)) {
       this._cursorState = NumberUtil.wrap(
         this._cursorState - 1,
         Select.START,
         Select.END
       )
     }
-    if (this._recorder.triggered(InputBit.ACTION)) {
+    if (this._recorder.triggeredSet(InputBit.ACTION)) {
       switch (this._cursorState) {
         case Select.START:
           nextLevel = new FieldsLevel(this._atlas)
