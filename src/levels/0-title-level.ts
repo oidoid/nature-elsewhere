@@ -4,7 +4,10 @@ import {Defaults} from './defaults'
 import {FieldsLevel} from './1-fields-level'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
+import {InputBit} from '../inputs/input-bit'
+import {InputSource} from '../inputs/input-source'
 import {Limits} from '../math/limits'
+import {MemFont} from '../text/mem-font'
 import {NatureElsewhere} from '../entities/nature-elsewhere'
 import {NumberUtil} from '../utils/number-util'
 import {Palette, Tone} from '../images/palette'
@@ -13,7 +16,11 @@ import {SettingsLevel} from './settings-level'
 import {Store} from '../entities/store'
 import {Text} from '../text/text'
 import {Viewport} from '../graphics/viewport'
-import {InputBit} from '../inputs/input-bit'
+import {VirtualJoystick} from '../entities/ui/virtual-joystick'
+import {
+  VirtualJoystickAxesInput,
+  VirtualJoystickPositionInput
+} from '../inputs/pointers/virtual-gamepad-input'
 
 export class TitleLevel implements Level {
   private readonly _store: Store
@@ -22,6 +29,7 @@ export class TitleLevel implements Level {
   private readonly _cursor: Image
   private readonly _cursorReference: Image
   private _cursorState: Select = Select.START
+  private readonly _virtualJoystick: VirtualJoystick
   constructor(
     private readonly _atlas: Atlas.Definition,
     private readonly _recorder: Recorder
@@ -37,10 +45,10 @@ export class TitleLevel implements Level {
     logo = logo.concat(chars)
 
     const menuText = `
-> start
-  settings
-  level editor
-  exit
+> Start
+  Settings
+  Level Editor
+  Exit
     `.trim()
     const menuChars = Text.toImages(_atlas, menuText)
     this._cursor = menuChars[0]
@@ -111,13 +119,36 @@ export class TitleLevel implements Level {
         offsetRate: {x: 0, y: -0.004}
       })
     )
+    this._virtualJoystick = new VirtualJoystick(_atlas, 100)
+    this._store.addImages(...this._virtualJoystick.images())
   }
 
   scale(canvas: WH) {
     return Viewport.scale(canvas, Defaults.minScreenSize, 0)
   }
 
-  update(then: number, now: number, cam: Rect): LevelUpdate {
+  update(then: number, now: number, _canvas: Rect, cam: Rect): LevelUpdate {
+    if (this._recorder.triggered(InputBit.POSITION_VIRTUAL_JOYSTICK)) {
+      const [set] = this._recorder.combo().slice(-1)
+      const input = set[InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION]
+      if (input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION) {
+        const xy = (<VirtualJoystickPositionInput>input).xy
+        this._virtualJoystick.setPosition(xy)
+      } // else timeout and remove
+    }
+
+    // this._virtualJoystick.centerStick()
+    ;[...this._recorder.combo()].reverse().some(set => {
+      const input = <VirtualJoystickAxesInput | undefined>(
+        set[InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES]
+      )
+      if (input && input.bits) {
+        this._virtualJoystick.setStick(input.normal, input.magnitude)
+        return true
+      }
+      return false
+    })
+
     let nextLevel: Level | undefined = this
     this._logo.centerOn(cam)
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
@@ -150,7 +181,9 @@ export class TitleLevel implements Level {
     }
     this._cursor.moveTo({
       x: this._cursor.target().x,
-      y: this._cursorReference.target().y + this._cursorState * 5
+      y:
+        this._cursorReference.target().y +
+        this._cursorState * (MemFont.lineHeight + MemFont.leading)
     })
     return {nextLevel, ...this._store.update(now - then, cam)}
   }

@@ -79,7 +79,7 @@ export class SettingsLevel implements Level {
     )
   }
 
-  update(then: number, now: number, cam: Rect): LevelUpdate {
+  update(then: number, now: number, _canvas: WH, cam: Rect): LevelUpdate {
     this._ui.centerOn(cam)
     return {nextLevel: this, ...this._store.update(now - then, cam)}
   }

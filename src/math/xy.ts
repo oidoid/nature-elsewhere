@@ -7,7 +7,7 @@ declare global {
 
 export namespace XY {
   export function add(lhs: XY, rhs: XY | number): XY {
-    if (typeof rhs === 'number') return {x: lhs.x + rhs, y: lhs.x + rhs}
+    if (typeof rhs === 'number') return {x: lhs.x + rhs, y: lhs.y + rhs}
     return {x: lhs.x + rhs.x, y: lhs.y + rhs.y}
   }
 
@@ -16,7 +16,7 @@ export namespace XY {
   }
 
   export function mul(lhs: XY, rhs: XY | number): XY {
-    if (typeof rhs === 'number') return {x: lhs.x * rhs, y: lhs.x * rhs}
+    if (typeof rhs === 'number') return {x: lhs.x * rhs, y: lhs.y * rhs}
     return {x: lhs.x * rhs.x, y: lhs.y * rhs.y}
   }
 
@@ -34,5 +34,9 @@ export namespace XY {
 
   export function max(lhs: XY, rhs: XY): XY {
     return {x: Math.max(lhs.x, rhs.x), y: Math.max(lhs.y, rhs.y)}
+  }
+
+  export function trunc({x, y}: XY): XY {
+    return {x: Math.trunc(x), y: Math.trunc(y)}
   }
 }

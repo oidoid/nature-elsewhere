@@ -17,6 +17,9 @@ export interface VirtualJoystickAxesInput extends Input {
 
   readonly bits: InputBit.LEFT | InputBit.RIGHT | InputBit.UP | InputBit.DOWN
 
+  /** The normalized components of the axes in [-1, 1]. */
+  readonly normal: XY
+
   /**
    * The nonnegative fractional length from the center of the stick to the
    * center of the base. This value may exceed the radius of the joystick base
@@ -32,7 +35,4 @@ export interface VirtualJoystickAxesInput extends Input {
    * pixel further on two sides.
    */
   readonly magnitude: number
-
-  /** The normalized components of the axes in [-1, 1]. */
-  readonly normal: XY
 }

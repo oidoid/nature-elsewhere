@@ -33,7 +33,7 @@ export class FieldsLevel implements Level {
     return this._scale
   }
 
-  update(then: number, now: number, cam: Rect): LevelUpdate {
+  update(then: number, now: number, _canvas: WH, cam: Rect): LevelUpdate {
     return {nextLevel: this, ...this._store.update(now - then, cam)}
   }
 }
