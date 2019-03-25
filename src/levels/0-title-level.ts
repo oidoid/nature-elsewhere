@@ -5,7 +5,6 @@ import {FieldsLevel} from './1-fields-level'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
 import {InputBit} from '../inputs/input-bit'
-import {InputSource} from '../inputs/input-source'
 import {Limits} from '../math/limits'
 import {MemFont} from '../text/mem-font'
 import {NatureElsewhere} from '../entities/nature-elsewhere'
@@ -17,10 +16,16 @@ import {Store} from '../entities/store'
 import {Text} from '../text/text'
 import {Viewport} from '../graphics/viewport'
 import {VirtualJoystick} from '../entities/ui/virtual-joystick'
-import {
-  VirtualJoystickAxesInput,
-  VirtualJoystickPositionInput
-} from '../inputs/pointers/virtual-gamepad-input'
+
+enum Select {
+  START,
+  SETTINGS,
+  LEVEL_EDITOR,
+  EXIT,
+  END
+}
+
+const rowHeight: number = MemFont.lineHeight + MemFont.leading
 
 export class TitleLevel implements Level {
   private readonly _store: Store
@@ -28,7 +33,7 @@ export class TitleLevel implements Level {
   private readonly _footer: ImageGroup
   private readonly _cursor: Image
   private readonly _cursorReference: Image
-  private _cursorState: Select = Select.START
+  private _cursorRow: Select = Select.START
   private readonly _virtualJoystick: VirtualJoystick
   constructor(
     private readonly _atlas: Atlas.Definition,
@@ -128,41 +133,22 @@ export class TitleLevel implements Level {
   }
 
   update(then: number, now: number, _canvas: Rect, cam: Rect): LevelUpdate {
-    if (this._recorder.triggeredSet(InputBit.POSITION_VIRTUAL_JOYSTICK)) {
-      const [set] = this._recorder.combo().slice(-1)
-      const input = set[InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION]
-      const xy = (<VirtualJoystickPositionInput>input).xy
-      this._virtualJoystick.setPosition(xy)
-    } // else timeout and remove
-
-    const [set] = this._recorder.combo().slice(-1)
-    const input = set
-      ? <VirtualJoystickAxesInput | undefined>(
-          set[InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES]
-        )
-      : undefined
-    if (input) this._virtualJoystick.setStick(input.normal, input.magnitude)
-    else this._virtualJoystick.centerStick()
+    const milliseconds = now - then
+    this._virtualJoystick.update(milliseconds, this._recorder)
 
     let nextLevel: Level | undefined = this
     this._logo.centerOn(cam)
-    this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - 5})
+    this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - rowHeight})
     if (this._recorder.triggeredSet(InputBit.DOWN)) {
-      this._cursorState = NumberUtil.wrap(
-        this._cursorState + 1,
-        Select.START,
-        Select.END
-      )
+      const nextState = this._cursorRow + 1
+      this._cursorRow = NumberUtil.wrap(nextState, Select.START, Select.END)
     }
     if (this._recorder.triggeredSet(InputBit.UP)) {
-      this._cursorState = NumberUtil.wrap(
-        this._cursorState - 1,
-        Select.START,
-        Select.END
-      )
+      const nextState = this._cursorRow - 1
+      this._cursorRow = NumberUtil.wrap(nextState, Select.START, Select.END)
     }
     if (this._recorder.triggeredSet(InputBit.ACTION)) {
-      switch (this._cursorState) {
+      switch (this._cursorRow) {
         case Select.START:
           nextLevel = new FieldsLevel(this._atlas)
           break
@@ -176,18 +162,8 @@ export class TitleLevel implements Level {
     }
     this._cursor.moveTo({
       x: this._cursor.target().x,
-      y:
-        this._cursorReference.target().y +
-        this._cursorState * (MemFont.lineHeight + MemFont.leading)
+      y: this._cursorReference.target().y + this._cursorRow * rowHeight
     })
     return {nextLevel, ...this._store.update(now - then, cam)}
   }
-}
-
-enum Select {
-  START,
-  SETTINGS,
-  LEVEL_EDITOR,
-  EXIT,
-  END
 }

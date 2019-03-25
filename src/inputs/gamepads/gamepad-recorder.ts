@@ -42,7 +42,7 @@ export namespace GamepadRecorder {
 
   export function record(recorder: Recorder, navigator: Navigator): void {
     const gamepads = Array.from(navigator.getGamepads())
-    const bits = gamepads.filter(ArrayUtil.nonEmpty).reduce(reduceGamepads, 0)
+    const bits = gamepads.filter(ArrayUtil.is).reduce(reduceGamepads, 0)
     recorder.record({source: InputSource.GAMEPAD, bits})
   }
 

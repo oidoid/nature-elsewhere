@@ -1,8 +1,6 @@
 import {Atlas} from './images/atlas'
 import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
-import {KeyboardRecorder} from './inputs/keyboards/keyboard-recorder'
-import {PointerRecorder} from './inputs/pointers/pointer-recorder'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {RendererStateMachine} from './graphics/renderer-state-machine'
@@ -21,12 +19,7 @@ export class Game {
     atlas: Atlas.Definition,
     paletteImage: HTMLImageElement
   ) {
-    this._inputRouter = new InputRouter(
-      window,
-      canvas,
-      new KeyboardRecorder(),
-      new PointerRecorder()
-    )
+    this._inputRouter = new InputRouter(window, canvas)
     this._level = new TitleLevel(atlas, this._recorder)
     this._rendererStateMachine = new RendererStateMachine(
       window,

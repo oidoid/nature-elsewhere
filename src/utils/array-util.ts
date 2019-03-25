@@ -7,7 +7,7 @@ export namespace ArrayUtil {
   }
 
   /** Type guard. */
-  export function nonEmpty<T>(val: T | null | undefined): val is T {
+  export function is<T>(val: T | null | undefined): val is T {
     return val !== null && val !== undefined
   }
 }

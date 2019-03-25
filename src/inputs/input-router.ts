@@ -11,8 +11,8 @@ export class InputRouter {
   constructor(
     private readonly _window: Window,
     private readonly _canvas: HTMLCanvasElement,
-    private readonly _keyboardRecorder: KeyboardRecorder,
-    private readonly _pointerRecorder: PointerRecorder
+    private readonly _keyboardRecorder: KeyboardRecorder = new KeyboardRecorder(),
+    private readonly _pointerRecorder: PointerRecorder = new PointerRecorder()
   ) {
     this.onKey = this.onKey.bind(this)
     this.onPointerMove = this.onPointerMove.bind(this)

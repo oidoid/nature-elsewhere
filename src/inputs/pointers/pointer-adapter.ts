@@ -108,7 +108,7 @@ export class PointerAdapter {
   private _origin?: XY
 
   toInput(): ReadonlyArray<DownInput | MoveInput> {
-    return [this._downInput, this._moveInput].filter(ArrayUtil.nonEmpty)
+    return [this._downInput, this._moveInput].filter(ArrayUtil.is)
   }
 
   adapt(viewport: WH, cam: Rect, event: PointerEvent, defaultOrigin: XY): void {

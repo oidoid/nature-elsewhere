@@ -1,9 +1,8 @@
+import {ArrayUtil} from '../utils/array-util'
 import {Input} from './input'
 import {InputBit} from './input-bit'
-import {InputSource} from './input-source'
+import {InputSet} from './input-set'
 import {ObjectUtil} from '../utils/object-util'
-
-type InputSet = Readonly<Record<InputSource, Input>>
 
 /** record(), update(), read (active(), trigger()) in that order. */
 export class Recorder {
@@ -20,9 +19,9 @@ export class Recorder {
         necessary to persist in _input and _lastInput to distinguish the off
         state between repeated button presses like [UP, UP]. Starts empty after
         each update. */
-    private _input: Mutable<InputSet> = <InputSet>{},
+    private _set: Mutable<InputSet> = {},
     /** The previous recording but not necessarily a combo member. */
-    private _lastInput: InputSet = <InputSet>{},
+    private _lastSet: InputSet = {},
     /** A sequence of nonzero input sets ordered from oldest (first) to latest
         (last). Combos are terminated only by expiration. */
     private readonly _combo: InputSet[] = []
@@ -51,41 +50,41 @@ export class Recorder {
   }
 
   record(input: Input): void {
-    this._input[input.source] = input
+    this._set[input.source] = <any>input
   }
 
   /** Update the combo with recorded input. */
   update(milliseconds: number): void {
     const interval = this._timer + milliseconds
-    const bits = this._toBits(this._input)
-    const lastBits = this._toBits(this._lastInput)
+    const bits = this._toBits(this._set)
+    const lastBits = this._toBits(this._lastSet)
 
     if (interval >= Recorder._maxInterval && (!bits || bits !== lastBits)) {
-      // Expired and changed.
+      // Expired and released or changed.
       this._timer = 0
       this._combo.length = 0
-      // Start a new combo.
-      if (bits) this._combo.push(this._input)
+      // If active and changed, start a new combo.
+      if (bits) this._combo.push(this._set)
     } else if (bits && bits !== lastBits) {
-      // Active and changed (triggered) nonzero.
+      // Unexpired active and changed (triggered).
       this._timer = 0
       // Input is now part of a combo and will not be modified by _lastInput.
-      this._combo.push(this._input)
+      this._combo.push(this._set)
     } else {
-      // Held, possibly expired, or unchanged and unexpired.
+      // Held, possibly expired, or unexpired and released.
       this._timer = interval
 
       if (bits && bits === lastBits) {
-        // Update combo with the latest input.
+        // Held, update combo with the latest input.
         this._combo.pop()
-        this._combo.push(this._input)
+        this._combo.push(this._set)
       }
     }
 
     // Input is now last input and will not be be modified. Next input starts
     // empty. No carryovers.
-    this._lastInput = this._input
-    this._input = <InputSet>{}
+    this._lastSet = this._set
+    this._set = {}
   }
 
   private active(exact: boolean, combo: InputBit[]): boolean {
@@ -102,6 +101,6 @@ export class Recorder {
       from any source overrides an unset bit from any other. */
   private _toBits(set: InputSet): InputBit {
     const inputs = ObjectUtil.keys(set).map(source => set[source])
-    return inputs.reduce((sum, {bits}) => sum | bits, 0)
+    return inputs.filter(ArrayUtil.is).reduce((sum, {bits}) => sum | bits, 0)
   }
 }
