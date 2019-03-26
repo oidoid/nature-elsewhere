@@ -6,8 +6,9 @@ import {Renderer} from './renderer'
  * │window                   ┌──────────────────────────────────────────┐│
  * │canvas                   │onVisibilityChanged                       ││
  * │atlas                    │onWebGLContextRestored                    ││
- * │palette                  │onWebGLContextLost              ┌────────┐││
- * │onAnimationFrame         │┌─────────┐ renderer && visible │Looping │││
+ * │palette                  │onWebGLContextLost                        ││
+ * │onAnimationFrame         │                                ┌────────┐││
+ * │onPause                  │┌─────────┐ renderer && visible │Looping │││
  * │╔════════════════╗ start ││Paused   ├────────────────────▶│renderer│││
  * │║Idle            ╟──────▶││renderer?│ !renderer || hidden │frameID │││
  * │║renderer?       ║ stop  │└─────────┘◀────────────────────┴────────┘││
@@ -21,6 +22,7 @@ interface IdleContext {
   readonly atlas: HTMLImageElement
   readonly palette: HTMLImageElement
   readonly onAnimationFrame: OnAnimationFrame
+  onPause(): void
   /** Undefined when context is lost. */
   readonly renderer?: Renderer
   transition(input: Input): void
@@ -55,7 +57,8 @@ export class RendererStateMachine {
     canvas: HTMLCanvasElement,
     atlas: HTMLImageElement,
     palette: HTMLImageElement,
-    onAnimationFrame: OnAnimationFrame
+    onAnimationFrame: OnAnimationFrame,
+    onPause: () => void
   ) {
     this._state = newIdleState({
       window,
@@ -63,6 +66,7 @@ export class RendererStateMachine {
       atlas,
       palette,
       onAnimationFrame,
+      onPause,
       transition: this.transition.bind(this)
     })
   }
@@ -95,6 +99,7 @@ function newIdleState(context: IdleContext) {
 }
 
 function newPausedState(context: PausedContext) {
+  context.onPause()
   return {
     stop() {
       registerListeners(context, false)

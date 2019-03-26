@@ -117,20 +117,22 @@ export class PointerAdapter {
     } else this.onDown(viewport, cam, event)
   }
 
-  onDown(viewport: WH, cam: Rect, event: PointerEvent) {
+  reset(): void {
+    this._downInput = undefined
+    this._moveInput = undefined
+    this._origin = undefined
+  }
+
+  private onDown(viewport: WH, cam: Rect, event: PointerEvent) {
     const input = PointerAdapter.down(viewport, cam, event)
     if (input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION) {
-      // There is no reason to clear the last known origin when inactive. If for
-      // some reason a new origin is not received before the next joystick axes
-      // event, the last known position will presumably be far better than the
-      // default.
       if (input.bits) this._origin = input.xy
       else this._moveInput = undefined
     }
     this._downInput = input
   }
 
-  onMove(
+  private onMove(
     viewport: WH,
     cam: Rect,
     event: PointerEvent,

@@ -48,6 +48,11 @@ export class InputRouter {
     GamepadRecorder.record(recorder, this._window.navigator)
   }
 
+  reset(): void {
+    this._keyboardRecorder.reset()
+    this._pointerRecorder.reset()
+  }
+
   private onKey(event: KeyboardEvent): void {
     this._keyboardRecorder.onKey(event)
   }

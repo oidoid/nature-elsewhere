@@ -26,7 +26,8 @@ export class Game {
       canvas,
       atlasImage,
       paletteImage,
-      this.onAnimationFrame.bind(this)
+      this.onAnimationFrame.bind(this),
+      this.onPause.bind(this)
     )
   }
 
@@ -38,6 +39,10 @@ export class Game {
   stop(): void {
     this._inputRouter.deregister()
     this._rendererStateMachine.stop()
+  }
+
+  private onPause(): void {
+    this._inputRouter.reset()
   }
 
   private onAnimationFrame(

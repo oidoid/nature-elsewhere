@@ -35,6 +35,10 @@ export class KeyboardRecorder {
     recorder.record(this._adapter.toInput())
   }
 
+  reset(): void {
+    this._adapter.reset()
+  }
+
   /** Call this function when a keydown or keyup KeyboardEvent is received. */
   onKey(event: KeyboardEvent): void {
     const bit = defaultKeyMap[event.key]

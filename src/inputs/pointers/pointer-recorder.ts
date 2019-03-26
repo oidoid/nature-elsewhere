@@ -10,6 +10,10 @@ export class PointerRecorder {
     this._adapter.toInput().forEach(input => recorder.record(input))
   }
 
+  reset(): void {
+    this._adapter.reset()
+  }
+
   onEvent(
     viewport: WH,
     cam: Rect,
