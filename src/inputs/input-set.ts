@@ -3,6 +3,8 @@ import {InputSource} from './input-source'
 import {KeyboardInput} from './keyboards/keyboard-input'
 import {MousePickInput, MousePointInput} from './pointers/mouse-input'
 import {
+  VirtualButtonsPositionInput,
+  VirtualButtonsPressedInput,
   VirtualJoystickAxesInput,
   VirtualJoystickPositionInput
 } from './pointers/virtual-gamepad-input'
@@ -15,4 +17,6 @@ export interface InputSet {
   readonly [InputSource.GAMEPAD]?: GamepadInput
   readonly [InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION]?: VirtualJoystickPositionInput
   readonly [InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES]?: VirtualJoystickAxesInput
+  readonly [InputSource.VIRTUAL_GAMEPAD_BUTTONS_POSITION]?: VirtualButtonsPressedInput
+  readonly [InputSource.VIRTUAL_GAMEPAD_BUTTONS_PRESSED]?: VirtualButtonsPositionInput
 }

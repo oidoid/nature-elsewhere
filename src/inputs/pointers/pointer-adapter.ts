@@ -4,12 +4,16 @@ import {InputSource} from '../input-source'
 import {MousePickInput, MousePointInput} from './mouse-input'
 import {Viewport} from '../../graphics/viewport'
 import {
+  VirtualButtonsPressedInput,
   VirtualJoystickAxesInput,
   VirtualJoystickPositionInput
 } from './virtual-gamepad-input'
 import {XY} from '../../math/xy'
 
-type DownInput = MousePickInput | VirtualJoystickPositionInput
+type DownInput =
+  | MousePickInput
+  | VirtualButtonsPressedInput
+  | VirtualJoystickPositionInput
 type MoveInput = MousePointInput | VirtualJoystickAxesInput
 
 /** Converts PointerEvents to polled MouseInputs or virtual gamepad Inputs.
@@ -27,11 +31,20 @@ export class PointerAdapter {
     {pointerType, type, clientX, clientY}: PointerEvent
   ): DownInput {
     const mouse = pointerType === 'pen' || pointerType === 'mouse'
-    const source =
-      InputSource[mouse ? 'MOUSE_PICK' : 'VIRTUAL_GAMEPAD_JOYSTICK_POSITION']
     const active = type === 'pointerdown'
-    const bits = InputBit[mouse ? 'PICK' : 'POSITION_VIRTUAL_JOYSTICK']
     const xy = Viewport.toLevelXY({x: clientX, y: clientY}, viewport, cam)
+    let source
+    let bits
+    if (mouse) {
+      source = InputSource.MOUSE_PICK
+      bits = InputBit.PICK
+    } else if (xy.x < cam.x + cam.w / 2) {
+      source = InputSource.VIRTUAL_GAMEPAD_BUTTONS_PRESSED
+      bits = InputBit.ACTION // todo: collision detection with last location.
+    } else {
+      source = InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION
+      bits = InputBit.POSITION_VIRTUAL_JOYSTICK
+    }
     return <DownInput>{source, bits: active ? bits : 0, xy}
   }
 

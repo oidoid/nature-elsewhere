@@ -5,7 +5,7 @@ import {InputSource} from '../input-source'
 export interface VirtualJoystickPositionInput extends Input {
   readonly source: InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION
 
-  readonly bits: InputBit.POSITION_VIRTUAL_JOYSTICK
+  readonly bits: InputBit.POSITION_VIRTUAL_JOYSTICK | 0
 
   /** The last known fractional position of the center of the joystick in level
       coordinates. */
@@ -15,7 +15,12 @@ export interface VirtualJoystickPositionInput extends Input {
 export interface VirtualJoystickAxesInput extends Input {
   readonly source: InputSource.VIRTUAL_GAMEPAD_JOYSTICK_AXES
 
-  readonly bits: InputBit.LEFT | InputBit.RIGHT | InputBit.UP | InputBit.DOWN
+  readonly bits:
+    | InputBit.LEFT
+    | InputBit.RIGHT
+    | InputBit.UP
+    | InputBit.DOWN
+    | 0
 
   /** The normalized components of the axes in [-1, 1]. */
   readonly normal: XY
@@ -35,4 +40,18 @@ export interface VirtualJoystickAxesInput extends Input {
    * pixel further on two sides.
    */
   readonly magnitude: number
+}
+
+export interface VirtualButtonsPositionInput extends Input {
+  readonly source: InputSource.VIRTUAL_GAMEPAD_BUTTONS_POSITION
+
+  readonly bits: InputBit.POSITION_VIRTUAL_BUTTONS | 0
+
+  /** The last known fractional position of the center of the buttons in level
+      coordinates. */
+  readonly xy: XY
+}
+
+export interface VirtualButtonsPressedInput extends Input {
+  readonly source: InputSource.VIRTUAL_GAMEPAD_BUTTONS_PRESSED
 }
