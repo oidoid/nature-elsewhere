@@ -20,7 +20,7 @@ flat in uint vPaletteIndex;
 out vec4 frag;
 
 void main() {
-  vec2 position = vec2(vSource) + mod(vOffset, vec2(vSource.zw));
+  vec2 position = vec2(vSource) + mod(trunc(vOffset), vec2(vSource.zw));
   // Obtain the pixel for position. Its RGBA color encodes the color index.
   vec4 px = texture(atlas, position / vec2(atlasSize));
 
@@ -32,7 +32,7 @@ void main() {
   vec4 color = texture(palette, index);
 
   // Multiply alpha by one (no-op) when inside mask, zero when outside.
-  vec2 maskPosition = vec2(vMaskSource) + mod(vMaskOffset, vec2(vMaskSource.zw));
+  vec2 maskPosition = vec2(vMaskSource) + mod(trunc(vMaskOffset), vec2(vMaskSource.zw));
   vec4 maskPx = texture(atlas, maskPosition / vec2(atlasSize));
   color.a *= sign(maskPx.a);
 

@@ -213,8 +213,8 @@ export namespace Shader {
     )
     dataView.setInt16(i + 26, maskAnimation.size.w, littleEndian)
     dataView.setInt16(i + 28, maskAnimation.size.h, littleEndian)
-    dataView.setInt16(i + 30, image.maskOffset().x, littleEndian)
-    dataView.setInt16(i + 31, image.maskOffset().y, littleEndian)
+    dataView.setInt8(i + 30, image.maskOffset().x)
+    dataView.setInt8(i + 31, image.maskOffset().y)
     dataView.setUint8(i + 32, image.palette())
   }
 }
