@@ -1,8 +1,8 @@
 import * as childProcess from 'child_process'
 import * as CopyPlugin from 'copy-webpack-plugin'
-import * as pkg from './package.json'
 import * as webpack from 'webpack'
 import CleanPlugin from 'clean-webpack-plugin'
+import {version} from './package.json'
 
 const stats: Readonly<webpack.Stats.ToJsonOptionsObject> = Object.freeze({
   all: false,
@@ -38,7 +38,7 @@ export default (): webpack.Configuration => ({
     new webpack.DefinePlugin({
       'process.env': {
         date: JSON.stringify(date),
-        version: JSON.stringify(pkg.version),
+        version: JSON.stringify(version),
         hash: JSON.stringify(hash)
       }
     })

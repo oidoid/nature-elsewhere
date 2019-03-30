@@ -1,8 +1,6 @@
-import {ArrayUtil} from '../utils/array-util'
 import {Input} from './input'
 import {InputBit} from './input-bit'
 import {InputSet} from './input-set'
-import {ObjectUtil} from '../utils/object-util'
 
 /** record(), update(), read (active(), trigger()) in that order. */
 export class Recorder {
@@ -56,8 +54,8 @@ export class Recorder {
   /** Update the combo with recorded input. */
   update(milliseconds: number): void {
     const interval = this._timer + milliseconds
-    const bits = this._toBits(this._set)
-    const lastBits = this._toBits(this._lastSet)
+    const bits = InputSet.bits(this._set)
+    const lastBits = InputSet.bits(this._lastSet)
 
     if (interval >= Recorder._maxInterval && (!bits || bits !== lastBits)) {
       // Expired and released or changed.
@@ -93,14 +91,7 @@ export class Recorder {
     // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
     return combo.every(
       (bits, i) =>
-        ((exact ? ~0 : bits) & this._toBits(this._combo[offset + i])) === bits
+        ((exact ? ~0 : bits) & InputSet.bits(this._combo[offset + i])) === bits
     )
-  }
-
-  /** Coalesces and returns the bits for the inputs at combo index. A set bit
-      from any source overrides an unset bit from any other. */
-  private _toBits(set: InputSet): InputBit {
-    const inputs = ObjectUtil.keys(set).map(source => set[source])
-    return inputs.filter(ArrayUtil.is).reduce((sum, {bits}) => sum | bits, <number>0)
   }
 }

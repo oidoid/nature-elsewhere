@@ -33,19 +33,19 @@ export class PointerAdapter {
     const mouse = pointerType === 'pen' || pointerType === 'mouse'
     const active = type === 'pointerdown'
     const xy = Viewport.toLevelXY({x: clientX, y: clientY}, viewport, cam)
-    let source
-    let bits
     if (mouse) {
-      source = InputSource.MOUSE_PICK
-      bits = InputBit.PICK
-    } else if (xy.x < cam.x + cam.w / 2) {
-      source = InputSource.VIRTUAL_GAMEPAD_BUTTONS_PRESSED
-      bits = InputBit.ACTION // todo: collision detection with last location.
-    } else {
-      source = InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION
-      bits = InputBit.POSITION_VIRTUAL_JOYSTICK
+      const source = InputSource.MOUSE_PICK
+      const bits = InputBit.PICK
+      return {source, bits: active ? bits : 0, xy}
     }
-    return <DownInput>{source, bits: active ? bits : 0, xy}
+    if (xy.x < cam.x + cam.w / 2) {
+      const source = InputSource.VIRTUAL_GAMEPAD_BUTTONS_PRESSED
+      const bits = InputBit.ACTION // todo: collision detection with last location.
+      return {source, bits: active ? bits : 0}
+    }
+    const source = InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION
+    const bits = InputBit.POSITION_VIRTUAL_JOYSTICK
+    return {source, bits: active ? bits : 0, xy}
   }
 
   /**
