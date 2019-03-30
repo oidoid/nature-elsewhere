@@ -10,6 +10,7 @@ import {MemFont} from '../text/mem-font'
 import {NatureElsewhere} from '../entities/nature-elsewhere'
 import {NumberUtil} from '../utils/number-util'
 import {Palette, Tone} from '../images/palette'
+import {RainCloud} from '../entities/rain-cloud'
 import {Recorder} from '../inputs/recorder'
 import {SettingsLevel} from './settings-level'
 import {Store} from '../entities/store'
@@ -85,44 +86,36 @@ export class TitleLevel implements Level {
       }),
       ...this._logo.images(),
       ...this._footer.images(),
-      Image.new(_atlas, AnimationID.CLOUD_M, {
-        palette: Palette.GREYS,
-        layer: 3,
-        position: {x: 105 + 10 - 40, y: 2}
-      }),
-      Image.new(_atlas, AnimationID.RAIN, {
-        palette: Palette.BLUES,
-        layer: 3,
-        position: {x: 105 + 10 - 40 + 1, y: 2 + 6},
-        preScale: {x: 1, y: 100},
-        offsetRate: {x: 0, y: -0.004}
-      }),
-
-      Image.new(_atlas, AnimationID.CLOUD_S, {
-        palette: Palette.GREYS,
-        layer: 3,
-        position: {x: 65 + 10 - 40, y: 22}
-      }),
-      Image.new(_atlas, AnimationID.RAIN, {
-        palette: Palette.BLUES,
-        layer: 3,
-        position: {x: 65 + 10 - 40 + 1, y: 22 + 6},
-        preScale: {x: 1, y: 100},
-        offsetRate: {x: 0, y: -0.004}
-      }),
-
-      Image.new(_atlas, AnimationID.CLOUD_XL, {
-        palette: Palette.GREYS,
-        layer: 3,
-        position: {x: 120 + 10 - 40, y: 36}
-      }),
-      Image.new(_atlas, AnimationID.RAIN, {
-        palette: Palette.BLUES,
-        layer: 3,
-        position: {x: 120 + 10 - 40 + 1, y: 36 + 6},
-        preScale: {x: 1, y: 100},
-        offsetRate: {x: 0, y: -0.004}
-      })
+      ...Image.moveBy(
+        {x: 105 + 10 - 40, y: 2},
+        RainCloud.create(
+          _atlas,
+          AnimationID.CLOUD_M,
+          3,
+          {x: 1, y: 100},
+          {x: 0, y: -0.004}
+        )
+      ),
+      ...Image.moveBy(
+        {x: 65 + 10 - 40, y: 22},
+        RainCloud.create(
+          _atlas,
+          AnimationID.CLOUD_S,
+          3,
+          {x: 1, y: 100},
+          {x: 0, y: -0.004}
+        )
+      ),
+      ...Image.moveBy(
+        {x: 120 + 10 - 40, y: 36},
+        RainCloud.create(
+          _atlas,
+          AnimationID.CLOUD_XL,
+          3,
+          {x: 1, y: 100},
+          {x: 0, y: -0.004}
+        )
+      )
     )
     this._virtualJoystick = new VirtualJoystick(_atlas, 100)
     this._store.addImages(...this._virtualJoystick.images())

@@ -8,7 +8,7 @@ export interface Settings {
 }
 
 export namespace Settings {
-  export const preset: Settings = ObjectUtil.freeze({
+  export const defaults: Settings = ObjectUtil.freeze({
     zoomMultiplier: ZoomMultiplierSetting.MAX,
     windowMode:
       process.env.NODE_ENV === 'development'

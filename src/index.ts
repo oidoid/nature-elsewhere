@@ -20,7 +20,7 @@ ImageLoader.loadImages(
     atlasImage,
     atlas,
     paletteImage,
-    Settings.preset
+    Settings.defaults
   )
   game.start()
 })
