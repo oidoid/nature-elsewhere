@@ -28,6 +28,12 @@ export class ImageOptions {
  * index.
  */
 export class Image {
+  // withDefaults
+  static newBind(    atlas: Atlas.Definition,
+    animationID: AnimationID,
+    defaults: ImageOptions = {}) {
+      return (options: ImageOptions) => Image.new(atlas, animationID, {...defaults, ...options})
+    }
   // preScale is multiplied by target dimensions to repeat source.
   static new(
     {animations}: Atlas.Definition,

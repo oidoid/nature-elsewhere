@@ -30,8 +30,7 @@ export class ZoomMultiplierPanel {
         atlas,
         strings['ui/settings/zoom-multiplier/title'],
         layer,
-        {
-          ...target,
+        {...target,
           w: 53,
           h: 41
         }

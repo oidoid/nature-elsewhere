@@ -17,6 +17,10 @@ export namespace BorderBox {
     {w, h}: WH // Size not including border.
   ): readonly Image[] {
     const borderID = <AnimationID>(<unknown>border)
+    const newBorder = Image.newBind(atlas, borderID, {
+      palette: borderColor,
+      layer: layer + 1
+    })
     return [
       Image.new(atlas, AnimationID.PIXEL, {
         palette: backgroundColor,
@@ -24,30 +28,10 @@ export namespace BorderBox {
         wh: {w, h},
         position: {x: 1, y: 1}
       }),
-      Image.new(atlas, borderID, {
-        palette: borderColor,
-        layer: layer + 1,
-        wh: {w, h: 1},
-        position: {x: 1, y: 0}
-      }),
-      Image.new(atlas, borderID, {
-        palette: borderColor,
-        layer: layer + 1,
-        wh: {w, h: 1},
-        position: {x: 1, y: 1 + h}
-      }),
-      Image.new(atlas, borderID, {
-        palette: borderColor,
-        layer: layer + 1,
-        wh: {w: 1, h},
-        position: {x: 0, y: 1}
-      }),
-      Image.new(atlas, borderID, {
-        palette: borderColor,
-        layer: layer + 1,
-        wh: {w: 1, h},
-        position: {x: 1 + w, y: 1}
-      })
+      newBorder({wh: {w, h: 1}, position: {x: 1, y: 0}}),
+      newBorder({wh: {w: 1, h}, position: {x: 1 + w, y: 1}}),
+      newBorder({wh: {w, h: 1}, position: {x: 1, y: 1 + h}}),
+      newBorder({wh: {w: 1, h}, position: {x: 0, y: 1}})
     ]
   }
 }
