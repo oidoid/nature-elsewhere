@@ -150,10 +150,10 @@ export class TitleLevel implements Level {
     if (this._recorder.triggeredSet(InputBit.ACTION)) {
       switch (this._cursorRow) {
         case Select.START:
-          nextLevel = new FieldsLevel(this._atlas)
+          nextLevel = new FieldsLevel(this._atlas, this._recorder)
           break
         case Select.SETTINGS:
-          nextLevel = new SettingsLevel(this._atlas)
+          nextLevel = new SettingsLevel(this._atlas, this._recorder, this)
           break
         case Select.EXIT:
           nextLevel = undefined

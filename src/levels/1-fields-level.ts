@@ -1,26 +1,29 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
 import {Image} from '../images/image'
+import {InputBit} from '../inputs/input-bit'
 import {Limits} from '../math/limits'
 import {Palette} from '../images/palette'
 import {Store} from '../entities/store'
+import {PauseLevel} from './pause-level'
+import {Recorder} from '../inputs/recorder'
 
 export class FieldsLevel implements Level {
   private readonly _scale: number = 9
   private readonly _store: Store
-  constructor(atlas: Atlas.Definition) {
-    this._store = new Store(atlas)
+  constructor(private _atlas: Atlas.Definition, private _recorder: Recorder) {
+    this._store = new Store(_atlas)
     this._store.addImages(
-      Image.new(atlas, AnimationID.PIXEL, {
+      Image.new(_atlas, AnimationID.PIXEL, {
         palette: Palette.YELLOWS,
         preScale: Limits.MAX_XY
       }),
-      Image.new(atlas, AnimationID.TREE, {
+      Image.new(_atlas, AnimationID.TREE, {
         palette: Palette.TREE,
         layer: 1,
         position: {x: 120, y: 4}
       }),
-      Image.new(atlas, AnimationID.GRASS_L, {
+      Image.new(_atlas, AnimationID.GRASS_L, {
         palette: Palette.GREENS,
         layer: 1,
         position: {x: -1024, y: 31},
@@ -34,6 +37,9 @@ export class FieldsLevel implements Level {
   }
 
   update(then: number, now: number, _canvas: WH, cam: Rect): LevelUpdate {
-    return {nextLevel: this, ...this._store.update(now - then, cam)}
+    const nextLevel = this._recorder.triggered(InputBit.MENU)
+      ? new PauseLevel(this._atlas, this._recorder, this)
+      : this
+    return {nextLevel, ...this._store.update(now - then, cam)}
   }
 }

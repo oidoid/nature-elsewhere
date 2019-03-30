@@ -5,8 +5,10 @@ import {Button} from '../entities/ui/button'
 import {ControllerMappingPanel} from '../entities/ui/controller-mapping-panel'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
+import {InputBit} from '../inputs/input-bit'
 import {Limits} from '../math/limits'
 import {Palette} from '../images/palette'
+import {Recorder} from '../inputs/recorder.js'
 import {Rect} from '../math/rect'
 import {Store} from '../entities/store'
 import {Text} from '../text/text'
@@ -17,7 +19,11 @@ import {ZoomMultiplierPanel} from '../entities/ui/zoom-multiplier-panel'
 export class SettingsLevel implements Level {
   private readonly _store: Store
   private readonly _ui: ImageGroup
-  constructor(atlas: Atlas.Definition) {
+  constructor(
+    atlas: Atlas.Definition,
+    private readonly _recorder: Recorder,
+    private readonly _level: Level
+  ) {
     this._store = new Store(atlas)
     this._store.addImages(
       Image.new(atlas, AnimationID.PIXEL, {
@@ -81,6 +87,8 @@ export class SettingsLevel implements Level {
 
   update(then: number, now: number, _canvas: WH, cam: Rect): LevelUpdate {
     this._ui.centerOn(cam)
-    return {nextLevel: this, ...this._store.update(now - then, cam)}
+
+    const nextLevel = this._recorder.set(InputBit.MENU) ? this._level : this
+    return {nextLevel, ...this._store.update(now - then, cam)}
   }
 }

@@ -1,4 +1,6 @@
 {
+  "ui/paused/title": "Paused",
+
   "ui/settings/controller-mapping/title": "Controller Mapping",
   "ui/settings/controller-mapping/source/gamepad": "Gamepad",
   "ui/settings/controller-mapping/input/up": "Up",

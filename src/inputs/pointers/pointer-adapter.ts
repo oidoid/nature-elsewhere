@@ -121,7 +121,11 @@ export class PointerAdapter {
   private _origin?: XY
 
   toInput(): readonly (DownInput | MoveInput)[] {
-    return [this._downInput, this._moveInput].filter(ArrayUtil.is)
+    const input = [this._downInput, this._moveInput].filter(ArrayUtil.is)
+    if (this._moveInput && this._moveInput.source === InputSource.MOUSE_POINT) {
+      this._moveInput = undefined
+    }
+    return input
   }
 
   adapt(viewport: WH, cam: Rect, event: PointerEvent, defaultOrigin: XY): void {
