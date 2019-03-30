@@ -16,7 +16,7 @@ const SwitchOffset: Readonly<
 
 export class WindowModePanel {
   private readonly _switch: SlideSwitch
-  private readonly _images: ReadonlyArray<Image>
+  private readonly _images: readonly Image[]
   constructor(atlas: Atlas.Definition, layer: number, target: XY) {
     this._switch = new SlideSwitch(atlas, layer + 4, 28)
     this._switch.switch(SwitchOffset[WindowModeSetting.FULLSCREEN])
@@ -34,7 +34,7 @@ export class WindowModePanel {
     ])
   }
 
-  images(): ReadonlyArray<Image> {
+  images(): readonly Image[] {
     return this._images
   }
 }

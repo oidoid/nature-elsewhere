@@ -9,7 +9,7 @@ const stats: Readonly<webpack.Stats.ToJsonOptionsObject> = Object.freeze({
   errors: true,
   warnings: true
 })
-const [date, hash]: ReadonlyArray<string> = Object.freeze(
+const [date, hash]: readonly string[] = Object.freeze(
   childProcess
     .execSync('git --no-pager log -1 --date=format:%F --pretty=%ad,%h')
     .toString()

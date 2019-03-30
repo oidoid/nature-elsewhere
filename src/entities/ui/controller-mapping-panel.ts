@@ -12,7 +12,7 @@ export namespace ControllerMappingPanel {
     atlas: Atlas.Definition,
     layer: number,
     target: XY
-  ): ReadonlyArray<Image> {
+  ): readonly Image[] {
     return Image.moveBy(target, [
       ...Panel.create(
         atlas,
@@ -97,7 +97,7 @@ export namespace ControllerMappingPanel {
     animationID: AnimationID,
     layer: number,
     title: string
-  ): ReadonlyArray<Image> {
+  ): readonly Image[] {
     return [
       Image.new(atlas, animationID, {layer}),
       ...Image.moveBy({x: 8, y: 2}, Text.toImages(atlas, title, {layer})),

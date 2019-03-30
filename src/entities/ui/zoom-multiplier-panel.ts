@@ -17,7 +17,7 @@ const SwitchOffset: Readonly<
 
 export class ZoomMultiplierPanel {
   private readonly _switch: SlideSwitch
-  private readonly _images: ReadonlyArray<Image>
+  private readonly _images: readonly Image[]
   constructor(
     atlas: Atlas.Definition,
     layer: number, // layer +5
@@ -44,7 +44,7 @@ export class ZoomMultiplierPanel {
     ])
   }
 
-  images(): ReadonlyArray<Image> {
+  images(): readonly Image[] {
     return this._images
   }
 }

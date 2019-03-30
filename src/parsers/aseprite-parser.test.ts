@@ -8,7 +8,7 @@ import {ObjectUtil} from '../utils/object-util'
 describe('atlas.json', () => {
   const file: Aseprite.File = ObjectUtil.freeze(atlasJSON)
   const atlas: Atlas.Definition = ObjectUtil.freeze(AsepriteParser.parse(file))
-  const tags: ReadonlyArray<Aseprite.Tag> = ObjectUtil.freeze(
+  const tags: readonly Aseprite.Tag[] = ObjectUtil.freeze(
     file.meta.frameTags.map(frameTag => frameTag.name)
   )
 
@@ -411,7 +411,7 @@ describe('parseCollision()', () => {
 
   test('Converts no Slices.', () => {
     const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    const slices = <ReadonlyArray<Aseprite.Slice>>[]
+    const slices = <readonly Aseprite.Slice[]>[]
     expect(AsepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
   })
 

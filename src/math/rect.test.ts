@@ -12,8 +12,8 @@ import {Rect} from './rect'
  *   flip: boolean
  * ]
  */
-type Test = Readonly<[string, Rect, Rect, Rect, boolean, Rect, boolean]>
-const tests: ReadonlyArray<Test> = ObjectUtil.freeze(
+type Test = [string, Rect, Rect, Rect, boolean, Rect, boolean]
+const tests: readonly Test[] = ObjectUtil.freeze(
   [
     [
       `

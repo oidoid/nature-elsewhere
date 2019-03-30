@@ -92,9 +92,7 @@ describe('celIndex', () => {
   )
 
   test.each(<
-    ReadonlyArray<
-      Readonly<[Aseprite.AnimationDirection, number, ReadonlyArray<number>]>
-    >
+    readonly [Aseprite.AnimationDirection, number, readonly number[]][]
   >[
     [
       Atlas.AnimationDirection.FORWARD,

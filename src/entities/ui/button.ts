@@ -10,7 +10,7 @@ export namespace Button {
     layer: number, // Uses layer and layer + 1
     wh: WH, // Size not including border.
     text: string
-  ): ReadonlyArray<Image> {
+  ): readonly Image[] {
     return [
       ...BorderBox.create(
         atlas,

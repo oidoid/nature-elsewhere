@@ -15,7 +15,7 @@ export namespace BorderBox {
     borderColor: number,
     layer: number, // Uses layer and layer + 1/
     {w, h}: WH // Size not including border.
-  ): ReadonlyArray<Image> {
+  ): readonly Image[] {
     const borderID = <AnimationID>(<unknown>border)
     return [
       Image.new(atlas, AnimationID.PIXEL, {

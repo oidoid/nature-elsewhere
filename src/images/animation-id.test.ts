@@ -7,7 +7,7 @@ import {ObjectUtil} from '../utils/object-util'
 const state: Atlas.Definition = ObjectUtil.freeze(
   AsepriteParser.parse(atlasJSON)
 )
-const ids: ReadonlyArray<AnimationID> = ObjectUtil.freeze(
+const ids: readonly AnimationID[] = ObjectUtil.freeze(
   ObjectUtil.values(AnimationID)
 )
 

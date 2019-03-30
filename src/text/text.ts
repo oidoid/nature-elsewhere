@@ -7,7 +7,7 @@ import {Palette} from '../images/palette'
 export namespace Text {
   export interface Layout {
     /** The length of this array matches the string length. */
-    readonly positions: ReadonlyArray<XY | undefined>
+    readonly positions: readonly (XY | undefined)[]
     /** The offset in pixels. */
     readonly cursor: XY
   }
@@ -22,7 +22,7 @@ export namespace Text {
     options: ImageOptions = {},
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
-  ): ReadonlyArray<Image> {
+  ): readonly Image[] {
     const images = []
     const scale = options.scale || {x: 1, y: 1}
     const positions = layout(string, w, scale).positions

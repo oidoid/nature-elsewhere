@@ -15,7 +15,7 @@ export class Store {
   private _instances: DataView = Shader.newInstanceBuffer(1024)
   constructor(private readonly _atlas: Atlas.Definition) {}
 
-  addImages(...images: Image[]): void {
+  addImages(...images: readonly Image[]): void {
     images.forEach(image => this.addImage(image))
   }
 

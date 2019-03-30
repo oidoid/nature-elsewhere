@@ -14,7 +14,7 @@ export namespace Atlas {
   export interface Animation {
     /** Cel dimensions in pixels. */
     readonly size: WH
-    readonly cels: ReadonlyArray<Cel>
+    readonly cels: readonly Cel[]
     /** Positive animation length in milliseconds, possibly infinite. */
     readonly duration: number
     readonly direction: AnimationDirection
@@ -27,7 +27,7 @@ export namespace Atlas {
     /** Positive cel exposure in milliseconds, possibly infinite. */
     readonly duration: number
     /** Collision bounds within the texture in pixels. */
-    readonly collision: ReadonlyArray<Rect>
+    readonly collision: readonly Rect[]
   }
 
   export import AnimationDirection = Aseprite.AnimationDirection

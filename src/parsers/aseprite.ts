@@ -39,9 +39,9 @@ export namespace Aseprite {
     /** E.g., '1'. */
     readonly scale: string
     /** All FrameTags for all files packed **via CLI** `--list-tags`. */
-    readonly frameTags: ReadonlyArray<FrameTag>
+    readonly frameTags: readonly FrameTag[]
     /** All slices for all files packed **via CLI** `--list-slices`. */
-    readonly slices: ReadonlyArray<Slice>
+    readonly slices: readonly Slice[]
   }
 
   /**
@@ -135,7 +135,7 @@ export namespace Aseprite {
     readonly name: Tag
     /** Color in #rrggbbaa format. E.g., blue is '#0000ffff'. */
     readonly color: string
-    readonly keys: ReadonlyArray<Key>
+    readonly keys: readonly Key[]
   }
 
   /** A Frame collision boundary subset within the file packed. */

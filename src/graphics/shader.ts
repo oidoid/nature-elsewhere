@@ -93,7 +93,7 @@ export namespace Shader {
     readonly length: number
     readonly stride: number
     readonly divisor: number
-    readonly attributes: ReadonlyArray<Attribute>
+    readonly attributes: readonly Attribute[]
   }
 
   export interface Attribute {
@@ -133,7 +133,7 @@ export namespace Shader {
 
   function newDivisorLayout(
     divisor: number,
-    ...partialAttributes: PartialAttribute[]
+    ...partialAttributes: readonly PartialAttribute[]
   ): DivisorLayout {
     const attributes = partialAttributes.reduce(reducePartialAttribute, [])
     const maxSize = attributes.reduce(
@@ -152,10 +152,10 @@ export namespace Shader {
   }
 
   function reducePartialAttribute(
-    attributes: ReadonlyArray<Attribute>,
+    attributes: readonly Attribute[],
     {type, name, length}: PartialAttribute,
     index: number
-  ): ReadonlyArray<Attribute> {
+  ): readonly Attribute[] {
     return attributes.concat({
       type,
       name,

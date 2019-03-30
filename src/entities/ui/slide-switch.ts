@@ -7,7 +7,7 @@ import {Palette, Tone} from '../../images/palette'
 
 export class SlideSwitch {
   private readonly _switch: Image
-  private readonly _images: ReadonlyArray<Image>
+  private readonly _images: readonly Image[]
   constructor(
     atlas: Atlas.Definition,
     layer: number,
@@ -33,7 +33,7 @@ export class SlideSwitch {
     ]
   }
 
-  images(): ReadonlyArray<Image> {
+  images(): readonly Image[] {
     return this._images
   }
 

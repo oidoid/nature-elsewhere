@@ -120,7 +120,7 @@ export class PointerAdapter {
   /** The last origin of the virtual joystick. */
   private _origin?: XY
 
-  toInput(): ReadonlyArray<DownInput | MoveInput> {
+  toInput(): readonly (DownInput | MoveInput)[] {
     return [this._downInput, this._moveInput].filter(ArrayUtil.is)
   }
 

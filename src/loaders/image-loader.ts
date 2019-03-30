@@ -1,7 +1,7 @@
 export namespace ImageLoader {
   export function loadImages(
-    ...urls: string[]
-  ): Promise<ReadonlyArray<HTMLImageElement>> {
+    ...urls: readonly string[]
+  ): Promise<readonly HTMLImageElement[]> {
     return Promise.all(urls.map(url => loadImage(url)))
   }
 

@@ -28,24 +28,24 @@ export class Recorder {
   ) {}
 
   /** @param combo A sequence of one or more InputBits. */
-  equal(...combo: InputBit[]): boolean {
+  equal(...combo: readonly InputBit[]): boolean {
     return this.active(true, combo)
   }
 
-  set(...combo: InputBit[]): boolean {
+  set(...combo: readonly InputBit[]): boolean {
     return this.active(false, combo)
   }
 
   /** Identical to active() but only true if combo is new. */
-  triggered(...combo: InputBit[]): boolean {
+  triggered(...combo: readonly InputBit[]): boolean {
     return !this._timer && this.equal(...combo)
   }
 
-  triggeredSet(...combo: InputBit[]): boolean {
+  triggeredSet(...combo: readonly InputBit[]): boolean {
     return !this._timer && this.set(...combo)
   }
 
-  combo(): ReadonlyArray<InputSet> {
+  combo(): readonly InputSet[] {
     return this._combo
   }
 
@@ -87,7 +87,7 @@ export class Recorder {
     this._set = {}
   }
 
-  private active(exact: boolean, combo: InputBit[]): boolean {
+  private active(exact: boolean, combo: readonly InputBit[]): boolean {
     const offset = this._combo.length - combo.length
     if (offset < 0) return false
     // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
@@ -101,6 +101,6 @@ export class Recorder {
       from any source overrides an unset bit from any other. */
   private _toBits(set: InputSet): InputBit {
     const inputs = ObjectUtil.keys(set).map(source => set[source])
-    return inputs.filter(ArrayUtil.is).reduce((sum, {bits}) => sum | bits, 0)
+    return inputs.filter(ArrayUtil.is).reduce((sum, {bits}) => sum | bits, <number>0)
   }
 }

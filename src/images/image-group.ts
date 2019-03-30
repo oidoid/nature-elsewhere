@@ -7,10 +7,10 @@ import {XY} from '../math/xy'
 export class ImageGroup {
   private _origin: Mutable<XY> = {x: 0, y: 0}
   private _target: Rect = {x: 0, y: 0, w: 0, h: 0}
-  constructor(private readonly _images: ReadonlyArray<Image>) {
+  constructor(private readonly _images: readonly Image[]) {
     this.invalidate()
   }
-  images(): ReadonlyArray<Image> {
+  images(): readonly Image[] {
     return this._images
   }
   moveTo(target: XY): void {

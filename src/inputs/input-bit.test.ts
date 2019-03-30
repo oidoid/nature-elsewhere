@@ -1,7 +1,7 @@
 import {InputBit} from './input-bit'
 import {ObjectUtil} from '../utils/object-util'
 
-const bits: ReadonlyArray<InputBit> = ObjectUtil.freeze(
+const bits: readonly InputBit[] = ObjectUtil.freeze(
   ObjectUtil.values(InputBit).filter(val => typeof val === 'number')
 )
 

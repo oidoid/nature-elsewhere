@@ -11,7 +11,7 @@ export namespace Panel {
     title: string,
     layer: number, // layer, layer +3
     target: WH
-  ): ReadonlyArray<Image> {
+  ): readonly Image[] {
     const box = BorderBox.create(
       atlas,
       Palette.YELLOWS,

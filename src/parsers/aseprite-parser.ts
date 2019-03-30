@@ -8,9 +8,9 @@ export namespace AsepriteParser {
   }
 
   export function parseAnimations(
-    frameTags: ReadonlyArray<Aseprite.FrameTag>,
+    frameTags: readonly Aseprite.FrameTag[],
     frames: Aseprite.FrameMap,
-    slices: ReadonlyArray<Aseprite.Slice>
+    slices: readonly Aseprite.Slice[]
   ): Atlas.AnimationMap {
     return frameTags.reduce(
       (sum, frameTag) => ({
@@ -24,7 +24,7 @@ export namespace AsepriteParser {
   export function parseAnimation(
     frameTag: Aseprite.FrameTag,
     frames: Aseprite.FrameMap,
-    slices: ReadonlyArray<Aseprite.Slice>
+    slices: readonly Aseprite.Slice[]
   ): Atlas.Animation {
     const cels = []
     let duration = 0
@@ -57,7 +57,7 @@ export namespace AsepriteParser {
     frameTag: Aseprite.FrameTag,
     frame: Aseprite.Frame,
     frameNumber: number,
-    slices: ReadonlyArray<Aseprite.Slice>
+    slices: readonly Aseprite.Slice[]
   ): Atlas.Cel {
     return {
       position: parsePosition(frame),
@@ -83,8 +83,8 @@ export namespace AsepriteParser {
   export function parseCollision(
     frameTag: Aseprite.FrameTag,
     frameNumber: number,
-    slices: ReadonlyArray<Aseprite.Slice>
-  ): ReadonlyArray<Rect> {
+    slices: readonly Aseprite.Slice[]
+  ): readonly Rect[] {
     const offset = frameNumber - frameTag.from
     return (
       slices

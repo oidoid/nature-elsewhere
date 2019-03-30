@@ -40,7 +40,7 @@ export class VirtualJoystick {
     } else this._image.setStick({x: 0, y: 0}, 0)
   }
 
-  images(): ReadonlyArray<Image> {
+  images(): readonly Image[] {
     return this.hidden() ? [] : this._image.images()
   }
 
@@ -69,7 +69,7 @@ class VirtualJoystickImage {
     this._radiusPx = Math.min(this._base.target().w, this._base.target().h) / 2
   }
 
-  images(): ReadonlyArray<Image> {
+  images(): readonly Image[] {
     return this._images.images()
   }
 

@@ -4,7 +4,7 @@ import {Text} from './text'
 const rowHeight: number = MemFont.lineHeight + MemFont.leading
 
 describe('layout()', () =>
-  test.each(<ReadonlyArray<Readonly<[string, number, Text.Layout]>>>[
+  test.each(<readonly [string, number, Text.Layout][]>[
     ['', Number.MAX_VALUE, {positions: [], cursor: {x: 0, y: 0 * rowHeight}}],
     [
       ' ',
@@ -165,7 +165,7 @@ describe('layout()', () =>
 
 describe('layoutWord()', () =>
   test.each(<
-    ReadonlyArray<Readonly<[XY, number, string, number, Text.Layout]>>
+    readonly [XY, number, string, number, Text.Layout][]
   >[
     [
       {x: 0, y: 0 * rowHeight},

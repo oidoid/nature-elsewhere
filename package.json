@@ -10,7 +10,7 @@
   "license": "GPL-3.0-only WITH CC-BY-SA-4.0",
   "scripts": {
     "start": "webpack-dev-server",
-    "test": "npm run -s formatter -- -l && npm -s run build && jest",
+    "test": "npm -s run build && jest # npm run -s formatter -- -l &&",
     "build": "webpack -p",
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{css,json,html,md,ts}'",
@@ -32,7 +32,7 @@
     "ts-jest": "24.0.0",
     "ts-loader": "5.3.3",
     "ts-node": "8.0.3",
-    "typescript": "3.3.4000",
+    "typescript": "3.4.1",
     "webpack": "4.29.6",
     "webpack-cli": "3.3.0",
     "webpack-dev-server": "3.2.1"

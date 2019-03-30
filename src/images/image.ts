@@ -71,20 +71,20 @@ export class Image {
 
   static moveBy(
     offset: XY,
-    images: ReadonlyArray<Image>
-  ): ReadonlyArray<Image> {
+    images: readonly Image[]
+  ): readonly Image[] {
     images.forEach(image => image.moveBy(offset))
     return images
   }
 
-  static target(images: ReadonlyArray<Image>): Rect {
+  static target(images: readonly Image[]): Rect {
     return images.reduce(
       (union, image) => Rect.union(union, image.target()),
       images[0] ? images[0].target() : {x: 0, y: 0, w: 0, h: 0}
     )
   }
 
-  static setPalette(palette: Palette, images: ReadonlyArray<Image>): void {
+  static setPalette(palette: Palette, images: readonly Image[]): void {
     images.forEach(image => image.setPalette(palette))
   }
 

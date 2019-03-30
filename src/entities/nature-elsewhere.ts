@@ -8,7 +8,7 @@ export namespace NatureElsewhere {
     atlas: Atlas.Definition,
     layer: number,
     position: XY
-  ): ReadonlyArray<Image> {
+  ): readonly Image[] {
     return [
       Image.new(atlas, AnimationID.NATURE_ELSEWHERE, {
         palette: Palette.GREENS,
