@@ -30,10 +30,7 @@ export class ZoomMultiplierPanel {
         atlas,
         strings['ui/settings/zoom-multiplier/title'],
         layer,
-        {...target,
-          w: 53,
-          h: 41
-        }
+        {...target, w: 53, h: 41}
       ),
       Image.new(atlas, AnimationID.UI_ZOOM_MULTIPLIER_CHART, {
         position: {x: 9, y: 6},

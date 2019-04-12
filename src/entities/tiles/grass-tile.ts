@@ -33,7 +33,10 @@ export namespace GrassTile {
     const grasses = []
     for (let i = 0, len = random.int(0, 8); i < len; ++i) {
       const id = randomGrassID(random)
-      const position = {x: random.int(0, wh.w), y: random.int(0, wh.h - atlas.animations[id].size.h + 1)}
+      const position = {
+        x: random.int(0, wh.w),
+        y: random.int(0, wh.h - atlas.animations[id].size.h + 1)
+      }
       grasses.push(
         Image.new(atlas, id, {
           palette: Palette.GREENS,
@@ -41,7 +44,10 @@ export namespace GrassTile {
           position,
           offset: {x: random.int(0, atlas.animations[id].size.w), y: 0},
           wh: {
-            w: random.int(1, Math.min(atlas.animations[id].size.w * 2, wh.w - position.x)),
+            w: random.int(
+              1,
+              Math.min(atlas.animations[id].size.w * 2, wh.w - position.x)
+            ),
             h: atlas.animations[id].size.h
           }
         })

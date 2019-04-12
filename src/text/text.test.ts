@@ -164,9 +164,7 @@ describe('layout()', () =>
   ))
 
 describe('layoutWord()', () =>
-  test.each(<
-    readonly [XY, number, string, number, Text.Layout][]
-  >[
+  test.each(<readonly [XY, number, string, number, Text.Layout][]>[
     [
       {x: 0, y: 0 * rowHeight},
       Number.MAX_VALUE,

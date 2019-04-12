@@ -18,9 +18,6 @@ export namespace ArrayUtil {
   ): readonly number[] {
     return Array(Math.ceil(Math.abs((start - end) / step)))
       .fill(undefined)
-      .reduce(
-        (sum: readonly number[], _, i) => ([...sum, start + i * step]),
-        []
-      )
+      .reduce((sum: readonly number[], _, i) => [...sum, start + i * step], [])
   }
 }
