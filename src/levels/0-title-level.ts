@@ -1,6 +1,7 @@
+import * as strings from '../assets/strings.json'
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
-import {Defaults} from './defaults'
+import {LevelDefault} from './level-default'
 import {FieldsLevel} from './1-fields-level'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
@@ -11,6 +12,7 @@ import {NatureElsewhere} from '../entities/nature-elsewhere'
 import {NumberUtil} from '../utils/number-util'
 import {Palette, Tone} from '../images/palette'
 import {RainCloud} from '../entities/rain-cloud'
+import {Random} from '../math/random.js'
 import {Recorder} from '../inputs/recorder'
 import {SettingsLevel} from './settings-level'
 import {Store} from '../entities/store'
@@ -38,11 +40,17 @@ export class TitleLevel implements Level {
   private readonly _virtualJoystick: VirtualJoystick
   constructor(
     private readonly _atlas: Atlas.Definition,
-    private readonly _recorder: Recorder
+    private readonly _recorder: Recorder,
+    private readonly _random: Random
   ) {
     this._store = new Store(_atlas)
     let logo = NatureElsewhere.create(_atlas, 1, {x: 0, y: 6})
-    const chars = Text.toImages(_atlas, 'episode 0                rndmem')
+    const chars = Text.toImages(
+      _atlas,
+      `${strings['ui/title/episode-0']}                ${
+        strings['ui/title/rndmem']
+      }`
+    )
     Image.setPalette(Palette.GREYS + Tone.HALF, chars)
     Image.moveBy(
       {x: 0, y: Image.target(logo).y + Image.target(logo).h + 3},
@@ -51,10 +59,10 @@ export class TitleLevel implements Level {
     logo = logo.concat(chars)
 
     const menuText = `
-> Start
-  Settings
-  Level Editor
-  Exit
+> ${strings['ui/title/menu/start']}
+  ${strings['ui/title/menu/settings']}
+  ${strings['ui/title/menu/level-editor']}
+  ${strings['ui/title/menu/exit']}
     `.trim()
     const menuChars = Text.toImages(_atlas, menuText)
     this._cursor = menuChars[0]
@@ -122,7 +130,7 @@ export class TitleLevel implements Level {
   }
 
   scale(canvas: WH) {
-    return Viewport.scale(canvas, Defaults.minScreenSize, 0)
+    return Viewport.scale(canvas, LevelDefault.minScreenSize, 0)
   }
 
   update(then: number, now: number, _canvas: Rect, cam: Rect): LevelUpdate {
@@ -143,7 +151,7 @@ export class TitleLevel implements Level {
     if (this._recorder.triggeredSet(InputBit.ACTION)) {
       switch (this._cursorRow) {
         case Select.START:
-          nextLevel = new FieldsLevel(this._atlas, this._recorder)
+          nextLevel = new FieldsLevel(this._atlas, this._recorder, this._random)
           break
         case Select.SETTINGS:
           nextLevel = new SettingsLevel(this._atlas, this._recorder, this)

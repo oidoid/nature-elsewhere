@@ -174,6 +174,7 @@ export enum AnimationID {
   TALL_GRASS_G = 'tall-grass g',
   TALL_GRASS_H = 'tall-grass h',
   TALL_GRASS_I = 'tall-grass i',
+  TILE_GRASS = 'tile grass',
   TREE = 'tree ',
   UI_CONTROLLER_MAPPING_INPUT_UP = 'ui-controller-mapping-input up',
   UI_CONTROLLER_MAPPING_INPUT_RIGHT = 'ui-controller-mapping-input right',

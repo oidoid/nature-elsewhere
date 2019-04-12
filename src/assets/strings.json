@@ -1,4 +1,11 @@
 {
+  "ui/title/episode-0": "episode 0",
+  "ui/title/rndmem": "rndmem",
+  "ui/title/menu/start": "Start",
+  "ui/title/menu/settings": "Settings",
+  "ui/title/menu/level-editor": "Level Editor",
+  "ui/title/menu/exit": "Exit",
+
   "ui/paused/title": "Paused",
 
   "ui/settings/controller-mapping/title": "Controller Mapping",

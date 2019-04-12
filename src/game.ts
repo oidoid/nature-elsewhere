@@ -1,6 +1,9 @@
 import {Atlas} from './images/atlas'
+import {FunctionUtil} from './utils/function-util'
 import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
+import {InputSet} from './inputs/input-set'
+import {Random} from './math/random'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer'
 import {RendererStateMachine} from './graphics/renderer-state-machine'
@@ -8,8 +11,6 @@ import {Settings} from './settings/settings'
 import {TitleLevel} from './levels/0-title-level'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
-import {InputSet} from './inputs/input-set'
-import {FunctionUtil} from './utils/function-util'
 
 export class Game {
   private _level: Level
@@ -26,7 +27,7 @@ export class Game {
     _settings: Settings
   ) {
     this._inputRouter = new InputRouter(window, canvas)
-    this._level = new TitleLevel(atlas, this._recorder)
+    this._level = new TitleLevel(atlas, this._recorder, new Random())
     this._rendererStateMachine = new RendererStateMachine(
       window,
       canvas,

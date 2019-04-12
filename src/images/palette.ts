@@ -7,7 +7,8 @@ export enum Palette {
   FROG = 4 * bankSize,
   SNAKE = 5 * bankSize,
   CATTAILS = 6 * bankSize,
-  YELLOWS = 7 * bankSize
+  YELLOWS = 7 * bankSize,
+  GRASS_GREENS = 8 * bankSize
 }
 
 export enum Tone {
