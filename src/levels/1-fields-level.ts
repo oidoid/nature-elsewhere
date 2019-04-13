@@ -28,7 +28,7 @@ export class FieldsLevel implements Level {
         palette: Palette.GRASS_GREENS,
         wh: Limits.MAX_WH
       }),
-      ...ArrayUtil.range(0, 1).reduce(
+      ...ArrayUtil.range(0, 1000).reduce(
         (sum: readonly Image[], i) => [
           ...sum,
           ...Image.moveBy(

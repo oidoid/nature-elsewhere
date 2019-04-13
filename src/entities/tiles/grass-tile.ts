@@ -25,11 +25,6 @@ export namespace GrassTile {
     wh: WH,
     random: Random
   ): readonly Image[] {
-    const tile = Image.new(atlas, AnimationID.TILE_GRASS, {
-      palette: Palette.GREENS,
-      layer,
-      wh
-    })
     const grasses = []
     for (let i = 0, len = random.int(0, 8); i < len; ++i) {
       const id = randomGrassID(random)
@@ -53,7 +48,7 @@ export namespace GrassTile {
         })
       )
     }
-    return [tile, ...grasses]
+    return grasses
   }
 }
 
