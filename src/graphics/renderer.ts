@@ -26,8 +26,10 @@ export class Renderer {
 
     // Allow translucent textures to be layered.
     gl.enable(GL.BLEND)
-    gl.blendEquation(GL.FUNC_ADD)
     gl.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
+
+    // Disable image colorspace conversions. The default is browser dependent.
+    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, false)
 
     const program = GLUtil.buildProgram(
       gl,
