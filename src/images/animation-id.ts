@@ -12,6 +12,8 @@ export enum AnimationID {
   CLOUD_M = 'cloud m',
   CLOUD_L = 'cloud l',
   CLOUD_XL = 'cloud xl',
+  FLOWER_DARK = 'flower dark',
+  FLOWER_LIGHT = 'flower light',
   FROG_EAT = 'frog eat',
   FROG_IDLE = 'frog idle',
   FROG_LEAP = 'frog leap',

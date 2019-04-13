@@ -38,7 +38,7 @@ export class PointerAdapter {
       const bits = InputBit.PICK
       return {source, bits: active ? bits : 0, xy}
     }
-    if (xy.x < cam.x + cam.w / 2) {
+    if (xy.x >= cam.x + cam.w / 2) {
       const source = InputSource.VIRTUAL_GAMEPAD_BUTTONS_PRESSED
       const bits = InputBit.ACTION // todo: collision detection with last location.
       return {source, bits: active ? bits : 0}

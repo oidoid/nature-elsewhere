@@ -10,6 +10,7 @@ import {Random} from '../math/random'
 import {Recorder} from '../inputs/recorder'
 import {Store} from '../entities/store'
 import {ArrayUtil} from '../utils/array-util'
+import {FlowerTile} from '../entities/tiles/flower-tile'
 
 //   _______ _______
 //  /      //      /
@@ -28,6 +29,7 @@ export class FieldsLevel implements Level {
         palette: Palette.GRASS_GREENS,
         wh: Limits.MAX_WH
       }),
+      ...FlowerTile.create(_atlas, 4, {w: 1000, h: 1000}, random),
       ...ArrayUtil.range(0, 1000).reduce(
         (sum: readonly Image[], i) => [
           ...sum,
