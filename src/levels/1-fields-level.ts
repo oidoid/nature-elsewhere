@@ -1,22 +1,23 @@
 import {AnimationID} from '../images/animation-id'
+import {ArrayUtil} from '../utils/array-util'
 import {Atlas} from '../images/atlas'
+import {FlowerTile} from '../entities/tiles/flower-tile'
 import {GrassTile} from '../entities/tiles/grass-tile'
 import {Image} from '../images/image'
 import {InputBit} from '../inputs/input-bit'
+import {LevelDefault} from './level-default'
 import {Limits} from '../math/limits'
 import {Palette} from '../images/palette'
 import {PauseLevel} from './pause-level'
 import {Random} from '../math/random'
 import {Recorder} from '../inputs/recorder'
 import {Store} from '../entities/store'
-import {ArrayUtil} from '../utils/array-util'
-import {FlowerTile} from '../entities/tiles/flower-tile'
+import {Viewport} from '../graphics/viewport'
 
 //   _______ _______
 //  /      //      /
 // /______//______/
 export class FieldsLevel implements Level {
-  private readonly _scale: number = 9
   private readonly _store: Store
   constructor(
     private _atlas: Atlas.Definition,
@@ -44,8 +45,8 @@ export class FieldsLevel implements Level {
     console.log(this._store)
   }
 
-  scale() {
-    return this._scale
+  scale(canvas: WH): number {
+    return Viewport.scale(canvas, LevelDefault.minScreenSize, 0)
   }
 
   update(then: number, now: number, _canvas: WH, cam: Rect): LevelUpdate {

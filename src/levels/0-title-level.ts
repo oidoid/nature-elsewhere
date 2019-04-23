@@ -129,7 +129,7 @@ export class TitleLevel implements Level {
     this._store.addImages(...this._virtualJoystick.images())
   }
 
-  scale(canvas: WH) {
+  scale(canvas: WH): number {
     return Viewport.scale(canvas, LevelDefault.minScreenSize, 0)
   }
 
