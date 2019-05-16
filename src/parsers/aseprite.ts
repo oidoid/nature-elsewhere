@@ -30,7 +30,7 @@ export namespace Aseprite {
     readonly app: string
     /** E.g., '1.2.8.1'. */
     readonly version: string
-    /** The associated output. E.g., 'atlas.png'. */
+    /** The associated output basename. E.g., 'atlas.png'. */
     readonly image: string
     /** E.g., 'RGBA8888' or 'I8'. */
     readonly format: string
