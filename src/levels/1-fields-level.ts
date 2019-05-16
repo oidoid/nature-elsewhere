@@ -42,7 +42,6 @@ export class FieldsLevel implements Level {
         []
       )
     )
-    console.log(this._store)
   }
 
   scale(canvas: WH): number {
