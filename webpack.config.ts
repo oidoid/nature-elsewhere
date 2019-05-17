@@ -4,11 +4,6 @@ import * as webpack from 'webpack'
 import CleanPlugin from 'clean-webpack-plugin'
 import {version} from './package.json'
 
-const stats: Readonly<webpack.Stats.ToJsonOptionsObject> = Object.freeze({
-  all: false,
-  errors: true,
-  warnings: true
-})
 const [date, hash]: readonly string[] = Object.freeze(
   childProcess
     .execSync('git --no-pager log -1 --date=format:%F --pretty=%ad,%h')
@@ -18,7 +13,7 @@ const [date, hash]: readonly string[] = Object.freeze(
 )
 
 export default (): webpack.Configuration => ({
-  stats,
+  stats: <any>'errors-warnings',
 
   resolve: {extensions: ['.js', '.ts']},
 
@@ -47,6 +42,6 @@ export default (): webpack.Configuration => ({
   devServer: {
     clientLogLevel: 'warning',
     overlay: {warnings: true, errors: true},
-    stats
+    stats: <any>'errors-warnings'
   }
 })
