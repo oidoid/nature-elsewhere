@@ -42,10 +42,6 @@ export default (): webpack.Configuration => ({
   devServer: {
     clientLogLevel: 'warning',
     overlay: {warnings: true, errors: true},
-    stats: {
-      all: false,
-      errors: true,
-      warnings: true
-    }
+    stats: <any>'errors-warnings'
   }
 })
