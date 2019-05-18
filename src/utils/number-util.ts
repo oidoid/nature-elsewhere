@@ -16,7 +16,7 @@ export namespace NumberUtil {
     return Math.min(Math.max(val, min), max)
   }
 
-  export function roundMultiple(multiple: number, val: number): number {
+  export function ceilMultiple(multiple: number, val: number): number {
     return Math.ceil(val / multiple) * multiple
   }
 }

@@ -142,7 +142,7 @@ export namespace Shader {
     )
     return {
       length: attributes.reduce((sum, {length}) => sum + length, 0),
-      stride: NumberUtil.roundMultiple(
+      stride: NumberUtil.ceilMultiple(
         maxSize,
         nextOffset(attributes[attributes.length - 1])
       ),
