@@ -17,8 +17,7 @@ export class ShaderCache {
     return this._program
   }
 
-  location(name: string): number
-  location(name: string): GLUniformLocation {
+  location(name: string): number | GLUniformLocation {
     const location =
       this._uniformLocations[name] || this._attributeLocations[name]
     if (location === undefined) throw new Error(`Unknown variable "${name}".`)
