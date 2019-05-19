@@ -106,7 +106,7 @@ export namespace GLUtil {
     gl: GL,
     program: GLProgram
   ): UniformLocations {
-    const length = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS) || 0
+    const length = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS) || 0
     const locations: Mutable<UniformLocations> = {}
     for (let i = 0; i < length; ++i) {
       const uniform = gl.getActiveUniform(program, i)
@@ -121,7 +121,7 @@ export namespace GLUtil {
     gl: GL,
     program: GLProgram
   ): AttributeLocations {
-    const length = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES) || 0
+    const length = gl.getProgramParameter(program, GL.ACTIVE_ATTRIBUTES) || 0
     const locations: Mutable<AttributeLocations> = {}
     for (let i = 0; i < length; ++i) {
       const attr = gl.getActiveAttrib(program, i)
