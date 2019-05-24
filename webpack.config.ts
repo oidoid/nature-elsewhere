@@ -13,7 +13,7 @@ const [date, hash]: readonly string[] = Object.freeze(
 )
 
 export default (): webpack.Configuration => ({
-  stats: <any>'errors-warnings',
+  stats: 'errors-warnings',
 
   resolve: {extensions: ['.js', '.ts']},
 
@@ -42,6 +42,6 @@ export default (): webpack.Configuration => ({
   devServer: {
     clientLogLevel: 'warning',
     overlay: {warnings: true, errors: true},
-    stats: <any>'errors-warnings'
+    stats: 'errors-warnings'
   }
 })
