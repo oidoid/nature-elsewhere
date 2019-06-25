@@ -1,7 +1,7 @@
 import * as childProcess from 'child_process'
 import * as CopyPlugin from 'copy-webpack-plugin'
 import * as webpack from 'webpack'
-import CleanPlugin from 'clean-webpack-plugin'
+import {CleanWebpackPlugin} from 'clean-webpack-plugin'
 import {version} from './package.json'
 
 const [date, hash]: readonly string[] = Object.freeze(
@@ -25,7 +25,7 @@ export default (): webpack.Configuration => ({
   },
 
   plugins: [
-    new CleanPlugin(),
+    new CleanWebpackPlugin(),
     new CopyPlugin([
       {context: 'src', from: '**/*.{css,html,ico,png,svg,xml}'},
       {context: 'src', from: 'manifest.json'}
