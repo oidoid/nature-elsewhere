@@ -105,6 +105,57 @@ Be sure to grep for the `#version` tag.
 The type syntax looks nicer but interfaces are preferred because VS Code uses
 their names instead of the full declaration.
 
+#### Imports
+
+Wildcard imports are used to better support a functional programming style. When
+order is irrelevant, case-insensitive alphabetical is used.
+
+For comparison, consider the following class:
+
+```lang=ts
+export class Random {
+  constructor(private seed: number) { this.seed &= 0xff }
+  next(): number { this.seed = (this.seed + 1) & 0xff; return 1 }
+}
+```
+
+And its usage:
+
+```lang=ts
+import {Random} from './random'
+
+const random = new Random(0)
+console.log(random.next())
+```
+
+Now the functional implementation:
+
+```lang=ts
+export function init(seed: number) { return seed & 0xff }
+export function next(seed: number) { return {seed: (seed + 1) & 0xff, val: 1 } }
+```
+
+And its usage with wildcard imports:
+
+```lang=ts
+import * as Random from './random'
+
+let random = Random.next(random.init(0))
+console.log(random.val)
+```
+
+The named imports could be used but they lack the context of dotting off Random.
+
+A proper TypeScript namespace could also be used, which VS Code has better
+refactor support for and it may also encourage more consistent usage, but this
+adds an extra level of indentation to every file.
+
+PascalCase is used to avoid collision with variables.
+
+#### Functional vs Object-Oriented Programming
+
+Functional is favored.
+
 #### Naming
 
 ##### Abbreviations
