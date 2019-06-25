@@ -27,7 +27,7 @@ export default (): webpack.Configuration => ({
   plugins: [
     new CleanWebpackPlugin(),
     new CopyPlugin([
-      {context: 'src', from: '**/*.{css,html,ico,png,svg,xml}'},
+      {context: 'src', from: '**/*.{css,html,png}'},
       {context: 'src', from: 'manifest.json'}
     ]),
     new webpack.DefinePlugin({
