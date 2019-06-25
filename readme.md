@@ -100,6 +100,11 @@ Be sure to grep for the `#version` tag.
 
 ### Conventions
 
+#### Types vs Interfaces
+
+The type syntax looks nicer but interfaces are preferred because VS Code uses
+their names instead of the full declaration.
+
 #### Naming
 
 ##### Abbreviations
