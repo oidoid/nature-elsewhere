@@ -152,6 +152,58 @@ adds an extra level of indentation to every file.
 
 PascalCase is used to avoid collision with variables.
 
+#### Divide State and Code
+
+Don't mix data and functions. With care, plain state can be de/serialized. It's
+harder when code is data. Regardless, there is often tight implicit coupling
+between data and behavior but it's simpler reviving from state that is clearly
+separated from code.
+
+Dynamic functions should not be created because they're difficult to inflate.
+E.g.:
+
+```lang=ts
+function newFlipper(state: number) {
+  let flipped = 0
+  return {
+    state(): number { return state },
+    flip(): void { ++flipped; state ^= 0xff },
+    flipped(): number { return flipped }
+  }
+}
+// How to preserve and restore a Flipper?
+```
+
+Even without the closure, unmarshalling the state back into a Flipper is clumsy
+and requires creating potentially invalid objects:
+
+```lang=ts
+function newFlipper(state: number) {
+  return {
+    _flipped: 0,
+    state(): number { return state },
+    flip(): void { ++this._flipped; state ^= 0xff },
+    flipped(): number { return this._flipped }
+  }
+}
+
+const flipper = newFlipper(1)
+flipper.flip()
+flipper.flip()
+const clone = newFlipper(flipper.state()) // An Indeterminate state is created.
+clone._flipped = flipper.flipped() // Forbidden.
+```
+
+Use an alternative approach. E.g.:
+
+```lang=ts
+interface Flipper {state: number; flipped: number}
+function flip({state, flipped}: Flipper): Flipper {
+  return {state: state ^ 0xff, flipped: flipped + 1}
+}
+// State is always returned and code lives in the repo, not in the state.
+```
+
 #### Functional vs Object-Oriented Programming
 
 Functional is favored.
