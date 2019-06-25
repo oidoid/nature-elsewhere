@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "resolveJsonModule": true,
-    "lib": ["es2018", "dom"],
+    "lib": ["es2019", "dom"],
 
     "strict": true,
     "noUnusedLocals": true,
@@ -9,7 +9,6 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
 
-    "target": "es5",
-    "noEmitOnError": true
+    "target": "es5"
   }
 }
