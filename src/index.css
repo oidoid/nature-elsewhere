@@ -9,7 +9,6 @@ body {
      dimensions, as opposed to window.innerWidth/Height, but overflow is still
      possible. Hide the scrollbars and disable scrolling. */
   overflow: hidden;
-  touch-action: none;
 
   /* Hide the cursor. */
   cursor: none;
@@ -22,6 +21,5 @@ canvas {
 
   /* When the user scales, use nearest-neighbor to prevent blurriness and
      changes to color. */
-  image-rendering: optimizeSpeed;
   image-rendering: pixelated;
 }
