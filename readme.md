@@ -159,7 +159,7 @@ harder when code is data. Regardless, there is often tight implicit coupling
 between data and behavior but it's simpler reviving from state that is clearly
 separated from code.
 
-Dynamic functions should not be created because they're difficult to inflate.
+Dynamic functions should be avoided because they're difficult to inflate.
 E.g.:
 
 ```lang=ts
@@ -194,7 +194,7 @@ const clone = newFlipper(flipper.state()) // An Indeterminate state is created.
 clone._flipped = flipper.flipped() // Forbidden.
 ```
 
-Use an alternative approach. E.g.:
+Favor an alternative approach. E.g.:
 
 ```lang=ts
 interface Flipper {state: number; flipped: number}
@@ -217,11 +217,13 @@ The following abbreviations are used regardless of context:
 - init: Initialize
 - rect: rectangle
 - config: configuration
+- fn: function
+- len: length
 
 The following abbreviations are only used for function locals:
 
-- len: length
 - ret: unambiguous return value
+- rnd: unambiguous random value
 - val: unambiguous input value
 - i: unambiguous index
 
@@ -234,10 +236,10 @@ The following abbreviations are only used for function locals:
 - location: a WebGL shader program variable index
 - new / make: like the `new` operator; new is preferred where the language
   allows
-- position: an X and Y cartesian location
-- size: an area or size in bytes like `sizeof` in C
+- position: an _x_ and _y_ cartesian location
+- size: an area or size in bytes like `sizeof` in the C programming language
 - WH: having width and height
-- XY: having x- and y-coordinate dimensions such as a position
+- XY: having _x_- and _y_-coordinate dimensions such as a position
 
 ## License
 
