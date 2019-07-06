@@ -116,16 +116,21 @@ order is irrelevant, case-insensitive alphabetical is used.
 
 For comparison, consider the following class:
 
-```lang=ts
+```ts
 export class Random {
-  constructor(private seed: number) { this.seed &= 0xff }
-  next(): number { this.seed = (this.seed + 1) & 0xff; return 1 }
+  constructor(private seed: number) {
+    this.seed &= 0xff
+  }
+  next(): number {
+    this.seed = (this.seed + 1) & 0xff
+    return this.seed ^ 0xff
+  }
 }
 ```
 
 And its usage:
 
-```lang=ts
+```ts
 import {Random} from './random'
 
 const random = new Random(0)
@@ -134,14 +139,18 @@ console.log(random.next())
 
 Now the functional implementation:
 
-```lang=ts
-export function init(seed: number) { return seed & 0xff }
-export function next(seed: number) { return {seed: (seed + 1) & 0xff, val: 1 } }
+```ts
+export function init(seed: number) {
+  return seed & 0xff
+}
+export function next(seed: number) {
+  return {seed: (seed + 1) & 0xff, val: seed ^ 0xff}
+}
 ```
 
 And its usage with wildcard imports:
 
-```lang=ts
+```ts
 import * as Random from './random'
 
 let random = Random.next(random.init(0))
@@ -166,13 +175,20 @@ separated from code.
 Dynamic functions should be avoided because they're difficult to inflate.
 E.g.:
 
-```lang=ts
+```ts
 function newFlipper(state: number) {
   let flipped = 0
   return {
-    state(): number { return state },
-    flip(): void { ++flipped; state ^= 0xff },
-    flipped(): number { return flipped }
+    state(): number {
+      return state
+    },
+    flip(): void {
+      ++flipped
+      state ^= 0xff
+    },
+    flipped(): number {
+      return flipped
+    }
   }
 }
 // How to preserve and restore a Flipper?
@@ -181,13 +197,20 @@ function newFlipper(state: number) {
 Even without the closure, unmarshalling the state back into a Flipper is clumsy
 and requires creating potentially invalid objects:
 
-```lang=ts
+```ts
 function newFlipper(state: number) {
   return {
     _flipped: 0,
-    state(): number { return state },
-    flip(): void { ++this._flipped; state ^= 0xff },
-    flipped(): number { return this._flipped }
+    state(): number {
+      return state
+    },
+    flip(): void {
+      ++this._flipped
+      state ^= 0xff
+    },
+    flipped(): number {
+      return this._flipped
+    }
   }
 }
 
@@ -200,8 +223,8 @@ clone._flipped = flipper.flipped() // Forbidden.
 
 Favor an alternative approach. E.g.:
 
-```lang=ts
-interface Flipper {state: number; flipped: number}
+```ts
+type Flipper = Readonly<{state: number; flipped: number}>
 function flip({state, flipped}: Flipper): Flipper {
   return {state: state ^ 0xff, flipped: flipped + 1}
 }
@@ -210,7 +233,234 @@ function flip({state, flipped}: Flipper): Flipper {
 
 #### Functional vs Object-Oriented Programming
 
-Functional is favored.
+When I think of functional programming, I have the following coarse conceptualization:
+
+- No closure object factories.
+- Avoid state context parameters.
+- Avoid mutations.
+- Use data and functions instead of classes.
+
+It may be contentious but I think the distinctions between closure-built objects
+and classes in TypeScript are too similar to be a major factor:
+
+```ts
+// "Functional" closure
+
+function newFoo(val: number) {
+  return {
+    getFoo() {
+      return val
+    }
+  }
+}
+```
+
+```ts
+// Object-oriented class
+
+class Foo {
+  constructor(private readonly val: number) {}
+  getFoo() {
+    return this.val
+  }
+}
+```
+
+State parameters feel very object-oriented, replacing an overarching class state
+with pieces of an overarching context. I don't think there's often much
+distinction in TypeScript:
+
+```ts
+// "Functional" state parameter
+
+namespace Random {
+  type State = Readonly<{seed: number; val: number}>
+
+  function int({seed}: State): State {
+    return {seed: seed + 1, val: seed ^ 0xff}
+  }
+}
+```
+
+```ts
+// Object-oriented class
+
+class Random {
+  constructor(private seed: number) {}
+  int(): number {
+    this.seed += 1
+    return seed ^ 0xff
+  }
+}
+```
+
+It's almost just different syntaxes for the same thing and kind of reminds me of
+passing around a void pointer in the C language instead of using classes in C++.
+
+Although easier in functional programming, I can usually make a class immutable
+and I favor composition over inheritance. So, for me, the primary benefit of
+functional programming is mostly about minimizing function scope. There can be a
+lot of implicit state baggage that comes with a class. A function is only given
+scope to what it needs.
+
+Functional implementations are easy to reason about in isolation. I'm drawn to
+them for their readability, although I tend to have a harder time expressing
+them. I think it's usually easier for me to write a cohesive class that operates
+on a common state than to write several functions that operate on common data.
+Some calculations lend themselves well to a functional style with minimal
+overhead.
+
+However, there's no encapsulation in functional programming. State management is
+explicit, manual, and there are no privates. In my view, this is clumsy and
+error-prone in TypeScript for client usage in the whole program.
+
+I think a pseudorandom number generator is a fine example. Consider the
+functional and object-oriented implementations:
+
+```ts
+// Functional
+
+export function seed(seed: number): number {
+  seed = seed % 0x7fff_ffff
+  if (seed <= 0) seed += 0x7fff_fffe
+  return seed
+}
+
+export function float(seed: number, min = 0, max = 1) {
+  seed = (seed * 16807) % 0x7fff_ffff
+  const val = min + ((max - min) * (seed - 1)) / 0x7fff_fffe
+  return {seed, val}
+}
+
+export function int(seed: number, min = 0, max = Number.MAX_SAFE_INTEGER) {
+  let val
+  ;({seed, val} = float(seed, min, max))
+  return {seed, val: Math.floor(val)}
+}
+```
+
+```ts
+// Object-oriented
+
+export class Random {
+  constructor(private _seed: number) {
+    this._seed = _seed % 0x7fff_ffff
+    if (this._seed <= 0) this._seed += 0x7fff_fffe
+  }
+
+  float(min: number = 0, max: number = 1): number {
+    this._seed = (this._seed * 16807) % 0x7fff_ffff
+    return min + ((max - min) * (this._seed - 1)) / 0x7fff_fffe
+  }
+
+  int(min = 0, max = Number.MAX_SAFE_INTEGER): number {
+    return Math.floor(this.float(min, max))
+  }
+}
+```
+
+Both look ok to me:
+
+- The number of lines of code and readability are similar.
+- The functional approach has a lesser level of indent but that would be lost if
+  it were wrapped in a namespace.
+- The usual tradeoff of explicit (functional) vs implicit (object-oriented)
+  state is present but the object is quite tightly scoped so the negative impact
+  of the latter is minimal.
+- The functional approach requires a special seed-only state since there's no
+  valid value at construction. The object-orient approach does a little bit of
+  work in the constructor to avoid the intermediate seed-only state.
+- I've omitted return types for the functional result objects. For more complex
+  code, I may need them.
+- "val" is used for the random number generated. "random" was considered but
+  a client may call their result object "random" and `random.random` doesn't
+  read as nicely as `random.val`.
+
+The usage of each implementation is more decisive though. First, consider the
+simplest cases:
+
+```ts
+// Functional
+
+import * as Random from './math/random'
+let val,
+  seed = Random.seed(0)
+;({seed, val} = Random.float(seed))
+console.log(val)
+;({seed, val} = Random.int(seed))
+console.log(val)
+```
+
+```ts
+// Object-oriented
+
+import {Random} from './math/random'
+const random = new Random(0)
+let val = random.float()
+console.log(val)
+val = random.int())
+console.log(val)
+```
+
+A slight win for object-oriented. However, real issues arise when wanting to
+thread a seed through the system. For instance:
+
+```ts
+// Functional
+
+function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
+  let x
+  ;({seed, val: y} = Random.int(seed, 0, 10))
+  let y
+  ;({seed, val: y} = Random.int(seed, 0, 20))
+  return {seed, point: {x, y}}
+}
+```
+
+```ts
+// Object-oriented
+
+function randomPoint(random: Random): XY {
+  return {x: random.int(0, 10), y: random.int(0, 20)}
+}
+```
+
+The functional approach requires manually threading the seed in and out of
+_every_ function that depends on it. Managing that seed externally (outside of
+Random) is verbose and fallible:
+
+- It's easy to forget to return the new seed.
+- It's easy to misuse functions when the programmer isn't in a "thinking about random" space
+  E.g., the following functional implementation is incorrect but compiles:
+
+```ts
+function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
+  return {
+    seed,
+    point: {x: Random.int(seed, 0, 10).val, y: Random.int(seed, 0, 20).val}
+  }
+}
+```
+
+- It's verbose and unfun to manually manage seed state for every interaction.
+- A seed is easy to construct but numbers are so common it's easy to misplace in
+  function parameter lists. In this case, it's a recipe for disaster given the
+  default values min and max. E.g., the following is incorrect but compiles:
+
+```ts
+function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
+  let x
+  ;({seed, val: y} = Random.int(0, 10))
+  let y
+  ;({seed, val: y} = Random.int(0, 20))
+  return {seed, point: {x, y}}
+}
+```
+
+I love how plain and readable the functional implementation is but using it is a
+drudgery and entirely unfun. The object-oriented implementation isn't
+appreciably worse and painless to use. I also think that certain expressions,
+such as polymorphic behavior, can be more natural in object-oriented designs.
 
 #### Naming
 
