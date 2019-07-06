@@ -214,7 +214,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: 0, y: 0, w: 0, h: 0},
       {x: 0, y: 0, w: 0, h: 0},
       {x: 0, y: 0, w: 0, h: 0},
-      true,
+      false,
       {x: 0, y: 0, w: 0, h: 0}
     ],
     [
@@ -230,7 +230,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: 1, y: -1, w: 2, h: 2},
       {x: 1, y: -1, w: 0, h: 2},
-      true,
+      false,
       {x: -1, y: -1, w: 4, h: 2}
     ],
     [
@@ -246,7 +246,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: 1, y: -2, w: 2, h: 2},
       {x: 1, y: -1, w: 0, h: 1},
-      true,
+      false,
       {x: -1, y: -2, w: 4, h: 3}
     ],
     [
@@ -262,7 +262,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: 1, y: -3, w: 2, h: 2},
       {x: 1, y: -1, w: 0, h: 0},
-      true,
+      false,
       {x: -1, y: -3, w: 4, h: 4}
     ],
     [
@@ -278,7 +278,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: 0, y: -3, w: 2, h: 2},
       {x: 0, y: -1, w: 1, h: 0},
-      true,
+      false,
       {x: -1, y: -3, w: 3, h: 4}
     ],
     [
@@ -294,7 +294,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -1, y: -3, w: 2, h: 2},
       {x: -1, y: -1, w: 2, h: 0},
-      true,
+      false,
       {x: -1, y: -3, w: 2, h: 4}
     ],
     [
@@ -310,7 +310,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -2, y: -3, w: 2, h: 2},
       {x: -1, y: -1, w: 1, h: 0},
-      true,
+      false,
       {x: -2, y: -3, w: 3, h: 4}
     ],
     [
@@ -326,7 +326,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -3, y: -3, w: 2, h: 2},
       {x: -1, y: -1, w: 0, h: 0},
-      true,
+      false,
       {x: -3, y: -3, w: 4, h: 4}
     ],
     [
@@ -342,7 +342,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -3, y: -2, w: 2, h: 2},
       {x: -1, y: -1, w: 0, h: 1},
-      true,
+      false,
       {x: -3, y: -2, w: 4, h: 3}
     ],
     [
@@ -358,7 +358,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -3, y: -1, w: 2, h: 2},
       {x: -1, y: -1, w: 0, h: 2},
-      true,
+      false,
       {x: -3, y: -1, w: 4, h: 2}
     ],
     [
@@ -374,7 +374,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -3, y: 0, w: 2, h: 2},
       {x: -1, y: 0, w: 0, h: 1},
-      true,
+      false,
       {x: -3, y: -1, w: 4, h: 3}
     ],
     [
@@ -390,7 +390,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -3, y: 1, w: 2, h: 2},
       {x: -1, y: 1, w: 0, h: 0},
-      true,
+      false,
       {x: -3, y: -1, w: 4, h: 4}
     ],
     [
@@ -406,7 +406,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -2, y: 1, w: 2, h: 2},
       {x: -1, y: 1, w: 1, h: 0},
-      true,
+      false,
       {x: -2, y: -1, w: 3, h: 4}
     ],
     [
@@ -422,7 +422,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: -1, y: 1, w: 2, h: 2},
       {x: -1, y: 1, w: 2, h: 0},
-      true,
+      false,
       {x: -1, y: -1, w: 2, h: 4}
     ],
     [
@@ -438,7 +438,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: 0, y: 1, w: 2, h: 2},
       {x: 0, y: 1, w: 1, h: 0},
-      true,
+      false,
       {x: -1, y: -1, w: 3, h: 4}
     ],
     [
@@ -454,7 +454,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: 1, y: 1, w: 2, h: 2},
       {x: 1, y: 1, w: 0, h: 0},
-      true,
+      false,
       {x: -1, y: -1, w: 4, h: 4}
     ],
     [
@@ -470,7 +470,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: -1, y: -1, w: 2, h: 2},
       {x: 1, y: 0, w: 2, h: 2},
       {x: 1, y: 0, w: 0, h: 1},
-      true,
+      false,
       {x: -1, y: -1, w: 4, h: 3}
     ],
     [
@@ -761,7 +761,7 @@ const tests: readonly Test[] = Object.freeze(
 
 describe('intersection()', () => {
   test.each(tests)(
-    '%#) %s (%p, %p) => %p %p, %p, %p',
+    '%#) %s (%p, %p) => %p %p, %p, flip=%p',
     (_diagram, lhs, rhs, intersection, _intersects, _union, flip) =>
       expect(
         Rect.intersection(flip ? rhs : lhs, flip ? lhs : rhs)
@@ -771,7 +771,7 @@ describe('intersection()', () => {
 
 describe('intersects()', () => {
   test.each(tests)(
-    '%#) %s (%p, %p) => %p %p, %p, %p',
+    '%#) %s (%p, %p) => %p %p, %p, flip=%p',
     (_diagram, lhs, rhs, _intersection, intersects, _union, flip) =>
       expect(Rect.intersects(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
         intersects
