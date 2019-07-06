@@ -1,4 +1,5 @@
 import {GL, GLUtil} from '../gl-util'
+import * as glConfig from './gl-config.json'
 import {ShaderCache} from '../shaders/shader-cache'
 import {Shader} from '../shaders/shader'
 import fragmentGLSL from '../shaders/fragment.glsl'
@@ -14,13 +15,7 @@ export class Renderer {
     atlas: HTMLImageElement,
     palette: HTMLImageElement
   ): Renderer {
-    const gl = canvas.getContext('webgl2', {
-      alpha: false,
-      depth: false,
-      antialias: false,
-      failIfMajorPerformanceCaveat: true,
-      lowLatency: true // https://www.chromestatus.com/feature/6360971442388992
-    })
+    const gl = canvas.getContext('webgl2', glConfig)
     if (!(gl instanceof GL)) throw new Error('WebGL 2 unsupported.')
 
     // Allow translucent textures to be layered.
