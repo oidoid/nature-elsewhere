@@ -1,16 +1,14 @@
 import * as childProcess from 'child_process'
-import * as CopyPlugin from 'copy-webpack-plugin'
-import * as webpack from 'webpack'
 import {CleanWebpackPlugin} from 'clean-webpack-plugin'
+import * as CopyPlugin from 'copy-webpack-plugin'
 import {version} from './package.json'
+import * as webpack from 'webpack'
 
-const [date, hash]: readonly string[] = Object.freeze(
-  childProcess
-    .execSync('git --no-pager log -1 --date=format:%F --pretty=%ad,%h')
-    .toString()
-    .trim()
-    .split(',')
-)
+const [date, hash]: readonly string[] = childProcess
+  .execSync('git --no-pager log -1 --date=format:%F --pretty=%ad,%h')
+  .toString()
+  .trim()
+  .split(',')
 
 export default (): webpack.Configuration => ({
   stats: 'errors-warnings',
