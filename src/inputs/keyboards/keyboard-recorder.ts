@@ -1,12 +1,11 @@
 import {InputBit} from '../input-bit'
 import {KeyboardAdapter} from './keyboard-adapter'
-import {ObjectUtil} from '../../utils/object-util'
 import {Recorder} from '../recorder'
 
 type Key = KeyboardEvent['key']
 type KeyMap = Readonly<Record<Key, InputBit>>
 
-const defaultKeyMap: KeyMap = ObjectUtil.freeze({
+const defaultKeyMap: KeyMap = Object.freeze({
   ArrowLeft: InputBit.LEFT,
   a: InputBit.LEFT,
   ArrowRight: InputBit.RIGHT,

@@ -22,13 +22,4 @@ export namespace ObjectUtil {
     return entries
   }
 
-  /** Recursively freeze obj. */
-  export function freeze<T extends object>(obj: T): Readonly<T> {
-    keys(obj)
-      .filter(key => typeof obj[key] === 'object')
-      .forEach(key => {
-        obj[key] = <T[keyof T] & object>freeze(<T[keyof T] & object>obj[key])
-      })
-    return Object.freeze(obj)
-  }
 }

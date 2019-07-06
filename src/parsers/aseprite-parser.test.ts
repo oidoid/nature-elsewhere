@@ -6,9 +6,9 @@ import {Atlas} from '../images/atlas'
 import {ObjectUtil} from '../utils/object-util'
 
 describe('atlas.json', () => {
-  const file: Aseprite.File = ObjectUtil.freeze(atlasJSON)
-  const atlas: Atlas.Definition = ObjectUtil.freeze(AsepriteParser.parse(file))
-  const tags: readonly Aseprite.Tag[] = ObjectUtil.freeze(
+  const file: Aseprite.File = Object.freeze(atlasJSON)
+  const atlas: Atlas.Definition = Object.freeze(AsepriteParser.parse(file))
+  const tags: readonly Aseprite.Tag[] = Object.freeze(
     file.meta.frameTags.map(frameTag => frameTag.name)
   )
 

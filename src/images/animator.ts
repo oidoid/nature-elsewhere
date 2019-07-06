@@ -1,6 +1,5 @@
 import {Atlas} from './atlas'
 import {NumberUtil} from '../utils/number-util'
-import {ObjectUtil} from '../utils/object-util'
 
 // Animates AtlasAnimations by providing the correct cel for a given time.
 export class Animator {
@@ -40,7 +39,7 @@ export class Animator {
 
 const Animate: Readonly<
   Record<Atlas.AnimationDirection, (period: number, length: number) => number>
-> = ObjectUtil.freeze({
+> = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Atlas.AnimationDirection.FORWARD](period: number) {
     return (period % Number.MAX_SAFE_INTEGER) + 1

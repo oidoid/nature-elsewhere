@@ -47,9 +47,7 @@ export class TitleLevel implements Level {
     let logo = NatureElsewhere.create(_atlas, 1, {x: 0, y: 6})
     const chars = Text.toImages(
       _atlas,
-      `${strings['ui/title/episode-0']}                ${
-        strings['ui/title/rndmem']
-      }`
+      `${strings['ui/title/episode-0']}                ${strings['ui/title/rndmem']}`
     )
     Image.setPalette(Palette.GREYS + Tone.HALF, chars)
     Image.moveBy(

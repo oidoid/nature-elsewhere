@@ -1,4 +1,3 @@
-import {ObjectUtil} from '../utils/object-util'
 import {WindowModeSetting} from './window-mode-setting'
 import {ZoomMultiplierSetting} from './zoom-multiplier-setting'
 
@@ -8,7 +7,7 @@ export interface Settings {
 }
 
 export namespace Settings {
-  export const defaults: Settings = ObjectUtil.freeze({
+  export const defaults: Settings = Object.freeze({
     zoomMultiplier: ZoomMultiplierSetting.MAX,
     windowMode:
       process.env.NODE_ENV === 'development'

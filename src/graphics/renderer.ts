@@ -1,12 +1,11 @@
 import {GL, GLUtil} from './gl-util'
-import {ObjectUtil} from '../utils/object-util'
 import {ShaderCache} from './shader-cache'
 import {Shader} from './shader'
 import fragmentShaderSource from './shader.frag'
 import vertexShaderSource from './shader.vert'
 
 const perVertexData: Int16Array = new Int16Array(
-  ObjectUtil.freeze([1, 1, 0, 1, 1, 0, 0, 0])
+  Object.freeze([1, 1, 0, 1, 1, 0, 0, 0])
 )
 
 export class Renderer {

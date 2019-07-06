@@ -1,11 +1,10 @@
 import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {Image} from '../../images/image'
-import {ObjectUtil} from '../../utils/object-util'
 import {Palette} from '../../images/palette'
 import {Random} from '../../math/random'
 
-const grassIDs: readonly AnimationID[] = ObjectUtil.freeze([
+const grassIDs: readonly AnimationID[] = Object.freeze([
   AnimationID.TALL_GRASS_A,
   AnimationID.TALL_GRASS_B,
   AnimationID.TALL_GRASS_C,

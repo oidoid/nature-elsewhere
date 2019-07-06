@@ -2,7 +2,6 @@ import {Atlas} from '../images/atlas'
 import {GL} from './gl-util'
 import {Image} from '../images/image'
 import {NumberUtil} from '../utils/number-util'
-import {ObjectUtil} from '../utils/object-util'
 
 // All variables passed from JavaScript are integral derived by truncation. When
 // passing an independent variable, implicit truncation by converting to shader
@@ -111,13 +110,13 @@ export namespace Shader {
   const U8: number = GL.UNSIGNED_BYTE
   const I8: number = GL.BYTE
   const I16: number = GL.SHORT
-  const sizeOfType: Readonly<Record<number, number>> = ObjectUtil.freeze({
+  const sizeOfType: Readonly<Record<number, number>> = Object.freeze({
     [U8]: 1,
     [I8]: 1,
     [I16]: 2
   })
 
-  export const layout: AttributeLayout = ObjectUtil.freeze({
+  export const layout: AttributeLayout = Object.freeze({
     perVertex: newDivisorLayout(0, {name: Variable.UV, type: I16, length: 2}),
     perInstance: newDivisorLayout(
       1,

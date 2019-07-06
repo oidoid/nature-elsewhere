@@ -2,14 +2,13 @@ import * as strings from '../../assets/strings.json'
 import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {Image} from '../../images/image'
-import {ObjectUtil} from '../../utils/object-util'
 import {Panel} from './panel'
 import {SlideSwitch} from './slide-switch'
 import {ZoomMultiplierSetting} from '../../settings/zoom-multiplier-setting'
 
 const SwitchOffset: Readonly<
   Record<ZoomMultiplierSetting, number>
-> = ObjectUtil.freeze({
+> = Object.freeze({
   [ZoomMultiplierSetting.MAX]: 32,
   [ZoomMultiplierSetting.HALF]: 16,
   [ZoomMultiplierSetting.MIN]: 0

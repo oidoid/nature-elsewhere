@@ -1,4 +1,3 @@
-import {ObjectUtil} from '../utils/object-util'
 import {Rect} from './rect'
 
 /**
@@ -13,7 +12,7 @@ import {Rect} from './rect'
  * ]
  */
 type Test = [string, Rect, Rect, Rect, boolean, Rect, boolean]
-const tests: readonly Test[] = ObjectUtil.freeze(
+const tests: readonly Test[] = Object.freeze(
   [
     [
       `

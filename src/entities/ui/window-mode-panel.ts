@@ -2,17 +2,16 @@ import * as strings from '../../assets/strings.json'
 import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {Image} from '../../images/image'
-import {ObjectUtil} from '../../utils/object-util'
 import {Panel} from './panel'
 import {SlideSwitch} from './slide-switch'
 import {WindowModeSetting} from '../../settings/window-mode-setting'
 
-const SwitchOffset: Readonly<
-  Record<WindowModeSetting, number>
-> = ObjectUtil.freeze({
-  [WindowModeSetting.FULLSCREEN]: 28,
-  [WindowModeSetting.WINDOWED]: 0
-})
+const SwitchOffset: Readonly<Record<WindowModeSetting, number>> = Object.freeze(
+  {
+    [WindowModeSetting.FULLSCREEN]: 28,
+    [WindowModeSetting.WINDOWED]: 0
+  }
+)
 
 export class WindowModePanel {
   private readonly _switch: SlideSwitch

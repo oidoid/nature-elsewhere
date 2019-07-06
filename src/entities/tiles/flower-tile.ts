@@ -1,11 +1,10 @@
 import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {Image} from '../../images/image'
-import {ObjectUtil} from '../../utils/object-util'
 import {Palette} from '../../images/palette'
 import {Random} from '../../math/random'
 
-const flowerIDs: readonly AnimationID[] = ObjectUtil.freeze([
+const flowerIDs: readonly AnimationID[] = Object.freeze([
   AnimationID.FLOWER_DARK,
   AnimationID.FLOWER_LIGHT
 ])

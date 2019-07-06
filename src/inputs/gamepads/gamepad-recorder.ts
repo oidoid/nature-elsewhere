@@ -1,7 +1,6 @@
 import {ArrayUtil} from '../../utils/array-util'
 import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
-import {ObjectUtil} from '../../utils/object-util'
 import {Recorder} from '../recorder'
 import {StandardGamepad} from './standard-gamepad'
 
@@ -12,7 +11,7 @@ export namespace GamepadRecorder {
     Record<number, (direction: StandardGamepad.AxisDirection) => InputBit>
   >
 
-  export const defaultButtonMap: ButtonMap = ObjectUtil.freeze({
+  export const defaultButtonMap: ButtonMap = Object.freeze({
     [StandardGamepad.Button.DPAD_LEFT]: InputBit.LEFT,
     [StandardGamepad.Button.DPAD_RIGHT]: InputBit.RIGHT,
     [StandardGamepad.Button.DPAD_UP]: InputBit.UP,
@@ -21,7 +20,7 @@ export namespace GamepadRecorder {
     [StandardGamepad.Button.START]: InputBit.MENU
   })
 
-  export const defaultAxisMap: AxisMap = ObjectUtil.freeze(<AxisMap>{
+  export const defaultAxisMap: AxisMap = Object.freeze(<AxisMap>{
     [StandardGamepad.Axis.LEFT_HORIZONTAL]: direction =>
       direction === StandardGamepad.AxisDirection.LEFT
         ? InputBit.LEFT

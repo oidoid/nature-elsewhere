@@ -4,10 +4,8 @@ import {AsepriteParser} from '../parsers/aseprite-parser'
 import {Atlas} from './atlas'
 import {ObjectUtil} from '../utils/object-util'
 
-const state: Atlas.Definition = ObjectUtil.freeze(
-  AsepriteParser.parse(atlasJSON)
-)
-const ids: readonly AnimationID[] = ObjectUtil.freeze(
+const state: Atlas.Definition = Object.freeze(AsepriteParser.parse(atlasJSON))
+const ids: readonly AnimationID[] = Object.freeze(
   ObjectUtil.values(AnimationID)
 )
 
