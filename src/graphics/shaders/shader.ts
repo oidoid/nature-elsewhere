@@ -1,7 +1,7 @@
 import {Atlas} from '../../images/atlas'
 import {GL} from '../gl-util'
 import {Image} from '../../images/image'
-import {NumberUtil} from '../../utils/number-util'
+import {NumberUtil} from '../../math/number-util'
 
 export namespace Shader {
   export enum Variable {

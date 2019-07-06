@@ -1,5 +1,5 @@
 import {Atlas} from './atlas'
-import {NumberUtil} from '../utils/number-util'
+import {NumberUtil} from '../math/number-util'
 
 // Animates AtlasAnimations by providing the correct cel for a given time.
 export class Animator {

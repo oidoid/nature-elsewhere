@@ -2,7 +2,7 @@ import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {BorderBox} from './border-box'
 import {Image} from '../../images/image'
-import {NumberUtil} from '../../utils/number-util'
+import {NumberUtil} from '../../math/number-util'
 import {Palette, Tone} from '../../images/palette'
 
 export class SlideSwitch {
