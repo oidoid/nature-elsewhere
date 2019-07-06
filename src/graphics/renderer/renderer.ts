@@ -1,8 +1,8 @@
-import {GL, GLUtil} from './gl-util'
-import {ShaderCache} from './shaders/shader-cache'
-import {Shader} from './shaders/shader'
-import fragmentGLSL from './shaders/fragment.glsl'
-import vertexGLSL from './shaders/vertex.glsl'
+import {GL, GLUtil} from '../gl-util'
+import {ShaderCache} from '../shaders/shader-cache'
+import {Shader} from '../shaders/shader'
+import fragmentGLSL from '../shaders/fragment.glsl'
+import vertexGLSL from '../shaders/vertex.glsl'
 
 const perVertexData: Int16Array = new Int16Array(
   Object.freeze([1, 1, 0, 1, 1, 0, 0, 0])
