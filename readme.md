@@ -86,9 +86,9 @@ Now that the player has moved to -0.5 px:
 
 Some files are implicitly coupled using tags which can be grepped:
 
-- #version - Implicitly tied to package.json.
-- #palette - Implicitly tied to palette.
-- #strings - Implicitly tied to assets/strings.json.
+- [version] - Implicitly tied to package.json.
+- [palette] - Implicitly tied to palette.
+- [strings] - Implicitly tied to assets/strings.json.
 
 ### Favicons and Manifest
 
@@ -96,7 +96,7 @@ The cache for each can be busted by incrementing the version.
 
 ### Versioning
 
-Be sure to grep for the `#version` tag.
+Be sure to grep for the `[version]` tag.
 
 ### Conventions
 
