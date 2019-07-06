@@ -30,18 +30,14 @@ export namespace GLUtil {
 
   export function buildProgram(
     gl: GL,
-    vertexShaderSource: string,
-    fragmentShaderSource: string
+    vertexGLSL: string,
+    fragmentGLSL: string
   ): GLProgram {
     const program = gl.createProgram()
     if (program === null) throw new Error('WebGL program creation failed.')
 
-    const vertexShader = compileShader(gl, GL.VERTEX_SHADER, vertexShaderSource)
-    const fragmentShader = compileShader(
-      gl,
-      GL.FRAGMENT_SHADER,
-      fragmentShaderSource
-    )
+    const vertexShader = compileShader(gl, GL.VERTEX_SHADER, vertexGLSL)
+    const fragmentShader = compileShader(gl, GL.FRAGMENT_SHADER, fragmentGLSL)
     gl.attachShader(program, vertexShader)
     gl.attachShader(program, fragmentShader)
     gl.linkProgram(program)

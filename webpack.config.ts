@@ -20,7 +20,7 @@ export default (): webpack.Configuration => ({
   module: {
     rules: [
       {test: /\.ts$/, use: 'ts-loader'},
-      {test: /\.(frag|vert)$/, use: 'raw-loader'}
+      {test: /\.glsl$/, use: 'raw-loader'}
     ]
   },
 

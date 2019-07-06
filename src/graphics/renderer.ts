@@ -1,8 +1,8 @@
 import {GL, GLUtil} from './gl-util'
 import {ShaderCache} from './shaders/shader-cache'
 import {Shader} from './shaders/shader'
-import fragmentShaderSource from './shaders/shader.frag'
-import vertexShaderSource from './shaders/shader.vert'
+import fragmentGLSL from './shaders/fragment.glsl'
+import vertexGLSL from './shaders/vertex.glsl'
 
 const perVertexData: Int16Array = new Int16Array(
   Object.freeze([1, 1, 0, 1, 1, 0, 0, 0])
@@ -30,11 +30,7 @@ export class Renderer {
     // Disable image colorspace conversions. The default is browser dependent.
     gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, false)
 
-    const program = GLUtil.buildProgram(
-      gl,
-      vertexShaderSource,
-      fragmentShaderSource
-    )
+    const program = GLUtil.buildProgram(gl, vertexGLSL, fragmentGLSL)
     const shaderCache = ShaderCache.new(gl, program)
 
     gl.uniform1i(shaderCache.location(Shader.Variable.ATLAS), 0)
