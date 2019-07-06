@@ -6,8 +6,8 @@ export namespace Viewport {
     return Math.max(1, Math.floor(Math.min(x, y)) - zoomOut)
   }
 
-  export function canvas(window: Window): WH {
-    const {clientWidth, clientHeight} = window.document.documentElement
+  export function canvasWH(doc: Document): WH {
+    const {clientWidth, clientHeight} = doc.documentElement
     return {w: clientWidth, h: clientHeight}
   }
 

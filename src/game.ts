@@ -63,11 +63,11 @@ export class Game {
     now: number
   ): void {
     const milliseconds = now - then
-    const viewport = Viewport.canvas(window)
-    const scale = this._level.scale(viewport)
-    const cam = Viewport.cam(viewport, scale)
+    const canvasWH = Viewport.canvasWH(window.document)
+    const scale = this._level.scale(canvasWH)
+    const cam = Viewport.cam(canvasWH, scale)
 
-    this._inputRouter.record(this._recorder, viewport, cam, cam)
+    this._inputRouter.record(this._recorder, canvasWH, cam, cam)
     this._recorder.update(milliseconds)
 
     const [set] = this._recorder.combo().slice(-1)
@@ -83,10 +83,10 @@ export class Game {
       }, 3 * 1000)
     }
 
-    const update = this._level.update(then, now, viewport, cam)
+    const update = this._level.update(then, now, canvasWH, cam)
     if (update.nextLevel) {
       this._level = update.nextLevel
-      renderer.render(viewport, scale, cam, update.instances, update.length)
+      renderer.render(canvasWH, scale, cam, update.instances, update.length)
     } else {
       this.stop()
     }

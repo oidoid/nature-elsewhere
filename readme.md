@@ -460,7 +460,8 @@ object-oriented designs.
 
 The following abbreviations are used regardless of context:
 
-- init: Initialize
+- doc: document
+- init: initialize
 - rect: rectangle
 - config: configuration
 - fn: function
