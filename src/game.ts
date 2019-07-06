@@ -27,7 +27,7 @@ export class Game {
     _settings: Settings
   ) {
     this._inputRouter = new InputRouter(window, canvas)
-    this._level = new TitleLevel(atlas, this._recorder, new Random())
+    this._level = new TitleLevel(atlas, this._recorder, new Random(0))
     this._rendererStateMachine = new RendererStateMachine(
       window,
       canvas,
