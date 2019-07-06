@@ -84,7 +84,7 @@ Now that the player has moved to -0.5 px:
 
 ### Implicit Coupling
 
-Some files are implicitly coupled using tags which can be grepped:
+Some files are implicitly coupled using bracketed tags which can be grepped:
 
 - [version] - Implicitly tied to package.json.
 - [palette] - Implicitly tied to palette.
@@ -233,7 +233,8 @@ function flip({state, flipped}: Flipper): Flipper {
 
 #### Functional vs Object-Oriented Programming
 
-When I think of functional programming, I have the following coarse conceptualization:
+When I think of functional programming, I have the following coarse
+conceptualization:
 
 - No closure object factories.
 - Avoid state context parameters.
@@ -376,45 +377,29 @@ Both look ok to me:
   a client may call their result object "random" and `random.random` doesn't
   read as nicely as `random.val`.
 
-The usage of each implementation is more decisive though. First, consider the
-simplest cases:
-
-```ts
-// Functional
-
-import * as Random from './math/random'
-let val,
-  seed = Random.seed(0)
-;({seed, val} = Random.float(seed))
-console.log(val)
-;({seed, val} = Random.int(seed))
-console.log(val)
-```
-
-```ts
-// Object-oriented
-
-import {Random} from './math/random'
-const random = new Random(0)
-let val = random.float()
-console.log(val)
-val = random.int())
-console.log(val)
-```
-
-A slight win for object-oriented. However, real issues arise when wanting to
-thread a seed through the system. For instance:
+The usage of each implementation is more decisive though. Real issues arise when
+threading state through the system. For instance, the seed:
 
 ```ts
 // Functional
 
 function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
   let x
-  ;({seed, val: y} = Random.int(seed, 0, 10))
+  ;({seed, val: x} = Random.int(seed, 0, 10))
   let y
   ;({seed, val: y} = Random.int(seed, 0, 20))
   return {seed, point: {x, y}}
 }
+
+let val,
+  point,
+  seed = Random.seed(0)
+;({seed, val} = Random.float(seed))
+console.log(val)
+;({seed, point} = randomPoint(seed))
+console.log(point)
+;({seed, val} = Random.int(seed))
+console.log(val)
 ```
 
 ```ts
@@ -423,6 +408,14 @@ function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
 function randomPoint(random: Random): XY {
   return {x: random.int(0, 10), y: random.int(0, 20)}
 }
+
+const random = new Random(0)
+let val = random.float()
+console.log(val)
+const point = randomPoint(random)
+console.log(point)
+val = random.int()
+console.log(val)
 ```
 
 The functional approach requires manually threading the seed in and out of
@@ -430,37 +423,36 @@ _every_ function that depends on it. Managing that seed externally (outside of
 Random) is verbose and fallible:
 
 - It's easy to forget to return the new seed.
-- It's easy to misuse functions when the programmer isn't in a "thinking about random" space
-  E.g., the following functional implementation is incorrect but compiles:
-
-```ts
-function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
-  return {
-    seed,
-    point: {x: Random.int(seed, 0, 10).val, y: Random.int(seed, 0, 20).val}
+- It's easy to misuse functions when the programmer isn't in a "thinking about
+  random" space. E.g., the following functional implementation is incorrect but
+  compiles:
+  ```ts
+  function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
+    return {
+      seed,
+      point: {x: Random.int(seed, 0, 10).val, y: Random.int(seed, 0, 20).val}
+    }
   }
-}
-```
-
+  ```
 - It's verbose and unfun to manually manage seed state for every interaction.
 - A seed is easy to construct but numbers are so common it's easy to misplace in
   function parameter lists. In this case, it's a recipe for disaster given the
   default values min and max. E.g., the following is incorrect but compiles:
-
-```ts
-function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
-  let x
-  ;({seed, val: y} = Random.int(0, 10))
-  let y
-  ;({seed, val: y} = Random.int(0, 20))
-  return {seed, point: {x, y}}
-}
-```
+  ```ts
+  function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
+    let x
+    ;({seed, val: x} = Random.int(0, 10))
+    let y
+    ;({seed, val: y} = Random.int(0, 20))
+    return {seed, point: {x, y}}
+  }
+  ```
 
 I love how plain and readable the functional implementation is but using it is a
 drudgery and entirely unfun. The object-oriented implementation isn't
-appreciably worse and painless to use. I also think that certain expressions,
-such as polymorphic behavior, can be more natural in object-oriented designs.
+appreciably worse, is easy to write and painless to use. I also think that
+certain expressions, such as polymorphic behavior, can be more natural in
+object-oriented designs.
 
 #### Naming
 
