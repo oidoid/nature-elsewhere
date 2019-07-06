@@ -1,4 +1,4 @@
-import {Shader} from './shader'
+import {Shader} from './shaders/shader'
 
 export type UniformLocations = Readonly<Record<string, GLUniformLocation>>
 export type AttributeLocations = Readonly<Record<string, number>>

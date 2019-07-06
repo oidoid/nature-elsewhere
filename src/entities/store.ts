@@ -1,7 +1,7 @@
 import {Atlas} from '../images/atlas'
 import {Image} from '../images/image'
 import {Rect} from '../math/rect'
-import {Shader} from '../graphics/shader'
+import {Shader} from '../graphics/shaders/shader'
 
 export interface StoreUpdate {
   /** instances.byteLength may exceed bytes to be rendered. length is the only
