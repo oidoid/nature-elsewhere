@@ -1,25 +1,26 @@
 export namespace ObjectUtil {
   // https://github.com/Microsoft/TypeScript/pull/12253
-  export function keys<T>(obj: T): readonly (keyof T)[] {
+  export function keys<T>(val: T & object): readonly (keyof T)[] {
     const keys: (keyof T)[] = []
-    for (const key in obj) if (obj.hasOwnProperty(key)) keys.push(key)
+    for (const key in val) if (val.hasOwnProperty(key)) keys.push(key)
     return keys
   }
 
   // https://github.com/Microsoft/TypeScript/pull/12253
-  export function values<T>(obj: T): readonly ValueOf<T>[] {
+  export function values<T>(val: T & object): readonly ValueOf<T>[] {
     const vals: ValueOf<T>[] = []
-    for (const key in obj) if (obj.hasOwnProperty(key)) vals.push(obj[key])
+    for (const key in val) if (val.hasOwnProperty(key)) vals.push(val[key])
     return vals
   }
 
   // https://github.com/Microsoft/TypeScript/pull/12253
-  export function entries<T>(obj: T): readonly [keyof T, ValueOf<T>][] {
-    const entries: [keyof T, ValueOf<T>][] = []
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) entries.push([key, obj[key]])
-    }
-    return entries
+  export function entries<T>(
+    val: T & object
+  ): readonly [keyof T, ValueOf<T>][] {
+    return keys(val).map(key => [key, val[key]])
   }
 
+  export function hasKey<T>(val: T, key: keyof any): key is keyof T {
+    return key in val
+  }
 }
