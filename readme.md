@@ -102,8 +102,12 @@ Be sure to grep for the `[version]` tag.
 
 #### Types vs Interfaces
 
-The type syntax looks nicer but interfaces are preferred because VS Code uses
-their names instead of the full declaration.
+The `type` syntax looks nicer than `interface` and allows `Readonly` wrappers.
+Prettier also formats `interface` types more verbosely than single line `type`
+types. However, VS Code presents types declared with `type` as property
+collections. Types declared with `interface` syntax are presented as proper
+named types. Given these tradeoffs, when a type can fit on one line, use `type`,
+otherwise use `interface`.
 
 #### Imports
 
