@@ -6,7 +6,7 @@ import {InputSet} from './inputs/input-set'
 import {Random} from './math/random'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer/renderer'
-import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
+import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
 import {TitleLevel} from './levels/0-title-level'
 import {Viewport} from './graphics/viewport'
@@ -14,7 +14,7 @@ import {WindowModeSetting} from './settings/window-mode-setting'
 
 export class Game {
   private _level: Level
-  private readonly _rendererStateMachine: RendererStateMachine
+  private readonly _rendererStateMachine: RendererStateMachine.State
   private readonly _recorder: Recorder = new Recorder()
   private readonly _inputRouter: InputRouter
   private _requestWindowSetting: FunctionUtil.Once = FunctionUtil.never
@@ -28,14 +28,12 @@ export class Game {
   ) {
     this._inputRouter = new InputRouter(window, canvas)
     this._level = new TitleLevel(atlas, this._recorder, new Random(0))
-    this._rendererStateMachine = new RendererStateMachine(
+    this._rendererStateMachine = RendererStateMachine.make({
       window,
       canvas,
-      atlasImage,
-      paletteImage,
-      this.onAnimationFrame.bind(this),
-      this.onPause.bind(this)
-    )
+      onFrame: this.onAnimationFrame.bind(this),
+      newRenderer: () => Renderer.new(canvas, atlasImage, paletteImage)
+    })
     if (_settings.windowMode === WindowModeSetting.FULLSCREEN) {
       this._requestWindowSetting = FunctionUtil.once(() =>
         window.document.documentElement.requestFullscreen().catch(() => {})
@@ -44,24 +42,16 @@ export class Game {
   }
 
   start(): void {
-    this._rendererStateMachine.start()
+    RendererStateMachine.start(this._rendererStateMachine)
     this._inputRouter.register()
   }
 
   stop(): void {
     this._inputRouter.deregister()
-    this._rendererStateMachine.stop()
+    RendererStateMachine.stop(this._rendererStateMachine)
   }
 
-  private onPause(): void {
-    this._inputRouter.reset()
-  }
-
-  private onAnimationFrame(
-    renderer: Renderer,
-    then: number,
-    now: number
-  ): void {
+  private onAnimationFrame(then: number, now: number): void {
     const milliseconds = now - then
     const canvasWH = Viewport.canvasWH(window.document)
     const scale = this._level.scale(canvasWH)
@@ -75,18 +65,28 @@ export class Game {
     this._requestWindowSetting = this._requestWindowSetting(!!bits)
 
     if (this._recorder.triggered(InputBit.DEBUG_CONTEXT_LOSS)) {
+      this._inputRouter.reset()
+      this._inputRouter.record(this._recorder, canvasWH, cam, cam)
+      this._recorder.update(milliseconds)
+
       console.log('Lose renderer context.')
-      renderer.debugLoseContext()
+      this._rendererStateMachine.renderer.debugLoseContext()
       setTimeout(() => {
         console.log('Restore renderer context.')
-        renderer.debugRestoreContext()
+        this._rendererStateMachine.renderer.debugRestoreContext()
       }, 3 * 1000)
     }
 
     const update = this._level.update(then, now, canvasWH, cam)
     if (update.nextLevel) {
       this._level = update.nextLevel
-      renderer.render(canvasWH, scale, cam, update.instances, update.length)
+      this._rendererStateMachine.renderer.render(
+        canvasWH,
+        scale,
+        cam,
+        update.instances,
+        update.length
+      )
     } else {
       this.stop()
     }

@@ -118,6 +118,10 @@ export class Renderer {
     this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
   }
 
+  isContextLost(): boolean {
+    return this._gl.isContextLost()
+  }
+
   debugLoseContext(): void {
     if (!this._loseContext) return
     this._loseContext.loseContext()
