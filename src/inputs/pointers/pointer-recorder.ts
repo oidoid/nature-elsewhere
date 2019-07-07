@@ -15,12 +15,12 @@ export class PointerRecorder {
   }
 
   onEvent(
-    viewport: WH,
+    canvasWH: WH,
     cam: Rect,
     event: PointerEvent,
     defaultOrigin: XY
   ): void {
-    this._adapter.adapt(viewport, cam, event, defaultOrigin)
+    this._adapter.adapt(canvasWH, cam, event, defaultOrigin)
 
     event.preventDefault()
   }

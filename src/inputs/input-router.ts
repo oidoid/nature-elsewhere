@@ -5,7 +5,7 @@ import {Recorder} from './recorder'
 
 export class InputRouter {
   private _registered: boolean = false
-  private _viewport: WH = {w: 0, h: 0}
+  private _canvasWH: WH = {w: 0, h: 0}
   private _cam: Rect = {x: 0, y: 0, w: 0, h: 0}
   private _defaultOrigin: XY = {x: 0, y: 0}
   constructor(
@@ -40,7 +40,7 @@ export class InputRouter {
   }
 
   record(recorder: Recorder, viewport: WH, cam: Rect, defaultOrigin: XY): void {
-    this._viewport = viewport
+    this._canvasWH = viewport
     this._cam = cam
     this._defaultOrigin = defaultOrigin
     this._keyboardRecorder.record(recorder)
@@ -59,7 +59,7 @@ export class InputRouter {
 
   private onPointerMove(event: PointerEvent): void {
     this._pointerRecorder.onEvent(
-      this._viewport,
+      this._canvasWH,
       this._cam,
       event,
       this._defaultOrigin
@@ -68,7 +68,7 @@ export class InputRouter {
 
   private onPointerDown(event: PointerEvent): void {
     this._pointerRecorder.onEvent(
-      this._viewport,
+      this._canvasWH,
       this._cam,
       event,
       this._defaultOrigin
