@@ -17,6 +17,6 @@ export namespace NumberUtil {
   }
 
   export function ceilMultiple(multiple: number, val: number): number {
-    return Math.ceil(val / multiple) * multiple
+    return multiple ? Math.ceil(val / multiple) * multiple : 0
   }
 }
