@@ -1,40 +1,28 @@
-import {Shader} from './shaders/shader'
-
-export type UniformLocations = Readonly<Record<string, GLUniformLocation>>
-export type AttributeLocations = Readonly<Record<string, number>>
-
-export const GL = WebGL2RenderingContext
-
 export namespace GLUtil {
+  const GL = WebGL2RenderingContext
+
   export function initAttribute(
     gl: GL,
-    program: GLProgram,
-    attribute: Shader.Attribute,
     stride: number,
     divisor: number,
-    buffer: GLBuffer
+    buffer: GLBuffer,
+    location: number,
+    {type, length, offset}: ShaderAttribute
   ): void {
-    const location = gl.getAttribLocation(program, attribute.name)
     gl.enableVertexAttribArray(location)
     gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
-    gl.vertexAttribIPointer(
-      location,
-      attribute.length,
-      attribute.type,
-      stride,
-      attribute.offset
-    )
+    gl.vertexAttribIPointer(location, length, GL[type], stride, offset)
     gl.vertexAttribDivisor(location, divisor)
     gl.bindBuffer(GL.ARRAY_BUFFER, null)
   }
 
-  export function buildProgram(
+  export function loadProgram(
     gl: GL,
     vertexGLSL: string,
     fragmentGLSL: string
   ): GLProgram {
     const program = gl.createProgram()
-    if (program === null) throw new Error('WebGL program creation failed.')
+    if (!program) return null
 
     const vertexShader = compileShader(gl, GL.VERTEX_SHADER, vertexGLSL)
     const fragmentShader = compileShader(gl, GL.FRAGMENT_SHADER, fragmentGLSL)
@@ -89,41 +77,42 @@ export namespace GLUtil {
     image: HTMLImageElement
   ): GLTexture {
     gl.activeTexture(textureUnit)
-    const texture = gl.createTexture()
-    gl.bindTexture(GL.TEXTURE_2D, texture)
+    const ret = gl.createTexture()
+    gl.bindTexture(GL.TEXTURE_2D, ret)
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST)
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST)
     gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, image)
     gl.bindTexture(GL.TEXTURE_2D, null)
-    return texture
+    return ret
   }
 
-  export function getUniformLocations(
+  export function uniformLocations(
     gl: GL,
     program: GLProgram
-  ): UniformLocations {
-    const length = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS) || 0
-    const locations: Mutable<UniformLocations> = {}
-    for (let i = 0; i < length; ++i) {
+  ): Readonly<Record<string, GLUniformLocation>> {
+    if (!program) return {}
+    const len = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS)
+    const ret: Record<string, GLUniformLocation> = {}
+    for (let i = 0; i < len; ++i) {
       const uniform = gl.getActiveUniform(program, i)
-      const name = uniform ? uniform.name : null
-      const location = name ? gl.getUniformLocation(program, name) : null
-      locations[name || i] = location
+      if (!uniform) throw new Error(`Can't get uniform at index ${i}.`)
+      ret[uniform.name] = gl.getUniformLocation(program, uniform.name)
     }
-    return locations
+    return ret
   }
 
-  export function getAttributeLocations(
+  export function attributeLocations(
     gl: GL,
     program: GLProgram
-  ): AttributeLocations {
-    const length = gl.getProgramParameter(program, GL.ACTIVE_ATTRIBUTES) || 0
-    const locations: Mutable<AttributeLocations> = {}
-    for (let i = 0; i < length; ++i) {
+  ): Readonly<Record<string, number>> {
+    if (!program) return {}
+    const len = gl.getProgramParameter(program, GL.ACTIVE_ATTRIBUTES)
+    const ret: Record<string, number> = {}
+    for (let i = 0; i < len; ++i) {
       const attr = gl.getActiveAttrib(program, i)
-      const location = attr ? gl.getAttribLocation(program, attr.name) : i
-      locations[attr ? attr.name : location] = location
+      if (!attr) throw new Error(`Can't get attribute at index ${i}.`)
+      ret[attr.name] = gl.getAttribLocation(program, attr.name)
     }
-    return locations
+    return ret
   }
 }

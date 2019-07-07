@@ -1,119 +1,19 @@
 import {Atlas} from '../../images/atlas'
-import {GL} from '../gl-util'
 import {Image} from '../../images/image'
-import {NumberUtil} from '../../math/number-util'
 
 export namespace Shader {
-  export enum Variable {
-    // Uniforms
-    ATLAS = 'atlas',
-    ATLAS_SIZE = 'atlasSize',
-    PALETTE = 'palette',
-    PALETTE_SIZE = 'paletteSize',
-    PROJECTION = 'projection',
-
-    // Per vertex attributes
-    UV = 'uv',
-
-    // Per instance attributes
-    SOURCE = 'source',
-    TARGET = 'target',
-    OFFSET = 'offset',
-    SCALE = 'scale',
-    MASK_SOURCE = 'maskSource',
-    MASK_OFFSET = 'maskOffset',
-    PALETTE_INDEX = 'paletteIndex'
-  }
-
-  export interface AttributeLayout {
-    readonly perVertex: DivisorLayout
-    readonly perInstance: DivisorLayout
-  }
-
-  export interface DivisorLayout {
-    readonly length: number
-    readonly stride: number
-    readonly divisor: number
-    readonly attributes: readonly Attribute[]
-  }
-
-  export interface Attribute {
-    readonly type: number
-    readonly name: Shader.Variable
-    readonly length: number
-    readonly offset: number
-  }
-
-  type PartialAttribute = Omit<Attribute, 'offset'>
-
   const littleEndian: boolean =
     new Int8Array(new Int16Array([1]).buffer)[0] === 1
 
-  const U8: number = GL.UNSIGNED_BYTE
-  const I8: number = GL.BYTE
-  const I16: number = GL.SHORT
-  const sizeOfType: Readonly<Record<number, number>> = Object.freeze({
-    [U8]: 1,
-    [I8]: 1,
-    [I16]: 2
-  })
-
-  export const layout: AttributeLayout = Object.freeze({
-    perVertex: newDivisorLayout(0, {name: Variable.UV, type: I16, length: 2}),
-    perInstance: newDivisorLayout(
-      1,
-      {name: Variable.SOURCE, type: I16, length: 4},
-      {name: Variable.TARGET, type: I16, length: 4},
-      {name: Variable.OFFSET, type: I8, length: 2},
-      {name: Variable.SCALE, type: I16, length: 2},
-      {name: Variable.MASK_SOURCE, type: I16, length: 4},
-      {name: Variable.MASK_OFFSET, type: I8, length: 2},
-      {name: Variable.PALETTE_INDEX, type: U8, length: 1}
-    )
-  })
-
-  function newDivisorLayout(
-    divisor: number,
-    ...partialAttributes: readonly PartialAttribute[]
-  ): DivisorLayout {
-    const attributes = partialAttributes.reduce(reducePartialAttribute, [])
-    const maxSize = attributes.reduce(
-      (max, {type}) => Math.max(sizeOfType[type], max),
-      0
-    )
-    return {
-      length: attributes.reduce((sum, {length}) => sum + length, 0),
-      stride: NumberUtil.ceilMultiple(
-        maxSize,
-        nextOffset(attributes[attributes.length - 1])
-      ),
-      divisor,
-      attributes
-    }
-  }
-
-  function reducePartialAttribute(
-    attributes: readonly Attribute[],
-    {type, name, length}: PartialAttribute,
-    index: number
-  ): readonly Attribute[] {
-    return attributes.concat({
-      type,
-      name,
-      length,
-      offset: index ? nextOffset(attributes[index - 1]) : 0
-    })
-  }
-
-  function nextOffset(attribute: Attribute): number {
-    return attribute.offset + sizeOfType[attribute.type] * attribute.length
-  }
-
-  export function newInstanceBuffer(length: number): DataView {
+  export function newInstanceBuffer(
+    layout: ShaderLayout,
+    length: number
+  ): DataView {
     return new DataView(new ArrayBuffer(layout.perInstance.stride * length))
   }
 
   export function packInstance(
+    layout: ShaderLayout,
     {animations}: Atlas.Definition,
     dataView: DataView,
     index: number,

@@ -1,16 +1,16 @@
-import {GL, GLUtil} from '../gl-util'
-import * as glConfig from './gl-config.json'
-import {ShaderCache} from '../shaders/shader-cache'
-import {Shader} from '../shaders/shader'
 import fragmentGLSL from '../shaders/fragment.glsl'
+import * as glConfig from './gl-config.json'
+import {GLUtil} from '../gl-util'
 import vertexGLSL from '../shaders/vertex.glsl'
 
-const perVertexData: Int16Array = new Int16Array(
+const GL = WebGL2RenderingContext
+const vertices: Int16Array = new Int16Array(
   Object.freeze([1, 1, 0, 1, 1, 0, 0, 0])
 )
 
 export class Renderer {
   static new(
+    layout: ShaderLayout,
     canvas: HTMLCanvasElement,
     atlas: HTMLImageElement,
     palette: HTMLImageElement
@@ -25,47 +25,49 @@ export class Renderer {
     // Disable image colorspace conversions. The default is browser dependent.
     gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, false)
 
-    const program = GLUtil.buildProgram(gl, vertexGLSL, fragmentGLSL)
-    const shaderCache = ShaderCache.new(gl, program)
+    const program = GLUtil.loadProgram(gl, vertexGLSL, fragmentGLSL)
+    const uniforms = GLUtil.uniformLocations(gl, program)
 
-    gl.uniform1i(shaderCache.location(Shader.Variable.ATLAS), 0)
+    gl.uniform1i(uniforms[layout.uniforms.atlas], 0)
     gl.uniform2i(
-      shaderCache.location(Shader.Variable.ATLAS_SIZE),
+      uniforms[layout.uniforms.atlasSize],
       atlas.naturalWidth,
       atlas.naturalHeight
     )
-    gl.uniform1i(shaderCache.location(Shader.Variable.PALETTE), 1)
+    gl.uniform1i(uniforms[layout.uniforms.palette], 1)
     gl.uniform2i(
-      shaderCache.location(Shader.Variable.PALETTE_SIZE),
+      uniforms[layout.uniforms.paletteSize],
       palette.naturalWidth,
       palette.naturalHeight
     )
+
+    const attributes = GLUtil.attributeLocations(gl, program)
 
     const vertexArray = gl.createVertexArray()
     gl.bindVertexArray(vertexArray)
 
     const perVertexBuffer = gl.createBuffer()
-    Shader.layout.perVertex.attributes.forEach(attr =>
+    layout.perVertex.attributes.forEach(attr =>
       GLUtil.initAttribute(
         gl,
-        program,
-        attr,
-        Shader.layout.perVertex.stride,
-        Shader.layout.perVertex.divisor,
-        perVertexBuffer
+        layout.perVertex.stride,
+        layout.perVertex.divisor,
+        perVertexBuffer,
+        attributes[attr.name],
+        attr
       )
     )
-    GLUtil.bufferData(gl, perVertexBuffer, perVertexData, GL.STATIC_READ)
+    GLUtil.bufferData(gl, perVertexBuffer, vertices, GL.STATIC_READ)
 
     const perInstanceBuffer = gl.createBuffer()
-    Shader.layout.perInstance.attributes.forEach(attr =>
+    layout.perInstance.attributes.forEach(attr =>
       GLUtil.initAttribute(
         gl,
-        program,
-        attr,
-        Shader.layout.perInstance.stride,
-        Shader.layout.perInstance.divisor,
-        perInstanceBuffer
+        layout.perInstance.stride,
+        layout.perInstance.divisor,
+        perInstanceBuffer,
+        attributes[attr.name],
+        attr
       )
     )
 
@@ -78,8 +80,9 @@ export class Renderer {
     const loseContext = gl.getExtension('WEBGL_lose_context')
 
     return new Renderer(
+      layout,
       gl,
-      shaderCache,
+      uniforms,
       new Float32Array(4 * 4),
       perInstanceBuffer,
       loseContext
@@ -87,8 +90,9 @@ export class Renderer {
   }
 
   private constructor(
+    private readonly _layout: ShaderLayout,
     private readonly _gl: GL,
-    private readonly _shaderCache: ShaderCache,
+    private readonly _uniforms: Readonly<Record<string, GLUniformLocation>>,
     private readonly _projection: Float32Array,
     private readonly _perInstanceBuffer: GLBuffer,
     private readonly _loseContext: GLLoseContext
@@ -114,8 +118,8 @@ export class Renderer {
       perInstanceData,
       GL.DYNAMIC_READ
     )
-    const vertices = perVertexData.length / Shader.layout.perVertex.length
-    this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, vertices, instances)
+    const len = vertices.length / this._layout.perVertex.length
+    this._gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, len, instances)
   }
 
   isContextLost(): boolean {
@@ -137,9 +141,9 @@ export class Renderer {
    *             {w: window.innerWidth, h: window.innerHeight}.
    * @arg scale Positive integer zoom.
    */
-  resize(canvas: WH, scale: number, cam: Rect): void {
-    this._gl.canvas.width = canvas.w
-    this._gl.canvas.height = canvas.h
+  resize(canvasWH: WH, scale: number, cam: Rect): void {
+    this._gl.canvas.width = canvasWH.w
+    this._gl.canvas.height = canvasWH.h
 
     // Convert the pixels to clipspace by taking them as a fraction of the cam
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y is
@@ -153,7 +157,7 @@ export class Renderer {
             0,        0, 0,                    1
     ])
     this._gl.uniformMatrix4fv(
-      this._shaderCache.location(Shader.Variable.PROJECTION),
+      this._uniforms[this._layout.uniforms.projection],
       false,
       this._projection
     )

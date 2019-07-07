@@ -7,6 +7,8 @@ import {Random} from './math/random'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer/renderer'
 import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
+import * as ShaderLayoutParser from './graphics/shaders/shader-config-parser'
+import * as shaderConfig from './graphics/shaders/shader-config.json'
 import {Settings} from './settings/settings'
 import {TitleLevel} from './levels/0-title-level'
 import {Viewport} from './graphics/viewport'
@@ -27,12 +29,19 @@ export class Game {
     _settings: Settings
   ) {
     this._inputRouter = new InputRouter(window, canvas)
-    this._level = new TitleLevel(atlas, this._recorder, new Random(0))
+    const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
+    this._level = new TitleLevel(
+      shaderLayout,
+      atlas,
+      this._recorder,
+      new Random(0)
+    )
     this._rendererStateMachine = RendererStateMachine.make({
       window,
       canvas,
       onFrame: this.onAnimationFrame.bind(this),
-      newRenderer: () => Renderer.new(canvas, atlasImage, paletteImage)
+      newRenderer: () =>
+        Renderer.new(shaderLayout, canvas, atlasImage, paletteImage)
     })
     if (_settings.windowMode === WindowModeSetting.FULLSCREEN) {
       this._requestWindowSetting = FunctionUtil.once(() =>

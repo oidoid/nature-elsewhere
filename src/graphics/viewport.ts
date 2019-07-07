@@ -18,7 +18,7 @@ export namespace Viewport {
   /**
    * @arg {} {x, y} The viewport coordinates of the input in pixels, usually
    *                {x: event.clientX, y: event.clientY}.
-   * @arg {} {w, h} The viewport dimensions in pixels.
+   * @arg {} {w, h} The viewport dimensions in pixels (canvasWH).
    * @arg cam The coordinates and dimensions of the camera the input was made
    *          through.
    * @return The fractional position in the level's coordinate-system.

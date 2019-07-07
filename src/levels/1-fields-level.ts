@@ -20,11 +20,12 @@ import {Viewport} from '../graphics/viewport'
 export class FieldsLevel implements Level {
   private readonly _store: Store
   constructor(
+    private readonly _shaderLayout: ShaderLayout,
     private _atlas: Atlas.Definition,
     private _recorder: Recorder,
     random: Random
   ) {
-    this._store = new Store(_atlas)
+    this._store = new Store(_shaderLayout, _atlas)
     this._store.addImages(
       Image.new(_atlas, AnimationID.TILE_GRASS, {
         palette: Palette.GRASS_GREENS,
@@ -50,7 +51,7 @@ export class FieldsLevel implements Level {
 
   update(then: number, now: number, _canvas: WH, cam: Rect): LevelUpdate {
     const nextLevel = this._recorder.triggered(InputBit.MENU)
-      ? new PauseLevel(this._atlas, this._recorder, this)
+      ? new PauseLevel(this._shaderLayout, this._atlas, this._recorder, this)
       : this
     return {nextLevel, ...this._store.update(now - then, cam)}
   }

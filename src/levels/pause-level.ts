@@ -16,11 +16,12 @@ export class PauseLevel implements Level {
   private readonly _store: Store
   private readonly _ui: ImageGroup
   constructor(
+    shaderLayout: ShaderLayout,
     atlas: Atlas.Definition,
     private readonly _recorder: Recorder,
     private readonly _level: Level
   ) {
-    this._store = new Store(atlas)
+    this._store = new Store(shaderLayout, atlas)
     this._store.addImages(
       Image.new(atlas, AnimationID.PIXEL, {
         palette: Palette.YELLOWS,

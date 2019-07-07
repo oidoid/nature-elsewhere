@@ -39,11 +39,12 @@ export class TitleLevel implements Level {
   private _cursorRow: Select = Select.START
   private readonly _virtualJoystick: VirtualJoystick
   constructor(
+    private readonly _shaderLayout: ShaderLayout,
     private readonly _atlas: Atlas.Definition,
     private readonly _recorder: Recorder,
     private readonly _random: Random
   ) {
-    this._store = new Store(_atlas)
+    this._store = new Store(_shaderLayout, _atlas)
     let logo = NatureElsewhere.create(_atlas, 1, {x: 0, y: 6})
     const chars = Text.toImages(
       _atlas,
@@ -149,10 +150,20 @@ export class TitleLevel implements Level {
     if (this._recorder.triggeredSet(InputBit.ACTION)) {
       switch (this._cursorRow) {
         case Select.START:
-          nextLevel = new FieldsLevel(this._atlas, this._recorder, this._random)
+          nextLevel = new FieldsLevel(
+            this._shaderLayout,
+            this._atlas,
+            this._recorder,
+            this._random
+          )
           break
         case Select.SETTINGS:
-          nextLevel = new SettingsLevel(this._atlas, this._recorder, this)
+          nextLevel = new SettingsLevel(
+            this._shaderLayout,
+            this._atlas,
+            this._recorder,
+            this
+          )
           break
         case Select.EXIT:
           nextLevel = undefined

@@ -1,0 +1,19 @@
+{
+  "uniforms": {
+    "atlas": "atlas",
+    "atlasSize": "atlasSize",
+    "palette": "palette",
+    "paletteSize": "paletteSize",
+    "projection": "projection"
+  },
+  "perVertex": [{"name": "uv", "type": "SHORT", "length": 2}],
+  "perInstance": [
+    {"name": "source", "type": "SHORT", "length": 4},
+    {"name": "target", "type": "SHORT", "length": 4},
+    {"name": "offset", "type": "BYTE", "length": 2},
+    {"name": "scale", "type": "SHORT", "length": 2},
+    {"name": "maskSource", "type": "SHORT", "length": 4},
+    {"name": "maskOffset", "type": "BYTE", "length": 2},
+    {"name": "paletteIndex", "type": "UNSIGNED_BYTE", "length": 1}
+  ]
+}
