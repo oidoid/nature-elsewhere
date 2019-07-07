@@ -1,6 +1,7 @@
 import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {Image} from '../../images/image'
+import {Layer} from '../../images/layer'
 
 export namespace BorderBox {
   export enum Border {
@@ -11,20 +12,21 @@ export namespace BorderBox {
   export function create(
     atlas: Atlas.Definition,
     backgroundColor: number,
+    backgroundLayer: Layer,
     border: Border,
+    borderLayer: Layer,
     borderColor: number,
-    layer: number, // Uses layer and layer + 1/
     {w, h}: WH // Size not including border.
   ): readonly Image[] {
     const borderID = <AnimationID>(<unknown>border)
     const newBorder = Image.newBind(atlas, borderID, {
       palette: borderColor,
-      layer: layer + 1
+      layer: borderLayer
     })
     return [
       Image.new(atlas, AnimationID.PIXEL, {
         palette: backgroundColor,
-        layer,
+        layer: backgroundLayer,
         wh: {w, h},
         position: {x: 1, y: 1}
       }),

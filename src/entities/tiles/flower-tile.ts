@@ -1,6 +1,7 @@
 import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {Image} from '../../images/image'
+import {Layer} from '../../images/layer'
 import {Palette} from '../../images/palette'
 import {Random} from '../../math/random'
 
@@ -12,7 +13,7 @@ const flowerIDs: readonly AnimationID[] = Object.freeze([
 export namespace FlowerTile {
   export function create(
     atlas: Atlas.Definition,
-    layer: number,
+    layer: Layer,
     wh: WH,
     random: Random
   ): readonly Image[] {
@@ -31,7 +32,7 @@ export namespace FlowerTile {
       flowers.push(
         Image.new(atlas, id, {
           palette: Palette.FLOWER,
-          layer: layer + 1,
+          layer,
           position
         })
       )

@@ -1,6 +1,7 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
 import {Image, ImageOptions} from '../images/image'
+import {Layer} from '../images/layer'
 import {MemFont} from './mem-font'
 import {Palette} from '../images/palette'
 
@@ -35,7 +36,7 @@ export namespace Text {
       const id = 'MEM_FONT_' + string.charCodeAt(i)
       const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], {
         palette: Palette.GREYS,
-        layer: 10,
+        layer: Layer.UI_HIHI,
         position: {x: position.x, y: position.y - y},
         ...options
       })

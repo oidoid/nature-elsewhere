@@ -3,6 +3,7 @@ import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {BorderBox} from './border-box'
 import {Image} from '../../images/image'
+import {Layer} from '../../images/layer'
 import {Palette} from '../../images/palette'
 import {Panel} from './panel'
 import {Text} from '../../text/text'
@@ -10,38 +11,34 @@ import {Text} from '../../text/text'
 export namespace ControllerMappingPanel {
   export function create(
     atlas: Atlas.Definition,
-    layer: number,
     target: XY
   ): readonly Image[] {
     return Image.moveBy(target, [
-      ...Panel.create(
-        atlas,
-        strings['ui/settings/controller-mapping/title'],
-        layer,
-        {...target, w: 137, h: 69}
-      ),
+      ...Panel.create(atlas, strings['ui/settings/controller-mapping/title'], {
+        ...target,
+        w: 137,
+        h: 69
+      }),
       Image.new(atlas, AnimationID.UI_CONTROLLER_MAPPING_SOURCE_KEYBOARD, {
-        layer: layer + 1,
+        layer: Layer.UI_HI,
         position: {x: 32, y: 7}
       }),
       ...Image.moveBy(
         {x: 32 + 17 + 2, y: 7 + 2},
         Text.toImages(
           atlas,
-          strings['ui/settings/controller-mapping/source/keyboard'],
-          {layer: layer + 1}
+          strings['ui/settings/controller-mapping/source/keyboard']
         )
       ),
       Image.new(atlas, AnimationID.UI_CONTROLLER_MAPPING_SOURCE_GAMEPAD, {
-        layer: layer + 1,
+        layer: Layer.UI_HI,
         position: {x: 85, y: 7}
       }),
       ...Image.moveBy(
         {x: 85 + 14 + 2, y: 7 + 2},
         Text.toImages(
           atlas,
-          strings['ui/settings/controller-mapping/source/gamepad'],
-          {layer: layer + 1}
+          strings['ui/settings/controller-mapping/source/gamepad']
         )
       ),
       ...Image.moveBy(
@@ -49,7 +46,6 @@ export namespace ControllerMappingPanel {
         newControllerMappingInputRow(
           atlas,
           AnimationID.UI_CONTROLLER_MAPPING_INPUT_UP,
-          layer + 1,
           strings['ui/settings/controller-mapping/input/up']
         )
       ),
@@ -58,7 +54,6 @@ export namespace ControllerMappingPanel {
         newControllerMappingInputRow(
           atlas,
           AnimationID.UI_CONTROLLER_MAPPING_INPUT_RIGHT,
-          layer + 1,
           strings['ui/settings/controller-mapping/input/right']
         )
       ),
@@ -67,7 +62,6 @@ export namespace ControllerMappingPanel {
         newControllerMappingInputRow(
           atlas,
           AnimationID.UI_CONTROLLER_MAPPING_INPUT_DOWN,
-          layer + 1,
           strings['ui/settings/controller-mapping/input/down']
         )
       ),
@@ -76,7 +70,6 @@ export namespace ControllerMappingPanel {
         newControllerMappingInputRow(
           atlas,
           AnimationID.UI_CONTROLLER_MAPPING_INPUT_LEFT,
-          layer + 1,
           strings['ui/settings/controller-mapping/input/left']
         )
       ),
@@ -85,7 +78,6 @@ export namespace ControllerMappingPanel {
         newControllerMappingInputRow(
           atlas,
           AnimationID.UI_CONTROLLER_MAPPING_INPUT_MENU,
-          layer + 1,
           'Menu'
         )
       )
@@ -95,20 +87,20 @@ export namespace ControllerMappingPanel {
   function newControllerMappingInputRow(
     atlas: Atlas.Definition,
     animationID: AnimationID,
-    layer: number,
     title: string
   ): readonly Image[] {
     return [
-      Image.new(atlas, animationID, {layer}),
-      ...Image.moveBy({x: 8, y: 2}, Text.toImages(atlas, title, {layer})),
+      Image.new(atlas, animationID, {layer: Layer.UI_HI}),
+      ...Image.moveBy({x: 8, y: 2}, Text.toImages(atlas, title)),
       ...Image.moveBy(
         {x: 27, y: 0},
         BorderBox.create(
           atlas,
           Palette.YELLOWS,
+          Layer.UI_MID,
           BorderBox.Border.SOLID,
+          Layer.UI_HI,
           Palette.GREYS,
-          layer,
           {w: 47, h: 6}
         )
       ),
@@ -117,9 +109,10 @@ export namespace ControllerMappingPanel {
         BorderBox.create(
           atlas,
           Palette.YELLOWS,
+          Layer.UI_MID,
           BorderBox.Border.SOLID,
+          Layer.UI_HI,
           Palette.GREYS,
-          layer,
           {w: 47, h: 6}
         )
       )

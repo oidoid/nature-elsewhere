@@ -6,6 +6,7 @@ import {FieldsLevel} from './1-fields-level'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
 import {InputBit} from '../inputs/input-bit'
+import {Layer} from '../images/layer'
 import {Limits} from '../math/limits'
 import {MemFont} from '../text/mem-font'
 import {NatureElsewhere} from '../entities/nature-elsewhere'
@@ -45,7 +46,7 @@ export class TitleLevel implements Level {
     private readonly _random: Random
   ) {
     this._store = new Store(_shaderLayout, _atlas)
-    let logo = NatureElsewhere.create(_atlas, 1, {x: 0, y: 6})
+    let logo = NatureElsewhere.create(_atlas, {x: 0, y: 6})
     const chars = Text.toImages(
       _atlas,
       `${strings['ui/title/episode-0']}                ${strings['ui/title/rndmem']}`
@@ -98,7 +99,7 @@ export class TitleLevel implements Level {
         RainCloud.create(
           _atlas,
           AnimationID.CLOUD_M,
-          3,
+          Layer.UI_MID,
           {x: 1, y: 100},
           {x: 0, y: -0.004}
         )
@@ -108,7 +109,7 @@ export class TitleLevel implements Level {
         RainCloud.create(
           _atlas,
           AnimationID.CLOUD_S,
-          3,
+          Layer.UI_HI,
           {x: 1, y: 100},
           {x: 0, y: -0.004}
         )
@@ -118,13 +119,13 @@ export class TitleLevel implements Level {
         RainCloud.create(
           _atlas,
           AnimationID.CLOUD_XL,
-          3,
+          Layer.UI_HI,
           {x: 1, y: 100},
           {x: 0, y: -0.004}
         )
       )
     )
-    this._virtualJoystick = new VirtualJoystick(_atlas, 100)
+    this._virtualJoystick = new VirtualJoystick(_atlas)
     this._store.addImages(...this._virtualJoystick.images())
   }
 

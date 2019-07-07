@@ -4,6 +4,7 @@ import {Image} from '../../images/image'
 import {InputBit} from '../../inputs/input-bit'
 import {ImageGroup} from '../../images/image-group'
 import {InputSource} from '../../inputs/input-source'
+import {Layer} from '../../images/layer'
 import {Palette} from '../../images/palette'
 import {Recorder} from '../../inputs/recorder'
 import {VirtualJoystickPositionInput} from '../../inputs/pointers/virtual-gamepad-input'
@@ -17,8 +18,8 @@ export class VirtualJoystick {
   private _timer: number = 0
   private _image: VirtualJoystickImage
 
-  constructor(atlas: Atlas.Definition, layer: number) {
-    this._image = new VirtualJoystickImage(atlas, layer)
+  constructor(atlas: Atlas.Definition) {
+    this._image = new VirtualJoystickImage(atlas)
   }
 
   update(milliseconds: number, recorder: Recorder): void {
@@ -55,15 +56,15 @@ class VirtualJoystickImage {
   private readonly _images: ImageGroup
   private readonly _radiusPx: number
 
-  constructor(atlas: Atlas.Definition, layer: number) {
+  constructor(atlas: Atlas.Definition) {
     const palette = Palette.GREYS
     this._base = Image.new(atlas, AnimationID.UI_VIRTUAL_JOYSTICK_BASE, {
       palette,
-      layer
+      layer: Layer.UI_MID
     })
     this._stick = Image.new(atlas, AnimationID.UI_VIRTUAL_JOYSTICK_STICK, {
       palette,
-      layer: layer + 1
+      layer: Layer.UI_HI
     })
     this._images = new ImageGroup([this._base, this._stick])
     this._radiusPx = Math.min(this._base.target().w, this._base.target().h) / 2

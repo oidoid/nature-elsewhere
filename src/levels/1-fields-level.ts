@@ -6,6 +6,7 @@ import {GrassTile} from '../entities/tiles/grass-tile'
 import {Image} from '../images/image'
 import {InputBit} from '../inputs/input-bit'
 import {LevelDefault} from './level-default'
+import {Layer} from '../images/layer'
 import {Limits} from '../math/limits'
 import {Palette} from '../images/palette'
 import {PauseLevel} from './pause-level'
@@ -28,16 +29,17 @@ export class FieldsLevel implements Level {
     this._store = new Store(_shaderLayout, _atlas)
     this._store.addImages(
       Image.new(_atlas, AnimationID.TILE_GRASS, {
+        layer: Layer.PLANE,
         palette: Palette.GRASS_GREENS,
         wh: Limits.MAX_WH
       }),
-      ...FlowerTile.create(_atlas, 4, {w: 1000, h: 1000}, random),
+      ...FlowerTile.create(_atlas, Layer.DECAL, {w: 1000, h: 1000}, random),
       ...ArrayUtil.range(0, 1000).reduce(
         (sum: readonly Image[], i) => [
           ...sum,
           ...Image.moveBy(
             {x: (i % 32) * 32, y: Math.trunc(i / 32) * 32},
-            GrassTile.create(_atlas, 4, {w: 32, h: 32}, random)
+            GrassTile.create(_atlas, Layer.DEFAULT, {w: 32, h: 32}, random)
           )
         ],
         []

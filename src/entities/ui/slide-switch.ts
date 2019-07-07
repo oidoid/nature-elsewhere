@@ -2,6 +2,7 @@ import {AnimationID} from '../../images/animation-id'
 import {Atlas} from '../../images/atlas'
 import {BorderBox} from './border-box'
 import {Image} from '../../images/image'
+import {Layer} from '../../images/layer'
 import {NumberUtil} from '../../math/number-util'
 import {Palette, Tone} from '../../images/palette'
 
@@ -10,12 +11,11 @@ export class SlideSwitch {
   private readonly _images: readonly Image[]
   constructor(
     atlas: Atlas.Definition,
-    layer: number,
     private readonly _width: number // Width not including border.
   ) {
     this._switch = Image.new(atlas, AnimationID.UI_SWITCH, {
       palette: Palette.GREYS,
-      layer: layer + 2
+      layer: Layer.UI_HI
     })
     this._images = [
       ...Image.moveBy(
@@ -23,9 +23,10 @@ export class SlideSwitch {
         BorderBox.create(
           atlas,
           Palette.GREYS + Tone.HALF,
+          Layer.UI_HIHI,
           BorderBox.Border.SOLID,
+          Layer.UI_HI,
           Palette.GREYS,
-          layer,
           {w: _width, h: 1}
         )
       ),

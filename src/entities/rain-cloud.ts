@@ -1,6 +1,7 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
 import {Image} from '../images/image'
+import {Layer} from '../images/layer'
 import {Palette} from '../images/palette'
 
 type Cloud =
@@ -14,7 +15,7 @@ export namespace RainCloud {
   export function create(
     atlas: Atlas.Definition,
     cloud: Cloud,
-    layer: number,
+    layer: Layer,
     preScale: XY,
     offsetRate: XY
   ): readonly Image[] {

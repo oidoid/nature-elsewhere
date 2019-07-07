@@ -1,12 +1,13 @@
 import {AnimationID} from './animation-id'
 import {Animator} from './animator'
 import {Atlas} from './atlas'
+import {Layer} from './layer'
 import {Palette} from './palette'
 import {Rect} from '../math/rect'
 
 export class ImageOptions {
   palette?: Palette
-  layer?: number
+  layer?: Layer
   position?: XY
   maskAnimationID?: AnimationID
   maskCel?: number
@@ -43,7 +44,7 @@ export class Image {
     animationID: AnimationID,
     {
       palette = Palette.GREYS,
-      layer = 0,
+      layer = Layer.DEFAULT,
       position = {x: 0, y: 0},
       scale = {x: 1, y: 1},
       offset = {x: 0, y: 0},
@@ -110,7 +111,7 @@ export class Image {
     private readonly _offsetRate: XY,
     private readonly _scale: XY,
     private _palette: Palette,
-    private readonly _layer: number,
+    private readonly _layer: Layer,
     private readonly _animator: Animator
   ) {}
 
@@ -179,7 +180,7 @@ export class Image {
     this._palette = palette
   }
 
-  layer(): number {
+  layer(): Layer {
     return this._layer
   }
 }

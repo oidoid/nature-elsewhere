@@ -1,13 +1,13 @@
 import {Atlas} from '../../images/atlas'
 import {BorderBox} from './border-box'
 import {Image} from '../../images/image'
+import {Layer} from '../../images/layer'
 import {Palette} from '../../images/palette'
 import {Text} from '../../text/text'
 
 export namespace Button {
   export function create(
     atlas: Atlas.Definition,
-    layer: number, // Uses layer and layer + 1
     wh: WH, // Size not including border.
     text: string
   ): readonly Image[] {
@@ -15,15 +15,13 @@ export namespace Button {
       ...BorderBox.create(
         atlas,
         Palette.YELLOWS,
+        Layer.UI_MID,
         BorderBox.Border.SOLID,
+        Layer.UI_HI,
         Palette.GREYS,
-        layer,
         wh
       ),
-      ...Image.moveBy(
-        {x: 5, y: 5},
-        Text.toImages(atlas, text, {layer: layer + 1})
-      )
+      ...Image.moveBy({x: 5, y: 5}, Text.toImages(atlas, text))
     ]
   }
 }
