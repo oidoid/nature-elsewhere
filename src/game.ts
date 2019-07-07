@@ -3,14 +3,13 @@ import {FunctionUtil} from './utils/function-util'
 import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
-import {Random} from './math/random'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer/renderer'
 import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
 import * as ShaderLayoutParser from './graphics/shaders/shader-config-parser'
 import * as shaderConfig from './graphics/shaders/shader-config.json'
 import {Settings} from './settings/settings'
-import {TitleLevel} from './levels/0-title-level'
+import {TitleLevel} from './levels/title-level'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
@@ -30,12 +29,7 @@ export class Game {
   ) {
     this._inputRouter = new InputRouter(window, canvas)
     const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
-    this._level = new TitleLevel(
-      shaderLayout,
-      atlas,
-      this._recorder,
-      new Random(0)
-    )
+    this._level = new TitleLevel(shaderLayout, atlas)
     this._rendererStateMachine = RendererStateMachine.make({
       window,
       canvas,
