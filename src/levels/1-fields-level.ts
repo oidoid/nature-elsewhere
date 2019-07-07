@@ -11,7 +11,7 @@ import {Palette} from '../images/palette'
 import {PauseLevel} from './pause-level'
 import {Random} from '../math/random'
 import {Recorder} from '../inputs/recorder'
-import {Store} from '../entities/store'
+import {Store} from '../store/store'
 import {Viewport} from '../graphics/viewport'
 
 //   _______ _______
