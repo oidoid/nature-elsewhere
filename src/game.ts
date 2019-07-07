@@ -6,9 +6,9 @@ import {InputSet} from './inputs/input-set'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer/renderer'
 import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
+import {Settings} from './settings/settings'
 import * as ShaderLayoutParser from './graphics/shaders/shader-config-parser'
 import * as shaderConfig from './graphics/shaders/shader-config.json'
-import {Settings} from './settings/settings'
 import {TitleLevel} from './levels/title-level'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
@@ -33,7 +33,7 @@ export class Game {
     this._rendererStateMachine = RendererStateMachine.make({
       window,
       canvas,
-      onFrame: this.onAnimationFrame.bind(this),
+      onFrame: this.onFrame.bind(this),
       newRenderer: () =>
         Renderer.new(shaderLayout, canvas, atlasImage, paletteImage)
     })
@@ -54,7 +54,7 @@ export class Game {
     RendererStateMachine.stop(this._rendererStateMachine)
   }
 
-  private onAnimationFrame(then: number, now: number): void {
+  private onFrame(then: number, now: number): void {
     const milliseconds = now - then
     const canvasWH = Viewport.canvasWH(window.document)
     const scale = this._level.scale(canvasWH)
