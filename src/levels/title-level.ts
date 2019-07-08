@@ -34,8 +34,8 @@ export class TitleLevel implements Level {
     return Viewport.scale(canvas, LevelDefault.minScreenSize, 0)
   }
 
-  update(then: number, now: number, _canvas: Rect, cam: Rect): LevelUpdate {
+  update(time: number, _canvas: Rect, cam: Rect): LevelUpdate {
     this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - rowHeight})
-    return {nextLevel: this, ...this._store.update(now - then, cam)}
+    return {nextLevel: this, ...this._store.update(time, cam)}
   }
 }

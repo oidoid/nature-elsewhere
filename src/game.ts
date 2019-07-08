@@ -14,6 +14,8 @@ import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
 export class Game {
+  private clock: number = 0
+  private readonly tick: number = 1000 / 60
   private _level: Level
   private readonly _rendererStateMachine: RendererStateMachine.State
   private readonly _recorder: Recorder = new Recorder()
@@ -43,6 +45,7 @@ export class Game {
   }
 
   start(): void {
+    this.clock = 0
     RendererStateMachine.start(this._rendererStateMachine)
     this._inputRouter.register()
   }
@@ -53,13 +56,13 @@ export class Game {
   }
 
   private onFrame(then: number, now: number): void {
-    const milliseconds = now - then
+    const time = now - then
     const canvasWH = Viewport.canvasWH(window.document)
     const scale = this._level.scale(canvasWH)
     const cam = Viewport.cam(canvasWH, scale)
 
     this._inputRouter.record(this._recorder, canvasWH, cam, cam)
-    this._recorder.update(milliseconds)
+    this._recorder.update(time)
 
     const [set] = this._recorder.combo().slice(-1)
     const bits = set && InputSet.bits(set) & ~InputBit.POINT
@@ -69,7 +72,7 @@ export class Game {
     if (this._recorder.triggered(InputBit.DEBUG_CONTEXT_LOSS) && loseContext) {
       this._inputRouter.reset()
       this._inputRouter.record(this._recorder, canvasWH, cam, cam)
-      this._recorder.update(milliseconds)
+      this._recorder.update(time)
 
       console.log('Lose renderer context.')
       loseContext.loseContext()
@@ -79,7 +82,13 @@ export class Game {
       }, 3 * 1000)
     }
 
-    const update = this._level.update(then, now, canvasWH, cam)
+    let update
+    for (this.clock += time; this.clock >= this.tick; this.clock -= this.tick) {
+      update = this._level.update(this.tick, canvasWH, cam)
+      if (!this._level) break
+    }
+
+    if (!update) return
     if (update.nextLevel) {
       this._level = update.nextLevel
       Renderer.render(
