@@ -1,3 +1,5 @@
+import * as atlasJSON from './assets/atlas.json'
+import {AsepriteParser} from './parsers/aseprite-parser'
 import {Atlas} from './images/atlas'
 import {FunctionUtil} from './utils/function-util'
 import {InputBit} from './inputs/input-bit'
@@ -12,8 +14,21 @@ import * as shaderConfig from './graphics/shaders/shader-config.json'
 import {TitleLevel} from './levels/title-level'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
+import {ImageLoader} from './loaders/image-loader'
 
 export class Game {
+  static load(): Promise<{
+    atlas: Atlas.Definition
+    atlasImage: HTMLImageElement
+    shaderLayout: ShaderLayout
+  }> {
+    return ImageLoader.load('assets/images/atlas.png').then(atlasImage => {
+      const atlas = AsepriteParser.parse(atlasJSON)
+      const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
+      return {atlas, atlasImage, shaderLayout}
+    })
+  }
+
   private clock: number = 0
   private readonly tick: number = 1000 / 60
   private _level: Level
@@ -26,10 +41,10 @@ export class Game {
     canvas: HTMLCanvasElement,
     atlasImage: HTMLImageElement,
     atlas: Atlas.Definition,
-    _settings: Settings
+    shaderLayout: ShaderLayout,
+    private readonly _settings: Settings
   ) {
     this._inputRouter = new InputRouter(window, canvas)
-    const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
     this._level = new TitleLevel(shaderLayout, atlas)
     this._rendererStateMachine = RendererStateMachine.make({
       window,
@@ -37,15 +52,15 @@ export class Game {
       onFrame: this.onFrame.bind(this),
       newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
     })
-    if (_settings.windowMode === WindowModeSetting.FULLSCREEN) {
+  }
+
+  start(): void {
+    if (this._settings.windowMode === WindowModeSetting.FULLSCREEN) {
       this._requestWindowSetting = FunctionUtil.once(() =>
         window.document.documentElement.requestFullscreen().catch(() => {})
       )
     }
-  }
 
-  start(): void {
-    this.clock = 0
     RendererStateMachine.start(this._rendererStateMachine)
     this._inputRouter.register()
   }
@@ -68,7 +83,8 @@ export class Game {
     const bits = set && InputSet.bits(set) & ~InputBit.POINT
     this._requestWindowSetting = this._requestWindowSetting(!!bits)
 
-    const loseContext = this._rendererStateMachine.renderer.loseContext
+    const renderer = this._rendererStateMachine.renderer
+    const loseContext = renderer.loseContext
     if (this._recorder.triggered(InputBit.DEBUG_CONTEXT_LOSS) && loseContext) {
       this._inputRouter.reset()
       this._inputRouter.record(this._recorder, canvasWH, cam, cam)
@@ -85,13 +101,12 @@ export class Game {
     let update
     for (this.clock += time; this.clock >= this.tick; this.clock -= this.tick) {
       update = this._level.update(this.tick, canvasWH, cam)
-      if (!this._level) break
+      if (!update.nextLevel) break
     }
 
     if (!update) return
     if (update.nextLevel) {
       this._level = update.nextLevel
-      const renderer = this._rendererStateMachine.renderer
       Renderer.render(renderer, canvasWH, scale, cam, update)
     } else {
       this.stop()
