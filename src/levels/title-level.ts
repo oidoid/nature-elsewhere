@@ -1,8 +1,8 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
-import {LevelDefault} from './level-default'
 import {Image} from '../images/image'
 import {ImageGroup} from '../images/image-group'
+import {LevelDefault} from './level-default'
 import {MemFont} from '../text/mem-font'
 import {Store} from '../store/store'
 import {Text} from '../text/text'
@@ -16,12 +16,10 @@ export class TitleLevel implements Level {
   constructor(shaderLayout: ShaderLayout, atlas: Atlas.Definition) {
     this._store = new Store(shaderLayout, atlas)
 
+    const {date, version, hash} = process.env
     this._footer = new ImageGroup(
       atlas,
-      Text.toImages(
-        atlas,
-        `${process.env.date}  v${process.env.version} (${process.env.hash})`
-      )
+      Text.toImages(atlas, `${date}  v${version} (${hash})`)
     )
 
     this._store.addImages(

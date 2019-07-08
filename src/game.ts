@@ -91,13 +91,8 @@ export class Game {
     if (!update) return
     if (update.nextLevel) {
       this._level = update.nextLevel
-      Renderer.render(
-        this._rendererStateMachine.renderer,
-        canvasWH,
-        scale,
-        cam,
-        update
-      )
+      const renderer = this._rendererStateMachine.renderer
+      Renderer.render(renderer, canvasWH, scale, cam, update)
     } else {
       this.stop()
     }

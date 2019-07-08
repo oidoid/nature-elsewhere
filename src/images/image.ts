@@ -5,9 +5,9 @@ import {Layer} from './layer'
 import {Rect} from '../math/rect'
 
 export class ImageOptions {
-  layer?: Layer
-  position?: XY
-  cel?: number
+  readonly layer?: Layer
+  readonly position?: XY
+  readonly cel?: number
 }
 
 /**
@@ -18,16 +18,6 @@ export class ImageOptions {
  * index.
  */
 export class Image {
-  // withDefaults
-  static newBind(
-    atlas: Atlas.Definition,
-    animationID: AnimationID,
-    defaults: ImageOptions = {}
-  ) {
-    return (options: ImageOptions) =>
-      Image.new(atlas, animationID, {...defaults, ...options})
-  }
-  // preScale is multiplied by target dimensions to repeat source.
   static new(
     {animations}: Atlas.Definition,
     animationID: AnimationID,
@@ -42,11 +32,6 @@ export class Image {
     )
   }
 
-  static moveBy(offset: XY, images: readonly Image[]): readonly Image[] {
-    images.forEach(image => image.moveBy(offset))
-    return images
-  }
-
   static target(atlas: Atlas.Definition, images: readonly Image[]): Rect {
     return images.reduce(
       (union, image) => Rect.union(union, image.target(atlas)),
@@ -55,46 +40,27 @@ export class Image {
   }
 
   constructor(
-    // how i transition between animations? includin the AtlasAnimation here
-    // would save a lot of lookup eveyrwhere else.
     private readonly _animationID: AnimationID,
-    /** Width and height do not change on AtlasAnimation change. */
     public x: number,
     public y: number,
     private readonly _layer: Layer,
     private readonly _animator: Animator
   ) {}
 
-  // For the renderer. In general, it should be unnecessary to obtain
-  // information from the atlas except to obtain the cel to render or collision
-  // data.
-  animationID(): AnimationID {
-    return this._animationID
-  }
-
-  cel(): number {
-    return this._animator.celIndex()
-  }
-
   update(milliseconds: number): void {
     this._animator.step(milliseconds)
   }
 
   animation(atlas: Atlas.Definition): Atlas.Animation {
-    return atlas.animations[this.animationID()]
+    return atlas.animations[this._animationID]
   }
 
   source(atlas: Atlas.Definition): Atlas.Cel {
-    return this.animation(atlas).cels[this.cel()]
+    return this.animation(atlas).cels[this._animator.celIndex()]
   }
 
   target(atlas: Atlas.Definition): Rect {
     return {x: this.x, y: this.y, ...this.animation(atlas).size}
-  }
-
-  moveTo(target: XY): void {
-    this.x = target.x
-    this.y = target.y
   }
 
   moveBy(offset: XY): void {
