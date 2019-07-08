@@ -4,7 +4,7 @@ import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
 import {Recorder} from './inputs/recorder'
-import {Renderer} from './graphics/renderer/renderer'
+import * as Renderer from './graphics/renderer/renderer'
 import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
 import * as ShaderLayoutParser from './graphics/shaders/shader-config-parser'
@@ -24,7 +24,6 @@ export class Game {
     canvas: HTMLCanvasElement,
     atlasImage: HTMLImageElement,
     atlas: Atlas.Definition,
-    paletteImage: HTMLImageElement,
     _settings: Settings
   ) {
     this._inputRouter = new InputRouter(window, canvas)
@@ -34,8 +33,7 @@ export class Game {
       window,
       canvas,
       onFrame: this.onFrame.bind(this),
-      newRenderer: () =>
-        Renderer.new(shaderLayout, canvas, atlasImage, paletteImage)
+      newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
     })
     if (_settings.windowMode === WindowModeSetting.FULLSCREEN) {
       this._requestWindowSetting = FunctionUtil.once(() =>
@@ -67,28 +65,29 @@ export class Game {
     const bits = set && InputSet.bits(set) & ~InputBit.POINT
     this._requestWindowSetting = this._requestWindowSetting(!!bits)
 
-    if (this._recorder.triggered(InputBit.DEBUG_CONTEXT_LOSS)) {
+    const loseContext = this._rendererStateMachine.renderer.loseContext
+    if (this._recorder.triggered(InputBit.DEBUG_CONTEXT_LOSS) && loseContext) {
       this._inputRouter.reset()
       this._inputRouter.record(this._recorder, canvasWH, cam, cam)
       this._recorder.update(milliseconds)
 
       console.log('Lose renderer context.')
-      this._rendererStateMachine.renderer.debugLoseContext()
+      loseContext.loseContext()
       setTimeout(() => {
         console.log('Restore renderer context.')
-        this._rendererStateMachine.renderer.debugRestoreContext()
+        loseContext.restoreContext()
       }, 3 * 1000)
     }
 
     const update = this._level.update(then, now, canvasWH, cam)
     if (update.nextLevel) {
       this._level = update.nextLevel
-      this._rendererStateMachine.renderer.render(
+      Renderer.render(
+        this._rendererStateMachine.renderer,
         canvasWH,
         scale,
         cam,
-        update.instances,
-        update.length
+        update
       )
     } else {
       this.stop()

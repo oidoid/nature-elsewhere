@@ -1,4 +1,4 @@
-import {Renderer} from './renderer'
+import {State as Renderer} from './renderer'
 
 export interface State {
   readonly window: Window
@@ -34,7 +34,7 @@ function onEvent(state: State, event: Event): void {
 
 function loop(state: State, then?: number): void {
   state.frameID = state.window.requestAnimationFrame(now => {
-    if (state.window.document.hasFocus() && !state.renderer.isContextLost())
+    if (state.window.document.hasFocus() && !state.renderer.gl.isContextLost())
       state.onFrame(then || now, now), loop(state, now)
     else delete state.frameID
   })

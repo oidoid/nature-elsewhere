@@ -4,9 +4,9 @@ import {Rect} from '../math/rect'
 import {StoreBuffer} from './store-buffer'
 
 export interface StoreUpdate {
-  /** instances.byteLength may exceed bytes to be rendered. length is the only
+  /** data.byteLength may exceed bytes to be rendered. length is the only
       accurate number of instances. */
-  readonly instances: DataView
+  readonly data: DataView
   readonly length: number
 }
 
@@ -40,7 +40,7 @@ export class Store {
     let i = 0
     this.images.forEach(image => {
       image.update(milliseconds)
-      if (Rect.intersects(image.target(), cam)) {
+      if (Rect.intersects(image.target(this._atlas), cam)) {
         StoreBuffer.set(
           this._shaderLayout,
           this._atlas,
@@ -51,6 +51,6 @@ export class Store {
         ++i
       }
     })
-    return {instances: this._instances, length: i}
+    return {data: this._instances, length: i}
   }
 }

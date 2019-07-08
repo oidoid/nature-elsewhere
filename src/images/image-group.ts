@@ -1,5 +1,5 @@
+import {Atlas} from './atlas'
 import {Image} from './image'
-import {Palette} from './palette'
 import {Rect} from '../math/rect'
 import {XY} from '../math/xy'
 
@@ -7,7 +7,10 @@ import {XY} from '../math/xy'
 // origin.
 export class ImageGroup {
   private _target: Rect = {x: 0, y: 0, w: 0, h: 0}
-  constructor(private readonly _images: readonly Image[]) {
+  constructor(
+    private readonly _atlas: Atlas.Definition,
+    private readonly _images: readonly Image[]
+  ) {
     this.invalidate()
   }
   images(): readonly Image[] {
@@ -31,10 +34,7 @@ export class ImageGroup {
   target(): Rect {
     return this._target
   }
-  setPalette(palette: Palette): void {
-    Image.setPalette(palette, this._images)
-  }
   private invalidate(): void {
-    this._target = Image.target(this._images)
+    this._target = Image.target(this._atlas, this._images)
   }
 }

@@ -3,7 +3,6 @@ import {Atlas} from '../images/atlas'
 import {Image, ImageOptions} from '../images/image'
 import {Layer} from '../images/layer'
 import {MemFont} from './mem-font'
-import {Palette} from '../images/palette'
 
 export namespace Text {
   export interface Layout {
@@ -25,7 +24,7 @@ export namespace Text {
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
   ): readonly Image[] {
     const images = []
-    const scale = options.scale || {x: 1, y: 1}
+    const scale = {x: 1, y: 1}
     const positions = layout(string, w, scale).positions
     for (let i = 0; i < positions.length; ++i) {
       const position = positions[i]
@@ -35,7 +34,6 @@ export namespace Text {
 
       const id = 'MEM_FONT_' + string.charCodeAt(i)
       const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], {
-        palette: Palette.GREYS,
         layer: Layer.UI_HIHI,
         position: {x: position.x, y: position.y - y},
         ...options
