@@ -8,8 +8,6 @@ import {Store} from '../store/store'
 import {Text} from '../text/text'
 import {Viewport} from '../graphics/viewport'
 
-const rowHeight: number = MemFont.lineHeight + MemFont.leading
-
 export class TitleLevel implements Level {
   private readonly _store: Store
   private readonly _footer: ImageGroup
@@ -19,7 +17,7 @@ export class TitleLevel implements Level {
     const {date, version, hash} = process.env
     this._footer = new ImageGroup(
       atlas,
-      Text.toImages(atlas, `${date}  v${version} (${hash})`)
+      Text.toImages(atlas, `${date} v${version} (${hash})`)
     )
 
     this._store.addImages(
@@ -33,7 +31,7 @@ export class TitleLevel implements Level {
   }
 
   update(time: number, _canvas: Rect, cam: Rect): LevelUpdate {
-    this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - rowHeight})
+    this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - MemFont.lineHeight})
     return {nextLevel: this, ...this._store.update(time, cam)}
   }
 }

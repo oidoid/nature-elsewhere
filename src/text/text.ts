@@ -131,6 +131,6 @@ export namespace Text {
   }
 
   function nextLine(y: number, scale: XY): XY {
-    return {x: 0, y: y + scale.y * (MemFont.lineHeight + MemFont.leading)}
+    return {x: 0, y: y + scale.y * (MemFont.letterHeight + MemFont.leading)}
   }
 }

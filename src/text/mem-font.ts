@@ -1,9 +1,10 @@
 export namespace MemFont {
   /** Height of lines, not including descenders, in pixels. */
-  export const lineHeight: number = 4
+  export const letterHeight: number = 4
 
-  /** Distance between lines, not including descenders, in pixels. */
+  /** Distance between lines in pixels. */
   export const leading: number = 2
+  export const lineHeight: number = letterHeight + leading
 
   /** @return Distance between letters in pixels. */
   export function kerning(lhs: string, rhs?: string): number {
