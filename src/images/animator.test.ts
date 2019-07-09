@@ -13,7 +13,7 @@ describe('step()', () => {
     }
     const subject = new Animator(animation)
     subject.step(1)
-    expect(subject).toMatchObject({_period: 0, _duration: 0})
+    expect(subject).toMatchObject({period: 0, duration: 0})
   })
 
   test('time < duration', () => {
@@ -26,7 +26,7 @@ describe('step()', () => {
     }
     const subject = new Animator(animation)
     subject.step(0.5)
-    expect(subject).toMatchObject({_period: 0, _duration: 0.5})
+    expect(subject).toMatchObject({period: 0, duration: 0.5})
   })
 
   test('time === duration', () => {
@@ -39,7 +39,7 @@ describe('step()', () => {
     }
     const subject = new Animator(animation)
     subject.step(1)
-    expect(subject).toMatchObject({_period: 1, _duration: 0})
+    expect(subject).toMatchObject({period: 1, duration: 0})
   })
 
   test('time > duration', () => {
@@ -52,11 +52,11 @@ describe('step()', () => {
     }
     const subject = new Animator(animation)
     subject.step(1.5)
-    expect(subject).toMatchObject({_period: 1, _duration: 0.5})
+    expect(subject).toMatchObject({period: 1, duration: 0.5})
   })
 })
 
-describe('celIndex', () => {
+describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# direction %p array start',
     direction => {
@@ -69,7 +69,7 @@ describe('celIndex', () => {
       }
       const subject = new Animator(animation)
       subject.step(1)
-      const actual = subject.celIndex()
+      const actual = subject.index()
       expect(actual).toStrictEqual(1)
     }
   )
@@ -86,7 +86,7 @@ describe('celIndex', () => {
       }
       const subject = new Animator(animation, 1)
       subject.step(1)
-      const actual = subject.celIndex()
+      const actual = subject.index()
       expect(actual).toStrictEqual(0)
     }
   )
@@ -141,7 +141,7 @@ describe('celIndex', () => {
     const actual = []
     for (let i = 0; i < animation.cels.length * 5; ++i) {
       subject.step(1)
-      actual.push(subject.celIndex())
+      actual.push(subject.index())
     }
     expect(actual).toStrictEqual(expected)
   })
@@ -160,7 +160,7 @@ describe('celIndex', () => {
       const actual = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
         subject.step(1)
-        actual.push(subject.celIndex())
+        actual.push(subject.index())
       }
       // prettier-ignore
       const expected = {
@@ -186,7 +186,7 @@ describe('celIndex', () => {
       const actual = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         subject.step(0.5)
-        actual.push(subject.celIndex())
+        actual.push(subject.index())
       }
       // prettier-ignore
       const expected = {
@@ -212,7 +212,7 @@ describe('celIndex', () => {
       const actual = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         subject.step(0.9)
-        actual.push(subject.celIndex())
+        actual.push(subject.index())
       }
       // prettier-ignore
       const expected = {

@@ -25,8 +25,8 @@ export namespace StoreBuffer {
   ): void {
     const i = index * layout.perInstance.stride
 
-    data.setInt16(i + 0, image.source(atlas).position.x, littleEndian)
-    data.setInt16(i + 2, image.source(atlas).position.y, littleEndian)
+    data.setInt16(i + 0, image.source().position.x, littleEndian)
+    data.setInt16(i + 2, image.source().position.y, littleEndian)
     data.setInt16(i + 4, image.animation(atlas).size.w, littleEndian)
     data.setInt16(i + 6, image.animation(atlas).size.h, littleEndian)
 

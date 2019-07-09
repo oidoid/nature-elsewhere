@@ -11,11 +11,10 @@ export namespace FunctionUtil {
     return never
   }
 
-  export function once(fnc: () => void): Once {
+  export function once(fn: () => void): Once {
     return function retry(execute): Once {
-      if (!execute) return retry
-      fnc()
-      return never
+      if (execute) return fn(), never
+      return retry
     }
   }
 }

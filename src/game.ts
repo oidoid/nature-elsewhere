@@ -29,7 +29,7 @@ export class Game {
     })
   }
 
-  private clock: number = 0
+  private duration: number = 0
   private readonly tick: number = 1000 / 60
   private level: Level
   private readonly rendererStateMachine: RendererStateMachine.State
@@ -99,7 +99,9 @@ export class Game {
     }
 
     let update
-    for (this.clock += time; this.clock >= this.tick; this.clock -= this.tick) {
+    this.duration += time
+    while (this.duration >= this.tick) {
+      this.duration -= this.tick
       update = this.level.update(this.tick, canvasWH, cam)
       if (!update.nextLevel) break
     }

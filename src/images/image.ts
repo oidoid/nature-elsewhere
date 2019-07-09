@@ -55,8 +55,8 @@ export class Image {
     return atlas.animations[this._animationID]
   }
 
-  source(atlas: Atlas.Definition): Atlas.Cel {
-    return this.animation(atlas).cels[this._animator.celIndex()]
+  source(): Atlas.Cel {
+    return this._animator.cel()
   }
 
   target(atlas: Atlas.Definition): Rect {
