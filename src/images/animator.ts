@@ -1,53 +1,50 @@
 import {Atlas} from './atlas'
 import {NumberUtil} from '../math/number-util'
 
-// Animates Atlas.Animations by providing the correct cel for a given time.
-export class Animator {
-  constructor(
-    private readonly animation: Atlas.Animation,
-    /** Cel index oscillation state. This integer may fall out of animation
-        bounds. */
-    private period: number = 0,
-    /** Cel exposure in milliseconds. */
-    private duration: number = 0
-  ) {
-    if (this.animation.cels.length < 2) this.step = () => {}
-  }
+export interface State {
+  /** Cel index oscillation state. This integer may fall outside animation
+   *  bounds depending on the animation interval selected by direction. This
+   *  value should be carried over from each call unless the cel is manually
+   *  set. */
+  readonly period: number
 
-  step(milliseconds: number): void {
-    // The next frame is a function of the current cel exposure (duration), the
-    // time since the last step measured (milliseconds), and the current frame
-    // index within the animation interval (period).
-    this.duration = (this.duration + milliseconds) % this.animation.duration
-    while (this.duration >= this.cel().duration) {
-      this.duration -= this.cel().duration
-      const period = Period[this.animation.direction]
-      this.period = period(this.period, this.animation.cels.length)
-    }
-  }
+  /** Current cel exposure in milliseconds. When the value meets or exceeds the
+   *  cel's exposure duration, the cel is advanced according to direction. This
+   *  value should be carried over from each call with the current time step
+   *  added and zeroed on manual cel change. */
+  readonly exposure: number
+}
 
-  cel(): Atlas.Cel {
-    return this.animation.cels[this.index()]
+export function animate(
+  {cels, direction, duration}: Atlas.Animation,
+  period: number,
+  exposure: number
+): State {
+  exposure = exposure % duration
+  while (exposure >= cels[index(cels, period)].duration) {
+    exposure -= cels[index(cels, period)].duration
+    period = Period[direction](period, cels.length)
   }
+  return {period, exposure}
+}
 
-  index(): number {
-    return Math.abs(this.period % this.animation.cels.length)
-  }
+export function index(cels: readonly Atlas.Cel[], period: number): number {
+  return Math.abs(period % cels.length)
 }
 
 const Period: Readonly<
-  Record<Atlas.AnimationDirection, (period: number, length: number) => number>
+  Record<Atlas.AnimationDirection, (period: number, len: number) => number>
 > = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Atlas.AnimationDirection.FORWARD](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
-  /** @arg period An integer in the domain (-∞, length - 1]. */
-  [Atlas.AnimationDirection.REVERSE](period, length) {
-    return (period % Number.MIN_SAFE_INTEGER) - 1 + length
+  /** @arg period An integer in the domain (-∞, len - 1]. */
+  [Atlas.AnimationDirection.REVERSE](period, len) {
+    return (period % Number.MIN_SAFE_INTEGER) - 1 + len
   },
-  /** @arg period An integer in the domain [2 - length, length - 1]. */
-  [Atlas.AnimationDirection.PING_PONG](period, length) {
-    return NumberUtil.wrap(period - 1, 2 - length, length)
+  /** @arg period An integer in the domain [2 - len, len - 1]. */
+  [Atlas.AnimationDirection.PING_PONG](period, len) {
+    return NumberUtil.wrap(period - 1, 2 - len, len)
   }
 })

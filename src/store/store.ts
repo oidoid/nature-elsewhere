@@ -29,7 +29,11 @@ export class Store {
     this.images.splice(index === -1 ? this.images.length : index, 0, image)
   }
 
-  update(milliseconds: number, cam: Rect): StoreUpdate {
+  update(
+    atlas: Atlas.Definition,
+    milliseconds: number,
+    cam: Rect
+  ): StoreUpdate {
     const minBytes = this.images.length * this._shaderLayout.perInstance.stride
     if (this._instances.byteLength < minBytes) {
       this._instances = StoreBuffer.make(
@@ -39,7 +43,7 @@ export class Store {
 
     let i = 0
     this.images.forEach(image => {
-      image.update(milliseconds)
+      image.update(atlas, milliseconds)
       if (Rect.intersects(image.target(this._atlas), cam)) {
         StoreBuffer.set(
           this._shaderLayout,

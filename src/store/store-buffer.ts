@@ -10,7 +10,7 @@ export namespace StoreBuffer {
     return layout.perInstance.stride * length
   }
 
-  /** @param size The buffer length in bytes. */
+  /** @arg size The buffer length in bytes. */
   export function make(size: number): DataView {
     return new DataView(new ArrayBuffer(size))
   }
@@ -25,8 +25,8 @@ export namespace StoreBuffer {
   ): void {
     const i = index * layout.perInstance.stride
 
-    data.setInt16(i + 0, image.source().position.x, littleEndian)
-    data.setInt16(i + 2, image.source().position.y, littleEndian)
+    data.setInt16(i + 0, image.source(atlas).position.x, littleEndian)
+    data.setInt16(i + 2, image.source(atlas).position.y, littleEndian)
     data.setInt16(i + 4, image.animation(atlas).size.w, littleEndian)
     data.setInt16(i + 6, image.animation(atlas).size.h, littleEndian)
 

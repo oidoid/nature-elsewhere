@@ -61,6 +61,11 @@ describe('atlas.json', () => {
   )('%# multi-Cel duration for Cel %p is < ∞', cel =>
     expect(cel.duration).toBeLessThan(Number.POSITIVE_INFINITY)
   )
+
+  test.each(ObjectUtil.values(atlas.animations))(
+    '%# every Animation has at lease one Cel %p',
+    ({cels}) => expect(cels.length).toBeGreaterThan(0)
+  )
 })
 
 describe('parseAnimations()', () => {

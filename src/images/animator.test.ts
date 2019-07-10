@@ -1,21 +1,9 @@
-import {Animator} from './animator'
+import * as Animator from './animator'
 import {Aseprite} from '../parsers/aseprite'
 import {Atlas} from './atlas'
 import {ObjectUtil} from '../utils/object-util'
 
 describe('step()', () => {
-  test('No cels', () => {
-    const animation = {
-      size: {w: 0, h: 0},
-      cels: [],
-      duration: 0,
-      direction: Atlas.AnimationDirection.FORWARD
-    }
-    const subject = new Animator(animation)
-    subject.step(1)
-    expect(subject).toMatchObject({period: 0, duration: 0})
-  })
-
   test('time < duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
     const animation = {
@@ -24,9 +12,8 @@ describe('step()', () => {
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(0.5)
-    expect(subject).toMatchObject({period: 0, duration: 0.5})
+    const ret = Animator.animate(animation, 0, 0.5)
+    expect(ret).toMatchObject({period: 0, exposure: 0.5})
   })
 
   test('time === duration', () => {
@@ -37,9 +24,8 @@ describe('step()', () => {
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(1)
-    expect(subject).toMatchObject({period: 1, duration: 0})
+    const ret = Animator.animate(animation, 0, 1)
+    expect(ret).toMatchObject({period: 1, exposure: 0})
   })
 
   test('time > duration', () => {
@@ -50,9 +36,8 @@ describe('step()', () => {
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
     }
-    const subject = new Animator(animation)
-    subject.step(1.5)
-    expect(subject).toMatchObject({period: 1, duration: 0.5})
+    const ret = Animator.animate(animation, 0, 1.5)
+    expect(ret).toMatchObject({period: 1, exposure: 0.5})
   })
 })
 
@@ -67,10 +52,9 @@ describe('index', () => {
         duration: 2,
         direction
       }
-      const subject = new Animator(animation)
-      subject.step(1)
-      const actual = subject.index()
-      expect(actual).toStrictEqual(1)
+      const {period} = Animator.animate(animation, 0, 1)
+      const ret = Animator.index(animation.cels, period)
+      expect(ret).toStrictEqual(1)
     }
   )
 
@@ -84,10 +68,9 @@ describe('index', () => {
         duration: 2,
         direction
       }
-      const subject = new Animator(animation, 1)
-      subject.step(1)
-      const actual = subject.index()
-      expect(actual).toStrictEqual(0)
+      const {period} = Animator.animate(animation, 1, 1)
+      const ret = Animator.index(animation.cels, period)
+      expect(ret).toStrictEqual(0)
     }
   )
 
@@ -137,13 +120,13 @@ describe('index', () => {
       duration: 4,
       direction
     }
-    const subject = new Animator(animation, period)
-    const actual = []
+    let exposure = 0
+    const ret = []
     for (let i = 0; i < animation.cels.length * 5; ++i) {
-      subject.step(1)
-      actual.push(subject.index())
+      ;({period, exposure} = Animator.animate(animation, period, exposure + 1))
+      ret.push(Animator.index(animation.cels, period))
     }
-    expect(actual).toStrictEqual(expected)
+    expect(ret).toStrictEqual(expected)
   })
 
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
@@ -156,11 +139,15 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator(animation)
-      const actual = []
+      let {period, exposure} = {period: 0, exposure: 0}
+      const ret = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
-        subject.step(1)
-        actual.push(subject.index())
+        ;({period, exposure} = Animator.animate(
+          animation,
+          period,
+          exposure + 1
+        ))
+        ret.push(Animator.index(animation.cels, period))
       }
       // prettier-ignore
       const expected = {
@@ -168,7 +155,7 @@ describe('index', () => {
         [Atlas.AnimationDirection.REVERSE]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
         [Atlas.AnimationDirection.PING_PONG]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
-      expect(actual).toStrictEqual(expected[direction])
+      expect(ret).toStrictEqual(expected[direction])
     }
   )
 
@@ -182,11 +169,15 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator(animation)
-      const actual = []
+      let {period, exposure} = {period: 0, exposure: 0}
+      const ret = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
-        subject.step(6)
-        actual.push(subject.index())
+        ;({period, exposure} = Animator.animate(
+          animation,
+          period,
+          exposure + 6
+        ))
+        ret.push(Animator.index(animation.cels, period))
       }
       // prettier-ignore
       const expected = {
@@ -194,7 +185,7 @@ describe('index', () => {
         [Atlas.AnimationDirection.REVERSE]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
         [Atlas.AnimationDirection.PING_PONG]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
-      expect(actual).toStrictEqual(expected[direction])
+      expect(ret).toStrictEqual(expected[direction])
     }
   )
 
@@ -208,11 +199,15 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator(animation)
-      const actual = []
+      let {period, exposure} = {period: 0, exposure: 0}
+      const ret = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        subject.step(0.5)
-        actual.push(subject.index())
+        ;({period, exposure} = Animator.animate(
+          animation,
+          period,
+          exposure + 0.5
+        ))
+        ret.push(Animator.index(animation.cels, period))
       }
       // prettier-ignore
       const expected = {
@@ -220,7 +215,7 @@ describe('index', () => {
         [Atlas.AnimationDirection.REVERSE]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
         [Atlas.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
-      expect(actual).toStrictEqual(expected[direction])
+      expect(ret).toStrictEqual(expected[direction])
     }
   )
 
@@ -234,11 +229,15 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator(animation)
-      const actual = []
+      let {period, exposure} = {period: 0, exposure: 0}
+      const ret = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        subject.step(0.9)
-        actual.push(subject.index())
+        ;({period, exposure} = Animator.animate(
+          animation,
+          period,
+          exposure + 0.9
+        ))
+        ret.push(Animator.index(animation.cels, period))
       }
       // prettier-ignore
       const expected = {
@@ -246,7 +245,7 @@ describe('index', () => {
         [Atlas.AnimationDirection.REVERSE]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
         [Atlas.AnimationDirection.PING_PONG]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
       }
-      expect(actual).toStrictEqual(expected[direction])
+      expect(ret).toStrictEqual(expected[direction])
     }
   )
 
@@ -260,11 +259,15 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      const subject = new Animator(animation)
-      const actual = []
+      let {period, exposure} = {period: 0, exposure: 0}
+      const ret = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        subject.step(5.5)
-        actual.push(subject.index())
+        ;({period, exposure} = Animator.animate(
+          animation,
+          period,
+          exposure + 5.5
+        ))
+        ret.push(Animator.index(animation.cels, period))
       }
       // prettier-ignore
       const expected = {
@@ -272,7 +275,7 @@ describe('index', () => {
         [Atlas.AnimationDirection.REVERSE]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
         [Atlas.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
-      expect(actual).toStrictEqual(expected[direction])
+      expect(ret).toStrictEqual(expected[direction])
     }
   )
 })

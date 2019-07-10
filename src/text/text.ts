@@ -1,5 +1,4 @@
 import {AnimationID} from '../images/animation-id'
-import {Atlas} from '../images/atlas'
 import {Image, ImageOptions} from '../images/image'
 import {Layer} from '../images/layer'
 import {MemFont} from './mem-font'
@@ -17,7 +16,6 @@ export namespace Text {
    * @arg target The window size in pixels.
    */
   export function toImages(
-    atlas: Atlas.Definition,
     string: string,
     options: ImageOptions = {},
     y: number = 0,
@@ -33,7 +31,7 @@ export namespace Text {
       if (position.y > y + h) break
 
       const id = 'MEM_FONT_' + string.charCodeAt(i)
-      const d = Image.new(atlas, AnimationID[<keyof typeof AnimationID>id], {
+      const d = Image.new(AnimationID[<keyof typeof AnimationID>id], {
         layer: Layer.UI_HIHI,
         position: {x: position.x, y: position.y - y},
         ...options

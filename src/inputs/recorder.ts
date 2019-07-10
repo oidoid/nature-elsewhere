@@ -25,7 +25,7 @@ export class Recorder {
     private readonly _combo: InputSet[] = []
   ) {}
 
-  /** @param combo A sequence of one or more InputBits. */
+  /** @arg combo A sequence of one or more InputBits. */
   equal(...combo: readonly InputBit[]): boolean {
     return this.active(true, combo)
   }

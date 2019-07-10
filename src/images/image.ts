@@ -1,5 +1,5 @@
 import {AnimationID} from './animation-id'
-import {Animator} from './animator'
+import * as Animator from './animator'
 import {Atlas} from './atlas'
 import {Layer} from './layer'
 import {Rect} from '../math/rect'
@@ -7,7 +7,8 @@ import {Rect} from '../math/rect'
 export class ImageOptions {
   readonly layer?: Layer
   readonly position?: XY
-  readonly cel?: number
+  readonly period?: number
+  readonly exposure?: number
 }
 
 /**
@@ -19,17 +20,18 @@ export class ImageOptions {
  */
 export class Image {
   static new(
-    {animations}: Atlas.Definition,
     animationID: AnimationID,
-    {layer = Layer.DEFAULT, position = {x: 0, y: 0}, cel = 0}: ImageOptions = {}
+    {
+      layer = Layer.DEFAULT,
+      position = {x: 0, y: 0},
+      period = 0,
+      exposure = 0
+    }: ImageOptions = {}
   ): Image {
-    return new Image(
-      animationID,
-      position.x,
-      position.y,
-      layer,
-      new Animator(animations[animationID], cel)
-    )
+    return new Image(animationID, position.x, position.y, layer, {
+      period,
+      exposure
+    })
   }
 
   static target(atlas: Atlas.Definition, images: readonly Image[]): Rect {
@@ -44,19 +46,24 @@ export class Image {
     public x: number,
     public y: number,
     private readonly _layer: Layer,
-    private readonly _animator: Animator
+    private animator: Animator.State
   ) {}
 
-  update(milliseconds: number): void {
-    this._animator.step(milliseconds)
+  update(atlas: Atlas.Definition, milliseconds: number): void {
+    this.animator = Animator.animate(
+      this.animation(atlas),
+      this.animator.period,
+      this.animator.exposure + milliseconds
+    )
   }
 
   animation(atlas: Atlas.Definition): Atlas.Animation {
     return atlas.animations[this._animationID]
   }
 
-  source(): Atlas.Cel {
-    return this._animator.cel()
+  source(atlas: Atlas.Definition): Atlas.Cel {
+    const {cels} = this.animation(atlas)
+    return cels[Animator.index(cels, this.animator.period)]
   }
 
   target(atlas: Atlas.Definition): Rect {
