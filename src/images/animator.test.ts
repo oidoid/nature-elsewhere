@@ -173,6 +173,32 @@ describe('index', () => {
   )
 
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
+    '%# duration exceeded direction %p cycles',
+    direction => {
+      const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+      const animation = {
+        size: {w: 0, h: 0},
+        cels: [cel, cel, cel, cel, cel],
+        duration: 5,
+        direction
+      }
+      const subject = new Animator(animation)
+      const actual = []
+      for (let i = 0; i < animation.cels.length * 3; ++i) {
+        subject.step(6)
+        actual.push(subject.index())
+      }
+      // prettier-ignore
+      const expected = {
+        [Atlas.AnimationDirection.FORWARD]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
+        [Atlas.AnimationDirection.REVERSE]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
+        [Atlas.AnimationDirection.PING_PONG]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
+      }
+      expect(actual).toStrictEqual(expected[direction])
+    }
+  )
+
+  test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# fractional duration met direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
@@ -219,6 +245,32 @@ describe('index', () => {
         [Atlas.AnimationDirection.FORWARD]:   [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
         [Atlas.AnimationDirection.REVERSE]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
         [Atlas.AnimationDirection.PING_PONG]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
+      }
+      expect(actual).toStrictEqual(expected[direction])
+    }
+  )
+
+  test.each(ObjectUtil.values(Atlas.AnimationDirection))(
+    '%# fractional duration exceeded direction %p cycles',
+    direction => {
+      const cel = {position: {x: 0, y: 0}, duration: 1, collision: []}
+      const animation = {
+        size: {w: 0, h: 0},
+        cels: [cel, cel, cel, cel, cel],
+        duration: 5,
+        direction
+      }
+      const subject = new Animator(animation)
+      const actual = []
+      for (let i = 0; i < animation.cels.length * 6; ++i) {
+        subject.step(5.5)
+        actual.push(subject.index())
+      }
+      // prettier-ignore
+      const expected = {
+        [Atlas.AnimationDirection.FORWARD]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+        [Atlas.AnimationDirection.REVERSE]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+        [Atlas.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
       expect(actual).toStrictEqual(expected[direction])
     }
