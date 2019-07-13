@@ -1,11 +1,11 @@
-import {Game} from './game'
+import * as Game from './game'
 import {Settings} from './settings/settings'
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
 if (!canvas) throw new Error('Canvas missing.')
 
 Game.load().then(({atlas, atlasImage, shaderLayout}) => {
-  const game = new Game(
+  const game = Game.make(
     window,
     canvas,
     atlasImage,
@@ -13,5 +13,5 @@ Game.load().then(({atlas, atlasImage, shaderLayout}) => {
     shaderLayout,
     Settings.defaults
   )
-  game.start()
+  Game.start(game)
 })
