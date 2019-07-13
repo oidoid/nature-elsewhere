@@ -3,12 +3,32 @@ import * as Animator from './animator'
 import {Atlas} from './atlas'
 import {Layer} from './layer'
 import {Rect} from '../math/rect'
+import {XY} from '../math/xy'
 
 export class ImageOptions {
   readonly layer?: Layer
   readonly position?: XY
   readonly period?: number
   readonly exposure?: number
+}
+
+export function move(
+  origin: XY,
+  xy: XY,
+  images: readonly Image[]
+): Readonly<{origin: XY; images: readonly Image[]}> {
+  if (XY.equal(origin, xy)) return {origin, images}
+  return moveBy(origin, XY.sub(xy, origin), images)
+}
+
+export function moveBy(
+  origin: XY,
+  {x, y}: XY,
+  images: readonly Image[]
+): Readonly<{origin: XY; images: readonly Image[]}> {
+  const offset = {x, y}
+  images.forEach(image => image.moveBy(offset))
+  return {origin: XY.add(origin, {x, y}), images}
 }
 
 /**

@@ -1,7 +1,6 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
-import {Image} from '../images/image'
-import {ImageGroup} from '../images/image-group'
+import * as Image from '../images/image'
 import {LevelDefault} from './level-default'
 import {MemFont} from '../text/mem-font'
 import {Store} from '../store/store'
@@ -10,7 +9,7 @@ import {Viewport} from '../graphics/viewport'
 
 export class TitleLevel implements Level {
   private readonly _store: Store
-  private readonly _footer: ImageGroup
+  private text: {origin: XY; images: readonly Image.Image[]}
   constructor(
     shaderLayout: ShaderLayout,
     private readonly atlas: Atlas.Definition
@@ -18,14 +17,12 @@ export class TitleLevel implements Level {
     this._store = new Store(shaderLayout, atlas)
 
     const {date, version, hash} = process.env
-    this._footer = new ImageGroup(
-      atlas,
-      Text.toImages(`${date} v${version} (${hash})`)
-    )
+    const images = Text.toImages(`${date} v${version} (${hash})`)
+    this.text = {origin: {x: 0, y: 0}, images}
 
     this._store.addImages(
-      Image.new(AnimationID.BACKGROUND),
-      ...this._footer.images()
+      Image.Image.new(AnimationID.BACKGROUND),
+      ...this.text.images
     )
   }
 
@@ -34,7 +31,8 @@ export class TitleLevel implements Level {
   }
 
   update(time: number, _canvas: Rect, cam: Rect): LevelUpdate {
-    this._footer.moveTo({x: cam.x + 1, y: cam.y + cam.h - MemFont.lineHeight})
+    const target = {x: cam.x + 1, y: cam.y + cam.h - MemFont.lineHeight}
+    this.text = Image.move(this.text.origin, target, this.text.images)
     return {nextLevel: this, ...this._store.update(this.atlas, time, cam)}
   }
 }
