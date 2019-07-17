@@ -1,6 +1,7 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../images/atlas'
 import * as Image from '../images/image'
+import * as ImageSystem from '../images/image-system'
 import {LevelDefault} from './level-default'
 import {MemFont} from '../text/mem-font'
 import {Store} from '../store/store'
@@ -9,7 +10,7 @@ import {Viewport} from '../graphics/viewport'
 
 export class TitleLevel implements Level {
   private readonly _store: Store
-  private text: {origin: XY; images: readonly Image.Image[]}
+  private text: ImageSystem
   constructor(
     shaderLayout: ShaderLayout,
     private readonly atlas: Atlas.Definition
@@ -21,7 +22,7 @@ export class TitleLevel implements Level {
     this.text = {origin: {x: 0, y: 0}, images}
 
     this._store.addImages(
-      Image.Image.new(AnimationID.BACKGROUND),
+      Image.make(AnimationID.BACKGROUND),
       ...this.text.images
     )
   }
@@ -32,7 +33,11 @@ export class TitleLevel implements Level {
 
   update(time: number, _canvas: Rect, cam: Rect): LevelUpdate {
     const target = {x: cam.x + 1, y: cam.y + cam.h - MemFont.lineHeight}
-    this.text = Image.move(this.text.origin, target, this.text.images)
+    this.text = ImageSystem.moveTo(
+      this.text.origin,
+      target,
+      ...this.text.images
+    )
     return {nextLevel: this, ...this._store.update(this.atlas, time, cam)}
   }
 }

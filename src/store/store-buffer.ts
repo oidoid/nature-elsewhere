@@ -1,4 +1,4 @@
-import {Image} from '../images/image'
+import * as Image from '../images/image'
 import {Atlas} from '../images/atlas'
 
 export namespace StoreBuffer {
@@ -25,10 +25,10 @@ export namespace StoreBuffer {
   ): void {
     const i = index * layout.perInstance.stride
 
-    data.setInt16(i + 0, image.source(atlas).position.x, littleEndian)
-    data.setInt16(i + 2, image.source(atlas).position.y, littleEndian)
-    data.setInt16(i + 4, image.animation(atlas).size.w, littleEndian)
-    data.setInt16(i + 6, image.animation(atlas).size.h, littleEndian)
+    data.setInt16(i + 0, Image.source(image, atlas).position.x, littleEndian)
+    data.setInt16(i + 2, Image.source(image, atlas).position.y, littleEndian)
+    data.setInt16(i + 4, atlas.animations[image.id].size.w, littleEndian)
+    data.setInt16(i + 6, atlas.animations[image.id].size.h, littleEndian)
 
     data.setInt16(i + 8, image.x, littleEndian)
     data.setInt16(i + 10, image.y, littleEndian)

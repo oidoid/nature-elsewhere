@@ -1,6 +1,5 @@
 import {AnimationID} from '../images/animation-id'
-import {Image, ImageOptions} from '../images/image'
-import {Layer} from '../images/layer'
+import * as Image from '../images/image'
 import {MemFont} from './mem-font'
 
 export namespace Text {
@@ -17,7 +16,7 @@ export namespace Text {
    */
   export function toImages(
     string: string,
-    options: ImageOptions = {},
+    options: Image.Options = {},
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
   ): readonly Image[] {
@@ -31,12 +30,13 @@ export namespace Text {
       if (position.y > y + h) break
 
       const id = 'MEM_FONT_' + string.charCodeAt(i)
-      const d = Image.new(AnimationID[<keyof typeof AnimationID>id], {
-        layer: Layer.UI_HIHI,
-        position: {x: position.x, y: position.y - y},
+      const image = Image.make(AnimationID[<keyof typeof AnimationID>id], {
+        layer: 'UI_HIHI',
+        x: position.x,
+        y: position.y - y,
         ...options
       })
-      images.push(d)
+      images.push(image)
     }
     return images
   }

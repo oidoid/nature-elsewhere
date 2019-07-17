@@ -1,5 +1,5 @@
 import {Atlas} from '../images/atlas'
-import {Image} from '../images/image'
+import * as Image from '../images/image'
 import {Rect} from '../math/rect'
 import {StoreBuffer} from './store-buffer'
 
@@ -25,7 +25,7 @@ export class Store {
   }
 
   addImage(image: Image): void {
-    const index = this.images.findIndex(val => image.layer() <= val.layer())
+    const index = this.images.findIndex(val => image.layer <= val.layer)
     this.images.splice(index === -1 ? this.images.length : index, 0, image)
   }
 
@@ -43,8 +43,8 @@ export class Store {
 
     let i = 0
     this.images.forEach(image => {
-      image.update(atlas, milliseconds)
-      if (Rect.intersects(image.target(this._atlas), cam)) {
+      Image.animate(image, atlas, milliseconds)
+      if (Rect.intersects(Image.target(this._atlas, image), cam)) {
         StoreBuffer.set(
           this._shaderLayout,
           this._atlas,
