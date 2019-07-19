@@ -29,12 +29,9 @@ export function parseAnimation(
     cels.push(cel)
   }
 
-  if (
-    frameTag.direction === Aseprite.AnimationDirection.PING_PONG &&
-    cels.length > 2
-  ) {
+  const pingPong = frameTag.direction === Aseprite.AnimationDirection.PING_PONG
+  if (pingPong && cels.length > 2)
     duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
-  }
 
   const size = frames[`${frameTag.name} ${frameTag.from}`].sourceSize
   const direction = <Atlas.AnimationDirection>frameTag.direction
@@ -47,11 +44,9 @@ export function parseCel(
   frameNumber: number,
   slices: readonly Aseprite.Slice[]
 ): Atlas.Cel {
-  return {
-    ...parsePosition(frame),
-    duration: parseDuration(frame.duration),
-    collision: parseCollision(frameTag, frameNumber, slices)
-  }
+  const duration = parseDuration(frame.duration)
+  const collision = parseCollision(frameTag, frameNumber, slices)
+  return {...parsePosition(frame), duration, collision}
 }
 
 export function parsePosition(frame: Aseprite.Frame): XY {

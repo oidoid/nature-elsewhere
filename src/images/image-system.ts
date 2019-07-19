@@ -1,4 +1,4 @@
-import {XY} from '../math/xy'
+import * as XY from '../math/xy'
 
 declare global {
   type ImageSystem = Readonly<{origin: XY; images: readonly Image[]}>

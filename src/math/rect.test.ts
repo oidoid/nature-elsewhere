@@ -1,4 +1,4 @@
-import {Rect} from './rect'
+import * as Rect from './rect'
 
 /**
  * [

@@ -1,6 +1,6 @@
 import * as Atlas from '../images/atlas'
 import * as Image from '../images/image'
-import {Rect} from '../math/rect'
+import * as Rect from '../math/rect'
 import * as StoreBuffer from './store-buffer'
 
 export interface StoreUpdate {

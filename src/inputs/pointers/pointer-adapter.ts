@@ -8,7 +8,7 @@ import {
   VirtualJoystickAxesInput,
   VirtualJoystickPositionInput
 } from './virtual-gamepad-input'
-import {XY} from '../../math/xy'
+import * as XY from '../../math/xy'
 
 type DownInput =
   | MousePickInput

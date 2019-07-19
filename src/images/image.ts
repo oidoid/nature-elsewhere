@@ -2,7 +2,7 @@ import {AnimationID} from './animation-id'
 import * as Animator from './animator'
 import * as Atlas from './atlas'
 import {Layer} from './layer'
-import {Rect} from '../math/rect'
+import * as Rect from '../math/rect'
 
 declare global {
   /** A mapping from a source atlas subtexture to a position. The target region

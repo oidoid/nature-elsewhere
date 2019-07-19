@@ -1,4 +1,4 @@
-import {GamepadRecorder} from './gamepads/gamepad-recorder'
+import * as GamepadRecorder from './gamepads/gamepad-recorder'
 import {KeyboardRecorder} from './keyboards/keyboard-recorder'
 import {PointerRecorder} from './pointers/pointer-recorder'
 import {Recorder} from './recorder'
