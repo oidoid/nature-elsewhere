@@ -1,23 +1,14 @@
 import {Aseprite} from './aseprite'
-import {Atlas} from '../images/atlas'
+import * as Atlas from '../images/atlas'
 
 export namespace AsepriteParser {
-  export function parse({meta, frames}: Aseprite.File): Atlas.Definition {
-    const animations = parseAnimations(meta.frameTags, frames, meta.slices)
-    return {size: meta.size, animations}
-  }
-
-  export function parseAnimations(
-    frameTags: readonly Aseprite.FrameTag[],
-    frames: Aseprite.FrameMap,
-    slices: readonly Aseprite.Slice[]
-  ): Atlas.AnimationMap {
-    return frameTags.reduce(
+  export function parse({meta, frames}: Aseprite.File): Atlas.State {
+    return meta.frameTags.reduce(
       (sum, frameTag) => ({
         ...sum,
-        [frameTag.name]: parseAnimation(frameTag, frames, slices)
+        [frameTag.name]: parseAnimation(frameTag, frames, meta.slices)
       }),
-      <Atlas.AnimationMap>{}
+      <Atlas.State>{}
     )
   }
 
@@ -50,7 +41,7 @@ export namespace AsepriteParser {
 
     const size = frame ? frame.sourceSize : {w: 0, h: 0}
     const direction = <Atlas.AnimationDirection>frameTag.direction
-    return {size, cels, duration, direction}
+    return {...size, cels, duration, direction}
   }
 
   export function parseCel(
@@ -60,7 +51,7 @@ export namespace AsepriteParser {
     slices: readonly Aseprite.Slice[]
   ): Atlas.Cel {
     return {
-      position: parsePosition(frame),
+      ...parsePosition(frame),
       duration: parseDuration(frame.duration),
       collision: parseCollision(frameTag, frameNumber, slices)
     }

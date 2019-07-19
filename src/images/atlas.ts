@@ -1,36 +1,24 @@
 import {AnimationID} from './animation-id'
 import {Aseprite} from '../parsers/aseprite'
 
-export namespace Atlas {
-  export interface Definition {
-    /** Atlas dimensions in pixels. */
-    readonly size: WH
-    readonly animations: AnimationMap
-  }
+export type State = Readonly<Record<AnimationID, Animation>>
 
-  export type AnimationMap = Readonly<Record<AnimationID, Animation>>
-
-  /** Animation and collision frames. */
-  export interface Animation {
-    /** Cel dimensions in pixels. */
-    readonly size: WH
-    readonly cels: readonly Cel[]
-    /** Positive animation length in milliseconds for a full cycle, possibly
-     *  infinite. For a ping-pong animation, this is a full traversal forward
-     *  plus traversal backward excluding the first and last frame. */
-    readonly duration: number
-    readonly direction: AnimationDirection
-  }
-
-  /** A single cel of an animation sequence. */
-  export interface Cel {
-    /** Texture location within the atlas in pixels. */
-    readonly position: XY
-    /** Positive cel exposure in milliseconds, possibly infinite. */
-    readonly duration: number
-    /** Collision bounds within the texture in pixels. */
-    readonly collision: readonly Rect[]
-  }
-
-  export import AnimationDirection = Aseprite.AnimationDirection
+/** Animation and collision frames. Dimensions are identical for every cel. */
+export interface Animation extends WH {
+  readonly cels: readonly Cel[]
+  /** Positive animation length in milliseconds for a full cycle, possibly
+   *  infinite. For a ping-pong animation, this is a full traversal forward plus
+   *  traversal backward excluding the first and last frame. */
+  readonly duration: number
+  readonly direction: AnimationDirection
 }
+
+/** A single frame of an animation sequence. */
+export interface Cel extends XY {
+  /** Positive cel exposure in milliseconds, possibly infinite. */
+  readonly duration: number
+  /** Collision bounds within the texture in pixels. */
+  readonly collision: readonly Rect[]
+}
+
+export import AnimationDirection = Aseprite.AnimationDirection

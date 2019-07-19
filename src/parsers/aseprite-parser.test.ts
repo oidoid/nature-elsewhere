@@ -2,22 +2,15 @@ import * as atlasJSON from '../assets/atlas.json'
 import {ArrayUtil} from '../utils/array-util'
 import {Aseprite} from './aseprite'
 import {AsepriteParser} from './aseprite-parser'
-import {Atlas} from '../images/atlas'
+import * as Atlas from '../images/atlas'
 import {ObjectUtil} from '../utils/object-util'
 
 describe('atlas.json', () => {
   const file: Aseprite.File = Object.freeze(atlasJSON)
-  const atlas: Atlas.Definition = Object.freeze(AsepriteParser.parse(file))
+  const atlas: Atlas.State = Object.freeze(AsepriteParser.parse(file))
   const tags: readonly Aseprite.Tag[] = Object.freeze(
     file.meta.frameTags.map(frameTag => frameTag.name)
   )
-
-  test('Converts current JSON and size is a reasonable power of two', () => {
-    expect(atlas.size.w).toBeLessThanOrEqual(4096)
-    expect(atlas.size.h).toBeLessThanOrEqual(4096)
-    expect(Math.log2(atlas.size.w) % 1).toStrictEqual(0)
-    expect(Math.log2(atlas.size.h) % 1).toStrictEqual(0)
-  })
 
   test.each(tags)('%# Tag %p is unique within the sheet', tag => {
     expect(tags.filter(val => val === tag)).toHaveLength(1)
@@ -44,7 +37,7 @@ describe('atlas.json', () => {
   )
 
   test.each(
-    ObjectUtil.values(atlas.animations).reduce(
+    ObjectUtil.values(atlas).reduce(
       (sum: Atlas.Cel[], val) => sum.concat(val.cels),
       []
     )
@@ -53,7 +46,7 @@ describe('atlas.json', () => {
   )
 
   test.each(
-    ObjectUtil.values(atlas.animations).reduce(
+    ObjectUtil.values(atlas).reduce(
       (sum: Atlas.Cel[], val) =>
         val.cels.length > 1 ? sum.concat(val.cels) : sum,
       []
@@ -62,13 +55,13 @@ describe('atlas.json', () => {
     expect(cel.duration).toBeLessThan(Number.POSITIVE_INFINITY)
   )
 
-  test.each(ObjectUtil.values(atlas.animations))(
+  test.each(ObjectUtil.values(atlas))(
     '%# every Animation has at lease one Cel %p',
     ({cels}) => expect(cels.length).toBeGreaterThan(0)
   )
 })
 
-describe('parseAnimations()', () => {
+describe('parse()', () => {
   test('Converts Animations.', () => {
     const frameTags = [
       {name: 'cactus s', from: 0, to: 0, direction: 'forward'},
@@ -133,13 +126,18 @@ describe('parseAnimations()', () => {
       }
     ]
     expect(
-      AsepriteParser.parseAnimations(frameTags, frames, slices)
+      AsepriteParser.parse({
+        meta: <Aseprite.Meta>(<unknown>{frameTags, slices}),
+        frames
+      })
     ).toStrictEqual({
       'cactus s': {
-        size: {w: 16, h: 16},
+        w: 16,
+        h: 16,
         cels: [
           {
-            position: {x: 221, y: 19},
+            x: 221,
+            y: 19,
             duration: 1,
             collision: [{x: 8, y: 12, w: 2, h: 3}]
           }
@@ -148,10 +146,12 @@ describe('parseAnimations()', () => {
         direction: 'forward'
       },
       'cactus m': {
-        size: {w: 16, h: 16},
+        w: 16,
+        h: 16,
         cels: [
           {
-            position: {x: 91, y: 55},
+            x: 91,
+            y: 55,
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 7, y: 11, w: 3, h: 4}]
           }
@@ -160,10 +160,12 @@ describe('parseAnimations()', () => {
         direction: 'forward'
       },
       'cactus l': {
-        size: {w: 16, h: 16},
+        w: 16,
+        h: 16,
         cels: [
           {
-            position: {x: 73, y: 55},
+            x: 73,
+            y: 55,
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 7, y: 10, w: 3, h: 5}]
           }
@@ -172,10 +174,12 @@ describe('parseAnimations()', () => {
         direction: 'forward'
       },
       'cactus xl': {
-        size: {w: 16, h: 16},
+        w: 16,
+        h: 16,
         cels: [
           {
-            position: {x: 55, y: 55},
+            x: 55,
+            y: 55,
             duration: Number.POSITIVE_INFINITY,
             collision: [{x: 7, y: 9, w: 3, h: 6}]
           }
@@ -236,10 +240,12 @@ describe('parseAnimation()', () => {
     expect(
       AsepriteParser.parseAnimation(frameTag, frames, slices)
     ).toStrictEqual({
-      size: {w: 16, h: 16},
+      w: 16,
+      h: 16,
       cels: [
         {
-          position: {x: 185, y: 37},
+          x: 185,
+          y: 37,
           duration: Number.POSITIVE_INFINITY,
           collision: [{x: 4, y: 11, w: 9, h: 4}]
         }
@@ -269,7 +275,8 @@ describe('parseCel()', () => {
       }
     ]
     expect(AsepriteParser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
-      position: {x: 131, y: 19},
+      x: 131,
+      y: 19,
       duration: Number.POSITIVE_INFINITY,
       collision: [{x: 4, y: 4, w: 8, h: 12}]
     })

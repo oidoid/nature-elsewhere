@@ -1,4 +1,4 @@
-import {Atlas} from '../images/atlas'
+import * as Atlas from '../images/atlas'
 import * as Image from '../images/image'
 import {Rect} from '../math/rect'
 import {StoreBuffer} from './store-buffer'
@@ -12,49 +12,41 @@ export interface StoreUpdate {
 
 export class Store {
   private readonly images: Image[] = []
-  private _instances: DataView
+  private instances: DataView
   constructor(
-    private readonly _shaderLayout: ShaderLayout,
-    private readonly _atlas: Atlas.Definition
+    private readonly shaderLayout: ShaderLayout,
+    private readonly atlas: Atlas.State
   ) {
-    this._instances = StoreBuffer.make(0)
+    this.instances = StoreBuffer.make(0)
   }
 
-  addImages(...images: readonly Image[]): void {
-    images.forEach(image => this.addImage(image))
+  addImages(atlas: Atlas.State, ...images: readonly Image[]): void {
+    images.forEach(image => this.addImage(atlas, image))
   }
 
-  addImage(image: Image): void {
-    const index = this.images.findIndex(val => image.layer <= val.layer)
+  addImage(atlas: Atlas.State, image: Image): void {
+    const index = this.images.findIndex(
+      val => Image.compare(atlas, image, val) < 0
+    )
     this.images.splice(index === -1 ? this.images.length : index, 0, image)
   }
 
-  update(
-    atlas: Atlas.Definition,
-    milliseconds: number,
-    cam: Rect
-  ): StoreUpdate {
-    const minBytes = this.images.length * this._shaderLayout.perInstance.stride
-    if (this._instances.byteLength < minBytes) {
-      this._instances = StoreBuffer.make(
-        StoreBuffer.size(this._shaderLayout, this.images.length * 2)
+  update(atlas: Atlas.State, milliseconds: number, cam: Rect): StoreUpdate {
+    const minBytes = this.images.length * this.shaderLayout.perInstance.stride
+    if (this.instances.byteLength < minBytes) {
+      this.instances = StoreBuffer.make(
+        StoreBuffer.size(this.shaderLayout, this.images.length * 2)
       )
     }
 
     let i = 0
     this.images.forEach(image => {
-      Image.animate(image, atlas, milliseconds)
-      if (Rect.intersects(Image.target(this._atlas, image), cam)) {
-        StoreBuffer.set(
-          this._shaderLayout,
-          this._atlas,
-          this._instances,
-          i,
-          image
-        )
+      if (Rect.intersects(Image.target(this.atlas, image), cam)) {
+        Image.animate(image, atlas, milliseconds)
+        StoreBuffer.set(this.shaderLayout, this.atlas, this.instances, i, image)
         ++i
       }
     })
-    return {data: this._instances, length: i}
+    return {data: this.instances, length: i}
   }
 }

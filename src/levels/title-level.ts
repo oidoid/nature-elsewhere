@@ -1,5 +1,5 @@
 import {AnimationID} from '../images/animation-id'
-import {Atlas} from '../images/atlas'
+import * as Atlas from '../images/atlas'
 import * as Image from '../images/image'
 import * as ImageSystem from '../images/image-system'
 import {LevelDefault} from './level-default'
@@ -11,10 +11,7 @@ import {Viewport} from '../graphics/viewport'
 export class TitleLevel implements Level {
   private readonly _store: Store
   private text: ImageSystem
-  constructor(
-    shaderLayout: ShaderLayout,
-    private readonly atlas: Atlas.Definition
-  ) {
+  constructor(shaderLayout: ShaderLayout, private readonly atlas: Atlas.State) {
     this._store = new Store(shaderLayout, atlas)
 
     const {date, version, hash} = process.env
@@ -22,6 +19,7 @@ export class TitleLevel implements Level {
     this.text = {origin: {x: 0, y: 0}, images}
 
     this._store.addImages(
+      atlas,
       Image.make(AnimationID.BACKGROUND),
       ...this.text.images
     )

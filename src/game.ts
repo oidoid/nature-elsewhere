@@ -1,5 +1,5 @@
 import {AsepriteParser} from './parsers/aseprite-parser'
-import {Atlas} from './images/atlas'
+import * as Atlas from './images/atlas'
 import * as atlasJSON from './assets/atlas.json'
 import {FunctionUtil} from './utils/function-util'
 import {ImageLoader} from './loaders/image-loader'
@@ -17,7 +17,7 @@ import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
 export function load(): Promise<{
-  atlas: Atlas.Definition
+  atlas: Atlas.State
   atlasImage: HTMLImageElement
   shaderLayout: ShaderLayout
 }> {
@@ -46,7 +46,7 @@ export function make(
   window: Window,
   canvas: HTMLCanvasElement,
   atlasImage: HTMLImageElement,
-  atlas: Atlas.Definition,
+  atlas: Atlas.State,
   shaderLayout: ShaderLayout,
   settings: Settings
 ): State {

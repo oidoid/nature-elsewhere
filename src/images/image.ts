@@ -1,6 +1,6 @@
 import {AnimationID} from './animation-id'
 import * as Animator from './animator'
-import {Atlas} from './atlas'
+import * as Atlas from './atlas'
 import {Layer} from './layer'
 import {Rect} from '../math/rect'
 
@@ -35,40 +35,32 @@ export function make(
 /** For sorting by draw order. E.g.,
  *  `images.sort((lhs, rhs) => Image.compare(atlas, lhs, rhs))`. */
 export function compare(
-  {animations}: Atlas.Definition,
+  atlas: Atlas.State,
   lhs: Readonly<Image>,
   rhs: Readonly<Image>
 ): number {
-  const lhsHeight = animations[lhs.id].size.h
-  const rhsHeight = animations[rhs.id].size.h
   return (
     Layer[lhs.layer] - Layer[rhs.layer] ||
-    lhs.y + lhsHeight - (rhs.y + rhsHeight)
+    lhs.y + atlas[lhs.id].h - (rhs.y + atlas[rhs.id].h)
   )
 }
 
-export function animate(
-  state: Image,
-  atlas: Atlas.Definition,
-  time: number
-): void {
-  const animation = atlas.animations[state.id]
+export function animate(state: Image, atlas: Atlas.State, time: number): void {
+  const animation = atlas[state.id]
   const exposure = state.animator.exposure + time
   state.animator = Animator.animate(animation, state.animator.period, exposure)
 }
 
-export function source(
-  state: Readonly<Image>,
-  atlas: Atlas.Definition
-): Atlas.Cel {
-  const {cels} = atlas.animations[state.id]
+export function source(state: Readonly<Image>, atlas: Atlas.State): Atlas.Cel {
+  const {cels} = atlas[state.id]
   return cels[Animator.index(cels, state.animator.period)]
 }
 
 export function target(
-  {animations}: Atlas.Definition,
+  atlas: Atlas.State,
   ...images: readonly Readonly<Image>[]
 ): Rect {
-  const rects = images.map(({x, y, id}) => ({x, y, ...animations[id].size}))
-  return rects.reduce(Rect.union)
+  return images
+    .map(({x, y, id}) => ({x, y, w: atlas[id].w, h: atlas[id].h}))
+    .reduce(Rect.union)
 }
