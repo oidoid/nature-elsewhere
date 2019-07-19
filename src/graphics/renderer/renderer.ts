@@ -1,7 +1,7 @@
-import * as glConfig from './gl-config.json'
-import {GLUtil} from '../gl-util'
-import {StoreUpdate} from '../../store/store'
 import fragmentGLSL from '../shaders/fragment.glsl'
+import * as glConfig from './gl-config.json'
+import * as GLUtil from '../gl-util'
+import {StoreUpdate} from '../../store/store'
 import vertexGLSL from '../shaders/vertex.glsl'
 
 export type State = Readonly<{
@@ -100,13 +100,13 @@ export function render(
   canvasWH: WH,
   scale: number,
   cam: Rect,
-  {data, length}: StoreUpdate
+  {data, len}: StoreUpdate
 ): void {
   resize(state, canvasWH, scale, cam)
   const perInstanceBuffer = state.perInstanceBuffer
   GLUtil.bufferData(state.gl, perInstanceBuffer, data, GL.DYNAMIC_READ)
   const verticesLen = vertices.length / state.layout.perVertex.length
-  state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, verticesLen, length)
+  state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, verticesLen, len)
 }
 
 /**

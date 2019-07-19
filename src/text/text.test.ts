@@ -1,5 +1,5 @@
-import {MemFont} from './mem-font'
-import {Text} from './text'
+import * as MemFont from './mem-font'
+import * as Text from './text'
 
 const lineHeight: number = MemFont.lineHeight
 

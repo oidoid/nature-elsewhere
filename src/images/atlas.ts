@@ -1,5 +1,5 @@
 import {AnimationID} from './animation-id'
-import {Aseprite} from '../parsers/aseprite'
+import * as Aseprite from '../parsers/aseprite'
 
 export type State = Readonly<Record<AnimationID, Animation>>
 

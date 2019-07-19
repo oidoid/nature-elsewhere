@@ -1,13 +1,13 @@
 import * as Atlas from '../images/atlas'
 import * as Image from '../images/image'
 import {Rect} from '../math/rect'
-import {StoreBuffer} from './store-buffer'
+import * as StoreBuffer from './store-buffer'
 
 export interface StoreUpdate {
   /** data.byteLength may exceed bytes to be rendered. length is the only
       accurate number of instances. */
   readonly data: DataView
-  readonly length: number
+  readonly len: number
 }
 
 export class Store {
@@ -47,6 +47,6 @@ export class Store {
         ++i
       }
     })
-    return {data: this.instances, length: i}
+    return {data: this.instances, len: i}
   }
 }

@@ -1,4 +1,4 @@
-import {NumberUtil} from '../../math/number-util'
+import * as NumberUtil from '../../math/number-util'
 
 const dataTypeSize: Readonly<Record<GLDataType, number>> = Object.freeze({
   BYTE: 1,
@@ -41,25 +41,9 @@ function reduceAttributeVariable(
   index: number
 ): readonly ShaderAttribute[] {
   const offset = index ? nextAttributeOffset(layouts[index - 1]) : 0
-  if (!isGLDataType(type)) throw new Error(`"${type}" is not a GLDataType.`)
-  return layouts.concat({type, name, length, offset})
+  return layouts.concat({type: <GLDataType>type, name, length, offset})
 }
 
 function nextAttributeOffset({offset, type, length}: ShaderAttribute): number {
   return offset + dataTypeSize[type] * length
-}
-
-function isGLDataType(val: string): val is GLDataType {
-  switch (val) {
-    case 'BYTE':
-    case 'UNSIGNED_BYTE':
-    case 'SHORT':
-    case 'UNSIGNED_SHORT':
-    case 'INT':
-    case 'UNSIGNED_INT':
-    case 'FLOAT':
-      const test: GLDataType = val
-      return true || test
-  }
-  return false
 }

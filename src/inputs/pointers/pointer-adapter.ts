@@ -1,8 +1,8 @@
-import {ArrayUtil} from '../../utils/array-util'
+import * as ArrayUtil from '../../utils/array-util'
 import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
 import {MousePickInput, MousePointInput} from './mouse-input'
-import {Viewport} from '../../graphics/viewport'
+import * as Viewport from '../../graphics/viewport'
 import {
   VirtualButtonsPressedInput,
   VirtualJoystickAxesInput,

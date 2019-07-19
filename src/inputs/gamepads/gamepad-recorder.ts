@@ -1,4 +1,4 @@
-import {ArrayUtil} from '../../utils/array-util'
+import * as ArrayUtil from '../../utils/array-util'
 import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
 import {Recorder} from '../recorder'

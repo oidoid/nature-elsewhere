@@ -1,7 +1,7 @@
-import {AsepriteParser} from './parsers/aseprite-parser'
+import * as AsepriteParser from './parsers/aseprite-parser'
 import * as Atlas from './images/atlas'
 import * as atlasJSON from './assets/atlas.json'
-import {FunctionUtil} from './utils/function-util'
+import * as FunctionUtil from './utils/function-util'
 import {ImageLoader} from './loaders/image-loader'
 import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
@@ -9,11 +9,11 @@ import {InputSet} from './inputs/input-set'
 import {Recorder} from './inputs/recorder'
 import * as Renderer from './graphics/renderer/renderer'
 import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
-import {Settings} from './settings/settings'
+import * as Settings from './settings/settings'
 import * as shaderConfig from './graphics/shaders/shader-config.json'
 import * as ShaderConfigParser from './graphics/shaders/shader-config-parser'
 import {TitleLevel} from './levels/title-level'
-import {Viewport} from './graphics/viewport'
+import * as Viewport from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
 export function load(): Promise<{
@@ -39,7 +39,7 @@ export interface State {
   readonly recorder: Recorder
   readonly inputRouter: InputRouter
   requestWindowSetting: FunctionUtil.Once
-  readonly settings: Settings
+  readonly settings: Settings.State
 }
 
 export function make(
@@ -48,7 +48,7 @@ export function make(
   atlasImage: HTMLImageElement,
   atlas: Atlas.State,
   shaderLayout: ShaderLayout,
-  settings: Settings
+  settings: Settings.State
 ): State {
   const state: State = {
     duration: 0,

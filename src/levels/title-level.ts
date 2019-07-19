@@ -3,10 +3,10 @@ import * as Atlas from '../images/atlas'
 import * as Image from '../images/image'
 import * as ImageSystem from '../images/image-system'
 import {LevelDefault} from './level-default'
-import {MemFont} from '../text/mem-font'
+import * as MemFont from '../text/mem-font'
 import {Store} from '../store/store'
-import {Text} from '../text/text'
-import {Viewport} from '../graphics/viewport'
+import * as Text from '../text/text'
+import * as Viewport from '../graphics/viewport'
 
 export class TitleLevel implements Level {
   private readonly _store: Store

@@ -1,5 +1,5 @@
 import * as Game from './game'
-import {Settings} from './settings/settings'
+import * as Settings from './settings/settings'
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
 if (!canvas) throw new Error('Canvas missing.')

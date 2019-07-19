@@ -1,8 +1,8 @@
 import {AnimationID} from './animation-id'
-import {AsepriteParser} from '../parsers/aseprite-parser'
+import * as AsepriteParser from '../parsers/aseprite-parser'
 import * as Atlas from './atlas'
 import * as atlasJSON from '../assets/atlas.json'
-import {ObjectUtil} from '../utils/object-util'
+import * as ObjectUtil from '../utils/object-util'
 
 const atlas: Atlas.State = Object.freeze(AsepriteParser.parse(atlasJSON))
 const ids: readonly AnimationID[] = Object.freeze(
