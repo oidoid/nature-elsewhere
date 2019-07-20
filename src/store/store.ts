@@ -1,5 +1,5 @@
 //  finish with references folder
-import * as Atlas from '../images/atlas'
+import * as Atlas from '../atlas/atlas'
 import * as Image from '../images/image'
 import * as InstanceBuffer from './instance-buffer'
 import * as Rect from '../math/rect'

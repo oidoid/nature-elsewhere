@@ -1,6 +1,6 @@
 import * as Animator from './animator'
-import * as Aseprite from '../aseprite/aseprite'
-import * as Atlas from './atlas'
+import * as Aseprite from '../atlas/aseprite'
+import * as Atlas from '../atlas/atlas'
 import * as ObjectUtil from '../utils/object-util'
 
 describe('step()', () => {

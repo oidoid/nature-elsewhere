@@ -1,4 +1,4 @@
-import * as Atlas from '../images/atlas'
+import * as Atlas from '../atlas/atlas'
 import * as Image from '../images/image'
 
 const littleEndian: boolean = !!new Int8Array(new Int16Array([1]).buffer)[0]

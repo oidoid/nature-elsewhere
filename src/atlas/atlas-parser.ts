@@ -1,5 +1,5 @@
 import * as Aseprite from './aseprite'
-import * as Atlas from '../images/atlas'
+import * as Atlas from './atlas'
 
 export function parse({meta, frames}: Aseprite.File): Atlas.State {
   return meta.frameTags.reduce(

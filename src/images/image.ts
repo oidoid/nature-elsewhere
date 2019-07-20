@@ -1,5 +1,5 @@
 import * as Animator from './animator'
-import {State as Atlas, Cel} from './atlas'
+import {State as Atlas, Cel} from '../atlas/atlas'
 import {Layer} from './layer'
 import * as Rect from '../math/rect'
 
@@ -46,7 +46,7 @@ export function animate(state: Image, atlas: Atlas, time: number): Image {
   const animation = atlas[state.id]
   const exposure = state.animator.exposure + time
   state.animator = Animator.animate(animation, state.animator.period, exposure)
-  return state // >
+  return state
 }
 
 export function source(state: Readonly<Image>, atlas: Atlas): Cel {

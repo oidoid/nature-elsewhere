@@ -1,4 +1,4 @@
-import * as Atlas from './atlas'
+import * as Atlas from '../atlas/atlas'
 import * as NumberUtil from '../math/number-util'
 
 export interface State {

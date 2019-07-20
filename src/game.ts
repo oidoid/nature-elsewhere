@@ -1,6 +1,6 @@
-import * as Atlas from './images/atlas'
+import * as Atlas from './atlas/atlas'
 import * as atlasJSON from './assets/atlas.json'
-import * as AtlasParser from './aseprite/atlas-parser'
+import * as AtlasParser from './atlas/atlas-parser'
 import * as FunctionUtil from './utils/function-util'
 import * as ImageLoader from './loaders/image-loader'
 import {InputBit} from './inputs/input-bit'

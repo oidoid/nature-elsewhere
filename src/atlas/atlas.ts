@@ -1,4 +1,4 @@
-import * as Aseprite from '../aseprite/aseprite'
+import * as Aseprite from './aseprite'
 
 export type State = Readonly<Record<string, Animation>>
 

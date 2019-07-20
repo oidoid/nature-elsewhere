@@ -1,4 +1,4 @@
-import * as Atlas from '../images/atlas'
+import * as Atlas from '../atlas/atlas'
 import * as Image from '../images/image'
 import * as ImageSystem from '../images/image-system'
 import * as LevelDefault from './level-default'

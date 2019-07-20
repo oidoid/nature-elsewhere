@@ -1,7 +1,7 @@
 import * as atlasJSON from '../assets/atlas.json'
 import * as ArrayUtil from '../utils/array-util'
 import * as Aseprite from './aseprite'
-import * as Atlas from '../images/atlas'
+import * as Atlas from './atlas'
 import * as AtlasParser from './atlas-parser'
 import * as ObjectUtil from '../utils/object-util'
 
