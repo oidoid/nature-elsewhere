@@ -1,3 +1,4 @@
+import {AnimationID} from './animation-id'
 import * as Animator from './animator'
 import {State as Atlas, Cel} from '../atlas/atlas'
 import {Layer} from './layer'
@@ -8,7 +9,7 @@ declare global {
       is used for rendering and collision detection. The image may be animated.
       Per Atlas.Animation, each Cel has the same size. */
   interface Image extends Mutable<XY>, Mutable<Animator.State> {
-    id: string
+    id: AnimationID
     layer: keyof typeof Layer
   }
 }
@@ -18,7 +19,7 @@ export interface Options extends Partial<XY>, Partial<Animator.State> {
 }
 
 export function make(
-  id: string,
+  id: AnimationID,
   {layer = 'DEFAULT', x = 0, y = 0, period = 0, exposure = 0}: Options = {}
 ): Image {
   return {id, x, y, layer, period, exposure}

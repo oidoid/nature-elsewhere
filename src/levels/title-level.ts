@@ -1,3 +1,4 @@
+import {AnimationID} from '../images/animation-id'
 import * as Atlas from '../atlas/atlas'
 import * as Image from '../images/image'
 import * as ImageSystem from '../images/image-system'
@@ -18,7 +19,7 @@ export class TitleLevel implements Level {
     this.text = {origin: {x: 0, y: 0}, images}
 
     this.images = (<Image[]>[]).concat(
-      Image.make('background '),
+      Image.make(AnimationID.BACKGROUND),
       ...this.text.images
     )
   }
