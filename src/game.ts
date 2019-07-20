@@ -1,4 +1,4 @@
-import * as AsepriteParser from './parsers/aseprite-parser'
+import * as AsepriteParser from './aseprite/aseprite-parser'
 import * as Atlas from './images/atlas'
 import * as atlasJSON from './assets/atlas.json'
 import * as FunctionUtil from './utils/function-util'

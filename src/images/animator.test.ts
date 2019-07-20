@@ -1,5 +1,5 @@
 import * as Animator from './animator'
-import * as Aseprite from '../parsers/aseprite'
+import * as Aseprite from '../aseprite/aseprite'
 import * as Atlas from './atlas'
 import * as ObjectUtil from '../utils/object-util'
 
