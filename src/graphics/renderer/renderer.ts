@@ -104,7 +104,7 @@ export function render(
   resize(state, canvasWH, scale, cam)
   const perInstanceBuffer = state.perInstanceBuffer
   GLUtil.bufferData(state.gl, perInstanceBuffer, dat, GL.DYNAMIC_READ)
-  const verticesLen = vertices.length / state.layout.perVertex.length
+  const verticesLen = vertices.length / state.layout.perVertex.len
   state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, verticesLen, len)
 }
 

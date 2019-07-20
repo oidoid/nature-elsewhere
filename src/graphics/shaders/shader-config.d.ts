@@ -7,5 +7,5 @@ interface ShaderConfig {
 interface AttributeConfig {
   readonly type: GLDataType | string
   readonly name: string
-  readonly length: number
+  readonly len: number
 }

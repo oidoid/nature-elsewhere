@@ -5,7 +5,7 @@ interface ShaderLayout {
 }
 
 interface ShaderAttributeBufferLayout {
-  readonly length: number
+  readonly len: number
   readonly stride: number
   readonly divisor: number
   readonly attributes: readonly ShaderAttribute[]
@@ -14,6 +14,6 @@ interface ShaderAttributeBufferLayout {
 interface ShaderAttribute {
   readonly type: GLDataType
   readonly name: string
-  readonly length: number
+  readonly len: number
   readonly offset: number
 }

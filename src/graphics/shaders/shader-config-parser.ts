@@ -28,7 +28,7 @@ function parseAttributes(
     .reduce((max, val) => Math.max(max, val), 0)
   const size = nextAttributeOffset(attributes[attributes.length - 1])
   return {
-    length: attributes.reduce((sum, {length}) => sum + length, 0),
+    len: attributes.reduce((sum, {len}) => sum + len, 0),
     stride: NumberUtil.ceilMultiple(maxDataTypeSize, size),
     divisor,
     attributes
@@ -37,13 +37,13 @@ function parseAttributes(
 
 function reduceAttributeVariable(
   layouts: readonly ShaderAttribute[],
-  {type, name, length}: AttributeConfig,
+  {type, name, len}: AttributeConfig,
   index: number
 ): readonly ShaderAttribute[] {
   const offset = index ? nextAttributeOffset(layouts[index - 1]) : 0
-  return layouts.concat({type: <GLDataType>type, name, length, offset})
+  return layouts.concat({type: <GLDataType>type, name, len, offset})
 }
 
-function nextAttributeOffset({offset, type, length}: ShaderAttribute): number {
-  return offset + dataTypeSize[type] * length
+function nextAttributeOffset({offset, type, len}: ShaderAttribute): number {
+  return offset + dataTypeSize[type] * len
 }

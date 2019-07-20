@@ -6,11 +6,11 @@ export function initAttribute(
   divisor: number,
   buffer: GLBuffer,
   location: number,
-  {type, length, offset}: ShaderAttribute
+  {type, len, offset}: ShaderAttribute
 ): void {
   gl.enableVertexAttribArray(location)
   gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
-  gl.vertexAttribIPointer(location, length, GL[type], stride, offset)
+  gl.vertexAttribIPointer(location, len, GL[type], stride, offset)
   gl.vertexAttribDivisor(location, divisor)
   gl.bindBuffer(GL.ARRAY_BUFFER, null)
 }

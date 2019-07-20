@@ -4,9 +4,9 @@
     "atlasSize": "atlasSize",
     "projection": "projection"
   },
-  "perVertex": [{"name": "uv", "type": "SHORT", "length": 2}],
+  "perVertex": [{"name": "uv", "type": "SHORT", "len": 2}],
   "perInstance": [
-    {"name": "source", "type": "SHORT", "length": 4},
-    {"name": "position", "type": "SHORT", "length": 2}
+    {"name": "source", "type": "SHORT", "len": 4},
+    {"name": "position", "type": "SHORT", "len": 2}
   ]
 }

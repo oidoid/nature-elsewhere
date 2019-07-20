@@ -17,17 +17,17 @@ export function make(size: number): DataView {
 export function set(
   layout: ShaderLayout,
   atlas: Atlas.State,
-  data: DataView,
+  dat: DataView,
   index: number,
-  image: Image
+  img: Image
 ): void {
   const i = index * layout.perInstance.stride
 
-  data.setInt16(i + 0, Image.source(image, atlas).x, littleEndian)
-  data.setInt16(i + 2, Image.source(image, atlas).y, littleEndian)
-  data.setInt16(i + 4, atlas[image.id].w, littleEndian)
-  data.setInt16(i + 6, atlas[image.id].h, littleEndian)
+  dat.setInt16(i + 0, Image.source(img, atlas).x, littleEndian)
+  dat.setInt16(i + 2, Image.source(img, atlas).y, littleEndian)
+  dat.setInt16(i + 4, atlas[img.id].w, littleEndian)
+  dat.setInt16(i + 6, atlas[img.id].h, littleEndian)
 
-  data.setInt16(i + 8, image.x, littleEndian)
-  data.setInt16(i + 10, image.y, littleEndian)
+  dat.setInt16(i + 8, img.x, littleEndian)
+  dat.setInt16(i + 10, img.y, littleEndian)
 }
