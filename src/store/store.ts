@@ -1,52 +1,38 @@
+//  finish with references folder
 import * as Atlas from '../images/atlas'
 import * as Image from '../images/image'
+import * as InstanceBuffer from './instance-buffer'
 import * as Rect from '../math/rect'
-import * as StoreBuffer from './store-buffer'
 
-export interface StoreUpdate {
-  /** data.byteLength may exceed bytes to be rendered. length is the only
-      accurate number of instances. */
-  readonly data: DataView
+export interface State {
+  readonly shaderLayout: ShaderLayout
+  readonly atlas: Atlas.State
+  /** dat.byteLength may exceed bytes to be rendered. len is the only accurate
+      number of instances. */
+  readonly dat: DataView
   readonly len: number
 }
 
-export class Store {
-  private readonly images: Image[] = []
-  private instances: DataView
-  constructor(
-    private readonly shaderLayout: ShaderLayout,
-    private readonly atlas: Atlas.State
-  ) {
-    this.instances = StoreBuffer.make(0)
-  }
+export function make(shaderLayout: ShaderLayout, atlas: Atlas.State): State {
+  return {atlas, shaderLayout, dat: InstanceBuffer.make(0), len: 0}
+}
 
-  addImages(atlas: Atlas.State, ...images: readonly Image[]): void {
-    images.forEach(image => this.addImage(atlas, image))
-  }
+export function update(
+  {shaderLayout, atlas, dat}: State,
+  cam: Rect,
+  entities: readonly Image[],
+  milliseconds: number
+): State {
+  const images = entities
+    .filter(entity => Rect.intersects(Image.target(atlas, entity), cam))
+    .map(entity => Image.animate(entity, atlas, milliseconds))
+    .sort((lhs, rhs) => Image.compare(atlas, lhs, rhs))
 
-  addImage(atlas: Atlas.State, image: Image): void {
-    const index = this.images.findIndex(
-      val => Image.compare(atlas, image, val) < 0
-    )
-    this.images.splice(index === -1 ? this.images.length : index, 0, image)
-  }
+  const size = InstanceBuffer.size(shaderLayout, images.length)
+  if (dat.byteLength < size) dat = InstanceBuffer.make(size * 2)
+  images.forEach((image, i) =>
+    InstanceBuffer.set(shaderLayout, atlas, dat, i, image)
+  )
 
-  update(atlas: Atlas.State, milliseconds: number, cam: Rect): StoreUpdate {
-    const minBytes = this.images.length * this.shaderLayout.perInstance.stride
-    if (this.instances.byteLength < minBytes) {
-      this.instances = StoreBuffer.make(
-        StoreBuffer.size(this.shaderLayout, this.images.length * 2)
-      )
-    }
-
-    let i = 0
-    this.images.forEach(image => {
-      if (Rect.intersects(Image.target(this.atlas, image), cam)) {
-        Image.animate(image, atlas, milliseconds)
-        StoreBuffer.set(this.shaderLayout, this.atlas, this.instances, i, image)
-        ++i
-      }
-    })
-    return {data: this.instances, len: i}
-  }
+  return {shaderLayout, atlas, dat, len: images.length}
 }

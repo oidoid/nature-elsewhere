@@ -1,6 +1,6 @@
 interface LevelUpdate {
   readonly nextLevel?: Level
-  readonly data: DataView
+  readonly dat: DataView
   readonly len: number
 }
 

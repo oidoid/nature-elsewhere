@@ -4,22 +4,21 @@ import * as Image from '../images/image'
 import * as ImageSystem from '../images/image-system'
 import * as LevelDefault from './level-default'
 import * as MemFont from '../text/mem-font'
-import {Store} from '../store/store'
+import * as Store from '../store/store'
 import * as Text from '../text/text'
 import * as Viewport from '../graphics/viewport'
 
 export class TitleLevel implements Level {
-  private readonly _store: Store
+  private store: Store.State
   private text: ImageSystem
-  constructor(shaderLayout: ShaderLayout, private readonly atlas: Atlas.State) {
-    this._store = new Store(shaderLayout, atlas)
-
+  private images: readonly Image[]
+  constructor(shaderLayout: ShaderLayout, atlas: Atlas.State) {
+    this.store = Store.make(shaderLayout, atlas)
     const {date, version, hash} = process.env
     const images = Text.toImages(`${date} v${version} (${hash})`)
     this.text = {origin: {x: 0, y: 0}, images}
 
-    this._store.addImages(
-      atlas,
+    this.images = (<Image[]>[]).concat(
       Image.make(AnimationID.BACKGROUND),
       ...this.text.images
     )
@@ -36,6 +35,7 @@ export class TitleLevel implements Level {
       target,
       ...this.text.images
     )
-    return {nextLevel: this, ...this._store.update(this.atlas, time, cam)}
+    this.store = Store.update(this.store, cam, this.images, time)
+    return {nextLevel: this, dat: this.store.dat, len: this.store.len}
   }
 }
