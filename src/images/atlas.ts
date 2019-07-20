@@ -1,7 +1,6 @@
-import {AnimationID} from './animation-id'
 import * as Aseprite from '../aseprite/aseprite'
 
-export type State = Readonly<Record<AnimationID, Animation>>
+export type State = Readonly<Record<string, Animation>>
 
 /** Animation and collision frames. Dimensions are identical for every cel. */
 export interface Animation extends WH {

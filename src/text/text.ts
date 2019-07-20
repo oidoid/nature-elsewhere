@@ -1,4 +1,3 @@
-import {AnimationID} from '../images/animation-id'
 import * as Image from '../images/image'
 import * as MemFont from './mem-font'
 
@@ -28,8 +27,8 @@ export function toImages(
     if (nextLine(position.y, scale).y < y) continue
     if (position.y > y + h) break
 
-    const id = 'MEM_FONT_' + string.charCodeAt(i)
-    const image = Image.make(AnimationID[<keyof typeof AnimationID>id], {
+    const id = 'mem-font ' + string.charCodeAt(i)
+    const image = Image.make(id, {
       layer: 'UI_HIHI',
       x: position.x,
       y: position.y - y,

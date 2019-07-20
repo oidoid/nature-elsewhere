@@ -1,4 +1,3 @@
-import {AnimationID} from './animation-id'
 import * as Animator from './animator'
 import {State as Atlas, Cel} from './atlas'
 import {Layer} from './layer'
@@ -9,11 +8,11 @@ declare global {
       is used for rendering and collision detection. The image may be animated.
       Per Atlas.Animation, each Cel has the same size. */
   interface Image {
-    id: AnimationID
+    id: string
     x: number
     y: number
     layer: keyof typeof Layer
-    animator: Animator.State // todo: move out. Size can be determined without animation.
+    animator: Animator.State
   }
 }
 
@@ -26,7 +25,7 @@ export class Options {
 }
 
 export function make(
-  id: AnimationID,
+  id: string,
   {layer = 'DEFAULT', x = 0, y = 0, period = 0, exposure = 0}: Options = {}
 ): Image {
   return {id, x, y, layer, animator: {period, exposure}}
@@ -47,7 +46,7 @@ export function animate(state: Image, atlas: Atlas, time: number): Image {
   const animation = atlas[state.id]
   const exposure = state.animator.exposure + time
   state.animator = Animator.animate(animation, state.animator.period, exposure)
-  return state
+  return state // >
 }
 
 export function source(state: Readonly<Image>, atlas: Atlas): Cel {
