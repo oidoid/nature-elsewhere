@@ -1,6 +1,6 @@
-import * as AsepriteParser from './aseprite/aseprite-parser'
 import * as Atlas from './images/atlas'
 import * as atlasJSON from './assets/atlas.json'
+import * as AtlasParser from './aseprite/atlas-parser'
 import * as FunctionUtil from './utils/function-util'
 import * as ImageLoader from './loaders/image-loader'
 import {InputBit} from './inputs/input-bit'
@@ -22,7 +22,7 @@ export function load(): Promise<{
   shaderLayout: ShaderLayout
 }> {
   return ImageLoader.load('assets/atlas.png').then(atlasImage => {
-    const atlas = AsepriteParser.parse(atlasJSON)
+    const atlas = AtlasParser.parse(atlasJSON)
     const shaderLayout = ShaderConfigParser.parse(shaderConfig)
     return {atlas, atlasImage, shaderLayout}
   })

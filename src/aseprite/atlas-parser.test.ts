@@ -1,13 +1,13 @@
 import * as atlasJSON from '../assets/atlas.json'
 import * as ArrayUtil from '../utils/array-util'
 import * as Aseprite from './aseprite'
-import * as AsepriteParser from './aseprite-parser'
 import * as Atlas from '../images/atlas'
+import * as AtlasParser from './atlas-parser'
 import * as ObjectUtil from '../utils/object-util'
 
 describe('atlas.json', () => {
   const file: Aseprite.File = Object.freeze(atlasJSON)
-  const atlas: Atlas.State = Object.freeze(AsepriteParser.parse(file))
+  const atlas: Atlas.State = Object.freeze(AtlasParser.parse(file))
   const tags: readonly Aseprite.Tag[] = Object.freeze(
     file.meta.frameTags.map(frameTag => frameTag.name)
   )
@@ -126,7 +126,7 @@ describe('parse()', () => {
       }
     ]
     expect(
-      AsepriteParser.parse({
+      AtlasParser.parse({
         meta: <Aseprite.Meta>(<unknown>{frameTags, slices}),
         frames
       })
@@ -237,9 +237,7 @@ describe('parseAnimation()', () => {
         keys: [{frame: 0, bounds: {x: 3, y: 11, w: 10, h: 4}}]
       }
     ]
-    expect(
-      AsepriteParser.parseAnimation(frameTag, frames, slices)
-    ).toStrictEqual({
+    expect(AtlasParser.parseAnimation(frameTag, frames, slices)).toStrictEqual({
       w: 16,
       h: 16,
       cels: [
@@ -274,7 +272,7 @@ describe('parseCel()', () => {
         keys: [{frame: 0, bounds: {x: 4, y: 4, w: 8, h: 12}}]
       }
     ]
-    expect(AsepriteParser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
+    expect(AtlasParser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
       x: 131,
       y: 19,
       duration: Number.POSITIVE_INFINITY,
@@ -293,7 +291,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AsepriteParser.parsePosition(frame)).toStrictEqual({x: 1, y: 2})
+    expect(AtlasParser.parsePosition(frame)).toStrictEqual({x: 1, y: 2})
   })
 
   test('Converts texture mapping with padding.', () => {
@@ -305,7 +303,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AsepriteParser.parsePosition(frame)).toStrictEqual({x: 2, y: 3})
+    expect(AtlasParser.parsePosition(frame)).toStrictEqual({x: 2, y: 3})
   })
 })
 
@@ -319,7 +317,7 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AsepriteParser.parsePadding(frame)).toStrictEqual({w: 0, h: 0})
+    expect(AtlasParser.parsePadding(frame)).toStrictEqual({w: 0, h: 0})
   })
 
   test('Converts nonzero padding.', () => {
@@ -331,7 +329,7 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AsepriteParser.parsePadding(frame)).toStrictEqual({w: 1, h: 1})
+    expect(AtlasParser.parsePadding(frame)).toStrictEqual({w: 1, h: 1})
   })
 
   test('Converts mixed padding.', () => {
@@ -343,17 +341,17 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AsepriteParser.parsePadding(frame)).toStrictEqual({w: 1, h: 2})
+    expect(AtlasParser.parsePadding(frame)).toStrictEqual({w: 1, h: 2})
   })
 })
 
 describe('parseDuration()', () => {
   test('Converts Duration.', () => {
-    expect(AsepriteParser.parseDuration(1)).toStrictEqual(1)
+    expect(AtlasParser.parseDuration(1)).toStrictEqual(1)
   })
 
   test('Converts infinite Duration.', () => {
-    expect(AsepriteParser.parseDuration(65535)).toStrictEqual(
+    expect(AtlasParser.parseDuration(65535)).toStrictEqual(
       Number.POSITIVE_INFINITY
     )
   })
@@ -369,7 +367,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
       }
     ]
-    expect(AsepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
       {x: 0, y: 1, w: 2, h: 3}
     ])
   })
@@ -383,7 +381,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
       }
     ]
-    expect(AsepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
+    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
   })
 
   test('Filters out unrelated Frame number Keys.', () => {
@@ -399,7 +397,7 @@ describe('parseCollision()', () => {
         ]
       }
     ]
-    expect(AsepriteParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
       {x: 4, y: 5, w: 6, h: 7}
     ])
   })
@@ -416,7 +414,7 @@ describe('parseCollision()', () => {
         ]
       }
     ]
-    expect(AsepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
       {x: 0, y: 1, w: 2, h: 3}
     ])
   })
@@ -424,7 +422,7 @@ describe('parseCollision()', () => {
   test('Converts no Slices.', () => {
     const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
     const slices = <readonly Aseprite.Slice[]>[]
-    expect(AsepriteParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
+    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
   })
 
   test('Converts multiple Slices.', () => {
@@ -454,7 +452,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 8, y: 9, w: 10, h: 11}}]
       }
     ]
-    expect(AsepriteParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
       {x: 4, y: 5, w: 6, h: 7},
       {x: 0, y: 1, w: 2, h: 3},
       {x: 8, y: 9, w: 10, h: 11}
