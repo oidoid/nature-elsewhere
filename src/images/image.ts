@@ -7,28 +7,21 @@ declare global {
   /** A mapping from a source atlas subtexture to a position. The target region
       is used for rendering and collision detection. The image may be animated.
       Per Atlas.Animation, each Cel has the same size. */
-  interface Image {
+  interface Image extends Mutable<XY>, Mutable<Animator.State> {
     id: string
-    x: number
-    y: number
     layer: keyof typeof Layer
-    animator: Animator.State
   }
 }
 
-export class Options {
-  readonly x?: number
-  readonly y?: number
+export interface Options extends Partial<XY>, Partial<Animator.State> {
   readonly layer?: keyof typeof Layer
-  readonly period?: number
-  readonly exposure?: number
 }
 
 export function make(
   id: string,
   {layer = 'DEFAULT', x = 0, y = 0, period = 0, exposure = 0}: Options = {}
 ): Image {
-  return {id, x, y, layer, animator: {period, exposure}}
+  return {id, x, y, layer, period, exposure}
 }
 
 /** For sorting by draw order. E.g.,
@@ -44,14 +37,14 @@ export function compare(
 
 export function animate(state: Image, atlas: Atlas, time: number): Image {
   const animation = atlas[state.id]
-  const exposure = state.animator.exposure + time
-  state.animator = Animator.animate(animation, state.animator.period, exposure)
-  return state
+  const exposure = state.exposure + time
+  const animator = Animator.animate(animation, state.period, exposure)
+  return Object.assign(state, animator)
 }
 
 export function source(state: Readonly<Image>, atlas: Atlas): Cel {
   const {cels} = atlas[state.id]
-  return cels[Animator.index(cels, state.animator.period)]
+  return cels[Animator.index(cels, state.period)]
 }
 
 export function target(
