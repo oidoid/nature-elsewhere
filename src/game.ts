@@ -11,7 +11,7 @@ import * as Renderer from './graphics/renderer/renderer'
 import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
 import * as Settings from './settings/settings'
 import * as shaderConfig from './graphics/shaders/shader-config.json'
-import * as ShaderConfigParser from './graphics/shaders/shader-config-parser'
+import * as ShaderLayoutParser from './graphics/shaders/shader-layout-parser'
 import {TitleLevel} from './levels/title-level'
 import * as Viewport from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
@@ -23,7 +23,7 @@ export function load(): Promise<{
 }> {
   return ImageLoader.load('assets/atlas.png').then(atlasImage => {
     const atlas = AtlasParser.parse(atlasJSON)
-    const shaderLayout = ShaderConfigParser.parse(shaderConfig)
+    const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
     return {atlas, atlasImage, shaderLayout}
   })
 }
