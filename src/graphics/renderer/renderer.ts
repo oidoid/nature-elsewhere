@@ -1,6 +1,8 @@
 import fragmentGLSL from '../shaders/fragment.glsl'
 import * as glConfig from './gl-config.json'
 import * as GLUtil from '../gl-util'
+import {LevelUpdate} from '../../levels/level'
+import {ShaderLayout} from '../shaders/shader-layout'
 import vertexGLSL from '../shaders/vertex.glsl'
 
 export type State = Readonly<{

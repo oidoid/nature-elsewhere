@@ -1,4 +1,10 @@
+import {AttributeConfig, ShaderConfig} from './shader-config'
 import * as NumberUtil from '../../math/number-util'
+import {
+  ShaderAttribute,
+  ShaderAttributeBufferLayout,
+  ShaderLayout
+} from './shader-layout'
 
 const dataTypeSize: Readonly<Record<GLDataType, number>> = Object.freeze({
   BYTE: 1,

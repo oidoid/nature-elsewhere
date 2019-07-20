@@ -1,3 +1,5 @@
+import {ShaderAttribute} from './shaders/shader-layout'
+
 const GL = WebGL2RenderingContext
 
 export function initAttribute(

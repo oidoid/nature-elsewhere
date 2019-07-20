@@ -3,22 +3,24 @@ import * as Atlas from '../atlas/atlas'
 import * as Image from '../images/image'
 import * as ImageSystem from '../images/image-system'
 import * as LevelDefault from './level-default'
+import {LevelUpdate, Level} from './level'
 import * as MemFont from '../text/mem-font'
+import {ShaderLayout} from '../graphics/shaders/shader-layout'
 import * as Store from '../store/store'
 import * as Text from '../text/text'
 import * as Viewport from '../graphics/viewport'
 
 export class TitleLevel implements Level {
   private store: Store.State
-  private text: ImageSystem
-  private images: readonly Image[]
+  private text: ImageSystem.State
+  private images: readonly Image.State[]
   constructor(shaderLayout: ShaderLayout, atlas: Atlas.State) {
     this.store = Store.make(shaderLayout, atlas)
     const {date, version, hash} = process.env
     const images = Text.toImages(`${date} v${version} (${hash})`)
     this.text = {origin: {x: 0, y: 0}, images}
 
-    this.images = (<Image[]>[]).concat(
+    this.images = (<Image.State[]>[]).concat(
       Image.make(AnimationID.BACKGROUND),
       ...this.text.images
     )
