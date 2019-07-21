@@ -1,10 +1,6 @@
-export interface LevelUpdate {
-  readonly nextLevel?: Level
-  readonly dat: DataView
-  readonly len: number
-}
+import * as Entity from '../entities/entity'
 
-export interface Level {
-  scale(canvas: WH): number
-  update(time: number, canvas: WH, cam: Rect): LevelUpdate
+export interface Level extends WH {
+  readonly minSize: WH
+  readonly entities: readonly Entity.State[]
 }

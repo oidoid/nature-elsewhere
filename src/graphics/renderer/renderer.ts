@@ -1,8 +1,8 @@
 import fragmentGLSL from '../shaders/fragment.glsl'
 import * as glConfig from './gl-config.json'
 import * as GLUtil from '../gl-util'
-import {LevelUpdate} from '../../levels/level'
 import {ShaderLayout} from '../shaders/shader-layout'
+import * as Store from '../../store/store'
 import vertexGLSL from '../shaders/vertex.glsl'
 
 export type State = Readonly<{
@@ -101,7 +101,7 @@ export function render(
   canvasWH: WH,
   scale: number,
   cam: Rect,
-  {dat, len}: LevelUpdate
+  {dat, len}: Store.State
 ): void {
   resize(state, canvasWH, scale, cam)
   const perInstanceBuffer = state.perInstanceBuffer

@@ -1,11 +1,12 @@
 import * as Atlas from '../atlas/atlas'
 import * as Image from '../images/image'
+import * as Entity from '../entities/entity'
 import * as InstanceBuffer from './instance-buffer'
 import * as Rect from '../math/rect'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 
 export interface State {
-  readonly shaderLayout: ShaderLayout
+  readonly layout: ShaderLayout
   readonly atlas: Atlas.State
   /** dat.byteLength may exceed bytes to be rendered. len is the only accurate
       number of instances. */
@@ -13,26 +14,25 @@ export interface State {
   readonly len: number
 }
 
-export function make(shaderLayout: ShaderLayout, atlas: Atlas.State): State {
-  return {atlas, shaderLayout, dat: InstanceBuffer.make(0), len: 0}
+export function make(layout: ShaderLayout, atlas: Atlas.State): State {
+  return {atlas, layout, dat: InstanceBuffer.make(0), len: 0}
 }
 
 export function update(
-  {shaderLayout, atlas, dat}: State,
+  {layout, atlas, dat}: State,
   cam: Rect,
-  entities: readonly Image.State[],
+  entities: readonly Entity.State[],
   milliseconds: number
 ): State {
   const images = entities
-    .filter(entity => Rect.intersects(Image.target(atlas, entity), cam))
-    .map(entity => Image.animate(entity, atlas, milliseconds))
+    .filter(entity => Rect.intersects(entity, cam))
+    .map(entity => Entity.animate(entity, atlas, milliseconds))
+    .reduce((sum, val) => [...sum, ...val], [])
     .sort((lhs, rhs) => Image.compare(atlas, lhs, rhs))
 
-  const size = InstanceBuffer.size(shaderLayout, images.length)
+  const size = InstanceBuffer.size(layout, images.length)
   if (dat.byteLength < size) dat = InstanceBuffer.make(size * 2)
-  images.forEach((img, i) =>
-    InstanceBuffer.set(shaderLayout, atlas, dat, i, img)
-  )
+  images.forEach((img, i) => InstanceBuffer.set(layout, atlas, dat, i, img))
 
-  return {shaderLayout, atlas, dat, len: images.length}
+  return {layout, atlas, dat, len: images.length}
 }

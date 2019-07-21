@@ -1,3 +1,4 @@
+import {Input} from './input'
 import {InputBit} from './input-bit'
 import {InputSource} from './input-source'
 import {Recorder} from './recorder'
@@ -7,9 +8,18 @@ const RIGHT: InputBit = InputBit.RIGHT
 const UP: InputBit = InputBit.UP
 const DOWN: InputBit = InputBit.DOWN
 
-const keyboardRight = {source: InputSource.KEYBOARD, bits: RIGHT}
-const keyboardUp = {source: InputSource.KEYBOARD, bits: UP}
-const keyboardDown = {source: InputSource.KEYBOARD, bits: DOWN}
+const keyboardRight: Input = Object.freeze({
+  source: InputSource.KEYBOARD,
+  bits: RIGHT
+})
+const keyboardUp: Input = Object.freeze({
+  source: InputSource.KEYBOARD,
+  bits: UP
+})
+const keyboardDown: Input = Object.freeze({
+  source: InputSource.KEYBOARD,
+  bits: DOWN
+})
 
 describe('Recorder', () => {
   test('Inputs are initially inactive and not triggered', () => {

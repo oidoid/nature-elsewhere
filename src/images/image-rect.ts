@@ -1,7 +1,13 @@
 import {State as Image} from './image'
 import * as XY from '../math/xy'
 
-export type State = Readonly<{origin: XY; images: readonly Image[]}>
+export interface State {
+  /** The upper-left of the rectangle describing the union of images in level
+      coordinates. */
+  readonly origin: XY
+  /** Image coordinates are not relative origin. */
+  readonly images: readonly Image[]
+}
 
 export function moveTo(origin: XY, xy: XY, ...images: readonly Image[]): State {
   if (XY.equal(origin, xy)) return {origin, images}

@@ -1,5 +1,5 @@
-/** The entity draw order from bottom (lesser) to top (greater). Within a Layer,
- *  entities are drawn in Y-coordinate + height ascending order (lesser to
+/** The image draw order from bottom (lesser) to top (greater). Within a Layer,
+ *  images are drawn in Y-coordinate + height ascending order (lesser to
  *  greater). Y-coordinate + height-ordering is the preferred resolution
  *  mechanism but the lowest possible Layer may be used where necessary. */
 export enum Layer {

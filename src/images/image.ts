@@ -12,13 +12,13 @@ export interface State extends Mutable<XY>, Mutable<Animator.State> {
   layer: keyof typeof Layer
 }
 
-export interface Options extends Partial<XY>, Partial<Animator.State> {
+export interface Config extends Partial<XY>, Partial<Animator.State> {
   readonly layer?: keyof typeof Layer
 }
 
 export function make(
   id: AnimationID,
-  {layer = 'DEFAULT', x = 0, y = 0, period = 0, exposure = 0}: Options = {}
+  {layer = 'DEFAULT', x = 0, y = 0, period = 0, exposure = 0}: Config = {}
 ): State {
   return {id, x, y, layer, period, exposure}
 }

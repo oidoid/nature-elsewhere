@@ -21,7 +21,6 @@ export class PointerRecorder {
     defaultOrigin: XY
   ): void {
     this._adapter.adapt(canvasWH, cam, event, defaultOrigin)
-
     event.preventDefault()
   }
 }

@@ -15,12 +15,12 @@ export function cam({w, h}: WH, scale: number): Rect {
 }
 
 /**
- * @arg {} {x, y} The viewport coordinates of the input in pixels, usually
- *                {x: event.clientX, y: event.clientY}.
- * @arg {} {w, h} The viewport dimensions in pixels (canvasWH).
+ * @arg {x, y} The viewport coordinates of the input in pixels, usually
+ *             {x: event.clientX, y: event.clientY}.
+ * @arg {w, h} The viewport dimensions in pixels (canvasWH).
  * @arg cam The coordinates and dimensions of the camera the input was made
  *          through.
- * @return The fractional position in the level's coordinate-system.
+ * @return The fractional position in level coordinates.
  */
 export function toLevelXY({x, y}: XY, {w, h}: WH, cam: Rect): XY {
   return {x: cam.x + (x / w) * cam.w, y: cam.y + (y / h) * cam.h}

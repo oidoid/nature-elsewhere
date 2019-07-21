@@ -17,18 +17,10 @@ export function parseAnimation(
   slices: readonly Aseprite.Slice[]
 ): Atlas.Animation {
   const cels = []
-  let duration = 0
-  for (
-    let frameNumber = frameTag.from;
-    frameNumber <= frameTag.to;
-    ++frameNumber
-  ) {
-    const frame = frames[`${frameTag.name} ${frameNumber}`]
-    const cel = parseCel(frameTag, frame, frameNumber, slices)
-    duration += cel.duration
-    cels.push(cel)
-  }
+  for (let i = frameTag.from; i <= frameTag.to; ++i)
+    cels.push(parseCel(frameTag, frames[`${frameTag.name} ${i}`], i, slices))
 
+  let duration = cels.reduce((sum, {duration}) => sum + duration, 0)
   const pingPong = frameTag.direction === Aseprite.AnimationDirection.PING_PONG
   if (pingPong && cels.length > 2)
     duration += duration - (cels[0].duration + cels[cels.length - 1].duration)

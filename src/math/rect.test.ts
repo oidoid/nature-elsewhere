@@ -1,16 +1,14 @@
 import * as Rect from './rect'
 
-/**
- * [
- *   diagram: string,
- *   lhs: Rect,
- *   rhs: Rect,
- *   intersection: Rect,
- *   intersects: boolean,
- *   union: Rect,
- *   flip: boolean
- * ]
- */
+/** [
+      diagram: string,
+      lhs: Rect,
+      rhs: Rect,
+      intersection: Rect,
+      intersects: boolean,
+      union: Rect,
+      flip: boolean
+    ] */
 type Test = [string, Rect, Rect, Rect, boolean, Rect, boolean]
 const tests: readonly Test[] = Object.freeze(
   [

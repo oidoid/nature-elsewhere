@@ -6,7 +6,7 @@ import * as ImageLoader from './loaders/image-loader'
 import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
-import {Level} from './levels/level'
+import * as LevelStateMachine from './levels/level-state-machine'
 import {Recorder} from './inputs/recorder'
 import * as Renderer from './graphics/renderer/renderer'
 import * as RendererStateMachine from './graphics/renderer/renderer-state-machine'
@@ -14,7 +14,6 @@ import * as Settings from './settings/settings'
 import * as shaderConfig from './graphics/shaders/shader-config.json'
 import {ShaderLayout} from './graphics/shaders/shader-layout'
 import * as ShaderLayoutParser from './graphics/shaders/shader-layout-parser'
-import {TitleLevel} from './levels/title-level'
 import * as Viewport from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
@@ -36,7 +35,7 @@ export interface State {
   /** The exact duration in milliseconds to apply each update. Any number of
    *  updates may occur per animation frame. */
   readonly tick: number
-  level: Level
+  levelStateMachine: LevelStateMachine.State
   readonly rendererStateMachine: RendererStateMachine.State
   readonly recorder: Recorder
   readonly inputRouter: InputRouter
@@ -55,7 +54,7 @@ export function make(
   const state: State = {
     duration: 0,
     tick: 1000 / 60,
-    level: new TitleLevel(shaderLayout, atlas),
+    levelStateMachine: LevelStateMachine.make(shaderLayout, atlas),
     rendererStateMachine: RendererStateMachine.make({
       window,
       canvas,
@@ -87,9 +86,18 @@ export function stop(state: State): void {
 }
 
 function onFrame(state: State, then: number, now: number): void {
+  if (!state.levelStateMachine.level) {
+    stop(state)
+    return
+  }
+
   const time = now - then
   const canvasWH = Viewport.canvasWH(window.document)
-  const scale = state.level.scale(canvasWH)
+  const scale = Viewport.scale(
+    canvasWH,
+    state.levelStateMachine.level.minSize,
+    0
+  )
   const cam = Viewport.cam(canvasWH, scale)
 
   state.inputRouter.record(state.recorder, canvasWH, cam, cam)
@@ -114,18 +122,24 @@ function onFrame(state: State, then: number, now: number): void {
     }, 3 * 1000)
   }
 
-  let update
   state.duration += time
-  while (state.duration >= state.tick) {
+  while (state.levelStateMachine && state.duration >= state.tick) {
     state.duration -= state.tick
-    update = state.level.update(state.tick, canvasWH, cam)
-    if (!update.nextLevel) break
+    state.levelStateMachine = state.levelStateMachine.update(
+      state.levelStateMachine,
+      cam,
+      state.tick
+    )
   }
 
-  if (!update) return
-  if (update.nextLevel) {
-    state.level = update.nextLevel
-    Renderer.render(renderer, canvasWH, scale, cam, update)
+  if (state.levelStateMachine) {
+    Renderer.render(
+      renderer,
+      canvasWH,
+      scale,
+      cam,
+      state.levelStateMachine.store
+    )
   } else {
     stop(state)
   }

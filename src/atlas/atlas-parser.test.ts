@@ -6,11 +6,9 @@ import * as AtlasParser from './atlas-parser'
 import * as ObjectUtil from '../utils/object-util'
 
 describe('atlas.json', () => {
-  const file: Aseprite.File = Object.freeze(atlasJSON)
-  const atlas: Atlas.State = Object.freeze(AtlasParser.parse(file))
-  const tags: readonly Aseprite.Tag[] = Object.freeze(
-    file.meta.frameTags.map(frameTag => frameTag.name)
-  )
+  const file = Object.freeze(atlasJSON)
+  const atlas = Object.freeze(AtlasParser.parse(file))
+  const tags = Object.freeze(file.meta.frameTags.map(frameTag => frameTag.name))
 
   test.each(tags)('%# Tag %p is unique within the sheet', tag => {
     expect(tags.filter(val => val === tag)).toHaveLength(1)

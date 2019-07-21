@@ -13,7 +13,7 @@ export interface Layout {
     @arg target The window size in pixels. */
 export function toImages(
   string: string,
-  options: Image.Options = {},
+  cfg: Image.Config = {},
   y: number = 0,
   {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
 ): readonly Image.State[] {
@@ -29,9 +29,9 @@ export function toImages(
     const key = 'MEM_FONT_' + string.charCodeAt(i)
     const image = Image.make(AnimationID[<keyof typeof AnimationID>key], {
       layer: 'UI_HIHI',
-      x: position.x,
-      y: position.y - y,
-      ...options
+      ...cfg,
+      x: (cfg.x || 0) + position.x,
+      y: (cfg.y || 0) + position.y - y
     })
     images.push(image)
   }
