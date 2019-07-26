@@ -1,0 +1,8 @@
+{
+  "id": "CONIFER",
+  "inactive": true,
+  "images": [
+    {"id": "CONIFER"},
+    {"id": "CONIFER_SHADOW", "y": 1, "layer": "SHADOW"}
+  ]
+}

@@ -1,7 +1,7 @@
 import * as ArrayUtil from '../utils/array-util'
 import * as Aseprite from './aseprite'
 import * as Atlas from './atlas'
-import * as atlasJSON from '../assets/atlas.json'
+import * as atlasJSON from '../assets/atlas/atlas.json'
 import * as AtlasParser from './atlas-parser'
 import * as ObjectUtil from '../utils/object-util'
 
@@ -62,13 +62,13 @@ describe('atlas.json', () => {
 describe('parse()', () => {
   test('Converts Animations.', () => {
     const frameTags = [
-      {name: 'cactus s', from: 0, to: 0, direction: 'forward'},
-      {name: 'cactus m', from: 1, to: 1, direction: 'forward'},
-      {name: 'cactus l', from: 2, to: 2, direction: 'forward'},
-      {name: 'cactus xl', from: 3, to: 3, direction: 'forward'}
+      {name: 'cloud ', from: 0, to: 0, direction: 'forward'},
+      {name: 'background ', from: 1, to: 1, direction: 'forward'},
+      {name: 'conifer ', from: 2, to: 2, direction: 'forward'},
+      {name: 'conifer shadow', from: 3, to: 3, direction: 'forward'}
     ]
     const frames = {
-      'cactus s 0': {
+      'cloud  0': {
         frame: {x: 220, y: 18, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -76,7 +76,7 @@ describe('parse()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 1
       },
-      'cactus m 1': {
+      'background  1': {
         frame: {x: 90, y: 54, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -84,7 +84,7 @@ describe('parse()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 65535
       },
-      'cactus l 2': {
+      'conifer  2': {
         frame: {x: 72, y: 54, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -92,7 +92,7 @@ describe('parse()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 65535
       },
-      'cactus xl 3': {
+      'conifer shadow 3': {
         frame: {x: 54, y: 54, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -103,22 +103,22 @@ describe('parse()', () => {
     }
     const slices = [
       {
-        name: 'cactus s',
+        name: 'cloud ',
         color: '#0000ffff',
         keys: [{frame: 0, bounds: {x: 8, y: 12, w: 2, h: 3}}]
       },
       {
-        name: 'cactus m',
+        name: 'background ',
         color: '#0000ffff',
         keys: [{frame: 0, bounds: {x: 7, y: 11, w: 3, h: 4}}]
       },
       {
-        name: 'cactus l',
+        name: 'conifer ',
         color: '#0000ffff',
         keys: [{frame: 0, bounds: {x: 7, y: 10, w: 3, h: 5}}]
       },
       {
-        name: 'cactus xl',
+        name: 'conifer shadow',
         color: '#0000ffff',
         keys: [{frame: 0, bounds: {x: 7, y: 9, w: 3, h: 6}}]
       }
@@ -129,7 +129,7 @@ describe('parse()', () => {
         frames
       })
     ).toStrictEqual({
-      'cactus s': {
+      CLOUD: {
         w: 16,
         h: 16,
         cels: [
@@ -143,7 +143,7 @@ describe('parse()', () => {
         duration: 1,
         direction: 'forward'
       },
-      'cactus m': {
+      BACKGROUND: {
         w: 16,
         h: 16,
         cels: [
@@ -157,7 +157,7 @@ describe('parse()', () => {
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
-      'cactus l': {
+      CONIFER: {
         w: 16,
         h: 16,
         cels: [
@@ -171,7 +171,7 @@ describe('parse()', () => {
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
-      'cactus xl': {
+      CONIFER_SHADOW: {
         w: 16,
         h: 16,
         cels: [
@@ -187,6 +187,13 @@ describe('parse()', () => {
       }
     })
   })
+})
+
+describe('isAnimationID()', () => {
+  test('Known.', () =>
+    expect(AtlasParser.isAnimationID('cloud ')).toStrictEqual(true))
+  test('Unknown.', () =>
+    expect(AtlasParser.isAnimationID('unknown')).toStrictEqual(false))
 })
 
 describe('parseAnimation()', () => {
@@ -250,6 +257,17 @@ describe('parseAnimation()', () => {
       direction: 'forward'
     })
   })
+})
+
+describe('isAnimationDirection()', () => {
+  test.each(ObjectUtil.values(Aseprite.AnimationDirection))(
+    '%# Direction %p',
+    direction =>
+      expect(AtlasParser.isAnimationDirection(direction)).toStrictEqual(true)
+  )
+
+  test('Unknown.', () =>
+    expect(AtlasParser.isAnimationDirection('unknown')).toStrictEqual(false))
 })
 
 describe('parseCel()', () => {

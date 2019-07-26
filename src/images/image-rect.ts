@@ -1,16 +1,15 @@
 import {State as Image} from './image'
 import * as XY from '../math/xy'
 
-export interface State {
-  /** The upper-left of the rectangle describing the union of images in level
-      coordinates. */
-  readonly origin: XY
+/** The upper-left of the rectangle describing the union of images in level
+    coordinates. */
+export interface State extends XY {
   /** Image coordinates are not relative origin. */
-  readonly images: readonly Image[]
+  readonly images: readonly Readonly<Image>[]
 }
 
 export function moveTo(origin: XY, xy: XY, ...images: readonly Image[]): State {
-  if (XY.equal(origin, xy)) return {origin, images}
+  if (XY.equal(origin, xy)) return {...origin, images}
   return moveBy(origin, XY.sub(xy, origin), ...images)
 }
 
@@ -20,7 +19,7 @@ export function moveBy(
   ...images: readonly Image[]
 ): State {
   images.forEach(img => ((img.x += x), (img.y += y)))
-  return {origin: XY.add(origin, {x, y}), images}
+  return {...XY.add(origin, {x, y}), images}
 }
 
 export function centerOn(

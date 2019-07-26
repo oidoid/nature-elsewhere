@@ -1,5 +1,5 @@
 /** This typing assumes the options specified in package.json and annotated
-    herin with **via CLI**. The JSON export format appears to be undocumented
+    herein with **via CLI**. The JSON export format appears to be undocumented
     but the related [binary format] is. Types marked "**by convention**" are
     supplemental to and unenforced by the JSON format. Any data of these types
     should be validated as soon as possible. All numbers are integers. All

@@ -1,3 +1,4 @@
+import {AnimationID, ReverseAnimationID} from '../images/animation-id'
 import * as Aseprite from './aseprite'
 import * as Atlas from './atlas'
 
@@ -5,10 +6,21 @@ export function parse({meta, frames}: Aseprite.File): Atlas.State {
   return meta.frameTags.reduce(
     (sum, val) => ({
       ...sum,
-      [val.name]: parseAnimation(val, frames, meta.slices)
+      [parseAnimationIDKey(val)]: parseAnimation(val, frames, meta.slices)
     }),
     <Atlas.State>{}
   )
+}
+
+export function parseAnimationIDKey({
+  name
+}: Aseprite.FrameTag): keyof typeof AnimationID {
+  if (isAnimationID(name)) return ReverseAnimationID[name]
+  throw new Error(`"${name}" is not an AnimationID key.`)
+}
+
+export function isAnimationID(val: string): val is ValueOf<typeof AnimationID> {
+  return val in ReverseAnimationID
 }
 
 export function parseAnimation(
@@ -26,8 +38,20 @@ export function parseAnimation(
     duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
 
   const size = frames[`${frameTag.name} ${frameTag.from}`].sourceSize
-  const direction = <Atlas.AnimationDirection>frameTag.direction
-  return {...size, cels, duration, direction}
+  return {...size, cels, duration, direction: parseAnimationDirection(frameTag)}
+}
+
+export function parseAnimationDirection({
+  direction
+}: Aseprite.FrameTag): Atlas.AnimationDirection {
+  if (isAnimationDirection(direction)) return direction
+  throw new Error(`"${direction}" is not a Direction.`)
+}
+
+export function isAnimationDirection(
+  val: string
+): val is Atlas.AnimationDirection {
+  return Object.values(Atlas.AnimationDirection).includes(val)
 }
 
 export function parseCel(

@@ -1,9 +1,0 @@
-{
-  "w": 64,
-  "h": 64,
-  "minSize": {"w": 96, "h": 64},
-  "entities": [
-    {"type": "BACKGROUND"},
-    {"type": "TEXT_DATE_VERSION_HASH", "x": 1, "y": 59}
-  ]
-}

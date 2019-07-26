@@ -17,6 +17,11 @@ export function entries<T>(val: T & object): readonly [keyof T, ValueOf<T>][] {
   return keys(val).map(key => [key, val[key]])
 }
 
+export function reverse<T>(val: Reversible<T>): Readonly<Reverse<T>> {
+  const init = <Readonly<Reverse<T>>>{}
+  return entries(val).reduce((sum, [key, val]) => ({...sum, [val]: key}), init)
+}
+
 export function hasKey<T>(val: T, key: keyof any): key is keyof T {
   return key in val
 }

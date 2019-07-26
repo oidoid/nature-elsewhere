@@ -3,7 +3,7 @@ import {Level} from './level'
 import * as LevelParser from './level-parser'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 import * as Store from '../store/store'
-import * as titleLevelConfig from './level-configs/title-level-config.json'
+import * as titleLevelConfig from '../assets/levels/title.json'
 
 export interface State {
   readonly level?: Level

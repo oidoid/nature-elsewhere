@@ -1,7 +1,7 @@
 import {AnimationID} from '../images/animation-id'
 import * as Aseprite from './aseprite'
 
-export type State = Readonly<Record<AnimationID, Animation>>
+export type State = Readonly<Record<keyof typeof AnimationID, Animation>>
 
 /** Animation and collision frames. Dimensions are identical for every cel and
     in pixels. */

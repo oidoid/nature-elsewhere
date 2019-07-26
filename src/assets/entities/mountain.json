@@ -1,0 +1,8 @@
+{
+  "id": "MOUNTAIN",
+  "inactive": true,
+  "images": [
+    {"id": "MOUNTAIN"},
+    {"id": "MOUNTAIN_SHADOW", "x": -2, "y": 1, "layer": "SHADOW"}
+  ]
+}

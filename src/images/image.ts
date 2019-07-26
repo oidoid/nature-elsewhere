@@ -8,7 +8,7 @@ import * as Rect from '../math/rect'
     is used for rendering and collision detection. The image may be animated.
     Per Atlas.Animation, each Cel has the same size. */
 export interface State extends Mutable<XY>, Mutable<Animator.State> {
-  id: AnimationID
+  id: keyof typeof AnimationID
   layer: keyof typeof Layer
 }
 
@@ -17,7 +17,7 @@ export interface Config extends Partial<XY>, Partial<Animator.State> {
 }
 
 export function make(
-  id: AnimationID,
+  id: keyof typeof AnimationID,
   {layer = 'DEFAULT', x = 0, y = 0, period = 0, exposure = 0}: Config = {}
 ): State {
   return {id, x, y, layer, period, exposure}
@@ -41,9 +41,8 @@ export function animate(state: State, atlas: Atlas, time: number): State {
   return Object.assign(state, animator)
 }
 
-export function source(state: Readonly<State>, atlas: Atlas): Cel {
-  const {cels} = atlas[state.id]
-  return cels[Animator.index(cels, state.period)]
+export function source({id, period}: Readonly<State>, atlas: Atlas): Cel {
+  return atlas[id].cels[Animator.index(atlas[id].cels, period)]
 }
 
 export function target(

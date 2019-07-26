@@ -26,8 +26,8 @@ export function update(
 ): State {
   const images = entities
     .filter(entity => Rect.intersects(entity, cam))
-    .map(entity => Entity.animate(entity, atlas, milliseconds))
-    .reduce((sum, val) => [...sum, ...val], [])
+    .map(entity => Entity.update(entity, atlas, milliseconds))
+    .reduce((sum: Image.State[], val) => [...sum, ...val], [])
     .sort((lhs, rhs) => Image.compare(atlas, lhs, rhs))
 
   const size = InstanceBuffer.size(layout, images.length)

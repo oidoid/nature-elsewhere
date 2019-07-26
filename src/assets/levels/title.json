@@ -1,0 +1,18 @@
+{
+  "id": "TITLE",
+  "w": 128,
+  "h": 128,
+  "minSize": {"w": 128, "h": 128},
+  "entities": [
+    {"id": "BACKGROUND"},
+    {"id": "TEXT_DATE_VERSION_HASH", "x": 1, "y": 123},
+    {"id": "CLOUD", "x": 20, "y": 20},
+    {"id": "CLOUD", "x": 30, "y": 28},
+    {"id": "CLOUD", "x": 54, "y": 50},
+    {"id": "CONIFER", "x": 59, "y": 78},
+    {"id": "CONIFER", "x": 64, "y": 85},
+    {"id": "CONIFER", "x": 68, "y": 84},
+    {"id": "CONIFER", "x": 60, "y": 83},
+    {"id": "MOUNTAIN", "x": 80, "y": 83}
+  ]
+}

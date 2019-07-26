@@ -26,8 +26,8 @@ export function toImages(
     if (nextLine(position.y, scale).y < y) continue
     if (position.y > y + h) break
 
-    const key = 'MEM_FONT_' + string.charCodeAt(i)
-    const image = Image.make(AnimationID[<keyof typeof AnimationID>key], {
+    const key = <keyof typeof AnimationID>('MEM_FONT_' + string.charCodeAt(i))
+    const image = Image.make(key, {
       layer: 'UI_HIHI',
       ...cfg,
       x: (cfg.x || 0) + position.x,
