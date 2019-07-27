@@ -1,8 +1,11 @@
 import {AnimationID} from '../images/animation-id'
+import {Font} from './font'
 import {Image} from '../images/image'
-import {MemFont} from './mem-font'
+import * as memFont from '../assets/mem-font.json'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
+
+const font: Font = Object.freeze(memFont)
 
 export namespace Text {
   export interface Layout {
@@ -88,7 +91,10 @@ export namespace Text {
     while (index < string.length && !/\s/.test(string[index])) {
       const span = tracking(string[index], scale, string[index + 1])
       if (x && x + span > width) ({x, y} = nextLine(y, scale))
-      positions.push({x, y: y + scale.y * MemFont.letterOffset(string[index])})
+      positions.push({
+        x,
+        y: y + scale.y * Font.letterOffset(font, string[index])
+      })
       x += span
       ++index
     }
@@ -117,9 +123,9 @@ function layoutSpace(
 
 /** @return The distance in pixels from the start of lhs to the start of rhs. */
 function tracking(lhs: string, scale: XY, rhs?: string): number {
-  return scale.x * (MemFont.letterWidth(lhs) + MemFont.kerning(lhs, rhs))
+  return scale.x * (Font.letterWidth(font, lhs) + Font.kerning(font, lhs, rhs))
 }
 
 function nextLine(y: number, scale: XY): XY {
-  return {x: 0, y: y + scale.y * (MemFont.letterHeight + MemFont.leading)}
+  return {x: 0, y: y + scale.y * font.lineHeight}
 }

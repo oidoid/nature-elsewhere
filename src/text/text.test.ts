@@ -1,8 +1,6 @@
-import {MemFont} from './mem-font'
+import {lineHeight} from '../assets/mem-font.json'
 import {Text} from './text'
 import {XY} from '../math/xy'
-
-const lineHeight: number = MemFont.lineHeight
 
 describe('layout()', () =>
   test.each(<readonly [string, number, Text.Layout][]>[

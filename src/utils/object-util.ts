@@ -28,6 +28,14 @@ export namespace ObjectUtil {
     )
   }
 
+  export function defaultIfAbsent<T, V = ValueOf<T>>(
+    obj: T,
+    key: keyof T,
+    fallback: V | ValueOf<T>
+  ): V | ValueOf<T> {
+    return key in obj ? obj[key] : fallback
+  }
+
   export function hasKey<T>(val: T, key: keyof any): key is keyof T {
     return key in val
   }
