@@ -1,22 +1,18 @@
 import {ArrayUtil} from '../../utils/array-util'
 import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
-import {MousePickInput, MousePointInput} from './mouse-input'
+import {MouseInput} from './mouse-input'
 import {Rect} from '../../math/rect'
 import {Viewport} from '../../graphics/viewport'
-import {
-  VirtualButtonsPressedInput,
-  VirtualJoystickAxesInput,
-  VirtualJoystickPositionInput
-} from './virtual-gamepad-input'
+import {VirtualGamepadInput} from './virtual-gamepad-input'
 import {WH} from '../../math/wh'
 import {XY} from '../../math/xy'
 
 type DownInput =
-  | MousePickInput
-  | VirtualButtonsPressedInput
-  | VirtualJoystickPositionInput
-type MoveInput = MousePointInput | VirtualJoystickAxesInput
+  | MouseInput.Pick
+  | VirtualGamepadInput.JoystickPosition
+  | VirtualGamepadInput.ButtonsPressed
+type MoveInput = MouseInput.Point | VirtualGamepadInput.JoystickAxes
 
 /** Converts PointerEvents to polled MouseInputs or virtual gamepad Inputs.
     Without this adapter, the Recorder must track which inputs to persist (roll

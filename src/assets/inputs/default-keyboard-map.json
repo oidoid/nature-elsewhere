@@ -1,0 +1,19 @@
+{
+  "ArrowLeft": "LEFT",
+  "a": "LEFT",
+  "ArrowRight": "RIGHT",
+  "d": "RIGHT",
+  "ArrowUp": "UP",
+  "w": "UP",
+  "ArrowDown": "DOWN",
+  "s": "DOWN",
+  " ": "ACTION",
+  "Enter": "ACTION",
+  "Escape": "MENU",
+  "p": "DEBUG_CONTEXT_LOSS",
+  "0": "SCALE_RESET",
+  "-": "SCALE_DECREASE",
+  "+": "SCALE_INCREASE",
+  "1": "PREV_ENTITY",
+  "2": "NEXT_ENTITY"
+}

@@ -3,20 +3,22 @@ import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
 import {XY} from '../../math/xy'
 
-export interface MousePickInput extends Input {
-  readonly source: InputSource.MOUSE_PICK
+export namespace MouseInput {
+  export interface Pick extends Input {
+    readonly source: InputSource.MOUSE_PICK
 
-  readonly bits: InputBit.PICK | 0
+    readonly bits: InputBit.PICK | 0
 
-  /** The fractional position of the input in level coordinates. */
-  readonly xy: XY
-}
+    /** The fractional position of the input in level coordinates. */
+    readonly xy: XY
+  }
 
-export interface MousePointInput extends Input {
-  readonly source: InputSource.MOUSE_POINT
+  export interface Point extends Input {
+    readonly source: InputSource.MOUSE_POINT
 
-  readonly bits: InputBit.POINT | 0
+    readonly bits: InputBit.POINT | 0
 
-  /** The fractional position of the input in level coordinates. */
-  readonly xy: XY
+    /** The fractional position of the input in level coordinates. */
+    readonly xy: XY
+  }
 }
