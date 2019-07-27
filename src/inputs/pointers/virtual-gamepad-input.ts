@@ -26,20 +26,18 @@ export interface VirtualJoystickAxesInput extends Input {
   /** The normalized components of the axes in [-1, 1]. */
   readonly normal: XY
 
-  /**
-   * The nonnegative fractional length from the center of the stick to the
-   * center of the base. This value may exceed the radius of the joystick base
-   * and should be capped when calculating stick render location.
-   *
-   * The product of each normalized component and the radius would be the
-   * position of the stick on the perimeter. If the lesser length of the radius
-   * and the magnitude is used instead, the stick may be positioned anywhere
-   * within the radius.
-   *
-   * Truncate the results when rendering to avoid possible asymmetry in the
-   * limits of the stick. For example, the stick may be allowed to extend one
-   * pixel further on two sides.
-   */
+  /** The nonnegative fractional length from the center of the stick to the
+      center of the base. This value may exceed the radius of the joystick base
+      and should be capped when calculating stick render location.
+
+      The product of each normalized component and the radius would be the
+      position of the stick on the perimeter. If the lesser length of the radius
+      and the magnitude is used instead, the stick may be positioned anywhere
+      within the radius.
+    
+      Truncate the results when rendering to avoid possible asymmetry in the
+      limits of the stick. For example, the stick may be allowed to extend one
+      pixel further on two sides. */
   readonly magnitude: number
 }
 

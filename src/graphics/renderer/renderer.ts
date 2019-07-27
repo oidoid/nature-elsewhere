@@ -113,11 +113,9 @@ export namespace Renderer {
     state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, verticesLen, len)
   }
 
-  /**
-   * @arg canvasWH The desired resolution of the canvas in CSS pixels. E.g.,
-   *               {w: window.innerWidth, h: window.innerHeight}.
-   * @arg scale Positive integer zoom.
-   */
+  /** @arg canvasWH The desired resolution of the canvas in CSS pixels. E.g.,
+                    {w: window.innerWidth, h: window.innerHeight}.
+      @arg scale Positive integer zoom. */
   function resize(
     {gl, layout, uniforms, projection}: Renderer,
     canvasWH: WH,
@@ -133,11 +131,11 @@ export namespace Renderer {
     const ratio = {w: 2 / cam.w, h: 2 / cam.h}
     // prettier-ignore
     projection.set([
-    ratio.w,        0, 0, -1 - cam.x * ratio.w,
-          0, -ratio.h, 0,  1 + cam.y * ratio.h,
-          0,        0, 1,                    0,
-          0,        0, 0,                    1
-  ])
+      ratio.w,        0, 0, -1 - cam.x * ratio.w,
+            0, -ratio.h, 0,  1 + cam.y * ratio.h,
+            0,        0, 1,                    0,
+            0,        0, 0,                    1
+    ])
     gl.uniformMatrix4fv(uniforms[layout.uniforms.projection], false, projection)
 
     // The viewport is a rendered in physical pixels. It's intentional to use the

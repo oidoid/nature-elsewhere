@@ -3,15 +3,15 @@ import {NumberUtil} from '../math/number-util'
 
 export interface Animator {
   /** Cel index oscillation state. This integer may fall outside of animation
-   *  bounds depending on the animation interval selected by direction. This
-   *  value should be carried over from each call unless the cel is manually
-   *  set. Any integer in [0, len - 1] is always valid. */
+      bounds depending on the animation interval selected by direction. This
+      value should be carried over from each call unless the cel is manually
+      set. Any integer in [0, len - 1] is always valid. */
   readonly period: number
 
   /** Current cel exposure in milliseconds. When the value meets or exceeds the
-   *  cel's exposure duration, the cel is advanced according to direction. This
-   *  value should be carried over from each call with the current time step
-   *  added, and zeroed on manual cel change. */
+      cel's exposure duration, the cel is advanced according to direction. This
+      value should be carried over from each call with the current time step
+      added, and zeroed on manual cel change. */
   readonly exposure: number
 }
 

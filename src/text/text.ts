@@ -108,9 +108,9 @@ function layoutNewline({y}: XY, scale: XY): Text.Layout {
 }
 
 /** @arg {x,y} The cursor offset in pixels.
- *  @arg width The allowed layout width in pixels.
- *  @arg span The distance in pixels from the start of the current letter to the
- *            start of the next including scale. */
+    @arg width The allowed layout width in pixels.
+    @arg span The distance in pixels from the start of the current letter to the
+              start of the next including scale. */
 function layoutSpace(
   {x, y}: XY,
   width: number,
