@@ -1,6 +1,6 @@
-import {State as Renderer} from './renderer'
+import {Renderer} from './renderer'
 
-export interface State {
+export interface RendererStateMachine {
   readonly window: Window
   readonly canvas: HTMLCanvasElement
   renderer: Renderer
@@ -10,29 +10,35 @@ export interface State {
   onEvent(event: Event): void
 }
 
-export function make(start: Omit<State, 'renderer' | 'onEvent'>): State {
-  const state = {onEvent: (event: Event) => onEvent(<State>state, event)}
-  return Object.assign(state, start, {renderer: start.newRenderer()})
+export namespace RendererStateMachine {
+  export function make(
+    start: Omit<RendererStateMachine, 'renderer' | 'onEvent'>
+  ): RendererStateMachine {
+    const state = {
+      onEvent: (event: Event) => onEvent(<RendererStateMachine>state, event)
+    }
+    return Object.assign(state, start, {renderer: start.newRenderer()})
+  }
+
+  export function start(state: RendererStateMachine): void {
+    register(state, true), loop(state)
+  }
+
+  export function stop(state: RendererStateMachine): void {
+    if (state.frameID) state.window.cancelAnimationFrame(state.frameID)
+    delete state.frameID
+    register(state, false)
+  }
 }
 
-export function start(state: State): void {
-  register(state, true), loop(state)
-}
-
-export function stop(state: State): void {
-  if (state.frameID) state.window.cancelAnimationFrame(state.frameID)
-  delete state.frameID
-  register(state, false)
-}
-
-function onEvent(state: State, event: Event): void {
+function onEvent(state: RendererStateMachine, event: Event): void {
   if (event.type === 'webglcontextrestored')
     state.renderer = state.newRenderer()
   if (!state.frameID) loop(state)
   event.preventDefault()
 }
 
-function loop(state: State, then?: number): void {
+function loop(state: RendererStateMachine, then?: number): void {
   state.frameID = state.window.requestAnimationFrame(now => {
     if (state.window.document.hasFocus() && !state.renderer.gl.isContextLost())
       state.onFrame(then || now, now), loop(state, now)
@@ -40,7 +46,7 @@ function loop(state: State, then?: number): void {
   })
 }
 
-function register(state: State, register: boolean): void {
+function register(state: RendererStateMachine, register: boolean): void {
   const fnc = register ? 'addEventListener' : 'removeEventListener'
   state.canvas[fnc]('webglcontextrestored', state.onEvent)
   state.canvas[fnc]('webglcontextlost', state.onEvent)

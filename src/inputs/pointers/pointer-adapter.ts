@@ -1,14 +1,16 @@
-import * as ArrayUtil from '../../utils/array-util'
+import {ArrayUtil} from '../../utils/array-util'
 import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
 import {MousePickInput, MousePointInput} from './mouse-input'
-import * as Viewport from '../../graphics/viewport'
+import {Rect} from '../../math/rect'
+import {Viewport} from '../../graphics/viewport'
 import {
   VirtualButtonsPressedInput,
   VirtualJoystickAxesInput,
   VirtualJoystickPositionInput
 } from './virtual-gamepad-input'
-import * as XY from '../../math/xy'
+import {WH} from '../../math/wh'
+import {XY} from '../../math/xy'
 
 type DownInput =
   | MousePickInput

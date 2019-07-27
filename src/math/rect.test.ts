@@ -1,4 +1,4 @@
-import * as Rect from './rect'
+import {Rect} from './rect'
 
 /** [
       diagram: string,

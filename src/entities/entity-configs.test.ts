@@ -1,10 +1,10 @@
 import {AnimationID} from '../images/animation-id'
-import * as ArrayUtil from '../utils/array-util'
+import {ArrayUtil} from '../utils/array-util'
 import {EntityConfigs} from './entity-configs'
 import {EntityID} from './entity-id'
 import {ImageConfig} from '../images/image-config'
 import {Layer} from '../images/layer'
-import * as ObjectUtil from '../utils/object-util'
+import {ObjectUtil} from '../utils/object-util'
 
 const ids: readonly string[] = Object.freeze(
   ObjectUtil.values(EntityConfigs)

@@ -1,15 +1,17 @@
 import {WindowModeSetting} from './window-mode-setting'
 import {ZoomMultiplierSetting} from './zoom-multiplier-setting'
 
-export interface State {
+export interface Settings {
   readonly zoomMultiplier: ZoomMultiplierSetting
   readonly windowMode: WindowModeSetting
 }
 
-export const defaults: State = Object.freeze({
-  zoomMultiplier: ZoomMultiplierSetting.MAX,
-  windowMode:
-    process.env.NODE_ENV === 'development'
-      ? WindowModeSetting.WINDOWED
-      : WindowModeSetting.FULLSCREEN
-})
+export namespace Settings {
+  export const defaults: Settings = Object.freeze({
+    zoomMultiplier: ZoomMultiplierSetting.MAX,
+    windowMode:
+      process.env.NODE_ENV === 'development'
+        ? WindowModeSetting.WINDOWED
+        : WindowModeSetting.FULLSCREEN
+  })
+}

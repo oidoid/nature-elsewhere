@@ -1,10 +1,10 @@
 import {AnimationID} from './animation-id'
-import * as Atlas from '../atlas/atlas'
+import {Atlas} from '../atlas/atlas'
 import * as atlasJSON from '../assets/atlas/atlas.json'
-import * as AtlasParser from '../atlas/atlas-parser'
-import * as ObjectUtil from '../utils/object-util'
+import {AtlasParser} from '../atlas/atlas-parser'
+import {ObjectUtil} from '../utils/object-util'
 
-const atlas: Atlas.State = Object.freeze(AtlasParser.parse(atlasJSON))
+const atlas: Atlas = Object.freeze(AtlasParser.parse(atlasJSON))
 const ids: readonly (keyof typeof AnimationID)[] = Object.freeze(
   ObjectUtil.keys(AnimationID)
 )

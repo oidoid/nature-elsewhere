@@ -1,5 +1,5 @@
 import {InputBit} from './input-bit'
-import * as ObjectUtil from '../utils/object-util'
+import {ObjectUtil} from '../utils/object-util'
 
 const bits: readonly InputBit[] = Object.freeze(
   ObjectUtil.values(InputBit).filter(val => typeof val === 'number')

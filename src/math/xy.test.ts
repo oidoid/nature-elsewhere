@@ -1,4 +1,4 @@
-import * as XY from './xy'
+import {XY} from './xy'
 
 describe('max()', () => {
   test.each([

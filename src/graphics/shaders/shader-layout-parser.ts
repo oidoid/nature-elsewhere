@@ -1,10 +1,6 @@
-import {AttributeConfig, ShaderConfig} from './shader-config'
-import * as NumberUtil from '../../math/number-util'
-import {
-  ShaderAttribute,
-  ShaderAttributeBufferLayout,
-  ShaderLayout
-} from './shader-layout'
+import {ShaderConfig} from './shader-config'
+import {NumberUtil} from '../../math/number-util'
+import {ShaderLayout} from './shader-layout'
 
 const dataTypeSize: Readonly<Record<GLDataType, number>> = Object.freeze({
   BYTE: 1,
@@ -16,18 +12,20 @@ const dataTypeSize: Readonly<Record<GLDataType, number>> = Object.freeze({
   FLOAT: 4
 })
 
-export function parse(config: ShaderConfig): ShaderLayout {
-  return {
-    uniforms: config.uniforms,
-    perVertex: parseAttributes(0, config.perVertex),
-    perInstance: parseAttributes(1, config.perInstance)
+export namespace ShaderLayoutParser {
+  export function parse(config: ShaderConfig): ShaderLayout {
+    return {
+      uniforms: config.uniforms,
+      perVertex: parseAttributes(0, config.perVertex),
+      perInstance: parseAttributes(1, config.perInstance)
+    }
   }
 }
 
 function parseAttributes(
   divisor: number,
-  configs: readonly AttributeConfig[]
-): ShaderAttributeBufferLayout {
+  configs: readonly ShaderConfig.Attribute[]
+): ShaderLayout.AttributeBuffer {
   const attributes = configs.reduce(reduceAttributeVariable, [])
   const maxDataTypeSize = attributes
     .map(({type}) => dataTypeSize[type])
@@ -42,14 +40,18 @@ function parseAttributes(
 }
 
 function reduceAttributeVariable(
-  layouts: readonly ShaderAttribute[],
-  {type, name, len}: AttributeConfig,
+  layouts: readonly ShaderLayout.Attribute[],
+  {type, name, len}: ShaderConfig.Attribute,
   index: number
-): readonly ShaderAttribute[] {
+): readonly ShaderLayout.Attribute[] {
   const offset = index ? nextAttributeOffset(layouts[index - 1]) : 0
   return layouts.concat({type: <GLDataType>type, name, len, offset})
 }
 
-function nextAttributeOffset({offset, type, len}: ShaderAttribute): number {
+function nextAttributeOffset({
+  offset,
+  type,
+  len
+}: ShaderLayout.Attribute): number {
   return offset + dataTypeSize[type] * len
 }

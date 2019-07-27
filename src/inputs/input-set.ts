@@ -1,10 +1,10 @@
-import * as ArrayUtil from '../utils/array-util'
+import {ArrayUtil} from '../utils/array-util'
 import {GamepadInput} from './gamepads/gamepad-input'
 import {InputBit} from './input-bit'
 import {InputSource} from './input-source'
 import {KeyboardInput} from './keyboards/keyboard-input'
 import {MousePickInput, MousePointInput} from './pointers/mouse-input'
-import * as ObjectUtil from '../utils/object-util'
+import {ObjectUtil} from '../utils/object-util'
 import {
   VirtualButtonsPositionInput,
   VirtualButtonsPressedInput,

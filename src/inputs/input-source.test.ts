@@ -1,5 +1,5 @@
 import {InputSource} from './input-source'
-import * as ObjectUtil from '../utils/object-util'
+import {ObjectUtil} from '../utils/object-util'
 
 const sources: readonly InputSource[] = Object.freeze(
   ObjectUtil.values(InputSource).filter(val => typeof val === 'number')

@@ -1,9 +1,9 @@
-import * as ArrayUtil from '../utils/array-util'
-import * as Aseprite from './aseprite'
-import * as Atlas from './atlas'
+import {ArrayUtil} from '../utils/array-util'
+import {Aseprite} from './aseprite'
+import {Atlas} from './atlas'
 import * as atlasJSON from '../assets/atlas/atlas.json'
-import * as AtlasParser from './atlas-parser'
-import * as ObjectUtil from '../utils/object-util'
+import {AtlasParser} from './atlas-parser'
+import {ObjectUtil} from '../utils/object-util'
 
 describe('atlas.json', () => {
   const file = Object.freeze(atlasJSON)

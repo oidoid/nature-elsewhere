@@ -1,5 +1,8 @@
 import {PointerAdapter} from './pointer-adapter'
 import {Recorder} from '../recorder'
+import {Rect} from '../../math/rect'
+import {WH} from '../../math/wh'
+import {XY} from '../../math/xy'
 
 export class PointerRecorder {
   constructor(

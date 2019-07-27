@@ -1,7 +1,10 @@
-import * as GamepadRecorder from './gamepads/gamepad-recorder'
+import {GamepadRecorder} from './gamepads/gamepad-recorder'
 import {KeyboardRecorder} from './keyboards/keyboard-recorder'
 import {PointerRecorder} from './pointers/pointer-recorder'
 import {Recorder} from './recorder'
+import {Rect} from '../math/rect'
+import {WH} from '../math/wh'
+import {XY} from '../math/xy'
 
 export class InputRouter {
   private _registered: boolean = false

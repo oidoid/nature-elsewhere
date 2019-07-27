@@ -1,30 +1,29 @@
 import {AnimationID} from '../images/animation-id'
-import * as Atlas from '../atlas/atlas'
-import * as Entity from './entity'
+import {Atlas} from '../atlas/atlas'
+import {Entity} from './entity'
 import {EntityConfig} from './entity-config'
 import {EntityConfigs} from './entity-configs'
 import {EntityID} from './entity-id'
-import * as Image from '../images/image'
-import * as ImageRect from '../images/image-rect'
+import {Image} from '../images/image'
+import {ImageRect} from '../images/image-rect'
 import {Layer} from '../images/layer'
-import * as Text from '../text/text'
+import {Text} from '../text/text'
 
 const factory: Partial<
-  Record<
-    keyof typeof EntityID,
-    (entity: Entity.State) => readonly Readonly<Image.State>[]
-  >
+  Record<keyof typeof EntityID, (entity: Entity) => readonly Readonly<Image>[]>
 > = Object.freeze({
   TEXT_DATE_VERSION_HASH: newTextDateVersionHash
 })
 
-export function parse(atlas: Atlas.State, cfg: EntityConfig): Entity.State {
-  const state = defaultState(cfg)
-  const images = (factory[state.id] || newStandardEntity)(state)
-  return {...state, ...Image.target(atlas, ...images), images}
+export namespace EntityParser {
+  export function parse(atlas: Atlas, cfg: EntityConfig): Entity {
+    const state = defaultState(cfg)
+    const images = (factory[state.id] || newStandardEntity)(state)
+    return {...state, ...Image.target(atlas, ...images), images}
+  }
 }
 
-function defaultState(cfg: EntityConfig): Entity.State {
+function defaultState(cfg: EntityConfig): Entity {
   if (!isEntityIDKey(cfg.id))
     throw new Error(`"${cfg.id}" is not a key of EntityID.`)
   return Object.assign(
@@ -43,12 +42,11 @@ function defaultState(cfg: EntityConfig): Entity.State {
     cfg
   )
 }
-
 function isEntityIDKey(val: string): val is keyof typeof EntityID {
   return val in EntityID
 }
 
-function newStandardEntity({id, x, y}: Entity.State): Readonly<Image.State>[] {
+function newStandardEntity({id, x, y}: Entity): Readonly<Image>[] {
   const config = EntityConfigs[id]
   if (!config) throw new Error(`${id} is not a standard entity.`)
 
@@ -63,9 +61,7 @@ function newStandardEntity({id, x, y}: Entity.State): Readonly<Image.State>[] {
   return images
 }
 
-function newTextDateVersionHash(
-  entity: Entity.State
-): readonly Readonly<Image.State>[] {
+function newTextDateVersionHash(entity: Entity): readonly Readonly<Image>[] {
   const {date, version, hash} = process.env
   return Text.toImages(`${date} v${version} (${hash})`, entity)
 }

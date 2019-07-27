@@ -1,6 +1,7 @@
 import {Input} from '../input'
 import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
+import {XY} from '../../math/xy'
 
 export interface VirtualJoystickPositionInput extends Input {
   readonly source: InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION

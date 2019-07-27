@@ -1,4 +1,4 @@
-import * as ObjectUtil from '../utils/object-util'
+import {ObjectUtil} from '../utils/object-util'
 
 /** Atlas AnimationIDs are Aseprite Tags and correspond to AtlasAnimations. */
 export enum AnimationID {

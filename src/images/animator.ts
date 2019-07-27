@@ -1,7 +1,7 @@
-import * as Atlas from '../atlas/atlas'
-import * as NumberUtil from '../math/number-util'
+import {Atlas} from '../atlas/atlas'
+import {NumberUtil} from '../math/number-util'
 
-export interface State {
+export interface Animator {
   /** Cel index oscillation state. This integer may fall outside of animation
    *  bounds depending on the animation interval selected by direction. This
    *  value should be carried over from each call unless the cel is manually
@@ -15,21 +15,23 @@ export interface State {
   readonly exposure: number
 }
 
-export function animate(
-  {cels, direction, duration}: Atlas.Animation,
-  period: number,
-  exposure: number
-): State {
-  exposure = exposure % duration
-  while (exposure >= cels[index(cels, period)].duration) {
-    exposure -= cels[index(cels, period)].duration
-    period = Period[direction](period, cels.length)
+export namespace Animator {
+  export function animate(
+    {cels, direction, duration}: Atlas.Animation,
+    period: number,
+    exposure: number
+  ): Animator {
+    exposure = exposure % duration
+    while (exposure >= cels[index(cels, period)].duration) {
+      exposure -= cels[index(cels, period)].duration
+      period = Period[direction](period, cels.length)
+    }
+    return {period, exposure}
   }
-  return {period, exposure}
-}
 
-export function index(cels: readonly Atlas.Cel[], period: number): number {
-  return Math.abs(period % cels.length)
+  export function index(cels: readonly Atlas.Cel[], period: number): number {
+    return Math.abs(period % cels.length)
+  }
 }
 
 const Period: Readonly<

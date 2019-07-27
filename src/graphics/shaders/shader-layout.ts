@@ -1,19 +1,21 @@
 export interface ShaderLayout {
   readonly uniforms: Readonly<Record<string, string>>
-  readonly perVertex: ShaderAttributeBufferLayout
-  readonly perInstance: ShaderAttributeBufferLayout
+  readonly perVertex: ShaderLayout.AttributeBuffer
+  readonly perInstance: ShaderLayout.AttributeBuffer
 }
 
-export interface ShaderAttributeBufferLayout {
-  readonly len: number
-  readonly stride: number
-  readonly divisor: number
-  readonly attributes: readonly ShaderAttribute[]
-}
+export namespace ShaderLayout {
+  export interface AttributeBuffer {
+    readonly len: number
+    readonly stride: number
+    readonly divisor: number
+    readonly attributes: readonly Attribute[]
+  }
 
-export interface ShaderAttribute {
-  readonly type: GLDataType
-  readonly name: string
-  readonly len: number
-  readonly offset: number
+  export interface Attribute {
+    readonly type: GLDataType
+    readonly name: string
+    readonly len: number
+    readonly offset: number
+  }
 }

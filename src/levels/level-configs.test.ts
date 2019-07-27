@@ -1,9 +1,9 @@
-import * as ArrayUtil from '../utils/array-util'
+import {ArrayUtil} from '../utils/array-util'
 import {EntityConfig} from '../entities/entity-config'
 import {EntityID} from '../entities/entity-id'
 import {LevelConfigs} from './level-configs'
 import {LevelID} from './level-id'
-import * as ObjectUtil from '../utils/object-util'
+import {ObjectUtil} from '../utils/object-util'
 
 const ids: readonly string[] = Object.freeze(
   ObjectUtil.values(LevelConfigs)
