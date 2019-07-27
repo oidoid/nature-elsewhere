@@ -8,13 +8,13 @@ import {XY} from '../math/xy'
 /** Images and behavior. Bounds (x, y, w, and h members) are the union of all
     Entity images. This is used for quick collision detections such checking if
     the Entity is on screen. x and y are in in level coordinates. */
-export interface Entity extends Mutable<ImageRect & Rect> {
+export interface Entity extends ImageRect, Rect {
   readonly id: keyof typeof EntityID
   /** Random number initial value or variant. */
   readonly seed: number
-  inactive: boolean
-  velocity: Mutable<XY>
-  acceleration: Mutable<XY>
+  readonly inactive: boolean
+  readonly velocity: XY
+  readonly acceleration: XY
 }
 
 export namespace Entity {
