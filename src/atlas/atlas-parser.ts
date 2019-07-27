@@ -45,12 +45,8 @@ export namespace AtlasParser {
       duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
 
     const size = frames[`${frameTag.name} ${frameTag.from}`].sourceSize
-    return {
-      ...size,
-      cels,
-      duration,
-      direction: parseAnimationDirection(frameTag)
-    }
+    const direction = parseAnimationDirection(frameTag)
+    return {...size, cels, duration, direction}
   }
 
   export function parseAnimationDirection({

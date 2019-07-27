@@ -6,7 +6,7 @@ import {XY} from '../math/xy'
     coordinates. */
 export interface ImageRect extends XY {
   /** Image coordinates are not relative origin. */
-  readonly images: readonly Readonly<Image>[]
+  readonly images: readonly Image[]
 }
 
 export namespace ImageRect {
@@ -22,7 +22,7 @@ export namespace ImageRect {
   export function moveBy(
     origin: XY,
     {x, y}: XY,
-    ...images: readonly Image[]
+    ...images: readonly Mutable<Image>[]
   ): ImageRect {
     images.forEach(img => ((img.x += x), (img.y += y)))
     return {...XY.add(origin, {x, y}), images}

@@ -8,9 +8,9 @@ import {XY} from '../math/xy'
 /** A mapping from a source atlas subtexture to a position. The target region
     is used for rendering and collision detection. The image may be animated.
     Per Atlas.Animation, each Cel has the same size. */
-export interface Image extends Mutable<XY>, Mutable<Animator> {
-  id: keyof typeof AnimationID
-  layer: keyof typeof Layer
+export interface Image extends XY, Animator {
+  readonly id: keyof typeof AnimationID
+  readonly layer: keyof typeof Layer
 }
 
 export namespace Image {
@@ -27,11 +27,7 @@ export namespace Image {
 
   /** For sorting by draw order. E.g.,
     `images.sort((lhs, rhs) => Image.compare(atlas, lhs, rhs))`. */
-  export function compare(
-    atlas: Atlas,
-    lhs: Readonly<Image>,
-    rhs: Readonly<Image>
-  ): number {
+  export function compare(atlas: Atlas, lhs: Image, rhs: Image): number {
     const layer = Layer[lhs.layer] - Layer[rhs.layer]
     return layer || lhs.y + atlas[lhs.id].h - (rhs.y + atlas[rhs.id].h)
   }
@@ -43,17 +39,11 @@ export namespace Image {
     return Object.assign(state, animator)
   }
 
-  export function source(
-    {id, period}: Readonly<Image>,
-    atlas: Atlas
-  ): Atlas.Cel {
+  export function source({id, period}: Image, atlas: Atlas): Atlas.Cel {
     return atlas[id].cels[Animator.index(atlas[id].cels, period)]
   }
 
-  export function target(
-    atlas: Atlas,
-    ...images: readonly Readonly<Image>[]
-  ): Rect {
+  export function target(atlas: Atlas, ...images: readonly Image[]): Rect {
     return images
       .map(({x, y, id}) => ({x, y, w: atlas[id].w, h: atlas[id].h}))
       .reduce(Rect.union)

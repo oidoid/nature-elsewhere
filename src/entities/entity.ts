@@ -22,7 +22,7 @@ export namespace Entity {
     state: Entity,
     atlas: Atlas,
     time: number
-  ): readonly Readonly<Image>[] {
+  ): readonly Image[] {
     if (state.inactive) return state.images
     state.images.forEach(img => Image.animate(img, atlas, time))
     return state.images

@@ -10,7 +10,7 @@ import {Layer} from '../images/layer'
 import {Text} from '../text/text'
 
 const factory: Partial<
-  Record<keyof typeof EntityID, (entity: Entity) => readonly Readonly<Image>[]>
+  Record<keyof typeof EntityID, (entity: Entity) => readonly Image[]>
 > = Object.freeze({
   TEXT_DATE_VERSION_HASH: newTextDateVersionHash
 })
@@ -46,7 +46,7 @@ function isEntityIDKey(val: string): val is keyof typeof EntityID {
   return val in EntityID
 }
 
-function newStandardEntity({id, x, y}: Entity): Readonly<Image>[] {
+function newStandardEntity({id, x, y}: Entity): readonly Image[] {
   const config = EntityConfigs[id]
   if (!config) throw new Error(`${id} is not a standard entity.`)
 
@@ -61,7 +61,7 @@ function newStandardEntity({id, x, y}: Entity): Readonly<Image>[] {
   return images
 }
 
-function newTextDateVersionHash(entity: Entity): readonly Readonly<Image>[] {
+function newTextDateVersionHash(entity: Entity): readonly Image[] {
   const {date, version, hash} = process.env
   return Text.toImages(`${date} v${version} (${hash})`, entity)
 }
