@@ -17,3 +17,16 @@ export enum InputBit {
   POSITION_VIRTUAL_JOYSTICK = 0b0100_0000_0000_0000,
   POSITION_VIRTUAL_BUTTONS  = 0b1000_0000_0000_0000
 }
+
+export const InvertInputBitDirection: Readonly<
+  Partial<Record<keyof typeof InputBit, InputBit>>
+> = Object.freeze({
+  LEFT: InputBit.RIGHT,
+  RIGHT: InputBit.LEFT,
+  UP: InputBit.DOWN,
+  DOWN: InputBit.UP,
+  SCALE_INCREASE: InputBit.SCALE_DECREASE,
+  SCALE_DECREASE: InputBit.SCALE_INCREASE,
+  PREV_ENTITY: InputBit.NEXT_ENTITY,
+  NEXT_ENTITY: InputBit.PREV_ENTITY
+})
