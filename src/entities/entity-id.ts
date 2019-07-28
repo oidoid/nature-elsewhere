@@ -1,11 +1,13 @@
 export enum EntityID {
+  BEE,
   CAM,
   CLOUD,
   CONIFER,
   IMAGES,
   MOUNTAIN,
   PLAYER,
-  TEXT_DATE_VERSION_HASH
+  TEXT_DATE_VERSION_HASH,
+  TREE
 }
 
 export namespace EntityID {

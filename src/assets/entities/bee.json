@@ -1,0 +1,5 @@
+{
+  "id": "BEE",
+  "active": true,
+  "images": [{"id": "BEE"}, {"id": "BEE_SHADOW", "y": 2, "layer": "SHADOW"}]
+}

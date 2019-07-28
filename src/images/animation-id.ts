@@ -2,6 +2,8 @@ import {ObjectUtil} from '../utils/object-util'
 
 /** Atlas AnimationIDs are Aseprite Tags and correspond to AtlasAnimations. */
 export enum AnimationID {
+  BEE = 'bee ',
+  BEE_SHADOW = 'bee shadow',
   BACKGROUND = 'background ',
   CLOUD = 'cloud ',
   CLOUD_SHADOW = 'cloud shadow',
@@ -136,7 +138,9 @@ export enum AnimationID {
   MEM_FONT_126 = 'mem-font 126',
   MEM_FONT_127 = 'mem-font 127',
   MOUNTAIN = 'mountain ',
-  MOUNTAIN_SHADOW = 'mountain shadow'
+  MOUNTAIN_SHADOW = 'mountain shadow',
+  TREE = 'tree ',
+  TREE_SHADOW = 'tree shadow'
 }
 
 export const ReverseAnimationID: Readonly<

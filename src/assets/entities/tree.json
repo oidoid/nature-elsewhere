@@ -1,0 +1,4 @@
+{
+  "id": "TREE",
+  "images": [{"id": "TREE"}, {"id": "TREE_SHADOW", "y": 1, "layer": "SHADOW"}]
+}
