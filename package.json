@@ -15,7 +15,7 @@
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{css,json,html,md,js,ts}'",
     "build:atlas": "aseprite -b assets/images/*.aseprite --filename-format '{tag} {frame}' --list-tags --list-slices --data src/assets/atlas/atlas.json --sheet-pack --inner-padding 1 --sheet src/assets/atlas/atlas.png",
-    "palettize": "cd assets && find images -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
+    "palettize": "cd assets/images && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "5.0.0",
