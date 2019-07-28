@@ -35,8 +35,7 @@ export namespace Image {
     return {id, x, y, w, h, layer, period, exposure}
   }
 
-  /** For sorting by draw order. E.g.,
-      `images.sort((lhs, rhs) => Image.compare(atlas, lhs, rhs))`. */
+  /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */
   export function compare(lhs: Image, rhs: Image): number {
     const layer = Layer[lhs.layer] - Layer[rhs.layer]
     return layer || lhs.y + lhs.h - (rhs.y + rhs.h)

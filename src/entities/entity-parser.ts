@@ -48,8 +48,11 @@ function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
   return Object.assign({}, entity, cfg, {images})
 }
 
-function newTextDateVersionHash(atlas: Atlas, entity: Entity): Entity {
+function newTextDateVersionHash(
+  atlas: Atlas,
+  {x, y, ...entity}: Entity
+): Entity {
   const {date, version, hash} = process.env
-  const images = Text.toImages(atlas, `${date} v${version} (${hash})`, entity)
-  return {...entity, images}
+  const images = Text.toImages(atlas, `${date} v${version} (${hash})`, {x, y})
+  return {...entity, x, y, images}
 }
