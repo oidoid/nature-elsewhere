@@ -63,7 +63,7 @@ describe('parse()', () => {
   test('Converts Animations.', () => {
     const frameTags = [
       {name: 'cloud ', from: 0, to: 0, direction: 'forward'},
-      {name: 'background ', from: 1, to: 1, direction: 'forward'},
+      {name: 'palette red', from: 1, to: 1, direction: 'forward'},
       {name: 'conifer ', from: 2, to: 2, direction: 'forward'},
       {name: 'conifer shadow', from: 3, to: 3, direction: 'forward'}
     ]
@@ -76,7 +76,7 @@ describe('parse()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 1
       },
-      'background  1': {
+      'palette red 1': {
         frame: {x: 90, y: 54, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -108,7 +108,7 @@ describe('parse()', () => {
         keys: [{frame: 0, bounds: {x: 8, y: 12, w: 2, h: 3}}]
       },
       {
-        name: 'background ',
+        name: 'palette red',
         color: '#0000ffff',
         keys: [{frame: 0, bounds: {x: 7, y: 11, w: 3, h: 4}}]
       },
@@ -143,7 +143,7 @@ describe('parse()', () => {
         duration: 1,
         direction: 'forward'
       },
-      BACKGROUND: {
+      PALETTE_RED: {
         w: 16,
         h: 16,
         cels: [

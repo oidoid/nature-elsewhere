@@ -4,7 +4,6 @@ import {ObjectUtil} from '../utils/object-util'
 export enum AnimationID {
   BEE = 'bee ',
   BEE_SHADOW = 'bee shadow',
-  BACKGROUND = 'background ',
   CLOUD = 'cloud ',
   CLOUD_SHADOW = 'cloud shadow',
   CONIFER = 'conifer ',
@@ -139,6 +138,18 @@ export enum AnimationID {
   MEM_FONT_127 = 'mem-font 127',
   MOUNTAIN = 'mountain ',
   MOUNTAIN_SHADOW = 'mountain shadow',
+  PALETTE_TRANSPARENT = 'palette transparent',
+  PALETTE_WHITE = 'palette white',
+  PALETTE_PALE_GREEN = 'palette pale-green',
+  PALETTE_LIGHT_GREEN = 'palette light-green',
+  PALETTE_GREEN = 'palette green',
+  PALETTE_DARK_GREEN = 'palette dark-green',
+  PALETTE_BLACK = 'palette black',
+  PALETTE_GREY = 'palette grey',
+  PALETTE_BLUE = 'palette blue',
+  PALETTE_LIGHT_BLUE = 'palette light-blue',
+  PALETTE_RED = 'palette red',
+  PALETTE_ORANGE = 'palette orange',
   TREE = 'tree ',
   TREE_SHADOW = 'tree shadow'
 }

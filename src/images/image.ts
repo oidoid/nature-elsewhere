@@ -16,6 +16,8 @@ export interface Image extends Rect, Animator {
 export namespace Image {
   /** Specifying a different width or height scales the target. */
   export interface Config extends Partial<Rect>, Partial<Animator> {
+    /** If true, x is translated by width and width is negative. */
+    readonly flip?: boolean
     readonly layer?: Layer.Key
   }
 
@@ -24,6 +26,7 @@ export namespace Image {
     id: AnimationID.Key,
     {
       layer = 'DEFAULT',
+      flip = false,
       x = 0,
       y = 0,
       w = atlas[id].w,
@@ -32,6 +35,7 @@ export namespace Image {
       exposure = 0
     }: Config = {}
   ): Image {
+    if (flip) (x += w), (w *= -1)
     return {id, x, y, w, h, layer, period, exposure}
   }
 

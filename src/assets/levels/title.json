@@ -6,7 +6,9 @@
   "entities": [
     {
       "id": "IMAGES",
-      "images": [{"id": "BACKGROUND", "w": 32767, "h": 32767, "layer": "PLANE"}]
+      "images": [
+        {"id": "PALETTE_PALE_GREEN", "w": 32767, "h": 32767, "layer": "PLANE"}
+      ]
     },
     {"id": "TEXT_DATE_VERSION_HASH", "x": 1, "y": 123},
     {"id": "CLOUD", "x": 20, "y": 20},
