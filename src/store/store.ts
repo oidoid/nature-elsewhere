@@ -29,7 +29,7 @@ export namespace Store {
       .filter(entity => Rect.intersects(entity, cam))
       .map(entity => Entity.update(entity, atlas, milliseconds))
       .reduce((sum: Image[], val) => [...sum, ...val], [])
-      .sort((lhs, rhs) => Image.compare(atlas, lhs, rhs))
+      .sort((lhs, rhs) => Image.compare(lhs, rhs))
 
     const size = InstanceBuffer.size(layout, images.length)
     if (dat.byteLength < size) dat = InstanceBuffer.make(size * 2)

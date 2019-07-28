@@ -4,7 +4,11 @@
   "h": 128,
   "minSize": {"w": 128, "h": 128},
   "entities": [
-    {"id": "BACKGROUND"},
+    {
+      "id": "IMAGES",
+      "active": true,
+      "images": [{"id": "BACKGROUND", "w": 32767, "h": 32767, "layer": "PLANE"}]
+    },
     {"id": "TEXT_DATE_VERSION_HASH", "x": 1, "y": 123},
     {"id": "CLOUD", "x": 20, "y": 20},
     {"id": "CLOUD", "x": 30, "y": 28},

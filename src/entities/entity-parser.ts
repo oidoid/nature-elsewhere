@@ -11,7 +11,7 @@ import {Layer} from '../images/layer'
 import {Text} from '../text/text'
 
 const imagesFactory: Partial<
-  Record<EntityID.Key, (entity: Entity) => Entity>
+  Record<EntityID.Key, (atlas: Atlas, entity: Entity) => Entity>
 > = Object.freeze({TEXT_DATE_VERSION_HASH: newTextDateVersionHash})
 
 export namespace EntityParser {
@@ -20,9 +20,10 @@ export namespace EntityParser {
       throw new Error(`"${cfg.id}" is not a key of EntityID.`)
 
     const state = (imagesFactory[cfg.id] || newStandardEntity)(
+      atlas,
       Object.assign({id: cfg.id}, defaultEntity, cfg)
     )
-    return {...state, ...Image.target(atlas, ...state.images)}
+    return {...state, ...Image.target(...state.images)}
   }
 }
 
@@ -30,19 +31,25 @@ function isEntityIDKey(val: string): val is EntityID.Key {
   return val in EntityID
 }
 
-function newStandardEntity(entity: Entity): Entity {
+function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
   const cfg = EntityConfigs[entity.id]
   if (!cfg) throw new Error(`${entity.id} is not a standard entity.`)
 
-  const images = (cfg.images || []).map(({id, layer, ...cfg}) =>
-    Image.make(<AnimationID.Key>id, {...cfg, layer: <Layer.Key>layer})
+  const images = (cfg.images || [])
+    .concat(entity.images)
+    .map(({id, layer, ...cfg}) =>
+      Image.make(atlas, <AnimationID.Key>id, {...cfg, layer: <Layer.Key>layer})
+    )
+  ImageRect.moveBy(
+    {x: 0, y: 0, w: 0, h: 0},
+    {x: entity.x, y: entity.y},
+    ...images
   )
-  ImageRect.moveBy({x: 0, y: 0}, {x: entity.x, y: entity.y}, ...images)
   return Object.assign({}, entity, cfg, {images})
 }
 
-function newTextDateVersionHash(entity: Entity): Entity {
+function newTextDateVersionHash(atlas: Atlas, entity: Entity): Entity {
   const {date, version, hash} = process.env
-  const images = Text.toImages(`${date} v${version} (${hash})`, entity)
+  const images = Text.toImages(atlas, `${date} v${version} (${hash})`, entity)
   return {...entity, images}
 }

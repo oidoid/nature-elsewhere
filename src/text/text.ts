@@ -1,4 +1,5 @@
 import {AnimationID} from '../images/animation-id'
+import {Atlas} from '../atlas/atlas'
 import {Font} from './font'
 import {Image} from '../images/image'
 import * as memFont from '../assets/mem-font.json'
@@ -18,6 +19,7 @@ export namespace Text {
   /** @arg y The vertical scroll offset in pixels.
     @arg target The window size in pixels. */
   export function toImages(
+    atlas: Atlas,
     string: string,
     cfg: Image.Config = {},
     y: number = 0,
@@ -32,8 +34,8 @@ export namespace Text {
       if (nextLine(position.y, scale).y < y) continue
       if (position.y > y + h) break
 
-      const key = <AnimationID.Key>('MEM_FONT_' + string.charCodeAt(i))
-      const image = Image.make(key, {
+      const id = <AnimationID.Key>('MEM_FONT_' + string.charCodeAt(i))
+      const image = Image.make(atlas, id, {
         layer: 'UI_HIHI',
         ...cfg,
         x: (cfg.x || 0) + position.x,

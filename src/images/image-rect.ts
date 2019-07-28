@@ -4,37 +4,37 @@ import {XY} from '../math/xy'
 
 /** The upper-left of the rectangle describing the union of images in level
     coordinates. */
-export interface ImageRect extends XY {
+export interface ImageRect extends Rect {
   /** Image coordinates are not relative origin. */
   readonly images: readonly Image[]
 }
 
 export namespace ImageRect {
   export function moveTo(
-    origin: XY,
+    state: Rect,
     xy: XY,
     ...images: readonly Image[]
   ): ImageRect {
-    if (XY.equal(origin, xy)) return {...origin, images}
-    return moveBy(origin, XY.sub(xy, origin), ...images)
+    if (XY.equal(state, xy)) return {...state, images}
+    return moveBy(state, XY.sub(xy, state), ...images)
   }
 
   export function moveBy(
-    origin: XY,
+    state: Rect,
     {x, y}: XY,
     ...images: readonly Mutable<Image>[]
   ): ImageRect {
     images.forEach(img => ((img.x += x), (img.y += y)))
-    return {...XY.add(origin, {x, y}), images}
+    return {...Rect.add(state, {x, y, w: 0, h: 0}), images}
   }
 
   export function centerOn(
-    bounds: Rect,
+    state: Rect,
     rect: Rect,
     ...images: readonly Image[]
   ): ImageRect {
-    const x = Math.trunc(rect.x + rect.w / 2) - Math.trunc(bounds.w / 2)
-    const y = Math.trunc(rect.y + rect.h / 2) - Math.trunc(bounds.h / 2)
-    return moveTo(bounds, {x, y}, ...images)
+    const x = Math.trunc(rect.x + rect.w / 2) - Math.trunc(state.w / 2)
+    const y = Math.trunc(rect.y + rect.h / 2) - Math.trunc(state.h / 2)
+    return moveTo(state, {x, y}, ...images)
   }
 }
