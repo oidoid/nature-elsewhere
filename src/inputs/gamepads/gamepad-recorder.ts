@@ -6,10 +6,8 @@ import {Recorder} from '../recorder'
 
 export namespace GamepadRecorder {
   // [+-∞] --[Gamepad]--> [GamepadRecorder] --Input--> [Recorder]
-  export type ButtonMap = Readonly<
-    Partial<Record<string, keyof typeof InputBit>>
-  >
-  export type AxisMap = Readonly<Partial<Record<string, keyof typeof InputBit>>>
+  export type ButtonMap = Readonly<Partial<Record<string, InputBit.Key>>>
+  export type AxisMap = Readonly<Partial<Record<string, InputBit.Key>>>
 
   export function record(recorder: Recorder, navigator: Navigator): void {
     const gamepads = Array.from(navigator.getGamepads())

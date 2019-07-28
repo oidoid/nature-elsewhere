@@ -9,7 +9,7 @@ import {XY} from '../math/xy'
     Entity images. This is used for quick collision detections such checking if
     the Entity is on screen. x and y are in in level coordinates. */
 export interface Entity extends ImageRect, Rect {
-  readonly id: keyof typeof EntityID
+  readonly id: EntityID.Key
   /** Random number initial value or variant. */
   readonly seed: number
   readonly inactive: boolean

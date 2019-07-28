@@ -10,7 +10,7 @@ import {Layer} from '../images/layer'
 import {Text} from '../text/text'
 
 const factory: Partial<
-  Record<keyof typeof EntityID, (entity: Entity) => readonly Image[]>
+  Record<EntityID.Key, (entity: Entity) => readonly Image[]>
 > = Object.freeze({
   TEXT_DATE_VERSION_HASH: newTextDateVersionHash
 })
@@ -42,7 +42,7 @@ function defaultState(cfg: EntityConfig): Entity {
     cfg
   )
 }
-function isEntityIDKey(val: string): val is keyof typeof EntityID {
+function isEntityIDKey(val: string): val is EntityID.Key {
   return val in EntityID
 }
 
@@ -51,10 +51,7 @@ function newStandardEntity({id, x, y}: Entity): readonly Image[] {
   if (!config) throw new Error(`${id} is not a standard entity.`)
 
   const images = (config.images || []).map(({id, layer, ...cfg}) =>
-    Image.make(<keyof typeof AnimationID>id, {
-      ...cfg,
-      layer: <keyof typeof Layer>(<any>layer)
-    })
+    Image.make(<AnimationID.Key>id, {...cfg, layer: <Layer.Key>layer})
   )
   ImageRect.moveBy({x: 0, y: 0}, {x: x || 0, y: y || 0}, ...images)
 

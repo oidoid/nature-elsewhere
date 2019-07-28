@@ -142,3 +142,7 @@ export enum AnimationID {
 export const ReverseAnimationID: Readonly<
   Readonly<Reverse<typeof AnimationID>>
 > = Object.freeze(ObjectUtil.reverse(AnimationID))
+
+export namespace AnimationID {
+  export type Key = keyof typeof AnimationID
+}

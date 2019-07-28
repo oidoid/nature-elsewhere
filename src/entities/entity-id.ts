@@ -7,3 +7,7 @@ export enum EntityID {
   PLAYER,
   TEXT_DATE_VERSION_HASH
 }
+
+export namespace EntityID {
+  export type Key = keyof typeof EntityID
+}

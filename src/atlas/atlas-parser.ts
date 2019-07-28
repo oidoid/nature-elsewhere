@@ -18,7 +18,7 @@ export namespace AtlasParser {
 
   export function parseAnimationIDKey({
     name
-  }: Aseprite.FrameTag): keyof typeof AnimationID {
+  }: Aseprite.FrameTag): AnimationID.Key {
     if (isAnimationID(name)) return ReverseAnimationID[name]
     throw new Error(`"${name}" is not an AnimationID key.`)
   }

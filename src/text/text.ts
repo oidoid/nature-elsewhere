@@ -32,7 +32,7 @@ export namespace Text {
       if (nextLine(position.y, scale).y < y) continue
       if (position.y > y + h) break
 
-      const key = <keyof typeof AnimationID>('MEM_FONT_' + string.charCodeAt(i))
+      const key = <AnimationID.Key>('MEM_FONT_' + string.charCodeAt(i))
       const image = Image.make(key, {
         layer: 'UI_HIHI',
         ...cfg,

@@ -4,7 +4,7 @@ import {Rect} from '../math/rect'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
 
-export type Atlas = Readonly<Record<keyof typeof AnimationID, Atlas.Animation>>
+export type Atlas = Readonly<Record<AnimationID.Key, Atlas.Animation>>
 
 export namespace Atlas {
   /** Animation and collision frames. Dimensions are identical for every cel and

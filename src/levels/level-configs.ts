@@ -3,5 +3,5 @@ import {LevelID} from './level-id.js'
 import * as title from '../assets/levels/title.json'
 
 export const LevelConfigs: Readonly<
-  Record<keyof typeof LevelID, LevelConfig>
+  Record<LevelID.Key, LevelConfig>
 > = Object.freeze({TITLE: title})

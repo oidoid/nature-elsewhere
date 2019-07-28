@@ -6,7 +6,7 @@ import {EntityID} from './entity-id.js'
 import * as mountain from '../assets/entities/mountain.json'
 
 export const EntityConfigs: Readonly<
-  Partial<Record<keyof typeof EntityID, EntityConfig>>
+  Partial<Record<EntityID.Key, EntityConfig>>
 > = Object.freeze({
   BACKGROUND: background,
   CLOUD: cloud,

@@ -19,7 +19,7 @@ export enum InputBit {
 }
 
 export const InvertInputBitDirection: Readonly<
-  Partial<Record<keyof typeof InputBit, InputBit>>
+  Partial<Record<InputBit.Key, InputBit>>
 > = Object.freeze({
   LEFT: InputBit.RIGHT,
   RIGHT: InputBit.LEFT,
@@ -30,3 +30,7 @@ export const InvertInputBitDirection: Readonly<
   PREV_ENTITY: InputBit.NEXT_ENTITY,
   NEXT_ENTITY: InputBit.PREV_ENTITY
 })
+
+export namespace InputBit {
+  export type Key = keyof typeof InputBit
+}

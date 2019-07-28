@@ -21,3 +21,7 @@ export enum Layer {
   UI_HI = 0x44,
   UI_HIHI = 0x48
 }
+
+export namespace Layer {
+  export type Key = keyof typeof Layer
+}

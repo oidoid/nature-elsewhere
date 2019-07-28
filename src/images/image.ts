@@ -9,17 +9,17 @@ import {XY} from '../math/xy'
     is used for rendering and collision detection. The image may be animated.
     Per Atlas.Animation, each Cel has the same size. */
 export interface Image extends XY, Animator {
-  readonly id: keyof typeof AnimationID
-  readonly layer: keyof typeof Layer
+  readonly id: AnimationID.Key
+  readonly layer: Layer.Key
 }
 
 export namespace Image {
   export interface Config extends Partial<XY>, Partial<Animator> {
-    readonly layer?: keyof typeof Layer
+    readonly layer?: Layer.Key
   }
 
   export function make(
-    id: keyof typeof AnimationID,
+    id: AnimationID.Key,
     {layer = 'DEFAULT', x = 0, y = 0, period = 0, exposure = 0}: Config = {}
   ): Image {
     return {id, x, y, layer, period, exposure}

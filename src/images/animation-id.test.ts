@@ -5,7 +5,7 @@ import {AtlasParser} from '../atlas/atlas-parser'
 import {ObjectUtil} from '../utils/object-util'
 
 const atlas: Atlas = Object.freeze(AtlasParser.parse(atlasJSON))
-const ids: readonly (keyof typeof AnimationID)[] = Object.freeze(
+const ids: readonly AnimationID.Key[] = Object.freeze(
   ObjectUtil.keys(AnimationID)
 )
 

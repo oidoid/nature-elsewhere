@@ -4,7 +4,7 @@ import {KeyboardAdapter} from './keyboard-adapter'
 import {Recorder} from '../recorder'
 
 type Key = KeyboardEvent['key']
-type KeyMap = Readonly<Partial<Record<Key, keyof typeof InputBit>>>
+type KeyMap = Readonly<Partial<Record<Key, InputBit.Key>>>
 
 export class KeyboardRecorder {
   constructor(

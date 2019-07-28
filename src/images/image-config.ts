@@ -4,6 +4,6 @@ import {Layer} from '../images/layer'
 import {XY} from '../math/xy'
 
 export interface ImageConfig extends Partial<XY>, Partial<Animator> {
-  readonly id: keyof typeof AnimationID | string
-  readonly layer?: keyof typeof Layer | string
+  readonly id: AnimationID.Key | string
+  readonly layer?: Layer.Key | string
 }
