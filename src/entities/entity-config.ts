@@ -5,7 +5,7 @@ import {XY} from '../math/xy'
 export interface EntityConfig extends Partial<XY> {
   readonly id: EntityID.Key | string
   readonly seed?: number
-  readonly inactive?: boolean
+  readonly active?: boolean
   readonly velocity?: Partial<XY>
   readonly acceleration?: Partial<XY>
   readonly images?: ImageConfig[]

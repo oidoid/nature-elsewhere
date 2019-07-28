@@ -12,7 +12,7 @@ export interface Entity extends ImageRect, Rect {
   readonly id: EntityID.Key
   /** Random number initial value or variant. */
   readonly seed: number
-  readonly inactive: boolean
+  readonly active: boolean
   readonly velocity: XY
   readonly acceleration: XY
 }
@@ -23,7 +23,7 @@ export namespace Entity {
     atlas: Atlas,
     time: number
   ): readonly Image[] {
-    if (state.inactive) return state.images
+    if (!state.active) return state.images
     state.images.forEach(img => Image.animate(img, atlas, time))
     return state.images
   }

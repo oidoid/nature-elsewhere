@@ -1,5 +1,5 @@
 {
   "id": "BACKGROUND",
-  "inactive": true,
+  "active": true,
   "images": [{"id": "BACKGROUND", "layer": "PLANE"}]
 }

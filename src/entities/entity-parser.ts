@@ -1,5 +1,6 @@
 import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../atlas/atlas'
+import * as defaultEntity from '../assets/entities/default.json'
 import {Entity} from './entity'
 import {EntityConfig} from './entity-config'
 import {EntityConfigs} from './entity-configs'
@@ -9,56 +10,39 @@ import {ImageRect} from '../images/image-rect'
 import {Layer} from '../images/layer'
 import {Text} from '../text/text'
 
-const factory: Partial<
-  Record<EntityID.Key, (entity: Entity) => readonly Image[]>
-> = Object.freeze({
-  TEXT_DATE_VERSION_HASH: newTextDateVersionHash
-})
+const imagesFactory: Partial<
+  Record<EntityID.Key, (entity: Entity) => Entity>
+> = Object.freeze({TEXT_DATE_VERSION_HASH: newTextDateVersionHash})
 
 export namespace EntityParser {
   export function parse(atlas: Atlas, cfg: EntityConfig): Entity {
-    const state = defaultState(cfg)
-    const images = (factory[state.id] || newStandardEntity)(state)
-    return {...state, ...Image.target(atlas, ...images), images}
+    if (!isEntityIDKey(cfg.id))
+      throw new Error(`"${cfg.id}" is not a key of EntityID.`)
+
+    const state = (imagesFactory[cfg.id] || newStandardEntity)(
+      Object.assign({id: cfg.id}, defaultEntity, cfg)
+    )
+    return {...state, ...Image.target(atlas, ...state.images)}
   }
 }
 
-function defaultState(cfg: EntityConfig): Entity {
-  if (!isEntityIDKey(cfg.id))
-    throw new Error(`"${cfg.id}" is not a key of EntityID.`)
-  return Object.assign(
-    {
-      id: cfg.id,
-      seed: 0,
-      inactive: false,
-      x: 0,
-      y: 0,
-      w: 0,
-      h: 0,
-      velocity: {x: 0, y: 0},
-      acceleration: {x: 0, y: 0},
-      images: []
-    },
-    cfg
-  )
-}
 function isEntityIDKey(val: string): val is EntityID.Key {
   return val in EntityID
 }
 
-function newStandardEntity({id, x, y}: Entity): readonly Image[] {
-  const config = EntityConfigs[id]
-  if (!config) throw new Error(`${id} is not a standard entity.`)
+function newStandardEntity(entity: Entity): Entity {
+  const cfg = EntityConfigs[entity.id]
+  if (!cfg) throw new Error(`${entity.id} is not a standard entity.`)
 
-  const images = (config.images || []).map(({id, layer, ...cfg}) =>
+  const images = (cfg.images || []).map(({id, layer, ...cfg}) =>
     Image.make(<AnimationID.Key>id, {...cfg, layer: <Layer.Key>layer})
   )
-  ImageRect.moveBy({x: 0, y: 0}, {x: x || 0, y: y || 0}, ...images)
-
-  return images
+  ImageRect.moveBy({x: 0, y: 0}, {x: entity.x, y: entity.y}, ...images)
+  return Object.assign({}, entity, cfg, {images})
 }
 
-function newTextDateVersionHash(entity: Entity): readonly Image[] {
+function newTextDateVersionHash(entity: Entity): Entity {
   const {date, version, hash} = process.env
-  return Text.toImages(`${date} v${version} (${hash})`, entity)
+  const images = Text.toImages(`${date} v${version} (${hash})`, entity)
+  return {...entity, images}
 }
