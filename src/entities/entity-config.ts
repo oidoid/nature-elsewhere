@@ -6,7 +6,9 @@ export interface EntityConfig extends Partial<XY> {
   readonly id: EntityID.Key | string
   readonly seed?: number
   readonly active?: boolean
-  readonly velocity?: Partial<XY>
-  readonly acceleration?: Partial<XY>
+  readonly vx?: number
+  readonly vy?: number
+  readonly ax?: number
+  readonly ay?: number
   readonly images?: ImageConfig[]
 }

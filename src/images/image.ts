@@ -11,14 +11,16 @@ import {Rect} from '../math/rect'
 export interface Image extends Rect, Animator {
   readonly id: AnimationID.Key
   readonly layer: Layer.Key
+  readonly sx: number
+  readonly sy: number
 }
 
 export namespace Image {
   /** Specifying a different width or height scales the target. */
   export interface Config extends Partial<Rect>, Partial<Animator> {
-    /** If true, x is translated by width and width is negative. */
-    readonly flip?: boolean
     readonly layer?: Layer.Key
+    readonly sx?: number
+    readonly sy?: number
   }
 
   export function make(
@@ -26,17 +28,17 @@ export namespace Image {
     id: AnimationID.Key,
     {
       layer = 'DEFAULT',
-      flip = false,
+      sx = 1,
+      sy = 1,
       x = 0,
       y = 0,
-      w = atlas[id].w,
-      h = atlas[id].h,
+      w = Math.abs(atlas[id].w * sx),
+      h = Math.abs(atlas[id].h * sy),
       period = 0,
       exposure = 0
     }: Config = {}
   ): Image {
-    if (flip) (x += w), (w *= -1)
-    return {id, x, y, w, h, layer, period, exposure}
+    return {id, x, y, w, h, layer, sx, sy, period, exposure}
   }
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */

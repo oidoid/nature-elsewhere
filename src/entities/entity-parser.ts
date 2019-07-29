@@ -38,7 +38,12 @@ function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
   const images = (cfg.images || [])
     .concat(entity.images)
     .map(({id, layer, ...cfg}) =>
-      Image.make(atlas, <AnimationID.Key>id, {...cfg, layer: <Layer.Key>layer})
+      Image.make(atlas, <AnimationID.Key>id, {
+        sx: entity.sx,
+        sy: entity.sy,
+        ...cfg,
+        layer: <Layer.Key>layer
+      })
     )
   ImageRect.moveBy(
     {x: 0, y: 0, w: 0, h: 0},

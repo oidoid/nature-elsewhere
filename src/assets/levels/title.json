@@ -7,7 +7,7 @@
     {
       "id": "IMAGES",
       "images": [
-        {"id": "PALETTE_PALE_GREEN", "w": 32767, "h": 32767, "layer": "PLANE"}
+        {"id": "PALETTE_PALE_GREEN", "sx": 32767, "sy": 32767, "layer": "PLANE"}
       ]
     },
     {"id": "TEXT_DATE_VERSION_HASH", "x": 1, "y": 123},
@@ -24,6 +24,7 @@
     {"id": "TREE", "x": 12, "y": 100},
     {"id": "TREE", "x": 24, "y": 96},
     {"id": "TREE", "x": 18, "y": 108},
-    {"id": "BEE", "x": 50, "y": 114}
+    {"id": "BEE", "x": 50, "y": 114},
+    {"id": "BEE", "x": 54, "y": 118, "sx": -1}
   ]
 }

@@ -4,6 +4,9 @@ import {ObjectUtil} from '../utils/object-util'
 export enum AnimationID {
   BEE = 'bee ',
   BEE_SHADOW = 'bee shadow',
+  BEE_DEAD = 'bee dead',
+  BEE_DEAD_SHADOW = 'bee dead-shadow',
+  BEE_DEAD_BLOOD = 'bee dead-blood',
   CLOUD = 'cloud ',
   CLOUD_SHADOW = 'cloud shadow',
   CONIFER = 'conifer ',

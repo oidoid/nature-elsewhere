@@ -3,7 +3,6 @@ import {EntityID} from './entity-id'
 import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
 import {Rect} from '../math/rect'
-import {XY} from '../math/xy'
 
 /** Images and behavior. Bounds (x, y, w, and h members) are the union of all
     Entity images. This is used for quick collision detections such checking if
@@ -11,10 +10,15 @@ import {XY} from '../math/xy'
 export interface Entity extends ImageRect, Rect {
   readonly id: EntityID.Key
   /** Random number initial value or variant. */
+
   readonly seed: number
   readonly active: boolean
-  readonly velocity: XY
-  readonly acceleration: XY
+  readonly sx: number
+  readonly sy: number
+  readonly vx: number
+  readonly vy: number
+  readonly ax: number
+  readonly ay: number
 }
 
 export namespace Entity {
