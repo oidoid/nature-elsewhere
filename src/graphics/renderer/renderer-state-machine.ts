@@ -7,7 +7,7 @@ export interface RendererStateMachine {
   readonly frameID?: number
   onFrame(then: number, now: number): void
   newRenderer(): Renderer
-  onEvent(event: Event): void
+  onEvent(ev: Event): void
 }
 
 export namespace RendererStateMachine {
@@ -21,34 +21,41 @@ export namespace RendererStateMachine {
   }
 
   export function start(state: RendererStateMachine): void {
-    register(state, true), loop(state)
+    register(state, true), resume(state)
   }
 
   export function stop(state: Mutable<RendererStateMachine>): void {
-    if (state.frameID) state.window.cancelAnimationFrame(state.frameID)
-    delete state.frameID
-    register(state, false)
+    pause(state), register(state, false)
   }
 }
 
-function onEvent(state: Mutable<RendererStateMachine>, event: Event): void {
-  if (event.type === 'webglcontextrestored')
-    state.renderer = state.newRenderer()
-  if (!state.frameID) loop(state)
-  event.preventDefault()
+function pause(state: Mutable<RendererStateMachine>): void {
+  if (state.frameID) state.window.cancelAnimationFrame(state.frameID)
+  delete state.frameID
+}
+
+function resume(state: Mutable<RendererStateMachine>): void {
+  const context = !state.renderer.gl.isContextLost()
+  if (state.window.document.hasFocus() && context && !state.frameID) loop(state)
+}
+
+function onEvent(state: Mutable<RendererStateMachine>, ev: Event): void {
+  if (ev.type === 'webglcontextrestored')
+    (state.renderer = state.newRenderer()), resume(state)
+  else if (ev.type === 'focus') resume(state)
+  else pause(state)
+  ev.preventDefault()
 }
 
 function loop(state: Mutable<RendererStateMachine>, then?: number): void {
   state.frameID = state.window.requestAnimationFrame(now => {
-    if (state.window.document.hasFocus() && !state.renderer.gl.isContextLost())
-      state.onFrame(then || now, now), loop(state, now)
-    else delete state.frameID
+    state.onFrame(then || now, now), loop(state, now)
   })
 }
 
 function register(state: RendererStateMachine, register: boolean): void {
-  const fnc = register ? 'addEventListener' : 'removeEventListener'
-  state.canvas[fnc]('webglcontextrestored', state.onEvent)
-  state.canvas[fnc]('webglcontextlost', state.onEvent)
-  state.window[fnc]('focus', state.onEvent)
+  const fn = register ? 'addEventListener' : 'removeEventListener'
+  state.canvas[fn]('webglcontextrestored', state.onEvent)
+  state.canvas[fn]('webglcontextlost', state.onEvent)
+  ;['focus', 'blur'].forEach(ev => state.window[fn](ev, state.onEvent))
 }
