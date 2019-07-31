@@ -2,6 +2,7 @@ export enum EntityID {
   BEE,
   CAM,
   CLOUD,
+  CLOVER,
   CONIFER,
   IMAGES,
   MOUNTAIN,

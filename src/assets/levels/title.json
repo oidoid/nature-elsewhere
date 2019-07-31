@@ -20,11 +20,15 @@
     {"id": "CONIFER", "x": 60, "y": 83},
     {"id": "CONIFER", "x": 90, "y": 21},
     {"id": "MOUNTAIN", "x": 80, "y": 83},
+    {"id": "MOUNTAIN", "x": 120, "y": 99},
+    {"id": "MOUNTAIN", "x": 20, "y": 130},
     {"id": "TREE", "x": 100, "y": 12},
     {"id": "TREE", "x": 12, "y": 100},
     {"id": "TREE", "x": 24, "y": 96},
     {"id": "TREE", "x": 18, "y": 108},
     {"id": "BEE", "x": 50, "y": 114},
-    {"id": "BEE", "x": 54, "y": 118, "sx": -1}
+    {"id": "BEE", "x": 54, "y": 118, "sx": -1},
+    {"id": "CLOVER", "seed": 0, "x": 54, "y": 12},
+    {"id": "CLOVER", "seed": 1, "x": 66, "y": 24}
   ]
 }

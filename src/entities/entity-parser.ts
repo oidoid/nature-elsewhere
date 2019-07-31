@@ -7,7 +7,6 @@ import {EntityConfigs} from './entity-configs'
 import {EntityID} from './entity-id'
 import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
-import {Layer} from '../images/layer'
 import {Text} from '../text/text'
 
 const imagesFactory: Partial<
@@ -37,13 +36,17 @@ function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
 
   const images = (cfg.images || [])
     .concat(entity.images)
-    .map(({id, layer, ...cfg}) =>
-      Image.make(atlas, <AnimationID.Key>id, {
-        sx: entity.sx,
-        sy: entity.sy,
-        ...cfg,
-        layer: <Layer.Key>layer
-      })
+    .concat((cfg.seeds && cfg.seeds[entity.seed || 0]) || [])
+    .map(({id, ...cfg}) =>
+      Image.make(
+        atlas,
+        <AnimationID.Key>id,
+        <Image.Options>{
+          sx: entity.sx,
+          sy: entity.sy,
+          ...cfg
+        }
+      )
     )
   ImageRect.moveBy(
     {x: 0, y: 0, w: 0, h: 0},

@@ -1,5 +1,6 @@
 import * as bee from '../assets/entities/bee.json'
 import * as cloud from '../assets/entities/cloud.json'
+import * as clover from '../assets/entities/clover.json'
 import * as conifer from '../assets/entities/conifer.json'
 import {EntityConfig} from './entity-config.js'
 import {EntityID} from './entity-id.js'
@@ -12,6 +13,7 @@ export const EntityConfigs: Readonly<
 > = Object.freeze({
   BEE: bee,
   CLOUD: cloud,
+  CLOVER: clover,
   CONIFER: conifer,
   IMAGES: images,
   MOUNTAIN: mountain,

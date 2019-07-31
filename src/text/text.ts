@@ -21,7 +21,7 @@ export namespace Text {
   export function toImages(
     atlas: Atlas,
     string: string,
-    cfg: Image.Config = {},
+    opts?: Image.Options,
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
   ): readonly Image[] {
@@ -37,9 +37,9 @@ export namespace Text {
       const id = <AnimationID.Key>('MEM_FONT_' + string.charCodeAt(i))
       const image = Image.make(atlas, id, {
         layer: 'UI_HIHI',
-        ...cfg,
-        x: (cfg.x || 0) + position.x,
-        y: (cfg.y || 0) + position.y - y
+        ...opts,
+        x: ((opts && opts.x) || 0) + position.x,
+        y: ((opts && opts.y) || 0) + position.y - y
       })
       images.push(image)
     }

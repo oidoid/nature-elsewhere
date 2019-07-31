@@ -1,6 +1,8 @@
 import {AnimationID} from './animation-id'
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
+import {ImageConfig} from './image-config'
+import * as imageDefaults from '../assets/image.json'
 import {Layer} from './layer'
 import {Limits} from '../math/limits'
 import {Rect} from '../math/rect'
@@ -16,29 +18,16 @@ export interface Image extends Rect, Animator {
 }
 
 export namespace Image {
-  /** Specifying a different width or height scales the target. */
-  export interface Config extends Partial<Rect>, Partial<Animator> {
-    readonly layer?: Layer.Key
-    readonly sx?: number
-    readonly sy?: number
-  }
+  export type Options = Omit<ImageConfig, 'id'> & {readonly layer?: Layer.Key}
 
   export function make(
     atlas: Atlas,
     id: AnimationID.Key,
-    {
-      layer = 'DEFAULT',
-      sx = 1,
-      sy = 1,
-      x = 0,
-      y = 0,
-      w = Math.abs(atlas[id].w * sx),
-      h = Math.abs(atlas[id].h * sy),
-      period = 0,
-      exposure = 0
-    }: Config = {}
+    opts: Options
   ): Image {
-    return {id, x, y, w, h, layer, sx, sy, period, exposure}
+    const ret = Object.assign({id}, imageDefaults, opts)
+    const {w, h} = atlas[id]
+    return {w: Math.abs(w * ret.sx), h: Math.abs(h * ret.sy), ...ret}
   }
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */
@@ -48,9 +37,8 @@ export namespace Image {
   }
 
   export function animate(state: Image, atlas: Atlas, time: number): Image {
-    const animation = atlas[state.id]
     const exposure = state.exposure + time
-    const animator = Animator.animate(animation, state.period, exposure)
+    const animator = Animator.animate(atlas[state.id], state.period, exposure)
     return Object.assign(state, animator)
   }
 
@@ -60,8 +48,7 @@ export namespace Image {
 
   export function target(...images: readonly Image[]): Rect {
     const rects: readonly Rect[] = images
-    return rects.length
-      ? rects.reduce(Rect.union)
-      : {x: Limits.MIN_SHORT, y: Limits.MIN_SHORT, w: 0, h: 0}
+    const fallback = {x: Limits.MIN_SHORT, y: Limits.MIN_SHORT, w: 0, h: 0}
+    return rects.length ? rects.reduce(Rect.union) : fallback
   }
 }

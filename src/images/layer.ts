@@ -7,8 +7,9 @@ export enum Layer {
   /** Terrain. */
   PLANE = 0x11,
   SHADOW = 0x12,
-  /** Blood, groundcover, or anything flat that is painted on the plane. */
+  /** Groundcover or anything flat that is painted on the plane. */
   DECAL = 0x14,
+  BLOOD = 0x15,
 
   /** Anything above the terrain and not flat. */
   DEFAULT = 0x21,
