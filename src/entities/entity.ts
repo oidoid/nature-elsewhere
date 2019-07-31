@@ -11,7 +11,7 @@ export interface Entity extends ImageRect, Rect {
   readonly id: EntityID.Key
   /** Random number initial value or variant. */
 
-  readonly seed: number
+  readonly state: string
   readonly active: boolean
   readonly sx: number
   readonly sy: number

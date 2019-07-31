@@ -36,7 +36,7 @@ function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
 
   const images = (cfg.images || [])
     .concat(entity.images)
-    .concat((cfg.seeds && cfg.seeds[entity.seed || 0]) || [])
+    .concat((cfg.states && cfg.states[entity.state || 0]) || [])
     .map(({id, ...cfg}) =>
       Image.make(
         atlas,

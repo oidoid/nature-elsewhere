@@ -1,6 +1,6 @@
 {
   "id": "CLOVER",
-  "seeds": {
+  "states": {
     "0": [
       {"id": "CLOVER_0_0", "layer": "DECAL"},
       {"id": "CLOVER_0_1", "x": 1, "y": 3, "layer": "DECAL"},
