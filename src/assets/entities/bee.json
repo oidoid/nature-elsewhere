@@ -2,7 +2,12 @@
   "id": "BEE",
   "updateType": "IF_VISIBLE",
   "behavior": "CIRCLE",
-  "vx": 0.025,
-  "vy": 0.025,
-  "images": [{"id": "BEE"}, {"id": "BEE_SHADOW", "y": 2, "layer": "SHADOW"}]
+  "states": {
+    "0": [{"id": "BEE"}, {"id": "BEE_SHADOW", "y": 2, "layer": "SHADOW"}],
+    "dead": [
+      {"id": "BEE_DEAD"},
+      {"id": "BEE_DEAD_SHADOW", "y": 1, "layer": "SHADOW"},
+      {"id": "BEE_DEAD_BLOOD", "y": 1, "layer": "BLOOD"}
+    ]
+  }
 }
