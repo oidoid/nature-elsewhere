@@ -1,10 +1,11 @@
 {
   "state": "0",
-  "active": false,
   "x": 0,
   "y": 0,
   "w": 0,
   "h": 0,
+  "updateType": "NEVER",
+  "behavior": "STATIC",
   "sx": 1,
   "sy": 1,
   "vx": 0,

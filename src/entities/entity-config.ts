@@ -1,13 +1,16 @@
 import {EntityID} from './entity-id'
 import {ImageConfig} from '../images/image-config'
+import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
+import {Behavior} from './behavior'
 
 export interface EntityConfig extends Partial<XY> {
   readonly id: EntityID.Key | string
   readonly state?: string
   readonly sx?: number
   readonly sy?: number
-  readonly active?: boolean
+  readonly updateType?: UpdateType.Key | string
+  readonly behavior?: Behavior.Key | string
   readonly vx?: number
   readonly vy?: number
   readonly ax?: number

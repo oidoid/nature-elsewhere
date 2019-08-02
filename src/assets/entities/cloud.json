@@ -1,6 +1,6 @@
 {
   "id": "CLOUD",
-  "active": true,
+  "updateType": "IF_VISIBLE",
   "images": [
     {"id": "CLOUD", "layer": "FLOATS"},
     {"id": "CLOUD_SHADOW", "y": 30, "layer": "SHADOW"}

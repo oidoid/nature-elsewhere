@@ -26,8 +26,10 @@ export namespace Store {
     milliseconds: number
   ): Store {
     const images = entities
-      .filter(entity => Rect.intersects(entity, cam))
-      .map(entity => Entity.update(entity, atlas, milliseconds))
+      .filter(
+        entity => entity.updateType === 'ALWAYS' || Rect.intersects(entity, cam)
+      )
+      .map(entity => Entity.update(entity, atlas, cam, milliseconds))
       .reduce((sum: Image[], val) => [...sum, ...val], [])
       .sort(Image.compare)
 

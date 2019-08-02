@@ -8,6 +8,8 @@ import {EntityID} from './entity-id'
 import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
 import {Text} from '../text/text'
+import {UpdateType} from '../store/update-type'
+import {Behavior} from './behavior'
 
 const imagesFactory: Partial<
   Record<EntityID.Key, (atlas: Atlas, entity: Entity) => Entity>
@@ -17,10 +19,14 @@ export namespace EntityParser {
   export function parse(atlas: Atlas, cfg: EntityConfig): Entity {
     if (!isEntityIDKey(cfg.id))
       throw new Error(`"${cfg.id}" is not a key of EntityID.`)
+    if (cfg.updateType && !isUpdateTypeKey(cfg.updateType))
+      throw new Error(`"${cfg.updateType}" is not a key of UpdateType.`)
+    if (cfg.behavior && !isBehaviorKey(cfg.behavior))
+      throw new Error(`"${cfg.behavior}" is not a key of Behavior.`)
 
     const state = (imagesFactory[cfg.id] || newStandardEntity)(
       atlas,
-      Object.assign({id: cfg.id}, defaultEntity, cfg)
+      Object.assign({}, <any>defaultEntity, cfg)
     )
     return {...state, ...Image.target(...state.images)}
   }
@@ -28,6 +34,14 @@ export namespace EntityParser {
 
 function isEntityIDKey(val: string): val is EntityID.Key {
   return val in EntityID
+}
+
+function isUpdateTypeKey(val: string): val is UpdateType.Key {
+  return val in UpdateType
+}
+
+function isBehaviorKey(val: string): val is UpdateType.Key {
+  return val in Behavior
 }
 
 function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
@@ -62,5 +76,12 @@ function newTextDateVersionHash(
 ): Entity {
   const {date, version, hash} = process.env
   const images = Text.toImages(atlas, `${date} v${version} (${hash})`, {x, y})
-  return {...entity, x, y, images}
+  return {
+    ...entity,
+    updateType: 'ALWAYS',
+    behavior: 'FOLLOW_CAM',
+    x,
+    y,
+    images
+  }
 }

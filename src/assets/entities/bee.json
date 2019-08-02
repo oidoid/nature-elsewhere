@@ -1,5 +1,8 @@
 {
   "id": "BEE",
-  "active": true,
+  "updateType": "IF_VISIBLE",
+  "behavior": "CIRCLE",
+  "vx": 0.025,
+  "vy": 0.025,
   "images": [{"id": "BEE"}, {"id": "BEE_SHADOW", "y": 2, "layer": "SHADOW"}]
 }

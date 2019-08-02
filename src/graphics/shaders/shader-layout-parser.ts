@@ -2,15 +2,15 @@ import {ShaderConfig} from './shader-config'
 import {NumberUtil} from '../../math/number-util'
 import {ShaderLayout} from './shader-layout'
 
-const dataTypeSize: Readonly<Record<GLDataType, number>> = Object.freeze({
-  BYTE: 1,
-  UNSIGNED_BYTE: 1,
-  SHORT: 2,
-  UNSIGNED_SHORT: 2,
-  INT: 4,
-  UNSIGNED_INT: 4,
-  FLOAT: 4
-})
+enum DataTypeSize {
+  BYTE = 1,
+  UNSIGNED_BYTE = 1,
+  SHORT = 2,
+  UNSIGNED_SHORT = 2,
+  INT = 4,
+  UNSIGNED_INT = 4,
+  FLOAT = 4
+}
 
 export namespace ShaderLayoutParser {
   export function parse(config: ShaderConfig): ShaderLayout {
@@ -28,7 +28,7 @@ function parseAttributes(
 ): ShaderLayout.AttributeBuffer {
   const attributes = configs.reduce(reduceAttributeVariable, [])
   const maxDataTypeSize = attributes
-    .map(({type}) => dataTypeSize[type])
+    .map(({type}) => DataTypeSize[type])
     .reduce((max, val) => Math.max(max, val), 0)
   const size = nextAttributeOffset(attributes[attributes.length - 1])
   return {
@@ -53,5 +53,5 @@ function nextAttributeOffset({
   type,
   len
 }: ShaderLayout.Attribute): number {
-  return offset + dataTypeSize[type] * len
+  return offset + DataTypeSize[type] * len
 }
