@@ -18,16 +18,14 @@ import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
 export namespace Game {
-  export function load(): Promise<{
+  export async function load(): Promise<{
     atlas: Atlas
     atlasImage: HTMLImageElement
     shaderLayout: ShaderLayout
   }> {
-    return ImageLoader.load('assets/atlas/atlas.png').then(atlasImage => {
-      const atlas = AtlasParser.parse(atlasJSON)
-      const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
-      return {atlas, atlasImage, shaderLayout}
-    })
+    const atlasImage = await ImageLoader.load('assets/atlas/atlas.png')
+    const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
+    return {atlas: AtlasParser.parse(atlasJSON), atlasImage, shaderLayout}
   }
 
   export interface State {
