@@ -170,6 +170,8 @@ export enum AnimationID {
   PALETTE_LIGHT_BLUE = 'palette light-blue',
   PALETTE_RED = 'palette red',
   PALETTE_ORANGE = 'palette orange',
+  PYRAMID = 'pyramid ',
+  PYRAMID_SHADOW = 'pyramid shadow',
   TREE = 'tree ',
   TREE_SHADOW = 'tree shadow'
 }

@@ -7,6 +7,7 @@ import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
 import {LevelStateMachine} from './levels/level-state-machine'
+import {Player} from './audio/player'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer/renderer'
 import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
@@ -38,6 +39,7 @@ export namespace Game {
     readonly rendererStateMachine: RendererStateMachine
     readonly recorder: Recorder
     readonly inputRouter: InputRouter
+    player: Player
     requestWindowSetting: FunctionUtil.Once
     readonly settings: Settings
   }
@@ -62,6 +64,7 @@ export namespace Game {
       }),
       recorder: new Recorder(),
       inputRouter: new InputRouter(window, canvas),
+      player: Player.make(),
       requestWindowSetting: FunctionUtil.never(),
       settings
     }
@@ -77,6 +80,7 @@ export namespace Game {
 
     RendererStateMachine.start(state.rendererStateMachine)
     state.inputRouter.register()
+    Player.play(state.player, 'sawtooth', 200, 500, 0.15)
   }
 
   export function stop(state: State): void {
@@ -85,10 +89,7 @@ export namespace Game {
   }
 
   function onFrame(state: State, then: number, now: number): void {
-    if (!state.levelStateMachine.level) {
-      stop(state)
-      return
-    }
+    if (!state.levelStateMachine.level) return stop(state)
 
     const time = now - then
     const canvasWH = Viewport.canvasWH(window.document)

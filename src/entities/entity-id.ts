@@ -9,6 +9,7 @@ export enum EntityID {
   IMAGES,
   MOUNTAIN,
   PLAYER,
+  PYRAMID,
   TEXT_DATE_VERSION_HASH,
   TREE
 }
