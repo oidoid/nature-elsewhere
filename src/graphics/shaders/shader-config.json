@@ -8,6 +8,7 @@
   "perInstance": [
     {"name": "source", "type": "SHORT", "len": 4},
     {"name": "position", "type": "SHORT", "len": 2},
-    {"name": "scale", "type": "SHORT", "len": 2}
+    {"name": "scale", "type": "SHORT", "len": 2},
+    {"name": "translate", "type": "SHORT", "len": 2}
   ]
 }

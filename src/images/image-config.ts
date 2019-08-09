@@ -9,4 +9,8 @@ export interface ImageConfig extends Partial<Rect>, Partial<Animator> {
   readonly layer?: Layer.Key | string
   readonly sx?: number
   readonly sy?: number
+  readonly tx?: number
+  readonly ty?: number
+  readonly tvx?: number
+  readonly tvy?: number
 }

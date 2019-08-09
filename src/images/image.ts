@@ -15,6 +15,10 @@ export interface Image extends Rect, Animator {
   readonly layer: Layer.Key
   readonly sx: number
   readonly sy: number
+  readonly tx: number
+  readonly ty: number
+  readonly tvx: number
+  readonly tvy: number
 }
 
 export namespace Image {
@@ -36,9 +40,14 @@ export namespace Image {
     return layer || lhs.y + lhs.h - (rhs.y + rhs.h)
   }
 
-  export function animate(state: Image, atlas: Atlas, time: number): Image {
+  export function animate(
+    state: Mutable<Image>,
+    atlas: Atlas,
+    time: number
+  ): Image {
     const exposure = state.exposure + time
     const animator = Animator.animate(atlas[state.id], state.period, exposure)
+    ;(state.tx += state.tvx * time), (state.ty += state.tvy * time)
     return Object.assign(state, animator)
   }
 

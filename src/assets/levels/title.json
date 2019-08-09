@@ -12,8 +12,11 @@
     },
     {"id": "TEXT_DATE_VERSION_HASH", "x": 1, "y": 123},
     {"id": "CLOUD", "x": 20, "y": 20},
-    {"id": "CLOUD", "x": 30, "y": 28},
+    {"id": "CLOUD", "state": "rain", "x": 30, "y": 28},
     {"id": "CLOUD", "x": 54, "y": 50},
+    {"id": "BEE", "x": 80, "y": 40, "vy": 0.025},
+    {"id": "CLOUD", "state": "rain", "x": 80, "y": 30},
+    {"id": "CLOUD", "state": "downpour", "x": 110, "y": 5, "vy": 0.001},
     {"id": "CONIFER", "x": 59, "y": 78},
     {"id": "CONIFER", "x": 64, "y": 85},
     {"id": "CONIFER", "x": 68, "y": 84},
@@ -38,6 +41,8 @@
     {"id": "GRASS", "state": "2", "x": 141, "y": 77},
     {"id": "BUSH", "x": 151, "y": 30},
     {"id": "BUSH", "state": "1", "x": 159, "y": 30},
-    {"id": "PYRAMID", "x": 125, "y": 114}
+    {"id": "PYRAMID", "x": 125, "y": 114},
+    {"id": "TREE", "x": 159, "y": 126},
+    {"id": "CONIFER", "x": 119, "y": 116}
   ]
 }

@@ -172,6 +172,8 @@ export enum AnimationID {
   PALETTE_ORANGE = 'palette orange',
   PYRAMID = 'pyramid ',
   PYRAMID_SHADOW = 'pyramid shadow',
+  RAIN = 'rain ',
+  RAIN_POOL = 'rain pool',
   TREE = 'tree ',
   TREE_SHADOW = 'tree shadow'
 }

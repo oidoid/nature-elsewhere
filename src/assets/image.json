@@ -1,9 +1,13 @@
 {
+  "x": 0,
+  "y": 0,
   "layer": "DEFAULT",
   "sx": 1,
   "sy": 1,
-  "x": 0,
-  "y": 0,
+  "tx": 0,
+  "ty": 0,
+  "tvx": 0,
+  "tvy": 0,
   "period": 0,
   "exposure": 0
 }

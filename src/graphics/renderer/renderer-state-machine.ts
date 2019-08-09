@@ -14,10 +14,9 @@ export namespace RendererStateMachine {
   export function make(
     start: Omit<RendererStateMachine, 'renderer' | 'onEvent'>
   ): RendererStateMachine {
-    const state = {
-      onEvent: (event: Event) => onEvent(<RendererStateMachine>state, event)
-    }
-    return Object.assign(state, start, {renderer: start.newRenderer()})
+    const renderer = start.newRenderer()
+    const ret = {...start, renderer, onEvent: (ev: Event) => onEvent(ret, ev)}
+    return ret
   }
 
   export function start(state: RendererStateMachine): void {
