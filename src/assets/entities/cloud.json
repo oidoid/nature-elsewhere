@@ -7,9 +7,13 @@
     {"id": "cloud shadow", "y": 32, "layer": "SHADOW"}
   ],
   "states": {
-    "rain": [
+    "drizzle": [
       {"id": "rain", "x": 2, "y": 2, "w": 7, "h": 12, "tvy": -0.01},
       {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": -0.045}
+    ],
+    "rain": [
+      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -0.01},
+      {"id": "rain", "x": 2, "y": 6, "w": 7, "tvy": -0.045}
     ],
     "downpour": [
       {"id": "rain", "x": 1, "y": 6, "w": 9, "tvy": -0.04},

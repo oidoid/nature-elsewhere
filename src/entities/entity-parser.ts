@@ -42,7 +42,8 @@ function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
     .concat(entity.images)
     .concat((cfg.states && cfg.states[entity.state || 0]) || [])
     .map(({id, ...cfg}) =>
-      Image.make(atlas, id, <Image.Options>{
+      Image.make(atlas, <Image.Options>{
+        id,
         sx: entity.sx,
         sy: entity.sy,
         ...cfg

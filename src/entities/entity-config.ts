@@ -6,10 +6,10 @@ import {Behavior} from './behavior'
 export interface EntityConfig extends Partial<XY> {
   readonly id?: string
   readonly state?: string
-  readonly sx?: number
-  readonly sy?: number
   readonly updateType?: UpdateType.Key | string
   readonly behavior?: Behavior.Key | string
+  readonly sx?: number
+  readonly sy?: number
   readonly vx?: number
   readonly vy?: number
   readonly ax?: number

@@ -20,7 +20,7 @@ export namespace Text {
   export function toImages(
     atlas: Atlas,
     string: string,
-    opts?: Image.Options,
+    opts?: Omit<Image.Options, 'id'>,
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
   ): readonly Image[] {
@@ -34,7 +34,8 @@ export namespace Text {
       if (position.y > y + h) break
 
       const id = 'mem-font ' + string.charCodeAt(i)
-      const image = Image.make(atlas, id, {
+      const image = Image.make(atlas, {
+        id,
         layer: 'UI_HIHI',
         ...opts,
         x: ((opts && opts.x) || 0) + position.x,

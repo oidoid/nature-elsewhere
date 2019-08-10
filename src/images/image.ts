@@ -9,24 +9,18 @@ import {Rect} from '../math/rect'
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering and collision detection. The image may be animated.
     Each Cel has the same size. */
-export interface Image extends Rect, Animator {
-  readonly id: string
+export interface Image extends Required<ImageConfig> {
   readonly layer: Layer.Key
-  readonly sx: number
-  readonly sy: number
-  readonly tx: number
-  readonly ty: number
-  readonly tvx: number
-  readonly tvy: number
 }
 
 export namespace Image {
-  export type Options = Omit<ImageConfig, 'id'> & {readonly layer?: Layer.Key}
+  export type Options = ImageConfig & {readonly layer?: Layer.Key}
 
-  export function make(atlas: Atlas, id: string, opts: Options): Image {
-    if (!(id in atlas)) throw new Error(`Atlas missing animation "${id}".`)
-    const ret = Object.assign({id}, imageDefaults, opts)
-    const {w, h} = atlas[id]
+  export function make(atlas: Atlas, opts: Options): Image {
+    if (!(opts.id in atlas))
+      throw new Error(`Atlas missing animation "${opts.id}".`)
+    const ret = Object.assign({}, imageDefaults, opts)
+    const {w, h} = atlas[opts.id]
     return {w: Math.abs(w * ret.sx), h: Math.abs(h * ret.sy), ...ret}
   }
 
