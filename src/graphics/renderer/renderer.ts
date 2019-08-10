@@ -125,23 +125,26 @@ export namespace Renderer {
     gl.canvas.width = canvasWH.w
     gl.canvas.height = canvasWH.h
 
-    // Convert the pixels to clipspace by taking them as a fraction of the cam
-    // resolution, scaling to 0-2, flipping the y-coordinate so that positive y is
-    // downward, and translating to -1 to 1 and again by the camera position.
-    const ratio = {w: 2 / cam.w, h: 2 / cam.h}
-    // prettier-ignore
-    projection.set([
-      ratio.w,        0, 0, -1 - cam.x * ratio.w,
-            0, -ratio.h, 0,  1 + cam.y * ratio.h,
-            0,        0, 1,                    0,
-            0,        0, 0,                    1
-    ])
+    projection.set(project(cam))
     gl.uniformMatrix4fv(uniforms[layout.uniforms.projection], false, projection)
 
-    // The viewport is a rendered in physical pixels. It's intentional to use the
-    // camera dimensions instead of canvas dimensions since the camera often
+    // The viewport is a rendered in physical pixels. It's intentional to use
+    // the camera dimensions instead of canvas dimensions since the camera often
     // exceeds the canvas and the viewport's dimensions must be an integer
     // multiple of the camera.
     gl.viewport(0, 0, scale * cam.w, scale * cam.h)
+  }
+
+  function project(cam: Rect): readonly number[] {
+    // Convert the pixels to clipspace by taking them as a fraction of the cam
+    // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
+    // is downward, and translating to -1 to 1 and again by the camera position.
+    const {w, h} = {w: 2 / cam.w, h: 2 / cam.h}
+    return [
+      w,  0, 0, -1 - cam.x * w,
+      0, -h, 0,  1 + cam.y * h,
+      0,  0, 1,              0,
+      0,  0, 0,              1
+    ] // prettier-ignore
   }
 }

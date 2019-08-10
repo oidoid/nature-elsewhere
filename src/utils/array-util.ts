@@ -11,16 +11,6 @@ export namespace ArrayUtil {
     return val !== null && val !== undefined
   }
 
-  export function range(
-    start: number,
-    end: number,
-    step: number = start > end ? -1 : 1
-  ): readonly number[] {
-    return Array(Math.ceil(Math.abs((start - end) / step)))
-      .fill(undefined)
-      .reduce((sum: readonly number[], _, i) => [...sum, start + i * step], [])
-  }
-
   export function bifurcate<T>(
     array: readonly T[],
     fn: (val: T, index: number, array: readonly T[]) => boolean

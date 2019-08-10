@@ -1,7 +1,6 @@
 interface GL extends WebGL2RenderingContext {}
 type GLBuffer = WebGLBuffer | null
 type GLBufferData = Parameters<GL['bufferData']>[1]
-type GLContextAttributes = WebGLContextAttributes | undefined
 type GLDataType =
   | 'BYTE'
   | 'UNSIGNED_BYTE'
