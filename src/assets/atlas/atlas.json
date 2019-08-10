@@ -32,7 +32,7 @@
       "sourceSize": {"w": 5, "h": 3},
       "duration": 65535
     },
-    "bee dead-blood 4": {
+    "bee deadBlood 4": {
       "frame": {"x": 113, "y": 37, "w": 7, "h": 5},
       "rotated": false,
       "trimmed": false,
@@ -40,7 +40,7 @@
       "sourceSize": {"w": 5, "h": 3},
       "duration": 65535
     },
-    "bee dead-shadow 5": {
+    "bee deadShadow 5": {
       "frame": {"x": 120, "y": 37, "w": 7, "h": 5},
       "rotated": false,
       "trimmed": false,
@@ -1272,7 +1272,7 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette pale-green 2": {
+    "palette paleGreen 2": {
       "frame": {"x": 125, "y": 28, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
@@ -1280,7 +1280,7 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette light-green 3": {
+    "palette lightGreen 3": {
       "frame": {"x": 125, "y": 31, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
@@ -1296,7 +1296,7 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette dark-green 5": {
+    "palette darkGreen 5": {
       "frame": {"x": 50, "y": 37, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
@@ -1328,7 +1328,7 @@
       "sourceSize": {"w": 1, "h": 1},
       "duration": 65535
     },
-    "palette light-blue 9": {
+    "palette lightBlue 9": {
       "frame": {"x": 125, "y": 48, "w": 3, "h": 3},
       "rotated": false,
       "trimmed": false,
@@ -1412,8 +1412,8 @@
       {"name": "bee", "from": 0, "to": 1, "direction": "forward"},
       {"name": "bee shadow", "from": 2, "to": 2, "direction": "forward"},
       {"name": "bee dead", "from": 3, "to": 3, "direction": "forward"},
-      {"name": "bee dead-blood", "from": 4, "to": 4, "direction": "forward"},
-      {"name": "bee dead-shadow", "from": 5, "to": 5, "direction": "forward"},
+      {"name": "bee deadBlood", "from": 4, "to": 4, "direction": "forward"},
+      {"name": "bee deadShadow", "from": 5, "to": 5, "direction": "forward"},
       {"name": "bush 0", "from": 0, "to": 0, "direction": "forward"},
       {"name": "bush 1", "from": 1, "to": 1, "direction": "forward"},
       {"name": "bush shadow", "from": 2, "to": 2, "direction": "forward"},
@@ -1572,34 +1572,19 @@
         "direction": "forward"
       },
       {"name": "palette white", "from": 1, "to": 1, "direction": "forward"},
+      {"name": "palette paleGreen", "from": 2, "to": 2, "direction": "forward"},
       {
-        "name": "palette pale-green",
-        "from": 2,
-        "to": 2,
-        "direction": "forward"
-      },
-      {
-        "name": "palette light-green",
+        "name": "palette lightGreen",
         "from": 3,
         "to": 3,
         "direction": "forward"
       },
       {"name": "palette green", "from": 4, "to": 4, "direction": "forward"},
-      {
-        "name": "palette dark-green",
-        "from": 5,
-        "to": 5,
-        "direction": "forward"
-      },
+      {"name": "palette darkGreen", "from": 5, "to": 5, "direction": "forward"},
       {"name": "palette black", "from": 6, "to": 6, "direction": "forward"},
       {"name": "palette grey", "from": 7, "to": 7, "direction": "forward"},
       {"name": "palette blue", "from": 8, "to": 8, "direction": "forward"},
-      {
-        "name": "palette light-blue",
-        "from": 9,
-        "to": 9,
-        "direction": "forward"
-      },
+      {"name": "palette lightBlue", "from": 9, "to": 9, "direction": "forward"},
       {"name": "palette red", "from": 10, "to": 10, "direction": "forward"},
       {"name": "palette orange", "from": 11, "to": 11, "direction": "forward"},
       {"name": "pyramid", "from": 0, "to": 0, "direction": "forward"},

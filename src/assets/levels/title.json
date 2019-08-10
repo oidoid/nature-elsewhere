@@ -6,7 +6,7 @@
   "entities": [
     {
       "images": [
-        {"id": "palette pale-green", "sx": 32767, "sy": 32767, "layer": "PLANE"}
+        {"id": "palette paleGreen", "sx": 32767, "sy": 32767, "layer": "PLANE"}
       ]
     },
     {"id": "textDateVersionHash", "x": 1, "y": 123},

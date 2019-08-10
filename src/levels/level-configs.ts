@@ -1,4 +1,4 @@
-import {LevelConfig} from './level-config.js'
+import {LevelConfig} from './level-config'
 import * as title from '../assets/levels/title.json'
 
 export const LevelConfigs: Readonly<
