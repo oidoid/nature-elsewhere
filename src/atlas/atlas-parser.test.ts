@@ -449,7 +449,8 @@ describe('parseCollision()', () => {
         color: '#00000000',
         keys: [
           {frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}},
-          {frame: 1, bounds: {x: 4, y: 5, w: 6, h: 7}}
+          {frame: 1, bounds: {x: 4, y: 5, w: 6, h: 7}},
+          {frame: 2, bounds: {x: 12, y: 13, w: 14, h: 15}}
         ]
       },
       {

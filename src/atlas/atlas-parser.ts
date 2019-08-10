@@ -98,7 +98,7 @@ export namespace AtlasParser {
 
   export function parseCollision(
     {name}: Aseprite.FrameTag,
-    offset: number,
+    index: number,
     slices: readonly Aseprite.Slice[]
   ): readonly Rect[] {
     return (
@@ -106,7 +106,7 @@ export namespace AtlasParser {
         // Filter out Slices not for this Tag.
         .filter(slice => slice.name === name)
         // For each Slice, get the greatest relevant Key.
-        .map(({keys}) => keys.filter(key => key.frame <= offset).slice(-1)[0])
+        .map(({keys}) => keys.filter(key => key.frame <= index).slice(-1)[0])
         .map(({bounds}) => bounds)
     )
   }
