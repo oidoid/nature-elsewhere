@@ -2,15 +2,14 @@
   "state": "0",
   "x": 0,
   "y": 0,
-  "w": 0,
-  "h": 0,
-  "updateType": "NEVER",
-  "behavior": "STATIC",
   "sx": 1,
   "sy": 1,
+  "updateType": "NEVER",
+  "behavior": "STATIC",
   "vx": 0,
   "vy": 0,
   "ax": 0,
   "ay": 0,
-  "images": []
+  "images": [],
+  "states": []
 }

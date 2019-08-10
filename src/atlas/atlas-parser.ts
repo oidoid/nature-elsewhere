@@ -34,9 +34,9 @@ export namespace AtlasParser {
     frames: Aseprite.FrameMap,
     slices: readonly Aseprite.Slice[]
   ): Atlas.Animation {
-    const cels = []
-    for (let i = frameTag.from; i <= frameTag.to; ++i)
-      cels.push(parseCel(frameTag, frames[`${frameTag.name} ${i}`], i, slices))
+    const cels = tagFrames(frameTag, frames).map((frame, i) =>
+      parseCel(frameTag, frame, i, slices)
+    )
 
     let duration = cels.reduce((sum, {duration}) => sum + duration, 0)
     const pingPong =
@@ -47,6 +47,15 @@ export namespace AtlasParser {
     const size = frames[`${frameTag.name} ${frameTag.from}`].sourceSize
     const direction = parseAnimationDirection(frameTag)
     return {...size, cels, duration, direction}
+  }
+
+  function tagFrames(
+    {name, from, to}: Aseprite.FrameTag,
+    frames: Aseprite.FrameMap
+  ): readonly Aseprite.Frame[] {
+    const ret = []
+    for (; from <= to; ++from) ret.push(frames[`${name} ${from}`])
+    return ret
   }
 
   export function parseAnimationDirection({
@@ -88,15 +97,14 @@ export namespace AtlasParser {
   }
 
   export function parseCollision(
-    frameTag: Aseprite.FrameTag,
-    frameNumber: number,
+    {name}: Aseprite.FrameTag,
+    offset: number,
     slices: readonly Aseprite.Slice[]
   ): readonly Rect[] {
-    const offset = frameNumber - frameTag.from
     return (
       slices
         // Filter out Slices not for this Tag.
-        .filter(slice => slice.name === frameTag.name)
+        .filter(slice => slice.name === name)
         // For each Slice, get the greatest relevant Key.
         .map(({keys}) => keys.filter(key => key.frame <= offset).slice(-1)[0])
         .map(({bounds}) => bounds)

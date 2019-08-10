@@ -9,7 +9,7 @@ import {UpdateType} from '../store/update-type'
 /** Images and behavior. Bounds (x, y, w, and h members) are the union of all
     Entity images. This is used for quick collision detections such checking if
     the Entity is on screen. x and y are in in level coordinates. */
-export interface Entity extends ImageRect, Rect {
+export interface Entity extends ImageRect {
   readonly id: EntityID.Key
   /** Random number initial value or variant. */
 
