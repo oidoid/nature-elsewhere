@@ -8,6 +8,7 @@ const ids: readonly string[] = Object.freeze(
   ObjectUtil.values(EntityConfigs)
     .filter(ArrayUtil.is)
     .map(({id}) => id)
+    .filter(ArrayUtil.is)
 )
 
 test.each(ids)('%# ID %p is unique', id =>

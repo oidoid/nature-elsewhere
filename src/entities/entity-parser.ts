@@ -20,7 +20,7 @@ export namespace EntityParser {
     if (cfg.behavior && !isBehaviorKey(cfg.behavior))
       throw new Error(`"${cfg.behavior}" is not a key of Behavior.`)
 
-    const state = (imagesFactory[cfg.id] || newStandardEntity)(
+    const state = ((cfg.id && imagesFactory[cfg.id]) || newStandardEntity)(
       atlas,
       Object.assign({}, <any>defaultEntity, cfg)
     )
@@ -37,9 +37,7 @@ function isBehaviorKey(val: string): val is UpdateType.Key {
 }
 
 function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
-  const cfg = EntityConfigs[entity.id]
-  if (!cfg) throw new Error(`${entity.id} is not a standard entity.`)
-
+  const cfg = EntityConfigs[entity.id] || {}
   const images = (cfg.images || [])
     .concat(entity.images)
     .concat((cfg.states && cfg.states[entity.state || 0]) || [])
@@ -64,12 +62,5 @@ function newTextDateVersionHash(
 ): Entity {
   const {date, version, hash} = process.env
   const images = Text.toImages(atlas, `${date} v${version} (${hash})`, {x, y})
-  return {
-    ...entity,
-    updateType: 'ALWAYS',
-    behavior: 'FOLLOW_CAM',
-    x,
-    y,
-    images
-  }
+  return {...entity, updateType: 'ALWAYS', behavior: 'FOLLOW_CAM', x, y, images}
 }

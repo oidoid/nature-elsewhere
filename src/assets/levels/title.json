@@ -5,7 +5,6 @@
   "minSize": {"w": 128, "h": 128},
   "entities": [
     {
-      "id": "images",
       "images": [
         {"id": "palette pale-green", "sx": 32767, "sy": 32767, "layer": "PLANE"}
       ]
