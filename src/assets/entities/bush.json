@@ -1,5 +1,5 @@
 {
-  "id": "BUSH",
+  "id": "bush",
   "states": {
     "0": [{"id": "bush 0"}, {"id": "bush shadow", "y": 1, "layer": "SHADOW"}],
     "1": [{"id": "bush 1"}, {"id": "bush shadow", "y": 1, "layer": "SHADOW"}]

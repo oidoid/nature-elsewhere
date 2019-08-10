@@ -13,14 +13,14 @@ import * as tree from '../assets/entities/tree.json'
 export const EntityConfigs: Readonly<
   Partial<Record<string, EntityConfig>>
 > = Object.freeze({
-  BEE: bee,
-  BUSH: bush,
-  CLOUD: cloud,
-  CLOVER: clover,
-  CONIFER: conifer,
-  GRASS: grass,
-  IMAGES: images,
-  MOUNTAIN: mountain,
-  PYRAMID: pyramid,
-  TREE: tree
+  bee,
+  bush,
+  cloud,
+  clover,
+  conifer,
+  grass,
+  images,
+  mountain,
+  pyramid,
+  tree
 })

@@ -11,7 +11,7 @@ import {Behavior} from './behavior'
 
 const imagesFactory: Partial<
   Record<string, (atlas: Atlas, entity: Entity) => Entity>
-> = Object.freeze({TEXT_DATE_VERSION_HASH: newTextDateVersionHash})
+> = Object.freeze({textDateVersionHash: newTextDateVersionHash})
 
 export namespace EntityParser {
   export function parse(atlas: Atlas, cfg: EntityConfig): Entity {

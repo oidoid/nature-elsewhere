@@ -1,5 +1,5 @@
 {
-  "id": "CONIFER",
+  "id": "conifer",
   "images": [
     {"id": "conifer"},
     {"id": "conifer shadow", "y": 1, "layer": "SHADOW"}
