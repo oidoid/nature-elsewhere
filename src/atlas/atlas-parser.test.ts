@@ -129,7 +129,7 @@ describe('parse()', () => {
         frames
       })
     ).toStrictEqual({
-      CLOUD: {
+      'cloud ': {
         w: 16,
         h: 16,
         cels: [
@@ -143,7 +143,7 @@ describe('parse()', () => {
         duration: 1,
         direction: 'forward'
       },
-      PALETTE_RED: {
+      'palette red': {
         w: 16,
         h: 16,
         cels: [
@@ -157,7 +157,7 @@ describe('parse()', () => {
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
-      CONIFER: {
+      'conifer ': {
         w: 16,
         h: 16,
         cels: [
@@ -171,7 +171,7 @@ describe('parse()', () => {
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
-      CONIFER_SHADOW: {
+      'conifer shadow': {
         w: 16,
         h: 16,
         cels: [
@@ -187,13 +187,6 @@ describe('parse()', () => {
       }
     })
   })
-})
-
-describe('isAnimationID()', () => {
-  test('Known.', () =>
-    expect(AtlasParser.isAnimationID('cloud ')).toStrictEqual(true))
-  test('Unknown.', () =>
-    expect(AtlasParser.isAnimationID('unknown')).toStrictEqual(false))
 })
 
 describe('parseAnimation()', () => {

@@ -3,11 +3,11 @@
   "updateType": "IF_VISIBLE",
   "behavior": "CIRCLE",
   "states": {
-    "0": [{"id": "BEE"}, {"id": "BEE_SHADOW", "y": 2, "layer": "SHADOW"}],
+    "0": [{"id": "bee "}, {"id": "bee shadow", "y": 2, "layer": "SHADOW"}],
     "dead": [
-      {"id": "BEE_DEAD", "layer": "DEAD"},
-      {"id": "BEE_DEAD_SHADOW", "x": -1, "y": 1, "layer": "SHADOW"},
-      {"id": "BEE_DEAD_BLOOD", "y": 1, "layer": "BLOOD"}
+      {"id": "bee dead", "layer": "DEAD"},
+      {"id": "bee dead-shadow", "x": -1, "y": 1, "layer": "SHADOW"},
+      {"id": "bee dead-blood", "y": 1, "layer": "BLOOD"}
     ]
   }
 }

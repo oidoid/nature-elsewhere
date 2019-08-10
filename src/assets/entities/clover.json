@@ -2,14 +2,14 @@
   "id": "CLOVER",
   "states": {
     "0": [
-      {"id": "CLOVER_0_0", "layer": "DECAL"},
-      {"id": "CLOVER_0_1", "x": 1, "y": 3, "layer": "DECAL"},
-      {"id": "CLOVER_0_0", "x": 4, "y": 1, "layer": "DECAL"}
+      {"id": "clover 0-0", "layer": "DECAL"},
+      {"id": "clover 0-1", "x": 1, "y": 3, "layer": "DECAL"},
+      {"id": "clover 0-0", "x": 4, "y": 1, "layer": "DECAL"}
     ],
     "1": [
-      {"id": "CLOVER_1_0", "layer": "DECAL"},
-      {"id": "CLOVER_0_1", "x": 1, "y": 3, "layer": "DECAL"},
-      {"id": "CLOVER_1_0", "x": 4, "y": 1, "layer": "DECAL"}
+      {"id": "clover 1-0", "layer": "DECAL"},
+      {"id": "clover 0-1", "x": 1, "y": 3, "layer": "DECAL"},
+      {"id": "clover 1-0", "x": 4, "y": 1, "layer": "DECAL"}
     ]
   }
 }

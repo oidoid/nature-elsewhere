@@ -1,7 +1,7 @@
 {
   "id": "BUSH",
   "states": {
-    "0": [{"id": "BUSH_0"}, {"id": "BUSH_SHADOW", "y": 1, "layer": "SHADOW"}],
-    "1": [{"id": "BUSH_1"}, {"id": "BUSH_SHADOW", "y": 1, "layer": "SHADOW"}]
+    "0": [{"id": "bush 0"}, {"id": "bush shadow", "y": 1, "layer": "SHADOW"}],
+    "1": [{"id": "bush 1"}, {"id": "bush shadow", "y": 1, "layer": "SHADOW"}]
   }
 }

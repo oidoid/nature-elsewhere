@@ -1,4 +1,3 @@
-import {AnimationID} from '../images/animation-id'
 import {Atlas} from '../atlas/atlas'
 import {Font} from './font'
 import {Image} from '../images/image'
@@ -34,7 +33,7 @@ export namespace Text {
       if (nextLine(position.y, scale).y < y) continue
       if (position.y > y + h) break
 
-      const id = <AnimationID.Key>('MEM_FONT_' + string.charCodeAt(i))
+      const id = 'mem-font ' + string.charCodeAt(i)
       const image = Image.make(atlas, id, {
         layer: 'UI_HIHI',
         ...opts,

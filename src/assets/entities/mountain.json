@@ -1,7 +1,7 @@
 {
   "id": "MOUNTAIN",
   "images": [
-    {"id": "MOUNTAIN"},
-    {"id": "MOUNTAIN_SHADOW", "x": -2, "y": 1, "layer": "SHADOW"}
+    {"id": "mountain "},
+    {"id": "mountain shadow", "x": -2, "y": 1, "layer": "SHADOW"}
   ]
 }

@@ -1,4 +1,3 @@
-import {AnimationID, ReverseAnimationID} from '../images/animation-id'
 import {Aseprite} from './aseprite'
 import {Atlas} from './atlas'
 import {Rect} from '../math/rect'
@@ -10,23 +9,10 @@ export namespace AtlasParser {
     return meta.frameTags.reduce(
       (sum, val) => ({
         ...sum,
-        [parseAnimationIDKey(val)]: parseAnimation(val, frames, meta.slices)
+        [val.name]: parseAnimation(val, frames, meta.slices)
       }),
-      <Atlas>{}
+      {}
     )
-  }
-
-  export function parseAnimationIDKey({
-    name
-  }: Aseprite.FrameTag): AnimationID.Key {
-    if (isAnimationID(name)) return ReverseAnimationID[name]
-    throw new Error(`"${name}" is not an AnimationID key.`)
-  }
-
-  export function isAnimationID(
-    val: string
-  ): val is ValueOf<typeof AnimationID> {
-    return val in ReverseAnimationID
   }
 
   export function parseAnimation(

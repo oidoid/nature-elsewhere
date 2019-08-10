@@ -1,7 +1,7 @@
 {
   "id": "CONIFER",
   "images": [
-    {"id": "CONIFER"},
-    {"id": "CONIFER_SHADOW", "y": 1, "layer": "SHADOW"}
+    {"id": "conifer "},
+    {"id": "conifer shadow", "y": 1, "layer": "SHADOW"}
   ]
 }

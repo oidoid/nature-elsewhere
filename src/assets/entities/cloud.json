@@ -3,20 +3,20 @@
   "updateType": "IF_VISIBLE",
   "behavior": "WRAPAROUND",
   "images": [
-    {"id": "CLOUD", "layer": "FLOATS"},
-    {"id": "CLOUD_SHADOW", "y": 32, "layer": "SHADOW"}
+    {"id": "cloud ", "layer": "FLOATS"},
+    {"id": "cloud shadow", "y": 32, "layer": "SHADOW"}
   ],
   "states": {
     "rain": [
-      {"id": "RAIN", "x": 2, "y": 2, "w": 7, "h": 12, "tvy": -0.01},
-      {"id": "RAIN", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": -0.045}
+      {"id": "rain ", "x": 2, "y": 2, "w": 7, "h": 12, "tvy": -0.01},
+      {"id": "rain ", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": -0.045}
     ],
     "downpour": [
-      {"id": "RAIN", "x": 1, "y": 6, "w": 9, "tvy": -0.04},
-      {"id": "RAIN", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": -0.035},
-      {"id": "RAIN", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": -0.04},
+      {"id": "rain ", "x": 1, "y": 6, "w": 9, "tvy": -0.04},
+      {"id": "rain ", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": -0.035},
+      {"id": "rain ", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": -0.04},
       {
-        "id": "RAIN_POOL",
+        "id": "rain pool",
         "x": 2,
         "y": 35,
         "w": 7,
@@ -26,7 +26,7 @@
         "layer": "DECAL"
       },
       {
-        "id": "RAIN_POOL",
+        "id": "rain pool",
         "y": 37,
         "w": 11,
         "h": 1,

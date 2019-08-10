@@ -1,4 +1,3 @@
-import {AnimationID} from './animation-id'
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
 import {ImageConfig} from './image-config'
@@ -11,7 +10,7 @@ import {Rect} from '../math/rect'
     is used for rendering and collision detection. The image may be animated.
     Each Cel has the same size. */
 export interface Image extends Rect, Animator {
-  readonly id: AnimationID.Key
+  readonly id: string
   readonly layer: Layer.Key
   readonly sx: number
   readonly sy: number
@@ -24,11 +23,8 @@ export interface Image extends Rect, Animator {
 export namespace Image {
   export type Options = Omit<ImageConfig, 'id'> & {readonly layer?: Layer.Key}
 
-  export function make(
-    atlas: Atlas,
-    id: AnimationID.Key,
-    opts: Options
-  ): Image {
+  export function make(atlas: Atlas, id: string, opts: Options): Image {
+    if (!(id in atlas)) throw new Error(`Atlas missing animation "${id}".`)
     const ret = Object.assign({id}, imageDefaults, opts)
     const {w, h} = atlas[id]
     return {w: Math.abs(w * ret.sx), h: Math.abs(h * ret.sy), ...ret}

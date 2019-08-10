@@ -1,6 +1,5 @@
 import {Atlas} from '../atlas/atlas'
 import {Behavior} from './behavior'
-import {EntityID} from './entity-id'
 import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
 import {Rect} from '../math/rect'
@@ -10,7 +9,7 @@ import {UpdateType} from '../store/update-type'
     Entity images. This is used for quick collision detections such checking if
     the Entity is on screen. x and y are in in level coordinates. */
 export interface Entity extends ImageRect {
-  readonly id: EntityID.Key
+  readonly id: string
   /** Random number initial value or variant. */
 
   readonly state: string
