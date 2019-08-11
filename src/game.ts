@@ -65,7 +65,7 @@ export namespace Game {
         newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
       }),
       recorder: Recorder.make(),
-      inputRouter: new InputRouter(window, canvas),
+      inputRouter: new InputRouter(window),
       player: Player.make(),
       requestWindowSetting: FunctionUtil.never(),
       settings

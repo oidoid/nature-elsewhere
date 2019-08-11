@@ -15,7 +15,6 @@ export class InputRouter {
   private keyboardBits: number = 0
   constructor(
     private readonly _window: Window,
-    private readonly _canvas: HTMLCanvasElement,
     private readonly _pointerRecorder: PointerRecorder = new PointerRecorder()
   ) {
     this.onKey = this.onKey.bind(this)
@@ -25,21 +24,13 @@ export class InputRouter {
 
   register(): void {
     if (this._registered) return
-    this._window.document.addEventListener('keydown', this.onKey)
-    this._window.document.addEventListener('keyup', this.onKey)
-    this._canvas.addEventListener('pointerdown', this.onPointerDown)
-    this._canvas.addEventListener('pointerup', this.onPointerDown)
-    this._canvas.addEventListener('pointermove', this.onPointerMove)
+    this._register(true)
     this._registered = true
   }
 
   deregister(): void {
     if (!this._registered) return
-    this._canvas.addEventListener('pointermove', this.onPointerMove)
-    this._canvas.addEventListener('pointerup', this.onPointerDown)
-    this._canvas.addEventListener('pointerdown', this.onPointerDown)
-    this._window.document.addEventListener('keyup', this.onKey)
-    this._window.document.addEventListener('keydown', this.onKey)
+    this._register(false)
     this._registered = false
   }
 
@@ -78,5 +69,14 @@ export class InputRouter {
       event,
       this._defaultOrigin
     )
+  }
+
+  private _register(register: boolean): void {
+    const fn = register ? 'addEventListener' : 'removeEventListener'
+    this._window[fn]('pointermove', <any>this.onPointerMove)
+    this._window[fn]('pointerup', <any>this.onPointerDown)
+    this._window[fn]('pointerdown', <any>this.onPointerDown)
+    this._window[fn]('keyup', <any>this.onKey)
+    this._window[fn]('keydown', <any>this.onKey)
   }
 }
