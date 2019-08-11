@@ -25,14 +25,18 @@ export namespace Image {
     readonly tvy?: number
   }
 
-  export type Options = Config & {readonly layer?: Layer.Key}
+  export function make(atlas: Atlas, cfg: Config): Image {
+    if (!(cfg.id in atlas))
+      throw new Error(`Atlas missing animation "${cfg.id}".`)
+    const ret = Object.assign({}, imageDefaults, cfg)
+    const layer = ret.layer
+    if (!isLayerKey(layer)) throw new Error(`Unknown Layer.Key "${ret.layer}".`)
+    const {w, h} = atlas[cfg.id]
+    return {w: Math.abs(w * ret.sx), h: Math.abs(h * ret.sy), ...ret, layer}
+  }
 
-  export function make(atlas: Atlas, opts: Options): Image {
-    if (!(opts.id in atlas))
-      throw new Error(`Atlas missing animation "${opts.id}".`)
-    const ret = Object.assign({}, imageDefaults, opts)
-    const {w, h} = atlas[opts.id]
-    return {w: Math.abs(w * ret.sx), h: Math.abs(h * ret.sy), ...ret}
+  function isLayerKey(val: string): val is Layer.Key {
+    return val in Layer
   }
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */
@@ -41,11 +45,7 @@ export namespace Image {
     return layer || lhs.y + lhs.h - (rhs.y + rhs.h)
   }
 
-  export function animate(
-    state: Mutable<Image>,
-    atlas: Atlas,
-    time: number
-  ): Image {
+  export function animate(state: Image, atlas: Atlas, time: number): Image {
     const exposure = state.exposure + time
     const animator = Animator.animate(atlas[state.id], state.period, exposure)
     return Object.assign(state, animator)

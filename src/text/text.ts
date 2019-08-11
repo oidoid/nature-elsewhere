@@ -20,7 +20,7 @@ export namespace Text {
   export function toImages(
     atlas: Atlas,
     string: string,
-    opts?: Omit<Image.Options, 'id'>,
+    opts?: Omit<Image.Config, 'id'>,
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
   ): readonly Image[] {

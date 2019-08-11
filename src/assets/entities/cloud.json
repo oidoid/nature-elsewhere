@@ -23,19 +23,19 @@
         "id": "rain pool",
         "x": 2,
         "y": 35,
+        "layer": "DECAL",
         "w": 7,
         "h": 5,
         "tvx": -1,
-        "tvy": -22,
-        "layer": "DECAL"
+        "tvy": -22
       },
       {
         "id": "rain pool",
         "y": 37,
+        "layer": "DECAL",
         "w": 11,
         "h": 1,
-        "tvx": 12,
-        "layer": "DECAL"
+        "tvx": 12
       }
     ]
   }

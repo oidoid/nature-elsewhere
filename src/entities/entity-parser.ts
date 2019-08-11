@@ -45,12 +45,7 @@ function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
     .concat(entity.images)
     .concat((cfg.states && cfg.states[entity.state || 0]) || [])
     .map(({id, ...cfg}) =>
-      Image.make(atlas, <Image.Options>{
-        id,
-        sx: entity.sx,
-        sy: entity.sy,
-        ...cfg
-      })
+      Image.make(atlas, {id, sx: entity.sx, sy: entity.sy, ...cfg})
     )
   ImageRect.moveBy(
     {x: 0, y: 0, w: 0, h: 0},
