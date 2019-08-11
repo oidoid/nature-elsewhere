@@ -11,10 +11,10 @@ export class InputRouter {
   private _canvasWH: WH = {w: 0, h: 0}
   private _cam: Rect = {x: 0, y: 0, w: 0, h: 0}
   private _defaultOrigin: XY = {x: 0, y: 0}
+  private keyboardBits: number = 0
   constructor(
     private readonly _window: Window,
     private readonly _canvas: HTMLCanvasElement,
-    private readonly _keyboardRecorder: KeyboardRecorder = new KeyboardRecorder(),
     private readonly _pointerRecorder: PointerRecorder = new PointerRecorder()
   ) {
     this.onKey = this.onKey.bind(this)
@@ -46,18 +46,18 @@ export class InputRouter {
     this._canvasWH = viewport
     this._cam = cam
     this._defaultOrigin = defaultOrigin
-    this._keyboardRecorder.record(recorder)
+    KeyboardRecorder.record(this.keyboardBits, recorder)
     this._pointerRecorder.record(recorder)
     GamepadRecorder.record(recorder, this._window.navigator)
   }
 
   reset(): void {
-    this._keyboardRecorder.reset()
+    this.keyboardBits = 0
     this._pointerRecorder.reset()
   }
 
   private onKey(event: KeyboardEvent): void {
-    this._keyboardRecorder.onKey(event)
+    this.keyboardBits = KeyboardRecorder.onKey(this.keyboardBits, event)
   }
 
   private onPointerMove(event: PointerEvent): void {
