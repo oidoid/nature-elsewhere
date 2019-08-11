@@ -23,8 +23,7 @@ export namespace InputSet {
   /** Coalesces and returns set bits. A set bit from any source overrides an
       unset bit from any other. */
   export function bits(set: InputSet): InputBit {
-    const inputs = ObjectUtil.keys(set).map(source => set[source])
-    return inputs
+    return ObjectUtil.values(set)
       .filter(ArrayUtil.is)
       .reduce((sum: number, {bits}) => sum | bits, 0)
   }

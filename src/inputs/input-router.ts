@@ -1,4 +1,5 @@
 import {GamepadRecorder} from './gamepads/gamepad-recorder'
+import {InputSource} from './input-source'
 import {KeyboardRecorder} from './keyboards/keyboard-recorder'
 import {PointerRecorder} from './pointers/pointer-recorder'
 import {Recorder} from './recorder'
@@ -46,7 +47,7 @@ export class InputRouter {
     this._canvasWH = viewport
     this._cam = cam
     this._defaultOrigin = defaultOrigin
-    KeyboardRecorder.record(this.keyboardBits, recorder)
+    recorder.record({source: InputSource.KEYBOARD, bits: this.keyboardBits})
     this._pointerRecorder.record(recorder)
     GamepadRecorder.record(recorder, this._window.navigator)
   }
