@@ -64,7 +64,7 @@ export namespace Game {
         onFrame: (then, now) => onFrame(state, then, now),
         newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
       }),
-      recorder: new Recorder(),
+      recorder: Recorder.make(),
       inputRouter: new InputRouter(window, canvas),
       player: Player.make(),
       requestWindowSetting: FunctionUtil.never(),
@@ -104,18 +104,21 @@ export namespace Game {
     const cam = Viewport.cam(canvasWH, scale)
 
     state.inputRouter.record(state.recorder, canvasWH, cam, cam)
-    state.recorder.update(delta)
+    Recorder.update(state.recorder, delta)
 
-    const [set] = state.recorder.combo().slice(-1)
+    const [set] = state.recorder.combo.slice(-1)
     const bits = set && InputSet.bits(set) & ~InputBit.POINT
     state.requestWindowSetting = state.requestWindowSetting(!!bits)
 
     const renderer = state.rendererStateMachine.renderer
     const loseContext = renderer.loseContext
-    if (state.recorder.triggered(InputBit.DEBUG_CONTEXT_LOSS) && loseContext) {
+    if (
+      Recorder.triggered(state.recorder, InputBit.DEBUG_CONTEXT_LOSS) &&
+      loseContext
+    ) {
       state.inputRouter.reset()
       state.inputRouter.record(state.recorder, canvasWH, cam, cam)
-      state.recorder.update(delta)
+      Recorder.update(state.recorder, delta)
 
       console.log('Lose renderer context.')
       loseContext.loseContext()

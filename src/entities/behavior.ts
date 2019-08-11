@@ -36,7 +36,7 @@ export const Behavior = Object.freeze({
     ))
   },
   CURSOR(state: Mutable<Entity>, _cam: Rect, recorder: Recorder) {
-    const [set] = recorder.combo()
+    const [set] = recorder.combo
     const point =
       set && (set[InputSource.MOUSE_POINT] || set[InputSource.MOUSE_PICK])
     if (point)

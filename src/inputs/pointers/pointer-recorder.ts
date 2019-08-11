@@ -10,7 +10,7 @@ export class PointerRecorder {
   ) {}
 
   record(recorder: Recorder): void {
-    this._adapter.toInput().forEach(input => recorder.record(input))
+    this._adapter.toInput().forEach(input => Recorder.record(recorder, input))
   }
 
   reset(): void {

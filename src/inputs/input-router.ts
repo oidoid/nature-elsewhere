@@ -47,7 +47,8 @@ export class InputRouter {
     this._canvasWH = viewport
     this._cam = cam
     this._defaultOrigin = defaultOrigin
-    recorder.record({source: InputSource.KEYBOARD, bits: this.keyboardBits})
+    const input = {source: InputSource.KEYBOARD, bits: this.keyboardBits}
+    Recorder.record(recorder, input)
     this._pointerRecorder.record(recorder)
     GamepadRecorder.record(recorder, this._window.navigator)
   }
