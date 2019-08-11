@@ -9,15 +9,15 @@ export interface Recorder {
   /** The time in milliseconds since the input changed. When zero, the input
       is triggered. When exceeded, the combo is reset (either to the active
       input or empty). */
-  timer: number
+  readonly timer: number
   /** The current recording and prospective combo member. The last input
       overwrites any previous. A zero value can never be a combo member but is
       necessary to persist in _input and _lastInput to distinguish the off
       state between repeated button presses like [UP, UP]. Starts empty after
       each update. */
-  set: Mutable<InputSet>
+  readonly set: Mutable<InputSet>
   /** The previous recording but not necessarily a combo member. */
-  lastSet: InputSet
+  readonly lastSet: InputSet
   /** A sequence of nonzero input sets ordered from oldest (first) to latest
       (last). Combos are terminated only by expiration. */
   readonly combo: InputSet[]
@@ -64,7 +64,10 @@ export namespace Recorder {
   }
 
   /** Update the combo with recorded input. */
-  export function update(recorder: Recorder, milliseconds: number): void {
+  export function update(
+    recorder: Mutable<Recorder>,
+    milliseconds: number
+  ): void {
     const interval = recorder.timer + milliseconds
     const bits = InputSet.bits(recorder.set)
     const lastBits = InputSet.bits(recorder.lastSet)
