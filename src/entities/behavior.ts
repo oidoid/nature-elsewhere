@@ -1,6 +1,9 @@
 import {Entity} from './entity'
 import {ImageRect} from '../images/image-rect'
+import {InputSource} from '../inputs/input-source'
+import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
+import {XY} from '../math/xy'
 
 export const Behavior = Object.freeze({
   STATIC() {},
@@ -31,6 +34,17 @@ export const Behavior = Object.freeze({
       {x: 1, y: cam.y + cam.h - (state.h + 1)},
       ...state.images
     ))
+  },
+  CURSOR(state: Mutable<Entity>, _cam: Rect, recorder: Recorder) {
+    const [set] = recorder.combo()
+    const point =
+      set && (set[InputSource.MOUSE_POINT] || set[InputSource.MOUSE_PICK])
+    if (point)
+      ({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
+        state,
+        XY.trunc(point.xy),
+        ...state.images
+      ))
   }
 })
 

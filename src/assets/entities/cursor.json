@@ -1,0 +1,6 @@
+{
+  "id": "cursor",
+  "updateType": "ALWAYS",
+  "behavior": "CURSOR",
+  "images": [{"id": "palette black", "layer": "UI_HIHI"}]
+}

@@ -131,7 +131,8 @@ export namespace Game {
       state.levelStateMachine = state.levelStateMachine.update(
         state.levelStateMachine,
         cam,
-        state.tick
+        state.tick,
+        state.recorder
       )
     }
 

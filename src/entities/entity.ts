@@ -2,6 +2,7 @@ import {Atlas} from '../atlas/atlas'
 import {Behavior} from './behavior'
 import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
+import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
@@ -36,11 +37,12 @@ export namespace Entity {
     state: Mutable<Entity>,
     atlas: Atlas,
     cam: Rect,
-    time: number
+    time: number,
+    recorder: Recorder
   ): readonly Image[] {
     if (state.updateType === 'NEVER') return state.images
     ;(state.vx += state.ax), (state.vy += state.ay)
-    Behavior[state.behavior](state, cam)
+    Behavior[state.behavior](state, cam, recorder)
     state.images.forEach(img => Image.animate(img, atlas, time))
     return state.images
   }

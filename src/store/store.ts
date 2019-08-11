@@ -2,6 +2,7 @@ import {Atlas} from '../atlas/atlas'
 import {Image} from '../images/image'
 import {Entity} from '../entities/entity'
 import {InstanceBuffer} from './instance-buffer'
+import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 
@@ -23,13 +24,14 @@ export namespace Store {
     {layout, atlas, dat}: Store,
     cam: Rect,
     entities: readonly Entity[],
-    milliseconds: number
+    milliseconds: number,
+    recorder: Recorder
   ): Store {
     const images = entities
       .filter(
         entity => entity.updateType === 'ALWAYS' || Rect.intersects(entity, cam)
       )
-      .map(entity => Entity.update(entity, atlas, cam, milliseconds))
+      .map(entity => Entity.update(entity, atlas, cam, milliseconds, recorder))
       .reduce((sum: Image[], val) => [...sum, ...val], [])
       .sort(Image.compare)
 

@@ -3,6 +3,8 @@ import * as bush from '../assets/entities/bush.json'
 import * as cloud from '../assets/entities/cloud.json'
 import * as clover from '../assets/entities/clover.json'
 import * as conifer from '../assets/entities/conifer.json'
+import * as cursor from '../assets/entities/cursor.json'
+import * as editor from '../assets/entities/editor.json'
 import {Entity} from './entity'
 import * as grass from '../assets/entities/grass.json'
 import * as mountain from '../assets/entities/mountain.json'
@@ -18,6 +20,8 @@ export const EntityConfigs: Readonly<
   cloud,
   clover,
   conifer,
+  cursor,
+  editor,
   grass,
   mountain,
   pyramid,
