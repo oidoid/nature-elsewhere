@@ -48,7 +48,6 @@ export namespace Image {
   ): Image {
     const exposure = state.exposure + time
     const animator = Animator.animate(atlas[state.id], state.period, exposure)
-    ;(state.tx += state.tvx * time), (state.ty += state.tvy * time)
     return Object.assign(state, animator)
   }
 

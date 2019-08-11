@@ -105,12 +105,14 @@ export namespace Renderer {
    */
   export function render(
     state: Renderer,
+    time: number,
     canvasWH: WH,
     scale: number,
     cam: Rect,
     {dat, len}: Store
   ): void {
     resize(state, canvasWH, scale, cam)
+    state.gl.uniform1f(state.uniforms[state.layout.uniforms.time], time)
     const perInstanceBuffer = state.perInstanceBuffer
     GLUtil.bufferData(state.gl, perInstanceBuffer, dat, GL.DYNAMIC_READ)
     const verticesLen = vertices.length / state.layout.perVertex.len

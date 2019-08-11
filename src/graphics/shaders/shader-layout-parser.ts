@@ -1,4 +1,3 @@
-import {ShaderConfig} from './shader-config'
 import {NumberUtil} from '../../math/number-util'
 import {ShaderLayout} from './shader-layout'
 
@@ -13,7 +12,7 @@ enum DataTypeSize {
 }
 
 export namespace ShaderLayoutParser {
-  export function parse(config: ShaderConfig): ShaderLayout {
+  export function parse(config: ShaderLayout.Config): ShaderLayout {
     return {
       uniforms: config.uniforms,
       perVertex: parseAttributes(0, config.perVertex),
@@ -24,7 +23,7 @@ export namespace ShaderLayoutParser {
 
 function parseAttributes(
   divisor: number,
-  configs: readonly ShaderConfig.Attribute[]
+  configs: readonly ShaderLayout.AttributeConfig[]
 ): ShaderLayout.AttributeBuffer {
   const attributes = configs.reduce(reduceAttributeVariable, [])
   const maxDataTypeSize = attributes
@@ -41,17 +40,13 @@ function parseAttributes(
 
 function reduceAttributeVariable(
   layouts: readonly ShaderLayout.Attribute[],
-  {type, name, len}: ShaderConfig.Attribute,
+  {type, name, len}: ShaderLayout.AttributeConfig,
   index: number
 ): readonly ShaderLayout.Attribute[] {
   const offset = index ? nextAttributeOffset(layouts[index - 1]) : 0
   return layouts.concat({type: <GLDataType>type, name, len, offset})
 }
 
-function nextAttributeOffset({
-  offset,
-  type,
-  len
-}: ShaderLayout.Attribute): number {
-  return offset + DataTypeSize[type] * len
+function nextAttributeOffset(attr: ShaderLayout.Attribute): number {
+  return attr.offset + DataTypeSize[attr.type] * attr.len
 }

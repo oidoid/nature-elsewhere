@@ -2,13 +2,14 @@
   "uniforms": {
     "atlas": "atlas",
     "atlasSize": "atlasSize",
-    "projection": "projection"
+    "projection": "projection",
+    "time": "time"
   },
   "perVertex": [{"name": "uv", "type": "SHORT", "len": 2}],
   "perInstance": [
     {"name": "source", "type": "SHORT", "len": 4},
     {"name": "position", "type": "SHORT", "len": 2},
     {"name": "scale", "type": "SHORT", "len": 2},
-    {"name": "translate", "type": "SHORT", "len": 2}
+    {"name": "translate", "type": "SHORT", "len": 4}
   ]
 }

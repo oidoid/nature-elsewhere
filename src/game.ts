@@ -30,6 +30,7 @@ export namespace Game {
   }
 
   export interface State {
+    time: number
     /** The outstanding time in milliseconds to apply. */
     duration: number
     /** The exact duration in milliseconds to apply each update. Any number of
@@ -53,6 +54,7 @@ export namespace Game {
     settings: Settings
   ): State {
     const state: State = {
+      time: 0,
       duration: 0,
       tick: 1000 / 60,
       levelStateMachine: LevelStateMachine.make(shaderLayout, atlas),
@@ -91,7 +93,8 @@ export namespace Game {
   function onFrame(state: State, then: number, now: number): void {
     if (!state.levelStateMachine.level) return stop(state)
 
-    const time = now - then
+    const delta = now - then
+    state.time += delta
     const canvasWH = Viewport.canvasWH(window.document)
     const scale = Viewport.scale(
       canvasWH,
@@ -101,7 +104,7 @@ export namespace Game {
     const cam = Viewport.cam(canvasWH, scale)
 
     state.inputRouter.record(state.recorder, canvasWH, cam, cam)
-    state.recorder.update(time)
+    state.recorder.update(delta)
 
     const [set] = state.recorder.combo().slice(-1)
     const bits = set && InputSet.bits(set) & ~InputBit.POINT
@@ -112,7 +115,7 @@ export namespace Game {
     if (state.recorder.triggered(InputBit.DEBUG_CONTEXT_LOSS) && loseContext) {
       state.inputRouter.reset()
       state.inputRouter.record(state.recorder, canvasWH, cam, cam)
-      state.recorder.update(time)
+      state.recorder.update(delta)
 
       console.log('Lose renderer context.')
       loseContext.loseContext()
@@ -122,7 +125,7 @@ export namespace Game {
       }, 3 * 1000)
     }
 
-    state.duration += time
+    state.duration += delta
     while (state.levelStateMachine && state.duration >= state.tick) {
       state.duration -= state.tick
       state.levelStateMachine = state.levelStateMachine.update(
@@ -135,6 +138,7 @@ export namespace Game {
     if (state.levelStateMachine) {
       Renderer.render(
         renderer,
+        state.time,
         canvasWH,
         scale,
         cam,

@@ -4,7 +4,7 @@ import {LevelParser} from './level-parser'
 import {Rect} from '../math/rect'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 import {Store} from '../store/store'
-import * as titleLevelConfig from '../assets/levels/title.json'
+import * as titleLevelConfig from '../assets/levels/field.json'
 
 export interface LevelStateMachine {
   readonly level?: Level
