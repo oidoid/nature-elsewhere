@@ -1,6 +1,5 @@
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
-import {ImageConfig} from './image-config'
 import * as imageDefaults from '../assets/image.json'
 import {Layer} from './layer'
 import {Limits} from '../math/limits'
@@ -9,12 +8,24 @@ import {Rect} from '../math/rect'
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering and collision detection. The image may be animated.
     Each Cel has the same size. */
-export interface Image extends Required<ImageConfig> {
+export interface Image extends Required<Image.Config> {
   readonly layer: Layer.Key
 }
 
 export namespace Image {
-  export type Options = ImageConfig & {readonly layer?: Layer.Key}
+  /** Specifying a different width or height scales the target. */
+  export interface Config extends Partial<Rect>, Partial<Animator> {
+    readonly id: string
+    readonly layer?: Layer.Key | string
+    readonly sx?: number
+    readonly sy?: number
+    readonly tx?: number
+    readonly ty?: number
+    readonly tvx?: number
+    readonly tvy?: number
+  }
+
+  export type Options = Config & {readonly layer?: Layer.Key}
 
   export function make(atlas: Atlas, opts: Options): Image {
     if (!(opts.id in atlas))

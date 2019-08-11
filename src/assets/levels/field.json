@@ -1,0 +1,47 @@
+{
+  "id": "field",
+  "w": 128,
+  "h": 128,
+  "minSize": {"w": 128, "h": 128},
+  "entities": [
+    {
+      "images": [
+        {"id": "palette paleGreen", "sx": 32767, "sy": 32767, "layer": "PLANE"}
+      ]
+    },
+    {"id": "textDateVersionHash", "x": 1, "y": 123},
+    {"id": "cloud", "x": 20, "y": 20},
+    {"id": "cloud", "state": "drizzle", "x": 30, "y": 28},
+    {"id": "cloud", "state": "rain", "x": 54, "y": 50},
+    {"id": "bee", "x": 80, "y": 40, "vy": 0.025},
+    {"id": "cloud", "state": "drizzle", "x": 80, "y": 30},
+    {"id": "cloud", "state": "downpour", "x": 110, "y": 5, "vy": 0.001},
+    {"id": "conifer", "x": 59, "y": 78},
+    {"id": "conifer", "x": 64, "y": 85},
+    {"id": "conifer", "x": 68, "y": 84},
+    {"id": "conifer", "x": 60, "y": 83},
+    {"id": "conifer", "x": 90, "y": 21},
+    {"id": "mountain", "x": 80, "y": 83},
+    {"id": "mountain", "x": 120, "y": 99},
+    {"id": "mountain", "x": 20, "y": 130},
+    {"id": "tree", "x": 100, "y": 12},
+    {"id": "tree", "x": 12, "y": 100},
+    {"id": "tree", "x": 24, "y": 96},
+    {"id": "tree", "x": 18, "y": 108},
+    {"id": "bee", "x": 50, "y": 114, "vx": 0.025, "vy": 0.025},
+    {"id": "bee", "x": 54, "y": 118, "sx": -1, "vx": 0.025, "vy": 0.025},
+    {"id": "bee", "state": "dead", "x": 55, "y": 122, "sx": -1},
+    {"id": "bee", "state": "dead", "x": 60, "y": 126},
+    {"id": "clover", "x": 54, "y": 12},
+    {"id": "clover", "state": "1", "x": 66, "y": 24},
+    {"id": "grass", "x": 45, "y": 117},
+    {"id": "grass", "state": "1", "x": 101, "y": 17},
+    {"id": "grass", "state": "1", "x": 111, "y": 57},
+    {"id": "grass", "state": "2", "x": 141, "y": 77},
+    {"id": "bush", "x": 151, "y": 30},
+    {"id": "bush", "state": "1", "x": 159, "y": 30},
+    {"id": "pyramid", "x": 125, "y": 114},
+    {"id": "tree", "x": 159, "y": 126},
+    {"id": "conifer", "x": 119, "y": 116}
+  ]
+}

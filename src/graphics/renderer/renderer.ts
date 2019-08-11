@@ -31,6 +31,10 @@ export namespace Renderer {
     const gl = canvas.getContext('webgl2', glConfig)
     if (!(gl instanceof GL)) throw new Error('WebGL 2 unsupported.')
 
+    // Avoid initial color flash by matching the background. [palette]
+    gl.clearColor(0xf2 / 0xff, 0xf5 / 0xff, 0xf5 / 0xff, 1)
+    gl.clear(GL.COLOR_BUFFER_BIT)
+
     // Allow transparent textures to be layered.
     gl.enable(GL.BLEND)
     gl.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
@@ -116,7 +120,7 @@ export namespace Renderer {
   /** @arg canvasWH The desired resolution of the canvas in CSS pixels. E.g.,
                     {w: window.innerWidth, h: window.innerHeight}.
       @arg scale Positive integer zoom. */
-  function resize(
+  export function resize(
     {gl, layout, uniforms, projection}: Renderer,
     canvasWH: WH,
     scale: number,

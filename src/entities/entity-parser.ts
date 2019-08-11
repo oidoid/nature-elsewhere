@@ -1,20 +1,23 @@
 import {Atlas} from '../atlas/atlas'
+import {Behavior} from './behavior'
 import * as defaultEntity from '../assets/entities/default.json'
 import {Entity} from './entity'
-import {EntityConfig} from './entity-config'
 import {EntityConfigs} from './entity-configs'
 import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
 import {Text} from '../text/text'
 import {UpdateType} from '../store/update-type'
-import {Behavior} from './behavior'
+import {TextEntity} from './text-entity'
 
 const imagesFactory: Partial<
   Record<string, (atlas: Atlas, entity: Entity) => Entity>
-> = Object.freeze({textDateVersionHash: newTextDateVersionHash})
+> = Object.freeze({
+  textDateVersionHash: newTextDateVersionHash,
+  text: TextEntity.make
+})
 
 export namespace EntityParser {
-  export function parse(atlas: Atlas, cfg: EntityConfig): Entity {
+  export function parse(atlas: Atlas, cfg: Entity.Config): Entity {
     if (cfg.updateType && !isUpdateTypeKey(cfg.updateType))
       throw new Error(`"${cfg.updateType}" is not a key of UpdateType.`)
     if (cfg.behavior && !isBehaviorKey(cfg.behavior))

@@ -2,8 +2,9 @@ body {
   /* Make the body flush with the window. */
   margin: 0;
 
-  /* The background color can be shown during quick resizes and context loss. */
-  background: #000;
+  /* The background color can be shown during quick resizes and context loss.
+     [palette] */
+  background: #f2f5f5;
 
   /* document.documentElement.clientWidth/Height seems to give the most accurate
      dimensions, as opposed to window.innerWidth/Height, but overflow is still

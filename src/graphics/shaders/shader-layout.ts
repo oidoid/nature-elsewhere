@@ -18,4 +18,16 @@ export namespace ShaderLayout {
     readonly len: number
     readonly offset: number
   }
+
+  export interface Config {
+    readonly uniforms: Readonly<Record<string, string>>
+    readonly perVertex: readonly AttributeConfig[]
+    readonly perInstance: readonly AttributeConfig[]
+  }
+
+  export interface AttributeConfig {
+    readonly type: GLDataType | string
+    readonly name: string
+    readonly len: number
+  }
 }

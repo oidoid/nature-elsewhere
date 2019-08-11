@@ -1,6 +1,6 @@
 import {ArrayUtil} from '../utils/array-util'
 import {EntityConfigs} from './entity-configs'
-import {ImageConfig} from '../images/image-config'
+import {Image} from '../images/image'
 import {Layer} from '../images/layer'
 import {ObjectUtil} from '../utils/object-util'
 
@@ -15,7 +15,7 @@ test.each(ids)('%# ID %p is unique', id =>
   expect(ids.filter(val => id === val)).toHaveLength(1)
 )
 
-const images: readonly ImageConfig[] = Object.freeze(
+const images: readonly Image.Config[] = Object.freeze(
   ObjectUtil.values(EntityConfigs)
     .filter(ArrayUtil.is)
     .map(({images}) => images)
