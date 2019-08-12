@@ -7,9 +7,9 @@ type KeyMap = Readonly<Partial<Record<Key, InputBit.Key>>>
 export namespace KeyboardRecorder {
   /** Call this function when a keydown or keyup KeyboardEvent is received. */
   export function onKey(bits: InputBit, event: KeyboardEvent): InputBit {
-    event.preventDefault()
     const bit = (<KeyMap>defaultKeyboardMap)[event.key]
     if (bit === undefined) return bits
+    event.preventDefault()
     return adapt(bits, InputBit[bit], event.type === 'keydown')
   }
 }

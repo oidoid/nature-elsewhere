@@ -3,7 +3,7 @@ import {InputBit} from './input-bit'
 import {InputSet} from './input-set'
 
 /** The maximum duration in milliseconds permitted between combo inputs. */
-const maxInterval: number = 256
+const maxInterval: number = 255
 
 export interface Recorder {
   /** The time in milliseconds since the input changed. When zero, the input
@@ -12,9 +12,9 @@ export interface Recorder {
   readonly timer: number
   /** The current recording and prospective combo member. The last input
       overwrites any previous. A zero value can never be a combo member but is
-      necessary to persist in _input and _lastInput to distinguish the off
-      state between repeated button presses like [UP, UP]. Starts empty after
-      each update. */
+      necessary to persist in set and lastSet to distinguish the off state
+      between repeated button presses like [UP, UP]. Starts empty after each
+      update. */
   readonly set: Mutable<InputSet>
   /** The previous recording but not necessarily a combo member. */
   readonly lastSet: InputSet
@@ -31,73 +31,67 @@ export namespace Recorder {
 
   /** @arg combo A sequence of one or more InputBits. */
   export function equal(
-    recorder: Recorder,
+    state: Recorder,
     ...combo: readonly InputBit[]
   ): boolean {
-    return active(recorder, true, combo)
+    return active(state, true, combo)
   }
 
-  export function set(
-    recorder: Recorder,
-    ...combo: readonly InputBit[]
-  ): boolean {
-    return active(recorder, false, combo)
+  export function set(state: Recorder, ...combo: readonly InputBit[]): boolean {
+    return active(state, false, combo)
   }
 
   /** Identical to active() but only true if combo is new. */
   export function triggered(
-    recorder: Recorder,
+    state: Recorder,
     ...combo: readonly InputBit[]
   ): boolean {
-    return !recorder.timer && equal(recorder, ...combo)
+    return !state.timer && equal(state, ...combo)
   }
 
   export function triggeredSet(
-    recorder: Recorder,
+    state: Recorder,
     ...combo: readonly InputBit[]
   ): boolean {
-    return !recorder.timer && set(recorder, ...combo)
+    return !state.timer && set(state, ...combo)
   }
 
-  export function record(recorder: Recorder, input: Input): void {
-    recorder.set[input.source] = <any>input
+  export function record(state: Recorder, input: Input): void {
+    state.set[input.source] = <any>input
   }
 
   /** Update the combo with recorded input. */
-  export function update(
-    recorder: Mutable<Recorder>,
-    milliseconds: number
-  ): void {
-    const interval = recorder.timer + milliseconds
-    const bits = InputSet.bits(recorder.set)
-    const lastBits = InputSet.bits(recorder.lastSet)
+  export function update(state: Mutable<Recorder>, milliseconds: number): void {
+    const interval = state.timer + milliseconds
+    const bits = InputSet.bits(state.set)
+    const lastBits = InputSet.bits(state.lastSet)
 
     if (interval >= maxInterval && (!bits || bits !== lastBits)) {
       // Expired and released or changed.
-      recorder.timer = 0
-      recorder.combo.length = 0
+      state.timer = 0
+      state.combo.length = 0
       // If active and changed, start a new combo.
-      if (bits) recorder.combo.push(recorder.set)
+      if (bits) state.combo.push(state.set)
     } else if (bits && bits !== lastBits) {
       // Unexpired active and changed (triggered).
-      recorder.timer = 0
+      state.timer = 0
       // Input is now part of a combo and will not be modified by _lastInput.
-      recorder.combo.push(recorder.set)
+      state.combo.push(state.set)
     } else {
       // Held, possibly expired, or unexpired and released.
-      recorder.timer = interval
+      state.timer = interval
 
       if (bits && bits === lastBits) {
         // Held, update combo with the latest input.
-        recorder.combo.pop()
-        recorder.combo.push(recorder.set)
+        state.combo.pop()
+        state.combo.push(state.set)
       }
     }
 
     // Input is now last input and will not be be modified. Next input starts
     // empty. No carryovers.
-    recorder.lastSet = recorder.set
-    recorder.set = {}
+    state.lastSet = state.set
+    state.set = {}
   }
 }
 

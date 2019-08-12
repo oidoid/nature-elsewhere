@@ -41,8 +41,8 @@ export namespace Entity {
     recorder: Recorder
   ): readonly Image[] {
     if (state.updateType === 'NEVER') return state.images
-    ;(state.vx += state.ax), (state.vy += state.ay)
-    Behavior[state.behavior](state, cam, recorder)
+    ;(state.vx += state.ax * time), (state.vy += state.ay * time)
+    Behavior[state.behavior](state, cam, recorder, time)
     state.images.forEach(img => Image.animate(img, atlas, time))
     return state.images
   }

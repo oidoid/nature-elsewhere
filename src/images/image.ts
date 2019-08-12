@@ -58,6 +58,7 @@ export namespace Image {
   export function target(...images: readonly Image[]): Rect {
     const rects: readonly Rect[] = images
     const fallback = {x: Limits.MIN_SHORT, y: Limits.MIN_SHORT, w: 0, h: 0}
-    return rects.length ? rects.reduce(Rect.union) : fallback
+    const union = rects.length ? rects.reduce(Rect.union) : fallback
+    return {w: union.w, h: union.h, x: union.x, y: union.y}
   }
 }

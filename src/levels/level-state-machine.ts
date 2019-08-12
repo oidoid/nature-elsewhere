@@ -1,27 +1,21 @@
 import {Atlas} from '../atlas/atlas'
 import {Level} from './level'
+import * as levelConfig from '../assets/levels/editor.json'
 import {LevelParser} from './level-parser'
 import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 import {Store} from '../store/store'
-import * as titleLevelConfig from '../assets/levels/editor.json'
 
 export interface LevelStateMachine {
   readonly level?: Level
   readonly store: Store
-  update(
-    state: LevelStateMachine,
-    cam: Rect,
-    time: number,
-    recorder: Recorder
-  ): LevelStateMachine
 }
 
 export namespace LevelStateMachine {
   export function make(layout: ShaderLayout, atlas: Atlas): LevelStateMachine {
-    const level = LevelParser.parse(atlas, titleLevelConfig)
-    return {level, store: Store.make(layout, atlas), update}
+    const level = LevelParser.parse(atlas, levelConfig)
+    return {level, store: Store.make(layout, atlas)}
   }
 
   export function update(
@@ -38,6 +32,6 @@ export namespace LevelStateMachine {
       time,
       recorder
     )
-    return {level: state.level, store, update}
+    return {level: state.level, store}
   }
 }

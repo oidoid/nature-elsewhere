@@ -131,7 +131,7 @@ export namespace Game {
     state.duration += delta
     while (state.levelStateMachine && state.duration >= state.tick) {
       state.duration -= state.tick
-      state.levelStateMachine = state.levelStateMachine.update(
+      state.levelStateMachine = LevelStateMachine.update(
         state.levelStateMachine,
         cam,
         state.tick,

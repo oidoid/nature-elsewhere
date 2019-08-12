@@ -33,8 +33,7 @@ export class PointerAdapter {
     const xy = Viewport.toLevelXY({x: clientX, y: clientY}, canvasWH, cam)
     if (mouse) {
       const source = InputSource.MOUSE_PICK
-      const bits = InputBit.PICK
-      return {source, bits: active ? bits : 0, xy}
+      return {source, bits: active ? InputBit.PICK : 0, xy}
     }
     if (xy.x >= cam.x + cam.w / 2) {
       const source = InputSource.VIRTUAL_GAMEPAD_BUTTONS_PRESSED
@@ -42,8 +41,7 @@ export class PointerAdapter {
       return {source, bits: active ? bits : 0}
     }
     const source = InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION
-    const bits = InputBit.POSITION_VIRTUAL_JOYSTICK
-    return {source, bits: active ? bits : 0, xy}
+    return {source, bits: active ? InputBit.POSITION_VIRTUAL_JOYSTICK : 0, xy}
   }
 
   /**
@@ -64,9 +62,8 @@ export class PointerAdapter {
   ): MoveInput {
     let xy = Viewport.toLevelXY({x: clientX, y: clientY}, canvasWH, cam)
 
-    if (pointerType === 'pen' || pointerType === 'mouse') {
+    if (pointerType === 'pen' || pointerType === 'mouse')
       return {source: InputSource.MOUSE_POINT, bits: InputBit.POINT, xy}
-    }
 
     // A point, xy, representing the stick is within or likely outside the
     // virtual joystick's base.
@@ -107,8 +104,7 @@ export class PointerAdapter {
           ? InputBit.UP
           : InputBit.DOWN
         : 0
-    const bits = horizontal | vertical
-    return {source, bits, normal, magnitude}
+    return {source, bits: horizontal | vertical, normal, magnitude}
   }
 
   /** Inputs persist until overwritten by the next input. */
@@ -120,16 +116,14 @@ export class PointerAdapter {
 
   toInput(): readonly (DownInput | MoveInput)[] {
     const input = [this._downInput, this._moveInput].filter(ArrayUtil.is)
-    if (this._moveInput && this._moveInput.source === InputSource.MOUSE_POINT) {
+    if (this._moveInput && this._moveInput.source === InputSource.MOUSE_POINT)
       this._moveInput = undefined
-    }
     return input
   }
 
-  adapt(canvasWH: WH, cam: Rect, event: PointerEvent, defaultOrigin: XY): void {
-    if (event.type === 'pointermove') {
-      this.onMove(canvasWH, cam, event, defaultOrigin)
-    } else this.onDown(canvasWH, cam, event)
+  adapt(canvasWH: WH, cam: Rect, ev: PointerEvent, defaultOrigin: XY): void {
+    if (ev.type === 'pointermove') this.onMove(canvasWH, cam, ev, defaultOrigin)
+    else this.onDown(canvasWH, cam, ev)
   }
 
   reset(): void {
@@ -138,26 +132,25 @@ export class PointerAdapter {
     this._origin = undefined
   }
 
-  private onDown(canvasWH: WH, cam: Rect, event: PointerEvent) {
-    const input = PointerAdapter.down(canvasWH, cam, event)
-    if (input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION) {
+  private onDown(canvasWH: WH, cam: Rect, ev: PointerEvent) {
+    const input = PointerAdapter.down(canvasWH, cam, ev)
+    if (input.source === InputSource.VIRTUAL_GAMEPAD_JOYSTICK_POSITION)
       if (input.bits) this._origin = input.xy
       else this._moveInput = undefined
-    }
     this._downInput = input
   }
 
   private onMove(
     canvasWH: WH,
     cam: Rect,
-    event: PointerEvent,
+    ev: PointerEvent,
     defaultOrigin: XY
   ): void {
     this._moveInput = PointerAdapter.move(
       canvasWH,
       cam,
       this._origin || defaultOrigin,
-      event
+      ev
     )
   }
 }

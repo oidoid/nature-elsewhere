@@ -13,6 +13,9 @@ body {
 
   /* Hide the cursor. */
   cursor: none;
+
+  /* Update for every pointermove touch Event like mouse Events. */
+  touch-action: none;
 }
 
 canvas {

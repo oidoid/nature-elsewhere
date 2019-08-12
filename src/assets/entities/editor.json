@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "updateType": "IF_VISIBLE",
+  "updateType": "ALWAYS",
   "behavior": "FOLLOW_CAM",
   "images": [{"id": "palette white", "sx": 128, "sy": 32, "layer": "UI_LO"}]
 }
