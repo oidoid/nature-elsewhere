@@ -10,13 +10,13 @@
     "drizzle": [
       {"id": "sprinkle", "x": 2, "y": 2, "w": 5, "tvy": -30},
       {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": -45},
-      {"id": "splash", "y": 35, "w": 8}
+      {"id": "rain-splash", "y": 35}
     ],
     "rain": [
       {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -45},
       {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -30},
       {"id": "sprinkle", "x": 2, "y": 6, "w": 7, "tvy": -40},
-      {"id": "splash", "y": 35, "w": 8}
+      {"id": "rain-splash", "y": 35}
     ],
     "downpour": [
       {"id": "sprinkle", "x": 1, "y": 6, "w": 9, "tvy": -43},
