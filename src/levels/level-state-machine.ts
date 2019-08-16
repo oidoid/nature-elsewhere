@@ -1,6 +1,6 @@
 import {Atlas} from '../atlas/atlas'
 import {Level} from './level'
-import * as levelConfig from '../assets/levels/editor.json'
+import * as levelConfig from '../assets/levels/title.json'
 import {LevelParser} from './level-parser'
 import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'

@@ -6,6 +6,7 @@ import * as conifer from '../assets/entities/conifer.json'
 import * as cursor from '../assets/entities/cursor.json'
 import * as editor from '../assets/entities/editor.json'
 import {Entity} from './entity'
+import * as fly from '../assets/entities/fly.json'
 import * as grass from '../assets/entities/grass.json'
 import * as mountain from '../assets/entities/mountain.json'
 import * as pyramid from '../assets/entities/pyramid.json'
@@ -23,6 +24,7 @@ export const EntityConfigs: Readonly<
   conifer,
   cursor,
   editor,
+  fly,
   grass,
   mountain,
   pyramid,

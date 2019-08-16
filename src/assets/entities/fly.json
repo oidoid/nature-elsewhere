@@ -1,0 +1,12 @@
+{
+  "id": "fly",
+  "updateType": "IF_VISIBLE",
+  "behavior": "CIRCLE",
+  "states": {
+    "0": [
+      {"id": "palette grey"},
+      {"id": "palette lightGreen", "y": 2, "layer": "SHADOW"}
+    ],
+    "dead": [{"id": "palette red", "layer": "BLOOD"}]
+  }
+}

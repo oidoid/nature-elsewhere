@@ -8,17 +8,18 @@
   ],
   "states": {
     "drizzle": [
-      {"id": "rain", "x": 2, "y": 2, "w": 7, "h": 12, "tvy": -10},
+      {"id": "sprinkle", "x": 2, "y": 2, "w": 5, "tvy": -30},
       {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": -45}
     ],
     "rain": [
-      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -30},
-      {"id": "rain", "x": 2, "y": 6, "w": 7, "tvy": -45}
+      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -35},
+      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -40},
+      {"id": "sprinkle", "x": 2, "y": 6, "w": 7, "tvy": -45}
     ],
     "downpour": [
-      {"id": "rain", "x": 1, "y": 6, "w": 9, "tvy": -40},
-      {"id": "rain", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": -35},
-      {"id": "rain", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": -40},
+      {"id": "sprinkle", "x": 1, "y": 6, "w": 9, "tvy": -43},
+      {"id": "rain", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": -53},
+      {"id": "sprinkle", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": -49},
       {
         "id": "rain pool",
         "x": 2,

@@ -139,7 +139,7 @@ export namespace Game {
       )
     }
 
-    if (state.levelStateMachine) {
+    if (state.levelStateMachine.level)
       Renderer.render(
         renderer,
         state.time,
@@ -148,8 +148,6 @@ export namespace Game {
         cam,
         state.levelStateMachine.store
       )
-    } else {
-      stop(state)
-    }
+    else stop(state)
   }
 }

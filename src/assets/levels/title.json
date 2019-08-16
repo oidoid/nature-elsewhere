@@ -6,14 +6,15 @@
   "entities": [
     {
       "images": [
-        {"id": "palette white", "sx": 32767, "sy": 32767, "layer": "PLANE"}
+        {"id": "palette green", "sx": 32767, "sy": 32767, "layer": "PLANE"}
       ]
     },
     {
       "id": "text",
       "text": "nature elsewhere",
       "behavior": "FOLLOW_CAM",
-      "layer": "UI_LO"
+      "layer": "UI_LO",
+      "images": [{"id": "palette red", "sx": 10, "sy": 10, "layer": "UI_HI"}]
     }
   ]
 }

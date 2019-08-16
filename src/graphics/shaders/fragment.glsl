@@ -8,6 +8,7 @@ uniform ivec2 atlasSize; // width (x), height (y) in pixels.
 
 flat in ivec4 vSource;
 in vec2 vOffset;
+
 out vec4 frag;
 
 void main() {
