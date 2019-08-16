@@ -54,7 +54,8 @@ export namespace AtlasParser {
   export function isAnimationDirection(
     val: string
   ): val is Atlas.AnimationDirection {
-    return Object.values(Atlas.AnimationDirection).includes(val)
+    const cast = <Atlas.AnimationDirection>val
+    return Object.values(Atlas.AnimationDirection).includes(cast)
   }
 
   export function parseCel(
