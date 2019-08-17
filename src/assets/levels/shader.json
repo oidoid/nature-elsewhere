@@ -7,13 +7,22 @@
     {
       "images": [
         {"id": "palette green", "w": 32767, "h": 32767, "layer": "PLANE"},
-        {"id": "mem-font 90", "x": 1, "y": 1, "tvx": 1},
-        {"id": "mem-font 90", "sx": 2, "sy": 2, "x": 5, "y": 1, "tvy": -1},
-        {"id": "mem-font 90", "sx": -2, "sy": 2, "x": 12, "y": 1},
-        {"id": "mem-font 90", "sx": -2, "sy": 2, "x": 19, "y": 1, "tvx": -1},
-        {"id": "mem-font 90", "x": 26, "w": 6, "y": 1, "tvx": 1},
-        {"id": "mem-font 90", "x": 26, "w": 6, "y": 6, "tvx": -1},
-        {"id": "mem-font 90", "sx": -3, "sy": 1, "x": 33, "y": 1, "tvx": 1}
+
+        {"id": "mem-font 90", "x": 1, "y": 1},
+        {"id": "mem-font 90", "x": 1, "y": 6, "sx": 2},
+        {"id": "mem-font 90", "x": 1, "y": 12, "w": 6},
+        {"id": "mem-font 90", "x": 1, "y": 18, "tx": 1},
+        {"id": "mem-font 90", "x": 1, "y": 24, "sx": 2, "tvx": -1},
+        {"id": "mem-font 90", "x": 1, "y": 30, "w": 6, "tvx": -1},
+        {"id": "mem-font 90", "x": 1, "y": 36, "tx": 1, "tvx": -1},
+
+        {"id": "mem-font 90", "x": 8, "y": 1, "sx": -1},
+        {"id": "mem-font 90", "x": 8, "y": 6, "sx": -2},
+        {"id": "mem-font 90", "x": 8, "y": 12, "w": 6, "sx": -1},
+        {"id": "mem-font 90", "x": 8, "y": 18, "sx": -1, "tx": 1},
+        {"id": "mem-font 90", "x": 8, "y": 24, "sx": -2, "tvx": -1},
+        {"id": "mem-font 90", "x": 8, "y": 30, "w": 6, "sx": -1, "tvx": -1},
+        {"id": "mem-font 90", "x": 8, "y": 36, "sx": -1, "tx": 1, "tvx": -1}
       ]
     }
   ]

@@ -8,20 +8,20 @@
   ],
   "states": {
     "drizzle": [
-      {"id": "sprinkle", "x": 2, "y": 2, "w": 5, "tvy": -30},
-      {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": -45},
+      {"id": "sprinkle", "x": 2, "y": 2, "w": 5, "tvy": 30},
+      {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": 45},
       {"id": "rain-splash", "y": 35}
     ],
     "rain": [
-      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -45},
-      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": -30},
-      {"id": "sprinkle", "x": 2, "y": 6, "w": 7, "tvy": -40},
+      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": 45},
+      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": 30},
+      {"id": "sprinkle", "x": 2, "y": 6, "w": 7, "tvy": 40},
       {"id": "rain-splash", "y": 35}
     ],
     "downpour": [
-      {"id": "sprinkle", "x": 1, "y": 6, "w": 9, "tvy": -43},
-      {"id": "rain", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": -53},
-      {"id": "sprinkle", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": -49},
+      {"id": "sprinkle", "x": 1, "y": 6, "w": 9, "tvy": 43},
+      {"id": "rain", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": 53},
+      {"id": "sprinkle", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": 49},
       {
         "id": "rain pool",
         "x": 2,
@@ -29,8 +29,8 @@
         "layer": "DECAL",
         "w": 7,
         "h": 5,
-        "tvx": -1,
-        "tvy": -22
+        "tvx": 1,
+        "tvy": 22
       },
       {
         "id": "rain pool",
@@ -38,7 +38,7 @@
         "layer": "DECAL",
         "w": 11,
         "h": 1,
-        "tvx": 12
+        "tvx": -12
       }
     ]
   }
