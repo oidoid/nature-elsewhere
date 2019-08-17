@@ -8,7 +8,7 @@
   "perVertex": [{"name": "uv", "type": "SHORT", "len": 2}],
   "perInstance": [
     {"name": "source", "type": "SHORT", "len": 4},
-    {"name": "position", "type": "SHORT", "len": 2},
+    {"name": "target", "type": "SHORT", "len": 4},
     {"name": "scale", "type": "SHORT", "len": 2},
     {"name": "translate", "type": "SHORT", "len": 4}
   ]

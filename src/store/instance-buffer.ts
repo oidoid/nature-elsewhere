@@ -27,20 +27,20 @@ export namespace InstanceBuffer {
 
     dat.setInt16(i + 0, Image.source(img, atlas).x, littleEndian)
     dat.setInt16(i + 2, Image.source(img, atlas).y, littleEndian)
-    dat.setInt16(i + 4, img.w, littleEndian)
-    dat.setInt16(i + 6, img.h, littleEndian)
-    // dat.setInt16(i + 4, atlas[img.id].w, littleEndian)
-    // dat.setInt16(i + 6, atlas[img.id].h, littleEndian)
+    dat.setInt16(i + 4, atlas[img.id].w, littleEndian)
+    dat.setInt16(i + 6, atlas[img.id].h, littleEndian)
 
     dat.setInt16(i + 8, img.x, littleEndian)
     dat.setInt16(i + 10, img.y, littleEndian)
+    dat.setInt16(i + 12, img.w, littleEndian)
+    dat.setInt16(i + 14, img.h, littleEndian)
 
-    dat.setInt16(i + 12, img.sx, littleEndian)
-    dat.setInt16(i + 14, img.sy, littleEndian)
+    dat.setInt16(i + 16, img.sx, littleEndian)
+    dat.setInt16(i + 18, img.sy, littleEndian)
 
-    dat.setInt16(i + 16, img.tx, littleEndian)
-    dat.setInt16(i + 18, img.ty, littleEndian)
-    dat.setInt16(i + 20, img.tvx, littleEndian)
-    dat.setInt16(i + 22, img.tvy, littleEndian)
+    dat.setInt16(i + 20, img.tx, littleEndian)
+    dat.setInt16(i + 22, img.ty, littleEndian)
+    dat.setInt16(i + 24, img.tvx, littleEndian)
+    dat.setInt16(i + 26, img.tvy, littleEndian)
   }
 }

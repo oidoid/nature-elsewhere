@@ -9,7 +9,6 @@
         {"id": "palette paleGreen", "sx": 32767, "sy": 32767, "layer": "PLANE"}
       ]
     },
-    {"id": "textDateVersionHash", "x": 1, "y": 123},
     {"id": "cloud", "x": 20, "y": 20},
     {"id": "cloud", "state": "drizzle", "x": 30, "y": 28},
     {"id": "cloud", "state": "rain", "x": 54, "y": 50},

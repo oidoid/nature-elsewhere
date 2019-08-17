@@ -1,6 +1,6 @@
 import {Atlas} from '../atlas/atlas'
 import {Level} from './level'
-import * as levelConfig from '../assets/levels/fields.json'
+import {LevelConfigs} from './level-configs'
 import {LevelParser} from './level-parser'
 import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
@@ -14,7 +14,7 @@ export interface LevelStateMachine {
 
 export namespace LevelStateMachine {
   export function make(layout: ShaderLayout, atlas: Atlas): LevelStateMachine {
-    const level = LevelParser.parse(atlas, levelConfig)
+    const level = LevelParser.parse(atlas, LevelConfigs.shader)
     return {level, store: Store.make(layout, atlas)}
   }
 

@@ -1,0 +1,20 @@
+{
+  "id": "shader",
+  "w": 128,
+  "h": 128,
+  "minSize": {"w": 128, "h": 128},
+  "entities": [
+    {
+      "images": [
+        {"id": "palette green", "w": 32767, "h": 32767, "layer": "PLANE"},
+        {"id": "mem-font 90", "x": 1, "y": 1, "tvx": 1},
+        {"id": "mem-font 90", "sx": 2, "sy": 2, "x": 5, "y": 1, "tvy": -1},
+        {"id": "mem-font 90", "sx": -2, "sy": 2, "x": 12, "y": 1},
+        {"id": "mem-font 90", "sx": -2, "sy": 2, "x": 19, "y": 1, "tvx": -1},
+        {"id": "mem-font 90", "x": 26, "w": 6, "y": 1, "tvx": 1},
+        {"id": "mem-font 90", "x": 26, "w": 6, "y": 6, "tvx": -1},
+        {"id": "mem-font 90", "sx": -3, "sy": 1, "x": 33, "y": 1, "tvx": 1}
+      ]
+    }
+  ]
+}

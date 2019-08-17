@@ -15,6 +15,7 @@
       "behavior": "FOLLOW_CAM",
       "layer": "UI_LO",
       "images": [{"id": "palette red", "sx": 10, "sy": 10, "layer": "UI_HI"}]
-    }
+    },
+    {"id": "textDateVersionHash", "x": 1, "y": 123}
   ]
 }
