@@ -1,0 +1,57 @@
+Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
+  Make large, lavish, content-rich levels.
+    Add title, editor, settings, and pause levels.
+      Make a level editor.
+        Make outstanding UI.
+-->       Mock the level editor.
+          How will I implement it?
+            UI is a special case. Most are just rectangles with centered contents relative. The relative positioning logic already exists for all entities.
+            Do I need masking?
+            What examples are there for making 9png like UI?
+              Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
+              What examples are there of single file C libraries for UI?
+                What other single file libraries should I take a page from?
+                  How can I be more single file functional and structural?
+    Make many wonderful entities.
+      Copy the old content (images and code) from previous commits, tmp/, and old animation and shader techniques.
+      I think I only need left / right, back, and forward animation states.
+      Add tornados.
+      Add lightning to the cloud entity.
+      Check that the entities strong, even, isometric perspectives.
+      I need a better way to manage states and transitions.
+        Entities are currently convenient configurations to pass to image factories that generate groups of images. The default entity can literally just be images.
+        There's some great examples of how to do player states, FSMs, and collision detection / gravity in https://script-8.github.io/?id=a3b40a159db3c794c1024fba73f4eb99.
+        There's some good examples in Underrun too. E.g., the Entity class: https://github.com/phoboslab/underrun/blob/master/source/entity-sentry.js
+        I may want to add flipped states given shadow alignment or I can try to account for it with event offsets in the image itself.
+      Consider alternative rain shader patterns.
+      Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
+      Add some kind of unstoppable giant monster / colossus / death entity.
+    Add collision detection.
+  Synthesize sounds.
+    Understand the basics: https://news.ycombinator.com/item?id=20272346
+    Flesh out the audio system.
+      Synthesize crickets, wind, rain, thunder, and birds.
+    Survey all the demos in Super Collider.
+  Improve the palette to have tremendous colors.
+  Improve the structure. Write little, clearly.
+    Add note about declarative style to readme. Declarative configs are awesome!
+    In CS, everything was an object. This worked. But we also did tricks like overlaying memory onto plain data.
+    Do I keep it flat (e.g., extends XY) or try to stick to composing types?
+      GLSL's trunc() operates on any kind of vector, e.g. JS can take two Record<keyof any, number> to return a new sum object or test equality.
+    Improve my JSON config DSL.
+      Explore better ways to represent states.
+      Add configuration tests that check the atlas.
+        Check that all animation IDs references by entities exist in the parsed atlas.
+    I want recursive freeze and equivalency functions.
+    What TypeScript and other open source examples should I consider?
+    Re-review WebGL implementations.
+  Improve my identity.
+    These are some ideas: motherboard, harpsichord, pretzel demake, harp pretzel, harpsichord pretzel, pizza circuit, motherpizza, motherpretzel, ninerva, minerva, mythology, health bars, xp, pretzel salt uroboros, milkshake, pizza, ooz, motherearth, motherboard, pretzel circuit
+  Add windy grass displacement shader to make the fields pop.
+    Maybe look through shader toys and displacement shader 101s.
+      https://forums.tigsource.com/index.php?topic=40539.20
+      https://www.austinobrien.me/blog/shader-study/slime-rancher-pixel-display
+    Add shadow distortion shader too.
+    Do I need a shader for better types of water? What does it look like?
+  How can I move my planning materials into the VCS?
+  Review Diablo tile IDs: https://www.boristhebrave.com/2019/07/14/dungeon-generation-in-diablo-1/
