@@ -19,7 +19,6 @@ void main() {
   // Offset flipped images by their width or height.
   gl_Position = vec4(target.xy + uv * target.zw, 0, 1) * projection;
   vSource = source;
-  vec2 offset = vec2(translate.xy - uv * target.zw) / vec2(-scale) + vec2(translate.zw) * time / vec2(-1000 * scale);
-  offset = offset - mod(offset, 1. / vec2(abs(scale)));
-  vOffset = offset;
+  vOffset = (vec2(-translate.xy + uv * target.zw) - vec2(translate.zw) * time / 1000.) / vec2(scale);
+  vOffset = vOffset - mod(vOffset, 1. / vec2(abs(scale)));
 }

@@ -17,7 +17,7 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
       I think I only need left / right, back, and forward animation states.
       Add tornados.
       Add lightning to the cloud entity.
-      Check that the entities strong, even, isometric perspectives.
+      Check that the entities have strong, even, isometric perspectives.
       I need a better way to manage states and transitions.
         Entities are currently convenient configurations to pass to image factories that generate groups of images. The default entity can literally just be images.
         There's some great examples of how to do player states, FSMs, and collision detection / gravity in https://script-8.github.io/?id=a3b40a159db3c794c1024fba73f4eb99.
@@ -45,8 +45,9 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
     I want recursive freeze and equivalency functions.
     What TypeScript and other open source examples should I consider?
     Re-review WebGL implementations.
+    Update the readme.
   Improve my identity.
-    These are some ideas: motherboard, harpsichord, pretzel demake, harp pretzel, harpsichord pretzel, pizza circuit, motherpizza, motherpretzel, ninerva, minerva, mythology, health bars, xp, pretzel salt uroboros, milkshake, pizza, ooz, motherearth, motherboard, pretzel circuit
+    These are some ideas: motherboard, harpsichord, pretzel demake, harp pretzel, harpsichord pretzel, pizza circuit, motherpizza, motherpretzel, ninerva, minerva, mythology, health bars, xp, pretzel salt uroboros, milkshake, pizza, ooz, motherearth, motherboard, pretzel circuit.
   Add windy grass displacement shader to make the fields pop.
     Maybe look through shader toys and displacement shader 101s.
       https://forums.tigsource.com/index.php?topic=40539.20

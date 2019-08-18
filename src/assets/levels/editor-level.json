@@ -1,0 +1,23 @@
+{
+  "id": "editor",
+  "w": 65535,
+  "h": 65535,
+  "minSize": {"w": 128, "h": 32},
+  "entities": [
+    {
+      "images": [
+        {"id": "palette red", "sx": 32767, "sy": 32767, "layer": "PLANE"}
+      ]
+    },
+    {"id": "text", "x": 1, "y": 1, "text": "id:...", "layer": "UI_MID"},
+    {"id": "text", "x": 1, "y": 6, "text": "state:...", "layer": "UI_MID"},
+    {"id": "text", "x": 1, "y": 11, "text": "x:32767", "layer": "UI_MID"},
+    {"id": "text", "x": 28, "y": 11, "text": "w:32767", "layer": "UI_MID"},
+    {"id": "text", "x": 1, "y": 16, "text": "y:...", "layer": "UI_MID"},
+    {"id": "text", "x": 28, "y": 16, "text": "h:32767", "layer": "UI_MID"},
+    {"id": "text", "x": 56, "y": 1, "text": "sx:...", "layer": "UI_MID"},
+    {"id": "text", "x": 56, "y": 6, "text": "sy:...", "layer": "UI_MID"},
+    {"id": "cursor"},
+    {"id": "editor"}
+  ]
+}
