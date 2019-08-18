@@ -6,12 +6,20 @@ type KeyMap = Readonly<Partial<Record<Key, InputBit.Key>>>
 
 export namespace KeyboardRecorder {
   /** Call this function when a keydown or keyup KeyboardEvent is received. */
-  export function onKey(bits: InputBit, event: KeyboardEvent): InputBit {
-    const bit = (<KeyMap>defaultKeyboardMap)[event.key]
+  export function onKey(bits: InputBit, ev: KeyboardEvent): InputBit {
+    const bit = (<KeyMap>defaultKeyboardMap)[eventToKey(ev)]
     if (bit === undefined) return bits
-    event.preventDefault()
-    return adapt(bits, InputBit[bit], event.type === 'keydown')
+    ev.preventDefault()
+    return adapt(bits, InputBit[bit], ev.type === 'keydown')
   }
+}
+
+function eventToKey(ev: KeyboardEvent): string {
+  const meta = ev.metaKey ? 'Meta+' : ''
+  const ctrl = ev.ctrlKey ? 'Control+' : ''
+  const alt = ev.altKey ? 'Alt+' : ''
+  const shift = ev.shiftKey ? 'Shift+' : ''
+  return meta + ctrl + alt + shift + ev.key
 }
 
 /** Converts an Event-based active / inactive input, keydown / keyup, to a
