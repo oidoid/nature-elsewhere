@@ -1,0 +1,33 @@
+{
+  "id": "entities",
+  "w": 128,
+  "h": 128,
+  "minSize": {"w": 128, "h": 128},
+  "entities": [
+    {
+      "images": [
+        {"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"}
+      ]
+    },
+    {"id": "bee", "x": 1, "y": 1},
+    {"id": "bee", "state": "dead", "x": 7, "y": 1},
+    {"id": "bush", "x": 12, "y": 1},
+    {"id": "bush", "state": "1", "x": 20, "y": 1},
+    {"id": "cloud", "x": 28, "y": 1},
+    {"id": "cloud", "state": "drizzle", "x": 41, "y": 1},
+    {"id": "cloud", "state": "rain", "x": 54, "y": 1},
+    {"id": "cloud", "state": "downpour", "x": 67, "y": 1},
+    {"id": "clover", "x": 80, "y": 1},
+    {"id": "clover", "state": "1", "x": 80, "y": 8},
+    {"id": "conifer", "x": 88, "y": 1},
+    {"id": "cursor", "x": 97, "y": 1},
+    {"id": "fly", "x": 99, "y": 1},
+    {"id": "fly", "state": "dead", "x": 101, "y": 1},
+    {"id": "grass", "x": 103, "y": 1},
+    {"id": "grass", "state": "1", "x": 120, "y": 1},
+    {"id": "grass", "state": "2", "x": 132, "y": 1},
+    {"id": "mountain", "x": 1, "y": 10},
+    {"id": "pyramid", "x": 1, "y": 40},
+    {"id": "tree", "x": 32, "y": 45}
+  ]
+}
