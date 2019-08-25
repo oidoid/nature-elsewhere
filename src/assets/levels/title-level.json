@@ -6,16 +6,18 @@
   "entities": [
     {
       "images": [
-        {"id": "palette green", "sx": 32767, "sy": 32767, "layer": "PLANE"}
+        {"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"},
+        {"id": "logo"},
+        {"id": "palette grey", "y": 11, "w": 33, "h": 1}
       ]
     },
     {
       "id": "text",
-      "text": "nature elsewhere",
-      "behavior": "FOLLOW_CAM",
-      "layer": "UI_LO",
-      "images": [{"id": "palette red", "sx": 10, "sy": 10, "layer": "UI_HI"}]
+      "y": 16,
+      "text": "start\noptions\nlevel editor\nexit"
     },
-    {"id": "textDateVersionHash", "x": 1, "y": 123}
+    {"id": "textDateVersionHash", "x": 1, "y": 123},
+    {"id": "cursor"},
+    {"id": "virtualJoystick"}
   ]
 }

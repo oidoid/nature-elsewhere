@@ -1,0 +1,23 @@
+{
+  "id": "backpacker",
+  "updateType": "ALWAYS",
+  "behavior": "BACKPACKER",
+  "states": {
+    "0": [
+      {"id": "backpacker idleDown"},
+      {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+    ],
+    "walkRight": [
+      {"id": "backpacker walkRight"},
+      {"id": "backpacker walkRightShadow", "layer": "SHADOW"}
+    ],
+    "walkDown": [
+      {"id": "backpacker walkDown"},
+      {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+    ],
+    "walkUp": [
+      {"id": "backpacker walkUp"},
+      {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+    ]
+  }
+}

@@ -2,7 +2,6 @@
   "letterHeight": 4,
   "leading": 2,
   "lineHeight": 6,
-
   "kerning": {
     ",'": 0,
     ",\"": 0,
@@ -10,7 +9,6 @@
     ".'": 0,
     ".\"": 0,
     ".`": 0,
-    "..": 1,
     "::": 0,
     ";:": 0,
     ";;": 0,
@@ -28,6 +26,7 @@
     "lt": 0,
     "ly": 0,
     "n'": 0,
+    "pt": 0,
     "rj": 0,
     "rs": 0,
     "s.": 0,
@@ -35,7 +34,6 @@
     "ts": 0,
     "y.": 0,
     "ys": 0,
-
     "\u0000,": 0,
     "\u0001,": 0,
     "\u0002,": 0,
@@ -168,7 +166,6 @@
   "defaultKerning": 1,
   "whitespaceKerning": 0,
   "endOfLineKerning": 0,
-
   "letterOffset": {
     ",": 1,
     ";": 1,
@@ -178,7 +175,6 @@
     "q": 1
   },
   "defaultLetterOffset": 0,
-
   "letterWidth": {
     "\n": 1,
     " ": 4,

@@ -43,6 +43,7 @@
     {"id": "tree", "x": 159, "y": 126},
     {"id": "conifer", "x": 119, "y": 116},
     {"id": "fly", "x": 110, "y": 130, "vx": -0.015},
-    {"id": "fly", "state": "dead", "x": 100, "y": 132}
+    {"id": "fly", "state": "dead", "x": 100, "y": 132},
+    {"id": "backpacker", "x": 80, "y": 102}
   ]
 }

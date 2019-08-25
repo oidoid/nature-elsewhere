@@ -1,3 +1,4 @@
+import * as backpacker from '../assets/entities/backpacker.json'
 import * as bee from '../assets/entities/bee.json'
 import * as bush from '../assets/entities/bush.json'
 import * as cloud from '../assets/entities/cloud.json'
@@ -17,6 +18,7 @@ import * as virtualJoystick from '../assets/entities/ui/virtual-joystick.json'
 export const EntityConfigs: Readonly<
   Partial<Record<string, Entity.Config>>
 > = Object.freeze({
+  backpacker,
   bee,
   bush,
   cloud,

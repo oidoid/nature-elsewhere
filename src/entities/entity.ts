@@ -14,7 +14,7 @@ export interface Entity
   extends ImageRect,
     Omit<Required<Entity.Config>, 'images' | 'states'> {
   readonly updateType: UpdateType.Key
-  readonly behavior: Behavior.Key
+  readonly behavior: Behavior.Key // should this be same state key instead?
 }
 
 export namespace Entity {

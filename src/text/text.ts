@@ -36,7 +36,6 @@ export namespace Text {
       const id = 'mem-font ' + string.charCodeAt(i)
       const image = Image.make(atlas, {
         id,
-        layer: 'UI_HIHI',
         ...opts,
         x: ((opts && opts.x) || 0) + position.x,
         y: ((opts && opts.y) || 0) + position.y - y

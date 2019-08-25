@@ -96,15 +96,21 @@ export namespace Recorder {
 }
 
 function active(
-  recorder: Recorder,
+  state: Recorder,
   exact: boolean,
   combo: readonly InputBit[]
 ): boolean {
-  const offset = recorder.combo.length - combo.length
-  if (offset < 0) return false
   // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
+  const offset = state.combo.length - combo.length
+  if (offset < 0) return false
+  if (
+    ((exact ? ~0 : combo.slice(-1)[0]) & InputSet.bits(state.lastSet)) !==
+    combo.slice(-1)[0]
+  ) {
+    return false
+  }
   return combo.every(
     (bits, i) =>
-      ((exact ? ~0 : bits) & InputSet.bits(recorder.combo[offset + i])) === bits
+      ((exact ? ~0 : bits) & InputSet.bits(state.combo[offset + i])) === bits
   )
 }

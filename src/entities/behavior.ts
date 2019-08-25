@@ -13,6 +13,39 @@ export const Behavior = Object.freeze({
     ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveBy(
       state,
       {x: state.vx, y: state.vy},
+      state.sx,
+      ...state.images
+    ))
+  },
+  BACKPACKER(state: Mutable<Entity>, _cam: Rect, recorder: Recorder): void {
+    if (state.id !== 'backpacker')
+      throw new Error(`Unsupported ID "${state.id}".`)
+    let {x, y} = state
+    const up = Recorder.set(recorder, InputBit.UP)
+    const down = Recorder.set(recorder, InputBit.DOWN)
+    const left = Recorder.set(recorder, InputBit.LEFT)
+    const right = Recorder.set(recorder, InputBit.RIGHT)
+    const diagonal = (left || right) && (up || down)
+    let s = 0.25
+    if (!recorder.timer && diagonal) {
+      // Synchronize x and y pixel movement when initially moving diagonally.
+      ;({x, y} = XY.trunc({x, y}))
+
+      // One direction is negative, the other is positive. Offset by 1 - speed
+      // to synchronize.
+      if (left && down) x += 1 - s
+      else if (right && up) y += 1 - s
+    }
+    if (up) (y -= s), (state.state = 'walkUp') // rebuild the images i guess
+    if (down) (y += s), (state.state = 'walkDown')
+    if (left) (x -= s), (state.state = 'walkLeft'), (state.sx = -1)
+    if (right)
+      (x += s), (state.state = 'walkLeft'), (state.sx = 1)
+      // state.images = EntityConfigs[state.state].images
+    ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
+      state,
+      {x, y},
+      state.sx,
       ...state.images
     ))
   },
@@ -21,6 +54,7 @@ export const Behavior = Object.freeze({
     ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveBy(
       state,
       {x: state.vx, y: state.vy},
+      1,
       ...state.images
     ))
 
@@ -33,6 +67,7 @@ export const Behavior = Object.freeze({
     ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
       state,
       {x: 1, y: cam.y + cam.h - (state.h + 1)},
+      state.sx,
       ...state.images
     ))
   },
@@ -43,6 +78,7 @@ export const Behavior = Object.freeze({
       ({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
         state,
         XY.trunc(point.xy),
+        state.sx,
         ...state.images
       ))
   },
@@ -62,6 +98,7 @@ export const Behavior = Object.freeze({
       ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
         state,
         XY.trunc(XY.sub(position.xy, {x: state.w / 2, y: state.h / 2})),
+        state.sx,
         ...state.images
       ))
       ;(<any>state).timer = 0

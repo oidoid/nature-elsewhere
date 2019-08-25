@@ -14,7 +14,7 @@ export interface LevelStateMachine {
 
 export namespace LevelStateMachine {
   export function make(layout: ShaderLayout, atlas: Atlas): LevelStateMachine {
-    const level = LevelParser.parse(atlas, LevelConfigs.editor)
+    const level = LevelParser.parse(atlas, LevelConfigs.fields)
     return {level, store: Store.make(layout, atlas)}
   }
 
