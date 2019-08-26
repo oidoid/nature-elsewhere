@@ -18,9 +18,8 @@ export interface Renderer {
 }
 
 const GL = WebGL2RenderingContext
-const vertices: Int16Array = new Int16Array(
-  Object.freeze([1, 1, 0, 1, 1, 0, 0, 0])
-)
+const uv: Int16Array = new Int16Array(Object.freeze([1, 1, 0, 1, 1, 0, 0, 0]))
+const uvLen: number = uv.length / 2 // dimensions
 
 export namespace Renderer {
   export function make(
@@ -68,7 +67,7 @@ export namespace Renderer {
         attr
       )
     )
-    GLUtil.bufferData(gl, perVertexBuffer, vertices, GL.STATIC_READ)
+    GLUtil.bufferData(gl, perVertexBuffer, uv, GL.STATIC_READ)
 
     const perInstanceBuffer = gl.createBuffer()
     layout.perInstance.attributes.forEach(attr =>
@@ -115,8 +114,7 @@ export namespace Renderer {
     state.gl.uniform1f(state.uniforms[state.layout.uniforms.time], time)
     const perInstanceBuffer = state.perInstanceBuffer
     GLUtil.bufferData(state.gl, perInstanceBuffer, dat, GL.DYNAMIC_READ)
-    const verticesLen = vertices.length / state.layout.perVertex.len
-    state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, verticesLen, len)
+    state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, uvLen, len)
   }
 
   /** @arg canvasWH The desired resolution of the canvas in CSS pixels. E.g.,

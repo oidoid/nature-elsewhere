@@ -8,7 +8,7 @@ import {Rect} from '../math/rect'
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering and collision detection. The image may be animated.
     Each Cel has the same size. Specifying a different target width or height
-    than the source truncates or repeats the rendered source. */
+    than the source truncates or repeats the scaled rendered source. */
 export interface Image extends Required<Image.Config> {
   readonly layer: Layer.Key
 }

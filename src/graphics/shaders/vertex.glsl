@@ -7,8 +7,14 @@ uniform mat4 projection;
 uniform float time;
 
 in ivec2 uv; // x, y (0 or 1).
-in ivec4 source; // x, y, width (z), and height (w) in pixels.
-in ivec4 target; // x, y, scaled width (z) and height (w) in pixels.
+// The subimage location and dimensions within the atlas given in pixel
+// coordinates. x, y, width (z), and height (w) in pixels.
+in ivec4 source;
+// The rendered destination and dimensions in level pixel coordinates. x, y,
+// scaled width (z) and scaled height (w) in pixels. When the destination width
+// and height is not equal to the source width and height times scale, the
+// rendered result is the source truncated or repeated.
+in ivec4 target;
 in ivec2 scale;
 in ivec4 translate; // Translation (x, y) and translation velocity (z, w) in pixels.
 
