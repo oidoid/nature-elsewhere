@@ -13,7 +13,6 @@ export const Behavior = Object.freeze({
     ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveBy(
       state,
       {x: state.vx, y: state.vy},
-      state.sx,
       ...state.images
     ))
   },
@@ -45,7 +44,6 @@ export const Behavior = Object.freeze({
     ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
       state,
       {x, y},
-      state.sx,
       ...state.images
     ))
   },
@@ -54,7 +52,6 @@ export const Behavior = Object.freeze({
     ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveBy(
       state,
       {x: state.vx, y: state.vy},
-      1,
       ...state.images
     ))
 
@@ -67,7 +64,6 @@ export const Behavior = Object.freeze({
     ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
       state,
       {x: 1, y: cam.y + cam.h - (state.h + 1)},
-      state.sx,
       ...state.images
     ))
   },
@@ -78,7 +74,6 @@ export const Behavior = Object.freeze({
       ({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
         state,
         XY.trunc(point.xy),
-        state.sx,
         ...state.images
       ))
   },
@@ -98,7 +93,6 @@ export const Behavior = Object.freeze({
       ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
         state,
         XY.trunc(XY.sub(position.xy, {x: state.w / 2, y: state.h / 2})),
-        state.sx,
         ...state.images
       ))
       ;(<any>state).timer = 0

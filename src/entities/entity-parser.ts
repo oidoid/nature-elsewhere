@@ -51,7 +51,6 @@ function newStandardEntity(atlas: Atlas, entity: Entity): Entity {
   ImageRect.moveBy(
     {x: 0, y: 0, w: 0, h: 0},
     {x: entity.x, y: entity.y},
-    entity.sx,
     ...images
   )
   return Object.assign({}, entity, cfg, {images})

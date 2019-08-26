@@ -7,13 +7,13 @@ import {Rect} from '../math/rect'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering and collision detection. The image may be animated.
-    Each Cel has the same size. */
+    Each Cel has the same size. Specifying a different target width or height
+    than the source truncates or repeats the rendered source. */
 export interface Image extends Required<Image.Config> {
   readonly layer: Layer.Key
 }
 
 export namespace Image {
-  /** Specifying a different width or height scales the target. */
   export interface Config extends Partial<Rect>, Partial<Animator> {
     readonly id: string
     readonly layer?: Layer.Key | string

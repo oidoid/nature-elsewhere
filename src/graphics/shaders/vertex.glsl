@@ -9,7 +9,7 @@ uniform float time;
 in ivec2 uv; // x, y (0 or 1).
 in ivec4 source; // x, y, width (z), and height (w) in pixels.
 in ivec4 target; // x, y, scaled width (z) and height (w) in pixels.
-in ivec2 scale; // x, y in pixels.
+in ivec2 scale;
 in ivec4 translate; // Translation (x, y) and translation velocity (z, w) in pixels.
 
 flat out ivec4 vSource;

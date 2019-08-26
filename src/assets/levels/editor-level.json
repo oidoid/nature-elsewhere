@@ -6,7 +6,7 @@
   "entities": [
     {
       "images": [
-        {"id": "palette red", "sx": 32767, "sy": 32767, "layer": "PLANE"}
+        {"id": "palette red", "w": 32767, "h": 32767, "layer": "PLANE"}
       ]
     },
     {"id": "text", "x": 1, "y": 1, "text": "id...", "layer": "UI_MID"},
