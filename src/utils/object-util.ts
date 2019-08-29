@@ -20,14 +20,6 @@ export namespace ObjectUtil {
     return keys(val).map(key => [key, val[key]])
   }
 
-  export function reverse<T>(
-    val: Readonly<Reversible<T>>
-  ): Readonly<Reverse<T>> {
-    return entries(val).reduce((sum, [key, val]) => ({...sum, [val]: key}), <
-      Readonly<Reverse<T>>
-    >{})
-  }
-
   export function defaultIfAbsent<T, V = ValueOf<T>>(
     obj: T,
     key: keyof T,

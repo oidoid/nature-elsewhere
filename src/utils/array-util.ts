@@ -1,5 +1,5 @@
 export namespace ArrayUtil {
-  export function uniq<T>(
+  export function unique<T>(
     equals: (lhs: T, rhs: T) => boolean
   ): Parameters<T[]['filter']>[0] {
     return (item: T, _: number, array: readonly T[]) =>

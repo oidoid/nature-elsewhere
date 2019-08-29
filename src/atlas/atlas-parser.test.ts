@@ -10,24 +10,24 @@ describe('atlas.json', () => {
   const atlas = Object.freeze(AtlasParser.parse(file))
   const tags = Object.freeze(file.meta.frameTags.map(frameTag => frameTag.name))
 
-  test.each(tags)('%# Tag %p is unique within the sheet', tag => {
+  test.each(tags)('%# Tag %p is unique within the sheet', tag =>
     expect(tags.filter(val => val === tag)).toHaveLength(1)
-  })
+  )
 
   test.each(tags)('%# Tag %p has a Frame', tag => {
     const frameKeys = ObjectUtil.keys(file.frames)
       .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
-      .filter(ArrayUtil.uniq(Object.is))
+      .filter(ArrayUtil.unique(Object.is))
     expect(frameKeys).toContainEqual(tag)
   })
 
   {
     const frameKeys = ObjectUtil.keys(file.frames)
       .map(tagFrameNumber => tagFrameNumber.replace(/ [0-9]*$/, ''))
-      .filter(ArrayUtil.uniq(Object.is))
-    test.each(frameKeys)('%# Frame has a Tag %p', frameKey => {
+      .filter(ArrayUtil.unique(Object.is))
+    test.each(frameKeys)('%# Frame has a Tag %p', frameKey =>
       expect(tags).toContainEqual(frameKey)
-    })
+    )
   }
 
   test.each([...file.meta.slices])('%# Slice name %p is a Tag', slice =>
@@ -133,12 +133,7 @@ describe('parse()', () => {
         w: 16,
         h: 16,
         cels: [
-          {
-            x: 221,
-            y: 19,
-            duration: 1,
-            collision: [{x: 8, y: 12, w: 2, h: 3}]
-          }
+          {x: 221, y: 19, duration: 1, collision: [{x: 8, y: 12, w: 2, h: 3}]}
         ],
         duration: 1,
         direction: 'forward'
@@ -355,15 +350,13 @@ describe('parsePadding()', () => {
 })
 
 describe('parseDuration()', () => {
-  test('Converts Duration.', () => {
-    expect(AtlasParser.parseDuration(1)).toStrictEqual(1)
-  })
+  test('Converts Duration.', () =>
+    expect(AtlasParser.parseDuration(1)).toStrictEqual(1))
 
-  test('Converts infinite Duration.', () => {
+  test('Converts infinite Duration.', () =>
     expect(AtlasParser.parseDuration(65535)).toStrictEqual(
       Number.POSITIVE_INFINITY
-    )
-  })
+    ))
 })
 
 describe('parseCollision()', () => {
@@ -430,8 +423,7 @@ describe('parseCollision()', () => {
 
   test('Converts no Slices.', () => {
     const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    const slices = <readonly Aseprite.Slice[]>[]
-    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
+    expect(AtlasParser.parseCollision(frameTag, 0, [])).toStrictEqual([])
   })
 
   test('Converts multiple Slices.', () => {
