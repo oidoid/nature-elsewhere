@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "resolveJsonModule": true,
-    "lib": ["es2019", "dom"],
 
     "strict": true,
     "noUnusedLocals": true,
