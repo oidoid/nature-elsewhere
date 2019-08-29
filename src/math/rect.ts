@@ -11,16 +11,16 @@ export namespace Rect {
   }
 
   /** @return True if lhs and rhs are overlapping, false if touching or
-    independent. */
+      independent. */
   export function intersects({x, y, w, h}: Rect, rhs: Rect): boolean {
     return (
       x + w > rhs.x && x < rhs.x + rhs.w && y + h > rhs.y && y < rhs.y + rhs.h
     )
   }
 
-  /** @return Width and / or height is less than zero if no intersection, equal to
-            to zero if touching but not overlapping, or greater than zero if
-            overlapping. */
+  /** @return Width and / or height is less than zero if no intersection, equal
+              to zero if touching but not overlapping, or greater than zero if
+              overlapping. */
   export function intersection(lhs: Rect, rhs: Rect): Rect {
     // The bottom-rightmost coordinates is the upper-left of the intersection.
     const upperLeft = XY.max(lhs, rhs)
@@ -30,7 +30,7 @@ export namespace Rect {
   }
 
   /** The union or bounds of an array of Rects may be computed thus:
-    `rects.reduce(Rect.union)`. */
+      `rects.reduce(Rect.union)`. */
   export function union(lhs: Rect, rhs: Rect): Rect {
     const {x, y} = XY.min(lhs, rhs)
     const w = Math.max(lhs.x + lhs.w, rhs.x + rhs.w) - x

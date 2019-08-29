@@ -25,8 +25,8 @@ export namespace InstanceBuffer {
   ): void {
     const i = index * layout.perInstance.stride
 
-    dat.setInt16(i + 0, Image.source(img, atlas).x, littleEndian)
-    dat.setInt16(i + 2, Image.source(img, atlas).y, littleEndian)
+    dat.setInt16(i + 0, Image.cel(img, atlas).x, littleEndian)
+    dat.setInt16(i + 2, Image.cel(img, atlas).y, littleEndian)
     dat.setInt16(i + 4, atlas[img.id].w, littleEndian)
     dat.setInt16(i + 6, atlas[img.id].h, littleEndian)
 

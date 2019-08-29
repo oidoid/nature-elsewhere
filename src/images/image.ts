@@ -51,7 +51,7 @@ export namespace Image {
     return Object.assign(state, animator)
   }
 
-  export function source({id, period}: Image, atlas: Atlas): Atlas.Cel {
+  export function cel({id, period}: Image, atlas: Atlas): Atlas.Cel {
     return atlas[id].cels[Animator.index(atlas[id].cels, period)]
   }
 
