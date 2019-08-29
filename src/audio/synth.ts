@@ -1,21 +1,21 @@
-export interface Player {
+export interface Synth {
   readonly context: AudioContext
   oscillator?: OscillatorNode
   gain?: GainNode
 }
 
-export namespace Player {
-  export function make(): Player {
+export namespace Synth {
+  export function make(): Synth {
     return {context: new AudioContext()}
   }
 
   export function play(
-    state: Player,
+    state: Synth,
     type: OscillatorType,
     startFrequency: number,
     endFrequency: number,
     duration: number
-  ): Player {
+  ): Synth {
     const oscillator = state.context.createOscillator()
     const gain = state.context.createGain()
 

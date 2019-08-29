@@ -4,38 +4,38 @@ import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
 import {LevelStateMachine} from './levels/level-state-machine'
-import {Player} from './audio/player'
 import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer/renderer'
 import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
+import {Synth} from './audio/synth'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
-export namespace Game {
-  export interface State {
-    time: number
-    /** The outstanding time in milliseconds to apply. */
-    duration: number
-    /** The exact duration in milliseconds to apply each update. Any number of
-     *  updates may occur per animation frame. */
-    readonly tick: number
-    levelStateMachine: LevelStateMachine
-    readonly rendererStateMachine: RendererStateMachine
-    readonly recorder: Recorder
-    readonly inputRouter: InputRouter
-    player: Player
-    requestWindowSetting: FunctionUtil.Once
-    readonly settings: Settings
-  }
+export interface Game {
+  time: number
+  /** The outstanding time in milliseconds to apply. */
+  duration: number
+  /** The exact duration in milliseconds to apply each update. Any number of
+   *  updates may occur per animation frame. */
+  readonly tick: number
+  levelStateMachine: LevelStateMachine
+  readonly rendererStateMachine: RendererStateMachine
+  readonly recorder: Recorder
+  readonly inputRouter: InputRouter
+  readonly synth: Synth
+  requestWindowSetting: FunctionUtil.Once
+  readonly settings: Settings
+}
 
+export namespace Game {
   export function make(
     window: Window,
     canvas: HTMLCanvasElement,
     assets: Assets,
     settings: Settings
-  ): State {
-    const state: State = {
+  ): Game {
+    const ret: Game = {
       time: 0,
       duration: 0,
       tick: 1000 / 60,
@@ -46,20 +46,20 @@ export namespace Game {
       rendererStateMachine: RendererStateMachine.make({
         window,
         canvas,
-        onFrame: (then, now) => onFrame(state, then, now),
+        onFrame: (then, now) => onFrame(ret, then, now),
         newRenderer: () =>
           Renderer.make(canvas, assets.atlasImage, assets.shaderLayout)
       }),
       recorder: Recorder.make(),
       inputRouter: new InputRouter(window),
-      player: Player.make(),
+      synth: Synth.make(),
       requestWindowSetting: FunctionUtil.never(),
       settings
     }
-    return state
+    return ret
   }
 
-  export function start(state: State): void {
+  export function start(state: Game): void {
     if (state.settings.windowMode === WindowModeSetting.FULLSCREEN) {
       state.requestWindowSetting = FunctionUtil.once(() =>
         window.document.documentElement.requestFullscreen().catch(() => {})
@@ -68,15 +68,15 @@ export namespace Game {
 
     RendererStateMachine.start(state.rendererStateMachine)
     state.inputRouter.register()
-    Player.play(state.player, 'sawtooth', 200, 500, 0.15)
+    Synth.play(state.synth, 'sawtooth', 200, 500, 0.15)
   }
 
-  export function stop(state: State): void {
+  export function stop(state: Game): void {
     state.inputRouter.deregister()
     RendererStateMachine.stop(state.rendererStateMachine)
   }
 
-  function onFrame(state: State, then: number, now: number): void {
+  function onFrame(state: Game, then: number, now: number): void {
     if (!state.levelStateMachine.level) return stop(state)
 
     const delta = now - then
