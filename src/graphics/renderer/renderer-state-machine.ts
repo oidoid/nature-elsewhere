@@ -6,6 +6,7 @@ export interface RendererStateMachine {
   readonly renderer: Renderer
   readonly frameID?: number
   onFrame(then: number, now: number): void
+  onPause(): void
   newRenderer(): Renderer
   onEvent(ev: Event): void
 }
@@ -30,7 +31,7 @@ export namespace RendererStateMachine {
 
 function pause(state: Mutable<RendererStateMachine>): void {
   if (state.frameID) state.window.cancelAnimationFrame(state.frameID)
-  delete state.frameID
+  delete state.frameID, state.onPause()
 }
 
 function resume(state: Mutable<RendererStateMachine>): void {

@@ -35,6 +35,7 @@ export namespace Game {
     assets: Assets,
     settings: Settings
   ): Game {
+    const inputRouter = new InputRouter(window)
     const ret: Game = {
       time: 0,
       duration: 0,
@@ -47,11 +48,12 @@ export namespace Game {
         window,
         canvas,
         onFrame: (then, now) => onFrame(ret, then, now),
+        onPause: () => inputRouter.reset(),
         newRenderer: () =>
           Renderer.make(canvas, assets.atlasImage, assets.shaderLayout)
       }),
       recorder: Recorder.make(),
-      inputRouter: new InputRouter(window),
+      inputRouter,
       synth: Synth.make(),
       requestWindowSetting: FunctionUtil.never(),
       settings
