@@ -59,8 +59,8 @@ export namespace Aseprite {
   /** A single animation frame and most primitive unit. Each file packed always
       has at least one Frame. */
   export interface Frame {
-    /** The Frame's bounds within the atlas, including a 1px border padding
-        **via CLI** `--inner-padding 1`. The padding dimensions may also be
+    /** The Frame's bounds within the atlas, including a any border padding
+        **via CLI** `--inner-padding n`. The padding dimensions may also be
         calculated by subtracting member's WH dimensions from sourceSize and
         dividing by 2. */
     readonly frame: Rect

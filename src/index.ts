@@ -1,17 +1,11 @@
 import {Game} from './game'
+import {AssetLoader} from './loaders/asset-loader'
 import {Settings} from './settings/settings'
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
 if (!canvas) throw new Error('Canvas missing.')
 ;(async () => {
-  const {atlas, atlasImage, shaderLayout} = await Game.load()
-  const game = Game.make(
-    window,
-    canvas,
-    atlasImage,
-    atlas,
-    shaderLayout,
-    Settings.defaults
-  )
+  const assets = await AssetLoader.load()
+  const game = Game.make(window, canvas, assets, Settings.defaults)
   Game.start(game)
 })()

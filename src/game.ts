@@ -1,8 +1,5 @@
-import {Atlas} from './atlas/atlas'
-import * as atlasJSON from './assets/atlas/atlas.json'
-import {AtlasParser} from './atlas/atlas-parser'
+import {Assets} from './loaders/assets'
 import {FunctionUtil} from './utils/function-util'
-import {ImageLoader} from './loaders/image-loader'
 import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
@@ -12,23 +9,10 @@ import {Recorder} from './inputs/recorder'
 import {Renderer} from './graphics/renderer/renderer'
 import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
-import * as shaderConfig from './graphics/shaders/shader-config.json'
-import {ShaderLayout} from './graphics/shaders/shader-layout'
-import {ShaderLayoutParser} from './graphics/shaders/shader-layout-parser'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 
 export namespace Game {
-  export async function load(): Promise<{
-    atlas: Atlas
-    atlasImage: HTMLImageElement
-    shaderLayout: ShaderLayout
-  }> {
-    const atlasImage = await ImageLoader.load('assets/atlas/atlas.png')
-    const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
-    return {atlas: AtlasParser.parse(atlasJSON), atlasImage, shaderLayout}
-  }
-
   export interface State {
     time: number
     /** The outstanding time in milliseconds to apply. */
@@ -48,21 +32,23 @@ export namespace Game {
   export function make(
     window: Window,
     canvas: HTMLCanvasElement,
-    atlasImage: HTMLImageElement,
-    atlas: Atlas,
-    shaderLayout: ShaderLayout,
+    assets: Assets,
     settings: Settings
   ): State {
     const state: State = {
       time: 0,
       duration: 0,
       tick: 1000 / 60,
-      levelStateMachine: LevelStateMachine.make(shaderLayout, atlas),
+      levelStateMachine: LevelStateMachine.make(
+        assets.shaderLayout,
+        assets.atlas
+      ),
       rendererStateMachine: RendererStateMachine.make({
         window,
         canvas,
         onFrame: (then, now) => onFrame(state, then, now),
-        newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
+        newRenderer: () =>
+          Renderer.make(canvas, assets.atlasImage, assets.shaderLayout)
       }),
       recorder: Recorder.make(),
       inputRouter: new InputRouter(window),

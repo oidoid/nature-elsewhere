@@ -7,7 +7,7 @@ export type Atlas = Readonly<Record<string, Atlas.Animation>>
 
 export namespace Atlas {
   /** Animation and collision frames. Dimensions are identical for every cel and
-    in pixels. */
+      in pixels. */
   export interface Animation extends WH {
     readonly cels: readonly Cel[]
     /** Positive animation length in milliseconds for a full cycle, possibly
