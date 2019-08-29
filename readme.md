@@ -1,5 +1,7 @@
 # nature elsewhere
 
+An isometric adventure.
+
 ## Development
 
 ### Installation

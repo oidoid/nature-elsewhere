@@ -2,8 +2,12 @@
   "name": "nature-elsewhere",
   "author": "rndmem",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "An isometric adventure.",
+  "keywords": [
+    "game",
+    "webgl",
+    "isometric"
+  ],
   "homepage": "https://github.com/rndmem/nature-elsewhere",
   "repository": "github:rndmem/nature-elsewhere",
   "bugs": "https://github.com/rndmem/nature-elsewhere/issues",
