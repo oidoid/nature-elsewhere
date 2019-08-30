@@ -1,3 +1,4 @@
+import {Build} from '../utils/build'
 import {WindowModeSetting} from './window-mode-setting'
 import {ZoomMultiplierSetting} from './zoom-multiplier-setting'
 
@@ -9,9 +10,8 @@ export interface Settings {
 export namespace Settings {
   export const defaults: Settings = Object.freeze({
     zoomMultiplier: ZoomMultiplierSetting.MAX,
-    windowMode:
-      process.env.NODE_ENV === 'development'
-        ? WindowModeSetting.WINDOWED
-        : WindowModeSetting.FULLSCREEN
+    windowMode: Build.dev
+      ? WindowModeSetting.WINDOWED
+      : WindowModeSetting.FULLSCREEN
   })
 }

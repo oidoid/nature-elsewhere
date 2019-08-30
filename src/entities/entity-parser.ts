@@ -1,5 +1,6 @@
 import {Atlas} from '../atlas/atlas'
 import {Behavior} from './behavior'
+import {Build} from '../utils/build'
 import * as defaultEntity from '../assets/entities/default.json'
 import {Entity} from './entity'
 import {EntityConfigs} from './entity-configs'
@@ -60,7 +61,7 @@ function newTextDateVersionHash(
   atlas: Atlas,
   {x, y, ...entity}: Entity
 ): Entity {
-  const {date, version, hash} = process.env
+  const {date, version, hash} = Build
   const images = Text.toImages(atlas, `${date} v${version} (${hash})`, {x, y})
   return {...entity, updateType: 'ALWAYS', behavior: 'FOLLOW_CAM', x, y, images} // move to defaults
 }

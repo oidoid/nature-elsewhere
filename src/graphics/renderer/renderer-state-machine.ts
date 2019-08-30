@@ -5,7 +5,7 @@ export interface RendererStateMachine {
   readonly canvas: HTMLCanvasElement
   readonly renderer: Renderer
   readonly frameID?: number
-  onFrame(then: number, now: number): void
+  onFrame(time: number): void
   onPause(): void
   newRenderer(): Renderer
   onEvent(ev: Event): void
@@ -49,7 +49,7 @@ function onEvent(state: Mutable<RendererStateMachine>, ev: Event): void {
 
 function loop(state: Mutable<RendererStateMachine>, then?: number): void {
   state.frameID = state.window.requestAnimationFrame(now => {
-    state.onFrame(then || now, now), loop(state, now)
+    state.onFrame(now - (then || now)), loop(state, now)
   })
 }
 
