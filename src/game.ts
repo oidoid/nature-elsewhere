@@ -1,4 +1,5 @@
 import {Assets} from './loaders/assets'
+import {Build} from './utils/build'
 import {FunctionUtil} from './utils/function-util'
 import {InputBit} from './inputs/input-bit'
 import {InputRouter} from './inputs/input-router'
@@ -11,14 +12,13 @@ import {Settings} from './settings/settings'
 import {Synth} from './audio/synth'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
-import {Build} from './utils/build'
 
 export interface Game {
   readonly doc: Document
-  /** The total running time in milliseconds excluding pauses. */
+  /** The total execution time in milliseconds excluding pauses. */
+  age: number
+  /** The outstanding time to execute in milliseconds. */
   time: number
-  /** The outstanding time to run in milliseconds. */
-  pending: number
   /** The exact duration in milliseconds to apply each update. Any number of
       updates may occur per animation frame. */
   readonly tick: number
@@ -42,8 +42,8 @@ export namespace Game {
     const inputRouter = new InputRouter(window)
     const ret: Game = {
       doc,
+      age: 0,
       time: 0,
-      pending: 0,
       tick: 1000 / 60,
       levelStateMachine: LevelStateMachine.make(shaderLayout, atlas),
       rendererStateMachine: RendererStateMachine.make({
@@ -87,11 +87,8 @@ export namespace Game {
     if (!state.levelStateMachine.level) return stop(state)
 
     const canvasWH = Viewport.canvasWH(state.doc)
-    const scale = Viewport.scale(
-      canvasWH,
-      state.levelStateMachine.level.minSize,
-      0
-    )
+    const {minSize} = state.levelStateMachine.level
+    const scale = Viewport.scale(canvasWH, minSize, 0)
     const cam = Viewport.cam(canvasWH, scale)
 
     state.inputRouter.record(state.recorder, canvasWH, cam, cam)
@@ -102,10 +99,10 @@ export namespace Game {
     state.requestWindowSetting = state.requestWindowSetting(!!bits)
     if (Build.dev) processDebugInput(state)
 
-    state.pending += time
-    while (state.levelStateMachine && state.pending >= state.tick) {
-      state.time += state.tick
-      state.pending -= state.tick
+    state.time += time
+    state.age += state.time - (state.time % state.tick)
+    while (state.levelStateMachine.level && state.time >= state.tick) {
+      state.time -= state.tick
       state.levelStateMachine = LevelStateMachine.update(
         state.levelStateMachine,
         cam,
@@ -115,9 +112,8 @@ export namespace Game {
     }
 
     const {renderer} = state.rendererStateMachine
-    const {store} = state.levelStateMachine
-    if (state.levelStateMachine.level)
-      Renderer.render(renderer, state.time, canvasWH, scale, cam, store)
+    const {level, store} = state.levelStateMachine
+    if (level) Renderer.render(renderer, state.age, canvasWH, scale, cam, store)
     else stop(state)
   }
 
@@ -125,12 +121,8 @@ export namespace Game {
     const triggered = Recorder.triggered(recorder, InputBit.DEBUG_CONTEXT_LOSS)
     const {loseContext} = rendererStateMachine.renderer
     if (triggered && loseContext) {
-      console.log('Lose renderer context.')
       loseContext.loseContext()
-      setTimeout(() => {
-        console.log('Restore renderer context.')
-        loseContext.restoreContext()
-      }, 3 * 1000)
+      setTimeout(() => loseContext.restoreContext(), 3 * 1000)
     }
   }
 }
