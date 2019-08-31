@@ -39,7 +39,7 @@ export namespace Game {
     settings: Settings
   ): Game {
     const doc = window.document
-    const inputRouter = new InputRouter(window)
+    const inputRouter = InputRouter.make(window)
     const ret: Game = {
       doc,
       age: 0,
@@ -50,7 +50,7 @@ export namespace Game {
         window,
         canvas,
         onFrame: time => onFrame(ret, time),
-        onPause: () => inputRouter.reset(),
+        onPause: () => InputRouter.reset(inputRouter),
         newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
       }),
       recorder: Recorder.make(),
@@ -74,12 +74,12 @@ export namespace Game {
 
   export function start(state: Game): void {
     RendererStateMachine.start(state.rendererStateMachine)
-    state.inputRouter.register()
+    InputRouter.register(state.inputRouter, true)
     Synth.play(state.synth, 'sawtooth', 200, 500, 0.15)
   }
 
   export function stop(state: Game): void {
-    state.inputRouter.deregister()
+    InputRouter.register(state.inputRouter, false)
     RendererStateMachine.stop(state.rendererStateMachine)
   }
 
@@ -91,7 +91,7 @@ export namespace Game {
     const scale = Viewport.scale(canvasWH, minSize, 0)
     const cam = Viewport.cam(canvasWH, scale)
 
-    state.inputRouter.record(state.recorder, canvasWH, cam, cam)
+    InputRouter.record(state.inputRouter, state.recorder, canvasWH, cam, cam)
     Recorder.update(state.recorder, time)
 
     const [set] = state.recorder.combo.slice(-1)

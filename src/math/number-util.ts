@@ -10,11 +10,9 @@ export namespace NumberUtil {
     return z + min // Add min to return ∈ [min, max).
   }
 
-  export function clamp(val: number, min: number, max: number): number {
-    return Math.min(Math.max(val, min), max)
-  }
+  export const clamp = (val: number, min: number, max: number): number =>
+    Math.min(Math.max(val, min), max)
 
-  export function ceilMultiple(multiple: number, val: number): number {
-    return multiple ? Math.ceil(val / multiple) * multiple : 0
-  }
+  export const ceilMultiple = (multiple: number, val: number): number =>
+    multiple ? Math.ceil(val / multiple) * multiple : 0
 }

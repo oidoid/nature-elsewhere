@@ -777,12 +777,11 @@ describe('intersects()', () => {
   )
 })
 
-describe('union()', () => {
+describe('union()', () =>
   test.each(tests)(
     '%#) %s (%p, %p) => %p %p, %p, %p',
     (_diagram, lhs, rhs, _intersection, _intersects, union, flip) =>
       expect(Rect.union(flip ? rhs : lhs, flip ? lhs : rhs)).toStrictEqual(
         union
       )
-  )
-})
+  ))

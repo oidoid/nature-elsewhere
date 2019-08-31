@@ -1,5 +1,5 @@
-import {Game} from './game'
 import {AssetLoader} from './loaders/asset-loader'
+import {Game} from './game'
 import {Settings} from './settings/settings'
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas')

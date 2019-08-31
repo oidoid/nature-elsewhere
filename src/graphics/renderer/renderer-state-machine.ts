@@ -24,7 +24,7 @@ export namespace RendererStateMachine {
     register(state, true), resume(state)
   }
 
-  export function stop(state: Mutable<RendererStateMachine>): void {
+  export const stop = (state: Mutable<RendererStateMachine>): void => {
     pause(state), register(state, false)
   }
 }

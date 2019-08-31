@@ -7,76 +7,70 @@ import {Rect} from '../math/rect'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
 
-export class InputRouter {
-  private _registered: boolean = false
-  private _canvasWH: WH = {w: 0, h: 0}
-  private _cam: Rect = {x: 0, y: 0, w: 0, h: 0}
-  private _defaultOrigin: XY = {x: 0, y: 0}
-  private keyboardBits: number = 0
-  constructor(
-    private readonly _window: Window,
-    private readonly _pointerRecorder: PointerRecorder = new PointerRecorder()
-  ) {
-    this.onKey = this.onKey.bind(this)
-    this.onPointerMove = this.onPointerMove.bind(this)
-    this.onPointerDown = this.onPointerDown.bind(this)
+export interface InputRouter {
+  canvasWH: WH
+  cam: Rect
+  defaultOrigin: XY
+  keyboardBits: number
+  readonly window: Window
+  readonly pointerRecorder: PointerRecorder
+  onKey(ev: KeyboardEvent): void
+  onPointer(ev: Event): void
+}
+
+export namespace InputRouter {
+  export function make(
+    window: Window,
+    pointerRecorder: PointerRecorder = new PointerRecorder()
+  ): InputRouter {
+    const ret = {
+      canvasWH: {w: 0, h: 0},
+      cam: {x: 0, y: 0, w: 0, h: 0},
+      defaultOrigin: {x: 0, y: 0},
+      keyboardBits: 0,
+      window,
+      pointerRecorder,
+      onKey: (ev: KeyboardEvent) => onKey(ret, ev),
+      onPointer: (ev: PointerEvent) => onPointer(ret, ev)
+    }
+    return ret
   }
 
-  register(): void {
-    if (this._registered) return
-    this._register(true)
-    this._registered = true
-  }
-
-  deregister(): void {
-    if (!this._registered) return
-    this._register(false)
-    this._registered = false
-  }
-
-  record(recorder: Recorder, viewport: WH, cam: Rect, defaultOrigin: XY): void {
-    this._canvasWH = viewport
-    this._cam = cam
-    this._defaultOrigin = defaultOrigin
-    const input = {source: InputSource.KEYBOARD, bits: this.keyboardBits}
-    Recorder.record(recorder, input)
-    this._pointerRecorder.record(recorder)
-    GamepadRecorder.record(recorder, this._window.navigator)
-  }
-
-  reset(): void {
-    this.keyboardBits = 0
-    this._pointerRecorder.reset()
-  }
-
-  private onKey(event: KeyboardEvent): void {
-    this.keyboardBits = KeyboardRecorder.onKey(this.keyboardBits, event)
-  }
-
-  private onPointerMove(event: PointerEvent): void {
-    this._pointerRecorder.onEvent(
-      this._canvasWH,
-      this._cam,
-      event,
-      this._defaultOrigin
-    )
-  }
-
-  private onPointerDown(event: PointerEvent): void {
-    this._pointerRecorder.onEvent(
-      this._canvasWH,
-      this._cam,
-      event,
-      this._defaultOrigin
-    )
-  }
-
-  private _register(register: boolean): void {
+  export function register(state: InputRouter, register: boolean): void {
     const fn = register ? 'addEventListener' : 'removeEventListener'
-    this._window[fn]('pointermove', <any>this.onPointerMove)
-    this._window[fn]('pointerup', <any>this.onPointerDown)
-    this._window[fn]('pointerdown', <any>this.onPointerDown)
-    this._window[fn]('keyup', <any>this.onKey)
-    this._window[fn]('keydown', <any>this.onKey)
+    ;['pointermove', 'pointerup', 'pointerdown'].forEach(ev =>
+      state.window[fn](ev, state.onPointer)
+    )
+    state.window[fn]('keyup', <EventListenerOrEventListenerObject>state.onKey)
+    state.window[fn]('keydown', <EventListenerOrEventListenerObject>state.onKey)
   }
+
+  export function record(
+    state: InputRouter,
+    recorder: Recorder,
+    viewport: WH,
+    cam: Rect,
+    defaultOrigin: XY
+  ): void {
+    state.canvasWH = viewport
+    state.cam = cam
+    state.defaultOrigin = defaultOrigin
+    const input = {source: InputSource.KEYBOARD, bits: state.keyboardBits}
+    Recorder.record(recorder, input)
+    state.pointerRecorder.record(recorder)
+    GamepadRecorder.record(recorder, state.window.navigator)
+  }
+
+  export function reset(state: InputRouter): void {
+    ;(state.keyboardBits = 0), state.pointerRecorder.reset()
+  }
+}
+
+function onKey(state: InputRouter, event: KeyboardEvent): void {
+  state.keyboardBits = KeyboardRecorder.onKey(state.keyboardBits, event)
+}
+
+function onPointer(state: InputRouter, event: PointerEvent): void {
+  const {pointerRecorder} = state
+  pointerRecorder.onEvent(state.canvasWH, state.cam, event, state.defaultOrigin)
 }
