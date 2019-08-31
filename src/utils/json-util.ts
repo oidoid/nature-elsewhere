@@ -7,19 +7,18 @@ export interface JSONArray extends ReadonlyArray<JSON> {}
 
 export namespace JSONUtil {
   export const merge = (...val: readonly JSONObject[]): JSONObject => {
-    return val.reduce(
-      (sum, val) =>
-        ObjectUtil.entries(val).reduce((sum, [key, val]) => {
-          const prev = sum[key]
-          if (isJSONObject(prev) && isJSONObject(val)) val = merge(prev, val)
-          else if (Array.isArray(prev) && Array.isArray(val))
-            val = prev.concat(copy(val))
-          else if (isJSONObject(val)) val = copy(val)
-          else if (Array.isArray(val)) val = copy(val)
-          return {...sum, [key]: val}
-        }, sum),
-      {}
-    )
+    return val
+      .map(ObjectUtil.entries)
+      .reduce((sum, val) => sum.concat(val), [])
+      .reduce((sum: JSONObject, [key, val]) => {
+        const prev = sum[key]
+        if (isJSONObject(prev) && isJSONObject(val)) val = merge(prev, val)
+        else if (Array.isArray(prev) && Array.isArray(val))
+          val = prev.concat(copy(val))
+        else if (isJSONObject(val)) val = copy(val)
+        else if (Array.isArray(val)) val = copy(val)
+        return {...sum, [key]: val}
+      }, {})
   }
 
   export const copy = <T>(val: Readonly<T> & JSON): T =>
