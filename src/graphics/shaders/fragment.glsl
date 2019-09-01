@@ -12,6 +12,6 @@ in vec2 vOffset;
 out vec4 frag;
 
 void main() {
-  vec2 position = vec2(vSource) + mod(vOffset, vec2(vSource.zw));
+  vec2 position = vec2(vSource) + trunc(mod(vOffset, vec2(vSource.zw)));
   frag = texture(atlas, position / vec2(atlasSize));
 }
