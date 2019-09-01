@@ -13,10 +13,11 @@ export namespace JSONUtil {
       .reduce((sum: JSONObject, [key, val]) => {
         const prev = sum[key]
         if (isJSONObject(prev) && isJSONObject(val)) val = merge(prev, val)
-        else if (Array.isArray(prev) && Array.isArray(val))
-          val = prev.concat(copy(val))
-        else if (isJSONObject(val)) val = copy(val)
-        else if (Array.isArray(val)) val = copy(val)
+        else if (Array.isArray(prev))
+          val = prev.concat(
+            isJSONObject(val) || Array.isArray(val) ? copy(<any>val) : val
+          )
+        else if (isJSONObject(val) || Array.isArray(val)) val = copy(<any>val)
         return {...sum, [key]: val}
       }, {})
   }
