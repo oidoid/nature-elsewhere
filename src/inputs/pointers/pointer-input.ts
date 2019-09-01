@@ -3,9 +3,9 @@ import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
 import {XY} from '../../math/xy'
 
-export namespace MouseInput {
+export namespace PointerInput {
   export interface Pick extends Input {
-    readonly source: InputSource.MOUSE_PICK
+    readonly source: InputSource.POINTER_PICK
 
     readonly bits: InputBit.PICK | 0
 
@@ -14,7 +14,7 @@ export namespace MouseInput {
   }
 
   export interface Point extends Input {
-    readonly source: InputSource.MOUSE_POINT
+    readonly source: InputSource.POINTER_POINT
 
     readonly bits: InputBit.POINT | 0
 

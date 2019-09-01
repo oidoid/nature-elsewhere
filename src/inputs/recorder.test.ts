@@ -262,7 +262,7 @@ describe('Recorder', () => {
     Recorder.record(subject, {source: InputSource.GAMEPAD, bits: DOWN})
     Recorder.record(subject, keyboardUp)
     Recorder.record(subject, {
-      source: InputSource.MOUSE_PICK,
+      source: InputSource.POINTER_PICK,
       bits: InputBit.PICK
     })
     Recorder.update(subject, 1)
@@ -277,8 +277,8 @@ describe('Recorder', () => {
       {
         [InputSource.GAMEPAD]: {source: InputSource.GAMEPAD, bits: DOWN},
         [InputSource.KEYBOARD]: {source: InputSource.KEYBOARD, bits: UP},
-        [InputSource.MOUSE_PICK]: {
-          source: InputSource.MOUSE_PICK,
+        [InputSource.POINTER_PICK]: {
+          source: InputSource.POINTER_PICK,
           bits: InputBit.PICK
         }
       }

@@ -13,7 +13,6 @@ import * as mountain from '../assets/entities/mountain.json'
 import * as pyramid from '../assets/entities/pyramid.json'
 import * as text from '../assets/entities/text.json'
 import * as tree from '../assets/entities/tree.json'
-import * as virtualJoystick from '../assets/entities/ui/virtual-joystick.json'
 
 export const EntityConfigs: Readonly<
   Partial<Record<string, Entity.Config>>
@@ -31,6 +30,5 @@ export const EntityConfigs: Readonly<
   mountain,
   pyramid,
   text,
-  tree,
-  virtualJoystick
+  tree
 })

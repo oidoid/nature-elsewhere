@@ -2,7 +2,6 @@ import {PointerAdapter} from './pointer-adapter'
 import {Recorder} from '../recorder'
 import {Rect} from '../../math/rect'
 import {WH} from '../../math/wh'
-import {XY} from '../../math/xy'
 
 export class PointerRecorder {
   constructor(
@@ -17,13 +16,8 @@ export class PointerRecorder {
     this._adapter.reset()
   }
 
-  onEvent(
-    canvasWH: WH,
-    cam: Rect,
-    event: PointerEvent,
-    defaultOrigin: XY
-  ): void {
-    this._adapter.adapt(canvasWH, cam, event, defaultOrigin)
+  onEvent(canvasWH: WH, cam: Rect, event: PointerEvent): void {
+    this._adapter.adapt(canvasWH, cam, event)
     event.preventDefault()
   }
 }

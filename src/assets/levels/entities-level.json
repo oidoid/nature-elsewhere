@@ -28,7 +28,6 @@
     {"id": "grass", "state": "2", "x": 132, "y": 1},
     {"id": "mountain", "x": 1, "y": 10},
     {"id": "pyramid", "x": 1, "y": 40},
-    {"id": "tree", "x": 32, "y": 45},
-    {"id": "virtualJoystick", "x": 44, "y": 45}
+    {"id": "tree", "x": 32, "y": 45}
   ]
 }

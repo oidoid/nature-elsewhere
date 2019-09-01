@@ -42,7 +42,7 @@ export namespace Entity {
   ): readonly Image[] {
     if (state.updateType === 'NEVER') return state.images
     ;(state.vx += state.ax * time), (state.vy += state.ay * time)
-    Behavior[state.behavior](state, cam, recorder, time)
+    Behavior[state.behavior](state, cam, recorder)
     state.images.forEach(img => Image.animate(img, atlas, time))
     return state.images
   }

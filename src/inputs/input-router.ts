@@ -5,12 +5,10 @@ import {PointerRecorder} from './pointers/pointer-recorder'
 import {Recorder} from './recorder'
 import {Rect} from '../math/rect'
 import {WH} from '../math/wh'
-import {XY} from '../math/xy'
 
 export interface InputRouter {
   canvasWH: WH
   cam: Rect
-  defaultOrigin: XY
   keyboardBits: number
   readonly window: Window
   readonly pointerRecorder: PointerRecorder
@@ -26,7 +24,6 @@ export namespace InputRouter {
     const ret = {
       canvasWH: {w: 0, h: 0},
       cam: {x: 0, y: 0, w: 0, h: 0},
-      defaultOrigin: {x: 0, y: 0},
       keyboardBits: 0,
       window,
       pointerRecorder,
@@ -49,12 +46,10 @@ export namespace InputRouter {
     state: InputRouter,
     recorder: Recorder,
     viewport: WH,
-    cam: Rect,
-    defaultOrigin: XY
+    cam: Rect
   ): void {
     state.canvasWH = viewport
     state.cam = cam
-    state.defaultOrigin = defaultOrigin
     const input = {source: InputSource.KEYBOARD, bits: state.keyboardBits}
     Recorder.record(recorder, input)
     state.pointerRecorder.record(recorder)
@@ -71,6 +66,5 @@ function onKey(state: InputRouter, event: KeyboardEvent): void {
 }
 
 function onPointer(state: InputRouter, event: PointerEvent): void {
-  const {pointerRecorder} = state
-  pointerRecorder.onEvent(state.canvasWH, state.cam, event, state.defaultOrigin)
+  state.pointerRecorder.onEvent(state.canvasWH, state.cam, event)
 }

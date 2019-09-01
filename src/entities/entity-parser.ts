@@ -14,8 +14,7 @@ const imagesFactory: Partial<
   Record<string, (atlas: Atlas, entity: Entity) => Entity>
 > = Object.freeze({
   textDateVersionHash: newTextDateVersionHash,
-  text: TextEntity.make,
-  virtualJoystick: newVirtualJoystick
+  text: TextEntity.make
 })
 
 export namespace EntityParser {
@@ -64,12 +63,4 @@ function newTextDateVersionHash(
   const {date, version, hash} = Build
   const images = Text.toImages(atlas, `${date} v${version} (${hash})`, {x, y})
   return {...entity, updateType: 'ALWAYS', behavior: 'FOLLOW_CAM', x, y, images} // move to defaults
-}
-
-function newVirtualJoystick(atlas: Atlas, entity: Entity): Entity {
-  entity = newStandardEntity(atlas, entity)
-  ;(<any>entity).stick = entity.images.find(
-    ({id}) => id === 'ui-virtual-joystick stick'
-  )
-  return entity
 }

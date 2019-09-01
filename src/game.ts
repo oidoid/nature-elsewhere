@@ -91,7 +91,7 @@ export namespace Game {
     const scale = Viewport.scale(canvasWH, minSize, 0)
     const cam = Viewport.cam(canvasWH, scale)
 
-    InputRouter.record(state.inputRouter, state.recorder, canvasWH, cam, cam)
+    InputRouter.record(state.inputRouter, state.recorder, canvasWH, cam)
     Recorder.update(state.recorder, time)
 
     const [set] = state.recorder.combo.slice(-1)

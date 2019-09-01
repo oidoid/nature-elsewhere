@@ -17,7 +17,6 @@
       "text": "start\noptions\nlevel editor\nexit"
     },
     {"id": "textDateVersionHash", "x": 1, "y": 123},
-    {"id": "cursor"},
-    {"id": "virtualJoystick"}
+    {"id": "cursor"}
   ]
 }
