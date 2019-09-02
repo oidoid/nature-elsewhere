@@ -111,7 +111,7 @@ export namespace Renderer {
     {dat, len}: Store
   ): void {
     resize(state, canvasWH, scale, cam)
-    state.gl.uniform1f(state.uniforms[state.layout.uniforms.time], time)
+    state.gl.uniform1ui(state.uniforms[state.layout.uniforms.time], time)
     const perInstanceBuffer = state.perInstanceBuffer
     GLUtil.bufferData(state.gl, perInstanceBuffer, dat, GL.DYNAMIC_READ)
     state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, uvLen, len)

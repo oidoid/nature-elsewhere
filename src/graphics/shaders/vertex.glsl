@@ -4,7 +4,7 @@ precision mediump float;
 
 // The camera projection in pixels.
 uniform mat4 projection;
-uniform float time;
+uniform uint time;
 
 in ivec2 uv; // x, y (0 or 1).
 // The subimage location and dimensions within the atlas given in pixel
@@ -25,6 +25,7 @@ void main() {
   // Offset flipped images by their width or height.
   gl_Position = vec4(target.xy + uv * target.zw, 0, 1) * projection;
   vSource = source;
-  vOffset = (vec2(-translate.xy + uv * target.zw) - vec2(translate.zw) * time / 1000.) / vec2(scale);
+  float fTime = float(time % uint(0x4000));
+  vOffset = (vec2(-translate.xy + uv * target.zw) - vec2(translate.zw) * fTime / 1000.) / vec2(scale);
   vOffset = vOffset - mod(vOffset, 1. / vec2(abs(scale)));
 }

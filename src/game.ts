@@ -22,7 +22,6 @@ export interface Game {
   /** The exact duration in milliseconds to apply each update. Any number of
       updates may occur per animation frame. */
   readonly tick: number
-  readonly mediumPrecisionFloat: number
   levelStateMachine: LevelStateMachine
   readonly rendererStateMachine: RendererStateMachine
   readonly recorder: Recorder
@@ -46,7 +45,6 @@ export namespace Game {
       age: 0,
       time: 0,
       tick: 1000 / 60,
-      mediumPrecisionFloat: Math.pow(2, 14),
       levelStateMachine: LevelStateMachine.make(shaderLayout, atlas),
       rendererStateMachine: RendererStateMachine.make({
         window,
@@ -103,10 +101,6 @@ export namespace Game {
 
     state.time += time
     state.age += state.time - (state.time % state.tick)
-    state.age =
-      state.age -
-      Math.trunc(state.age / state.mediumPrecisionFloat) *
-        state.mediumPrecisionFloat
     while (state.levelStateMachine.level && state.time >= state.tick) {
       state.time -= state.tick
       state.levelStateMachine = LevelStateMachine.update(
