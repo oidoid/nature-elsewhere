@@ -62,5 +62,5 @@ function newTextDateVersionHash(
 ): Entity {
   const {date, version, hash} = Build
   const images = Text.toImages(atlas, `${date} v${version} (${hash})`, {x, y})
-  return {...entity, updateType: 'ALWAYS', behavior: 'FOLLOW_CAM', x, y, images} // move to defaults
+  return {...entity, x, y, images}
 }

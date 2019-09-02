@@ -1,4 +1,6 @@
 {
   "id": "text",
+  "updateType": "ALWAYS",
+  "behavior": "FOLLOW_CAM",
   "text": ""
 }
