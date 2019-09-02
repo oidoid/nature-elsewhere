@@ -6,9 +6,10 @@
   "entities": [
     {
       "images": [
-        {"id": "palette paleGreen", "sx": 32767, "sy": 32767, "layer": "PLANE"}
+        {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
       ]
     },
+    {"id": "cursor"},
     {"id": "cloud", "x": 20, "y": 20},
     {"id": "cloud", "state": "drizzle", "x": 30, "y": 28},
     {"id": "cloud", "state": "rain", "x": 54, "y": 50},
