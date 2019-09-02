@@ -1,4 +1,4 @@
 {
   "id": "pyramid",
-  "images": [{"id": "pyramid"}, {"id": "pyramid shadow"}]
+  "images": [{"id": "pyramid"}, {"id": "pyramid shadow", "layer": "SHADOW"}]
 }
