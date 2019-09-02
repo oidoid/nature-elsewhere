@@ -1,6 +1,6 @@
 # nature elsewhere
 
-An isometric adventure.
+An isometric adventure in an idealized state of nature.
 
 ## Development
 
