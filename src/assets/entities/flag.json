@@ -1,0 +1,4 @@
+{
+  "id": "flag",
+  "states": {"0": [{"id": "flag"}, {"id": "flag shadow", "layer": "SHADOW"}]}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "bunny",
+  "updateType": "IF_VISIBLE",
+  "states": {
+    "0": [{"id": "bunny"}, {"id": "bunny shadow", "y": 1, "layer": "SHADOW"}]
+  }
+}

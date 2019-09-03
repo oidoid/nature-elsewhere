@@ -7,7 +7,15 @@
     {
       "states": {
         "0": [
-          {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
+          {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"},
+          {
+            "id": "palette lightBlue",
+            "x": 10,
+            "y": 55,
+            "w": 25,
+            "h": 25,
+            "layer": "WATER"
+          }
         ]
       }
     },
@@ -54,6 +62,11 @@
     {"id": "conifer", "x": 119, "y": 116},
     {"id": "fly", "x": 110, "y": 130, "vx": -0.015},
     {"id": "fly", "state": "dead", "x": 100, "y": 132},
-    {"id": "backpacker", "x": 80, "y": 102}
+    {"id": "backpacker", "x": 80, "y": 102},
+    {"id": "frog", "x": 10, "y": 60},
+    {"id": "cattails", "x": 12, "y": 48},
+    {"id": "bunny", "x": 40, "y": 48},
+    {"id": "flag", "x": 73, "y": 21},
+    {"id": "snake", "x": 121, "y": 30, "vx": -0.02}
   ]
 }

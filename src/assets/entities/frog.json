@@ -1,0 +1,8 @@
+{
+  "id": "frog",
+  "updateType": "IF_VISIBLE",
+  "state": "idle",
+  "states": {
+    "idle": [{"id": "frog idle"}, {"id": "frog idleShadow", "layer": "SHADOW"}]
+  }
+}
