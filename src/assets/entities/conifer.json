@@ -1,5 +1,6 @@
 {
   "id": "conifer",
+  "collides": true,
   "states": {
     "0": [
       {"id": "conifer"},

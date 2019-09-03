@@ -1,5 +1,6 @@
 {
   "id": "tree",
+  "collides": true,
   "states": {
     "0": [{"id": "tree"}, {"id": "tree shadow", "y": 1, "layer": "SHADOW"}]
   }

@@ -1,8 +1,12 @@
 {
   "id": "frog",
   "updateType": "IF_VISIBLE",
+  "collides": true,
   "state": "idle",
   "states": {
-    "idle": [{"id": "frog idle"}, {"id": "frog idleShadow", "layer": "SHADOW"}]
+    "idle": [
+      {"id": "frog idle"},
+      {"id": "frog idleShadow", "x": -1, "y": 1, "layer": "SHADOW"}
+    ]
   }
 }

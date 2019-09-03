@@ -5,6 +5,8 @@ import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {XY} from '../math/xy'
 import {InputBit} from '../inputs/input-bit'
+import {Atlas} from '../atlas/atlas'
+import {Image} from '../images/image'
 
 export const Behavior = Object.freeze({
   STATIC() {},
@@ -17,9 +19,16 @@ export const Behavior = Object.freeze({
       ...rect.images
     )
   },
-  BACKPACKER(state: Mutable<Entity>, _cam: Rect, recorder: Recorder): void {
+  BACKPACKER(
+    state: Mutable<Entity>,
+    entities: readonly Entity[],
+    atlas: Atlas,
+    _cam: Rect,
+    recorder: Recorder
+  ): void {
     if (state.id !== 'backpacker')
       throw new Error(`Unsupported ID "${state.id}".`)
+    const original = state.states[state.state]
     let rect = state.states[state.state]
     let {x, y} = rect
     const up = Recorder.set(recorder, InputBit.UP)
@@ -51,8 +60,14 @@ export const Behavior = Object.freeze({
           ? 'idleRight'
           : 'idleDown'
 
-    rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveTo(rect, {x, y}, ...rect.images)
+    let found
+    ;({found, rect} = checkCollisionThingy(rect, state, entities, x, y, atlas))
+    if (found) ({x, y} = original)
+    state.states[state.state] = ImageRect.moveTo(
+      rect,
+      {x, y},
+      ...state.states[state.state].images
+    )
   },
   WRAPAROUND(state: Mutable<Entity>) {
     // posit new xy and if ok
@@ -67,7 +82,12 @@ export const Behavior = Object.freeze({
     // const max = level.bounds.x + level.bounds.w + cam.w
     // entityState.position.x = util.wrap(entityState.position.x, min, max)
   },
-  FOLLOW_CAM(state: Mutable<Entity>, cam: Rect) {
+  FOLLOW_CAM(
+    state: Mutable<Entity>,
+    _entities: readonly Entity[],
+    _atlas: Atlas,
+    cam: Rect
+  ) {
     const rect = state.states[state.state]
     state.states[state.state] = ImageRect.moveTo(
       rect,
@@ -75,7 +95,13 @@ export const Behavior = Object.freeze({
       ...rect.images
     )
   },
-  CURSOR(state: Mutable<Entity>, _cam: Rect, recorder: Recorder) {
+  CURSOR(
+    state: Mutable<Entity>,
+    _entities: readonly Entity[],
+    _atlas: Atlas,
+    _cam: Rect,
+    recorder: Recorder
+  ) {
     const [set] = recorder.combo.slice(-1)
     const point = set && set[InputSource.POINTER_POINT]
     if (point) {
@@ -91,4 +117,35 @@ export const Behavior = Object.freeze({
 
 export namespace Behavior {
   export type Key = keyof typeof Behavior
+}
+function checkCollisionThingy(
+  rect: ImageRect,
+  state: Mutable<Entity>,
+  entities: readonly Entity[],
+  x: number,
+  y: number,
+  atlas: Readonly<Record<string, Atlas.Animation>>
+) {
+  rect = state.states[state.state]
+  const found = entities.find(
+    entity =>
+      entity !== state &&
+      entity.collides &&
+      Rect.intersects(entity.states[entity.state], {...rect, x, y}) &&
+      entity.states[entity.state].images.some(img =>
+        Image.cel(img, atlas).collision.some(r =>
+          rect.images.some(lhsImg =>
+            Image.cel(lhsImg, atlas).collision.some(lhsRect =>
+              Rect.intersects(r, {
+                w: lhsRect.w,
+                h: lhsRect.h,
+                x: lhsRect.x + x - entity.states[entity.state].x,
+                y: lhsRect.y + y - entity.states[entity.state].y
+              })
+            )
+          )
+        )
+      )
+  )
+  return {found, rect}
 }

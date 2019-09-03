@@ -2771,6 +2771,34 @@
     ],
     "slices": [
       {
+        "name": "backpacker walkRight",
+        "color": "#0000ffff",
+        "keys": [
+          {"frame": 0, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 1, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 6, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 17, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 23, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 25, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 32, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}}
+        ]
+      },
+      {
+        "name": "backpacker walkDown",
+        "color": "#0000ffff",
+        "keys": [
+          {"frame": 0, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 17, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 25, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}},
+          {"frame": 32, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}}
+        ]
+      },
+      {
+        "name": "backpacker walkUp",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 2, "y": 12, "w": 4, "h": 3}}]
+      },
+      {
         "name": "bird rest",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 2, "y": 1, "w": 2, "h": 3}}]
@@ -2791,6 +2819,11 @@
         "keys": [{"frame": 0, "bounds": {"x": 0, "y": 1, "w": 5, "h": 2}}]
       },
       {
+        "name": "bush",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 2, "y": 5, "w": 3, "h": 2}}]
+      },
+      {
         "name": "cattails",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 2, "h": 8}}]
@@ -2806,9 +2839,24 @@
         "keys": [{"frame": 0, "bounds": {"x": 5, "y": 1, "w": 2, "h": 7}}]
       },
       {
+        "name": "conifer",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 2, "y": 9, "w": 3, "h": 3}}]
+      },
+      {
         "name": "flag",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 3, "h": 4}}]
+      },
+      {
+        "name": "frog idle",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 1, "y": 14, "w": 6, "h": 2}}]
+      },
+      {
+        "name": "mountain",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 1, "y": 5, "w": 12, "h": 3}}]
       },
       {
         "name": "palette transparent",
@@ -2816,9 +2864,34 @@
         "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 1, "h": 1}}]
       },
       {
+        "name": "pyramid",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 9, "y": 19, "w": 11, "h": 3}}]
+      },
+      {
+        "name": "pyramid",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 25, "y": 12, "w": 5, "h": 7}}]
+      },
+      {
+        "name": "pyramid",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 0, "y": 12, "w": 5, "h": 7}}]
+      },
+      {
+        "name": "pyramid",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 5, "y": 9, "w": 20, "h": 10}}]
+      },
+      {
         "name": "snake",
         "color": "#0000ffff",
         "keys": [{"frame": 0, "bounds": {"x": 0, "y": 0, "w": 11, "h": 4}}]
+      },
+      {
+        "name": "tree",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 3, "y": 8, "w": 4, "h": 3}}]
       }
     ]
   }

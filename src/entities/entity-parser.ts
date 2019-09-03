@@ -34,6 +34,7 @@ export namespace EntityParser {
       state: defaults.state,
       updateType: parseUpdateType(defaults.updateType),
       behavior: parseBehaviorKey(defaults.behavior),
+      collides: defaults.collides,
       scale: defaults.scale,
       vx: defaults.vx,
       vy: defaults.vy,

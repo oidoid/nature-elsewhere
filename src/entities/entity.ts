@@ -24,6 +24,7 @@ export namespace Entity {
     readonly state?: string
     readonly updateType?: UpdateType.Key | string
     readonly behavior?: Behavior.Key | string
+    readonly collides?: boolean
     readonly scale?: Partial<XY>
     readonly vx?: number
     readonly vy?: number
@@ -34,6 +35,7 @@ export namespace Entity {
 
   export function update(
     state: Mutable<Entity>,
+    entities: readonly Entity[],
     atlas: Atlas,
     cam: Rect,
     time: number,
@@ -42,7 +44,7 @@ export namespace Entity {
     const rect = state.states[state.state]
     if (state.updateType === 'NEVER') return rect.images
     ;(state.vx += state.ax * time), (state.vy += state.ay * time)
-    Behavior[state.behavior](state, cam, recorder)
+    Behavior[state.behavior](state, entities, atlas, cam, recorder)
     rect.images.forEach(img => Image.animate(img, atlas, time))
     return rect.images
   }

@@ -33,7 +33,9 @@ export namespace Store {
           entity.updateType === 'ALWAYS' ||
           Rect.intersects(entity.states[entity.state], cam)
       )
-      .map(entity => Entity.update(entity, atlas, cam, milliseconds, recorder))
+      .map((entity, _, entities) =>
+        Entity.update(entity, entities, atlas, cam, milliseconds, recorder)
+      )
       .reduce((sum: Image[], val) => [...sum, ...val], [])
       .sort(Image.compare)
 

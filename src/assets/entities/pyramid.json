@@ -1,5 +1,6 @@
 {
   "id": "pyramid",
+  "collides": true,
   "states": {
     "0": [{"id": "pyramid"}, {"id": "pyramid shadow", "layer": "SHADOW"}]
   }

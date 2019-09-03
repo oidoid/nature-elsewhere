@@ -1,5 +1,6 @@
 {
   "id": "bush",
+  "collides": true,
   "states": {
     "0": [{"id": "bush"}, {"id": "bush shadow", "y": 1, "layer": "SHADOW"}]
   }
