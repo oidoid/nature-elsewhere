@@ -15,8 +15,10 @@ import * as fly from '../assets/entities/fly.json'
 import * as frog from '../assets/entities/frog.json'
 import * as grass from '../assets/entities/grass.json'
 import * as mountain from '../assets/entities/mountain.json'
+import * as path from '../assets/entities/path.json'
 import * as pyramid from '../assets/entities/pyramid.json'
 import * as snake from '../assets/entities/snake.json'
+import * as subshrub from '../assets/entities/subshrub.json'
 import * as text from '../assets/entities/text.json'
 import * as tree from '../assets/entities/tree.json'
 
@@ -39,8 +41,10 @@ export const EntityConfigs: Readonly<
   frog,
   grass,
   mountain,
+  path,
   pyramid,
   snake,
+  subshrub,
   text,
   tree
 })

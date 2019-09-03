@@ -56,7 +56,8 @@
     {"id": "grass", "state": "1", "x": 111, "y": 57},
     {"id": "grass", "state": "2", "x": 141, "y": 77},
     {"id": "bush", "x": 151, "y": 30},
-    {"id": "bush", "state": "1", "x": 159, "y": 30},
+    {"id": "subshrub", "x": 159, "y": 32},
+    {"id": "subshrub", "x": 163, "y": 36},
     {"id": "pyramid", "x": 125, "y": 114},
     {"id": "tree", "x": 159, "y": 126},
     {"id": "conifer", "x": 119, "y": 116},
@@ -66,7 +67,11 @@
     {"id": "frog", "x": 10, "y": 60},
     {"id": "cattails", "x": 12, "y": 48},
     {"id": "bunny", "x": 40, "y": 48},
+    {"id": "bunny", "state": "dead", "x": 48, "y": 48},
     {"id": "flag", "x": 77, "y": 17},
-    {"id": "snake", "x": 121, "y": 30, "vx": -0.02}
+    {"id": "snake", "x": 121, "y": 30, "vx": -0.02},
+    {"id": "path", "state": "horizontal", "x": 136, "y": 40},
+    {"id": "path", "state": "turnRight", "x": 128, "y": 40, "w": 8},
+    {"id": "path", "state": "vertical", "x": 128, "y": 48}
   ]
 }

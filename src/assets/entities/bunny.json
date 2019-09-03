@@ -1,7 +1,12 @@
 {
   "id": "bunny",
   "updateType": "IF_VISIBLE",
+  "state": "idle",
   "states": {
-    "0": [{"id": "bunny"}, {"id": "bunny shadow", "y": 1, "layer": "SHADOW"}]
+    "idle": [
+      {"id": "bunny"},
+      {"id": "bunny shadow", "y": 1, "layer": "SHADOW"}
+    ],
+    "dead": [{"id": "bunny dead"}, {"id": "bunny blood", "layer": "BLOOD"}]
   }
 }

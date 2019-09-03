@@ -12,7 +12,6 @@
     {"id": "bee", "x": 1, "y": 1},
     {"id": "bee", "state": "dead", "x": 7, "y": 1},
     {"id": "bush", "x": 12, "y": 1},
-    {"id": "bush", "state": "1", "x": 20, "y": 1},
     {"id": "cloud", "x": 28, "y": 1},
     {"id": "cloud", "state": "drizzle", "x": 41, "y": 1},
     {"id": "cloud", "state": "rain", "x": 54, "y": 1},
