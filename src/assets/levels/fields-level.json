@@ -8,14 +8,7 @@
       "states": {
         "0": [
           {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"},
-          {
-            "id": "palette lightBlue",
-            "x": 10,
-            "y": 55,
-            "w": 25,
-            "h": 25,
-            "layer": "WATER"
-          }
+          {"id": "grid", "w": 32767, "h": 32767, "layer": "PLANE"}
         ]
       }
     },
@@ -65,13 +58,26 @@
     {"id": "fly", "state": "dead", "x": 100, "y": 132},
     {"id": "backpacker", "x": 80, "y": 102},
     {"id": "frog", "x": 10, "y": 60},
-    {"id": "cattails", "x": 12, "y": 48},
     {"id": "bunny", "x": 40, "y": 48},
     {"id": "bunny", "state": "dead", "x": 48, "y": 48},
     {"id": "flag", "x": 77, "y": 17},
     {"id": "snake", "x": 121, "y": 30, "vx": -0.02},
-    {"id": "path", "state": "horizontal", "x": 136, "y": 40},
-    {"id": "path", "state": "turnRight", "x": 128, "y": 40, "w": 8},
-    {"id": "path", "state": "vertical", "x": 128, "y": 48}
+    {"id": "isoGrass", "state": "/0", "x": 160, "y": 96},
+    {"id": "path", "state": "/", "x": 160, "y": 96},
+    {"id": "path", "state": "/", "x": 176, "y": 88},
+    {"id": "path", "state": "/", "x": 192, "y": 80},
+    {"id": "path", "state": ">", "x": 208, "y": 72},
+    {"id": "path", "state": "\\", "x": 192, "y": 64},
+    {"id": "path", "state": "^", "x": 176, "y": 56},
+    {"id": "path", "state": "v", "x": 160, "y": 64},
+    {"id": "path", "state": "\\", "x": 144, "y": 56},
+    {"id": "path", "state": "<", "x": 128, "y": 48},
+    {"id": "path", "state": "/", "x": 144, "y": 40},
+    {"id": "path", "state": "/", "x": 160, "y": 32},
+    {"id": "path", "state": "/", "x": 176, "y": 24},
+    {"id": "path", "state": "^", "x": 192, "y": 16},
+    {"id": "conifer", "x": 188, "y": 27},
+    {"id": "pond", "x": 160, "y": 48},
+    {"id": "pond", "y": 64}
   ]
 }

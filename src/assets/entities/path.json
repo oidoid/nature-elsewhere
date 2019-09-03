@@ -1,10 +1,12 @@
 {
   "id": "path",
-  "state": "vertical",
+  "state": "/",
   "states": {
-    "vertical": [{"id": "path vertical"}],
-    "horizontal": [{"id": "path horizontal", "y": -24}],
-    "turnRight": [{"id": "path turnRight", "y": -24}],
-    "turnLeft": [{"id": "path turnRight", "y": -24, "scale": {"x": -1}}]
+    "/": [{"id": "path /", "layer": "DECAL"}],
+    "\\": [{"id": "path /", "layer": "DECAL", "scale": {"x": -1}}],
+    ">": [{"id": "path >", "layer": "DECAL"}],
+    "<": [{"id": "path >", "layer": "DECAL", "scale": {"x": -1}}],
+    "^": [{"id": "path ^", "layer": "DECAL"}],
+    "v": [{"id": "path ^", "layer": "DECAL", "scale": {"y": -1}}]
   }
 }

@@ -1,0 +1,16 @@
+{
+  "id": "pond",
+  "states": {
+    "0": [
+      {"id": "pond", "layer": "WATER"},
+      {"id": "cattails", "x": 15, "y": -3},
+      {"id": "grass 1", "x": 1, "y": 4},
+      {"id": "grass 2", "x": 12, "y": 11},
+      {"id": "grass 6", "x": 24, "y": 4},
+      {"id": "grass 8", "x": 26, "y": 6},
+      {"id": "grass 9", "x": 11, "y": -1},
+      {"id": "grass 10", "x": 6, "y": 10},
+      {"id": "grass 5", "x": 21, "y": 10}
+    ]
+  }
+}

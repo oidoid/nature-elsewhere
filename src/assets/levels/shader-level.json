@@ -13,10 +13,10 @@
           {"id": "mem-font 90", "x": 1, "y": 6, "scale": {"x": 2}},
           {"id": "mem-font 90", "x": 1, "y": 12, "w": 6},
           {"id": "mem-font 90", "x": 1, "y": 18, "tx": 1},
-          {"id": "mem-font 90", "x": 1, "y": 24, "scale": {"x": 2}, "tx": 1},
-          {"id": "mem-font 90", "x": 1, "y": 30, "scale": {"x": 2}, "tvx": -1},
-          {"id": "mem-font 90", "x": 1, "y": 36, "w": 6, "tvx": -1},
-          {"id": "mem-font 90", "x": 1, "y": 42, "tx": 1, "tvx": -1},
+          {"id": "mem-font 90", "x": 1, "y": 24, "scale": {"x": 2}, "tx": 10},
+          {"id": "mem-font 90", "x": 1, "y": 30, "scale": {"x": 2}, "tvx": -10},
+          {"id": "mem-font 90", "x": 1, "y": 36, "w": 6, "tvx": -10},
+          {"id": "mem-font 90", "x": 1, "y": 42, "tx": 1, "tvx": -10},
           {"id": "mem-font 90", "x": 15, "y": 1, "scale": {"x": 4, "y": 4}},
 
           {"id": "mem-font 90", "x": 8, "y": 1, "scale": {"x": -1}},
@@ -24,14 +24,20 @@
           {"id": "mem-font 90", "x": 8, "y": 12, "w": 6, "scale": {"x": -1}},
           {"id": "mem-font 90", "x": 8, "y": 18, "scale": {"x": -1}, "tx": 1},
           {"id": "mem-font 90", "x": 8, "y": 24, "scale": {"x": -2}, "tx": 1},
-          {"id": "mem-font 90", "x": 8, "y": 30, "scale": {"x": -2}, "tvx": -1},
+          {
+            "id": "mem-font 90",
+            "x": 8,
+            "y": 30,
+            "scale": {"x": -2},
+            "tvx": -10
+          },
           {
             "id": "mem-font 90",
             "x": 8,
             "y": 36,
             "w": 6,
             "scale": {"x": -1},
-            "tvx": -1
+            "tvx": -10
           },
           {
             "id": "mem-font 90",
@@ -39,7 +45,7 @@
             "y": 42,
             "scale": {"x": -1},
             "tx": 1,
-            "tvx": -1
+            "tvx": -10
           },
           {"id": "mem-font 90", "x": 15, "y": 24, "scale": {"x": 4, "y": -4}}
         ]

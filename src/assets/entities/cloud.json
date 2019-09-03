@@ -11,8 +11,8 @@
     "drizzle": [
       {"id": "cloud", "layer": "FLOATS"},
       {"id": "cloud shadow", "y": 32, "layer": "SHADOW"},
-      {"id": "sprinkle", "x": 2, "y": 2, "w": 5, "tvy": 30},
-      {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": 45},
+      {"id": "sprinkle", "x": 2, "y": 2, "w": 5, "tvy": 150},
+      {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": 225},
       {"id": "rain-splash", "y": 35},
       {"id": "palette blue", "x": 3, "y": 36, "layer": "DECAL", "w": 3, "h": 3},
       {
@@ -22,15 +22,15 @@
         "layer": "DECAL",
         "w": 7,
         "h": 1,
-        "tvx": -12
+        "tvx": -60
       }
     ],
     "rain": [
       {"id": "cloud", "layer": "FLOATS"},
       {"id": "cloud shadow", "y": 32, "layer": "SHADOW"},
-      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": 45},
-      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": 30},
-      {"id": "sprinkle", "x": 2, "y": 6, "w": 7, "tvy": 40},
+      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": 225},
+      {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": 150},
+      {"id": "sprinkle", "x": 2, "y": 6, "w": 7, "tvy": 200},
       {"id": "rain-splash", "y": 35},
       {"id": "palette blue", "x": 3, "y": 36, "layer": "DECAL", "w": 3, "h": 3},
       {
@@ -40,15 +40,15 @@
         "layer": "DECAL",
         "w": 7,
         "h": 1,
-        "tvx": -12
+        "tvx": -60
       }
     ],
     "downpour": [
       {"id": "cloud", "layer": "FLOATS"},
       {"id": "cloud shadow", "y": 32, "layer": "SHADOW"},
-      {"id": "sprinkle", "x": 1, "y": 6, "w": 9, "tvy": 43},
-      {"id": "rain", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": 53},
-      {"id": "sprinkle", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": 49},
+      {"id": "sprinkle", "x": 1, "y": 6, "w": 9, "tvy": 215},
+      {"id": "rain", "x": 2, "y": 6, "w": 8, "ty": 12, "tvy": 265},
+      {"id": "sprinkle", "x": 2, "y": 6, "w": 8, "ty": 4, "tvy": 245},
       {
         "id": "rain pool",
         "x": 2,
@@ -56,8 +56,8 @@
         "layer": "DECAL",
         "w": 7,
         "h": 5,
-        "tvx": 1,
-        "tvy": 22
+        "tvx": 5,
+        "tvy": 110
       },
       {
         "id": "rain pool",
@@ -65,7 +65,7 @@
         "layer": "DECAL",
         "w": 11,
         "h": 1,
-        "tvx": -12
+        "tvx": -60
       }
     ]
   }
