@@ -2,8 +2,9 @@
   "id": "fly",
   "updateType": "IF_VISIBLE",
   "behavior": "CIRCLE",
+  "state": "idle",
   "states": {
-    "0": [
+    "idle": [
       {"id": "palette grey"},
       {"id": "palette lightGreen", "y": 2, "layer": "SHADOW"}
     ],

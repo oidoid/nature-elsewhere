@@ -2,8 +2,9 @@
   "id": "backpacker",
   "updateType": "ALWAYS",
   "behavior": "BACKPACKER",
+  "state": "idleDown",
   "states": {
-    "0": [
+    "idleDown": [
       {"id": "backpacker idleDown"},
       {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
     ],

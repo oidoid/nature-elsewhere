@@ -49,7 +49,7 @@ export const Behavior = Object.freeze({
             state.state === 'walkRight' ||
             state.state === 'walkLeft'
           ? 'idleRight'
-          : '0'
+          : 'idleDown'
 
     rect = state.states[state.state]
     state.states[state.state] = ImageRect.moveTo(rect, {x, y}, ...rect.images)

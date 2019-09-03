@@ -2,8 +2,9 @@
   "id": "cloud",
   "updateType": "IF_VISIBLE",
   "behavior": "WRAPAROUND",
+  "state": "cloud",
   "states": {
-    "0": [
+    "cloud": [
       {"id": "cloud", "layer": "FLOATS"},
       {"id": "cloud shadow", "y": 32, "layer": "SHADOW"}
     ],
