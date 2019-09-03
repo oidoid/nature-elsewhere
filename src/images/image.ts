@@ -1,15 +1,18 @@
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
 import * as imageDefaults from '../assets/image.json'
+import {JSONUtil} from '../utils/json-util'
 import {Layer} from './layer'
 import {Limits} from '../math/limits'
 import {Rect} from '../math/rect'
+import {XY} from '../math/xy'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering and collision detection. The image may be animated.
     Each Cel has the same size. Specifying a different target width or height
     than the source truncates or repeats the scaled rendered source. */
 export interface Image extends Required<Image.Config> {
+  readonly scale: XY
   readonly layer: Layer.Key
 }
 
@@ -17,8 +20,7 @@ export namespace Image {
   export interface Config extends Partial<Rect>, Partial<Animator> {
     readonly id: string
     readonly layer?: Layer.Key | string
-    readonly sx?: number
-    readonly sy?: number
+    readonly scale?: Partial<XY>
     readonly tx?: number
     readonly ty?: number
     readonly tvx?: number
@@ -28,11 +30,16 @@ export namespace Image {
   export function make(atlas: Atlas, cfg: Config): Image {
     if (!(cfg.id in atlas))
       throw new Error(`Atlas missing animation "${cfg.id}".`)
-    const ret = Object.assign({}, imageDefaults, cfg)
+    const wh = {
+      w: Math.abs(cfg.scale && cfg.scale.x ? cfg.scale.x : 1) * atlas[cfg.id].w,
+      h: Math.abs(cfg.scale && cfg.scale.y ? cfg.scale.y : 1) * atlas[cfg.id].h
+    }
+    const ret = <Image>JSONUtil.merge(imageDefaults, wh, <any>cfg)
     const layer = ret.layer
-    if (!isLayerKey(layer)) throw new Error(`Unknown Layer.Key "${ret.layer}".`)
-    const {w, h} = atlas[cfg.id]
-    return {w: Math.abs(w * ret.sx), h: Math.abs(h * ret.sy), ...ret, layer}
+    if (!isLayerKey(layer)) throw new Error(`Unknown Layer.Key "${layer}".`)
+    const scale =
+      cfg.scale && cfg.scale.x && cfg.scale.y ? <XY>cfg.scale : ret.scale
+    return {...ret, scale}
   }
 
   function isLayerKey(val: string): val is Layer.Key {

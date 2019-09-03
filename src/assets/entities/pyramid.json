@@ -1,4 +1,6 @@
 {
   "id": "pyramid",
-  "images": [{"id": "pyramid"}, {"id": "pyramid shadow", "layer": "SHADOW"}]
+  "states": {
+    "0": [{"id": "pyramid"}, {"id": "pyramid shadow", "layer": "SHADOW"}]
+  }
 }

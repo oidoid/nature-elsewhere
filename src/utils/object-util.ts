@@ -1,16 +1,16 @@
 export namespace ObjectUtil {
   // https://github.com/Microsoft/TypeScript/pull/12253
   export const keys = <T>(val: T & object): readonly (keyof T)[] => {
-    const keys = []
-    for (const key in val) if (val.hasOwnProperty(key)) keys.push(key)
-    return keys
+    const ret = []
+    for (const key in val) if (val.hasOwnProperty(key)) ret.push(key)
+    return ret
   }
 
   // https://github.com/Microsoft/TypeScript/pull/12253
   export const values = <T>(val: T & object): readonly T[keyof T][] => {
-    const vals = []
-    for (const key in val) if (val.hasOwnProperty(key)) vals.push(val[key])
-    return vals
+    const ret = []
+    for (const key in val) if (val.hasOwnProperty(key)) ret.push(val[key])
+    return ret
   }
 
   // https://github.com/Microsoft/TypeScript/pull/12253

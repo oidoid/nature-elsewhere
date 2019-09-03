@@ -2,5 +2,7 @@
   "id": "editor",
   "updateType": "ALWAYS",
   "behavior": "FOLLOW_CAM",
-  "images": [{"id": "palette green", "sx": 128, "sy": 32, "layer": "UI_LO"}]
+  "states": {
+    "0": [{"id": "palette green", "w": 128, "h": 32, "layer": "UI_LO"}]
+  }
 }

@@ -5,9 +5,11 @@
   "minSize": {"w": 128, "h": 128},
   "entities": [
     {
-      "images": [
-        {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
-      ]
+      "states": {
+        "0": [
+          {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
+        ]
+      }
     },
     {"id": "cursor"},
     {"id": "cloud", "x": 20, "y": 20},
@@ -29,8 +31,15 @@
     {"id": "tree", "x": 24, "y": 96},
     {"id": "tree", "x": 18, "y": 108},
     {"id": "bee", "x": 50, "y": 114, "vx": 0.025, "vy": 0.025},
-    {"id": "bee", "x": 54, "y": 118, "sx": -1, "vx": 0.025, "vy": 0.025},
-    {"id": "bee", "state": "dead", "x": 55, "y": 122, "sx": -1},
+    {
+      "id": "bee",
+      "x": 54,
+      "y": 118,
+      "scale": {"x": -1},
+      "vx": 0.025,
+      "vy": 0.025
+    },
+    {"id": "bee", "state": "dead", "x": 55, "y": 122, "scale": {"x": -1}},
     {"id": "bee", "state": "dead", "x": 60, "y": 126},
     {"id": "clover", "x": 54, "y": 12},
     {"id": "clover", "state": "1", "x": 66, "y": 24},

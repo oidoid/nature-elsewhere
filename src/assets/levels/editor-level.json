@@ -5,9 +5,9 @@
   "minSize": {"w": 128, "h": 32},
   "entities": [
     {
-      "images": [
-        {"id": "palette red", "w": 32767, "h": 32767, "layer": "PLANE"}
-      ]
+      "states": {
+        "0": [{"id": "palette red", "w": 32767, "h": 32767, "layer": "PLANE"}]
+      }
     },
     {"id": "text", "x": 1, "y": 1, "text": "id...", "layer": "UI_MID"},
     {"id": "text", "x": 1, "y": 6, "text": "state...", "layer": "UI_MID"},

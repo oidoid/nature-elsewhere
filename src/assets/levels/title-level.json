@@ -5,18 +5,20 @@
   "minSize": {"w": 128, "h": 128},
   "entities": [
     {
-      "images": [
-        {"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"},
-        {"id": "logo"},
-        {"id": "palette grey", "y": 11, "w": 33, "h": 1}
-      ]
+      "states": {
+        "0": [
+          {"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"},
+          {"id": "logo"},
+          {"id": "palette grey", "y": 11, "w": 33, "h": 1}
+        ]
+      }
     },
     {
       "id": "text",
       "y": 16,
       "text": "start\noptions\nlevel editor\nexit"
     },
-    {"id": "textDateVersionHash", "x": 1, "y": 123},
+    {"id": "dateVersionHash", "x": 1, "y": 123, "layer": "UI_LO"},
     {"id": "cursor"}
   ]
 }

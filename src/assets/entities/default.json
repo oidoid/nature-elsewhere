@@ -1,15 +1,14 @@
 {
+  "id": "default",
   "state": "0",
   "x": 0,
   "y": 0,
-  "sx": 1,
-  "sy": 1,
+  "scale": {"x": 1, "y": 1},
   "updateType": "NEVER",
   "behavior": "STATIC",
   "vx": 0,
   "vy": 0,
   "ax": 0,
   "ay": 0,
-  "images": [],
   "states": {}
 }

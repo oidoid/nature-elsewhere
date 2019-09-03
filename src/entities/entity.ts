@@ -11,10 +11,11 @@ import {XY} from '../math/xy'
     Entity images. This is used for quick collision detections such checking if
     the Entity is on screen. x and y are in in level coordinates. */
 export interface Entity
-  extends ImageRect,
-    Omit<Required<Entity.Config>, 'images' | 'states'> {
+  extends Omit<Required<Entity.Config>, 'states' | 'x' | 'y'> {
   readonly updateType: UpdateType.Key
   readonly behavior: Behavior.Key
+  readonly scale: Mutable<XY>
+  readonly states: Record<string, ImageRect>
 }
 
 export namespace Entity {
@@ -23,13 +24,11 @@ export namespace Entity {
     readonly state?: string
     readonly updateType?: UpdateType.Key | string
     readonly behavior?: Behavior.Key | string
-    readonly sx?: number
-    readonly sy?: number
+    readonly scale?: Partial<XY>
     readonly vx?: number
     readonly vy?: number
     readonly ax?: number
     readonly ay?: number
-    readonly images?: readonly Image.Config[]
     readonly states?: Readonly<Record<string, readonly Image.Config[]>>
   }
 
@@ -40,10 +39,11 @@ export namespace Entity {
     time: number,
     recorder: Recorder
   ): readonly Image[] {
-    if (state.updateType === 'NEVER') return state.images
+    const rect = state.states[state.state]
+    if (state.updateType === 'NEVER') return rect.images
     ;(state.vx += state.ax * time), (state.vy += state.ay * time)
     Behavior[state.behavior](state, cam, recorder)
-    state.images.forEach(img => Image.animate(img, atlas, time))
-    return state.images
+    rect.images.forEach(img => Image.animate(img, atlas, time))
+    return rect.images
   }
 }

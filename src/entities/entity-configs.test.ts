@@ -18,9 +18,10 @@ test.each(ids)('%# ID %p is unique', id =>
 const images: readonly Image.Config[] = Object.freeze(
   ObjectUtil.values(EntityConfigs)
     .filter(ArrayUtil.is)
-    .map(({images}) => images)
+    .map(({states}) => states)
     .filter(ArrayUtil.is)
-    .reduce((sum, val) => [...sum, ...val])
+    .map(ObjectUtil.values)
+    .reduce((sum: Image.Config[], val) => sum.concat(...val), [])
 )
 
 test.each(images)('%# image has a valid layer or no layer %p', ({layer}) => {

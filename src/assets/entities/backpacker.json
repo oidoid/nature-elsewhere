@@ -7,6 +7,14 @@
       {"id": "backpacker idleDown"},
       {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
     ],
+    "idleUp": [
+      {"id": "backpacker idleUp"},
+      {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+    ],
+    "idleRight": [
+      {"id": "backpacker idleRight"},
+      {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+    ],
     "walkRight": [
       {"id": "backpacker walkRight"},
       {"id": "backpacker walkRightShadow", "layer": "SHADOW"}

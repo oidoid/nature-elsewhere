@@ -5,6 +5,7 @@ import * as cloud from '../assets/entities/cloud.json'
 import * as clover from '../assets/entities/clover.json'
 import * as conifer from '../assets/entities/conifer.json'
 import * as cursor from '../assets/entities/cursor.json'
+import * as dateVersionHash from '../assets/entities/date-version-hash.json'
 import * as editor from '../assets/entities/editor.json'
 import {Entity} from './entity'
 import * as fly from '../assets/entities/fly.json'
@@ -24,6 +25,7 @@ export const EntityConfigs: Readonly<
   clover,
   conifer,
   cursor,
+  dateVersionHash,
   editor,
   fly,
   grass,

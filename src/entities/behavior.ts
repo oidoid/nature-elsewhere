@@ -10,16 +10,18 @@ export const Behavior = Object.freeze({
   STATIC() {},
   CIRCLE(state: Mutable<Entity>) {
     // posit new xy and if ok
-    ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveBy(
-      state,
+    const rect = state.states[state.state]
+    state.states[state.state] = ImageRect.moveTo(
+      rect,
       {x: state.vx, y: state.vy},
-      ...state.images
-    ))
+      ...rect.images
+    )
   },
   BACKPACKER(state: Mutable<Entity>, _cam: Rect, recorder: Recorder): void {
     if (state.id !== 'backpacker')
       throw new Error(`Unsupported ID "${state.id}".`)
-    let {x, y} = state
+    let rect = state.states[state.state]
+    let {x, y} = rect
     const up = Recorder.set(recorder, InputBit.UP)
     const down = Recorder.set(recorder, InputBit.DOWN)
     const left = Recorder.set(recorder, InputBit.LEFT)
@@ -35,47 +37,55 @@ export const Behavior = Object.freeze({
       if (left && down) x += 1 - s
       else if (right && up) y += 1 - s
     }
-    if (up) (y -= s), (state.state = 'walkUp') // rebuild the images i guess
-    if (down) (y += s), (state.state = 'walkDown')
-    if (left) (x -= s), (state.state = 'walkLeft'), (state.sx = -1)
-    if (right)
-      (x += s), (state.state = 'walkLeft'), (state.sx = 1)
-      // state.images = EntityConfigs[state.state].images
-    ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
-      state,
-      {x, y},
-      ...state.images
-    ))
+    if (up) (y -= s), ((state.state = 'walkUp'), (state.scale.x = 1))
+    if (down) (y += s), ((state.state = 'walkDown'), (state.scale.x = 1))
+    if (left) (x -= s), (state.state = 'walkRight'), (state.scale.x = -1)
+    if (right) (x += s), (state.state = 'walkRight'), (state.scale.x = 1)
+    if (!(left || right || up || down))
+      state.state =
+        state.state === 'walkUp' || state.state === 'idleUp'
+          ? 'idleUp'
+          : state.state === 'idleRight' ||
+            state.state === 'walkRight' ||
+            state.state === 'walkLeft'
+          ? 'idleRight'
+          : '0'
+
+    rect = state.states[state.state]
+    state.states[state.state] = ImageRect.moveTo(rect, {x, y}, ...rect.images)
   },
   WRAPAROUND(state: Mutable<Entity>) {
     // posit new xy and if ok
-    ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveBy(
-      state,
+    const rect = state.states[state.state]
+    state.states[state.state] = ImageRect.moveBy(
+      rect,
       {x: state.vx, y: state.vy},
-      ...state.images
-    ))
-
+      ...rect.images
+    )
     // entity.step(entityState, milliseconds, atlas)
     // const min = level.bounds.x - cam.w
     // const max = level.bounds.x + level.bounds.w + cam.w
     // entityState.position.x = util.wrap(entityState.position.x, min, max)
   },
   FOLLOW_CAM(state: Mutable<Entity>, cam: Rect) {
-    ;({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
-      state,
-      {x: 1, y: cam.y + cam.h - (state.h + 1)},
-      ...state.images
-    ))
+    const rect = state.states[state.state]
+    state.states[state.state] = ImageRect.moveTo(
+      rect,
+      {x: 1, y: cam.y + cam.h - (rect.h + 1)},
+      ...rect.images
+    )
   },
   CURSOR(state: Mutable<Entity>, _cam: Rect, recorder: Recorder) {
     const [set] = recorder.combo.slice(-1)
     const point = set && set[InputSource.POINTER_POINT]
-    if (point)
-      ({x: state.x, y: state.y, w: state.w, h: state.h} = ImageRect.moveTo(
-        state,
-        XY.trunc(point.xy),
-        ...state.images
-      ))
+    if (point) {
+      const rect = state.states[state.state]
+      state.states[state.state] = ImageRect.moveTo(
+        rect,
+        point.xy,
+        ...rect.images
+      )
+    }
   }
 })
 

@@ -29,7 +29,9 @@ export namespace Store {
   ): Store {
     const images = entities
       .filter(
-        entity => entity.updateType === 'ALWAYS' || Rect.intersects(entity, cam)
+        entity =>
+          entity.updateType === 'ALWAYS' ||
+          Rect.intersects(entity.states[entity.state], cam)
       )
       .map(entity => Entity.update(entity, atlas, cam, milliseconds, recorder))
       .reduce((sum: Image[], val) => [...sum, ...val], [])

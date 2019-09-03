@@ -35,8 +35,8 @@ export namespace InstanceBuffer {
     dat.setInt16(i + 12, img.w, littleEndian)
     dat.setInt16(i + 14, img.h, littleEndian)
 
-    dat.setInt16(i + 16, img.sx, littleEndian)
-    dat.setInt16(i + 18, img.sy, littleEndian)
+    dat.setInt16(i + 16, img.scale.x, littleEndian)
+    dat.setInt16(i + 18, img.scale.y, littleEndian)
 
     dat.setInt16(i + 20, img.tx, littleEndian)
     dat.setInt16(i + 22, img.ty, littleEndian)
