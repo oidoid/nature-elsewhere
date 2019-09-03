@@ -11,7 +11,7 @@ export const Behavior = Object.freeze({
   CIRCLE(state: Mutable<Entity>) {
     // posit new xy and if ok
     const rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveTo(
+    state.states[state.state] = ImageRect.moveBy(
       rect,
       {x: state.vx, y: state.vy},
       ...rect.images
