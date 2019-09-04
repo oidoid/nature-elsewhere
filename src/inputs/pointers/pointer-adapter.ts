@@ -16,7 +16,7 @@ import {WH} from '../../math/wh'
     frame, it is lost. */
 export class PointerAdapter {
   static down(canvasWH: WH, cam: Rect, ev: PointerEvent): PointerInput.Pick {
-    const active = ev.type === 'pointerdown'
+    const active = ev.type === 'pointerdown' || ev.type === 'pointermove'
     const xy = Viewport.toLevelXY({x: ev.clientX, y: ev.clientY}, canvasWH, cam)
     const source = InputSource.POINTER_PICK
     return {source, bits: active ? InputBit.PICK : 0, xy}
@@ -44,7 +44,10 @@ export class PointerAdapter {
   }
 
   adapt(canvasWH: WH, cam: Rect, ev: PointerEvent): void {
-    if (ev.type === 'pointermove')
+    if (
+      (!this._downInput || !this._downInput.bits) &&
+      ev.type === 'pointermove'
+    )
       this._moveInput = PointerAdapter.move(canvasWH, cam, ev)
     else this._downInput = PointerAdapter.down(canvasWH, cam, ev)
   }

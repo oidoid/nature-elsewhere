@@ -76,6 +76,8 @@ export namespace Game {
   }
 
   export function start(state: Game): void {
+    // Disable the context menu.
+    state.doc.oncontextmenu = () => false
     RendererStateMachine.start(state.rendererStateMachine)
     InputRouter.register(state.inputRouter, true)
     Synth.play(state.synth, 'sawtooth', 200, 500, 0.15)

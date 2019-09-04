@@ -26,8 +26,7 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
       Add lightning to the cloud entity.
       Add cactus.
       Add more clouds.
-      Add backpacker (don't call them player?).
-      Add ponds. These should most probably be a collection of *small* animated tiles.
+      Add pond shader.
       Add rainbow.
       Add waterfall.
       Add quicksand.
@@ -58,7 +57,6 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
       Explore better ways to represent states.
       Add configuration tests that check the atlas.
         Check that all animation IDs references by entities exist in the parsed atlas.
-    I want recursive freeze and equivalency functions.
     What TypeScript and other open source examples should I consider?
     Re-review WebGL implementations.
     Update the readme.
