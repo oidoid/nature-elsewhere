@@ -1,9 +1,10 @@
 {
   "id": "fields",
-  "w": 128,
-  "h": 128,
-  "minSize": {"w": 128, "h": 128},
+  "w": 256,
+  "h": 256,
+  "minSize": {"w": 96, "h": 96},
   "entities": [
+    {"id": "cursor"},
     {
       "states": {
         "0": [
@@ -12,7 +13,6 @@
         ]
       }
     },
-    {"id": "cursor"},
     {"id": "cloud", "x": 20, "y": 20},
     {"id": "cloud", "state": "drizzle", "x": 30, "y": 28},
     {"id": "cloud", "state": "rain", "x": 54, "y": 50},
@@ -57,6 +57,7 @@
     {"id": "fly", "x": 110, "y": 130, "vx": -0.015},
     {"id": "fly", "state": "dead", "x": 100, "y": 132},
     {"id": "backpacker", "x": 80, "y": 102},
+    {"id": "followPlayer"},
     {"id": "frog", "x": 12, "y": 58},
     {"id": "bunny", "x": 40, "y": 48},
     {"id": "bunny", "state": "dead", "x": 48, "y": 48},

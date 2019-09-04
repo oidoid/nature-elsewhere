@@ -12,6 +12,7 @@ import * as editor from '../assets/entities/editor.json'
 import {Entity} from './entity'
 import * as flag from '../assets/entities/flag.json'
 import * as fly from '../assets/entities/fly.json'
+import * as followPlayer from '../assets/entities/follow-player.json'
 import * as frog from '../assets/entities/frog.json'
 import * as grass from '../assets/entities/grass.json'
 import * as isoGrass from '../assets/entities/iso-grass.json'
@@ -40,6 +41,7 @@ export const EntityConfigs: Readonly<
   editor,
   flag,
   fly,
+  followPlayer,
   frog,
   grass,
   isoGrass,

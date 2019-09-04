@@ -7,6 +7,8 @@ import {XY} from '../math/xy'
 import {InputBit} from '../inputs/input-bit'
 import {Atlas} from '../atlas/atlas'
 import {Image} from '../images/image'
+import {Level} from '../levels/level'
+import {NumberUtil} from '../math/number-util'
 
 export const Behavior = Object.freeze({
   STATIC() {},
@@ -22,6 +24,7 @@ export const Behavior = Object.freeze({
   BACKPACKER(
     state: Mutable<Entity>,
     entities: readonly Entity[],
+    _level: Level,
     atlas: Atlas,
     _cam: Rect,
     recorder: Recorder
@@ -69,6 +72,31 @@ export const Behavior = Object.freeze({
       ...state.states[state.state].images
     )
   },
+  FOLLOW_PLAYER(
+    _state: Mutable<Entity>,
+    entities: readonly Entity[],
+    level: Level,
+    _atlas: Atlas,
+    cam: Mutable<Rect>
+  ) {
+    const player = entities.find(({id}) => id === 'backpacker')
+    if (player) {
+      cam.x = NumberUtil.clamp(
+        Math.trunc(player.states[player.state].x) +
+          Math.trunc(player.states[player.state].w / 2) -
+          Math.trunc(cam.w / 2),
+        0,
+        Math.max(0, level.w - cam.w)
+      )
+      cam.y = NumberUtil.clamp(
+        Math.trunc(player.states[player.state].y) +
+          Math.trunc(player.states[player.state].h / 2) -
+          Math.trunc(cam.h / 2),
+        0,
+        Math.max(0, level.h - cam.h)
+      )
+    }
+  },
   WRAPAROUND(state: Mutable<Entity>) {
     // posit new xy and if ok
     const rect = state.states[state.state]
@@ -85,6 +113,7 @@ export const Behavior = Object.freeze({
   FOLLOW_CAM(
     state: Mutable<Entity>,
     _entities: readonly Entity[],
+    _level: Level,
     _atlas: Atlas,
     cam: Rect
   ) {
@@ -98,6 +127,7 @@ export const Behavior = Object.freeze({
   CURSOR(
     state: Mutable<Entity>,
     _entities: readonly Entity[],
+    _level: Level,
     _atlas: Atlas,
     _cam: Rect,
     recorder: Recorder

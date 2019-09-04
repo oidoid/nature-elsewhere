@@ -27,14 +27,4 @@ export namespace ImageRect {
     images.forEach(img => ((img.x += x), (img.y += y)))
     return {...Rect.add(state, {x, y, w: 0, h: 0}), images}
   }
-
-  export function centerOn(
-    state: Rect,
-    rect: Rect,
-    ...images: readonly Image[]
-  ): ImageRect {
-    const x = Math.trunc(rect.x + rect.w / 2) - Math.trunc(state.w / 2)
-    const y = Math.trunc(rect.y + rect.h / 2) - Math.trunc(state.h / 2)
-    return moveTo(state, {x, y}, ...images)
-  }
 }

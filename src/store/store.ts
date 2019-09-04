@@ -5,6 +5,7 @@ import {InstanceBuffer} from './instance-buffer'
 import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
+import {Level} from '../levels/level'
 
 export interface Store {
   readonly layout: ShaderLayout
@@ -24,9 +25,11 @@ export namespace Store {
     {layout, atlas, dat}: Store,
     cam: Rect,
     entities: readonly Entity[],
+    level: Level,
     milliseconds: number,
     recorder: Recorder
   ): Store {
+    const camCopy = {...cam}
     const images = entities
       .filter(
         entity =>
@@ -34,7 +37,15 @@ export namespace Store {
           Rect.intersects(entity.states[entity.state], cam)
       )
       .map((entity, _, entities) =>
-        Entity.update(entity, entities, atlas, cam, milliseconds, recorder)
+        Entity.update(
+          entity,
+          entities,
+          level,
+          atlas,
+          camCopy,
+          milliseconds,
+          recorder
+        )
       )
       .reduce((sum: Image[], val) => [...sum, ...val], [])
       .sort(Image.compare)
@@ -42,7 +53,8 @@ export namespace Store {
     const size = InstanceBuffer.size(layout, images.length)
     if (dat.byteLength < size) dat = InstanceBuffer.make(size * 2)
     images.forEach((img, i) => InstanceBuffer.set(layout, atlas, dat, i, img))
-
+    ;(<any>cam).x = camCopy.x
+    ;(<any>cam).y = camCopy.y
     return {layout, atlas, dat, len: images.length}
   }
 }

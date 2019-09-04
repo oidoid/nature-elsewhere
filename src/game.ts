@@ -12,6 +12,7 @@ import {Settings} from './settings/settings'
 import {Synth} from './audio/synth'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
+import {Rect} from './math/rect'
 
 export interface Game {
   readonly doc: Document
@@ -23,6 +24,7 @@ export interface Game {
       updates may occur per animation frame. */
   readonly tick: number
   levelStateMachine: LevelStateMachine
+  readonly cam: Mutable<Rect>
   readonly rendererStateMachine: RendererStateMachine
   readonly recorder: Recorder
   readonly inputRouter: InputRouter
@@ -42,6 +44,7 @@ export namespace Game {
     const inputRouter = InputRouter.make(window)
     const ret: Game = {
       doc,
+      cam: {x: 0, y: 0, w: 0, h: 0},
       age: 0,
       time: 0,
       tick: 1000 / 60,
@@ -89,9 +92,9 @@ export namespace Game {
     const canvasWH = Viewport.canvasWH(state.doc)
     const {minSize} = state.levelStateMachine.level
     const scale = Viewport.scale(canvasWH, minSize, 0)
-    const cam = Viewport.cam(canvasWH, scale)
+    ;({w: state.cam.w, h: state.cam.h} = Viewport.camWH(canvasWH, scale))
 
-    InputRouter.record(state.inputRouter, state.recorder, canvasWH, cam)
+    InputRouter.record(state.inputRouter, state.recorder, canvasWH, state.cam)
     Recorder.update(state.recorder, time)
 
     const [set] = state.recorder.combo.slice(-1)
@@ -105,7 +108,7 @@ export namespace Game {
       state.time -= state.tick
       state.levelStateMachine = LevelStateMachine.update(
         state.levelStateMachine,
-        cam,
+        state.cam,
         state.tick,
         state.recorder
       )
@@ -113,7 +116,8 @@ export namespace Game {
 
     const {renderer} = state.rendererStateMachine
     const {level, store} = state.levelStateMachine
-    if (level) Renderer.render(renderer, state.age, canvasWH, scale, cam, store)
+    if (level)
+      Renderer.render(renderer, state.age, canvasWH, scale, state.cam, store)
     else stop(state)
   }
 

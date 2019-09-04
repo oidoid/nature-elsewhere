@@ -15,8 +15,8 @@ export namespace Viewport {
     return {w: clientWidth, h: clientHeight}
   }
 
-  export function cam({w, h}: WH, scale: number): Rect {
-    return {x: 0, y: 0, w: Math.ceil(w / scale), h: Math.ceil(h / scale)}
+  export function camWH({w, h}: WH, scale: number): WH {
+    return {w: Math.ceil(w / scale), h: Math.ceil(h / scale)}
   }
 
   /** @arg {x, y} The viewport coordinates of the input in pixels, usually

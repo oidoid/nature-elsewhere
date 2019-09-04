@@ -6,6 +6,7 @@ import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
+import {Level} from '../levels/level'
 
 /** Images and behavior. Bounds (x, y, w, and h members) are the union of all
     Entity images. This is used for quick collision detections such checking if
@@ -36,6 +37,7 @@ export namespace Entity {
   export function update(
     state: Mutable<Entity>,
     entities: readonly Entity[],
+    level: Level,
     atlas: Atlas,
     cam: Rect,
     time: number,
@@ -44,7 +46,7 @@ export namespace Entity {
     const rect = state.states[state.state]
     if (state.updateType === 'NEVER') return rect.images
     ;(state.vx += state.ax * time), (state.vy += state.ay * time)
-    Behavior[state.behavior](state, entities, atlas, cam, recorder)
+    Behavior[state.behavior](state, entities, level, atlas, cam, recorder)
     rect.images.forEach(img => Image.animate(img, atlas, time))
     return rect.images
   }

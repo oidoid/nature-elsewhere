@@ -29,6 +29,7 @@ export namespace LevelStateMachine {
       state.store,
       cam,
       state.level.entities,
+      state.level,
       time,
       recorder
     )
