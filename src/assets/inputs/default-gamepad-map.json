@@ -1,5 +1,5 @@
 {
-  // https://w3c.github.io/gamepad/#remapping
+  "//": "https://w3c.github.io/gamepad/#remapping",
   "buttons": {
     "14": "LEFT",
     "15": "RIGHT",

@@ -3,6 +3,6 @@
   "depth": false,
   "antialias": false,
   "failIfMajorPerformanceCaveat": true,
-  // https://www.chromestatus.com/feature/6360971442388992
+  "//": "https://www.chromestatus.com/feature/6360971442388992",
   "lowLatency": true
 }

@@ -19,8 +19,7 @@ export default (): webpack.Configuration => {
     module: {
       rules: [
         {test: /\.ts$/, use: 'ts-loader'},
-        {test: /\.glsl$/, use: 'raw-loader'},
-        {test: /\.json$/, use: 'json5-loader', type: 'javascript/auto'}
+        {test: /\.glsl$/, use: 'raw-loader'}
       ]
     },
 

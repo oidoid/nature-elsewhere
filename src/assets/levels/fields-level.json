@@ -57,7 +57,7 @@
     {"id": "fly", "x": 110, "y": 130, "vx": -0.015},
     {"id": "fly", "state": "dead", "x": 100, "y": 132},
     {"id": "backpacker", "x": 80, "y": 102},
-    {"id": "followPlayer"}, // Must appear after backpacker.
+    {"id": "followPlayer", "//": "Must appear after backpacker."},
     {"id": "frog", "x": 12, "y": 58},
     {"id": "bunny", "x": 40, "y": 48},
     {"id": "bunny", "state": "dead", "x": 48, "y": 48},
