@@ -80,6 +80,11 @@ Now that the player has moved to -0.5 px:
 | Floor.       | floor(-0.5 px) + 100.9 px | 99.9 px  | 0 px            | 99 px           | **99 px**         |
 | Ceil.        | ceil(-0.5 px) + 100.9 px  | 100.9 px | 0 px            | 100 px          | **100 px**        |
 
+It's also possible to see heavy jitter when moving diagonally. E.g., moving an
+image left one pixel on one frame and then up another pixel on the next frame.
+It is often better to instead synchronize the movements in each direction to
+occur on the same frame.
+
 #### Shader Floating Point Limits
 
 My Pixel XL's [`mediump` precision is noticeably

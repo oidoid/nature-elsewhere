@@ -33,30 +33,30 @@ export const Behavior = Object.freeze({
     const original = state.states[state.state]
     let rect = state.states[state.state]
     let {x, y} = rect
-    const up = Recorder.set(recorder, InputBit.UP)
-    const down = Recorder.set(recorder, InputBit.DOWN)
-    const left = Recorder.set(recorder, InputBit.LEFT)
-    const right = Recorder.set(recorder, InputBit.RIGHT)
-    const diagonal = (left || right) && (up || down)
-    let s = 0.25
-    if (!recorder.timer && diagonal) {
-      // Synchronize x and y pixel movement when initially moving diagonally.
-      ;({x, y} = XY.trunc({x, y}))
-
-      // One direction is negative, the other is positive. Offset by 1 - speed
-      // to synchronize.
-      if (left && down) x += 1 - s
-      else if (right && up) y += 1 - s
-    }
 
     const [set] = recorder.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
+    const dst =
+      pick && pick.bits === InputBit.PICK
+        ? XY.trunc(XY.add(pick.xy, {x: -4, y: -rect.h + 2}))
+        : rect
+    const up = y > dst.y
+    const down = y < dst.y
+    const left = x > dst.x
+    const right = x < dst.x
+    let s = 0.25
+
+    // Synchronize x and y pixel diagonal movement.
+    if ((left && up) || (right && down)) y = Math.trunc(y) + (x % 1)
+    // One direction is negative, the other is positive. Offset by 1 - speed
+    // to synchronize.
+    if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - s) - (x % 1)
+
     if (pick && pick.bits === InputBit.PICK) {
-      const dst = XY.trunc(XY.add(pick.xy, {x: -4, y: -rect.h + 2}))
-      if (y > dst.y) (y -= s), ((state.state = 'walkUp'), (state.scale.x = 1))
-      if (y < dst.y) (y += s), ((state.state = 'walkDown'), (state.scale.x = 1))
-      if (x > dst.x) (x -= s), (state.state = 'walkRight'), (state.scale.x = -1)
-      if (x < dst.x) (x += s), (state.state = 'walkRight'), (state.scale.x = 1)
+      if (up) (y -= s), ((state.state = 'walkUp'), (state.scale.x = 1))
+      if (down) (y += s), ((state.state = 'walkDown'), (state.scale.x = 1))
+      if (left) (x -= s), (state.state = 'walkRight'), (state.scale.x = -1)
+      if (right) (x += s), (state.state = 'walkRight'), (state.scale.x = 1)
       if (x === dst.x && y === dst.y)
         state.state =
           state.state === 'walkUp' || state.state === 'idleUp'
