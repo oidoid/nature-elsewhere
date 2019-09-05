@@ -44,6 +44,7 @@ export const Behavior = Object.freeze({
     const down = y < dst.y
     const left = x > dst.x
     const right = x < dst.x
+    const animateHorizontal = Math.abs(x - dst.x) > 8
     let s = 0.25
 
     // Synchronize x and y pixel diagonal movement.
@@ -53,10 +54,14 @@ export const Behavior = Object.freeze({
     if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - s) - (x % 1)
 
     if (pick && pick.bits === InputBit.PICK) {
-      if (up) (y -= s), ((state.state = 'walkUp'), (state.scale.x = 1))
-      if (down) (y += s), ((state.state = 'walkDown'), (state.scale.x = 1))
-      if (left) (x -= s), (state.state = 'walkRight'), (state.scale.x = -1)
-      if (right) (x += s), (state.state = 'walkRight'), (state.scale.x = 1)
+      if (up) (y -= s), (state.state = 'walkUp'), (state.scale.x = 1)
+      if (down) (y += s), (state.state = 'walkDown'), (state.scale.x = 1)
+      if (left) x -= s
+      if (left && animateHorizontal)
+        (state.state = 'walkRight'), (state.scale.x = -1)
+      if (right) x += s
+      if (right && animateHorizontal)
+        (state.state = 'walkRight'), (state.scale.x = 1)
       if (x === dst.x && y === dst.y)
         state.state =
           state.state === 'walkUp' || state.state === 'idleUp'
