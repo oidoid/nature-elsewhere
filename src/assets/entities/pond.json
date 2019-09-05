@@ -2,7 +2,7 @@
   "id": "pond",
   "states": {
     "0": [
-      {"id": "pond", "layer": "WATER"},
+      {"id": "pond", "layer": "ABOVE_PLANE"},
       {"id": "cattails", "x": 15, "y": -3},
       {"id": "grass 1", "x": 1, "y": 4},
       {"id": "grass 2", "x": 12, "y": 11},

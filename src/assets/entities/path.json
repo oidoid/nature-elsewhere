@@ -2,11 +2,11 @@
   "id": "path",
   "state": "/",
   "states": {
-    "/": [{"id": "path /", "layer": "DECAL"}],
-    "\\": [{"id": "path /", "layer": "DECAL", "scale": {"x": -1}}],
-    ">": [{"id": "path >", "layer": "DECAL"}],
-    "<": [{"id": "path >", "layer": "DECAL", "scale": {"x": -1}}],
-    "^": [{"id": "path ^", "layer": "DECAL"}],
-    "v": [{"id": "path ^", "layer": "DECAL", "scale": {"y": -1}}]
+    "/": [{"id": "path /", "layer": "ABOVE_PLANE"}],
+    "\\": [{"id": "path /", "layer": "ABOVE_PLANE", "scale": {"x": -1}}],
+    ">": [{"id": "path >", "layer": "ABOVE_PLANE"}],
+    "<": [{"id": "path >", "layer": "ABOVE_PLANE", "scale": {"x": -1}}],
+    "^": [{"id": "path ^", "layer": "ABOVE_PLANE"}],
+    "v": [{"id": "path ^", "layer": "ABOVE_PLANE", "scale": {"y": -1}}]
   }
 }

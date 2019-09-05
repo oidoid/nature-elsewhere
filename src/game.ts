@@ -124,7 +124,10 @@ export namespace Game {
   }
 
   function processDebugInput({rendererStateMachine, recorder}: Game): void {
-    const triggered = Recorder.triggered(recorder, InputBit.DEBUG_CONTEXT_LOSS)
+    const triggered = Recorder.triggeredSet(
+      recorder,
+      InputBit.DEBUG_CONTEXT_LOSS
+    )
     const {loseContext} = rendererStateMachine.renderer
     if (triggered && loseContext) {
       loseContext.loseContext()

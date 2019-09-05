@@ -13,17 +13,7 @@
       {"id": "cloud shadow", "y": 32, "layer": "SHADOW"},
       {"id": "sprinkle", "x": 2, "y": 2, "w": 5, "tvy": 225},
       {"id": "rain", "x": 2, "y": 6, "w": 7, "ty": 8, "tvy": 340},
-      {"id": "rain-splash", "y": 35},
-      {"id": "palette blue", "x": 3, "y": 36, "layer": "DECAL", "w": 3, "h": 3},
-      {
-        "id": "palette green",
-        "x": 1,
-        "y": 37,
-        "layer": "DECAL",
-        "w": 7,
-        "h": 1,
-        "tvx": -90
-      }
+      {"id": "rain-splash", "y": 35}
     ],
     "rain": [
       {"id": "cloud", "layer": "FLOATS"},
@@ -32,7 +22,16 @@
       {"id": "rain", "x": 2, "y": 2, "w": 7, "tvy": 225},
       {"id": "sprinkle", "x": 2, "y": 6, "w": 7, "tvy": 300},
       {"id": "rain-splash", "y": 35},
-      {"id": "palette blue", "x": 3, "y": 36, "layer": "DECAL", "w": 3, "h": 3},
+      {
+        "id": "rain pool",
+        "x": 2,
+        "y": 36,
+        "layer": "DECAL",
+        "w": 5,
+        "h": 3,
+        "tvx": -44,
+        "tvy": 22
+      },
       {
         "id": "palette green",
         "x": 1,

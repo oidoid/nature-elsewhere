@@ -8,8 +8,7 @@
     {
       "states": {
         "0": [
-          {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"},
-          {"id": "grid", "w": 32767, "h": 32767, "layer": "PLANE"}
+          {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
         ]
       }
     },
@@ -55,9 +54,11 @@
     {"id": "pyramid", "x": 129, "y": 105},
     {"id": "tree", "x": 159, "y": 126},
     {"id": "conifer", "x": 119, "y": 116},
-    {"id": "fly", "x": 110, "y": 130, "vx": -0.015},
-    {"id": "fly", "state": "dead", "x": 100, "y": 132},
+    {"id": "fly", "x": 120, "y": 130, "vx": -0.015},
+    {"id": "fly", "state": "dead", "x": 125, "y": 132},
     {"id": "backpacker", "x": 80, "y": 102},
+    {"id": "cloud", "x": 90, "y": 122},
+    {"id": "pond", "x": 80, "y": 148},
     {"id": "followPlayer", "//": "Must appear after backpacker."},
     {"id": "frog", "x": 12, "y": 58},
     {"id": "bunny", "x": 40, "y": 48},

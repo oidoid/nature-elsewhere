@@ -6,7 +6,7 @@
   "states": {
     "idle": [
       {"id": "palette grey"},
-      {"id": "palette lightGreen", "y": 2, "layer": "SHADOW"}
+      {"id": "palette lightGrey", "y": 2, "layer": "SHADOW"}
     ],
     "dead": [{"id": "palette red", "layer": "BLOOD"}]
   }
