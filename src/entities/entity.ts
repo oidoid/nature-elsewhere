@@ -12,7 +12,7 @@ import {Level} from '../levels/level'
     Entity images. This is used for quick collision detections such checking if
     the Entity is on screen. x and y are in in level coordinates. */
 export interface Entity
-  extends Omit<Required<Entity.Config>, 'states' | 'x' | 'y'> {
+  extends Omit<Required<Entity.Config>, 'states' | 'x' | 'y' | 'period'> {
   readonly updateType: UpdateType.Key
   readonly behavior: Behavior.Key
   readonly scale: Mutable<XY>
@@ -32,6 +32,7 @@ export namespace Entity {
     readonly ax?: number
     readonly ay?: number
     readonly states?: Readonly<Record<string, readonly Image.Config[]>>
+    readonly period?: number
   }
 
   export function update(

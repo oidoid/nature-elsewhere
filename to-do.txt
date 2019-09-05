@@ -4,7 +4,6 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
     Add old options UI.
     Draw dashed path.
       Add path behavior.
-        Add A*.
     Add title, editor, and pause levels.
       Make a level editor.
         Make outstanding UI.
@@ -70,4 +69,3 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
     Do I need a shader for better types of water? What does it look like?
   How can I move my planning materials into the VCS?
   Review Diablo tile IDs: https://www.boristhebrave.com/2019/07/14/dungeon-generation-in-diablo-1/
-  Fix iOS execution bug.

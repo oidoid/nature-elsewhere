@@ -48,9 +48,13 @@ export namespace EntityParser {
             y: 0,
             w: 0,
             h: 0,
-            images: val.map(
-              val =>
-                Image.make(atlas, {...val, scale: val.scale || defaults.scale}) // maybe i can pass this in from entity and use it when non-1. maybe same for w/h
+            images: val.map(val =>
+              Image.make(atlas, {
+                ...val,
+                // maybe i can pass this in from entity and use it when non-1. maybe same for w/h
+                scale: val.scale || defaults.scale,
+                period: defaults.period
+              })
             )
           }
         }),
