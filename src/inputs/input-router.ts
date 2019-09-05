@@ -19,7 +19,7 @@ export interface InputRouter {
 export namespace InputRouter {
   export function make(
     window: Window,
-    pointerRecorder: PointerRecorder = new PointerRecorder()
+    pointerRecorder: PointerRecorder = PointerRecorder.make()
   ): InputRouter {
     const ret = {
       canvasWH: {w: 0, h: 0},
@@ -52,12 +52,12 @@ export namespace InputRouter {
     state.cam = cam
     const input = {source: InputSource.KEYBOARD, bits: state.keyboardBits}
     Recorder.record(recorder, input)
-    state.pointerRecorder.record(recorder)
+    PointerRecorder.record(state.pointerRecorder, recorder)
     GamepadRecorder.record(recorder, state.window.navigator)
   }
 
   export function reset(state: InputRouter): void {
-    ;(state.keyboardBits = 0), state.pointerRecorder.reset()
+    ;(state.keyboardBits = 0), PointerRecorder.reset(state.pointerRecorder)
   }
 }
 
@@ -66,5 +66,10 @@ function onKey(state: InputRouter, event: KeyboardEvent): void {
 }
 
 function onPointer(state: InputRouter, event: PointerEvent): void {
-  state.pointerRecorder.onEvent(state.canvasWH, state.cam, event)
+  PointerRecorder.onEvent(
+    state.pointerRecorder,
+    state.canvasWH,
+    state.cam,
+    event
+  )
 }

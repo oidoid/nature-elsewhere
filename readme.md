@@ -17,9 +17,9 @@ another variable, the first must be truncated independently to avoid possible
 jitter.
 
 E.g., consider deriving camera position at an offset from the player's position.
-The player may be at 0.1 and the camera at an offset of 100.9. The rendered
-player's position is implicitly truncated to 0. Depending on calculation choice,
-the rendered camera's position may be:
+The player may be at 0.1 and the camera follows at an offset of 100.9. The
+rendered player's position is implicitly truncated to 0. Depending on
+formulation, the rendered camera's position may be:
 
 | Formula Type                  | Formula                  | Result   | Rendered player | Rendered camera | Rendered distance |
 | ----------------------------- | ------------------------ | -------- | --------------- | --------------- | ----------------- |
@@ -79,6 +79,52 @@ Now that the player has moved to -0.5 px:
 | Round.       | round(-0.5 px) + 100.9 px | 100.9 px | 0 px            | 100 px          | **100 px**        |
 | Floor.       | floor(-0.5 px) + 100.9 px | 99.9 px  | 0 px            | 99 px           | **99 px**         |
 | Ceil.        | ceil(-0.5 px) + 100.9 px  | 100.9 px | 0 px            | 100 px          | **100 px**        |
+
+#### Shader Floating Point Limits
+
+My Pixel XL's [`mediump` precision is noticeably
+lower](https://stackoverflow.com/a/4430934/970346) than my laptop. Since the
+program's execution time is fed into the shader as a floating point, this was
+quickly overflowing causing calculations to become quite out of sync. I've
+since increased the request to `highp`.
+
+#### Floating Point Modulo
+
+I also had some floating point errors when taking relatively small modulos of
+very large numbers. [The following] seemed to work ok and is [the definition for
+OpenGL's `mod`](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/mod.xhtml):
+
+```
+// 0x4000 is 2^14 (mediump).
+val = val - Math.trunc(val / 0x4000) \* 0x4000
+```
+
+[the following]: https://wikipedia.org/wiki/Modulo_operation#Remainder_calculation_for_the_modulo_operation
+
+### Scaling
+
+It took me way too long to figure this out but only integer scaling with a
+minimum size works the way I wanted.
+
+- Noninteger scaling produces odd pixels that are inconsistently sized. This is
+  especially noticeable for such large, low-resolution virtual pixels. Either
+  they're slightly larger than their neighbors or, if I recall correctly,
+  missing.
+- Given an ideal viewport size, integer scaling usually generates an image
+  that's either too large or too small. I found that picking the maximum integer
+  scale that shows a minimum viewport size works well. The result is either a
+  viewport that is scaled to exactly the document size or the next size smaller.
+  In the (frequent) latter case, the result is simply to show larger viewport
+  than ideal.
+
+The scaling transformation can be done in a number of ways. I think the best is
+probably to change the canvas and viewport size to match the document every
+frame, and then do all the scaling in WebGL. This keeps all the math as a
+projection in WebGL which keeps things much simpler than diving into the world
+of CSS.
+
+This was all quite a frustration when combined with updating all the different
+Phaser framework subsystems and eventually led me to pursue WebGL.
 
 ### Renderer State Machine
 
@@ -191,15 +237,16 @@ Three.js was much more complicated than I wanted for a side-scroller.
 
 ### Work
 
-As a personal passion project, it's been a challenge to maintain my motivation
-and work earnestly. I mostly struggle with: 1) project value to anyone 2) the
-immense gobs of time this project eats up 3) whether the project is completable
-by me. I question myself pretty regularly about it all. For instance, the pixel
-art style may be hard to appreciate. Even in the best case scenario that I
-manage to finish development, will anyone actually want to play it much? The
-construction quality and open-source approach has also been a great burden. I
-read some Gamasutra article about the Venn diagram of "games you can make,"
-"games you want to make," and "games others want to play" and I think it a lot.
+As a personal passion project, it's been a challenge to maintain my motivation,
+project vision, and to work earnestly. I mostly struggle with: 1) project value
+to anyone 2) the immense gobs of time this project eats up 3) whether the project
+is completable by me. I question myself pretty regularly about it all. For
+instance, the pixel art style may be hard to appreciate. Even in the best case
+scenario that I manage to finish development, will anyone actually want to play
+it much? The construction quality and open-source approach has also been a great
+burden. I read some Gamasutra article about the Venn diagram of "games you can
+make," "games you want to make," and "games others want to play." I think about
+it often.
 
 One precursor project I pursued was "Once and Future Cactus" but I was pouring
 so much time into it that I wanted a more serious idea to pursue. I also had
@@ -361,7 +408,8 @@ function flip({state, flipped}: Flipper): Flipper {
 
 WebGL v2 is used because it supports instancing, which seemed very convenient.
 v1 also supports instancing but only when the ANGLE_instanced_arrays extension
-is available.
+is available. I may need to readdress this decision as iOS somehow only supports
+v1.
 
 #### Functional vs Object-Oriented Programming
 
@@ -606,8 +654,10 @@ generalize which is easier to conceptualize a system for.
 #### Formatting
 
 Prettier does such consistent formatting that braceless if and loops seem to be
-perfectly fine. The indentation is never misleading. I think that guaranteeing
-code will never be misleading is a great benefit.
+perfectly fine. No matter how guttural the input, the indentation is never
+misleading. Code isn't always formatted to my ideal, but I think that
+guaranteeing code will never be misleading is magnificent and opens up the
+syntax.
 
 #### Parts of JavaScript / TypeScript to Avoid
 
@@ -643,7 +693,6 @@ avoid:
   frameworks mixed with weird language quirks. Further, I think a lot of pre-ES6
   materials are examples of what _not_ to do in modern JavaScript,
   unfortunately.
-- Closures are fine, I guess, but I haven't needed to use them much.
 - Getters and setters (via get / set keywords). I just don't know much about
   them. They seem kind of limited over traditional functions. I would most
   probably try to favor a plain object unless coding standards required
