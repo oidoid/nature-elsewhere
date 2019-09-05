@@ -1,20 +1,16 @@
-# nature elsewhere
+# Nature Elsewhere
 
 An isometric adventure in an idealized state of nature.
 
 ## Development
 
-### Installation
+### Install and Execute
 
-`npm -s i`
-
-### Execution
-
-`npm -s start`
+`npm -s i && npm -s start`
 
 ### Rounding Errors
 
-All variables passed from JavaScript to WebGL are integral by truncation.
+All integral variables passed from JavaScript to WebGL are inherently truncated.
 When passing an independent variable, this implicit truncation by converting to
 shader input is acceptable. However, when deriving a renderable variable from
 another variable, the first must be truncated independently to avoid possible
@@ -83,6 +79,134 @@ Now that the player has moved to -0.5 px:
 | Round.       | round(-0.5 px) + 100.9 px | 100.9 px | 0 px            | 100 px          | **100 px**        |
 | Floor.       | floor(-0.5 px) + 100.9 px | 99.9 px  | 0 px            | 99 px           | **99 px**         |
 | Ceil.        | ceil(-0.5 px) + 100.9 px  | 100.9 px | 0 px            | 100 px          | **100 px**        |
+
+### Renderer State Machine
+
+The game is paused when the player backgrounds the game either by selecting a
+different window or tab. This is accomplished by subscribing to window focus,
+blur, and GL context change events, not Document.hidden. The game loop is
+suspended when possible so events, which are necessary to resume looping, are
+used consistently.
+
+The [Khronos website has microscopic examples on how to properly manage a
+renderer](https://www.khronos.org/webgl/wiki/HandlingContextLost).
+Of course, I seemed to have neverending difficulties in writing a slim manager.
+Its design was encumbered by other systemic factors but I just couldn't seem to
+wrap my head around how to handle the states nicely in TypeScript and the code
+was a disheartening disaster for a long time. I eventually stripped everything
+away and wrote a synchronous version. I then realized the loop couldn't "wake"
+back up once suspended, and mimicked the simple synchronous version so much as
+possible using EventListeners which seems to work pretty well.
+
+### Isometric
+
+The original vision for Nature Elsewhere was always a 2D Mario-like
+side-scroller. That is, a flat as in paper, no depth, wallpaper-like game. It
+was very easy for me to envision and reason about conceptually, both technically
+and visually, and I never thought of it any other way. However, I don't think it
+fit in well with the themes of adventure and exploration nearly so well. I had a
+hard time picturing exploration without adding the usual platform mechanics of
+jumping from place to place. I love pre-scripted content but it felt much too
+linear. My feelings were that I wanted to avoid platformer mechanics if possible
+because there are many such games and I think it could distract from a sense of
+wandering. Maybe it wouldn't have been bad if I had been able to do some kind of
+enjoyable water physics but bah.
+
+So eventually I worked my way towards an isometric style which has been very
+difficult for me to visualize but has the atmosphere I was seeking. I played a
+lot of Diablo II and a little SimCity 2000 but throughout development and long
+before, I always come back to "a simple good game would be a nature-y take on
+Super Mario Bros. 3." Nature Elsewhere is kind of a mix of them all, I suppose.
+
+I drew a lot of contrast, pixeling, and inspiration in general from
+[Arne's website]. I also really like their humble way of writing which changed
+how I think about things. I spent quite some hours during a week long vacation
+just reading through their copious and sprawling materials. [Pixel Joint] and
+numerous creators on [Twitter] have also been a fantastic reference and source
+of inspirado but sometimes equally make me feel inadequate.
+
+[arne's website]: https://androidarts.com/
+[pixel joint]: http://pixeljoint.com/
+[twitter]: https://twitter.com/
+
+### Palettes
+
+Early palettes had a very washed-out look. The intent was to give that Colorado
+bleached look you see on a blindingly bright day, or maybe my recollections of
+the bloom effect in Ico and Shadow of the Colossus, but it wasn't so enjoyable
+in practice. I focused on giving the palette more saturation and contrast with
+fewer colors over _many_ iterations including several rewrites. I think this
+works much better for a pixel game.
+
+I struggled a lot with palette swapping too. Old versions of the engine
+supported many complex visual operations, including palette swapping. Not in
+itself complex, but the system I built around the feature, in combination with
+other features, really made development a lot more complex and slower than it
+needed to be and I just had a hard time grasping how multiple palettes should
+work.
+
+### Entities
+
+I've had something of an identity crisis while working on Nature Elsewhere. Is
+it an object-oriented or functional project? Back and forth I go! More so than
+with other parts of the system, I've had trouble expressing entities nicely in
+a functional style. Perhaps it's the way I was taught, but I consistently find
+object-oriented systems much easier to write, but not easier to read or modify,
+than functional. The former comes naturally to me and the latter is easier to
+usually easier reason about after its written. I'm not sure I could generalize
+which is easier to conceptualize a system for.
+
+I am quite pleased to have finally extracted a lot of the data into JSON
+configuration files, as opposed to code, which has a number of benefits: 1)
+reasoning about data is closer to reasoning a picture than code (much easier and
+fewer bugs) 2) dumb data is easier to serialize and deserialize than dynamic
+code. That number is more than two, I think, but that's all I have at the
+moment.
+
+I had a lot of trouble understanding what the responsibilities of images should
+be and what their relationship is to entities. All of these concerns were
+compounded by managing groups of images and entities and how they correlated to
+the Aseprite format.
+
+### Other Engines
+
+I tried a few other engines and tools, notably Phaser v2.x and Tiled. I found it
+very challenging to achieve "pixel perfect" AND responsive sizing in Phaser
+v2.x. I even bought a book! Phaser felt like it had glued a whole bunch of
+different tools together and it was an ultimately extremely frustrating
+experience but I imagine v3 is much better. Tiled gave me similar feelings of
+frustration where a lot worked and was very promising and useful but the devil
+was in the details and when little things didn't work, it was a great unfun.
+
+I also tried using the plain web Canvas API but the performance was very poor on
+my Linux machine. WebGL is pretty flakey on my NVIDIA GPU too, but felt like the
+best approach to me. The reason is that I get far less upset having to learn how
+to do something in WebGL than I do in a non-standard engine. For me, it is kind
+of like how learning the C programming language is a good investment since it's
+probably not going to disappear any time soon and has concepts that can be built
+upon in any other language, but learning (redacted) may be shortsighted and
+offer poor returns.
+
+Three.js was much more complicated than I wanted for a side-scroller.
+
+### Work
+
+As a personal passion project, it's been a challenge to maintain my motivation
+and work earnestly. I mostly struggle with: 1) project value to anyone 2) the
+immense gobs of time this project eats up 3) whether the project is completable
+by me. I question myself pretty regularly about it all. For instance, the pixel
+art style may be hard to appreciate. Even in the best case scenario that I
+manage to finish development, will anyone actually want to play it much? The
+construction quality and open-source approach has also been a great burden. I
+read some Gamasutra article about the Venn diagram of "games you can make,"
+"games you want to make," and "games others want to play" and I think it a lot.
+
+One precursor project I pursued was "Once and Future Cactus" but I was pouring
+so much time into it that I wanted a more serious idea to pursue. I also had
+another "simple" game called "Sound of Water" that I just never had enough
+momentum to follow-through on.
+
+I don't know why it's taking me so long.
 
 ### Implicit Coupling
 
@@ -232,6 +356,12 @@ function flip({state, flipped}: Flipper): Flipper {
 }
 // State is always returned and code lives in the repo, not in the state.
 ```
+
+#### WebGL
+
+WebGL v2 is used because it supports instancing, which seemed very convenient.
+v1 also supports instancing but only when the ANGLE_instanced_arrays extension
+is available.
 
 #### Functional vs Object-Oriented Programming
 
@@ -456,37 +586,131 @@ appreciably worse, is easy to write and painless to use. I also think that
 certain expressions, such as polymorphic behavior, can be more natural in
 object-oriented designs.
 
+Functional programming conventions are preferred. That is:
+
+- Return new immutable types instead of modifying parameters.
+- Avoid classes and closures.
+
+Despite:
+
+- Difficulty with polymorphic behavior
+- Privates are not encapsulated. This mostly requires reframing and extra care
+  when handling results.
+- Keep code and data separate to avoid serializing woes
+
+For me, I think object-oriented code is easier to write but functional code is
+easier to read and modify. The former comes naturally to me and the latter is
+usually easier to reason about after its written. I'm not sure I could
+generalize which is easier to conceptualize a system for.
+
+#### Formatting
+
+Prettier does such consistent formatting that braceless if and loops seem to be
+perfectly fine. The indentation is never misleading. I think that guaranteeing
+code will never be misleading is a great benefit.
+
+#### Parts of JavaScript / TypeScript to Avoid
+
+I guess, in general, I just try to stick to fat arrow functions, the base
+JavaScript API, and composition. There's lot of JavaScript to know but I don't
+and it doesn't seem to be much of a problem when sticking to a modern subset of
+it with modern tools. I think of older JavaScript versions as almost a
+different language entirely and can understand why some avoided it. ES6+ is
+something entirely different (in a good way). However, I try specifically to
+avoid:
+
+- `bind` and `this`. Just use arrows, generally.
+- The prototype chain and inheritance. Any time I look online at some
+  distinguished but slightly historical JavaScript documentation, they go on and
+  on about the prototype chain and inheritance. It sounds really complicated and
+  scares the potatoes out of me. For me, the important thing to recognize is
+  that this prototypal inheritance is still inheritance and should be used with
+  care or even avoided entirely. I really don't want a bunch of implicit stuff
+  where everything I do is nuanced and has to be considered up and down the
+  chain. In my opinion, the cost outweighs the value. I would have to know a lot
+  more to work with code like that and I probably wouldn't want to. I think
+  that in ES6 if you're touching the prototype you're probably doing something
+  wrong (or someone else touched it first) or maybe I'm missing the point.
+- Prototypal inheritance over classical inheritance. When I first started
+  JavaScripting, I was sad to learn that classes were being added given how
+  highly prototypal inheritance was touted by some. The old school guard of
+  legends seemed to think that prototypes were the bee's knees and maybe even
+  more. That was a different time and thankfully the extensive foundational
+  framework that is installed at the beginning of "JavaScript: The Good Parts"
+  no longer seems necessary. I now think that proper class support is a big
+  improvement for taking an inheritance approach. I just don't want to think
+  about any kind of inheritance though, generally, but most especially custom
+  frameworks mixed with weird language quirks. Further, I think a lot of pre-ES6
+  materials are examples of what _not_ to do in modern JavaScript,
+  unfortunately.
+- Closures are fine, I guess, but I haven't needed to use them much.
+- Getters and setters (via get / set keywords). I just don't know much about
+  them. They seem kind of limited over traditional functions. I would most
+  probably try to favor a plain object unless coding standards required
+  otherwise.
+- I don't know enough about the details of modules, scope, and hoisting.
+  Fortunately, I don't seem to need to by sticking to const, let, class, and
+  import. It kind of all just works as expected without any arcane knowledge.
+- I try to avoid loops. Although the syntax is less appealing to me,
+  Array.forEach() provides updated variables for the current value, index, and
+  array under iteration. I also think it's nice to be able to forget about the
+  for..in / for..of distinction, and Object.hasOwnProperty() which is an
+  inheritance smell.
+- I try not to use null. I think there's a whole article about why it's
+  generally unnecessary by the TypeScript folks that I agreed with. Regardless,
+  I don't even like that an object can have undefined values for key values and
+  would prefer the key just be omitted which is the approach I've tried to take
+  but support in TypeScript isn't robust enough yet.
+- I always use strict equality checking (`===`) to avoid thinking about type
+  coercion. I wish there were nicer built-in mechanisms for deep operations.
+- I want to use ESLint. It's useful. However, it needs and allows too much
+  configuration to make it worthwhile for me. I want an ESLint config that
+  draws red lines under likely bugs and lets Prettier do the rest without any
+  muss. It feels like almost a Webpack level of complexity and requires a much
+  deeper understanding of JavaScript and the ESLint ecosystem than I want to
+  have.
+- I try to stick to Promises and async / await for anything asynchronous. I wish
+  there was better built-in cancelation support.
+
 #### Naming
 
 ##### Abbreviations
 
 The following abbreviations are used regardless of context:
 
+- cfg, config: configuration
+- dat: data
 - doc: document
-- init: initialize
-- rect: rectangle
-- config: configuration
+- ev: event
 - fn: function
+- init: initialize, initial value
 - len: length
+- obj: object
+- rect: rectangle
+- state (state bundle)
+
+(generally not used for types)
 
 The following abbreviations are only used for function locals:
 
-- ret: unambiguous return value
+- ret: unambiguous return value or result, especially test subject (actual)
+  result
 - rnd: unambiguous random value
 - val: unambiguous input value
 - i: unambiguous index
+- img: image
 
 ##### Terminology
 
 - atlas: a composite texture
-- bounds: having a position and size
-- coord: a texture coordinate
+- bounds: having a position and size (usually a `Rect`)
 - length: usually number of elements
 - location: a WebGL shader program variable index
 - new / make: like the `new` operator; new is preferred where the language
   allows
-- position: an _x_ and _y_ cartesian location
-- size: an area or size in bytes like `sizeof` in the C programming language
+- position: an _x_ and _y_ cartesian location (usually a `XY`)
+- size: an area (usually a `WH`) or size in bytes like `sizeof` in the C
+  programming language
 - WH: having width and height
 - XY: having _x_- and _y_-coordinate dimensions such as a position
 
