@@ -5,12 +5,10 @@ import {WH} from '../math/wh'
 import {XY} from '../math/xy'
 
 export namespace AtlasParser {
-  export function parse({meta, frames}: Aseprite.File): Atlas {
-    return meta.frameTags.reduce(
-      (sum, val) => ({
-        ...sum,
-        [val.name]: parseAnimation(val, frames, meta.slices)
-      }),
+  export const parse = ({meta, frames}: Aseprite.File): Atlas => {
+    const {frameTags, slices} = meta
+    return frameTags.reduce(
+      (sum, val) => ({...sum, [val.name]: parseAnimation(val, frames, slices)}),
       {}
     )
   }
@@ -88,13 +86,10 @@ export namespace AtlasParser {
     index: number,
     slices: readonly Aseprite.Slice[]
   ): readonly Rect[] {
-    return (
-      slices
-        // Filter out Slices not for this Tag.
-        .filter(slice => slice.name === name)
-        // For each Slice, get the greatest relevant Key.
-        .map(({keys}) => keys.filter(key => key.frame <= index).slice(-1)[0])
-        .map(({bounds}) => bounds)
-    )
+    // Filter out Slices not for this Tag.
+    slices = slices.filter(slice => slice.name === name)
+    return slices // For each Slice, get the greatest relevant Key.
+      .map(({keys}) => keys.filter(key => key.frame <= index).slice(-1)[0])
+      .map(({bounds}) => bounds)
   }
 }

@@ -13,15 +13,6 @@ export namespace XY {
     return {x: lhs.x - rhs.x, y: lhs.y - rhs.y}
   }
 
-  export function mul(lhs: XY, rhs: XY | number): XY {
-    if (typeof rhs === 'number') return {x: lhs.x * rhs, y: lhs.y * rhs}
-    return {x: lhs.x * rhs.x, y: lhs.y * rhs.y}
-  }
-
-  export function div(lhs: XY, rhs: XY): XY {
-    return {x: lhs.x / rhs.x, y: lhs.y / rhs.y}
-  }
-
   export function equal(lhs: XY, rhs: XY): boolean {
     return lhs.x === rhs.x && lhs.y === rhs.y
   }

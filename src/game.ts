@@ -6,13 +6,13 @@ import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
 import {LevelStateMachine} from './levels/level-state-machine'
 import {Recorder} from './inputs/recorder'
+import {Rect} from './math/rect'
 import {Renderer} from './graphics/renderer/renderer'
 import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
 import {Synth} from './audio/synth'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
-import {Rect} from './math/rect'
 
 export interface Game {
   readonly doc: Document

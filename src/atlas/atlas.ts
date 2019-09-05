@@ -11,8 +11,8 @@ export namespace Atlas {
   export interface Animation extends WH {
     readonly cels: readonly Cel[]
     /** Positive animation length in milliseconds for a full cycle, possibly
-     *  infinite. For a ping-pong animation, this is a full traversal forward plus
-     *  traversal backward excluding the first and last frame. */
+        infinite. For a ping-pong animation, this is a full traversal forward
+        plus traversal backward excluding the first and last frame. */
     readonly duration: number
     readonly direction: AnimationDirection
   }
