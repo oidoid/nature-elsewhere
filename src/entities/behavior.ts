@@ -88,7 +88,12 @@ export const Behavior = Object.freeze({
       if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - (x % 1))
     }
 
-    if (x === dst.x && y === dst.y)
+    const idle =
+      !pick ||
+      !pick.bits ||
+      (Math.trunc(x) === dst.x && Math.trunc(y) === dst.y)
+
+    if (idle)
       state.state =
         state.state === 'walkUp' || state.state === 'idleUp'
           ? 'idleUp'
