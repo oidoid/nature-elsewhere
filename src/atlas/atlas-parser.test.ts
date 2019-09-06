@@ -133,7 +133,7 @@ describe('parse()', () => {
         w: 16,
         h: 16,
         cels: [
-          {x: 221, y: 19, duration: 1, collision: [{x: 8, y: 12, w: 2, h: 3}]}
+          {x: 221, y: 19, duration: 1, collisions: [{x: 8, y: 12, w: 2, h: 3}]}
         ],
         duration: 1,
         direction: 'forward'
@@ -146,7 +146,7 @@ describe('parse()', () => {
             x: 91,
             y: 55,
             duration: Number.POSITIVE_INFINITY,
-            collision: [{x: 7, y: 11, w: 3, h: 4}]
+            collisions: [{x: 7, y: 11, w: 3, h: 4}]
           }
         ],
         duration: Number.POSITIVE_INFINITY,
@@ -160,7 +160,7 @@ describe('parse()', () => {
             x: 73,
             y: 55,
             duration: Number.POSITIVE_INFINITY,
-            collision: [{x: 7, y: 10, w: 3, h: 5}]
+            collisions: [{x: 7, y: 10, w: 3, h: 5}]
           }
         ],
         duration: Number.POSITIVE_INFINITY,
@@ -174,7 +174,7 @@ describe('parse()', () => {
             x: 55,
             y: 55,
             duration: Number.POSITIVE_INFINITY,
-            collision: [{x: 7, y: 9, w: 3, h: 6}]
+            collisions: [{x: 7, y: 9, w: 3, h: 6}]
           }
         ],
         duration: Number.POSITIVE_INFINITY,
@@ -238,7 +238,7 @@ describe('parseAnimation()', () => {
           x: 185,
           y: 37,
           duration: Number.POSITIVE_INFINITY,
-          collision: [{x: 4, y: 11, w: 9, h: 4}]
+          collisions: [{x: 4, y: 11, w: 9, h: 4}]
         }
       ],
       duration: Number.POSITIVE_INFINITY,
@@ -280,7 +280,7 @@ describe('parseCel()', () => {
       x: 131,
       y: 19,
       duration: Number.POSITIVE_INFINITY,
-      collision: [{x: 4, y: 4, w: 8, h: 12}]
+      collisions: [{x: 4, y: 4, w: 8, h: 12}]
     })
   })
 })
@@ -369,7 +369,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
       }
     ]
-    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollisions(frameTag, 0, slices)).toStrictEqual([
       {x: 0, y: 1, w: 2, h: 3}
     ])
   })
@@ -383,7 +383,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
       }
     ]
-    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([])
+    expect(AtlasParser.parseCollisions(frameTag, 0, slices)).toStrictEqual([])
   })
 
   test('Filters out unrelated Frame number Keys.', () => {
@@ -399,7 +399,7 @@ describe('parseCollision()', () => {
         ]
       }
     ]
-    expect(AtlasParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollisions(frameTag, 1, slices)).toStrictEqual([
       {x: 4, y: 5, w: 6, h: 7}
     ])
   })
@@ -416,14 +416,14 @@ describe('parseCollision()', () => {
         ]
       }
     ]
-    expect(AtlasParser.parseCollision(frameTag, 0, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollisions(frameTag, 0, slices)).toStrictEqual([
       {x: 0, y: 1, w: 2, h: 3}
     ])
   })
 
   test('Converts no Slices.', () => {
     const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    expect(AtlasParser.parseCollision(frameTag, 0, [])).toStrictEqual([])
+    expect(AtlasParser.parseCollisions(frameTag, 0, [])).toStrictEqual([])
   })
 
   test('Converts multiple Slices.', () => {
@@ -454,7 +454,7 @@ describe('parseCollision()', () => {
         keys: [{frame: 0, bounds: {x: 8, y: 9, w: 10, h: 11}}]
       }
     ]
-    expect(AtlasParser.parseCollision(frameTag, 1, slices)).toStrictEqual([
+    expect(AtlasParser.parseCollisions(frameTag, 1, slices)).toStrictEqual([
       {x: 4, y: 5, w: 6, h: 7},
       {x: 0, y: 1, w: 2, h: 3},
       {x: 8, y: 9, w: 10, h: 11}

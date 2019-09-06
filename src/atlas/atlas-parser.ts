@@ -63,8 +63,8 @@ export namespace AtlasParser {
     slices: readonly Aseprite.Slice[]
   ): Atlas.Cel {
     const duration = parseDuration(frame.duration)
-    const collision = parseCollision(frameTag, frameNumber, slices)
-    return {...parsePosition(frame), duration, collision}
+    const collisions = parseCollisions(frameTag, frameNumber, slices)
+    return {...parsePosition(frame), duration, collisions}
   }
 
   export function parsePosition(frame: Aseprite.Frame): XY {
@@ -81,7 +81,7 @@ export namespace AtlasParser {
     return infinite ? Number.POSITIVE_INFINITY : duration
   }
 
-  export function parseCollision(
+  export function parseCollisions(
     {name}: Aseprite.FrameTag,
     index: number,
     slices: readonly Aseprite.Slice[]

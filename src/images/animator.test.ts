@@ -5,7 +5,7 @@ import {ObjectUtil} from '../utils/object-util'
 
 describe('step()', () => {
   test('time < duration', () => {
-    const cel = {x: 0, y: 0, duration: 1, collision: []}
+    const cel = {x: 0, y: 0, duration: 1, collisions: []}
     const animation = {
       w: 0,
       h: 0,
@@ -18,7 +18,7 @@ describe('step()', () => {
   })
 
   test('time === duration', () => {
-    const cel = {x: 0, y: 0, duration: 1, collision: []}
+    const cel = {x: 0, y: 0, duration: 1, collisions: []}
     const animation = {
       w: 0,
       h: 0,
@@ -31,7 +31,7 @@ describe('step()', () => {
   })
 
   test('time > duration', () => {
-    const cel = {x: 0, y: 0, duration: 1, collision: []}
+    const cel = {x: 0, y: 0, duration: 1, collisions: []}
     const animation = {
       w: 0,
       h: 0,
@@ -48,7 +48,7 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# direction %p array start',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1, collision: []}
+      const cel = {x: 0, y: 0, duration: 1, collisions: []}
       const animation = {
         w: 0,
         h: 0,
@@ -65,7 +65,7 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# direction %p array end',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1, collision: []}
+      const cel = {x: 0, y: 0, duration: 1, collisions: []}
       const animation = {
         w: 0,
         h: 0,
@@ -118,7 +118,7 @@ describe('index', () => {
       [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
     ]
   ])('%# direction %p bounds %p', (direction, period, expected) => {
-    const cel = {x: 0, y: 0, duration: 1, collision: []}
+    const cel = {x: 0, y: 0, duration: 1, collisions: []}
     const animation = {
       w: 0,
       h: 0,
@@ -138,7 +138,7 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration met direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1, collision: []}
+      const cel = {x: 0, y: 0, duration: 1, collisions: []}
       const animation = {
         w: 0,
         h: 0,
@@ -169,7 +169,7 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration exceeded direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1, collision: []}
+      const cel = {x: 0, y: 0, duration: 1, collisions: []}
       const animation = {
         w: 0,
         h: 0,
@@ -200,7 +200,7 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# fractional duration met direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1, collision: []}
+      const cel = {x: 0, y: 0, duration: 1, collisions: []}
       const animation = {
         w: 0,
         h: 0,
@@ -231,7 +231,7 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration not met direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1, collision: []}
+      const cel = {x: 0, y: 0, duration: 1, collisions: []}
       const animation = {
         w: 0,
         h: 0,
@@ -262,7 +262,7 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# fractional duration exceeded direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1, collision: []}
+      const cel = {x: 0, y: 0, duration: 1, collisions: []}
       const animation = {
         w: 0,
         h: 0,

@@ -1,6 +1,5 @@
 import {Atlas} from '../atlas/atlas'
 import {Entity} from './entity'
-import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
 import {InputBit} from '../inputs/input-bit'
 import {InputSource} from '../inputs/input-source'
@@ -23,14 +22,13 @@ export const Behavior = Object.freeze({
   BACKPACKER(
     state: Mutable<Entity>,
     entities: readonly Entity[],
-    _level: Level,
+    level: Level,
     atlas: Atlas,
     _cam: Rect,
     recorder: Recorder
   ): void {
     if (state.id !== 'backpacker')
       throw new Error(`Unsupported ID "${state.id}".`)
-    const original = state.states[state.state]
     let rect = state.states[state.state]
     let {x, y} = rect
 
@@ -40,18 +38,13 @@ export const Behavior = Object.freeze({
       pick && pick.bits === InputBit.PICK
         ? XY.trunc(XY.add(pick.xy, {x: -4, y: -rect.h + 2}))
         : rect
-    const up = y > dst.y
-    const down = y < dst.y
-    const left = x > dst.x
-    const right = x < dst.x
+    const left = dst.x < x
+    const right = dst.x > x
+    const up = dst.y < y
+    const down = dst.y > y
+    const diagonal = (left || right) && (up || down)
     const animateHorizontal = Math.abs(x - dst.x) > 8
     let s = 0.25
-
-    // Synchronize x and y pixel diagonal movement.
-    if ((left && up) || (right && down)) y = Math.trunc(y) + (x % 1)
-    // One direction is negative, the other is positive. Offset by 1 - speed
-    // to synchronize.
-    if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - s) - (x % 1)
 
     if (pick && pick.bits === InputBit.PICK) {
       if (up) (y -= s), (state.state = 'walkUp'), (state.scale.x = 1)
@@ -62,16 +55,40 @@ export const Behavior = Object.freeze({
       if (right) x += s
       if (right && animateHorizontal)
         (state.state = 'walkRight'), (state.scale.x = 1)
-      if (x === dst.x && y === dst.y)
-        state.state =
-          state.state === 'walkUp' || state.state === 'idleUp'
-            ? 'idleUp'
-            : state.state === 'idleRight' ||
-              state.state === 'walkRight' ||
-              state.state === 'walkLeft'
-            ? 'idleRight'
-            : 'idleDown'
-    } else {
+    }
+
+    const collision = collides(state, atlas, XY.trunc({x, y}), level, entities)
+      ? {x: true, y: true}
+      : {x: false, y: false}
+    if (diagonal && collision.x && collision.y) {
+      collision.x = collides(
+        state,
+        atlas,
+        {x: Math.trunc(x), y: Math.trunc(rect.y)},
+        level,
+        entities
+      )
+      if (collision.x)
+        collision.y = collides(
+          state,
+          atlas,
+          {x: Math.trunc(rect.x), y: Math.trunc(y)},
+          level,
+          entities
+        )
+    }
+    if (collision.x) x = rect.x
+    if (collision.y) y = rect.y
+
+    if (!collision.x && !collision.y) {
+      // Synchronize x and y pixel diagonal movement.
+      if ((left && up) || (right && down)) y = Math.trunc(y) + (x % 1)
+      // One direction is negative, the other is positive. Offset by 1 - speed
+      // to synchronize.
+      if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - s) - (x % 1)
+    }
+
+    if (x === dst.x && y === dst.y)
       state.state =
         state.state === 'walkUp' || state.state === 'idleUp'
           ? 'idleUp'
@@ -80,11 +97,8 @@ export const Behavior = Object.freeze({
             state.state === 'walkLeft'
           ? 'idleRight'
           : 'idleDown'
-    }
 
-    let found
-    ;({found, rect} = checkCollisionThingy(rect, state, entities, x, y, atlas))
-    if (found) ({x, y} = original)
+    rect = state.states[state.state]
     state.states[state.state] = ImageRect.moveTo(
       rect,
       {x, y},
@@ -175,34 +189,21 @@ export const Behavior = Object.freeze({
 export namespace Behavior {
   export type Key = keyof typeof Behavior
 }
-function checkCollisionThingy(
-  rect: ImageRect,
-  state: Mutable<Entity>,
-  entities: readonly Entity[],
-  x: number,
-  y: number,
-  atlas: Readonly<Record<string, Atlas.Animation>>
-) {
-  rect = state.states[state.state]
-  const found = entities.find(
-    entity =>
-      entity !== state &&
-      entity.collides &&
-      Rect.intersects(entity.states[entity.state], {...rect, x, y}) &&
-      entity.states[entity.state].images.some(img =>
-        Image.cel(img, atlas).collision.some(r =>
-          rect.images.some(lhsImg =>
-            Image.cel(lhsImg, atlas).collision.some(lhsRect =>
-              Rect.intersects(r, {
-                w: lhsRect.w,
-                h: lhsRect.h,
-                x: lhsRect.x + x - entity.states[entity.state].x,
-                y: lhsRect.y + y - entity.states[entity.state].y
-              })
-            )
-          )
-        )
-      )
-  )
-  return {found, rect}
+
+const collides = (
+  entity: Entity,
+  atlas: Atlas,
+  xy: XY, // Overrides entity.xy
+  level: Level,
+  entities: readonly Entity[]
+): boolean => {
+  const imgRect = entity.states[entity.state]
+  const levelRect = {x: 0, y: 0, w: level.w, h: level.h}
+  if (!Rect.within({x: xy.x, y: xy.y, w: imgRect.w, h: imgRect.h}, levelRect))
+    return true
+
+  return !!entities.find(val => {
+    if (val === entity || !val.collides) return
+    return ImageRect.collides(imgRect, val.states[val.state], atlas, xy)
+  })
 }

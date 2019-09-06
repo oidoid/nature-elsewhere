@@ -18,6 +18,15 @@ export namespace Rect {
     )
   }
 
+  export function within({x, y, w, h}: Rect, rhs: Rect): boolean {
+    return (
+      x >= rhs.x &&
+      x + w <= rhs.x + rhs.w &&
+      y >= rhs.y &&
+      y + h <= rhs.y + rhs.h
+    )
+  }
+
   /** @return Width and / or height is less than zero if no intersection, equal
               to zero if touching but not overlapping, or greater than zero if
               overlapping. */

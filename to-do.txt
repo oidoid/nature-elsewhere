@@ -1,4 +1,4 @@
-Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
+Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with tremendous colors.
   Make large, lavish, content-rich levels.
     Add "a summary of you" / inven / journal screen level.
     Add old options UI.
@@ -46,7 +46,6 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game.
     Flesh out the audio system.
       Synthesize crickets, wind, rain, thunder, and birds.
     Survey all the demos in Super Collider.
-  Improve the palette to have tremendous colors.
   Improve the structure. Write little, clearly.
     Add note about declarative style to readme. Declarative configs are awesome!
     In CS, everything was an object. This worked. But we also did tricks like overlaying memory onto plain data.

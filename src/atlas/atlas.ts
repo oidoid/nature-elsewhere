@@ -22,7 +22,7 @@ export namespace Atlas {
     /** Positive cel exposure in milliseconds, possibly infinite. */
     readonly duration: number
     /** Collision bounds within the texture in pixels. */
-    readonly collision: readonly Rect[]
+    readonly collisions: readonly Rect[]
   }
 
   export import AnimationDirection = Aseprite.AnimationDirection
