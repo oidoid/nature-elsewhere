@@ -200,26 +200,19 @@ const collides = (
   level: Level,
   entities: readonly Entity[]
 ): boolean => {
-  const plane = entity.states[entity.state] // it seems unideal that i have to go to the image state for this if collision data is moving up. can i move collision data into the staete?
+  const plane = {
+    x: xy.x,
+    y: xy.y,
+    w: entity.states[entity.state].w,
+    h: entity.states[entity.state].h
+  } // it seems unideal that i have to go to the image state for this if collision data is moving up. can i move collision data into the staete?
   const levelRect = {x: 0, y: 0, w: level.w, h: level.h}
-  if (!Rect.within({x: xy.x, y: xy.y, w: plane.w, h: plane.h}, levelRect))
-    return true
-  const rectArray = RectArray.moveTo(
-    {x: 0, y: 0, w: plane.w, h: plane.h, rects: entity.collisions},
-    xy
-  )
+  if (!Rect.within(plane, levelRect)) return true
+  const rectArray = RectArray.moveBy(entity.collisions, xy)
   return !!entities.find(val => {
     if (val === entity) return
-    const other = RectArray.moveTo(
-      {
-        x: 0,
-        y: 0,
-        w: val.states[val.state].w,
-        h: val.states[val.state].h,
-        rects: val.collisions
-      },
-      val.states[val.state]
-    )
+    if (!Rect.intersects(plane, val.states[val.state])) return
+    const other = RectArray.moveBy(val.collisions, val.states[val.state])
     return RectArray.intersects(rectArray, other)
   })
 }
