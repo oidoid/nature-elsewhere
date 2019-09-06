@@ -1,6 +1,6 @@
 {
   "id": "mountain",
-  "collides": true,
+  "collisions": [{"x": 1, "y": 5, "w": 12, "h": 4}],
   "states": {
     "0": [
       {"id": "mountain"},

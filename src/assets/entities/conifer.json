@@ -1,6 +1,6 @@
 {
   "id": "conifer",
-  "collides": true,
+  "collisions": [{"x": 2, "y": 9, "w": 3, "h": 3}],
   "states": {
     "0": [
       {"id": "conifer"},

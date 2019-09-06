@@ -1,7 +1,7 @@
 {
   "id": "frog",
   "updateType": "IF_VISIBLE",
-  "collides": true,
+  "collisions": [{"x": 1, "y": 14, "w": 6, "h": 2}],
   "state": "idle",
   "states": {
     "idle": [

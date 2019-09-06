@@ -8,6 +8,7 @@ import {NumberUtil} from '../math/number-util'
 import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {XY} from '../math/xy'
+import {RectArray} from '../math/rect-array'
 
 export const Behavior = Object.freeze({
   STATIC() {},
@@ -23,7 +24,7 @@ export const Behavior = Object.freeze({
     state: Mutable<Entity>,
     entities: readonly Entity[],
     level: Level,
-    atlas: Atlas,
+    _atlas: Atlas,
     _cam: Rect,
     recorder: Recorder
   ): void {
@@ -57,13 +58,12 @@ export const Behavior = Object.freeze({
         (state.state = 'walkRight'), (state.scale.x = 1)
     }
 
-    const collision = collides(state, atlas, XY.trunc({x, y}), level, entities)
+    const collision = collides(state, XY.trunc({x, y}), level, entities)
       ? {x: true, y: true}
       : {x: false, y: false}
     if (diagonal && collision.x && collision.y) {
       collision.x = collides(
         state,
-        atlas,
         {x: Math.trunc(x), y: Math.trunc(rect.y)},
         level,
         entities
@@ -71,7 +71,6 @@ export const Behavior = Object.freeze({
       if (collision.x)
         collision.y = collides(
           state,
-          atlas,
           {x: Math.trunc(rect.x), y: Math.trunc(y)},
           level,
           entities
@@ -197,18 +196,30 @@ export namespace Behavior {
 
 const collides = (
   entity: Entity,
-  atlas: Atlas,
   xy: XY, // Overrides entity.xy
   level: Level,
   entities: readonly Entity[]
 ): boolean => {
-  const imgRect = entity.states[entity.state]
+  const plane = entity.states[entity.state] // it seems unideal that i have to go to the image state for this if collision data is moving up. can i move collision data into the staete?
   const levelRect = {x: 0, y: 0, w: level.w, h: level.h}
-  if (!Rect.within({x: xy.x, y: xy.y, w: imgRect.w, h: imgRect.h}, levelRect))
+  if (!Rect.within({x: xy.x, y: xy.y, w: plane.w, h: plane.h}, levelRect))
     return true
-
+  const rectArray = RectArray.moveTo(
+    {x: 0, y: 0, w: plane.w, h: plane.h, rects: entity.collisions},
+    xy
+  )
   return !!entities.find(val => {
-    if (val === entity || !val.collides) return
-    return ImageRect.collides(imgRect, val.states[val.state], atlas, xy)
+    if (val === entity) return
+    const other = RectArray.moveTo(
+      {
+        x: 0,
+        y: 0,
+        w: val.states[val.state].w,
+        h: val.states[val.state].h,
+        rects: val.collisions
+      },
+      val.states[val.state]
+    )
+    return RectArray.intersects(rectArray, other)
   })
 }

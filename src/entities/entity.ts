@@ -8,9 +8,7 @@ import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
 import {Level} from '../levels/level'
 
-/** Images and behavior. Bounds (x, y, w, and h members) are the union of all
-    Entity images. This is used for quick collision detections such checking if
-    the Entity is on screen. x and y are in in level coordinates. */
+/** Images and behavior. */
 export interface Entity
   extends Omit<Required<Entity.Config>, 'states' | 'x' | 'y' | 'period'> {
   readonly updateType: UpdateType.Key
@@ -25,7 +23,7 @@ export namespace Entity {
     readonly state?: string
     readonly updateType?: UpdateType.Key | string
     readonly behavior?: Behavior.Key | string
-    readonly collides?: boolean
+    readonly collisions?: readonly Rect[]
     readonly scale?: Partial<XY>
     readonly vx?: number
     readonly vy?: number

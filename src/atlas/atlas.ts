@@ -1,13 +1,11 @@
 import {Aseprite} from './aseprite'
-import {Rect} from '../math/rect'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
 
 export type Atlas = Readonly<Record<string, Atlas.Animation>>
 
 export namespace Atlas {
-  /** Animation and collision frames. Dimensions are identical for every cel and
-      in pixels. */
+  /** Animation frames. Dimensions are identical for every cel and in pixels. */
   export interface Animation extends WH {
     readonly cels: readonly Cel[]
     /** Positive animation length in milliseconds for a full cycle, possibly
@@ -21,8 +19,6 @@ export namespace Atlas {
   export interface Cel extends XY {
     /** Positive cel exposure in milliseconds, possibly infinite. */
     readonly duration: number
-    /** Collision bounds within the texture in pixels. */
-    readonly collisions: readonly Rect[]
   }
 
   export import AnimationDirection = Aseprite.AnimationDirection

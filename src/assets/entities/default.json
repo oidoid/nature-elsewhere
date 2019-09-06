@@ -6,7 +6,7 @@
   "scale": {"x": 1, "y": 1},
   "updateType": "NEVER",
   "behavior": "STATIC",
-  "collides": false,
+  "collisions": [],
   "vx": 0,
   "vy": 0,
   "ax": 0,

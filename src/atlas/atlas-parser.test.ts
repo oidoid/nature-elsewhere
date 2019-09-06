@@ -30,10 +30,6 @@ describe('atlas.json', () => {
     )
   }
 
-  test.each([...file.meta.slices])('%# Slice name %p is a Tag', slice =>
-    expect(tags).toContainEqual(slice.name)
-  )
-
   test.each(
     ObjectUtil.values(atlas).reduce(
       (sum: Atlas.Cel[], val) => sum.concat(val.cels),
@@ -101,82 +97,34 @@ describe('parse()', () => {
         duration: 65535
       }
     }
-    const slices = [
-      {
-        name: 'cloud ',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 8, y: 12, w: 2, h: 3}}]
-      },
-      {
-        name: 'palette red',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 7, y: 11, w: 3, h: 4}}]
-      },
-      {
-        name: 'conifer ',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 7, y: 10, w: 3, h: 5}}]
-      },
-      {
-        name: 'conifer shadow',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 7, y: 9, w: 3, h: 6}}]
-      }
-    ]
     expect(
-      AtlasParser.parse({
-        meta: <Aseprite.Meta>(<unknown>{frameTags, slices}),
-        frames
-      })
+      AtlasParser.parse({meta: <Aseprite.Meta>(<unknown>{frameTags}), frames})
     ).toStrictEqual({
       'cloud ': {
         w: 16,
         h: 16,
-        cels: [
-          {x: 221, y: 19, duration: 1, collisions: [{x: 8, y: 12, w: 2, h: 3}]}
-        ],
+        cels: [{x: 221, y: 19, duration: 1}],
         duration: 1,
         direction: 'forward'
       },
       'palette red': {
         w: 16,
         h: 16,
-        cels: [
-          {
-            x: 91,
-            y: 55,
-            duration: Number.POSITIVE_INFINITY,
-            collisions: [{x: 7, y: 11, w: 3, h: 4}]
-          }
-        ],
+        cels: [{x: 91, y: 55, duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
       'conifer ': {
         w: 16,
         h: 16,
-        cels: [
-          {
-            x: 73,
-            y: 55,
-            duration: Number.POSITIVE_INFINITY,
-            collisions: [{x: 7, y: 10, w: 3, h: 5}]
-          }
-        ],
+        cels: [{x: 73, y: 55, duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
       'conifer shadow': {
         w: 16,
         h: 16,
-        cels: [
-          {
-            x: 55,
-            y: 55,
-            duration: Number.POSITIVE_INFINITY,
-            collisions: [{x: 7, y: 9, w: 3, h: 6}]
-          }
-        ],
+        cels: [{x: 55, y: 55, duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       }
@@ -185,7 +133,7 @@ describe('parse()', () => {
 })
 
 describe('parseAnimation()', () => {
-  test('Converts FrameTag, Frame from Frame[], and Slice.', () => {
+  test('Converts FrameTag and Frame from Frame[].', () => {
     const frameTag = {name: 'cloud s', from: 1, to: 1, direction: 'forward'}
     const frames = {
       'cloud xs 0': {
@@ -213,34 +161,10 @@ describe('parseAnimation()', () => {
         duration: 65535
       }
     }
-    const slices = [
-      {
-        name: 'cloud xs',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 4, y: 12, w: 7, h: 3}}]
-      },
-      {
-        name: 'cloud s',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 4, y: 11, w: 9, h: 4}}]
-      },
-      {
-        name: 'cloud m',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 3, y: 11, w: 10, h: 4}}]
-      }
-    ]
-    expect(AtlasParser.parseAnimation(frameTag, frames, slices)).toStrictEqual({
+    expect(AtlasParser.parseAnimation(frameTag, frames)).toStrictEqual({
       w: 16,
       h: 16,
-      cels: [
-        {
-          x: 185,
-          y: 37,
-          duration: Number.POSITIVE_INFINITY,
-          collisions: [{x: 4, y: 11, w: 9, h: 4}]
-        }
-      ],
+      cels: [{x: 185, y: 37, duration: Number.POSITIVE_INFINITY}],
       duration: Number.POSITIVE_INFINITY,
       direction: 'forward'
     })
@@ -260,7 +184,6 @@ describe('isAnimationDirection()', () => {
 
 describe('parseCel()', () => {
   test('Converts 1:1 texture mapping.', () => {
-    const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
     const frame = {
       frame: {x: 130, y: 18, w: 18, h: 18},
       rotated: false,
@@ -269,18 +192,10 @@ describe('parseCel()', () => {
       sourceSize: {w: 16, h: 16},
       duration: 65535
     }
-    const slices = [
-      {
-        name: 'stem ',
-        color: '#0000ffff',
-        keys: [{frame: 0, bounds: {x: 4, y: 4, w: 8, h: 12}}]
-      }
-    ]
-    expect(AtlasParser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
+    expect(AtlasParser.parseCel(frame)).toStrictEqual({
       x: 131,
       y: 19,
-      duration: Number.POSITIVE_INFINITY,
-      collisions: [{x: 4, y: 4, w: 8, h: 12}]
+      duration: Number.POSITIVE_INFINITY
     })
   })
 })
@@ -357,107 +272,4 @@ describe('parseDuration()', () => {
     expect(AtlasParser.parseDuration(65535)).toStrictEqual(
       Number.POSITIVE_INFINITY
     ))
-})
-
-describe('parseCollision()', () => {
-  test('Converts Slice to Rect[].', () => {
-    const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    const slices = [
-      {
-        name: 'stem ',
-        color: '#00000000',
-        keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
-      }
-    ]
-    expect(AtlasParser.parseCollisions(frameTag, 0, slices)).toStrictEqual([
-      {x: 0, y: 1, w: 2, h: 3}
-    ])
-  })
-
-  test('Filters out unrelated Tags.', () => {
-    const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    const slices = [
-      {
-        name: 'unrelated ',
-        color: '#00000000',
-        keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
-      }
-    ]
-    expect(AtlasParser.parseCollisions(frameTag, 0, slices)).toStrictEqual([])
-  })
-
-  test('Filters out unrelated Frame number Keys.', () => {
-    const frameTag = {name: 'stem ', from: 0, to: 2, direction: 'forward'}
-    const slices = [
-      {
-        name: 'stem ',
-        color: '#00000000',
-        keys: [
-          {frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}},
-          {frame: 1, bounds: {x: 4, y: 5, w: 6, h: 7}},
-          {frame: 2, bounds: {x: 8, y: 9, w: 10, h: 11}}
-        ]
-      }
-    ]
-    expect(AtlasParser.parseCollisions(frameTag, 1, slices)).toStrictEqual([
-      {x: 4, y: 5, w: 6, h: 7}
-    ])
-  })
-
-  test('Converts Slice with multiple Keys to Rect[].', () => {
-    const frameTag = {name: 'stem ', from: 0, to: 1, direction: 'forward'}
-    const slices = [
-      {
-        name: 'stem ',
-        color: '#00000000',
-        keys: [
-          {frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}},
-          {frame: 1, bounds: {x: 4, y: 5, w: 6, h: 7}}
-        ]
-      }
-    ]
-    expect(AtlasParser.parseCollisions(frameTag, 0, slices)).toStrictEqual([
-      {x: 0, y: 1, w: 2, h: 3}
-    ])
-  })
-
-  test('Converts no Slices.', () => {
-    const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
-    expect(AtlasParser.parseCollisions(frameTag, 0, [])).toStrictEqual([])
-  })
-
-  test('Converts multiple Slices.', () => {
-    const frameTag = {name: 'stem ', from: 0, to: 1, direction: 'forward'}
-    const slices = [
-      {
-        name: 'stem ',
-        color: '#00000000',
-        keys: [
-          {frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}},
-          {frame: 1, bounds: {x: 4, y: 5, w: 6, h: 7}},
-          {frame: 2, bounds: {x: 12, y: 13, w: 14, h: 15}}
-        ]
-      },
-      {
-        name: 'unrelated ',
-        color: '#00000000',
-        keys: [{frame: 0, bounds: {x: 0, y: 1, w: 2, h: 3}}]
-      },
-      {
-        name: 'stem ',
-        color: '#00000000',
-        keys: [{frame: 1, bounds: {x: 0, y: 1, w: 2, h: 3}}]
-      },
-      {
-        name: 'stem ',
-        color: '#00000000',
-        keys: [{frame: 0, bounds: {x: 8, y: 9, w: 10, h: 11}}]
-      }
-    ]
-    expect(AtlasParser.parseCollisions(frameTag, 1, slices)).toStrictEqual([
-      {x: 4, y: 5, w: 6, h: 7},
-      {x: 0, y: 1, w: 2, h: 3},
-      {x: 8, y: 9, w: 10, h: 11}
-    ])
-  })
 })

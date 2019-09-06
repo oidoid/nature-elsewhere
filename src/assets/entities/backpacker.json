@@ -3,6 +3,7 @@
   "updateType": "ALWAYS",
   "behavior": "BACKPACKER",
   "state": "idleDown",
+  "collisions": [{"x": 2, "y": 12, "w": 4, "h": 3}],
   "states": {
     "idleDown": [
       {"id": "backpacker idleDown"},
