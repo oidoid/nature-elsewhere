@@ -8,23 +8,16 @@ export interface ImageRect extends Rect {
   /** Image coordinates are not relative origin. */
   readonly images: readonly Image[]
 }
+type t = ImageRect
 
 export namespace ImageRect {
-  export function moveTo(
-    state: Rect,
-    xy: XY,
-    ...images: readonly Image[]
-  ): ImageRect {
-    if (XY.equal(state, xy)) return {...state, images}
-    return moveBy(state, XY.sub(xy, state), ...images)
+  export function moveTo(val: t, to: XY): ImageRect {
+    return moveBy(val, {x: to.x - val.x, y: to.y - val.y})
   }
 
-  export function moveBy(
-    state: Rect,
-    {x, y}: XY,
-    ...images: readonly Mutable<Image>[]
-  ): ImageRect {
-    images.forEach(img => ((img.x += x), (img.y += y)))
-    return {...Rect.add(state, {x, y, w: 0, h: 0}), images}
+  export function moveBy(val: Mutable<t>, {x, y}: XY): ImageRect {
+    if (!x && !y) return val
+    val.images.forEach((img: Mutable<Image>) => ((img.x += x), (img.y += y)))
+    return {...Rect.add(val, {x, y, w: 0, h: 0}), images: val.images}
   }
 }

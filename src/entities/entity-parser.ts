@@ -76,11 +76,10 @@ export namespace EntityParser {
       ;(<any>rect).h = h
     })
 
-    state.states[state.state] = ImageRect.moveBy(
-      state.states[state.state],
-      {x: defaults.x, y: defaults.y},
-      ...state.states[state.state].images
-    )
+    state.states[state.state] = ImageRect.moveBy(state.states[state.state], {
+      x: defaults.x,
+      y: defaults.y
+    })
 
     return state
   }

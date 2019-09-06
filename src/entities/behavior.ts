@@ -14,11 +14,10 @@ export const Behavior = Object.freeze({
   STATIC() {},
   CIRCLE(state: Mutable<Entity>) {
     const rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveBy(
-      rect,
-      {x: state.vx, y: state.vy},
-      ...rect.images
-    )
+    state.states[state.state] = ImageRect.moveBy(rect, {
+      x: state.vx,
+      y: state.vy
+    })
   },
   BACKPACKER(
     state: Mutable<Entity>,
@@ -103,11 +102,10 @@ export const Behavior = Object.freeze({
           : 'idleDown'
 
     rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveTo(
-      rect,
-      {x, y},
-      ...state.states[state.state].images
-    )
+    state.states[state.state] = ImageRect.moveTo(state.states[state.state], {
+      x,
+      y
+    })
   },
   FOLLOW_PLAYER(
     _state: Mutable<Entity>,
@@ -141,7 +139,7 @@ export const Behavior = Object.freeze({
       x: NumberUtil.wrap(rect.x + state.vx, -rect.w, level.w),
       y: NumberUtil.wrap(rect.y + state.vy, -rect.h, level.h)
     }
-    state.states[state.state] = ImageRect.moveTo(rect, xy, ...rect.images)
+    state.states[state.state] = ImageRect.moveTo(rect, xy)
   },
   FOLLOW_CAM(
     state: Mutable<Entity>,
@@ -151,11 +149,10 @@ export const Behavior = Object.freeze({
     cam: Rect
   ) {
     const rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveTo(
-      rect,
-      {x: 1, y: cam.y + cam.h - (rect.h + 1)},
-      ...rect.images
-    )
+    state.states[state.state] = ImageRect.moveTo(rect, {
+      x: 1,
+      y: cam.y + cam.h - (rect.h + 1)
+    })
   },
   CURSOR(
     state: Mutable<Entity>,
@@ -171,20 +168,12 @@ export const Behavior = Object.freeze({
     if (pick && pick.bits === InputBit.PICK) {
       state.state = 'pick'
       const rect = state.states[state.state]
-      state.states[state.state] = ImageRect.moveTo(
-        rect,
-        pick.xy,
-        ...rect.images
-      )
+      state.states[state.state] = ImageRect.moveTo(rect, pick.xy)
     } else {
       state.state = 'point'
       if (point) {
         const rect = state.states[state.state]
-        state.states[state.state] = ImageRect.moveTo(
-          rect,
-          point.xy,
-          ...rect.images
-        )
+        state.states[state.state] = ImageRect.moveTo(rect, point.xy)
       }
     }
   }
