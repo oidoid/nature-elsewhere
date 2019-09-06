@@ -95,7 +95,7 @@ since increased the request to `highp`.
 
 #### Floating Point Modulo
 
-I also had some floating point errors when taking relatively small modulos of
+I also had some floating point errors when taking relatively small divisors of
 very large numbers. [The following] seemed to work ok and is [the definition for
 OpenGL's `mod`](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/mod.xhtml):
 

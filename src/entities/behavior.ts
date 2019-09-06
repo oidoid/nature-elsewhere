@@ -38,13 +38,13 @@ export const Behavior = Object.freeze({
       pick && pick.bits === InputBit.PICK
         ? XY.trunc(XY.add(pick.xy, {x: -4, y: -rect.h + 2}))
         : rect
-    const left = dst.x < x
-    const right = dst.x > x
-    const up = dst.y < y
-    const down = dst.y > y
+    const left = dst.x < Math.trunc(x)
+    const right = dst.x > Math.trunc(x)
+    const up = dst.y < Math.trunc(y)
+    const down = dst.y > Math.trunc(y)
     const diagonal = (left || right) && (up || down)
     const animateHorizontal = Math.abs(x - dst.x) > 8
-    let s = 0.25
+    let s = 0.2
 
     if (pick && pick.bits === InputBit.PICK) {
       if (up) (y -= s), (state.state = 'walkUp'), (state.scale.x = 1)
@@ -85,7 +85,7 @@ export const Behavior = Object.freeze({
       if ((left && up) || (right && down)) y = Math.trunc(y) + (x % 1)
       // One direction is negative, the other is positive. Offset by 1 - speed
       // to synchronize.
-      if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - s) - (x % 1)
+      if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - (x % 1))
     }
 
     if (x === dst.x && y === dst.y)
