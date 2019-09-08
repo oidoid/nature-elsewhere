@@ -5,8 +5,8 @@ type Key = KeyboardEvent['key']
 type KeyMap = Readonly<Partial<Record<Key, InputBit.Key>>>
 
 export namespace KeyboardRecorder {
-  /** Call this function when a keydown or keyup KeyboardEvent is received. */
-  export function onKey(bits: InputBit, ev: KeyboardEvent): InputBit {
+  /** Call this const when a keydown or keyup KeyboardEvent is received. */
+  export const onKey = (bits: InputBit, ev: KeyboardEvent): InputBit => {
     const bit = (<KeyMap>defaultKeyboardMap)[eventToKey(ev)]
     if (bit === undefined) return bits
     ev.preventDefault()
@@ -14,7 +14,7 @@ export namespace KeyboardRecorder {
   }
 }
 
-function eventToKey(ev: KeyboardEvent): string {
+const eventToKey = (ev: KeyboardEvent): string => {
   const meta = ev.metaKey ? 'Meta+' : ''
   const ctrl = ev.ctrlKey ? 'Control+' : ''
   const alt = ev.altKey ? 'Alt+' : ''
@@ -29,6 +29,5 @@ function eventToKey(ev: KeyboardEvent): string {
     can safely start with a zeroed sample each loop since any carryover status
     will be provided by the underlying adapters. Bits persist until cleared by
     reset or keyup. If a bit is set and unset in the same frame, it is lost. */
-function adapt(bits: InputBit, bit: InputBit, active: boolean): InputBit {
-  return active ? bits | bit : bits & ~bit
-}
+const adapt = (bits: InputBit, bit: InputBit, active: boolean): InputBit =>
+  active ? bits | bit : bits & ~bit

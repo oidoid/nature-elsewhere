@@ -6,7 +6,7 @@ import * as shaderConfig from '../graphics/shaders/shader-config.json'
 import {ShaderLayoutParser} from '../graphics/shaders/shader-layout-parser'
 
 export namespace AssetLoader {
-  export async function load(): Promise<Assets> {
+  export const load = async (): Promise<Assets> => {
     const atlasImage = await ImageLoader.load('/assets/atlas/atlas.png')
     const shaderLayout = ShaderLayoutParser.parse(shaderConfig)
     return {atlas: AtlasParser.parse(atlasJSON), atlasImage, shaderLayout}

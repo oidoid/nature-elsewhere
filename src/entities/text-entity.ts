@@ -8,7 +8,7 @@ export interface TextEntity extends Entity {
 }
 
 export namespace TextEntity {
-  export function make(atlas: Atlas, entity: Entity): Entity {
+  export const make = (atlas: Atlas, entity: Entity): Entity => {
     if (!isTextEntityConfig(entity))
       throw new Error(`Unknown ID "${entity.id}".`)
     const images = Text.toImages(atlas, entity.text || '')

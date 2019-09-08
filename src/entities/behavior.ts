@@ -44,7 +44,8 @@ export const Behavior = Object.freeze({
     const down = dst.y > Math.trunc(y)
     const diagonal = (left || right) && (up || down)
     const animateHorizontal = Math.abs(x - dst.x) > 8
-    let s = 0.2
+    const hypotenuse = 0.18
+    let s = diagonal ? hypotenuse : Math.sqrt(hypotenuse * hypotenuse * 2)
 
     if (pick && pick.bits === InputBit.PICK) {
       if (up) (y -= s), (state.state = 'walkUp'), (state.scale.x = 1)

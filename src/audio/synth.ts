@@ -5,17 +5,15 @@ export interface Synth {
 }
 
 export namespace Synth {
-  export function make(): Synth {
-    return {context: new AudioContext()}
-  }
+  export const make = (): Synth => ({context: new AudioContext()})
 
-  export function play(
+  export const play = (
     state: Synth,
     type: OscillatorType,
     startFrequency: number,
     endFrequency: number,
     duration: number
-  ): Synth {
+  ): Synth => {
     const oscillator = state.context.createOscillator()
     const gain = state.context.createGain()
 

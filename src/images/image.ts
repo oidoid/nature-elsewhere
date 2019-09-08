@@ -30,7 +30,7 @@ export namespace Image {
     readonly tvy?: number
   }
 
-  export function make(atlas: Atlas, cfg: Config): Image {
+  export const make = (atlas: Atlas, cfg: Config): Image => {
     if (!(cfg.id in atlas))
       throw new Error(`Atlas missing animation "${cfg.id}".`)
     const wh = {
@@ -45,27 +45,22 @@ export namespace Image {
     return {...ret, scale}
   }
 
-  function isLayerKey(val: string): val is Layer.Key {
-    return val in Layer
-  }
+  const isLayerKey = (val: string): val is Layer.Key => val in Layer
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */
-  export function compare(lhs: Image, rhs: Image): number {
-    const layer = Layer[lhs.layer] - Layer[rhs.layer]
-    return layer || lhs.y + lhs.h - (rhs.y + rhs.h)
-  }
+  export const compare = (lhs: Image, rhs: Image): number =>
+    Layer[lhs.layer] - Layer[rhs.layer] || lhs.y + lhs.h - (rhs.y + rhs.h)
 
-  export function animate(state: Image, atlas: Atlas, time: number): Image {
+  export const animate = (state: Image, atlas: Atlas, time: number): Image => {
     const exposure = state.exposure + time
     const animator = Animator.animate(atlas[state.id], state.period, exposure)
     return Object.assign(state, animator)
   }
 
-  export function cel({id, period}: Image, atlas: Atlas): Atlas.Cel {
-    return atlas[id].cels[Animator.index(atlas[id].cels, period)]
-  }
+  export const cel = ({id, period}: Image, atlas: Atlas): Atlas.Cel =>
+    atlas[id].cels[Animator.index(atlas[id].cels, period)]
 
-  export function target(...images: readonly Image[]): Rect {
+  export const target = (...images: readonly Image[]): Rect => {
     const rects: readonly Rect[] = images
     const fallback = {x: Limits.MIN_SHORT, y: Limits.MIN_SHORT, w: 0, h: 0}
     const union = rects.length ? rects.reduce(Rect.union) : fallback

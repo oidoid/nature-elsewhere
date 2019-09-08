@@ -6,23 +6,21 @@ const littleEndian: boolean = !!new Int8Array(new Int16Array([1]).buffer)[0]
 
 export namespace InstanceBuffer {
   /** @return The length in bytes. */
-  export function size(layout: ShaderLayout, len: number): number {
-    return layout.perInstance.stride * len
-  }
+  export const size = (layout: ShaderLayout, len: number): number =>
+    layout.perInstance.stride * len
 
   /** @arg size The buffer length in bytes. */
-  export function make(size: number): DataView {
-    return new DataView(new ArrayBuffer(size))
-  }
+  export const make = (size: number): DataView =>
+    new DataView(new ArrayBuffer(size))
 
   /** Tightly coupled to ShaderLayout and GLSL. */
-  export function set(
+  export const set = (
     layout: ShaderLayout,
     atlas: Atlas,
     dat: DataView,
     index: number,
     img: Image
-  ): void {
+  ): void => {
     const i = index * layout.perInstance.stride
 
     dat.setInt16(i + 0, Image.cel(img, atlas).x, littleEndian)

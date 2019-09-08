@@ -13,15 +13,8 @@ import {Text} from '../text/text'
 import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
 
-const imagesFactory: Partial<
-  Record<string, (atlas: Atlas, entity: Entity) => Entity>
-> = Object.freeze({
-  dateVersionHash: newDateVersionHash,
-  text: TextEntity.make
-})
-
 export namespace EntityParser {
-  export function parse(atlas: Atlas, cfg: Entity.Config): Entity {
+  export const parse = (atlas: Atlas, cfg: Entity.Config): Entity => {
     const defaults = <Required<Entity.Config> & {readonly scale: XY}>(
       JSONUtil.merge(
         defaultEntity,
@@ -95,17 +88,21 @@ const parseBehaviorKey = (val: string): Behavior.Key => {
   throw new Error(`"${val}" is not a key of Behavior.`)
 }
 
-function isUpdateTypeKey(val: string): val is UpdateType.Key {
-  return val in UpdateType
-}
+const isUpdateTypeKey = (val: string): val is UpdateType.Key =>
+  val in UpdateType
 
-function isBehaviorKey(val: string): val is Behavior.Key {
-  return val in Behavior
-}
+const isBehaviorKey = (val: string): val is Behavior.Key => val in Behavior
 
-function newDateVersionHash(atlas: Atlas, entity: Entity): Entity {
+const newDateVersionHash = (atlas: Atlas, entity: Entity): Entity => {
   // use the text fnuction
   const {date, version, hash} = Build
   const images = Text.toImages(atlas, `${date} v${version} (${hash})`)
   return {...entity, states: {'0': {x: 0, y: 0, w: 0, h: 0, images}}}
 }
+
+const imagesFactory: Partial<
+  Record<string, (atlas: Atlas, entity: Entity) => Entity>
+> = Object.freeze({
+  dateVersionHash: newDateVersionHash,
+  text: TextEntity.make
+})

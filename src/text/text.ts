@@ -17,13 +17,13 @@ export namespace Text {
 
   /** @arg y The vertical scroll offset in pixels.
     @arg target The window size in pixels. */
-  export function toImages(
+  export const toImages = (
     atlas: Atlas,
     string: string,
     opts?: Omit<Image.Config, 'id'>,
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
-  ): readonly Image[] {
+  ): readonly Image[] => {
     const images = []
     const scale = {x: 1, y: 1}
     const positions = layout(string, w, scale).positions
@@ -46,7 +46,7 @@ export namespace Text {
   }
 
   /** @arg width The allowed layout width in pixels. */
-  export function layout(string: string, width: number, scale: XY): Layout {
+  export const layout = (string: string, width: number, scale: XY): Layout => {
     const positions: (XY | undefined)[] = []
     let cursor = {x: 0, y: 0}
     for (let i = 0; i < string.length; ) {
@@ -81,13 +81,13 @@ export namespace Text {
 
   /** @arg {x,y} The cursor offset in pixels.
     @arg width The allowed layout width in pixels. */
-  export function layoutWord(
+  export const layoutWord = (
     {x, y}: XY,
     width: number,
     string: string,
     index: number,
     scale: XY
-  ): Layout {
+  ): Layout => {
     const positions = []
     while (index < string.length && !/\s/.test(string[index])) {
       const span = tracking(string[index], scale, string[index + 1])
@@ -104,29 +104,30 @@ export namespace Text {
 }
 
 /** @arg cursor The cursor offset in pixels. */
-function layoutNewline({y}: XY, scale: XY): Text.Layout {
-  return {positions: [undefined], cursor: nextLine(y, scale)}
-}
+const layoutNewline = ({y}: XY, scale: XY): Text.Layout => ({
+  positions: [undefined],
+  cursor: nextLine(y, scale)
+})
 
 /** @arg {x,y} The cursor offset in pixels.
     @arg width The allowed layout width in pixels.
     @arg span The distance in pixels from the start of the current letter to the
               start of the next including scale. */
-function layoutSpace(
+const layoutSpace = (
   {x, y}: XY,
   width: number,
   span: number,
   scale: XY
-): Text.Layout {
+): Text.Layout => {
   const cursor = x && x + span >= width ? nextLine(y, scale) : {x: x + span, y}
   return {positions: [undefined], cursor}
 }
 
 /** @return The distance in pixels from the start of lhs to the start of rhs. */
-function tracking(lhs: string, scale: XY, rhs?: string): number {
-  return scale.x * (Font.letterWidth(font, lhs) + Font.kerning(font, lhs, rhs))
-}
+const tracking = (lhs: string, scale: XY, rhs?: string): number =>
+  scale.x * (Font.letterWidth(font, lhs) + Font.kerning(font, lhs, rhs))
 
-function nextLine(y: number, scale: XY): XY {
-  return {x: 0, y: y + scale.y * font.lineHeight}
-}
+const nextLine = (y: number, scale: XY): XY => ({
+  x: 0,
+  y: y + scale.y * font.lineHeight
+})

@@ -34,12 +34,12 @@ export interface Game {
 }
 
 export namespace Game {
-  export function make(
+  export const make = (
     window: Window,
     canvas: HTMLCanvasElement,
     {atlas, atlasImage, shaderLayout}: Assets,
     settings: Settings
-  ): Game {
+  ): Game => {
     const doc = window.document
     const inputRouter = InputRouter.make(window)
     const ret: Game = {
@@ -65,17 +65,17 @@ export namespace Game {
     return ret
   }
 
-  function newRequestWindowSetting(
+  const newRequestWindowSetting = (
     windowMode: WindowModeSetting,
     doc: Document
-  ): FunctionUtil.Once {
+  ): FunctionUtil.Once => {
     const full = () => doc.documentElement.requestFullscreen().catch(() => {})
     return windowMode === WindowModeSetting.FULLSCREEN
       ? FunctionUtil.once(full)
       : FunctionUtil.never()
   }
 
-  export function start(state: Game): void {
+  export const start = (state: Game): void => {
     // Disable the context menu.
     state.doc.oncontextmenu = () => false
     RendererStateMachine.start(state.rendererStateMachine)
@@ -83,12 +83,12 @@ export namespace Game {
     Synth.play(state.synth, 'sawtooth', 200, 500, 0.15)
   }
 
-  export function stop(state: Game): void {
+  export const stop = (state: Game): void => {
     InputRouter.register(state.inputRouter, false)
     RendererStateMachine.stop(state.rendererStateMachine)
   }
 
-  function onFrame(state: Game, time: number): void {
+  const onFrame = (state: Game, time: number): void => {
     if (!state.levelStateMachine.level) return stop(state)
 
     const canvasWH = Viewport.canvasWH(state.doc)
@@ -123,7 +123,7 @@ export namespace Game {
     else stop(state)
   }
 
-  function processDebugInput({rendererStateMachine, recorder}: Game): void {
+  const processDebugInput = ({rendererStateMachine, recorder}: Game): void => {
     const triggered = Recorder.triggeredSet(
       recorder,
       InputBit.DEBUG_CONTEXT_LOSS

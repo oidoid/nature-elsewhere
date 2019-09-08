@@ -16,9 +16,8 @@ export interface InputSet {
 export namespace InputSet {
   /** Coalesces and returns set bits. A set bit from any source overrides an
       unset bit from any other. */
-  export function bits(val: InputSet): InputBit {
-    return ObjectUtil.values(val)
+  export const bits = (val: InputSet): InputBit =>
+    ObjectUtil.values(val)
       .filter(ArrayUtil.is)
       .reduce((sum: number, {bits}) => sum | bits, 0)
-  }
 }

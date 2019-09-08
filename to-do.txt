@@ -58,8 +58,6 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with
     What TypeScript and other open source examples should I consider?
     Re-review WebGL implementations.
     Update the readme.
-  Improve my identity.
-    These are some ideas: motherboard, harpsichord, pretzel demake, harp pretzel, harpsichord pretzel, pizza circuit, motherpizza, motherpretzel, ninerva, minerva, mythology, health bars, xp, pretzel salt uroboros, milkshake, pizza, ooz, motherearth, motherboard, pretzel circuit, nano, kola, koka kola klassic.
   Add windy grass displacement shader to make the fields pop.
     Maybe look through shader toys and displacement shader 101s.
       https://forums.tigsource.com/index.php?topic=40539.20

@@ -26,7 +26,7 @@ export interface Font {
 }
 
 export namespace Font {
-  export function kerning(font: Font, lhs: string, rhs?: string): number {
+  export const kerning = (font: Font, lhs: string, rhs?: string): number => {
     if (rhs === undefined) return font.endOfLineKerning
     if (/\s/.test(lhs + rhs)) return font.whitespaceKerning
     return ObjectUtil.defaultIfAbsent(
@@ -36,19 +36,13 @@ export namespace Font {
     )
   }
 
-  export function letterOffset(font: Font, char: string): number {
-    return ObjectUtil.defaultIfAbsent(
+  export const letterOffset = (font: Font, char: string): number =>
+    ObjectUtil.defaultIfAbsent(
       font.letterOffset,
       char,
       font.defaultLetterOffset
     )
-  }
 
-  export function letterWidth(font: Font, char: string): number {
-    return ObjectUtil.defaultIfAbsent(
-      font.letterWidth,
-      char,
-      font.defaultLetterWidth
-    )
-  }
+  export const letterWidth = (font: Font, char: string): number =>
+    ObjectUtil.defaultIfAbsent(font.letterWidth, char, font.defaultLetterWidth)
 }

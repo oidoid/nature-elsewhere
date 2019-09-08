@@ -1,20 +1,11 @@
 export namespace FunctionUtil {
-  export interface Never {
-    (): Never
-  }
+  export type Never = {(): Never}
+  export type Once = {(execute: boolean): Once}
 
-  export interface Once {
-    (execute: boolean): Once
-  }
+  export const never = (): Never => never
 
-  export function never(): Never {
-    return never
-  }
-
-  export function once(fn: () => void): Once {
-    return function retry(execute): Once {
-      if (execute) return fn(), never
-      return retry
+  export const once = (fn: () => void): Once =>
+    function retry(execute): Once {
+      return execute ? (fn(), never) : retry
     }
-  }
 }

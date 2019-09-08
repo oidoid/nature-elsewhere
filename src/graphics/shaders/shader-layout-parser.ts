@@ -12,19 +12,17 @@ enum DataTypeSize {
 }
 
 export namespace ShaderLayoutParser {
-  export function parse(config: ShaderLayout.Config): ShaderLayout {
-    return {
-      uniforms: config.uniforms,
-      perVertex: parseAttributes(0, config.perVertex),
-      perInstance: parseAttributes(1, config.perInstance)
-    }
-  }
+  export const parse = (config: ShaderLayout.Config): ShaderLayout => ({
+    uniforms: config.uniforms,
+    perVertex: parseAttributes(0, config.perVertex),
+    perInstance: parseAttributes(1, config.perInstance)
+  })
 }
 
-function parseAttributes(
+const parseAttributes = (
   divisor: number,
   configs: readonly ShaderLayout.AttributeConfig[]
-): ShaderLayout.AttributeBuffer {
+): ShaderLayout.AttributeBuffer => {
   const attributes = configs.reduce(reduceAttributeVariable, [])
   const maxDataTypeSize = attributes
     .map(({type}) => DataTypeSize[type])
@@ -38,15 +36,14 @@ function parseAttributes(
   }
 }
 
-function reduceAttributeVariable(
+const reduceAttributeVariable = (
   layouts: readonly ShaderLayout.Attribute[],
   {type, name, len}: ShaderLayout.AttributeConfig,
   index: number
-): readonly ShaderLayout.Attribute[] {
+): readonly ShaderLayout.Attribute[] => {
   const offset = index ? nextAttributeOffset(layouts[index - 1]) : 0
   return layouts.concat({type: <GLDataType>type, name, len, offset})
 }
 
-function nextAttributeOffset(attr: ShaderLayout.Attribute): number {
-  return attr.offset + DataTypeSize[attr.type] * attr.len
-}
+const nextAttributeOffset = (attr: ShaderLayout.Attribute): number =>
+  attr.offset + DataTypeSize[attr.type] * attr.len

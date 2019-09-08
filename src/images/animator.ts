@@ -16,11 +16,11 @@ export interface Animator {
 }
 
 export namespace Animator {
-  export function animate(
+  export const animate = (
     {cels, direction, duration}: Atlas.Animation,
     period: number,
     exposure: number
-  ): Animator {
+  ): Animator => {
     exposure = exposure % duration
     while (exposure >= cels[index(cels, period)].duration) {
       exposure -= cels[index(cels, period)].duration
@@ -29,9 +29,8 @@ export namespace Animator {
     return {period, exposure}
   }
 
-  export function index(cels: readonly Atlas.Cel[], period: number): number {
-    return Math.abs(period % cels.length)
-  }
+  export const index = (cels: readonly Atlas.Cel[], period: number): number =>
+    Math.abs(period % cels.length)
 }
 
 const Period: Readonly<

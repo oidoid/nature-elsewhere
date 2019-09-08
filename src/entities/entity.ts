@@ -33,7 +33,7 @@ export namespace Entity {
     readonly period?: number
   }
 
-  export function update(
+  export const update = (
     state: Mutable<Entity>,
     entities: readonly Entity[],
     level: Level,
@@ -41,7 +41,7 @@ export namespace Entity {
     cam: Rect,
     time: number,
     recorder: Recorder
-  ): readonly Image[] {
+  ): readonly Image[] => {
     const rect = state.states[state.state]
     if (state.updateType === 'NEVER') return rect.images
     ;(state.vx += state.ax * time), (state.vy += state.ay * time)

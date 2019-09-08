@@ -13,17 +13,20 @@ export interface LevelStateMachine {
 }
 
 export namespace LevelStateMachine {
-  export function make(layout: ShaderLayout, atlas: Atlas): LevelStateMachine {
+  export const make = (
+    layout: ShaderLayout,
+    atlas: Atlas
+  ): LevelStateMachine => {
     const level = LevelParser.parse(atlas, LevelConfigs.fields)
     return {level, store: Store.make(layout, atlas)}
   }
 
-  export function update(
+  export const update = (
     state: LevelStateMachine,
     cam: Rect,
     time: number,
     recorder: Recorder
-  ): LevelStateMachine {
+  ): LevelStateMachine => {
     if (!state.level) return state
     const store = Store.update(
       state.store,

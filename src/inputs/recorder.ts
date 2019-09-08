@@ -25,43 +25,43 @@ export interface Recorder {
 
 /** record(), update(), read (active(), trigger()) in that order. */
 export namespace Recorder {
-  export function make(): Recorder {
-    return {timer: 0, set: {}, lastSet: {}, combo: []}
-  }
+  export const make = (): Recorder => ({
+    timer: 0,
+    set: {},
+    lastSet: {},
+    combo: []
+  })
 
   /** @arg combo A sequence of one or more InputBits. */
-  export function equal(
+  export const equal = (
     state: Recorder,
     ...combo: readonly InputBit[]
-  ): boolean {
-    return active(state, true, combo)
-  }
+  ): boolean => active(state, true, combo)
 
-  export function set(state: Recorder, ...combo: readonly InputBit[]): boolean {
-    return active(state, false, combo)
-  }
+  export const set = (
+    state: Recorder,
+    ...combo: readonly InputBit[]
+  ): boolean => active(state, false, combo)
 
   /** Identical to active() but only true if combo is new. */
-  export function triggered(
+  export const triggered = (
     state: Recorder,
     ...combo: readonly InputBit[]
-  ): boolean {
-    return !state.timer && equal(state, ...combo)
-  }
+  ): boolean => !state.timer && equal(state, ...combo)
 
-  export function triggeredSet(
+  export const triggeredSet = (
     state: Recorder,
     ...combo: readonly InputBit[]
-  ): boolean {
-    return !state.timer && set(state, ...combo)
-  }
+  ): boolean => !state.timer && set(state, ...combo)
 
-  export function record(state: Recorder, input: Input): void {
-    state.set[input.source] = <any>input
-  }
+  export const record = (state: Recorder, input: Input): void =>
+    (state.set[input.source] = <any>input)
 
   /** Update the combo with recorded input. */
-  export function update(state: Mutable<Recorder>, milliseconds: number): void {
+  export const update = (
+    state: Mutable<Recorder>,
+    milliseconds: number
+  ): void => {
     const interval = state.timer + milliseconds
     const bits = InputSet.bits(state.set)
     const lastBits = InputSet.bits(state.lastSet)
@@ -95,11 +95,11 @@ export namespace Recorder {
   }
 }
 
-function active(
+const active = (
   state: Recorder,
   exact: boolean,
   combo: readonly InputBit[]
-): boolean {
+): boolean => {
   // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
   const offset = state.combo.length - combo.length
   if (offset < 0) return false

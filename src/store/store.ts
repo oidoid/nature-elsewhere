@@ -17,18 +17,21 @@ export interface Store {
 }
 
 export namespace Store {
-  export function make(layout: ShaderLayout, atlas: Atlas): Store {
-    return {atlas, layout, dat: InstanceBuffer.make(0), len: 0}
-  }
+  export const make = (layout: ShaderLayout, atlas: Atlas): Store => ({
+    atlas,
+    layout,
+    dat: InstanceBuffer.make(0),
+    len: 0
+  })
 
-  export function update(
+  export const update = (
     {layout, atlas, dat}: Store,
     cam: Rect,
     entities: readonly Entity[],
     level: Level,
     milliseconds: number,
     recorder: Recorder
-  ): Store {
+  ): Store => {
     const camCopy = {...cam}
     const images = entities
       .filter(

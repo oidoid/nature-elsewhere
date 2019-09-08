@@ -3,14 +3,14 @@ import {ShaderLayout} from './shaders/shader-layout'
 const GL = WebGL2RenderingContext
 
 export namespace GLUtil {
-  export function initAttribute(
+  export const initAttribute = (
     gl: GL,
     stride: number,
     divisor: number,
     buffer: GLBuffer,
     location: number,
     {type, len, offset}: ShaderLayout.Attribute
-  ): void {
+  ): void => {
     gl.enableVertexAttribArray(location)
     gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
     gl.vertexAttribIPointer(location, len, GL[type], stride, offset)
@@ -18,11 +18,11 @@ export namespace GLUtil {
     gl.bindBuffer(GL.ARRAY_BUFFER, null)
   }
 
-  export function loadProgram(
+  export const loadProgram = (
     gl: GL,
     vertexGLSL: string,
     fragmentGLSL: string
-  ): GLProgram {
+  ): GLProgram => {
     const program = gl.createProgram()
     if (!program) return null
 
@@ -45,11 +45,11 @@ export namespace GLUtil {
     return program
   }
 
-  export function compileShader(
+  export const compileShader = (
     gl: GL,
     type: number,
     source: string
-  ): GLShader {
+  ): GLShader => {
     const shader = gl.createShader(type)
     if (!shader) throw new Error('Shader creation failed.')
 
@@ -62,22 +62,22 @@ export namespace GLUtil {
     return shader
   }
 
-  export function bufferData(
+  export const bufferData = (
     gl: GL,
     buffer: GLBuffer,
     data: GLBufferData,
     usage: number
-  ): void {
+  ): void => {
     gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
     gl.bufferData(GL.ARRAY_BUFFER, data, usage)
     gl.bindBuffer(GL.ARRAY_BUFFER, null)
   }
 
-  export function loadTexture(
+  export const loadTexture = (
     gl: GL,
     textureUnit: number,
     image: HTMLImageElement
-  ): GLTexture {
+  ): GLTexture => {
     gl.activeTexture(textureUnit)
     const ret = gl.createTexture()
     gl.bindTexture(GL.TEXTURE_2D, ret)
@@ -88,10 +88,10 @@ export namespace GLUtil {
     return ret
   }
 
-  export function uniformLocations(
+  export const uniformLocations = (
     gl: GL,
     program: GLProgram
-  ): Readonly<Record<string, GLUniformLocation>> {
+  ): Readonly<Record<string, GLUniformLocation>> => {
     if (!program) return {}
     const len = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS)
     const ret: Record<string, GLUniformLocation> = {}
@@ -103,10 +103,10 @@ export namespace GLUtil {
     return ret
   }
 
-  export function attributeLocations(
+  export const attributeLocations = (
     gl: GL,
     program: GLProgram
-  ): Readonly<Record<string, number>> {
+  ): Readonly<Record<string, number>> => {
     if (!program) return {}
     const len = gl.getProgramParameter(program, GL.ACTIVE_ATTRIBUTES)
     const ret: Record<string, number> = {}

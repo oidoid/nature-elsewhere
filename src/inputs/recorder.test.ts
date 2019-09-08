@@ -286,10 +286,10 @@ describe('Recorder', () => {
   })
 })
 
-function expectKeyboardCombo(
+const expectKeyboardCombo = (
   subject: Recorder,
   ...inputs: readonly InputBit[]
-): void {
+): void => {
   const source = InputSource.KEYBOARD
   const combo = inputs.map(bits => ({[source]: {source, bits}}))
   expect(subject.combo).toStrictEqual(combo)
