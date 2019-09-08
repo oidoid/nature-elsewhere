@@ -12,11 +12,12 @@ export interface InputSet {
   readonly [InputSource.POINTER_POINT]?: PointerInput.Point
   readonly [InputSource.GAMEPAD]?: Input
 }
+type t = InputSet
 
 export namespace InputSet {
   /** Coalesces and returns set bits. A set bit from any source overrides an
       unset bit from any other. */
-  export const bits = (val: InputSet): InputBit =>
+  export const bits = (val: t): InputBit =>
     ObjectUtil.values(val)
       .filter(ArrayUtil.is)
       .reduce((sum: number, {bits}) => sum | bits, 0)

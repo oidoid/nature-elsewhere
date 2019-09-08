@@ -11,21 +11,22 @@ export interface PointerRecorder {
   point?: PointerInput.Point
   pick?: PointerInput.Pick
 }
+type t = PointerRecorder
 
 export namespace PointerRecorder {
-  export const make = (): PointerRecorder => ({})
+  export const make = (): t => ({})
 
-  export const record = (state: PointerRecorder, recorder: Recorder): void => {
+  export const record = (state: t, recorder: Recorder): void => {
     const inputs = [state.pick, state.point].filter(ArrayUtil.is)
     inputs.forEach(input => Recorder.record(recorder, input))
   }
 
-  export const reset = (state: PointerRecorder): void => {
+  export const reset = (state: t): void => {
     delete state.point, delete state.pick
   }
 
   export const onEvent = (
-    state: PointerRecorder,
+    state: t,
     canvasWH: WH,
     cam: Rect,
     ev: PointerEvent

@@ -4,7 +4,7 @@ import {XY} from './xy'
 type t = readonly Rect[]
 
 export namespace RectArray {
-  export const intersects = (lhs: t, rhs: t | Rect): $<Rect> =>
+  export const intersects = (lhs: t, rhs: t | Rect): Maybe<Rect> =>
     lhs.find(val =>
       'length' in rhs ? intersects(rhs, val) : Rect.intersects(val, rhs)
     )

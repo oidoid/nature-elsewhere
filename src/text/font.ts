@@ -24,9 +24,10 @@ export interface Font {
   readonly letterWidth: Readonly<Record<string, number>>
   readonly defaultLetterWidth: number
 }
+type t = Font
 
 export namespace Font {
-  export const kerning = (font: Font, lhs: string, rhs?: string): number => {
+  export const kerning = (font: t, lhs: string, rhs?: string): number => {
     if (rhs === undefined) return font.endOfLineKerning
     if (/\s/.test(lhs + rhs)) return font.whitespaceKerning
     return ObjectUtil.defaultIfAbsent(
@@ -36,13 +37,13 @@ export namespace Font {
     )
   }
 
-  export const letterOffset = (font: Font, char: string): number =>
+  export const letterOffset = (font: t, char: string): number =>
     ObjectUtil.defaultIfAbsent(
       font.letterOffset,
       char,
       font.defaultLetterOffset
     )
 
-  export const letterWidth = (font: Font, char: string): number =>
+  export const letterWidth = (font: t, char: string): number =>
     ObjectUtil.defaultIfAbsent(font.letterWidth, char, font.defaultLetterWidth)
 }

@@ -11,18 +11,16 @@ export interface LevelStateMachine {
   readonly level?: Level
   readonly store: Store
 }
+type t = LevelStateMachine
 
 export namespace LevelStateMachine {
-  export const make = (
-    layout: ShaderLayout,
-    atlas: Atlas
-  ): LevelStateMachine => {
+  export const make = (layout: ShaderLayout, atlas: Atlas): t => {
     const level = LevelParser.parse(atlas, LevelConfigs.fields)
     return {level, store: Store.make(layout, atlas)}
   }
 
   export const update = (
-    state: LevelStateMachine,
+    state: t,
     cam: Rect,
     time: number,
     recorder: Recorder

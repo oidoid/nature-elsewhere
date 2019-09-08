@@ -18,6 +18,7 @@ export interface Image extends Required<Image.Config> {
   readonly scale: XY
   readonly layer: Layer.Key
 }
+type t = Image
 
 export namespace Image {
   export interface Config extends Partial<Rect>, Partial<Animator> {
@@ -30,7 +31,7 @@ export namespace Image {
     readonly tvy?: number
   }
 
-  export const make = (atlas: Atlas, cfg: Config): Image => {
+  export const make = (atlas: Atlas, cfg: Config): t => {
     if (!(cfg.id in atlas))
       throw new Error(`Atlas missing animation "${cfg.id}".`)
     const wh = {
@@ -48,16 +49,16 @@ export namespace Image {
   const isLayerKey = (val: string): val is Layer.Key => val in Layer
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */
-  export const compare = (lhs: Image, rhs: Image): number =>
+  export const compare = (lhs: t, rhs: t): number =>
     Layer[lhs.layer] - Layer[rhs.layer] || lhs.y + lhs.h - (rhs.y + rhs.h)
 
-  export const animate = (state: Image, atlas: Atlas, time: number): Image => {
+  export const animate = (state: t, atlas: Atlas, time: number): t => {
     const exposure = state.exposure + time
     const animator = Animator.animate(atlas[state.id], state.period, exposure)
     return Object.assign(state, animator)
   }
 
-  export const cel = ({id, period}: Image, atlas: Atlas): Atlas.Cel =>
+  export const cel = ({id, period}: t, atlas: Atlas): Atlas.Cel =>
     atlas[id].cels[Animator.index(atlas[id].cels, period)]
 
   export const target = (...images: readonly Image[]): Rect => {

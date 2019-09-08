@@ -22,8 +22,5 @@ export namespace XY {
     y: Math.max(lhs.y, rhs.y)
   })
 
-  export const trunc = ({x, y}: t): t => ({
-    x: Math.trunc(x),
-    y: Math.trunc(y)
-  })
+  export const trunc = ({x, y}: t): t => ({x: Math.trunc(x), y: Math.trunc(y)})
 }

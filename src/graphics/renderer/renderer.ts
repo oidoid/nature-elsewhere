@@ -16,6 +16,7 @@ export interface Renderer {
   readonly perInstanceBuffer: GLBuffer
   readonly loseContext: GLLoseContext
 }
+type t = Renderer
 
 const GL = WebGL2RenderingContext
 const uv: Int16Array = new Int16Array(Object.freeze([1, 1, 0, 1, 1, 0, 0, 0]))
@@ -26,7 +27,7 @@ export namespace Renderer {
     canvas: HTMLCanvasElement,
     atlas: HTMLImageElement,
     layout: ShaderLayout
-  ): Renderer => {
+  ): t => {
     const gl = canvas.getContext('webgl2', glConfig)
     if (!(gl instanceof GL)) throw new Error('WebGL 2 unsupported.')
 
@@ -103,7 +104,7 @@ export namespace Renderer {
    * @arg scale Positive integer zoom.
    */
   export const render = (
-    state: Renderer,
+    state: t,
     time: number,
     canvasWH: WH,
     scale: number,
@@ -121,7 +122,7 @@ export namespace Renderer {
                     {w: window.innerWidth, h: window.innerHeight}.
       @arg scale Positive integer zoom. */
   export const resize = (
-    {gl, layout, uniforms, projection}: Renderer,
+    {gl, layout, uniforms, projection}: t,
     canvasWH: WH,
     scale: number,
     cam: Rect

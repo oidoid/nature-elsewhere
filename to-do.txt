@@ -2,8 +2,6 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with
   Make large, lavish, content-rich levels.
     Add "a summary of you" / inven / journal screen level.
     Add old options UI.
-    Draw dashed path.
-      Add path behavior.
     Add title, editor, and pause levels.
       Make a level editor.
         Make outstanding UI.

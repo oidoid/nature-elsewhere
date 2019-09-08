@@ -16,6 +16,7 @@ export interface Entity
   readonly scale: Mutable<XY>
   readonly states: Record<string, ImageRect>
 }
+type t = Entity
 
 export namespace Entity {
   export interface Config extends Partial<XY> {
@@ -34,8 +35,8 @@ export namespace Entity {
   }
 
   export const update = (
-    state: Mutable<Entity>,
-    entities: readonly Entity[],
+    state: Mutable<t>,
+    entities: readonly t[],
     level: Level,
     atlas: Atlas,
     cam: Rect,

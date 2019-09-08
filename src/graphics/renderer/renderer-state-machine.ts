@@ -10,36 +10,35 @@ export interface RendererStateMachine {
   newRenderer(): Renderer
   onEvent(ev: Event): void
 }
+type t = RendererStateMachine
 
 export namespace RendererStateMachine {
-  export const make = (
-    start: Omit<RendererStateMachine, 'renderer' | 'onEvent'>
-  ): RendererStateMachine => {
+  export const make = (start: Omit<t, 'renderer' | 'onEvent'>): t => {
     const renderer = start.newRenderer()
     const ret = {...start, renderer, onEvent: (ev: Event) => onEvent(ret, ev)}
     return ret
   }
 
-  export const start = (state: RendererStateMachine): void => (
+  export const start = (state: t): void => (
     register(state, true), resume(state)
   )
 
-  export const stop = (state: Mutable<RendererStateMachine>): void => (
+  export const stop = (state: Mutable<t>): void => (
     pause(state), register(state, false)
   )
 }
 
-const pause = (state: Mutable<RendererStateMachine>): void => {
+const pause = (state: Mutable<t>): void => {
   if (state.frameID) state.window.cancelAnimationFrame(state.frameID)
   delete state.frameID, state.onPause()
 }
 
-const resume = (state: Mutable<RendererStateMachine>): void => {
+const resume = (state: Mutable<t>): void => {
   const context = !state.renderer.gl.isContextLost()
   if (state.window.document.hasFocus() && context && !state.frameID) loop(state)
 }
 
-const onEvent = (state: Mutable<RendererStateMachine>, ev: Event): void => {
+const onEvent = (state: Mutable<t>, ev: Event): void => {
   if (ev.type === 'webglcontextrestored')
     (state.renderer = state.newRenderer()), resume(state)
   else if (ev.type === 'focus') resume(state)
@@ -53,7 +52,7 @@ const loop = (state: Mutable<RendererStateMachine>, then?: number): void => {
   })
 }
 
-const register = (state: RendererStateMachine, register: boolean): void => {
+const register = (state: t, register: boolean): void => {
   const fn = register ? 'addEventListener' : 'removeEventListener'
   state.canvas[fn]('webglcontextrestored', state.onEvent)
   state.canvas[fn]('webglcontextlost', state.onEvent)

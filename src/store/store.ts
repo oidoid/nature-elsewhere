@@ -15,9 +15,10 @@ export interface Store {
   readonly dat: DataView
   readonly len: number
 }
+type t = Store
 
 export namespace Store {
-  export const make = (layout: ShaderLayout, atlas: Atlas): Store => ({
+  export const make = (layout: ShaderLayout, atlas: Atlas): t => ({
     atlas,
     layout,
     dat: InstanceBuffer.make(0),
@@ -25,13 +26,13 @@ export namespace Store {
   })
 
   export const update = (
-    {layout, atlas, dat}: Store,
+    {layout, atlas, dat}: t,
     cam: Rect,
     entities: readonly Entity[],
     level: Level,
     milliseconds: number,
     recorder: Recorder
-  ): Store => {
+  ): t => {
     const camCopy = {...cam}
     const images = entities
       .filter(

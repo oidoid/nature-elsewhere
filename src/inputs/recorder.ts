@@ -22,46 +22,33 @@ export interface Recorder {
       (last). Combos are terminated only by expiration. */
   readonly combo: InputSet[]
 }
+type t = Recorder
 
 /** record(), update(), read (active(), trigger()) in that order. */
 export namespace Recorder {
-  export const make = (): Recorder => ({
-    timer: 0,
-    set: {},
-    lastSet: {},
-    combo: []
-  })
+  export const make = (): t => ({timer: 0, set: {}, lastSet: {}, combo: []})
 
   /** @arg combo A sequence of one or more InputBits. */
-  export const equal = (
-    state: Recorder,
-    ...combo: readonly InputBit[]
-  ): boolean => active(state, true, combo)
+  export const equal = (state: t, ...combo: readonly InputBit[]): boolean =>
+    active(state, true, combo)
 
-  export const set = (
-    state: Recorder,
-    ...combo: readonly InputBit[]
-  ): boolean => active(state, false, combo)
+  export const set = (state: t, ...combo: readonly InputBit[]): boolean =>
+    active(state, false, combo)
 
   /** Identical to active() but only true if combo is new. */
-  export const triggered = (
-    state: Recorder,
-    ...combo: readonly InputBit[]
-  ): boolean => !state.timer && equal(state, ...combo)
+  export const triggered = (state: t, ...combo: readonly InputBit[]): boolean =>
+    !state.timer && equal(state, ...combo)
 
   export const triggeredSet = (
-    state: Recorder,
+    state: t,
     ...combo: readonly InputBit[]
   ): boolean => !state.timer && set(state, ...combo)
 
-  export const record = (state: Recorder, input: Input): void =>
+  export const record = (state: t, input: Input): void =>
     (state.set[input.source] = <any>input)
 
   /** Update the combo with recorded input. */
-  export const update = (
-    state: Mutable<Recorder>,
-    milliseconds: number
-  ): void => {
+  export const update = (state: Mutable<t>, milliseconds: number): void => {
     const interval = state.timer + milliseconds
     const bits = InputSet.bits(state.set)
     const lastBits = InputSet.bits(state.lastSet)
@@ -96,7 +83,7 @@ export namespace Recorder {
 }
 
 const active = (
-  state: Recorder,
+  state: t,
   exact: boolean,
   combo: readonly InputBit[]
 ): boolean => {

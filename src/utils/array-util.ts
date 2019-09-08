@@ -7,6 +7,6 @@ export namespace ArrayUtil {
     array.findIndex(rhs => equals(item, rhs)) !== -1
 
   /** Type guard. */
-  export const is = <T>(val: T | null | undefined): val is T =>
+  export const is = <T>(val: Maybe<T> | null): val is T =>
     val !== null && val !== undefined
 }

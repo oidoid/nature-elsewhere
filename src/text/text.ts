@@ -10,7 +10,7 @@ const font: Font = Object.freeze(memFont)
 export namespace Text {
   export interface Layout {
     /** The length of this array matches the string length. */
-    readonly positions: readonly (XY | undefined)[]
+    readonly positions: readonly Maybe<XY>[]
     /** The offset in pixels. */
     readonly cursor: XY
   }
@@ -47,7 +47,7 @@ export namespace Text {
 
   /** @arg width The allowed layout width in pixels. */
   export const layout = (string: string, width: number, scale: XY): Layout => {
-    const positions: (XY | undefined)[] = []
+    const positions: Maybe<XY>[] = []
     let cursor = {x: 0, y: 0}
     for (let i = 0; i < string.length; ) {
       let layout
