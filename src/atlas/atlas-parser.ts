@@ -2,7 +2,6 @@ import {Aseprite} from './aseprite'
 import {Atlas} from './atlas'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
-import {ObjectUtil} from '../utils/object-util'
 
 export namespace AtlasParser {
   export const parse = ({meta, frames}: Aseprite.File): Atlas =>
@@ -47,9 +46,9 @@ export namespace AtlasParser {
   export const isAnimationDirection = (
     val: string
   ): val is Atlas.AnimationDirection =>
-    ObjectUtil.values(Atlas.AnimationDirection).includes(<
-      Atlas.AnimationDirection
-    >val)
+    Object.values(Atlas.AnimationDirection).includes(<Atlas.AnimationDirection>(
+      val
+    ))
 
   export const parseCel = (frame: Aseprite.Frame): Atlas.Cel => ({
     ...parsePosition(frame),

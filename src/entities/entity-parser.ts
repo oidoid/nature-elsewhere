@@ -63,7 +63,7 @@ export namespace EntityParser {
     const ctor = imagesFactory[defaults.id]
     const state: Entity = ctor ? ctor(atlas, entity) : entity
 
-    ObjectUtil.values(state.states).forEach(rect => {
+    Object.values(state.states).forEach(rect => {
       const {w, h} = Image.target(...rect.images)
       ;(<any>rect).w = w
       ;(<any>rect).h = h

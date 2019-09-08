@@ -2,10 +2,9 @@ import {ArrayUtil} from '../utils/array-util'
 import {EntityConfigs} from './entity-configs'
 import {Image} from '../images/image'
 import {Layer} from '../images/layer'
-import {ObjectUtil} from '../utils/object-util'
 
 const ids: readonly string[] = Object.freeze(
-  ObjectUtil.values(EntityConfigs)
+  Object.values(EntityConfigs)
     .filter(ArrayUtil.is)
     .map(({id}) => id)
     .filter(ArrayUtil.is)
@@ -16,11 +15,11 @@ test.each(ids)('%# ID %p is unique', id =>
 )
 
 const images: readonly Image.Config[] = Object.freeze(
-  ObjectUtil.values(EntityConfigs)
+  Object.values(EntityConfigs)
     .filter(ArrayUtil.is)
     .map(({states}) => states)
     .filter(ArrayUtil.is)
-    .map(ObjectUtil.values)
+    .map(Object.values)
     .reduce((sum: Image.Config[], val) => sum.concat(...val), [])
 )
 

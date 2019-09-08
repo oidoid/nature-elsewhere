@@ -31,7 +31,7 @@ describe('atlas.json', () => {
   }
 
   test.each(
-    ObjectUtil.values(atlas).reduce(
+    Object.values(atlas).reduce(
       (sum: Atlas.Cel[], val) => sum.concat(val.cels),
       []
     )
@@ -40,7 +40,7 @@ describe('atlas.json', () => {
   )
 
   test.each(
-    ObjectUtil.values(atlas).reduce(
+    Object.values(atlas).reduce(
       (sum: [Atlas.Cel, boolean][], val) =>
         val.cels.length > 1
           ? sum.concat(
@@ -53,7 +53,7 @@ describe('atlas.json', () => {
     if (!last) expect(cel.duration).toBeLessThan(Number.POSITIVE_INFINITY)
   })
 
-  test.each(ObjectUtil.values(atlas))(
+  test.each(Object.values(atlas))(
     '%# every Animation has at lease one Cel %p',
     ({cels}) => expect(cels.length).toBeGreaterThan(0)
   )
@@ -176,7 +176,7 @@ describe('parseAnimation()', () => {
 })
 
 describe('isAnimationDirection()', () => {
-  test.each(ObjectUtil.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.AnimationDirection))(
     '%# Direction %p',
     direction =>
       expect(AtlasParser.isAnimationDirection(direction)).toStrictEqual(true)

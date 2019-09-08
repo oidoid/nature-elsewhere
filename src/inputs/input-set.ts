@@ -2,7 +2,6 @@ import {ArrayUtil} from '../utils/array-util'
 import {Input} from './input'
 import {InputBit} from './input-bit'
 import {InputSource} from './input-source'
-import {ObjectUtil} from '../utils/object-util'
 import {PointerInput} from './pointers/pointer-input'
 
 /** All inputs possible in a single recording / update loop. */
@@ -18,7 +17,7 @@ export namespace InputSet {
   /** Coalesces and returns set bits. A set bit from any source overrides an
       unset bit from any other. */
   export const bits = (val: t): InputBit =>
-    ObjectUtil.values(val)
+    Object.values(val)
       .filter(ArrayUtil.is)
       .reduce((sum: number, {bits}) => sum | bits, 0)
 }
