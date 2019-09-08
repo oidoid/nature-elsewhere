@@ -1,0 +1,10 @@
+{
+  "id": "destination",
+  "updateType": "ALWAYS",
+  "behavior": "DESTINATION",
+  "state": "hidden",
+  "states": {
+    "hidden": [],
+    "visible": [{"id": "destination", "x": -1, "y": -1, "layer": "UI_CURSOR"}]
+  }
+}

@@ -5,6 +5,7 @@
   "minSize": {"w": 96, "h": 96},
   "entities": [
     {"id": "cursor"},
+    {"id": "destination"},
     {
       "states": {
         "0": [

@@ -8,6 +8,7 @@ import * as clover from '../assets/entities/clover.json'
 import * as conifer from '../assets/entities/conifer.json'
 import * as cursor from '../assets/entities/cursor.json'
 import * as dateVersionHash from '../assets/entities/date-version-hash.json'
+import * as destination from '../assets/entities/destination.json'
 import * as editor from '../assets/entities/editor.json'
 import {Entity} from './entity'
 import * as flag from '../assets/entities/flag.json'
@@ -38,6 +39,7 @@ export const EntityConfigs: Readonly<
   conifer,
   cursor,
   dateVersionHash,
+  destination,
   editor,
   flag,
   fly,

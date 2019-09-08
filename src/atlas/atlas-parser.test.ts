@@ -41,13 +41,17 @@ describe('atlas.json', () => {
 
   test.each(
     ObjectUtil.values(atlas).reduce(
-      (sum: Atlas.Cel[], val) =>
-        val.cels.length > 1 ? sum.concat(val.cels) : sum,
+      (sum: [Atlas.Cel, boolean][], val) =>
+        val.cels.length > 1
+          ? sum.concat(
+              val.cels.map((cel, i) => [cel, i === val.cels.length - 1])
+            )
+          : sum,
       []
     )
-  )('%# multi-Cel duration for Cel %p is < ∞', cel =>
-    expect(cel.duration).toBeLessThan(Number.POSITIVE_INFINITY)
-  )
+  )('%# multi-Cel duration for Cel %p is < ∞ (except last)', (cel, last) => {
+    if (!last) expect(cel.duration).toBeLessThan(Number.POSITIVE_INFINITY)
+  })
 
   test.each(ObjectUtil.values(atlas))(
     '%# every Animation has at lease one Cel %p',

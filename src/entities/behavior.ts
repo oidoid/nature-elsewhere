@@ -25,19 +25,15 @@ export const Behavior = Object.freeze({
     level: Level,
     _atlas: Atlas,
     _cam: Rect,
-    recorder: Recorder
+    _recorder: Recorder
   ): void {
     if (state.id !== 'backpacker')
       throw new Error(`Unsupported ID "${state.id}".`)
     let rect = state.states[state.state]
     let {x, y} = rect
 
-    const [set] = recorder.combo.slice(-1)
-    const pick = set && set[InputSource.POINTER_PICK]
-    const dst =
-      pick && pick.bits === InputBit.PICK
-        ? XY.trunc(XY.add(pick.xy, {x: -4, y: -rect.h + 2}))
-        : rect
+    const pick = (<any>state).dst
+    const dst = pick ? XY.trunc(XY.add(pick, {x: -4, y: -rect.h + 2})) : rect
     const left = dst.x < Math.trunc(x)
     const right = dst.x > Math.trunc(x)
     const up = dst.y < Math.trunc(y)
@@ -47,7 +43,7 @@ export const Behavior = Object.freeze({
     const hypotenuse = 0.18
     let s = diagonal ? hypotenuse : Math.sqrt(hypotenuse * hypotenuse * 2)
 
-    if (pick && pick.bits === InputBit.PICK) {
+    if (pick) {
       if (up) (y -= s), (state.state = 'walkUp'), (state.scale.x = 1)
       if (down) (y += s), (state.state = 'walkDown'), (state.scale.x = 1)
       if (left) x -= s
@@ -89,10 +85,10 @@ export const Behavior = Object.freeze({
 
     const idle =
       !pick ||
-      !pick.bits ||
-      (Math.trunc(x) === dst.x && Math.trunc(y) === dst.y)
+      (Math.trunc(x) === dst.x && Math.trunc(y) === dst.y) ||
+      (collision.x && collision.y)
 
-    if (idle)
+    if (idle) {
       state.state =
         state.state === 'walkUp' || state.state === 'idleUp'
           ? 'idleUp'
@@ -101,7 +97,10 @@ export const Behavior = Object.freeze({
             state.state === 'walkLeft'
           ? 'idleRight'
           : 'idleDown'
-
+      const destination = entities.find(({id}) => id === 'destination')
+      if (destination) (<any>destination).state = 'hidden'
+      delete (<any>state).dst
+    }
     rect = state.states[state.state]
     state.states[state.state] = ImageRect.moveTo(state.states[state.state], {
       x,
@@ -157,7 +156,7 @@ export const Behavior = Object.freeze({
   },
   CURSOR(
     state: Mutable<Entity>,
-    _entities: readonly Entity[],
+    entities: readonly Entity[],
     _level: Level,
     _atlas: Atlas,
     _cam: Rect,
@@ -166,16 +165,40 @@ export const Behavior = Object.freeze({
     const [set] = recorder.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
     const point = set && set[InputSource.POINTER_POINT]
+    const xy =
+      pick && pick.bits === InputBit.PICK
+        ? pick.xy
+        : point
+        ? point.xy
+        : undefined
+
+    const rect = state.states[state.state]
+    if (xy) state.states[state.state] = ImageRect.moveTo(rect, xy)
+
     if (pick && pick.bits === InputBit.PICK) {
-      state.state = 'pick'
-      const rect = state.states[state.state]
-      state.states[state.state] = ImageRect.moveTo(rect, pick.xy)
-    } else {
-      state.state = 'point'
-      if (point) {
-        const rect = state.states[state.state]
-        state.states[state.state] = ImageRect.moveTo(rect, point.xy)
-      }
+      const player = entities.find(({id}) => id === 'backpacker')
+      if (player) (<any>player).dst = xy
+    }
+  },
+  DESTINATION(
+    state: Mutable<Entity>,
+    _entities: readonly Entity[],
+    _level: Level,
+    _atlas: Atlas,
+    _cam: Rect,
+    recorder: Recorder
+  ) {
+    const [set] = recorder.combo.slice(-1)
+    const pick = set && set[InputSource.POINTER_PICK]
+    if (pick && pick.bits === InputBit.PICK) {
+      state.state = 'visible'
+      state.states[state.state].images.forEach(
+        img => (((<any>img).exposure = 0), ((<any>img).period = 0))
+      )
+      state.states[state.state] = ImageRect.moveTo(
+        state.states[state.state],
+        pick.xy
+      )
     }
   }
 })

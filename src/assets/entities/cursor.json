@@ -3,8 +3,5 @@
   "updateType": "ALWAYS",
   "behavior": "CURSOR",
   "state": "point",
-  "states": {
-    "point": [{"id": "palette grey", "layer": "UI_CURSOR"}],
-    "pick": [{"id": "mem-font 120", "x": -1, "y": -2, "layer": "UI_CURSOR"}]
-  }
+  "states": {"point": [{"id": "palette grey", "layer": "UI_CURSOR"}]}
 }

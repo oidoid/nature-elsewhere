@@ -42,10 +42,10 @@ export namespace Entity {
     time: number,
     recorder: Recorder
   ): readonly Image[] => {
-    const rect = state.states[state.state]
-    if (state.updateType === 'NEVER') return rect.images
+    if (state.updateType === 'NEVER') return state.states[state.state].images
     ;(state.vx += state.ax * time), (state.vy += state.ay * time)
     Behavior[state.behavior](state, entities, level, atlas, cam, recorder)
+    const rect = state.states[state.state]
     rect.images.forEach(img => Image.animate(img, atlas, time))
     return rect.images
   }
