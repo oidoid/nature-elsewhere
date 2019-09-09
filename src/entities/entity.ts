@@ -2,16 +2,16 @@ import {Atlas} from '../atlas/atlas'
 import {Behavior} from './behavior'
 import {Image} from '../images/image'
 import {ImageRect} from '../images/image-rect'
+import {Level} from '../levels/level'
 import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
-import {Level} from '../levels/level'
 
 /** Images and behavior. */
 export interface Entity {
   readonly id: string
-  readonly state: string
+  state: string
   readonly updateType: UpdateType.Key
   readonly behavior: Behavior.Key
   readonly collisions: readonly Rect[]
@@ -24,7 +24,7 @@ type t = Entity
 
 export namespace Entity {
   export const update = (
-    val: Mutable<t>,
+    val: t,
     entities: readonly t[],
     level: Level,
     atlas: Atlas,
@@ -37,4 +37,17 @@ export namespace Entity {
     val.states[val.state].images.forEach(val => Image.animate(val, atlas, time))
     return val.states[val.state].images
   }
+
+  export const velocity = (
+    {vx, vy}: t,
+    horizontal: boolean,
+    vertical: boolean
+  ): number =>
+    horizontal && vertical
+      ? vx // fix all this
+      : horizontal
+      ? Math.sqrt(vx * vx + vy * vy)
+      : vertical
+      ? Math.sqrt(vx * vx + vy * vy)
+      : 0
 }

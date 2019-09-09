@@ -4,6 +4,8 @@
   "behavior": "BACKPACKER",
   "state": "idleDown",
   "collisions": [{"x": 2, "y": 12, "w": 4, "h": 3}],
+  "vx": 0.14,
+  "vy": 0.14,
   "states": {
     "idleDown": [
       {"id": "backpacker idleDown"},

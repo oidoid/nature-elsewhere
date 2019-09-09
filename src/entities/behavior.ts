@@ -12,18 +12,11 @@ import {RectArray} from '../math/rect-array'
 
 export const Behavior = Object.freeze({
   STATIC() {},
-  CIRCLE(val: Mutable<Entity>) {
+  CIRCLE(val: Entity) {
     const rect = val.states[val.state]
     val.states[val.state] = ImageRect.moveBy(rect, {x: val.vx, y: val.vy})
   },
-  BACKPACKER(
-    val: Mutable<Entity>,
-    entities: readonly Entity[],
-    level: Level,
-    _atlas: Atlas,
-    _cam: Rect,
-    _recorder: Recorder
-  ): void {
+  BACKPACKER(val: Entity, entities: readonly Entity[], level: Level): void {
     if (val.id !== 'backpacker') throw new Error(`Unsupported ID "${val.id}".`)
     let rect = val.states[val.state]
     let {x, y} = rect
@@ -34,26 +27,27 @@ export const Behavior = Object.freeze({
     const right = dst.x > Math.trunc(x)
     const up = dst.y < Math.trunc(y)
     const down = dst.y > Math.trunc(y)
-    const diagonal = (left || right) && (up || down)
-    const animateHorizontal = Math.abs(x - dst.x) > 8
-    const hypotenuse = 0.18
-    let s = diagonal ? hypotenuse : Math.sqrt(hypotenuse * hypotenuse * 2)
+    const speed = Entity.velocity(val, left || right, up || down)
 
     if (pick) {
-      if (up) (y -= s), (val.state = 'walkUp'), (val.scale.x = 1)
-      if (down) (y += s), (val.state = 'walkDown'), (val.scale.x = 1)
-      if (left) x -= s
-      if (left && animateHorizontal)
-        (val.state = 'walkRight'), (val.scale.x = -1)
-      if (right) x += s
-      if (right && animateHorizontal)
-        (val.state = 'walkRight'), (val.scale.x = 1)
+      if (up) (y -= speed), (val.state = 'walkUp'), (val.scale.x = 1)
+      if (down) (y += speed), (val.state = 'walkDown'), (val.scale.x = 1)
+
+      const animateHorizontal = Math.abs(x - dst.x) > 8
+      if (left) {
+        x -= speed
+        if (animateHorizontal) (val.state = 'walkRight'), (val.scale.x = -1)
+      }
+      if (right) {
+        x += speed
+        if (animateHorizontal) (val.state = 'walkRight'), (val.scale.x = 1)
+      }
     }
 
     const collision = collides(val, XY.trunc({x, y}), level, entities)
       ? {x: true, y: true}
       : {x: false, y: false}
-    if (diagonal && collision.x && collision.y) {
+    if ((left || right) && (up || down) && collision.x && collision.y) {
       collision.x = collides(
         val,
         {x: Math.trunc(x), y: Math.trunc(rect.y)},
@@ -104,7 +98,7 @@ export const Behavior = Object.freeze({
     })
   },
   FOLLOW_PLAYER(
-    _val: Mutable<Entity>,
+    _val: Entity,
     entities: readonly Entity[],
     level: Level,
     _atlas: Atlas,
@@ -125,7 +119,7 @@ export const Behavior = Object.freeze({
       )
     }
   },
-  WRAPAROUND(val: Mutable<Entity>, _entities: readonly Entity[], level: Level) {
+  WRAPAROUND(val: Entity, _entities: readonly Entity[], level: Level) {
     const rect = val.states[val.state]
     const xy = {
       x: NumberUtil.wrap(rect.x + val.vx, -rect.w, level.w),
@@ -134,7 +128,7 @@ export const Behavior = Object.freeze({
     val.states[val.state] = ImageRect.moveTo(rect, xy)
   },
   FOLLOW_CAM(
-    val: Mutable<Entity>,
+    val: Entity,
     _entities: readonly Entity[],
     _level: Level,
     _atlas: Atlas,
@@ -147,7 +141,7 @@ export const Behavior = Object.freeze({
     })
   },
   CURSOR(
-    val: Mutable<Entity>,
+    val: Entity,
     entities: readonly Entity[],
     _level: Level,
     _atlas: Atlas,
@@ -176,7 +170,7 @@ export const Behavior = Object.freeze({
     } else if (point) val.state = 'visible'
   },
   DESTINATION(
-    val: Mutable<Entity>,
+    val: Entity,
     _entities: readonly Entity[],
     _level: Level,
     _atlas: Atlas,
