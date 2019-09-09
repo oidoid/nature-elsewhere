@@ -4,6 +4,7 @@
   "h": 128,
   "minSize": {"w": 128, "h": 128},
   "entities": [
+    {"id": "cursor"},
     {
       "states": {
         "0": [
@@ -19,6 +20,6 @@
       "text": "start\noptions\nlevel editor\nexit"
     },
     {"id": "dateVersionHash", "x": 1, "y": 123, "layer": "UI_LO"},
-    {"id": "cursor"}
+    {"id": "tinyBackpacker", "x": 50, "y": 50}
   ]
 }

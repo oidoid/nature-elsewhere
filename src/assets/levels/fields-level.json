@@ -5,6 +5,7 @@
   "minSize": {"w": 96, "h": 96},
   "entities": [
     {"id": "cursor"},
+    {"id": "toolbar", "x": 1, "y": 123, "layer": "UI_LO"},
     {"id": "destination"},
     {
       "states": {

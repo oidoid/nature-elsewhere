@@ -2,10 +2,10 @@ import {Atlas} from '../atlas/atlas'
 import {Image} from '../images/image'
 import {Entity} from '../entities/entity'
 import {InstanceBuffer} from './instance-buffer'
+import {Level} from '../levels/level'
 import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
-import {Level} from '../levels/level'
 
 export interface Store {
   readonly layout: ShaderLayout
@@ -35,20 +35,12 @@ export namespace Store {
   ): t => {
     const images = entities
       .filter(
-        entity =>
-          entity.updateType === 'ALWAYS' ||
-          Rect.intersects(entity.states[entity.state], cam)
+        val =>
+          val.updateType === 'ALWAYS' ||
+          Rect.intersects(val.states[val.state], cam)
       )
-      .map((entity, _, entities) =>
-        Entity.update(
-          entity,
-          entities,
-          level,
-          atlas,
-          cam,
-          milliseconds,
-          recorder
-        )
+      .map((val, _, entities) =>
+        Entity.update(val, entities, level, atlas, cam, milliseconds, recorder)
       )
       .reduce((ret: Image[], val) => [...ret, ...val.images], [])
       .sort(Image.compare)

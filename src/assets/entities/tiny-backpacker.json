@@ -1,0 +1,5 @@
+{
+  "id": "tinyBackpacker",
+  "updateType": "IF_VISIBLE",
+  "states": {"0": [{"id": "tiny-backpacker"}]}
+}

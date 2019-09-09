@@ -1,0 +1,13 @@
+{
+  "id": "toolbar",
+  "updateType": "ALWAYS",
+  "behavior": "FOLLOW_CAM",
+  "states": {
+    "0": [
+      {"id": "flag"},
+      {"id": "flag", "x": 4},
+      {"id": "flag", "x": 8},
+      {"id": "arrow upRight", "x": 12}
+    ]
+  }
+}

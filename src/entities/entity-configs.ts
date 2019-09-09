@@ -11,6 +11,7 @@ import * as dateVersionHash from '../assets/entities/date-version-hash.json'
 import * as destination from '../assets/entities/destination.json'
 import * as editor from '../assets/entities/editor.json'
 import {EntityConfig} from './entity-config'
+import * as toolbar from '../assets/entities/toolbar.json'
 import * as flag from '../assets/entities/flag.json'
 import * as fly from '../assets/entities/fly.json'
 import * as followPlayer from '../assets/entities/follow-player.json'
@@ -24,6 +25,7 @@ import * as pyramid from '../assets/entities/pyramid.json'
 import * as snake from '../assets/entities/snake.json'
 import * as subshrub from '../assets/entities/subshrub.json'
 import * as text from '../assets/entities/text.json'
+import * as tinyBackpacker from '../assets/entities/tiny-backpacker.json'
 import * as tree from '../assets/entities/tree.json'
 
 export const EntityConfigs: Readonly<
@@ -54,5 +56,7 @@ export const EntityConfigs: Readonly<
   snake,
   subshrub,
   text,
+  tinyBackpacker,
+  toolbar,
   tree
 })

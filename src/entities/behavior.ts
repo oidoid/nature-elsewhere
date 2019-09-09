@@ -144,7 +144,7 @@ export const Behavior = Object.freeze({
   ) {
     const rect = val.states[val.state]
     val.states[val.state] = ImageRect.moveTo(rect, {
-      x: 1,
+      x: cam.x + 1,
       y: cam.y + cam.h - (rect.h + 1)
     })
   },
