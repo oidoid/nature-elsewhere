@@ -172,8 +172,11 @@ export const Behavior = Object.freeze({
 
     if (pick && pick.bits === InputBit.PICK) {
       const player = entities.find(({id}) => id === 'backpacker')
-      if (player) (<any>player).dst = xy
-    }
+      if (player) {
+        val.state = 'hidden'
+        ;(<any>player).dst = xy
+      } else val.state = 'visible'
+    } else if (point) val.state = 'visible'
   },
   DESTINATION(
     val: Mutable<Entity>,

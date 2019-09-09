@@ -2,6 +2,9 @@
   "id": "cursor",
   "updateType": "ALWAYS",
   "behavior": "CURSOR",
-  "state": "point",
-  "states": {"point": [{"id": "palette grey", "layer": "UI_CURSOR"}]}
+  "state": "hidden",
+  "states": {
+    "hidden": [],
+    "visible": [{"id": "palette grey", "layer": "UI_CURSOR"}]
+  }
 }

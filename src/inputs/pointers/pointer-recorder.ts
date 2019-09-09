@@ -33,7 +33,7 @@ export namespace PointerRecorder {
   ): void => {
     if ((!val.pick || !val.pick.bits) && ev.type === 'pointermove')
       val.point = point(canvasWH, cam, ev)
-    else val.pick = pick(canvasWH, cam, ev)
+    else (val.pick = pick(canvasWH, cam, ev)), delete val.point
     ev.preventDefault()
   }
 }
