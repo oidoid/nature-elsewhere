@@ -18,8 +18,6 @@ export interface Entity {
   readonly scale: Mutable<XY>
   readonly vx: number
   readonly vy: number
-  readonly ax: number
-  readonly ay: number
   readonly states: Record<string, ImageRect>
 }
 type t = Entity
@@ -35,10 +33,8 @@ export namespace Entity {
     recorder: Recorder
   ): readonly Image[] => {
     if (val.updateType === 'NEVER') return val.states[val.state].images
-    ;(val.vx += val.ax * time), (val.vy += val.ay * time)
     Behavior[val.behavior](val, entities, level, atlas, cam, recorder)
-    const rect = val.states[val.state]
-    rect.images.forEach(img => Image.animate(img, atlas, time))
-    return rect.images
+    val.states[val.state].images.forEach(val => Image.animate(val, atlas, time))
+    return val.states[val.state].images
   }
 }

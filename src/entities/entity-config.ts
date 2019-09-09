@@ -13,8 +13,6 @@ export interface EntityConfig extends Partial<XY> {
   readonly scale?: Partial<XY>
   readonly vx?: number
   readonly vy?: number
-  readonly ax?: number
-  readonly ay?: number
   readonly states?: Readonly<Record<string, readonly ImageConfig[]>>
   readonly period?: number
 }

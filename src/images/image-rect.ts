@@ -23,9 +23,6 @@ export namespace ImageRect {
   export const moveBy = (val: t, by: XY): t => {
     if (!by.x && !by.y) return val
     val.images.forEach(val => Image.moveBy(val, by))
-    return {
-      ...Rect.add(val, {x: by.x, y: by.y, w: 0, h: 0}),
-      images: val.images
-    }
+    return {...Rect.moveBy(val, {x: by.x, y: by.y}), images: val.images}
   }
 }

@@ -32,8 +32,6 @@ export namespace EntityParser {
       scale: defaults.scale,
       vx: defaults.vx,
       vy: defaults.vy,
-      ax: defaults.ax,
-      ay: defaults.ay,
       states: ObjectUtil.entries(defaults.states).reduce(
         (sum, [key, val]) => ({
           ...sum,

@@ -1,8 +1,8 @@
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
 import {Layer} from './layer'
-import {XY} from '../math/xy'
 import {WH} from '../math/wh'
+import {XY} from '../math/xy'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same
@@ -11,7 +11,7 @@ import {WH} from '../math/wh'
     Bounds (x, y, w, and h members) are the union of all Entity images. This is
     used for quick collision detections such checking if the Entity is on
     screen. x and y are in in level coordinates. */
-export interface Image extends Mutable<XY>, WH, Animator {
+export interface Image extends Mutable<XY>, WH, Mutable<Animator> {
   readonly id: string
   readonly scale: XY
   readonly layer: Layer.Key
