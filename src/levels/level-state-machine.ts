@@ -15,7 +15,7 @@ type t = LevelStateMachine
 
 export namespace LevelStateMachine {
   export const make = (layout: ShaderLayout, atlas: Atlas): t => ({
-    level: LevelParser.parse(atlas, LevelConfigs.fields),
+    level: LevelParser.parse(atlas, LevelConfigs.shader),
     store: Store.make(layout, atlas)
   })
 

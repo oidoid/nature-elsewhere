@@ -33,7 +33,6 @@ export namespace Store {
     milliseconds: number,
     recorder: Recorder
   ): t => {
-    const camCopy = {...cam}
     const images = entities
       .filter(
         entity =>
@@ -46,19 +45,17 @@ export namespace Store {
           entities,
           level,
           atlas,
-          camCopy,
+          cam,
           milliseconds,
           recorder
         )
       )
-      .reduce((ret: Image[], val) => [...ret, ...val], [])
+      .reduce((ret: Image[], val) => [...ret, ...val.images], [])
       .sort(Image.compare)
 
     const size = InstanceBuffer.size(layout, images.length)
     if (dat.byteLength < size) dat = InstanceBuffer.make(size * 2)
     images.forEach((img, i) => InstanceBuffer.set(layout, atlas, dat, i, img))
-    ;(<any>cam).x = camCopy.x
-    ;(<any>cam).y = camCopy.y
     return {layout, atlas, dat, len: images.length}
   }
 }

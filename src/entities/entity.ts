@@ -31,11 +31,11 @@ export namespace Entity {
     cam: Rect,
     time: number,
     recorder: Recorder
-  ): readonly Image[] => {
-    if (val.updateType === 'NEVER') return val.states[val.state].images
+  ): ImageRect => {
+    if (val.updateType === 'NEVER') return val.states[val.state]
     Behavior[val.behavior](val, entities, level, atlas, cam, recorder, time)
     val.states[val.state].images.forEach(val => Image.animate(val, atlas, time))
-    return val.states[val.state].images
+    return val.states[val.state]
   }
 
   export const velocity = (
