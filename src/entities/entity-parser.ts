@@ -5,7 +5,6 @@ import * as defaultEntity from '../assets/entities/default.json'
 import {EntityConfig} from './entity-config'
 import {EntityConfigs} from './entity-configs'
 import {Entity} from './entity'
-import {Image} from '../images/image'
 import {ImageParser} from '../images/image-parser'
 import {ImageRect} from '../images/image-rect'
 import {JSONObject, JSONUtil} from '../utils/json-util'
@@ -65,11 +64,7 @@ export namespace EntityParser {
     const ctor = imagesFactory[defaults.id]
     const state: Entity = ctor ? ctor(atlas, entity) : entity
 
-    Object.values(state.states).forEach(rect => {
-      const {w, h} = Image.target(...rect.images)
-      ;(<any>rect).w = w
-      ;(<any>rect).h = h
-    })
+    Object.values(state.states).forEach(ImageRect.invalidate)
 
     state.states[state.state] = ImageRect.moveBy(state.states[state.state], {
       x: defaults.x,
