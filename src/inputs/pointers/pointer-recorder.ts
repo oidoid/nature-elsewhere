@@ -16,24 +16,24 @@ type t = PointerRecorder
 export namespace PointerRecorder {
   export const make = (): t => ({})
 
-  export const record = (state: t, recorder: Recorder): void => {
-    const inputs = [state.pick, state.point].filter(ArrayUtil.is)
+  export const record = (val: t, recorder: Recorder): void => {
+    const inputs = [val.pick, val.point].filter(ArrayUtil.is)
     inputs.forEach(input => Recorder.record(recorder, input))
   }
 
-  export const reset = (state: t): void => {
-    delete state.point, delete state.pick
+  export const reset = (val: t): void => {
+    delete val.point, delete val.pick
   }
 
   export const onEvent = (
-    state: t,
+    val: t,
     canvasWH: WH,
     cam: Rect,
     ev: PointerEvent
   ): void => {
-    if ((!state.pick || !state.pick.bits) && ev.type === 'pointermove')
-      state.point = point(canvasWH, cam, ev)
-    else state.pick = pick(canvasWH, cam, ev)
+    if ((!val.pick || !val.pick.bits) && ev.type === 'pointermove')
+      val.point = point(canvasWH, cam, ev)
+    else val.pick = pick(canvasWH, cam, ev)
     ev.preventDefault()
   }
 }

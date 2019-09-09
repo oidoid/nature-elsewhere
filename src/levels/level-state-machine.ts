@@ -20,20 +20,20 @@ export namespace LevelStateMachine {
   }
 
   export const update = (
-    state: t,
+    val: t,
     cam: Rect,
     time: number,
     recorder: Recorder
   ): LevelStateMachine => {
-    if (!state.level) return state
+    if (!val.level) return val
     const store = Store.update(
-      state.store,
+      val.store,
       cam,
-      state.level.entities,
-      state.level,
+      val.level.entities,
+      val.level,
       time,
       recorder
     )
-    return {level: state.level, store}
+    return {level: val.level, store}
   }
 }

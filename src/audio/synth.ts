@@ -9,36 +9,33 @@ export namespace Synth {
   export const make = (): t => ({context: new AudioContext()})
 
   export const play = (
-    state: t,
+    val: t,
     type: OscillatorType,
     startFrequency: number,
     endFrequency: number,
     duration: number
   ): t => {
-    const oscillator = state.context.createOscillator()
-    const gain = state.context.createGain()
+    const oscillator = val.context.createOscillator()
+    const gain = val.context.createGain()
 
     oscillator.type = type
-    oscillator.frequency.setValueAtTime(
-      startFrequency,
-      state.context.currentTime
-    )
+    oscillator.frequency.setValueAtTime(startFrequency, val.context.currentTime)
     oscillator.frequency.exponentialRampToValueAtTime(
       endFrequency,
-      state.context.currentTime + duration
+      val.context.currentTime + duration
     )
 
-    gain.gain.setValueAtTime(1, state.context.currentTime)
+    gain.gain.setValueAtTime(1, val.context.currentTime)
     gain.gain.exponentialRampToValueAtTime(
       0.01,
-      state.context.currentTime + duration
+      val.context.currentTime + duration
     )
 
     oscillator.connect(gain)
-    gain.connect(state.context.destination)
+    gain.connect(val.context.destination)
 
     oscillator.start()
-    oscillator.stop(state.context.currentTime + duration)
-    return {...state, oscillator, gain}
+    oscillator.stop(val.context.currentTime + duration)
+    return {...val, oscillator, gain}
   }
 }

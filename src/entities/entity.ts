@@ -35,7 +35,7 @@ export namespace Entity {
   }
 
   export const update = (
-    state: Mutable<t>,
+    val: Mutable<t>,
     entities: readonly t[],
     level: Level,
     atlas: Atlas,
@@ -43,10 +43,10 @@ export namespace Entity {
     time: number,
     recorder: Recorder
   ): readonly Image[] => {
-    if (state.updateType === 'NEVER') return state.states[state.state].images
-    ;(state.vx += state.ax * time), (state.vy += state.ay * time)
-    Behavior[state.behavior](state, entities, level, atlas, cam, recorder)
-    const rect = state.states[state.state]
+    if (val.updateType === 'NEVER') return val.states[val.state].images
+    ;(val.vx += val.ax * time), (val.vy += val.ay * time)
+    Behavior[val.behavior](val, entities, level, atlas, cam, recorder)
+    const rect = val.states[val.state]
     rect.images.forEach(img => Image.animate(img, atlas, time))
     return rect.images
   }

@@ -34,42 +34,37 @@ export namespace InputRouter {
     return ret
   }
 
-  export const register = (state: t, register: boolean): void => {
+  export const register = (val: t, register: boolean): void => {
     const fn = register ? 'addEventListener' : 'removeEventListener'
     ;['pointermove', 'pointerup', 'pointerdown'].forEach(ev =>
-      state.window[fn](ev, state.onPointer)
+      val.window[fn](ev, val.onPointer)
     )
-    state.window[fn]('keyup', <EventListenerOrEventListenerObject>state.onKey)
-    state.window[fn]('keydown', <EventListenerOrEventListenerObject>state.onKey)
+    val.window[fn]('keyup', <EventListenerOrEventListenerObject>val.onKey)
+    val.window[fn]('keydown', <EventListenerOrEventListenerObject>val.onKey)
   }
 
   export const record = (
-    state: t,
+    val: t,
     recorder: Recorder,
     viewport: WH,
     cam: Rect
   ): void => {
-    state.canvasWH = viewport
-    state.cam = cam
-    const input = {source: InputSource.KEYBOARD, bits: state.keyboardBits}
+    val.canvasWH = viewport
+    val.cam = cam
+    const input = {source: InputSource.KEYBOARD, bits: val.keyboardBits}
     Recorder.record(recorder, input)
-    PointerRecorder.record(state.pointerRecorder, recorder)
-    GamepadRecorder.record(recorder, state.window.navigator)
+    PointerRecorder.record(val.pointerRecorder, recorder)
+    GamepadRecorder.record(recorder, val.window.navigator)
   }
 
-  export const reset = (state: t): void => {
-    ;(state.keyboardBits = 0), PointerRecorder.reset(state.pointerRecorder)
-  }
-}
-
-const onKey = (state: t, event: KeyboardEvent): void => {
-  state.keyboardBits = KeyboardRecorder.onKey(state.keyboardBits, event)
-}
-
-const onPointer = (state: t, event: PointerEvent): void =>
-  PointerRecorder.onEvent(
-    state.pointerRecorder,
-    state.canvasWH,
-    state.cam,
-    event
+  export const reset = (val: t): void => (
+    (val.keyboardBits = 0), PointerRecorder.reset(val.pointerRecorder)
   )
+}
+
+const onKey = (val: t, event: KeyboardEvent): void => {
+  val.keyboardBits = KeyboardRecorder.onKey(val.keyboardBits, event)
+}
+
+const onPointer = (val: t, event: PointerEvent): void =>
+  PointerRecorder.onEvent(val.pointerRecorder, val.canvasWH, val.cam, event)

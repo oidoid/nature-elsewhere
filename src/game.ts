@@ -76,52 +76,52 @@ export namespace Game {
       : FunctionUtil.never()
   }
 
-  export const start = (state: t): void => {
+  export const start = (val: t): void => {
     // Disable the context menu.
-    state.doc.oncontextmenu = () => false
-    RendererStateMachine.start(state.rendererStateMachine)
-    InputRouter.register(state.inputRouter, true)
-    Synth.play(state.synth, 'sawtooth', 200, 500, 0.15)
+    val.doc.oncontextmenu = () => false
+    RendererStateMachine.start(val.rendererStateMachine)
+    InputRouter.register(val.inputRouter, true)
+    Synth.play(val.synth, 'sawtooth', 200, 500, 0.15)
   }
 
-  export const stop = (state: t): void => {
-    InputRouter.register(state.inputRouter, false)
-    RendererStateMachine.stop(state.rendererStateMachine)
+  export const stop = (val: t): void => {
+    InputRouter.register(val.inputRouter, false)
+    RendererStateMachine.stop(val.rendererStateMachine)
   }
 
-  const onFrame = (state: t, time: number): void => {
-    if (!state.levelStateMachine.level) return stop(state)
+  const onFrame = (val: t, time: number): void => {
+    if (!val.levelStateMachine.level) return stop(val)
 
-    const canvasWH = Viewport.canvasWH(state.doc)
-    const {minSize} = state.levelStateMachine.level
+    const canvasWH = Viewport.canvasWH(val.doc)
+    const {minSize} = val.levelStateMachine.level
     const scale = Viewport.scale(canvasWH, minSize, 0)
-    ;({w: state.cam.w, h: state.cam.h} = Viewport.camWH(canvasWH, scale))
+    ;({w: val.cam.w, h: val.cam.h} = Viewport.camWH(canvasWH, scale))
 
-    InputRouter.record(state.inputRouter, state.recorder, canvasWH, state.cam)
-    Recorder.update(state.recorder, time)
+    InputRouter.record(val.inputRouter, val.recorder, canvasWH, val.cam)
+    Recorder.update(val.recorder, time)
 
-    const [set] = state.recorder.combo.slice(-1)
+    const [set] = val.recorder.combo.slice(-1)
     const bits = set && InputSet.bits(set) & ~InputBit.POINT
-    state.requestWindowSetting = state.requestWindowSetting(!!bits)
-    if (Build.dev) processDebugInput(state)
+    val.requestWindowSetting = val.requestWindowSetting(!!bits)
+    if (Build.dev) processDebugInput(val)
 
-    state.time += time
-    state.age += state.time - (state.time % state.tick)
-    while (state.levelStateMachine.level && state.time >= state.tick) {
-      state.time -= state.tick
-      state.levelStateMachine = LevelStateMachine.update(
-        state.levelStateMachine,
-        state.cam,
-        state.tick,
-        state.recorder
+    val.time += time
+    val.age += val.time - (val.time % val.tick)
+    while (val.levelStateMachine.level && val.time >= val.tick) {
+      val.time -= val.tick
+      val.levelStateMachine = LevelStateMachine.update(
+        val.levelStateMachine,
+        val.cam,
+        val.tick,
+        val.recorder
       )
     }
 
-    const {renderer} = state.rendererStateMachine
-    const {level, store} = state.levelStateMachine
+    const {renderer} = val.rendererStateMachine
+    const {level, store} = val.levelStateMachine
     if (level)
-      Renderer.render(renderer, state.age, canvasWH, scale, state.cam, store)
-    else stop(state)
+      Renderer.render(renderer, val.age, canvasWH, scale, val.cam, store)
+    else stop(val)
   }
 
   const processDebugInput = ({rendererStateMachine, recorder}: t): void => {

@@ -104,18 +104,18 @@ export namespace Renderer {
    * @arg scale Positive integer zoom.
    */
   export const render = (
-    state: t,
+    val: t,
     time: number,
     canvasWH: WH,
     scale: number,
     cam: Rect,
     {dat, len}: Store
   ): void => {
-    resize(state, canvasWH, scale, cam)
-    state.gl.uniform1ui(state.uniforms[state.layout.uniforms.time], time)
-    const perInstanceBuffer = state.perInstanceBuffer
-    GLUtil.bufferData(state.gl, perInstanceBuffer, dat, GL.DYNAMIC_READ)
-    state.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, uvLen, len)
+    resize(val, canvasWH, scale, cam)
+    val.gl.uniform1ui(val.uniforms[val.layout.uniforms.time], time)
+    const perInstanceBuffer = val.perInstanceBuffer
+    GLUtil.bufferData(val.gl, perInstanceBuffer, dat, GL.DYNAMIC_READ)
+    val.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, uvLen, len)
   }
 
   /** @arg canvasWH The desired resolution of the canvas in CSS pixels. E.g.,

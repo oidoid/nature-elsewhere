@@ -52,10 +52,10 @@ export namespace Image {
   export const compare = (lhs: t, rhs: t): number =>
     Layer[lhs.layer] - Layer[rhs.layer] || lhs.y + lhs.h - (rhs.y + rhs.h)
 
-  export const animate = (state: t, atlas: Atlas, time: number): t => {
-    const exposure = state.exposure + time
-    const animator = Animator.animate(atlas[state.id], state.period, exposure)
-    return Object.assign(state, animator)
+  export const animate = (val: t, atlas: Atlas, time: number): t => {
+    const exposure = val.exposure + time
+    const animator = Animator.animate(atlas[val.id], val.period, exposure)
+    return Object.assign(val, animator)
   }
 
   export const cel = ({id, period}: t, atlas: Atlas): Atlas.Cel =>

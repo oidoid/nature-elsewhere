@@ -12,27 +12,26 @@ import {RectArray} from '../math/rect-array'
 
 export const Behavior = Object.freeze({
   STATIC() {},
-  CIRCLE(state: Mutable<Entity>) {
-    const rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveBy(rect, {
-      x: state.vx,
-      y: state.vy
+  CIRCLE(val: Mutable<Entity>) {
+    const rect = val.states[val.state]
+    val.states[val.state] = ImageRect.moveBy(rect, {
+      x: val.vx,
+      y: val.vy
     })
   },
   BACKPACKER(
-    state: Mutable<Entity>,
+    val: Mutable<Entity>,
     entities: readonly Entity[],
     level: Level,
     _atlas: Atlas,
     _cam: Rect,
     _recorder: Recorder
   ): void {
-    if (state.id !== 'backpacker')
-      throw new Error(`Unsupported ID "${state.id}".`)
-    let rect = state.states[state.state]
+    if (val.id !== 'backpacker') throw new Error(`Unsupported ID "${val.id}".`)
+    let rect = val.states[val.state]
     let {x, y} = rect
 
-    const pick = (<any>state).dst
+    const pick = (<any>val).dst
     const dst = pick ? XY.trunc(XY.add(pick, {x: -4, y: -rect.h + 2})) : rect
     const left = dst.x < Math.trunc(x)
     const right = dst.x > Math.trunc(x)
@@ -44,29 +43,29 @@ export const Behavior = Object.freeze({
     let s = diagonal ? hypotenuse : Math.sqrt(hypotenuse * hypotenuse * 2)
 
     if (pick) {
-      if (up) (y -= s), (state.state = 'walkUp'), (state.scale.x = 1)
-      if (down) (y += s), (state.state = 'walkDown'), (state.scale.x = 1)
+      if (up) (y -= s), (val.state = 'walkUp'), (val.scale.x = 1)
+      if (down) (y += s), (val.state = 'walkDown'), (val.scale.x = 1)
       if (left) x -= s
       if (left && animateHorizontal)
-        (state.state = 'walkRight'), (state.scale.x = -1)
+        (val.state = 'walkRight'), (val.scale.x = -1)
       if (right) x += s
       if (right && animateHorizontal)
-        (state.state = 'walkRight'), (state.scale.x = 1)
+        (val.state = 'walkRight'), (val.scale.x = 1)
     }
 
-    const collision = collides(state, XY.trunc({x, y}), level, entities)
+    const collision = collides(val, XY.trunc({x, y}), level, entities)
       ? {x: true, y: true}
       : {x: false, y: false}
     if (diagonal && collision.x && collision.y) {
       collision.x = collides(
-        state,
+        val,
         {x: Math.trunc(x), y: Math.trunc(rect.y)},
         level,
         entities
       )
       if (collision.x)
         collision.y = collides(
-          state,
+          val,
           {x: Math.trunc(rect.x), y: Math.trunc(y)},
           level,
           entities
@@ -89,26 +88,26 @@ export const Behavior = Object.freeze({
       (collision.x && collision.y)
 
     if (idle) {
-      state.state =
-        state.state === 'walkUp' || state.state === 'idleUp'
+      val.state =
+        val.state === 'walkUp' || val.state === 'idleUp'
           ? 'idleUp'
-          : state.state === 'idleRight' ||
-            state.state === 'walkRight' ||
-            state.state === 'walkLeft'
+          : val.state === 'idleRight' ||
+            val.state === 'walkRight' ||
+            val.state === 'walkLeft'
           ? 'idleRight'
           : 'idleDown'
       const destination = entities.find(({id}) => id === 'destination')
       if (destination) (<any>destination).state = 'hidden'
-      delete (<any>state).dst
+      delete (<any>val).dst
     }
-    rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveTo(state.states[state.state], {
+    rect = val.states[val.state]
+    val.states[val.state] = ImageRect.moveTo(val.states[val.state], {
       x,
       y
     })
   },
   FOLLOW_PLAYER(
-    _state: Mutable<Entity>,
+    _val: Mutable<Entity>,
     entities: readonly Entity[],
     level: Level,
     _atlas: Atlas,
@@ -129,33 +128,29 @@ export const Behavior = Object.freeze({
       )
     }
   },
-  WRAPAROUND(
-    state: Mutable<Entity>,
-    _entities: readonly Entity[],
-    level: Level
-  ) {
-    const rect = state.states[state.state]
+  WRAPAROUND(val: Mutable<Entity>, _entities: readonly Entity[], level: Level) {
+    const rect = val.states[val.state]
     const xy = {
-      x: NumberUtil.wrap(rect.x + state.vx, -rect.w, level.w),
-      y: NumberUtil.wrap(rect.y + state.vy, -rect.h, level.h)
+      x: NumberUtil.wrap(rect.x + val.vx, -rect.w, level.w),
+      y: NumberUtil.wrap(rect.y + val.vy, -rect.h, level.h)
     }
-    state.states[state.state] = ImageRect.moveTo(rect, xy)
+    val.states[val.state] = ImageRect.moveTo(rect, xy)
   },
   FOLLOW_CAM(
-    state: Mutable<Entity>,
+    val: Mutable<Entity>,
     _entities: readonly Entity[],
     _level: Level,
     _atlas: Atlas,
     cam: Rect
   ) {
-    const rect = state.states[state.state]
-    state.states[state.state] = ImageRect.moveTo(rect, {
+    const rect = val.states[val.state]
+    val.states[val.state] = ImageRect.moveTo(rect, {
       x: 1,
       y: cam.y + cam.h - (rect.h + 1)
     })
   },
   CURSOR(
-    state: Mutable<Entity>,
+    val: Mutable<Entity>,
     entities: readonly Entity[],
     _level: Level,
     _atlas: Atlas,
@@ -172,8 +167,8 @@ export const Behavior = Object.freeze({
         ? point.xy
         : undefined
 
-    const rect = state.states[state.state]
-    if (xy) state.states[state.state] = ImageRect.moveTo(rect, xy)
+    const rect = val.states[val.state]
+    if (xy) val.states[val.state] = ImageRect.moveTo(rect, xy)
 
     if (pick && pick.bits === InputBit.PICK) {
       const player = entities.find(({id}) => id === 'backpacker')
@@ -181,7 +176,7 @@ export const Behavior = Object.freeze({
     }
   },
   DESTINATION(
-    state: Mutable<Entity>,
+    val: Mutable<Entity>,
     _entities: readonly Entity[],
     _level: Level,
     _atlas: Atlas,
@@ -191,14 +186,11 @@ export const Behavior = Object.freeze({
     const [set] = recorder.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
     if (pick && pick.bits === InputBit.PICK) {
-      state.state = 'visible'
-      state.states[state.state].images.forEach(
+      val.state = 'visible'
+      val.states[val.state].images.forEach(
         img => (((<any>img).exposure = 0), ((<any>img).period = 0))
       )
-      state.states[state.state] = ImageRect.moveTo(
-        state.states[state.state],
-        pick.xy
-      )
+      val.states[val.state] = ImageRect.moveTo(val.states[val.state], pick.xy)
     }
   }
 })
@@ -208,24 +200,27 @@ export namespace Behavior {
 }
 
 const collides = (
-  entity: Entity,
-  xy: XY, // Overrides entity.xy
+  val: Entity,
+  xy: XY, // Overrides val.xy
   level: Level,
   entities: readonly Entity[]
 ): boolean => {
   const plane = {
     x: xy.x,
     y: xy.y,
-    w: entity.states[entity.state].w,
-    h: entity.states[entity.state].h
+    w: val.states[val.state].w,
+    h: val.states[val.state].h
   } // it seems unideal that i have to go to the image state for this if collision data is moving up. can i move collision data into the staete?
   const levelRect = {x: 0, y: 0, w: level.w, h: level.h}
   if (!Rect.within(plane, levelRect)) return true
-  const rectArray = RectArray.moveBy(entity.collisions, xy)
-  return !!entities.find(val => {
+  const rectArray = RectArray.moveBy(val.collisions, xy)
+  return !!entities.find(entity => {
     if (val === entity) return
-    if (!Rect.intersects(plane, val.states[val.state])) return
-    const other = RectArray.moveBy(val.collisions, val.states[val.state])
-    return RectArray.intersects(rectArray, other)
+    if (!Rect.intersects(plane, entity.states[entity.state])) return
+    const entityRectArray = RectArray.moveBy(
+      entity.collisions,
+      entity.states[entity.state]
+    )
+    return RectArray.intersects(rectArray, entityRectArray)
   })
 }
