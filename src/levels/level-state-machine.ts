@@ -14,26 +14,20 @@ export interface LevelStateMachine {
 type t = LevelStateMachine
 
 export namespace LevelStateMachine {
-  export const make = (layout: ShaderLayout, atlas: Atlas): t => {
-    const level = LevelParser.parse(atlas, LevelConfigs.title)
-    return {level, store: Store.make(layout, atlas)}
-  }
+  export const make = (layout: ShaderLayout, atlas: Atlas): t => ({
+    level: LevelParser.parse(atlas, LevelConfigs.fields),
+    store: Store.make(layout, atlas)
+  })
 
   export const update = (
-    val: t,
+    {level, store}: t,
     cam: Rect,
     time: number,
     recorder: Recorder
-  ): LevelStateMachine => {
-    if (!val.level) return val
-    const store = Store.update(
-      val.store,
-      cam,
-      val.level.entities,
-      val.level,
-      time,
-      recorder
-    )
-    return {level: val.level, store}
-  }
+  ): LevelStateMachine => ({
+    level,
+    store: level
+      ? Store.update(store, cam, level.entities, level, time, recorder)
+      : store
+  })
 }

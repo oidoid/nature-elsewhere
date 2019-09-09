@@ -127,8 +127,7 @@ export namespace Renderer {
     scale: number,
     cam: Rect
   ): void => {
-    gl.canvas.width = canvasWH.w
-    gl.canvas.height = canvasWH.h
+    ;({w: gl.canvas.width, h: gl.canvas.height} = canvasWH)
 
     projection.set(project(cam))
     gl.uniformMatrix4fv(uniforms[layout.uniforms.projection], false, projection)
