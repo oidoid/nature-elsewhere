@@ -10,7 +10,7 @@ import * as cursor from '../assets/entities/cursor.json'
 import * as dateVersionHash from '../assets/entities/date-version-hash.json'
 import * as destination from '../assets/entities/destination.json'
 import * as editor from '../assets/entities/editor.json'
-import {Entity} from './entity'
+import {EntityConfig} from './entity-config.js'
 import * as flag from '../assets/entities/flag.json'
 import * as fly from '../assets/entities/fly.json'
 import * as followPlayer from '../assets/entities/follow-player.json'
@@ -27,7 +27,7 @@ import * as text from '../assets/entities/text.json'
 import * as tree from '../assets/entities/tree.json'
 
 export const EntityConfigs: Readonly<
-  Partial<Record<string, Entity.Config>>
+  Partial<Record<string, EntityConfig>>
 > = Object.freeze({
   backpacker,
   bee,

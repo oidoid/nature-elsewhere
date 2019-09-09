@@ -1,6 +1,8 @@
 import {Atlas} from '../atlas/atlas'
 import {Font} from './font'
 import {Image} from '../images/image'
+import {ImageConfig} from '../images/image-config'
+import {ImageParser} from '../images/image-parser'
 import * as memFont from '../assets/mem-font.json'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
@@ -20,7 +22,7 @@ export namespace Text {
   export const toImages = (
     atlas: Atlas,
     string: string,
-    opts?: Omit<Image.Config, 'id'>,
+    opts?: Omit<ImageConfig, 'id'>,
     y: number = 0,
     {w, h}: WH = {w: Number.POSITIVE_INFINITY, h: Number.POSITIVE_INFINITY}
   ): readonly Image[] => {
@@ -34,7 +36,7 @@ export namespace Text {
       if (position.y > y + h) break
 
       const id = 'mem-font ' + string.charCodeAt(i)
-      const image = Image.make(atlas, {
+      const image = ImageParser.parse(atlas, {
         id,
         ...opts,
         x: ((opts && opts.x) || 0) + position.x,

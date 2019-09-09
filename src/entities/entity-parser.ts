@@ -2,9 +2,11 @@ import {Atlas} from '../atlas/atlas'
 import {Behavior} from './behavior'
 import {Build} from '../utils/build'
 import * as defaultEntity from '../assets/entities/default.json'
+import {EntityConfig} from './entity-config'
 import {EntityConfigs} from './entity-configs'
 import {Entity} from './entity'
 import {Image} from '../images/image'
+import {ImageParser} from '../images/image-parser'
 import {ImageRect} from '../images/image-rect'
 import {JSONObject, JSONUtil} from '../utils/json-util'
 import {ObjectUtil} from '../utils/object-util'
@@ -14,8 +16,8 @@ import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
 
 export namespace EntityParser {
-  export const parse = (atlas: Atlas, cfg: Entity.Config): Entity => {
-    const defaults = <Required<Entity.Config> & {readonly scale: XY}>(
+  export const parse = (atlas: Atlas, cfg: EntityConfig): Entity => {
+    const defaults = <Required<EntityConfig> & {readonly scale: XY}>(
       JSONUtil.merge(
         defaultEntity,
         cfg.id ? <JSONObject>EntityConfigs[cfg.id] : {},
@@ -42,7 +44,7 @@ export namespace EntityParser {
             w: 0,
             h: 0,
             images: val.map(val =>
-              Image.make(atlas, {
+              ImageParser.parse(atlas, {
                 ...val,
                 // maybe i can pass this in from entity and use it when non-1. maybe same for w/h
                 scale: val.scale || defaults.scale,

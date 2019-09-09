@@ -1,5 +1,6 @@
 import {NumberUtil} from '../../math/number-util'
 import {ShaderLayout} from './shader-layout'
+import {ShaderLayoutConfig} from './shader-layout-config'
 
 enum DataTypeSize {
   BYTE = 1,
@@ -12,7 +13,7 @@ enum DataTypeSize {
 }
 
 export namespace ShaderLayoutParser {
-  export const parse = (config: ShaderLayout.Config): ShaderLayout => ({
+  export const parse = (config: ShaderLayoutConfig): ShaderLayout => ({
     uniforms: config.uniforms,
     perVertex: parseAttributes(0, config.perVertex),
     perInstance: parseAttributes(1, config.perInstance)
@@ -21,7 +22,7 @@ export namespace ShaderLayoutParser {
 
 const parseAttributes = (
   divisor: number,
-  configs: readonly ShaderLayout.AttributeConfig[]
+  configs: readonly ShaderLayoutConfig.Attribute[]
 ): ShaderLayout.AttributeBuffer => {
   const attributes = configs.reduce(reduceAttributeVariable, [])
   const maxDataTypeSize = attributes
@@ -38,7 +39,7 @@ const parseAttributes = (
 
 const reduceAttributeVariable = (
   layouts: readonly ShaderLayout.Attribute[],
-  {type, name, len}: ShaderLayout.AttributeConfig,
+  {type, name, len}: ShaderLayoutConfig.Attribute,
   index: number
 ): readonly ShaderLayout.Attribute[] => {
   const offset = index ? nextAttributeOffset(layouts[index - 1]) : 0

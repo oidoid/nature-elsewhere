@@ -14,12 +14,12 @@ All integral variables passed from JavaScript to WebGL are inherently truncated.
 When passing an independent variable, this implicit truncation by converting to
 shader input is acceptable. However, when deriving a renderable variable from
 another variable, the first must be truncated independently to avoid possible
-jitter.
+jitter. I.e., inconsistent results.
 
 E.g., consider deriving camera position at an offset from the player's position.
 The player may be at 0.1 and the camera follows at an offset of 100.9. The
 rendered player's position is implicitly truncated to 0. Depending on
-formulation, the rendered camera's position may be:
+formulation, the rendered camera's position may be (inconsistencies in bold):
 
 | Formula Type                  | Formula                  | Result   | Rendered player | Rendered camera | Rendered distance |
 | ----------------------------- | ------------------------ | -------- | --------------- | --------------- | ----------------- |
@@ -88,7 +88,7 @@ occur on the same frame.
 #### Shader Floating Point Limits
 
 My Pixel XL's [`mediump` precision is noticeably
-lower](https://stackoverflow.com/a/4430934/970346) than my laptop. Since the
+lower](https://stackoverflow.com/a/4430934/970346) than my laptop's. Since the
 program's execution time is fed into the shader as a floating point, this was
 quickly overflowing causing calculations to become quite out of sync. I've
 since increased the request to `highp`.
@@ -127,6 +127,9 @@ probably to change the canvas and viewport size to match the document every
 frame, and then do all the scaling in WebGL. This keeps all the math as a
 projection in WebGL which keeps things much simpler than diving into the world
 of CSS.
+
+Listening for window size events asynchronously seems to be a common pitfall as
+well, which I stumbled into while working with Phaser.
 
 This was all quite a frustration when combined with updating all the different
 Phaser framework subsystems and eventually led me to pursue WebGL.
@@ -750,7 +753,7 @@ The following abbreviations are only used for function locals:
 - ret: unambiguous return value or result, especially test subject (actual)
   result
 - rnd: unambiguous random value
-- val: unambiguous input value
+- val: unambiguous input, bundle state, or primary input value
 - i: unambiguous index
 - img: image
 

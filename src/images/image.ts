@@ -1,11 +1,10 @@
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
-import * as imageDefaults from '../assets/image.json'
-import {JSONUtil} from '../utils/json-util'
 import {Layer} from './layer'
 import {Limits} from '../math/limits'
 import {Rect} from '../math/rect'
 import {XY} from '../math/xy'
+import {RectArray} from '../math/rect-array'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same
@@ -14,40 +13,18 @@ import {XY} from '../math/xy'
     Bounds (x, y, w, and h members) are the union of all Entity images. This is
     used for quick collision detections such checking if the Entity is on
     screen. x and y are in in level coordinates. */
-export interface Image extends Required<Image.Config> {
+export interface Image extends Rect, Animator {
+  readonly id: string
   readonly scale: XY
   readonly layer: Layer.Key
+  readonly tx: number
+  readonly ty: number
+  readonly tvx: number
+  readonly tvy: number
 }
 type t = Image
 
 export namespace Image {
-  export interface Config extends Partial<Rect>, Partial<Animator> {
-    readonly id: string
-    readonly layer?: Layer.Key | string
-    readonly scale?: Partial<XY>
-    readonly tx?: number
-    readonly ty?: number
-    readonly tvx?: number
-    readonly tvy?: number
-  }
-
-  export const make = (atlas: Atlas, cfg: Config): t => {
-    if (!(cfg.id in atlas))
-      throw new Error(`Atlas missing animation "${cfg.id}".`)
-    const wh = {
-      w: Math.abs(cfg.scale && cfg.scale.x ? cfg.scale.x : 1) * atlas[cfg.id].w,
-      h: Math.abs(cfg.scale && cfg.scale.y ? cfg.scale.y : 1) * atlas[cfg.id].h
-    }
-    const ret = <Image>JSONUtil.merge(imageDefaults, wh, <any>cfg)
-    const layer = ret.layer
-    if (!isLayerKey(layer)) throw new Error(`Unknown Layer.Key "${layer}".`)
-    const scale =
-      cfg.scale && cfg.scale.x && cfg.scale.y ? <XY>cfg.scale : ret.scale
-    return {...ret, scale}
-  }
-
-  const isLayerKey = (val: string): val is Layer.Key => val in Layer
-
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */
   export const compare = (lhs: t, rhs: t): number =>
     Layer[lhs.layer] - Layer[rhs.layer] || lhs.y + lhs.h - (rhs.y + rhs.h)
@@ -61,10 +38,8 @@ export namespace Image {
   export const cel = ({id, period}: t, atlas: Atlas): Atlas.Cel =>
     atlas[id].cels[Animator.index(atlas[id].cels, period)]
 
-  export const target = (...images: readonly Image[]): Rect => {
-    const rects: readonly Rect[] = images
+  export const target = (...images: readonly t[]): Rect => {
     const fallback = {x: Limits.MIN_SHORT, y: Limits.MIN_SHORT, w: 0, h: 0}
-    const union = rects.length ? rects.reduce(Rect.union) : fallback
-    return {w: union.w, h: union.h, x: union.x, y: union.y}
+    return RectArray.union(images) || fallback
   }
 }

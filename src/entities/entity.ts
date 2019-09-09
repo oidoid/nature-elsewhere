@@ -9,31 +9,22 @@ import {XY} from '../math/xy'
 import {Level} from '../levels/level'
 
 /** Images and behavior. */
-export interface Entity
-  extends Omit<Required<Entity.Config>, 'states' | 'x' | 'y' | 'period'> {
+export interface Entity {
+  readonly id: string
+  readonly state: string
   readonly updateType: UpdateType.Key
   readonly behavior: Behavior.Key
+  readonly collisions: readonly Rect[]
   readonly scale: Mutable<XY>
+  readonly vx: number
+  readonly vy: number
+  readonly ax: number
+  readonly ay: number
   readonly states: Record<string, ImageRect>
 }
 type t = Entity
 
 export namespace Entity {
-  export interface Config extends Partial<XY> {
-    readonly id?: string
-    readonly state?: string
-    readonly updateType?: UpdateType.Key | string
-    readonly behavior?: Behavior.Key | string
-    readonly collisions?: readonly Rect[]
-    readonly scale?: Partial<XY>
-    readonly vx?: number
-    readonly vy?: number
-    readonly ax?: number
-    readonly ay?: number
-    readonly states?: Readonly<Record<string, readonly Image.Config[]>>
-    readonly period?: number
-  }
-
   export const update = (
     val: Mutable<t>,
     entities: readonly t[],
