@@ -9,29 +9,18 @@ import {ImageParser} from '../images/image-parser'
 import {ImageRect} from '../images/image-rect'
 import {JSONObject, JSONUtil} from '../utils/json-util'
 import {ObjectUtil} from '../utils/object-util'
-import {TextEntity} from './text-entity'
-import {TextLayout} from '../text/text-layout'
+import {Text} from './text'
 import {UpdateType} from '../store/update-type'
-import {XY} from '../math/xy'
+import {Image} from '../images/image'
+import {ImageConfig} from '../images/image-config'
 
 export namespace EntityParser {
   export const parse = (atlas: Atlas, cfg: EntityConfig): Entity => {
-    const defaults = <Required<EntityConfig> & {readonly scale: XY}>(
-      JSONUtil.merge(
-        defaultEntity,
-        cfg.id ? <JSONObject>EntityConfigs[cfg.id] : {},
-        <JSONObject>cfg
-      )
-    )
-    const entity: Entity = {
-      id: defaults.id,
-      state: defaults.state,
+    const defaults = parseDefaults(cfg)
+    const entity = {
+      ...defaults,
       updateType: parseUpdateType(defaults.updateType),
       behavior: parseBehaviorKey(defaults.behavior),
-      collisions: defaults.collisions,
-      scale: defaults.scale,
-      vx: defaults.vx,
-      vy: defaults.vy,
       states: ObjectUtil.entries(defaults.states).reduce(
         (sum, [key, val]) => ({
           ...sum,
@@ -40,20 +29,12 @@ export namespace EntityParser {
             y: 0,
             w: 0,
             h: 0,
-            images: val.map(val =>
-              ImageParser.parse(atlas, {
-                ...val,
-                // maybe i can pass this in from entity and use it when non-1. maybe same for w/h
-                scale: val.scale || defaults.scale,
-                period: defaults.period
-              })
-            )
+            images: val.map(val => parseImage(atlas, defaults, val))
           }
         }),
         {}
       )
     }
-    if ('text' in cfg) (<any>entity).text = cfg['text']
 
     // how to join states here?
     // there is a difference in the images in htat it's really just use a constructor template thingy
@@ -89,15 +70,35 @@ const isUpdateTypeKey = (val: string): val is UpdateType.Key =>
 const isBehaviorKey = (val: string): val is Behavior.Key => val in Behavior
 
 const newDateVersionHash = (atlas: Atlas, entity: Entity): Entity => {
-  // use the text fnuction
   const {date, version, hash} = Build
-  const images = TextLayout.toImages(atlas, `${date} v${version} (${hash})`)
-  return {...entity, states: {'0': {x: 0, y: 0, w: 0, h: 0, images}}}
+  const text = `${date} v${version} (${hash})`
+  return Text.make(atlas, {...entity, id: 'text', text})
 }
 
 const imagesFactory: Partial<
   Record<string, (atlas: Atlas, entity: Entity) => Entity>
 > = Object.freeze({
   dateVersionHash: newDateVersionHash,
-  text: TextEntity.make
+  text: Text.make
 })
+
+const parseDefaults = (cfg: EntityConfig): DeepRequired<EntityConfig> =>
+  <DeepRequired<EntityConfig>>(
+    JSONUtil.merge(
+      defaultEntity,
+      <JSONObject>(cfg.id && EntityConfigs[cfg.id]) || {},
+      <JSONObject>cfg
+    )
+  )
+
+const parseImage = (
+  atlas: Atlas,
+  defaults: DeepRequired<EntityConfig>,
+  val: ImageConfig
+): Image =>
+  ImageParser.parse(atlas, {
+    ...val,
+    // maybe i can pass this in from entity and use it when non-1. maybe same for w/h
+    scale: val.scale || defaults.scale,
+    period: defaults.period
+  })

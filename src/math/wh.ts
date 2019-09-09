@@ -1,7 +1,4 @@
-export interface WH {
-  readonly w: number
-  readonly h: number
-}
+export type WH = Readonly<{w: number; h: number}>
 type t = WH
 
 export namespace WH {

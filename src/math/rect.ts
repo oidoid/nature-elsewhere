@@ -3,7 +3,7 @@ import {XY} from './xy'
 
 /** Where XY describes the upper-left corner, or minimum, and XY + WH the
     bottom-right, or maximum. */
-export interface Rect extends WH, XY {}
+export type Rect = WH & XY
 type t = Rect
 
 export namespace Rect {

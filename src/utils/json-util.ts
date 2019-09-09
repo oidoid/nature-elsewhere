@@ -4,6 +4,7 @@ import {ObjectUtil} from './object-util'
 export type JSON = string | number | boolean | JSONObject | JSONArray
 export interface JSONObject extends Readonly<Record<string, JSON>> {}
 export interface JSONArray extends ReadonlyArray<JSON> {}
+type t = JSON
 
 export namespace JSONUtil {
   export const merge = (...val: readonly JSONObject[]): JSONObject => {
@@ -22,8 +23,8 @@ export namespace JSONUtil {
       }, {})
   }
 
-  export const copy = <T>(val: Readonly<T> & JSON): T =>
+  export const copy = <T>(val: Readonly<T> & t): T =>
     JSON.parse(JSON.stringify(val))
 }
 
-const isJSONObject = (val: JSON): val is JSONObject => ObjectUtil.is(val)
+const isJSONObject = (val: t): val is JSONObject => ObjectUtil.is(val)

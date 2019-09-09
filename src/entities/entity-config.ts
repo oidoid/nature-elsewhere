@@ -4,7 +4,7 @@ import {Rect} from '../math/rect'
 import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
 
-export interface EntityConfig extends Partial<XY> {
+export type EntityConfig = Partial<XY> & {
   readonly id?: string
   readonly state?: string
   readonly updateType?: UpdateType.Key | string
