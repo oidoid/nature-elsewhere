@@ -9,16 +9,16 @@ export namespace JSONUtil {
   export const merge = (...val: readonly JSONObject[]): JSONObject => {
     return val
       .map(ObjectUtil.entries)
-      .reduce((sum, val) => sum.concat(val), [])
-      .reduce((sum: JSONObject, [key, val]) => {
-        const prev = sum[key]
+      .reduce((ret, val) => ret.concat(val), [])
+      .reduce((ret: JSONObject, [key, val]) => {
+        const prev = ret[key]
         if (isJSONObject(prev) && isJSONObject(val)) val = merge(prev, val)
         else if (Array.isArray(prev))
           val = prev.concat(
             isJSONObject(val) || Array.isArray(val) ? copy(<any>val) : val
           )
         else if (isJSONObject(val) || Array.isArray(val)) val = copy(<any>val)
-        return {...sum, [key]: val}
+        return {...ret, [key]: val}
       }, {})
   }
 

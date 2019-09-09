@@ -32,7 +32,7 @@ describe('atlas.json', () => {
 
   test.each(
     Object.values(atlas).reduce(
-      (sum: Atlas.Cel[], val) => sum.concat(val.cels),
+      (ret: Atlas.Cel[], val) => ret.concat(val.cels),
       []
     )
   )('%# duration for Cel %p is > 0', (cel: Atlas.Cel) =>
@@ -41,12 +41,12 @@ describe('atlas.json', () => {
 
   test.each(
     Object.values(atlas).reduce(
-      (sum: [Atlas.Cel, boolean][], val) =>
+      (ret: [Atlas.Cel, boolean][], val) =>
         val.cels.length > 1
-          ? sum.concat(
+          ? ret.concat(
               val.cels.map((cel, i) => [cel, i === val.cels.length - 1])
             )
-          : sum,
+          : ret,
       []
     )
   )('%# multi-Cel duration for Cel %p is < ∞ (except last)', (cel, last) => {

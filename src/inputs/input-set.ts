@@ -19,5 +19,5 @@ export namespace InputSet {
   export const bits = (val: t): InputBit =>
     Object.values(val)
       .filter(ArrayUtil.is)
-      .reduce((sum: number, {bits}) => sum | bits, 0)
+      .reduce((ret: number, {bits}) => ret | bits, 0)
 }

@@ -15,23 +15,23 @@ export namespace GamepadRecorder {
     Recorder.record(recorder, {source: InputSource.GAMEPAD, bits})
   }
 
-  const reduceGamepads = (sum: InputBit, {buttons, axes}: Gamepad): InputBit =>
-    sum | buttons.reduce(reduceButtons, 0) | axes.reduce(reduceAxes, 0)
+  const reduceGamepads = (ret: InputBit, {buttons, axes}: Gamepad): InputBit =>
+    ret | buttons.reduce(reduceButtons, 0) | axes.reduce(reduceAxes, 0)
 
   const reduceButtons = (
-    sum: InputBit,
+    ret: InputBit,
     button: GamepadButton,
     index: number
-  ): InputBit => sum | (button.pressed ? buttonIndexToInputBit(index) : 0)
+  ): InputBit => ret | (button.pressed ? buttonIndexToInputBit(index) : 0)
 
   const buttonIndexToInputBit = (index: number): InputBit => {
     const key = (<ButtonMap>defaultGamepadMap.buttons)[index]
     return key ? InputBit[key] : 0
   }
 
-  const reduceAxes = (sum: InputBit, axis: number, index: number): InputBit => {
+  const reduceAxes = (ret: InputBit, axis: number, index: number): InputBit => {
     const bit = axisIndexToInputBit(index, Math.sign(axis))
-    return sum | (bit && Math.abs(axis) > 0.5 ? bit : 0)
+    return ret | (bit && Math.abs(axis) > 0.5 ? bit : 0)
   }
 
   const axisIndexToInputBit = (index: number, direction: number): InputBit => {

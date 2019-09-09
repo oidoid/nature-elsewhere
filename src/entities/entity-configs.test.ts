@@ -20,7 +20,7 @@ const images: readonly Image.Config[] = Object.freeze(
     .map(({states}) => states)
     .filter(ArrayUtil.is)
     .map(Object.values)
-    .reduce((sum: Image.Config[], val) => sum.concat(...val), [])
+    .reduce((ret: Image.Config[], val) => ret.concat(...val), [])
 )
 
 test.each(images)('%# image has a valid layer or no layer %p', ({layer}) => {

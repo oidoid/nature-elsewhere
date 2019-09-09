@@ -51,7 +51,7 @@ export namespace Store {
           recorder
         )
       )
-      .reduce((sum: Image[], val) => [...sum, ...val], [])
+      .reduce((ret: Image[], val) => [...ret, ...val], [])
       .sort(Image.compare)
 
     const size = InstanceBuffer.size(layout, images.length)

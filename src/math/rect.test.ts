@@ -752,7 +752,7 @@ const tests: readonly Test[] = Object.freeze(
       {x: 20, y: 39, w: 480, h: 1061}
     ]
   ].reduce(
-    (sum: Test[], val) => [...sum, <Test>[...val, false], <Test>[...val, true]],
+    (ret: Test[], val) => [...ret, <Test>[...val, false], <Test>[...val, true]],
     []
   )
 )
