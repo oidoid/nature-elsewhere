@@ -1,8 +1,8 @@
-import {ArrayUtil} from '../utils/array-util'
 import {Input} from './input'
 import {InputBit} from './input-bit'
 import {InputSource} from './input-source'
 import {PointerInput} from './pointers/pointer-input'
+import {ValueUtil} from '../utils/value-util'
 
 /** All inputs possible in a single recording / update loop. */
 export interface InputSet {
@@ -18,6 +18,6 @@ export namespace InputSet {
       unset bit from any other. */
   export const bits = (val: t): InputBit =>
     Object.values(val)
-      .filter(ArrayUtil.is)
+      .filter(ValueUtil.is)
       .reduce((ret: number, {bits}) => ret | bits, 0)
 }

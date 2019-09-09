@@ -1,4 +1,3 @@
-import {ArrayUtil} from '../../utils/array-util'
 import {InputBit} from '../input-bit'
 import {InputSource} from '../input-source'
 import {PointerInput} from './pointer-input'
@@ -6,6 +5,7 @@ import {Recorder} from '../recorder'
 import {Rect} from '../../math/rect'
 import {Viewport} from '../../graphics/viewport'
 import {WH} from '../../math/wh'
+import {ValueUtil} from '../../utils/value-util'
 
 export interface PointerRecorder {
   point?: PointerInput.Point
@@ -17,12 +17,12 @@ export namespace PointerRecorder {
   export const make = (): t => ({})
 
   export const record = (val: t, recorder: Recorder): void => {
-    const inputs = [val.pick, val.point].filter(ArrayUtil.is)
+    const inputs = [val.pick, val.point].filter(ValueUtil.is)
     inputs.forEach(input => Recorder.record(recorder, input))
   }
 
   export const reset = (val: t): void => {
-    delete val.point, delete val.pick
+    ;(val.point = undefined), (val.pick = undefined)
   }
 
   export const onEvent = (

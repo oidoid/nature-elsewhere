@@ -10,7 +10,7 @@ import {ImageRect} from '../images/image-rect'
 import {JSONObject, JSONUtil} from '../utils/json-util'
 import {ObjectUtil} from '../utils/object-util'
 import {TextEntity} from './text-entity'
-import {Text} from '../text/text'
+import {TextLayout} from '../text/text-layout'
 import {UpdateType} from '../store/update-type'
 import {XY} from '../math/xy'
 
@@ -91,7 +91,7 @@ const isBehaviorKey = (val: string): val is Behavior.Key => val in Behavior
 const newDateVersionHash = (atlas: Atlas, entity: Entity): Entity => {
   // use the text fnuction
   const {date, version, hash} = Build
-  const images = Text.toImages(atlas, `${date} v${version} (${hash})`)
+  const images = TextLayout.toImages(atlas, `${date} v${version} (${hash})`)
   return {...entity, states: {'0': {x: 0, y: 0, w: 0, h: 0, images}}}
 }
 

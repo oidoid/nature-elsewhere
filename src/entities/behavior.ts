@@ -1,4 +1,5 @@
 import {Atlas} from '../atlas/atlas'
+import {Backpacker} from './backpacker'
 import {Entity} from './entity'
 import {ImageRect} from '../images/image-rect'
 import {InputBit} from '../inputs/input-bit'
@@ -16,18 +17,26 @@ export const Behavior = Object.freeze({
     const rect = val.states[val.state]
     val.states[val.state] = ImageRect.moveBy(rect, {x: val.vx, y: val.vy})
   },
-  BACKPACKER(val: Entity, entities: readonly Entity[], level: Level): void {
-    if (val.id !== 'backpacker') throw new Error(`Unsupported ID "${val.id}".`)
+  BACKPACKER(
+    val: Entity,
+    entities: readonly Entity[],
+    level: Level,
+    _atlas: Atlas,
+    _cam: Rect,
+    _recorder: Recorder,
+    time: number
+  ): void {
+    if (!Backpacker.is(val)) throw new Error(`Unsupported ID "${val.id}".`)
     let rect = val.states[val.state]
     let {x, y} = rect
 
-    const pick = (<any>val).dst
+    const pick = val.dst
     const dst = pick ? XY.trunc(XY.add(pick, {x: -4, y: -rect.h + 2})) : rect
     const left = dst.x < Math.trunc(x)
     const right = dst.x > Math.trunc(x)
     const up = dst.y < Math.trunc(y)
     const down = dst.y > Math.trunc(y)
-    const speed = Entity.velocity(val, left || right, up || down)
+    const speed = Entity.velocity(val, left || right, up || down, time)
 
     if (pick) {
       if (up) (y -= speed), (val.state = 'walkUp'), (val.scale.x = 1)
@@ -47,7 +56,8 @@ export const Behavior = Object.freeze({
     const collision = collides(val, XY.trunc({x, y}), level, entities)
       ? {x: true, y: true}
       : {x: false, y: false}
-    if ((left || right) && (up || down) && collision.x && collision.y) {
+    const diagonal = (left || right) && (up || down)
+    if (diagonal && collision.x && collision.y) {
       collision.x = collides(
         val,
         {x: Math.trunc(x), y: Math.trunc(rect.y)},
@@ -74,9 +84,7 @@ export const Behavior = Object.freeze({
     }
 
     const idle =
-      !pick ||
-      (Math.trunc(x) === dst.x && Math.trunc(y) === dst.y) ||
-      (collision.x && collision.y)
+      !pick || XY.equal(XY.trunc({x, y}), dst) || (collision.x && collision.y)
 
     if (idle) {
       val.state =
@@ -88,8 +96,8 @@ export const Behavior = Object.freeze({
           ? 'idleRight'
           : 'idleDown'
       const destination = entities.find(({id}) => id === 'destination')
-      if (destination) (<any>destination).state = 'hidden'
-      delete (<any>val).dst
+      if (destination) destination.state = 'hidden'
+      val.dst = undefined
     }
     rect = val.states[val.state]
     val.states[val.state] = ImageRect.moveTo(val.states[val.state], {
@@ -163,9 +171,9 @@ export const Behavior = Object.freeze({
 
     if (pick && pick.bits === InputBit.PICK) {
       const player = entities.find(({id}) => id === 'backpacker')
-      if (player) {
+      if (player && Backpacker.is(player)) {
         val.state = 'hidden'
-        ;(<any>player).dst = xy
+        player.dst = xy
       } else val.state = 'visible'
     } else if (point) val.state = 'visible'
   },
@@ -182,7 +190,7 @@ export const Behavior = Object.freeze({
     if (pick && pick.bits === InputBit.PICK) {
       val.state = 'visible'
       val.states[val.state].images.forEach(
-        img => (((<any>img).exposure = 0), ((<any>img).period = 0))
+        val => ((val.exposure = 0), (val.period = 0))
       )
       val.states[val.state] = ImageRect.moveTo(val.states[val.state], pick.xy)
     }

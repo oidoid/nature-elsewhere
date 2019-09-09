@@ -7,16 +7,17 @@ import * as memFont from '../assets/mem-font.json'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
 
+export interface TextLayout {
+  /** The length of this array matches the string length. */
+  readonly positions: readonly Maybe<XY>[]
+  /** The offset in pixels. */
+  readonly cursor: XY
+}
+type t = TextLayout
+
 const font: Font = Object.freeze(memFont)
 
-export namespace Text {
-  export interface Layout {
-    /** The length of this array matches the string length. */
-    readonly positions: readonly Maybe<XY>[]
-    /** The offset in pixels. */
-    readonly cursor: XY
-  }
-
+export namespace TextLayout {
   /** @arg y The vertical scroll offset in pixels.
     @arg target The window size in pixels. */
   export const toImages = (
@@ -48,7 +49,7 @@ export namespace Text {
   }
 
   /** @arg width The allowed layout width in pixels. */
-  export const layout = (string: string, width: number, scale: XY): Layout => {
+  export const layout = (string: string, width: number, scale: XY): t => {
     const positions: Maybe<XY>[] = []
     let cursor = {x: 0, y: 0}
     for (let i = 0; i < string.length; ) {
@@ -82,14 +83,14 @@ export namespace Text {
   }
 
   /** @arg {x,y} The cursor offset in pixels.
-    @arg width The allowed layout width in pixels. */
+      @arg width The allowed layout width in pixels. */
   export const layoutWord = (
     {x, y}: XY,
     width: number,
     string: string,
     index: number,
     scale: XY
-  ): Layout => {
+  ): t => {
     const positions = []
     while (index < string.length && !/\s/.test(string[index])) {
       const span = tracking(string[index], scale, string[index + 1])
@@ -106,7 +107,7 @@ export namespace Text {
 }
 
 /** @arg cursor The cursor offset in pixels. */
-const layoutNewline = ({y}: XY, scale: XY): Text.Layout => ({
+const layoutNewline = ({y}: XY, scale: XY): t => ({
   positions: [undefined],
   cursor: nextLine(y, scale)
 })
@@ -115,12 +116,7 @@ const layoutNewline = ({y}: XY, scale: XY): Text.Layout => ({
     @arg width The allowed layout width in pixels.
     @arg span The distance in pixels from the start of the current letter to the
               start of the next including scale. */
-const layoutSpace = (
-  {x, y}: XY,
-  width: number,
-  span: number,
-  scale: XY
-): Text.Layout => {
+const layoutSpace = ({x, y}: XY, width: number, span: number, scale: XY): t => {
   const cursor = x && x + span >= width ? nextLine(y, scale) : {x: x + span, y}
   return {positions: [undefined], cursor}
 }

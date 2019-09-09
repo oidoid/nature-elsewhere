@@ -26,4 +26,4 @@ export namespace JSONUtil {
     JSON.parse(JSON.stringify(val))
 }
 
-const isJSONObject = (val: JSON): val is JSONObject => ObjectUtil.isObject(val)
+const isJSONObject = (val: JSON): val is JSONObject => ObjectUtil.is(val)

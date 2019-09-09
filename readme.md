@@ -663,9 +663,14 @@ generalize which is easier to conceptualize a system for.
 
 Prettier does such consistent formatting that braceless if and loops seem to be
 perfectly fine. No matter how guttural the input, the indentation is never
-misleading. Code isn't always formatted to my ideal, but I think that
+misleading. Code isn't always formatted ideally, especially given that
+TypeScript typing is more verbose than untyped JavaScript, but I think that
 guaranteeing code will never be misleading is magnificent and opens up the
-syntax.
+syntax available to the full capacity of the language's design intents.
+
+I've also appreciated that Prettier supports related languages likely to appear
+in a JavaScript project, such as HTML and Markdown, although I generally wish
+their was a way to favor a more compact formatting.
 
 #### Parts of JavaScript / TypeScript to Avoid
 
@@ -750,6 +755,7 @@ The following abbreviations are used regardless of context:
 
 The following abbreviations are only used for function locals:
 
+- arr: array
 - ret: unambiguous return value or result, especially test subject (actual)
   result
 - rnd: unambiguous random value

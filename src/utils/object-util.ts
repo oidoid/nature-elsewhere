@@ -27,6 +27,6 @@ export namespace ObjectUtil {
   export const hasKey = <T>(val: T, key: keyof any): key is keyof T =>
     key in val
 
-  export const isObject = (val: any): val is object =>
+  export const is = (val: any): val is object =>
     val && val.constructor === Object
 }

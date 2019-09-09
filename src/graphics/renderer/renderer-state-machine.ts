@@ -28,7 +28,7 @@ export namespace RendererStateMachine {
 
 const pause = (val: Mutable<t>): void => {
   if (val.frameID) val.window.cancelAnimationFrame(val.frameID)
-  delete val.frameID, val.onPause()
+  ;(val.frameID = undefined), val.onPause()
 }
 
 const resume = (val: Mutable<t>): void => {

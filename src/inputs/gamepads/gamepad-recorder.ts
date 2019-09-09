@@ -1,8 +1,8 @@
-import {ArrayUtil} from '../../utils/array-util'
 import * as defaultGamepadMap from '../../assets/inputs/default-gamepad-map.json'
 import {InputBit, InvertInputBitDirection} from '../input-bit'
 import {InputSource} from '../input-source'
 import {Recorder} from '../recorder'
+import {ValueUtil} from '../../utils/value-util'
 
 export namespace GamepadRecorder {
   // [+-∞] --[Gamepad]--> [GamepadRecorder] --Input--> [Recorder]
@@ -11,7 +11,7 @@ export namespace GamepadRecorder {
 
   export const record = (recorder: Recorder, navigator: Navigator): void => {
     const gamepads = Array.from(navigator.getGamepads())
-    const bits = gamepads.filter(ArrayUtil.is).reduce(reduceGamepads, 0)
+    const bits = gamepads.filter(ValueUtil.is).reduce(reduceGamepads, 0)
     Recorder.record(recorder, {source: InputSource.GAMEPAD, bits})
   }
 

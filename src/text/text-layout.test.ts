@@ -1,9 +1,9 @@
 import {lineHeight} from '../assets/mem-font.json'
-import {Text} from './text'
+import {TextLayout} from './text-layout'
 import {XY} from '../math/xy'
 
 describe('layout()', () =>
-  test.each(<readonly [string, number, Text.Layout][]>[
+  test.each(<readonly [string, number, TextLayout][]>[
     ['', Number.MAX_VALUE, {positions: [], cursor: {x: 0, y: 0 * lineHeight}}],
     [
       ' ',
@@ -158,12 +158,12 @@ describe('layout()', () =>
     ]
   ])('%#) %p %p => %p', (string, width, expected) =>
     expect(
-      Text.layout(string, width, {x: 1, y: 1 + 0 * lineHeight})
+      TextLayout.layout(string, width, {x: 1, y: 1 + 0 * lineHeight})
     ).toStrictEqual(expected)
   ))
 
 describe('layoutWord()', () =>
-  test.each(<readonly [XY, number, string, number, Text.Layout][]>[
+  test.each(<readonly [XY, number, string, number, TextLayout][]>[
     [
       {x: 0, y: 0 * lineHeight},
       Number.MAX_VALUE,
@@ -601,7 +601,7 @@ describe('layoutWord()', () =>
     ]
   ])('%#) %p %p %p %p => %p', (cursor, width, string, index, expected) =>
     expect(
-      Text.layoutWord(cursor, width, string, index, {
+      TextLayout.layoutWord(cursor, width, string, index, {
         x: 1,
         y: 1 + 0 * lineHeight
       })

@@ -1,9 +1,9 @@
-import {ArrayUtil} from '../utils/array-util'
 import {LevelConfigs} from './level-configs'
+import {ValueUtil} from '../utils/value-util'
 
 const ids: readonly string[] = Object.freeze(
   Object.values(LevelConfigs)
-    .filter(ArrayUtil.is)
+    .filter(ValueUtil.is)
     .map(({id}) => id)
 )
 

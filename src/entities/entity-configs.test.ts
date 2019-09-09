@@ -1,13 +1,13 @@
-import {ArrayUtil} from '../utils/array-util'
 import {EntityConfigs} from './entity-configs'
 import {ImageConfig} from '../images/image-config'
 import {Layer} from '../images/layer'
+import {ValueUtil} from '../utils/value-util'
 
 const ids: readonly string[] = Object.freeze(
   Object.values(EntityConfigs)
-    .filter(ArrayUtil.is)
+    .filter(ValueUtil.is)
     .map(({id}) => id)
-    .filter(ArrayUtil.is)
+    .filter(ValueUtil.is)
 )
 
 test.each(ids)('%# ID %p is unique', id =>
@@ -16,9 +16,9 @@ test.each(ids)('%# ID %p is unique', id =>
 
 const images: readonly ImageConfig[] = Object.freeze(
   Object.values(EntityConfigs)
-    .filter(ArrayUtil.is)
+    .filter(ValueUtil.is)
     .map(({states}) => states)
-    .filter(ArrayUtil.is)
+    .filter(ValueUtil.is)
     .map(Object.values)
     .reduce((ret: ImageConfig[], val) => ret.concat(...val), [])
 )

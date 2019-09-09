@@ -1,6 +1,6 @@
 import {Atlas} from '../atlas/atlas'
 import {Entity} from './entity'
-import {Text} from '../text/text'
+import {TextLayout} from '../text/text-layout'
 
 export interface TextEntity extends Entity {
   readonly id: 'text'
@@ -12,7 +12,7 @@ export namespace TextEntity {
   export const make = (atlas: Atlas, entity: Entity): t => {
     if (!isTextEntityConfig(entity))
       throw new Error(`Unknown ID "${entity.id}".`)
-    const images = Text.toImages(atlas, entity.text || '')
+    const images = TextLayout.toImages(atlas, entity.text || '')
     return {...entity, states: {'0': {x: 0, y: 0, w: 0, h: 0, images}}}
   }
 
