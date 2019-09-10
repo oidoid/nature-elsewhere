@@ -2,5 +2,7 @@
   "id": "dateVersionHash",
   "updateType": "ALWAYS",
   "behavior": "FOLLOW_CAM",
-  "text": ""
+  "text": "",
+  "state": "text",
+  "states": {"text": []}
 }

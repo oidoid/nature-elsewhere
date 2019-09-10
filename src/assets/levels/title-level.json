@@ -6,8 +6,9 @@
   "entities": [
     {"id": "cursor"},
     {
+      "state": "images",
       "states": {
-        "0": [
+        "images": [
           {"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"},
           {"id": "logo"},
           {"id": "palette grey", "y": 11, "w": 33, "h": 1}

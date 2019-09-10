@@ -1,8 +1,9 @@
 {
   "id": "mountain",
   "collisions": [{"x": 1, "y": 5, "w": 12, "h": 4}],
+  "state": "mountain",
   "states": {
-    "0": [
+    "mountain": [
       {"id": "mountain"},
       {"id": "mountain shadow", "x": -2, "y": 1, "layer": "SHADOW"}
     ]

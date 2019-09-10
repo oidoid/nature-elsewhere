@@ -1,7 +1,8 @@
 {
   "id": "bush",
   "collisions": [{"x": 2, "y": 5, "w": 3, "h": 2}],
+  "state": "bush",
   "states": {
-    "0": [{"id": "bush"}, {"id": "bush shadow", "y": 1, "layer": "SHADOW"}]
+    "bush": [{"id": "bush"}, {"id": "bush shadow", "y": 1, "layer": "SHADOW"}]
   }
 }

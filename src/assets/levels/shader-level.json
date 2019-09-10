@@ -5,8 +5,9 @@
   "minSize": {"w": 48, "h": 48},
   "entities": [
     {
+      "state": "images",
       "states": {
-        "0": [
+        "images": [
           {"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"},
 
           {"id": "mem-font 90", "x": 1, "y": 1},

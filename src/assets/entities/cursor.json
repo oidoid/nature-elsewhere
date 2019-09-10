@@ -2,9 +2,5 @@
   "id": "cursor",
   "updateType": "ALWAYS",
   "behavior": "CURSOR",
-  "state": "hidden",
-  "states": {
-    "hidden": [],
-    "visible": [{"id": "palette grey", "layer": "UI_CURSOR"}]
-  }
+  "states": {"visible": [{"id": "palette grey", "layer": "UI_CURSOR"}]}
 }

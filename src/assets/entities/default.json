@@ -1,6 +1,5 @@
 {
   "id": "default",
-  "state": "0",
   "x": 0,
   "y": 0,
   "scale": {"x": 1, "y": 1},
@@ -9,6 +8,7 @@
   "collisions": [],
   "vx": 0,
   "vy": 0,
-  "states": {"0": []},
+  "state": "hidden",
+  "states": {"hidden": []},
   "period": 0
 }

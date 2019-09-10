@@ -1,8 +1,9 @@
 {
   "id": "flag",
   "updateType": "IF_VISIBLE",
+  "state": "flag",
   "states": {
-    "0": [
+    "flag": [
       {"id": "flag"},
       {"id": "flag shadow", "x": -1, "y": 1, "layer": "SHADOW"}
     ]

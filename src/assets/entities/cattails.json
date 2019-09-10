@@ -1,1 +1,5 @@
-{"id": "cattails", "states": {"0": [{"id": "cattails"}]}}
+{
+  "id": "cattails",
+  "state": "cattails",
+  "states": {"cattails": [{"id": "cattails"}]}
+}

@@ -1,8 +1,9 @@
 {
   "id": "conifer",
   "collisions": [{"x": 2, "y": 9, "w": 3, "h": 3}],
+  "state": "conifer",
   "states": {
-    "0": [
+    "conifer": [
       {"id": "conifer"},
       {"id": "conifer shadow", "y": 1, "layer": "SHADOW"}
     ]

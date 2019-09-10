@@ -1,5 +1,6 @@
 {
   "id": "grass",
+  "state": "0",
   "states": {
     "0": [{"id": "grass 0"}],
     "1": [{"id": "grass 1"}, {"id": "grass 3", "x": 4, "y": 1}],

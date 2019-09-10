@@ -1,5 +1,6 @@
 {
   "id": "clover",
+  "state": "0",
   "states": {
     "0": [
       {"id": "clover 0-0", "layer": "DECAL"},

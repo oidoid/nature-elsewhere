@@ -4,11 +4,7 @@
   "h": 128,
   "minSize": {"w": 128, "h": 128},
   "entities": [
-    {
-      "states": {
-        "0": [{"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"}]
-      }
-    },
+    {"id": "plane", "state": "white"},
     {"id": "bee", "x": 1, "y": 1},
     {"id": "bee", "state": "dead", "x": 7, "y": 1},
     {"id": "bush", "x": 12, "y": 1},

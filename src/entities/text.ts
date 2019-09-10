@@ -5,10 +5,12 @@ import {ImageConfig} from '../images/image-config'
 import {ImageParser} from '../images/image-parser'
 import {TextLayout} from '../text/text-layout'
 import {WH} from '../math/wh'
+import {ImageRect} from '../images/image-rect'
 
 export interface Text extends Entity {
   readonly id: 'text'
   readonly text: string
+  readonly states: Record<string, ImageRect> & {readonly text: ImageRect}
 }
 type t = Text
 
@@ -18,7 +20,7 @@ export namespace Text {
       throw new Error(`Unknown ID "${entity.id}".`)
     const {scale} = entity
     const images = toImages(atlas, entity.text, {scale})
-    return {...entity, states: {'0': {x: 0, y: 0, w: 0, h: 0, images}}}
+    return {...entity, states: {text: {x: 0, y: 0, w: 0, h: 0, images}}}
   }
 
   const isTextEntityConfig = (val: Entity): val is t => val.id === 'text'

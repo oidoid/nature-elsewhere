@@ -2,8 +2,9 @@
   "id": "editor",
   "updateType": "ALWAYS",
   "behavior": "FOLLOW_CAM_SE",
+  "state": "editor",
   "states": {
-    "0": [
+    "editor": [
       {
         "id": "palette white",
         "x": 1,

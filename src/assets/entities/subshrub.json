@@ -1,6 +1,10 @@
 {
   "id": "subshrub",
+  "state": "subshrub",
   "states": {
-    "0": [{"id": "subshrub"}, {"id": "subshrub shadow", "layer": "SHADOW"}]
+    "subshrub": [
+      {"id": "subshrub"},
+      {"id": "subshrub shadow", "layer": "SHADOW"}
+    ]
   }
 }

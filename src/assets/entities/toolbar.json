@@ -2,8 +2,9 @@
   "id": "toolbar",
   "updateType": "ALWAYS",
   "behavior": "FOLLOW_CAM",
+  "state": "toolbar",
   "states": {
-    "0": [
+    "toolbar": [
       {"id": "flag"},
       {"id": "flag", "x": 4},
       {"id": "flag", "x": 8},
