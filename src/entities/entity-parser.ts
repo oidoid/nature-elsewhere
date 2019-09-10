@@ -5,14 +5,15 @@ import * as defaultEntity from '../assets/entities/default.json'
 import {EntityConfig} from './entity-config'
 import {EntityConfigs} from './entity-configs'
 import {Entity} from './entity'
+import {Image} from '../images/image'
+import {ImageConfig} from '../images/image-config'
 import {ImageParser} from '../images/image-parser'
 import {ImageRect} from '../images/image-rect'
 import {JSONObject, JSONUtil} from '../utils/json-util'
 import {ObjectUtil} from '../utils/object-util'
 import {Text} from './text'
+import {UIEditorButton} from './ui-editor-button'
 import {UpdateType} from '../store/update-type'
-import {Image} from '../images/image'
-import {ImageConfig} from '../images/image-config'
 
 export namespace EntityParser {
   export const parse = (atlas: Atlas, cfg: EntityConfig): Entity => {
@@ -79,7 +80,8 @@ const imagesFactory: Partial<
   Record<string, (atlas: Atlas, entity: Entity) => Entity>
 > = Object.freeze({
   dateVersionHash: newDateVersionHash,
-  text: Text.make
+  text: Text.make,
+  uiEditorButton: UIEditorButton.make
 })
 
 const parseDefaults = (cfg: EntityConfig): DeepRequired<EntityConfig> =>

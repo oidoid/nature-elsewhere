@@ -17,7 +17,7 @@ export namespace Text {
     if (!isTextEntityConfig(entity))
       throw new Error(`Unknown ID "${entity.id}".`)
     const {scale} = entity
-    const images = toImages(atlas, entity.text || '', {scale})
+    const images = toImages(atlas, entity.text, {scale})
     return {...entity, states: {'0': {x: 0, y: 0, w: 0, h: 0, images}}}
   }
 

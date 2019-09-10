@@ -6,6 +6,7 @@
 export enum Layer {
   /** Terrain. */
   PLANE,
+  GRID,
   ABOVE_PLANE,
   SHADOW,
   /** Anything flat that is painted on the plane and should appear above

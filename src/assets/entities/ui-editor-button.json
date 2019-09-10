@@ -1,0 +1,14 @@
+{
+  "id": "uiEditorButton",
+  "updateType": "ALWAYS",
+  "behavior": "UI_EDITOR_BUTTON",
+  "state": "unpressed",
+  "button": "base",
+  "states": {
+    "unpressed": [{"id": "ui-editor-button base", "layer": "UI_LO"}],
+    "pressed": [
+      {"id": "ui-editor-button base", "layer": "UI_LO"},
+      {"id": "ui-editor-button pressed", "layer": "UI_MID"}
+    ]
+  }
+}

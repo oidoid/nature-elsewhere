@@ -120,7 +120,9 @@ minimum size works the way I wanted.
   scale that shows a minimum viewport size works well. The result is either a
   viewport that is scaled to exactly the document size or the next size smaller.
   In the (frequent) latter case, the result is simply to show larger viewport
-  than ideal.
+  than ideal. If different minimum viewport sizes are used, the scaling may
+  vary which means that pixels will vary in size between levels. I think this
+  works visually.
 
 The scaling transformation can be done in a number of ways. I think the best is
 probably to change the canvas and viewport size to match the document every
@@ -182,6 +184,29 @@ of inspirado but sometimes equally make me feel inadequate.
 [arne's website]: https://androidarts.com/
 [pixel joint]: http://pixeljoint.com/
 [twitter]: https://twitter.com/
+
+### Style
+
+Initially, I wanted to pursue a minimalismistic style as much as possible
+because I'm not a good artist and I hoped that the constraints would help me be
+more efficient and eliminate some opportunities for my shortcomings to show.
+This style choice went all the way back to "Once and Future Cactus" and, to an
+even greater extent, "Sound of Water." Well, after working on nature elsewhere
+for some long time, I just wanted more. The backpacker avatar was about as
+minimal as you can get, seven black pixels when idle:
+
+```
+ x
+xx
+xx
+ x
+ x
+```
+
+There were some things I really liked about it. Well, I was doodling one evening
+and came up with some designs I thought I might like much better if I could
+animate them. Another night, I had the walking animation and I thought it was
+quite an improvement. I'm still pursuing minimalism but less aggressively so.
 
 ### Palettes
 

@@ -1,0 +1,41 @@
+{
+  "id": "plane",
+  "state": "transparent",
+  "//": "[palette]",
+  "states": {
+    "grid": [{"id": "grid", "w": 32767, "h": 32767, "layer": "GRID"}],
+    "transparent": [
+      {"id": "palette transparent", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "white": [
+      {"id": "palette white", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "paleGreen": [
+      {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "lightGreen": [
+      {"id": "palette lightGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "green": [
+      {"id": "palette green", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "darkGreen": [
+      {"id": "palette darkGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "black": [
+      {"id": "palette black", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "grey": [{"id": "palette grey", "w": 32767, "h": 32767, "layer": "PLANE"}],
+    "blue": [{"id": "palette blue", "w": 32767, "h": 32767, "layer": "PLANE"}],
+    "lightBlue": [
+      {"id": "palette lightBlue", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "red": [{"id": "palette red", "w": 32767, "h": 32767, "layer": "PLANE"}],
+    "orange": [
+      {"id": "palette orange", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ],
+    "lightGrey": [
+      {"id": "palette lightGrey", "w": 32767, "h": 32767, "layer": "PLANE"}
+    ]
+  }
+}

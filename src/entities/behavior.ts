@@ -148,6 +148,19 @@ export const Behavior = Object.freeze({
       y: cam.y + cam.h - (rect.h + 1)
     })
   },
+  FOLLOW_CAM_SE(
+    val: Entity,
+    _entities: readonly Entity[],
+    _level: Level,
+    _atlas: Atlas,
+    cam: Rect
+  ) {
+    const rect = val.states[val.state]
+    val.states[val.state] = ImageRect.moveTo(rect, {
+      x: cam.x + cam.w - rect.w,
+      y: cam.y + cam.h - rect.h
+    })
+  },
   CURSOR(
     val: Entity,
     entities: readonly Entity[],
@@ -194,6 +207,31 @@ export const Behavior = Object.freeze({
       )
       val.states[val.state] = ImageRect.moveTo(val.states[val.state], pick.xy)
     }
+  },
+  UI_EDITOR_BUTTON(
+    val: Entity,
+    entities: readonly Entity[],
+    _level: Level,
+    _atlas: Atlas,
+    _cam: Rect,
+    recorder: Recorder
+  ) {
+    const cursor = entities.find(({id}) => id === 'cursor')
+
+    const [set] = recorder.combo.slice(-1)
+    const pick = set && set[InputSource.POINTER_PICK]
+    const {x, y} = val.states[val.state]
+
+    if (
+      pick &&
+      pick.bits === InputBit.PICK &&
+      cursor &&
+      Rect.intersects(val.states[val.state], cursor.states[cursor.state])
+    )
+      val.state = 'pressed'
+    else val.state = 'unpressed'
+
+    val.states[val.state] = ImageRect.moveTo(val.states[val.state], {x, y})
   }
 })
 

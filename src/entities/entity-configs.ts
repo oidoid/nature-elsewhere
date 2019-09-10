@@ -11,7 +11,6 @@ import * as dateVersionHash from '../assets/entities/date-version-hash.json'
 import * as destination from '../assets/entities/destination.json'
 import * as editor from '../assets/entities/editor.json'
 import {EntityConfig} from './entity-config'
-import * as toolbar from '../assets/entities/toolbar.json'
 import * as flag from '../assets/entities/flag.json'
 import * as fly from '../assets/entities/fly.json'
 import * as followPlayer from '../assets/entities/follow-player.json'
@@ -20,13 +19,16 @@ import * as grass from '../assets/entities/grass.json'
 import * as isoGrass from '../assets/entities/iso-grass.json'
 import * as mountain from '../assets/entities/mountain.json'
 import * as path from '../assets/entities/path.json'
+import * as plane from '../assets/entities/plane.json'
 import * as pond from '../assets/entities/pond.json'
 import * as pyramid from '../assets/entities/pyramid.json'
 import * as snake from '../assets/entities/snake.json'
 import * as subshrub from '../assets/entities/subshrub.json'
 import * as text from '../assets/entities/text.json'
 import * as tinyBackpacker from '../assets/entities/tiny-backpacker.json'
+import * as toolbar from '../assets/entities/toolbar.json'
 import * as tree from '../assets/entities/tree.json'
+import * as uiEditorButton from '../assets/entities/ui-editor-button.json'
 
 export const EntityConfigs: Readonly<
   Partial<Record<string, EntityConfig>>
@@ -51,6 +53,7 @@ export const EntityConfigs: Readonly<
   isoGrass,
   mountain,
   path,
+  plane,
   pond,
   pyramid,
   snake,
@@ -58,5 +61,6 @@ export const EntityConfigs: Readonly<
   text,
   tinyBackpacker,
   toolbar,
-  tree
+  tree,
+  uiEditorButton
 })

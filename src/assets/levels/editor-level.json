@@ -2,22 +2,14 @@
   "id": "editor",
   "w": 32767,
   "h": 32767,
-  "minSize": {"w": 128, "h": 32},
+  "minSize": {"w": 128, "h": 64},
   "entities": [
-    {
-      "states": {
-        "0": [{"id": "palette red", "w": 32767, "h": 32767, "layer": "PLANE"}]
-      }
-    },
-    {"id": "text", "x": 1, "y": 1, "text": "id...", "layer": "UI_MID"},
-    {"id": "text", "x": 1, "y": 6, "text": "state...", "layer": "UI_MID"},
-    {"id": "text", "x": 1, "y": 11, "text": "x32767", "layer": "UI_MID"},
-    {"id": "text", "x": 28, "y": 11, "text": "w32767", "layer": "UI_MID"},
-    {"id": "text", "x": 1, "y": 16, "text": "y...", "layer": "UI_MID"},
-    {"id": "text", "x": 28, "y": 16, "text": "h32767", "layer": "UI_MID"},
-    {"id": "text", "x": 56, "y": 1, "text": "sx...", "layer": "UI_MID"},
-    {"id": "text", "x": 56, "y": 6, "text": "sy...", "layer": "UI_MID"},
     {"id": "cursor"},
-    {"id": "editor"}
+    {"id": "editor"},
+    {"id": "uiEditorButton", "button": "decrement", "x": 2, "y": 2},
+    {"id": "uiEditorButton", "button": "increment", "x": 10, "y": 2},
+    {"id": "uiEditorButton", "button": "remove", "x": 18, "y": 2},
+    {"id": "uiEditorButton", "button": "add", "x": 26, "y": 2},
+    {"id": "uiEditorButton", "button": "grid", "x": 34, "y": 2}
   ]
 }

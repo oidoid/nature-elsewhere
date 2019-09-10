@@ -7,13 +7,7 @@
     {"id": "cursor"},
     {"id": "toolbar", "x": 1, "y": 123, "layer": "UI_LO"},
     {"id": "destination"},
-    {
-      "states": {
-        "0": [
-          {"id": "palette paleGreen", "w": 32767, "h": 32767, "layer": "PLANE"}
-        ]
-      }
-    },
+    {"id": "plane", "state": "paleGreen"},
     {"id": "cloud", "x": 20, "y": 20, "vx": -0.01},
     {"id": "cloud", "state": "drizzle", "x": 30, "y": 28},
     {"id": "cloud", "state": "rain", "x": 54, "y": 50},
