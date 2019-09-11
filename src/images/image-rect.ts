@@ -17,12 +17,11 @@ export namespace ImageRect {
     if (union) ({w: val.w, h: val.h} = union)
   }
 
-  export const moveTo = (val: t, to: XY): t =>
-    moveBy(val, {x: to.x - val.x, y: to.y - val.y})
+  export const moveTo = (val: t, to: XY): t => moveBy(val, XY.sub(to, val))
 
   export const moveBy = (val: t, by: XY): t => {
     if (!by.x && !by.y) return val
     val.images.forEach(val => Image.moveBy(val, by))
-    return {...Rect.moveBy(val, {x: by.x, y: by.y}), images: val.images}
+    return {...Rect.moveBy(val, by), images: val.images}
   }
 }

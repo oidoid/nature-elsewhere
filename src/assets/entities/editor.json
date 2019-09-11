@@ -1,7 +1,6 @@
 {
   "id": "editor",
   "updateType": "ALWAYS",
-  "behavior": "FOLLOW_CAM_SE",
   "state": "editor",
   "states": {
     "editor": [

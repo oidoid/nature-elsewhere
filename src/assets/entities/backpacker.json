@@ -3,8 +3,8 @@
   "updateType": "ALWAYS",
   "behavior": "BACKPACKER",
   "collisions": [{"x": 2, "y": 12, "w": 4, "h": 3}],
-  "vx": 80,
-  "vy": 80,
+  "vx": 90,
+  "vy": 90,
   "state": "idleDown",
   "states": {
     "idleDown": [

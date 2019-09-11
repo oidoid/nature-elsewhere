@@ -1,0 +1,5 @@
+{
+  "id": "followCursor",
+  "updateType": "ALWAYS",
+  "behavior": "FOLLOW_CURSOR"
+}

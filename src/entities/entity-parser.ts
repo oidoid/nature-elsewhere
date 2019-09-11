@@ -14,9 +14,15 @@ import {ObjectUtil} from '../utils/object-util'
 import {Text} from './text'
 import {UIEditorButton} from './ui-editor-button'
 import {UpdateType} from '../store/update-type'
+// import {UIEntityPicker} from './ui-entity-picker'
+import {EntityRect} from './entity-rect'
+import {UIEditorLabelButton} from './ui-editor-label-button'
 
 export namespace EntityParser {
-  export const parse = (atlas: Atlas, cfg: EntityConfig): Entity => {
+  export const parse = (
+    atlas: Atlas,
+    cfg: EntityConfig
+  ): Entity | EntityRect => {
     const defaults = parseDefaults(cfg)
     const entity = {
       ...defaults,
@@ -42,7 +48,7 @@ export namespace EntityParser {
     // replace scale with references
 
     const ctor = imagesFactory[defaults.id]
-    const state: Entity = ctor ? ctor(atlas, entity) : entity
+    const state = ctor ? ctor(atlas, entity) : entity
 
     Object.values(state.states).forEach(ImageRect.invalidate)
 
@@ -81,7 +87,9 @@ const imagesFactory: Partial<
 > = Object.freeze({
   dateVersionHash: newDateVersionHash,
   text: Text.make,
-  uiEditorButton: UIEditorButton.make
+  uiEditorButton: UIEditorButton.make,
+  uiEditorLabelButton: UIEditorLabelButton.make
+  // uiEntityPicker: UIEntityPicker.make
 })
 
 const parseDefaults = (cfg: EntityConfig): DeepRequired<EntityConfig> =>

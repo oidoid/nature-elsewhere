@@ -16,7 +16,7 @@ export namespace UIEditorButton {
       throw new Error(`Unknown ID "${entity.id}".`)
     const button = ImageParser.parse(atlas, {
       id: 'ui-editor-button ' + entity.button,
-      layer: 'UI_HI'
+      layer: 'UI_HIHI'
     })
     const states = Object.entries(entity.states).reduce(
       (ret: Record<string, ImageRect>, [key, val]) => ({

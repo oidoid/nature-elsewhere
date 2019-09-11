@@ -694,8 +694,12 @@ guaranteeing code will never be misleading is magnificent and opens up the
 syntax available to the full capacity of the language's design intents.
 
 I've also appreciated that Prettier supports related languages likely to appear
-in a JavaScript project, such as HTML and Markdown, although I generally wish
-their was a way to favor a more compact formatting.
+in a JavaScript project, such as HTML and Markdown.
+
+I generally wish their was a way to favor a more compact formatting. In some
+cases, I've changed my writing to favor a particular formatting. For example,
+using types instead of interfaces, arrow functions instead of functions, and
+trying to minimize the verbosity of typing by aliasing the subject type to "t".
 
 #### Parts of JavaScript / TypeScript to Avoid
 

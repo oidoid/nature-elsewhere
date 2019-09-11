@@ -5,10 +5,10 @@
   "state": "unpressed",
   "button": "base",
   "states": {
-    "unpressed": [{"id": "ui-editor-button base", "layer": "UI_LO"}],
+    "unpressed": [{"id": "ui-editor-button base", "layer": "UI_MID"}],
     "pressed": [
-      {"id": "ui-editor-button base", "layer": "UI_LO"},
-      {"id": "ui-editor-button pressed", "layer": "UI_MID"}
+      {"id": "ui-editor-button base", "layer": "UI_MID"},
+      {"id": "ui-editor-button pressed", "layer": "UI_HI"}
     ]
   }
 }

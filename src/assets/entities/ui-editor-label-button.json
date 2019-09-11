@@ -1,0 +1,19 @@
+{
+  "id": "uiEditorLabelButton",
+  "updateType": "ALWAYS",
+  "behavior": "UI_EDITOR_LABEL_BUTTON",
+  "text": "",
+  "state": "deselected",
+  "states": {
+    "deselected": [
+      {"id": "palette paleGreen", "x": 1, "h": 5, "layer": "UI_MID"},
+      {"id": "palette paleGreen", "y": 1, "h": 3, "layer": "UI_MID"},
+      {"id": "palette paleGreen", "y": 1, "h": 3, "layer": "UI_MID"}
+    ],
+    "selected": [
+      {"id": "palette lightGreen", "x": 1, "h": 5, "layer": "UI_MID"},
+      {"id": "palette lightGreen", "y": 1, "h": 3, "layer": "UI_MID"},
+      {"id": "palette lightGreen", "y": 1, "h": 3, "layer": "UI_MID"}
+    ]
+  }
+}

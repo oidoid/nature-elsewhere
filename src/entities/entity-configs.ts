@@ -13,6 +13,7 @@ import * as editor from '../assets/entities/editor.json'
 import {EntityConfig} from './entity-config'
 import * as flag from '../assets/entities/flag.json'
 import * as fly from '../assets/entities/fly.json'
+import * as followCursor from '../assets/entities/follow-cursor.json'
 import * as followPlayer from '../assets/entities/follow-player.json'
 import * as frog from '../assets/entities/frog.json'
 import * as grass from '../assets/entities/grass.json'
@@ -29,6 +30,8 @@ import * as tinyBackpacker from '../assets/entities/tiny-backpacker.json'
 import * as toolbar from '../assets/entities/toolbar.json'
 import * as tree from '../assets/entities/tree.json'
 import * as uiEditorButton from '../assets/entities/ui-editor-button.json'
+import * as uiEditorLabelButton from '../assets/entities/ui-editor-label-button.json'
+import * as uiEntityPicker from '../assets/entities/ui-entity-picker.json'
 
 export const EntityConfigs: Readonly<
   Partial<Record<string, EntityConfig>>
@@ -47,6 +50,7 @@ export const EntityConfigs: Readonly<
   editor,
   flag,
   fly,
+  followCursor,
   followPlayer,
   frog,
   grass,
@@ -62,5 +66,7 @@ export const EntityConfigs: Readonly<
   tinyBackpacker,
   toolbar,
   tree,
-  uiEditorButton
+  uiEditorButton,
+  uiEditorLabelButton,
+  uiEntityPicker
 })

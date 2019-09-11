@@ -1,6 +1,7 @@
 import {Atlas} from '../atlas/atlas'
 import {Backpacker} from './backpacker'
 import {Entity} from './entity'
+import {EntityRect} from './entity-rect'
 import {ImageRect} from '../images/image-rect'
 import {InputBit} from '../inputs/input-bit'
 import {InputSource} from '../inputs/input-source'
@@ -13,13 +14,20 @@ import {RectArray} from '../math/rect-array'
 
 export const Behavior = Object.freeze({
   STATIC() {},
-  CIRCLE(val: Entity) {
-    const rect = val.states[val.state]
-    val.states[val.state] = ImageRect.moveBy(rect, {x: val.vx, y: val.vy})
+  CIRCLE(
+    val: Entity,
+    _entities: readonly (Entity | EntityRect)[],
+    _level: Level,
+    _atlas: Atlas,
+    _cam: Rect,
+    _recorder: Recorder,
+    time: number
+  ) {
+    Entity.moveBy(val, Entity.velocity(val, !!val.vx, !!val.vy, time))
   },
   BACKPACKER(
     val: Entity,
-    entities: readonly Entity[],
+    entities: readonly (Entity | EntityRect)[],
     level: Level,
     _atlas: Atlas,
     _cam: Rect,
@@ -39,16 +47,16 @@ export const Behavior = Object.freeze({
     const speed = Entity.velocity(val, left || right, up || down, time)
 
     if (pick) {
-      if (up) (y -= speed), (val.state = 'walkUp'), (val.scale.x = 1)
-      if (down) (y += speed), (val.state = 'walkDown'), (val.scale.x = 1)
+      if (up) (y -= speed.y), (val.state = 'walkUp'), (val.scale.x = 1)
+      if (down) (y += speed.y), (val.state = 'walkDown'), (val.scale.x = 1)
 
       const animateHorizontal = Math.abs(x - dst.x) > 8
       if (left) {
-        x -= speed
+        x -= speed.x
         if (animateHorizontal) (val.state = 'walkRight'), (val.scale.x = -1)
       }
       if (right) {
-        x += speed
+        x += speed.x
         if (animateHorizontal) (val.state = 'walkRight'), (val.scale.x = 1)
       }
     }
@@ -95,7 +103,7 @@ export const Behavior = Object.freeze({
             val.state === 'walkLeft'
           ? 'idleRight'
           : 'idleDown'
-      const destination = entities.find(({id}) => id === 'destination')
+      const destination = EntityRect.find(entities, 'destination')
       if (destination) destination.state = 'hidden'
       val.dst = undefined
     }
@@ -107,12 +115,12 @@ export const Behavior = Object.freeze({
   },
   FOLLOW_PLAYER(
     _val: Entity,
-    entities: readonly Entity[],
+    entities: readonly (Entity | EntityRect)[],
     level: Level,
     _atlas: Atlas,
     cam: Mutable<Rect>
   ) {
-    const player = entities.find(({id}) => id === 'backpacker')
+    const player = EntityRect.find(entities, 'backpacker')
     if (player) {
       const rect = player.states[player.state]
       cam.x = NumberUtil.clamp(
@@ -127,17 +135,49 @@ export const Behavior = Object.freeze({
       )
     }
   },
-  WRAPAROUND(val: Entity, _entities: readonly Entity[], level: Level) {
-    const rect = val.states[val.state]
-    const xy = {
-      x: NumberUtil.wrap(rect.x + val.vx, -rect.w, level.w),
-      y: NumberUtil.wrap(rect.y + val.vy, -rect.h, level.h)
+
+  FOLLOW_CURSOR(
+    _val: Entity,
+    _entities: readonly (Entity | EntityRect)[],
+    level: Level,
+    _atlas: Atlas,
+    cam: Mutable<Rect>,
+    recorder: Recorder
+  ) {
+    const [set] = recorder.combo.slice(-1)
+    const pick = set && set[InputSource.POINTER_PICK]
+    if (pick && pick.bits === InputBit.PICK) {
+      // if colliding with anything but plane and UI, return.
+      const {x, y} = pick.xy
+      // keep track of pointer offset relative cmaera
+
+      // just increment the value like the player pointer logic does, don't jump.
+      cam.x = NumberUtil.clamp(
+        Math.trunc(x) + -Math.trunc(cam.w / 2),
+        0,
+        Math.max(0, level.w - cam.w)
+      )
+      cam.y = NumberUtil.clamp(
+        Math.trunc(y) - Math.trunc(cam.h / 2),
+        0,
+        Math.max(0, level.h - cam.h)
+      )
     }
-    val.states[val.state] = ImageRect.moveTo(rect, xy)
+  },
+  WRAPAROUND(
+    val: Entity,
+    _entities: readonly (Entity | EntityRect)[],
+    _level: Level,
+    _atlas: Atlas,
+    _cam: Rect,
+    _recorder: Recorder,
+    time: number
+  ) {
+    Entity.moveBy(val, Entity.velocity(val, !!val.vx, !!val.vy, time))
   },
   FOLLOW_CAM(
     val: Entity,
-    _entities: readonly Entity[],
+    _entities: readonly (Entity | EntityRect)[],
     _level: Level,
     _atlas: Atlas,
     cam: Rect
@@ -148,22 +188,9 @@ export const Behavior = Object.freeze({
       y: cam.y + cam.h - (rect.h + 1)
     })
   },
-  FOLLOW_CAM_SE(
-    val: Entity,
-    _entities: readonly Entity[],
-    _level: Level,
-    _atlas: Atlas,
-    cam: Rect
-  ) {
-    const rect = val.states[val.state]
-    val.states[val.state] = ImageRect.moveTo(rect, {
-      x: cam.x + cam.w - rect.w,
-      y: cam.y + cam.h - rect.h
-    })
-  },
   CURSOR(
     val: Entity,
-    entities: readonly Entity[],
+    entities: readonly (Entity | EntityRect)[],
     _level: Level,
     _atlas: Atlas,
     _cam: Rect,
@@ -183,16 +210,16 @@ export const Behavior = Object.freeze({
     if (xy) val.states[val.state] = ImageRect.moveTo(rect, xy)
 
     if (pick && pick.bits === InputBit.PICK) {
-      const player = entities.find(({id}) => id === 'backpacker')
-      if (player && Backpacker.is(player)) {
+      const backpacker = EntityRect.find(entities, 'backpacker')
+      if (backpacker && Backpacker.is(backpacker)) {
         val.state = 'hidden'
-        player.dst = xy
+        backpacker.dst = xy
       } else val.state = 'visible'
     } else if (point) val.state = 'visible'
   },
   DESTINATION(
     val: Entity,
-    _entities: readonly Entity[],
+    _entities: readonly (Entity | EntityRect)[],
     _level: Level,
     _atlas: Atlas,
     _cam: Rect,
@@ -210,13 +237,13 @@ export const Behavior = Object.freeze({
   },
   UI_EDITOR_BUTTON(
     val: Entity,
-    entities: readonly Entity[],
+    entities: readonly (Entity | EntityRect)[],
     _level: Level,
     _atlas: Atlas,
     _cam: Rect,
     recorder: Recorder
   ) {
-    const cursor = entities.find(({id}) => id === 'cursor')
+    const cursor = EntityRect.find(entities, 'cursor')
 
     const [set] = recorder.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
@@ -232,7 +259,40 @@ export const Behavior = Object.freeze({
     else val.state = 'unpressed'
 
     val.states[val.state] = ImageRect.moveTo(val.states[val.state], {x, y})
-  }
+  },
+  UI_EDITOR_LABEL_BUTTON(
+    val: Entity,
+    entities: readonly (Entity | EntityRect)[],
+    _level: Level,
+    _atlas: Atlas,
+    _cam: Rect,
+    recorder: Recorder
+  ) {
+    const cursor = EntityRect.find(entities, 'cursor')
+
+    const [set] = recorder.combo.slice(-1)
+    const pick = set && set[InputSource.POINTER_PICK]
+    const {x, y} = val.states[val.state]
+
+    if (
+      pick &&
+      pick.bits === InputBit.PICK &&
+      Recorder.triggered(recorder, InputBit.PICK) &&
+      cursor &&
+      Rect.intersects(val.states[val.state], cursor.states[cursor.state])
+    )
+      val.state = val.state === 'selected' ? 'deselected' : 'selected'
+
+    val.states[val.state] = ImageRect.moveTo(val.states[val.state], {x, y})
+  },
+  UI_ENTITY_PICKER(
+    _val: Entity,
+    _entities: readonly (Entity | EntityRect)[],
+    _level: Level,
+    _atlas: Atlas,
+    _cam: Rect,
+    _recorder: Recorder
+  ) {}
 })
 
 export namespace Behavior {
@@ -243,7 +303,7 @@ const collides = (
   val: Entity,
   xy: XY, // Overrides val.xy
   level: Level,
-  entities: readonly Entity[]
+  entities: readonly (Entity | EntityRect)[]
 ): boolean => {
   const plane = {
     x: xy.x,
@@ -256,10 +316,36 @@ const collides = (
   const rectArray = RectArray.moveBy(val.collisions, xy)
   return !!entities.find(entity => {
     if (val === entity) return
-    if (!Rect.intersects(plane, entity.states[entity.state])) return
+    if (
+      !Rect.intersects(
+        plane,
+        EntityRect.is(entity) ? entity : entity.states[entity.state]
+      )
+    )
+      return
+    if (EntityRect.is(entity))
+      return EntityRectCollisioNThingy(entity, rectArray)
     const entityRectArray = RectArray.moveBy(
       entity.collisions,
       entity.states[entity.state]
+    )
+    return RectArray.intersects(rectArray, entityRectArray)
+  })
+}
+
+const EntityRectCollisioNThingy = (
+  rect: EntityRect,
+  rectArray: readonly Rect[]
+): boolean => {
+  return !!rect.entities.find(val => {
+    if (
+      !Rect.intersects(rect, EntityRect.is(val) ? val : val.states[val.state])
+    )
+      return
+    if (EntityRect.is(val)) return EntityRectCollisioNThingy(val, rectArray)
+    const entityRectArray = RectArray.moveBy(
+      val.collisions,
+      val.states[val.state]
     )
     return RectArray.intersects(rectArray, entityRectArray)
   })

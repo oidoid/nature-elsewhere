@@ -3,9 +3,9 @@ import {Entity} from './entity'
 import {Image} from '../images/image'
 import {ImageConfig} from '../images/image-config'
 import {ImageParser} from '../images/image-parser'
+import {ImageRect} from '../images/image-rect'
 import {TextLayout} from '../text/text-layout'
 import {WH} from '../math/wh'
-import {ImageRect} from '../images/image-rect'
 
 export interface Text extends Entity {
   readonly id: 'text'
@@ -19,7 +19,8 @@ export namespace Text {
     if (!isTextEntityConfig(entity))
       throw new Error(`Unknown ID "${entity.id}".`)
     const {scale} = entity
-    const images = toImages(atlas, entity.text, {scale})
+    const layer = 'layer' in entity ? (<any>entity).layer : 'DEFAULT'
+    const images = toImages(atlas, entity.text, {scale, layer})
     return {...entity, states: {text: {x: 0, y: 0, w: 0, h: 0, images}}}
   }
 
