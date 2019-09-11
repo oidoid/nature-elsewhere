@@ -62,34 +62,21 @@ export const EntityRectBehavior = Object.freeze({
       }
       const {x, y} = ent.states[ent.state]
 
-      // console.log(x, y, pick ? pick.xy.x : undefined, pick?  pick.xy.y:undefined)
       // get the old image. update takes effect next frame.
       // ret = [...ret, ...ent.states[ent.state].images]
-      // console.log(cursor && cursor.states[cursor.state], pick && pick.xy)
       if (
         pick &&
         Recorder.triggered(recorder, InputBit.PICK) &&
         cursor &&
-        Rect.intersects(
-          ent.states[ent.state],
-          cursor.states[
-            cursor.state
-          ] /*{
-          x: pick.xy.x,
-          y: pick.xy.y,
-          w: cursor.states[cursor.state].w,
-          h: cursor.states[cursor.state].h
-        }*/
-        )
+        Rect.intersects(ent.states[ent.state], cursor.states[cursor.state])
       ) {
-        // console.log('intersect')
         const selected: Maybe<Entity> = (<any>val).selected
         if (selected && selected !== ent) {
-          const fanyc = selected.states[selected.state]
+          const {x, y} = selected.states[selected.state]
           selected.state = 'deselected'
           selected.states[selected.state] = ImageRect.moveTo(
             selected.states[selected.state],
-            fanyc
+            {x, y}
           )
         }
         ent.state = ent.state === 'selected' ? 'deselected' : 'selected'
@@ -109,28 +96,21 @@ export const EntityRectBehavior = Object.freeze({
     milliseconds: number,
     recorder: Recorder
   ): void {
-    // the problem is that this generates a list of images. this list of iamges
-    // contains hte previous button images. since the state changes in the
-    // update, the camera hcange in EntityRect.moveTo doesn't apply until the subsequent update
     // update the children first so that the origin for the previous frame's
     // input doesn't change?
-    const ret = EntityRect.filterUpdate(
-        val.entities,
-        entities,
-        atlas,
-        cam,
-        level,
-        milliseconds,
-        recorder
-      )
-
-      // this is now a double render pass instead of single recursive pass.
+    EntityRect.filterUpdate(
+      val.entities,
+      entities,
+      atlas,
+      cam,
+      level,
+      milliseconds,
+      recorder
+    )
     ;({x: val.x, y: val.y, w: val.w, h: val.h} = EntityRect.moveTo(val, {
       x: cam.x + cam.w - val.w,
       y: cam.y + cam.h - val.h
     }))
-
-    return ret
   }
 })
 
