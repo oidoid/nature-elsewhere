@@ -15,8 +15,7 @@ export namespace Aseprite {
   /** The topmost data type for JSON exported from Aseprite. This format
       contains all the image, animation, and collision information for every
       file packed in the atlas. **By convention**, every file has one or more
-      animations. Every animation has a Frame sequence, a Tag, and zero or more
-      Slices. */
+      animations. Every animation has a Frame sequence and a Tag. */
   export interface File {
     readonly meta: Meta
     /** All Frames for all files packed. */
@@ -40,8 +39,6 @@ export namespace Aseprite {
     readonly scale: string
     /** All FrameTags for all files packed **via CLI** `--list-tags`. */
     readonly frameTags: readonly FrameTag[]
-    /** All slices for all files packed **via CLI** `--list-slices`. */
-    readonly slices: readonly Slice[]
   }
 
   /** A Tag followed by a space followed by a frame number **via CLI**
@@ -105,25 +102,5 @@ export namespace Aseprite {
         is lesser. A traversal from start to end - 1 then end to start + 1 is
         considered a complete loop. */
     PING_PONG = 'pingpong'
-  }
-
-  /** **By convention**, a collection of bounds within the file packed whose
-      union defines the total collision polygon for a single Frame. */
-  export interface Slice {
-    readonly name: Tag
-    /** Color in #rrggbbaa format. E.g., blue is '#0000ffff'. */
-    readonly color: string
-    readonly keys: readonly Key[]
-  }
-
-  /** A Frame collision boundary subset within the file packed. */
-  export interface Key {
-    /** The inclusive associated Frame's start offset, the exclusive previous
-        Frame's end offset. **By convention,** the exclusive end offset is the
-        next higher Key.frame if it exists or the animation's end if not. A
-        Key's Frame index may be calculated from FrameTag.index + Key.frame. */
-    readonly frame: number
-    /** The Frame's collision boundary within the file packed. */
-    readonly bounds: Rect
   }
 }
