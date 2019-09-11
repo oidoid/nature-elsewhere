@@ -138,7 +138,7 @@ export const Behavior = Object.freeze({
 
   FOLLOW_CURSOR(
     _val: Entity,
-    _entities: readonly (Entity | EntityRect)[],
+    entities: readonly (Entity | EntityRect)[],
     level: Level,
     _atlas: Atlas,
     cam: Mutable<Rect>,
@@ -146,7 +146,16 @@ export const Behavior = Object.freeze({
   ) {
     const [set] = recorder.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
-    if (pick && pick.bits === InputBit.PICK) {
+    const ui = EntityRect.find(entities, 'editor')
+    if (
+      pick &&
+      pick.bits === InputBit.PICK &&
+      (!ui ||
+        !Rect.intersects(ui.states[ui.state], {...pick.xy, w: 1, h: 1}) ||
+        !ui.states[ui.state].images.some(val =>
+          Rect.intersects(val, {...pick.xy, w: 1, h: 1})
+        ))
+    ) {
       // if colliding with anything but plane and UI, return.
       const {x, y} = pick.xy
       // keep track of pointer offset relative cmaera
