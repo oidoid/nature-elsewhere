@@ -32,9 +32,16 @@ export namespace Entity {
     cam: Rect,
     time: number,
     recorder: Recorder
-  ): readonly Image[] => {
-    if (val.updateType === 'NEVER') return val.states[val.state].images
+  ): void => {
+    if (val.updateType === 'NEVER') return
     Behavior[val.behavior](val, entities, level, atlas, cam, recorder, time)
+  }
+
+  export const layout = (
+    val: t,
+    atlas: Atlas,
+    time: number
+  ): readonly Image[] => {
     animate(val, atlas, time)
     return val.states[val.state].images
   }

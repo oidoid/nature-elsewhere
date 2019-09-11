@@ -36,24 +36,20 @@ export namespace EntityRect {
     level: Level,
     milliseconds: number,
     recorder: Recorder
-  ): Image[] => {
-    if (!Rect.intersects(val, cam)) return []
+  ): void => {
+    if (!Rect.intersects(val, cam)) return
     const entities = val.entities.filter(
       val =>
-        (!('entities' in val) && val.updateType === 'ALWAYS') ||
-        ('entities' in val
+        (!EntityRect.is(val) && val.updateType === 'ALWAYS') ||
+        (EntityRect.is(val)
           ? Rect.intersects(val, cam)
           : Rect.intersects(val.states[val.state], cam))
     )
-    return filterUpdate(
-      entities,
-      entities,
-      atlas,
-      cam,
-      level,
-      milliseconds,
-      recorder
-    )
+    filterUpdate(entities, entities, atlas, cam, level, milliseconds, recorder)
+  }
+
+  export const layout = (val: t, atlas: Atlas, time: number): Image[] => {
+    return filterLayout(val.entities, atlas, time)
   }
 
   export const invalidate = (val: t): void => {
@@ -89,28 +85,40 @@ export namespace EntityRect {
     level: Level,
     milliseconds: number,
     recorder: Recorder
+  ): void {
+    val.forEach(val =>
+      is(val)
+        ? EntityRectBehavior[val.behavior](
+            val,
+            entities,
+            atlas,
+            cam,
+            level,
+            milliseconds,
+            recorder
+          )
+        : Entity.update(
+            val,
+            entities,
+            level,
+            atlas,
+            cam,
+            milliseconds,
+            recorder
+          )
+    )
+  }
+
+  export function filterLayout(
+    val: readonly (Entity | EntityRect)[],
+    atlas: Atlas,
+    milliseconds: number
   ): Image[] {
     return val
       .map(val =>
         is(val)
-          ? EntityRectBehavior[val.behavior](
-              val,
-              entities,
-              atlas,
-              cam,
-              level,
-              milliseconds,
-              recorder
-            )
-          : Entity.update(
-              val,
-              entities,
-              level,
-              atlas,
-              cam,
-              milliseconds,
-              recorder
-            )
+          ? EntityRect.layout(val, atlas, milliseconds)
+          : Entity.layout(val, atlas, milliseconds)
       )
       .reduce((ret: Image[], val) => [...ret, ...val], [])
   }

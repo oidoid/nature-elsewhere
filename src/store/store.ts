@@ -34,14 +34,10 @@ export namespace Store {
     recorder: Recorder
   ): t => {
     const copy = {...cam}
-    const images = EntityRect.update(
-      entities,
-      atlas,
-      copy,
-      level,
-      milliseconds,
-      recorder
-    ).sort(Image.compare)
+    EntityRect.update(entities, atlas, copy, level, milliseconds, recorder)
+    const images = EntityRect.layout(entities, atlas, milliseconds).sort(
+      Image.compare
+    )
     ;(<any>cam).x = copy.x
     ;(<any>cam).y = copy.y
     ;(<any>cam).w = copy.w

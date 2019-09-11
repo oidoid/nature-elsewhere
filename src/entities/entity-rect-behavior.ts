@@ -19,8 +19,8 @@ export const EntityRectBehavior = Object.freeze({
     level: Level,
     milliseconds: number,
     recorder: Recorder
-  ): Image[] {
-    return EntityRect.filterUpdate(
+  ): void {
+    EntityRect.filterUpdate(
       val.entities,
       entities,
       atlas,
@@ -38,7 +38,7 @@ export const EntityRectBehavior = Object.freeze({
     level: Level,
     milliseconds: number,
     recorder: Recorder
-  ): Image[] {
+  ): void {
     const cursor = EntityRect.find(entities, 'cursor')
     const [set] = recorder.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
@@ -48,18 +48,16 @@ export const EntityRectBehavior = Object.freeze({
     let ret: Image[] = []
     for (const ent of val.entities) {
       if (!UIEditorLabelButton.is(ent)) {
-        ret = [
-          ...ret,
-          ...EntityRect.filterUpdate(
-            [ent],
-            entities,
-            atlas,
-            cam,
-            level,
-            milliseconds,
-            recorder
-          )
-        ]
+        ret = [...ret]
+        EntityRect.filterUpdate(
+          [ent],
+          entities,
+          atlas,
+          cam,
+          level,
+          milliseconds,
+          recorder
+        )
         continue
       }
       const {x, y} = ent.states[ent.state]
@@ -101,7 +99,6 @@ export const EntityRectBehavior = Object.freeze({
 
       ret = [...ret, ...ent.states[ent.state].images]
     }
-    return ret
   },
   FOLLOW_CAM_SE(
     val: EntityRect,
@@ -111,7 +108,7 @@ export const EntityRectBehavior = Object.freeze({
     level: Level,
     milliseconds: number,
     recorder: Recorder
-  ) {
+  ): void {
     // the problem is that this generates a list of images. this list of iamges
     // contains hte previous button images. since the state changes in the
     // update, the camera hcange in EntityRect.moveTo doesn't apply until the subsequent update
