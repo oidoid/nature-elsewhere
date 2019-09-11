@@ -4,7 +4,6 @@ import {Atlas} from '../atlas/atlas'
 import {Rect} from '../math/rect'
 import {Level} from '../levels/level'
 import {Recorder} from '../inputs/recorder'
-import {Image} from '../images/image'
 import {InputSource} from '../inputs/input-source'
 import {UIEditorLabelButton} from './ui-editor-label-button'
 import {ImageRect} from '../images/image-rect'
@@ -45,10 +44,8 @@ export const EntityRectBehavior = Object.freeze({
 
     // Only UIEditorLabel children are permitted
 
-    let ret: Image[] = []
     for (const ent of val.entities) {
       if (!UIEditorLabelButton.is(ent)) {
-        ret = [...ret]
         EntityRect.filterUpdate(
           [ent],
           entities,
@@ -83,8 +80,6 @@ export const EntityRectBehavior = Object.freeze({
         ;(<any>val).selected = ent.state === 'selected' ? ent : undefined
       }
       ent.states[ent.state] = ImageRect.moveTo(ent.states[ent.state], {x, y})
-
-      ret = [...ret, ...ent.states[ent.state].images]
     }
   },
   FOLLOW_CAM_SE(

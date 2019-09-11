@@ -13,17 +13,22 @@ import {XY} from '../math/xy'
 export interface EntityRect extends Mutable<Rect> {
   readonly behavior: EntityRectBehavior.Key
   /** Image coordinates are not relative origin. */
-  readonly entities: readonly (Entity | EntityRect)[] // rename children
+  readonly entities: (Entity | EntityRect)[] // rename children
 }
 type t = EntityRect
 
 export namespace EntityRect {
   export const find = (
     val: readonly (Entity | EntityRect)[],
-    id: string
+    id: string,
+    state?: string
   ): Maybe<Entity> => {
     for (const i of val) {
-      const ret = is(i) ? find(i.entities, id) : i.id === id ? i : undefined
+      const ret = is(i)
+        ? find(i.entities, id, state)
+        : i.id === id && (!state || i.state === state)
+        ? i
+        : undefined
       if (ret) return ret
     }
     return undefined
@@ -37,6 +42,7 @@ export namespace EntityRect {
     milliseconds: number,
     recorder: Recorder
   ): void => {
+    // need support here for the EntityRects to specify always too. currently the editor doesn't come back on screen once off.
     if (!Rect.intersects(val, cam)) return
     const entities = val.entities.filter(
       val =>

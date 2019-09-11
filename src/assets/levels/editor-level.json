@@ -18,8 +18,20 @@
             {"id": "uiEditorButton", "button": "decrement", "x": 2, "y": 22},
             {"id": "uiEditorButton", "button": "increment", "x": 10, "y": 22},
             {"id": "uiEditorButton", "button": "remove", "x": 18, "y": 22},
-            {"id": "uiEditorButton", "button": "add", "x": 26, "y": 22},
-            {"id": "uiEditorButton", "button": "grid", "x": 34, "y": 22},
+            {
+              "id": "uiEditorButton",
+              "behavior": "ADD",
+              "button": "add",
+              "x": 26,
+              "y": 22
+            },
+            {
+              "id": "uiEditorButton",
+              "behavior": "GRID",
+              "button": "grid",
+              "x": 34,
+              "y": 22
+            },
             {"id": "uiEntityPicker", "x": 88, "y": 0},
             {
               "behavior": "PICK_ONE",

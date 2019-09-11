@@ -11,6 +11,7 @@ import {Recorder} from '../inputs/recorder'
 import {Rect} from '../math/rect'
 import {XY} from '../math/xy'
 import {RectArray} from '../math/rect-array'
+import {EntityParser} from './entity-parser'
 
 export const Behavior = Object.freeze({
   STATIC() {},
@@ -136,6 +137,60 @@ export const Behavior = Object.freeze({
     }
   },
 
+  GRID(
+    val: Entity,
+    entities: readonly (Entity | EntityRect)[],
+    level: Level,
+    atlas: Atlas,
+    cam: Rect,
+    recorder: Recorder
+  ) {
+    const cursor = EntityRect.find(entities, 'cursor')
+    const grid =
+      EntityRect.find(level.entities, 'plane', 'grid') ||
+      EntityRect.find(level.entities, 'plane', 'hidden')
+
+    const [set] = recorder.combo.slice(-1)
+    const pick = set && set[InputSource.POINTER_PICK]
+
+    if (
+      pick &&
+      pick.bits === InputBit.PICK &&
+      Recorder.triggered(recorder, InputBit.PICK) &&
+      cursor &&
+      Rect.intersects(val.states[val.state], cursor.states[cursor.state]) &&
+      grid
+    ) {
+      grid.state = grid.state === 'grid' ? 'hidden' : 'grid'
+    }
+    Behavior.UI_EDITOR_BUTTON(val, entities, level, atlas, cam, recorder)
+  },
+  ADD(
+    val: Entity,
+    entities: readonly (Entity | EntityRect)[],
+    level: Level,
+    atlas: Atlas,
+    cam: Rect,
+    recorder: Recorder
+  ) {
+    const cursor = EntityRect.find(entities, 'cursor')
+
+    const [set] = recorder.combo.slice(-1)
+    const pick = set && set[InputSource.POINTER_PICK]
+
+    if (
+      pick &&
+      pick.bits === InputBit.PICK &&
+      Recorder.triggered(recorder, InputBit.PICK) &&
+      cursor &&
+      Rect.intersects(val.states[val.state], cursor.states[cursor.state])
+    ) {
+      level.entities.push(
+        EntityParser.parse(atlas, {id: 'plane', state: 'red'})
+      )
+    }
+    Behavior.UI_EDITOR_BUTTON(val, entities, level, atlas, cam, recorder)
+  },
   FOLLOW_CURSOR(
     _val: Entity,
     entities: readonly (Entity | EntityRect)[],
