@@ -2,6 +2,7 @@
   "name": "nature-elsewhere",
   "author": "rndmem",
   "version": "0.0.0",
+  "//": "[strings]",
   "description": "An isometric adventure in an idealized state of nature.",
   "keywords": [
     "game",
