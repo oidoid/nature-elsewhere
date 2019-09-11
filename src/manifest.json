@@ -1,5 +1,5 @@
 {
-  "//": "[strings] [version] [palette]",
+  "//": "[strings] [version] [palette] Don't forget to update the favicon palette.",
   "name": "nature elsewhere",
   "description": "An isometric adventure in an idealized state of nature.",
   "icons": [
