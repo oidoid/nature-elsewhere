@@ -3,14 +3,14 @@ import {Entity} from '../../../entity'
 import {EntityType} from '../../entity-type'
 import {Text} from '../text'
 import {Limits} from '../../../../math/limits'
-import {Image} from '../../../../images/image'
-import {Layer} from '../../../../images/layer'
+import {Image} from '../../../../images/image/image'
+import {Layer} from '../../../../images/layer/layer'
 import {XY} from '../../../../math/xy'
 import {TextLayout} from '../../../../text/text-layout'
-import {ImageParser} from '../../../../images/parsers/image-parser'
 import {Rect} from '../../../../math/rect'
 import {RectArray} from '../../../../math/rect-array'
 import {XYParser} from '../../../../math/parsers/xy-parser'
+import {ImageParser} from '../../../../images/image/image-parser'
 
 export namespace TextParser {
   export function parse(text: Entity, atlas: Atlas): Text {

@@ -1,8 +1,8 @@
 import {EntityState} from '../../entities/entity-state'
 import {EntityStateParser} from '../../entities/parsers/entity-state-parser'
-import {ImageStateMap} from '../image-state-map'
+import {ImageStateMap} from './image-state-map'
 import {ImageStateMapConfig} from './image-state-map-config'
-import {ImageRectParser} from './image-rect-parser'
+import {ImageRectParser} from '../image-rect/image-rect-parser'
 import {Atlas} from '../../atlas/atlas'
 
 export namespace ImageStateMapParser {

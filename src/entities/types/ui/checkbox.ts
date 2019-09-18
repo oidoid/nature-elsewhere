@@ -9,13 +9,13 @@ import {InputBit} from '../../../inputs/input-bit'
 import {Entity} from '../../entity'
 import {AtlasID} from '../../../atlas/atlas-id'
 import {Atlas} from '../../../atlas/atlas'
-import {Image} from '../../../images/image'
-import {ImageParser} from '../../../images/parsers/image-parser'
+import {Image} from '../../../images/image/image'
 import * as memFont from '../../../assets/mem-font.json'
-import {ImageRect} from '../../../images/image-rect'
+import {ImageRect} from '../../../images/image-rect/image-rect'
 import {Recorder} from '../../../inputs/recorder'
 import {EntityParser} from '../../parsers/entity-parser'
 import {Rect} from '../../../math/rect'
+import {ImageParser} from '../../../images/image/image-parser'
 
 export interface Checkbox extends Omit<Text, 'type'> {
   readonly type: EntityType.UI_CHECKBOX

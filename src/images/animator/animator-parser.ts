@@ -1,4 +1,4 @@
-import {Animator} from '../animator'
+import {Animator} from './animator'
 import {AnimatorConfig} from './animator-config'
 
 export namespace AnimatorParser {

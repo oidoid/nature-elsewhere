@@ -8,11 +8,11 @@ import {Updater} from '../../updaters/updater'
 import {InputSource} from '../../../inputs/input-source'
 import {InputBit} from '../../../inputs/input-bit'
 import {Atlas} from '../../../atlas/atlas'
-import {ImageParser} from '../../../images/parsers/image-parser'
 import {XY} from '../../../math/xy'
-import {Image} from '../../../images/image'
-import {ImageRect} from '../../../images/image-rect'
+import {Image} from '../../../images/image/image'
+import {ImageRect} from '../../../images/image-rect/image-rect'
 import {Recorder} from '../../../inputs/recorder'
+import {ImageParser} from '../../../images/image/image-parser'
 
 export interface Button extends Entity {
   readonly type: EntityType.UI_BUTTON

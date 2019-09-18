@@ -1,7 +1,7 @@
-import {Image} from './image'
-import {Rect} from '../math/rect'
-import {XY} from '../math/xy'
-import {RectArray} from '../math/rect-array'
+import {Image} from '../image/image'
+import {Rect} from '../../math/rect'
+import {XY} from '../../math/xy'
+import {RectArray} from '../../math/rect-array'
 
 export interface ImageRect {
   /** The upper-left and size of the local coordinate system. The images are

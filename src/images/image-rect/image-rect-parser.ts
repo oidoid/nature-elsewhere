@@ -1,11 +1,11 @@
-import {ImageParser} from './image-parser'
-import {ImageRect} from '../image-rect'
+import {ImageRect} from './image-rect'
 import {ImageRectConfig} from './image-rect-config'
 import {XYParser} from '../../math/parsers/xy-parser'
 import {RectArray} from '../../math/rect-array'
-import {Image} from '../image'
+import {Image} from '../image/image'
 import {Atlas} from '../../atlas/atlas'
-import {ImageScaleParser} from './image-scale-parser'
+import {ImageScaleParser} from '../image-scale/image-scale-parser'
+import {ImageParser} from '../image/image-parser'
 
 export namespace ImageRectParser {
   export function parse(config: ImageRectConfig, atlas: Atlas): ImageRect {

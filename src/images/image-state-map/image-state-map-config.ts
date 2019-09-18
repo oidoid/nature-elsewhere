@@ -1,4 +1,4 @@
-import {ImageRectConfig} from './image-rect-config'
+import {ImageRectConfig} from '../image-rect/image-rect-config'
 import {EntityStateConfig} from '../../entities/parsers/entity-state-config'
 
 export type ImageStateMapConfig = Maybe<

@@ -4,7 +4,7 @@ import {EntityParser} from '../../parsers/entity-parser'
 import {EntityState} from '../../entity-state'
 import {EntityTypeConfigMap} from '../entity-type-config-map'
 import {EntityType} from '../entity-type'
-import {Layer} from '../../../images/layer'
+import {Layer} from '../../../images/layer/layer'
 import {ObjectUtil} from '../../../utils/object-util'
 import {NumberUtil} from '../../../math/number-util'
 
