@@ -34,8 +34,9 @@ export namespace Animator {
   }
 }
 
+type Period = (period: number, len: number) => number
 const Period: Readonly<
-  Record<Atlas.AnimationDirection, (period: number, len: number) => number>
+  Record<Atlas.AnimationDirection, Period>
 > = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Atlas.AnimationDirection.FORWARD](period) {
@@ -43,9 +44,12 @@ const Period: Readonly<
   },
 
   /** @arg period An integer in the domain (-∞, len - 1]. */
-  [Atlas.AnimationDirection.REVERSE]: (period, len) =>
-    (period % Number.MIN_SAFE_INTEGER) - 1 + len,
+  [Atlas.AnimationDirection.REVERSE](period, len) {
+    return (period % Number.MIN_SAFE_INTEGER) - 1 + len
+  },
+
   /** @arg period An integer in the domain [2 - len, len - 1]. */
-  [Atlas.AnimationDirection.PING_PONG]: (period, len) =>
-    NumberUtil.wrap(period - 1, 2 - len, len)
+  [Atlas.AnimationDirection.PING_PONG](period, len) {
+    return NumberUtil.wrap(period - 1, 2 - len, len)
+  }
 })

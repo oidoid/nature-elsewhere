@@ -1,23 +1,24 @@
-import {Rect} from '../math/rect'
-import {Animator} from './animator'
-import {XY} from '../math/xy'
-import {Layer} from './layer'
-import {Atlas} from '../atlas/atlas'
 import {AnimationID} from '../atlas/animation-id'
+import {Animator} from './animator'
+import {Atlas} from '../atlas/atlas'
+import {Layer} from './layer'
+import {Rect} from '../math/rect'
+import {XY} from '../math/xy'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same
     size. Specifying a different target width or height than the source
-    truncates or repeats the scaled rendered source. */
+    truncates or repeats the scaled rendered source. Images do not affect
+    collision tests but their bounds may be used. */
 export interface Image {
   readonly id: AnimationID
-  /** Specified in level coordinates. Includes scaling.
+  /** Specified in fractional pixel level coordinates. Includes scaling.
 
-      Images.bounds are used to determine when the image is on screen (and
-      therefor) should be drawn as well as rendering itself.
+      Images.bounds are used to determine when the image is on screen and
+      therefor should be drawn, as well as for rendering itself.
 
       Images.bounds are used for some collision tests (see CollisionPredicate)
-      as entity bounds are in part calculated by Image.bounds, ImageRect.bounds,
+      as entity bounds are calculated in part by Image.bounds, ImageRect.bounds,
       and Entity.bounds. */
   readonly bounds: Writable<Rect>
   layer: Layer

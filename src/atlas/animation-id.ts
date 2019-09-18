@@ -1,4 +1,8 @@
-/** The Atlas.Animation identifier. */
+/** The Atlas.Animation identifier. These are used to reference immutable image
+    source properties, such as dimensions and animation duration, from the
+    Atlas. These animations are mostly referenced directly from entity configs
+    but also in some cases where Images are instantiated or manipulated
+    dynamically in code. */
 export enum AnimationID {
   CHAR_ARROW_DIAGONAL = 'arrow upRight',
   CHAR_ARROW_HORIZONTAL = 'arrow right',
@@ -67,6 +71,7 @@ export enum AnimationID {
   SCENERY_FLAG = 'flag',
   SCENERY_FLAG_SHADOW = 'flag shadow',
   SCENERY_GRASS_0 = 'grass 0',
+  SCENERY_GRASS_10 = 'grass 10',
   SCENERY_GRASS_1 = 'grass 1',
   SCENERY_GRASS_2 = 'grass 2',
   SCENERY_GRASS_3 = 'grass 3',
@@ -76,7 +81,6 @@ export enum AnimationID {
   SCENERY_GRASS_7 = 'grass 7',
   SCENERY_GRASS_8 = 'grass 8',
   SCENERY_GRASS_9 = 'grass 9',
-  SCENERY_GRASS_10 = 'grass 10',
   SCENERY_ISO_GRASS = 'isoGrass /0',
   SCENERY_MOUNTAIN = 'mountain',
   SCENERY_MOUNTAIN_SHADOW = 'mountain shadow',
