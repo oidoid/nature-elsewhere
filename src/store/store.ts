@@ -3,8 +3,8 @@ import {Image} from '../images/image/image'
 import {InstanceBuffer} from './instance-buffer'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 import {UpdateState} from '../entities/updaters/update-state'
-import {Entity} from '../entities/entity'
-import {EntityID} from '../entities/entity-id'
+import {Entity} from '../entities/entity/entity'
+import {EntityID} from '../entities/entity-id/entity-id'
 import {NumberUtil} from '../math/number-util'
 
 export interface Store {

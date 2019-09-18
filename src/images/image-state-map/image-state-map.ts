@@ -1,4 +1,4 @@
-import {EntityState} from '../../entities/entity-state'
+import {EntityState} from '../../entities/entity-state/entity-state'
 import {ImageRect} from '../image-rect/image-rect'
 
 // EntityState | string is terrible

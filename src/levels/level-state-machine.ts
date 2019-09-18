@@ -1,9 +1,9 @@
 import {Atlas} from '../atlas/atlas/atlas'
-import {Level} from './level'
+import {Level} from './level/level'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 import {Store} from '../store/store'
-import {LevelParser} from './parsers/level-parser'
-import {LevelTypeConfigMap} from './level-type-config-map'
+import {LevelParser} from './level/level-parser'
+import {LevelTypeConfigMap} from './level-type-config/level-type-config-map'
 import {UpdateState} from '../entities/updaters/update-state'
 
 export interface LevelStateMachine {

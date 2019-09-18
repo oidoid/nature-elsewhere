@@ -1,5 +1,5 @@
-import {Entity} from '../entity'
-import {Level} from '../../levels/level'
+import {Entity} from '../entity/entity'
+import {Level} from '../../levels/level/level'
 import {Recorder} from '../../inputs/recorder'
 import {EntityCollision} from '../../collision/entity-collision'
 import {EntityCollider} from '../../collision/entity-collider'

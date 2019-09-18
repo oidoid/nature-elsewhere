@@ -1,5 +1,5 @@
-import {EntityState} from '../../entities/entity-state'
-import {EntityStateParser} from '../../entities/parsers/entity-state-parser'
+import {EntityState} from '../../entities/entity-state/entity-state'
+import {EntityStateParser} from '../../entities/entity-state/entity-state-parser'
 import {ImageStateMap} from './image-state-map'
 import {ImageStateMapConfig} from './image-state-map-config'
 import {ImageRectParser} from '../image-rect/image-rect-parser'
