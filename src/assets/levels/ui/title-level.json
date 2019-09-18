@@ -12,7 +12,7 @@
       "imageStates": {
         "visible": {
           "images": [
-            {"id": "palette lightGreen", "bounds": {"y": 33, "w": 99, "h": 2}}
+            {"id": "palette lightGreen", "bounds": {"y": 44, "w": 132, "h": 2}}
           ]
         }
       },
@@ -24,51 +24,58 @@
           "type": "uiText",
           "//": "[strings]",
           "text": "nature\nelsewhere",
-          "textScale": {"x": 3, "y": 3}
+          "textScale": {"x": 4, "y": 4}
         },
         {
-          "id": "uiLinkStart",
-          "type": "uiText",
-          "position": {"y": 48},
-          "//": "[strings]",
-          "text": "start",
-          "textScale": {"x": 2, "y": 2},
-          "link": "playFields",
-          "updaters": ["uiLink", "uiLevelLink"],
-          "collisionPredicate": "bounds"
-        },
-        {
-          "id": "uiLinkOptions",
-          "type": "uiText",
+          "type": "group",
           "position": {"y": 60},
-          "//": "[strings]",
-          "text": "options",
-          "textScale": {"x": 2, "y": 2},
-          "link": "uiOptions",
-          "updaters": ["uiLink", "uiLevelLink"],
-          "collisionPredicate": "bounds"
-        },
-        {
-          "id": "uiLinkLevelEditor",
-          "type": "uiText",
-          "position": {"y": 72},
-          "//": "[strings]",
-          "text": "level editor",
-          "textScale": {"x": 2, "y": 2},
-          "link": "uiLevelEditor",
-          "updaters": ["uiLink", "uiLevelLink"],
-          "collisionPredicate": "bounds"
-        },
-        {
-          "id": "uiLinkExit",
-          "type": "uiText",
-          "position": {"y": 84},
-          "//": "[strings]",
-          "text": "exit",
-          "textScale": {"x": 2, "y": 2},
-          "link": "uiExit",
-          "updaters": ["uiLink", "uiLevelLink"],
-          "collisionPredicate": "bounds"
+          "updatePredicate": "always",
+          "collisionPredicate": "children",
+          "children": [
+            {
+              "id": "uiLinkStart",
+              "type": "uiText",
+              "//": "[strings]",
+              "text": "start",
+              "textScale": {"x": 2, "y": 2},
+              "link": "playFields",
+              "updaters": ["uiLink", "uiLevelLink"],
+              "collisionPredicate": "bounds"
+            },
+            {
+              "id": "uiLinkOptions",
+              "type": "uiText",
+              "position": {"y": 12},
+              "//": "[strings]",
+              "text": "options",
+              "textScale": {"x": 2, "y": 2},
+              "link": "uiOptions",
+              "updaters": ["uiLink", "uiLevelLink"],
+              "collisionPredicate": "bounds"
+            },
+            {
+              "id": "uiLinkLevelEditor",
+              "type": "uiText",
+              "position": {"y": 24},
+              "//": "[strings]",
+              "text": "level editor",
+              "textScale": {"x": 2, "y": 2},
+              "link": "uiLevelEditor",
+              "updaters": ["uiLink", "uiLevelLink"],
+              "collisionPredicate": "bounds"
+            },
+            {
+              "id": "uiLinkExit",
+              "type": "uiText",
+              "position": {"y": 36},
+              "//": "[strings]",
+              "text": "exit",
+              "textScale": {"x": 2, "y": 2},
+              "link": "uiExit",
+              "updaters": ["uiLink", "uiLevelLink"],
+              "collisionPredicate": "bounds"
+            }
+          ]
         }
       ]
     },
