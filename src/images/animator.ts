@@ -17,19 +17,19 @@ export interface Animator {
 
 export namespace Animator {
   export function animate(
-    {cels, direction, duration}: Atlas.Animation,
     period: number,
-    exposure: Milliseconds
+    exposure: Milliseconds,
+    animation: Atlas.Animation
   ): Animator {
-    exposure = exposure % duration
-    while (exposure >= cels[index(cels, period)].duration) {
-      exposure -= cels[index(cels, period)].duration
-      period = Period[direction](period, cels.length)
+    exposure = exposure % animation.duration
+    while (exposure >= animation.cels[index(period, animation.cels)].duration) {
+      exposure -= animation.cels[index(period, animation.cels)].duration
+      period = Period[animation.direction](period, animation.cels.length)
     }
     return {period, exposure}
   }
 
-  export function index(cels: readonly Atlas.Cel[], period: number): number {
+  export function index(period: number, cels: readonly Atlas.Cel[]): number {
     return Math.abs(period % cels.length)
   }
 }

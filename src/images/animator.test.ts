@@ -12,7 +12,7 @@ describe('step()', () => {
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
     }
-    const ret = Animator.animate(animation, 0, 0.5)
+    const ret = Animator.animate(0, 0.5, animation)
     expect(ret).toMatchObject({period: 0, exposure: 0.5})
   })
 
@@ -24,7 +24,7 @@ describe('step()', () => {
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
     }
-    const ret = Animator.animate(animation, 0, 1)
+    const ret = Animator.animate(0, 1, animation)
     expect(ret).toMatchObject({period: 1, exposure: 0})
   })
 
@@ -36,7 +36,7 @@ describe('step()', () => {
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
     }
-    const ret = Animator.animate(animation, 0, 1.5)
+    const ret = Animator.animate(0, 1.5, animation)
     expect(ret).toMatchObject({period: 1, exposure: 0.5})
   })
 })
@@ -52,8 +52,8 @@ describe('index', () => {
         duration: 2,
         direction
       }
-      const {period} = Animator.animate(animation, 0, 1)
-      const ret = Animator.index(animation.cels, period)
+      const {period} = Animator.animate(0, 1, animation)
+      const ret = Animator.index(period, animation.cels)
       expect(ret).toStrictEqual(1)
     }
   )
@@ -68,8 +68,8 @@ describe('index', () => {
         duration: 2,
         direction
       }
-      const {period} = Animator.animate(animation, 1, 1)
-      const ret = Animator.index(animation.cels, period)
+      const {period} = Animator.animate(1, 1, animation)
+      const ret = Animator.index(period, animation.cels)
       expect(ret).toStrictEqual(0)
     }
   )
@@ -123,8 +123,8 @@ describe('index', () => {
     let exposure = 0
     const ret = []
     for (let i = 0; i < animation.cels.length * 5; ++i) {
-      ;({period, exposure} = Animator.animate(animation, period, exposure + 1))
-      ret.push(Animator.index(animation.cels, period))
+      ;({period, exposure} = Animator.animate(period, exposure + 1, animation))
+      ret.push(Animator.index(period, animation.cels))
     }
     expect(ret).toStrictEqual(expected)
   })
@@ -143,11 +143,11 @@ describe('index', () => {
       const ret = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
         ;({period, exposure} = Animator.animate(
-          animation,
           period,
-          exposure + 1
+          exposure + 1,
+          animation
         ))
-        ret.push(Animator.index(animation.cels, period))
+        ret.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -173,11 +173,11 @@ describe('index', () => {
       const ret = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
         ;({period, exposure} = Animator.animate(
-          animation,
           period,
-          exposure + 6
+          exposure + 6,
+          animation
         ))
-        ret.push(Animator.index(animation.cels, period))
+        ret.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -203,11 +203,11 @@ describe('index', () => {
       const ret = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         ;({period, exposure} = Animator.animate(
-          animation,
           period,
-          exposure + 0.5
+          exposure + 0.5,
+          animation
         ))
-        ret.push(Animator.index(animation.cels, period))
+        ret.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -233,11 +233,11 @@ describe('index', () => {
       const ret = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         ;({period, exposure} = Animator.animate(
-          animation,
           period,
-          exposure + 0.9
+          exposure + 0.9,
+          animation
         ))
-        ret.push(Animator.index(animation.cels, period))
+        ret.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -263,11 +263,11 @@ describe('index', () => {
       const ret = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         ;({period, exposure} = Animator.animate(
-          animation,
           period,
-          exposure + 5.5
+          exposure + 5.5,
+          animation
         ))
-        ret.push(Animator.index(animation.cels, period))
+        ret.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {

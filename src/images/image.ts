@@ -26,28 +26,31 @@ export interface Image {
   /** See bounds. */
   readonly scale: Writable<IntXY>
   /** Specifies the initial marquee offset. */
-  readonly wrap: Readonly<DecamillipixelIntXY>
+  readonly wrap: DecamillipixelIntXY
   /** Specifies the additional marquee offset added by the shader according to
       the game clock. */
-  readonly wrapVelocity: Readonly<DecamillipixelIntXY>
+  readonly wrapVelocity: DecamillipixelIntXY
 }
 
 export namespace Image {
+  /** Translate by. */
   export function moveBy(image: Image, by: XY): void {
     image.bounds.x += by.x
     image.bounds.y += by.y
   }
 
-  export function setScale(image: Image, scale: XY): void {
-    image.bounds.w *= Math.abs(scale.x / image.scale.x)
-    image.bounds.h *= Math.abs(scale.y / image.scale.y)
-    image.scale.x = scale.x
-    image.scale.y = scale.y
+  /** Set absolute scale. */
+  export function setScale(image: Image, to: XY): void {
+    image.bounds.w *= Math.abs(to.x / image.scale.x)
+    image.bounds.h *= Math.abs(to.y / image.scale.y)
+    image.scale.x = to.x
+    image.scale.y = to.y
   }
 
-  export function scale(image: Image, scale: XY): void {
-    scale = {x: scale.x * image.scale.x, y: scale.y * image.scale.y}
-    Image.setScale(image, scale)
+  /** Multiply by scale. */
+  export function scale(image: Image, by: XY): void {
+    by = {x: by.x * image.scale.x, y: by.y * image.scale.y}
+    Image.setScale(image, by)
   }
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. See
@@ -64,15 +67,17 @@ export namespace Image {
     time: Milliseconds,
     atlas: Atlas
   ): void {
-    const exposure = image.animator.exposure + time
-    ;({
-      period: image.animator.period,
-      exposure: image.animator.exposure
-    } = Animator.animate(atlas[image.id], image.animator.period, exposure))
+    const animator = Animator.animate(
+      image.animator.period,
+      image.animator.exposure + time,
+      atlas[image.id]
+    )
+    image.animator.period = animator.period
+    image.animator.exposure = animator.exposure
   }
 
   export function cel(image: Readonly<Image>, atlas: Atlas): Atlas.Cel {
-    const index = Animator.index(atlas[image.id].cels, image.animator.period)
+    const index = Animator.index(image.animator.period, atlas[image.id].cels)
     return atlas[image.id].cels[index]
   }
 }

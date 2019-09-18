@@ -1,4 +1,3 @@
-// do i really want these to be radonly verywhere?
 export interface XY {
   readonly x: number
   readonly y: number

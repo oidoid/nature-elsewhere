@@ -1,14 +1,14 @@
-import {AtlasIDParser} from '../../atlas/atlas-id-parser'
 import {AnimatorParser} from './animator-parser'
-import {ImageConfig} from './image-config'
-import {Image} from '../image'
-import {LayerParser} from './layer-parser'
-import {XYParser} from '../../math/parsers/xy-parser'
-import {DecamillipixelIntXYParser} from './decamillipixel-xy-parser'
 import {Atlas} from '../../atlas/atlas'
 import {AtlasID} from '../../atlas/atlas-id'
-import {Rect} from '../../math/rect'
+import {AtlasIDParser} from '../../atlas/atlas-id-parser'
+import {DecamillipixelIntXYParser} from './decamillipixel-xy-parser'
+import {ImageConfig} from './image-config'
+import {Image} from '../image'
 import {ImageScaleParser} from './image-scale-parser'
+import {LayerParser} from './layer-parser'
+import {Rect} from '../../math/rect'
+import {XYParser} from '../../math/parsers/xy-parser'
 
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
