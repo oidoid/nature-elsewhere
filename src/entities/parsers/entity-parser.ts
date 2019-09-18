@@ -28,9 +28,9 @@ export namespace EntityParser {
     const state = EntityStateParser.parse(config.state)
     const imageStates = ImageStateMapParser.parse(config.imageStates, atlas)
     const children = EntityArrayParser.parse(config.children, atlas)
-    const scaleImages = ImageScaleParser.parse(config.scaleImages)
+    const scale = ImageScaleParser.parse(config.scale)
     for (const state of Object.values(imageStates)) {
-      ImageRect.scale(state, scaleImages)
+      ImageRect.scale(state, scale)
     }
 
     let entity: Entity = {
@@ -46,7 +46,7 @@ export namespace EntityParser {
         w: 0,
         h: 0
       },
-      flipImages: ImageScaleParser.parse(config.flipImages),
+      scale,
       state,
       imageStates,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
@@ -62,7 +62,7 @@ export namespace EntityParser {
     const position = XYParser.parse(config.position)
     Entity.moveTo(entity, position)
 
-    Entity.setFlip(entity, entity.flipImages)
+    Entity.setScale(entity, entity.scale)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.
@@ -96,8 +96,7 @@ function specialization(config: EntityConfig): Partial<EntityConfig> {
     id,
     type,
     position,
-    flipImages,
-    scaleImages,
+    scale,
     state,
     imageStates,
     updatePredicate,

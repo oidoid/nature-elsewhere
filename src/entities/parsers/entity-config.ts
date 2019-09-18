@@ -16,8 +16,7 @@ export interface EntityConfig {
   readonly type: EntityTypeConfig
   /** Defaults to (0, 0). */
   readonly position?: XYConfig
-  readonly flipImages?: ImageScaleConfig
-  readonly scaleImages?: ImageScaleConfig
+  readonly scale?: ImageScaleConfig
   /** Defaults to {}. */
   readonly state?: EntityStateConfig
   readonly imageStates?: ImageStateMapConfig

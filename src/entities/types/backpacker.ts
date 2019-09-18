@@ -109,12 +109,12 @@ export namespace Backpacker {
       if ((left || right) && animateHorizontal) nextState = State.WALK_RIGHT
     }
 
-    let flipX = backpacker.flipImages.x
+    let flipX = backpacker.scale.x
     if (up || down) flipX = 1
     if (left && animateHorizontal) flipX = -1
     if (right && animateHorizontal) flipX = 1
 
-    Entity.setFlip(backpacker, {x: flipX, y: backpacker.flipImages.y})
+    Entity.setScale(backpacker, {x: flipX, y: backpacker.scale.y})
     Entity.setState(backpacker, nextState)
 
     return status

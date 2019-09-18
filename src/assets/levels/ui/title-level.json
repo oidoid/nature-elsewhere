@@ -2,7 +2,7 @@
   "type": "uiTitle",
   "size": {"w": 256, "h": 256},
   "minViewport": {"w": 256, "h": 128},
-  "cursor": {"type": "uiCursor", "scaleImages": {"x": 2, "y": 2}},
+  "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
     {"type": "sceneryPlane", "state": "white"},
     {

@@ -34,7 +34,7 @@ export interface Entity {
       in the ImageRect is flipped or not. The original orientation is considered
       so a flipped entity composed of a mishmash of flipped images will mirror
       that mishmash and not lose each individual's image's relative flip. */
-  readonly flipImages: Writable<XY>
+  readonly scale: Writable<XY>
   // [todo] a string superset isn't ideal but a template param is needed
   //        otherwise for specialization.
   state: EntityState | string
@@ -94,11 +94,10 @@ export namespace Entity {
     return UpdateStatus.UPDATED
   }
 
-  export function setFlip(entity: Entity, flip: XY): void {
-    entity.flipImages.x = Math.sign(flip.x)
-    entity.flipImages.y = Math.sign(flip.y)
-    if (entity.type === EntityType.CHAR_BEE) console.log(entity.flipImages)
-    ImageRect.scale(imageState(entity), entity.flipImages)
+  export function setScale(entity: Entity, scale: XY): void {
+    entity.scale.x = scale.x
+    entity.scale.y = scale.y
+    ImageRect.setScale(imageState(entity), scale)
   }
 
   export function imageState(entity: Readonly<Entity>): ImageRect {
@@ -148,7 +147,7 @@ export namespace Entity {
     const imagesPosition = imageState(entity).bounds
     entity.state = state
     ImageRect.moveTo(imageState(entity), imagesPosition)
-    setFlip(entity, entity.flipImages)
+    setScale(entity, entity.scale)
     invalidateBounds(entity)
     return UpdateStatus.UPDATED
   }

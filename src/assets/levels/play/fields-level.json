@@ -67,14 +67,14 @@
       "type": "charBee",
       "position": {"x": 54, "y": 118},
       "animator": {"period": 1},
-      "flipImages": {"x": -1},
+      "scale": {"x": -1},
       "velocity": {"x": 15, "y": 15}
     },
     {
       "type": "charBee",
       "state": "dead",
       "position": {"x": 55, "y": 122},
-      "flipImages": {"x": -1}
+      "scale": {"x": -1}
     },
     {"type": "charBee", "state": "dead", "position": {"x": 60, "y": 126}},
     {"type": "sceneryClover", "position": {"x": 54, "y": 12}},
