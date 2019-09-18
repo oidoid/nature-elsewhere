@@ -13,6 +13,14 @@ export namespace XY {
     return {x: x - rhs.x, y: y - rhs.y}
   }
 
+  export function mul({x, y}: XY, rhs: XY): XY {
+    return {x: x * rhs.x, y: y * rhs.y}
+  }
+
+  export function div({x, y}: XY, rhs: XY): XY {
+    return {x: x / rhs.x, y: y / rhs.y}
+  }
+
   export function equal({x, y}: XY, rhs: XY): boolean {
     return x === rhs.x && y === rhs.y
   }

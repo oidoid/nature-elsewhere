@@ -97,7 +97,8 @@ export namespace Entity {
   export function setFlip(entity: Entity, flip: XY): void {
     entity.flipImages.x = Math.sign(flip.x)
     entity.flipImages.y = Math.sign(flip.y)
-    ImageRect.setFlip(imageState(entity), entity.flipImages)
+    if (entity.type === EntityType.CHAR_BEE) console.log(entity.flipImages)
+    ImageRect.scale(imageState(entity), entity.flipImages)
   }
 
   export function imageState(entity: Readonly<Entity>): ImageRect {

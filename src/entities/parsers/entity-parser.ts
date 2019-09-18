@@ -62,6 +62,8 @@ export namespace EntityParser {
     const position = XYParser.parse(config.position)
     Entity.moveTo(entity, position)
 
+    Entity.setFlip(entity, entity.flipImages)
+
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.
     Entity.invalidateBounds(entity)

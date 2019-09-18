@@ -4,6 +4,6 @@ import {ImageScaleConfig} from './image-scale-config'
 
 export type ImageRectConfig = Maybe<{
   readonly position?: XYConfig
-  readonly flip?: ImageScaleConfig
+  readonly scale?: ImageScaleConfig
   readonly images?: readonly ImageConfig[]
 }>

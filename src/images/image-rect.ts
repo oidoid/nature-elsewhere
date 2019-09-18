@@ -8,7 +8,7 @@ export interface ImageRect {
       moved relative this position. */
   // [todo]: it is currently not possible to specify images relative an origin. everything assumes upper left so you have to move destination to  cursor knowing to offset by -1, -1.
   readonly bounds: Writable<Rect>
-  readonly flip: Writable<XY>
+  readonly scale: Writable<XY>
   /** Image coordinates are not relative the bounds origin, they're in level
       coordinates. */
   readonly images: Image[]
@@ -36,20 +36,11 @@ export namespace ImageRect {
     rect.images.forEach(image => Image.moveBy(image, by))
   }
 
-  export function setFlip(rect: ImageRect, flip: XY): void {
-    const flipX = rect.flip.x !== Math.sign(flip.x)
-    const flipY = rect.flip.y !== Math.sign(flip.y)
-    if (!flipX && !flipY) return
-    rect.flip.x = Math.sign(flip.x)
-    rect.flip.y = Math.sign(flip.y)
-    rect.images.forEach(image =>
-      Image.scale(image, {x: flipX ? -1 : 1, y: flipY ? -1 : 1})
-    )
-  }
-
   export function setScale(rect: ImageRect, scale: XY): void {
-    // [todo] if needed, scale can be cached in ImageRect. Figure out how to remove flip overlap.
-    rect.images.forEach(image => Image.setScale(image, scale))
+    if (XY.equal(rect.scale, scale)) return
+    rect.images.forEach(image => Image.scale(image, XY.div(scale, rect.scale)))
+    rect.scale.x = scale.x
+    rect.scale.y = scale.y
     const union = RectArray.union(rect.images.map(image => image.bounds))
     if (union) {
       rect.bounds.x = union.x
@@ -60,13 +51,7 @@ export namespace ImageRect {
   }
 
   export function scale(rect: ImageRect, scale: XY): void {
-    rect.images.forEach(image => Image.scale(image, scale))
-    const union = RectArray.union(rect.images.map(image => image.bounds))
-    if (union) {
-      rect.bounds.x = union.x
-      rect.bounds.y = union.y
-      rect.bounds.w = union.w
-      rect.bounds.h = union.h
-    }
+    scale = {x: rect.scale.x * scale.x, y: rect.scale.y * scale.y}
+    ImageRect.setScale(rect, XY.mul(scale, rect.scale))
   }
 }
