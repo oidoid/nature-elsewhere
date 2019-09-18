@@ -16,7 +16,8 @@ in ivec4 source;
 // rendered result is the source truncated or repeated.
 in ivec4 target;
 in ivec2 scale;
-in ivec4 translate; // Translation (x, y) and translation velocity (z, w) in pixels.
+in ivec4 translate; // Translation (x, y) and translation velocity (z, w) in
+                    // units of 1/10000 pixels.
 
 flat out ivec4 vSource;
 out vec2 vOffset;

@@ -4,7 +4,7 @@ import {ImageConfig} from './image-config'
 import {Image} from '../image'
 import {LayerParser} from './layer-parser'
 import {XYParser} from '../../math/parsers/xy-parser'
-import {MillipixelIntXYParser} from './millipixel-xy-parser'
+import {DecamillipixelIntXYParser} from './decamillipixel-xy-parser'
 import {Atlas} from '../../atlas/atlas'
 import {AtlasID} from '../../atlas/atlas-id'
 import {Rect} from '../../math/rect'
@@ -19,8 +19,8 @@ export namespace ImageParser {
       layer: LayerParser.parse(config.layer),
       animator: AnimatorParser.parse(config.animator),
       scale: ImageScaleParser.parse(config.scale),
-      wrap: MillipixelIntXYParser.parse(config.wrap),
-      wrapVelocity: MillipixelIntXYParser.parse(config.wrapVelocity)
+      wrap: DecamillipixelIntXYParser.parse(config.wrap),
+      wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity)
     }
   }
 }

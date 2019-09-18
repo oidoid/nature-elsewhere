@@ -4,4 +4,4 @@ type Milliseconds = number
 /** An integer. */
 type Int = number
 /** An integer in units of a thousandth of a pixel. */
-type MillipixelInt = Int
+type DecamillipixelInt = Int

@@ -23,12 +23,12 @@ export interface Image {
   readonly bounds: Writable<Rect>
   layer: Layer
   readonly animator: Animator
-  /** In Int units. See bounds. */
+  /** An integer. See bounds. */
   readonly scale: Writable<XY>
-  /** Specifies the initial marquee offset. In MillipixelInt units. */
+  /** Specifies the initial marquee offset. In DecamillipixelInt units. */
   readonly wrap: XY
   /** Specifies the additional marquee offset added by the shader according to
-      the game clock. In MillipixelInt units. */
+      the game clock. In DecamillipixelInt units. */
   readonly wrapVelocity: XY
 }
 
