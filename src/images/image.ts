@@ -1,9 +1,9 @@
 import {AtlasID} from '../atlas/atlas-id'
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
+import {DecamillipixelIntXY, IntXY, XY} from '../math/xy'
 import {Layer} from './layer'
 import {Rect} from '../math/rect'
-import {XY} from '../math/xy'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same
@@ -23,13 +23,13 @@ export interface Image {
   readonly bounds: Writable<Rect>
   layer: Layer
   readonly animator: Animator
-  /** An integer. See bounds. */
-  readonly scale: Writable<XY>
-  /** Specifies the initial marquee offset. In DecamillipixelInt units. */
-  readonly wrap: XY
+  /** See bounds. */
+  readonly scale: Writable<IntXY>
+  /** Specifies the initial marquee offset. */
+  readonly wrap: Readonly<DecamillipixelIntXY>
   /** Specifies the additional marquee offset added by the shader according to
-      the game clock. In DecamillipixelInt units. */
-  readonly wrapVelocity: XY
+      the game clock. */
+  readonly wrapVelocity: Readonly<DecamillipixelIntXY>
 }
 
 export namespace Image {

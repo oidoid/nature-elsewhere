@@ -4,6 +4,11 @@ export interface XY {
   readonly y: number
 }
 
+/** An integral XY. */
+export type IntXY = XY
+/** An integral XY in 1/10000 of a pixel. */
+export type DecamillipixelIntXY = XY
+
 export namespace XY {
   export function add({x, y}: XY, rhs: XY): XY {
     return {x: x + rhs.x, y: y + rhs.y}
