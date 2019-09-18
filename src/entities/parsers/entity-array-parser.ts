@@ -1,7 +1,7 @@
 import {Entity} from '../entity'
 import {EntityArrayConfig} from './entity-array-config'
 import {EntityParser} from './entity-parser'
-import {Atlas} from '../../atlas/atlas'
+import {Atlas} from '../../atlas/atlas/atlas'
 
 export namespace EntityArrayParser {
   export function parse(config: EntityArrayConfig, atlas: Atlas): Entity[] {

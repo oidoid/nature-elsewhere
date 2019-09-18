@@ -1,4 +1,4 @@
-import {Entity} from '../entity'
+import {Entity} from '../entities/entity'
 
 export interface EntityCollision {
   readonly lhs: ParentDescendant

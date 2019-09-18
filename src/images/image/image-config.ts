@@ -1,7 +1,7 @@
 import {XYConfig} from '../../math/parsers/xy-config'
 import {RectConfig} from '../../math/parsers/rect-config'
 import {AnimatorConfig} from '../animator/animator-config'
-import {AtlasIDConfig} from '../../atlas/atlas-id-config'
+import {AtlasIDConfig} from '../../atlas/atlas-id/atlas-id-config'
 import {LayerKeyConfig} from '../layer/layer-config'
 import {DecamillipixelIntXYConfig} from '../decamillipixel-int-xy/decamillipixel-int-xy-config'
 

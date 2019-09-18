@@ -6,7 +6,7 @@ import {CameraParser} from './camera-parser'
 import {EntityParser} from '../../entities/parsers/entity-parser'
 import {Cursor} from '../../entities/types/ui/cursor'
 import {Backpacker} from '../../entities/types/backpacker'
-import {Atlas} from '../../atlas/atlas'
+import {Atlas} from '../../atlas/atlas/atlas'
 
 export namespace LevelParser {
   export function parse(config: LevelConfig, atlas: Atlas): Level {

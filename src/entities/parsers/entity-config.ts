@@ -1,4 +1,3 @@
-import {CollisionPredicateConfig} from '../colliders/collision-predicate-config'
 import {EntityArrayConfig} from './entity-array-config'
 import {EntityIDConfig} from './entity-id-config'
 import {EntityStateConfig} from './entity-state-config'
@@ -9,6 +8,7 @@ import {RectArrayConfig} from '../../math/parsers/rect-array-config'
 import {UpdatePredicateConfig} from '../updaters/parsers/update-predicate-config'
 import {UpdaterArrayConfig} from '../updaters/parsers/updater-array-config'
 import {XYConfig} from '../../math/parsers/xy-config'
+import {CollisionPredicateConfig} from '../../collision/collision-predicate/collision-predicate-config'
 
 export interface EntityConfig {
   /** Defaults to EntityID.UNDEFINED. */

@@ -1,7 +1,7 @@
 import {Animator} from './animator'
-import {Aseprite} from '../../atlas/aseprite'
-import {Atlas} from '../../atlas/atlas'
+import {Atlas} from '../../atlas/atlas/atlas'
 import {ObjectUtil} from '../../utils/object-util'
+import {Aseprite} from '../../atlas/atlas/aseprite'
 
 describe('step()', () => {
   test('time < duration', () => {

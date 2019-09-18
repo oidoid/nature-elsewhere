@@ -1,6 +1,6 @@
-import {AtlasID} from '../../atlas/atlas-id'
+import {AtlasID} from '../../atlas/atlas-id/atlas-id'
 import {Animator} from '../animator/animator'
-import {Atlas} from '../../atlas/atlas'
+import {Atlas} from '../../atlas/atlas/atlas'
 import {DecamillipixelIntXY, IntXY, XY} from '../../math/xy'
 import {Layer} from '../layer/layer'
 import {Rect} from '../../math/rect'

@@ -3,7 +3,7 @@ import {EntityStateParser} from '../../entities/parsers/entity-state-parser'
 import {ImageStateMap} from './image-state-map'
 import {ImageStateMapConfig} from './image-state-map-config'
 import {ImageRectParser} from '../image-rect/image-rect-parser'
-import {Atlas} from '../../atlas/atlas'
+import {Atlas} from '../../atlas/atlas/atlas'
 
 export namespace ImageStateMapParser {
   export function parse(

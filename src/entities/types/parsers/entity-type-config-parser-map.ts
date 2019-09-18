@@ -1,5 +1,5 @@
 import {LevelEditorPanel} from '../ui/level-editor-panel'
-import {Atlas} from '../../../atlas/atlas'
+import {Atlas} from '../../../atlas/atlas/atlas'
 import {Entity} from '../../entity'
 import {EntityType} from '../entity-type'
 import {EntityPicker} from '../ui/entity-picker'

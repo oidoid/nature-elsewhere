@@ -3,7 +3,7 @@ import {ImageRectConfig} from './image-rect-config'
 import {XYParser} from '../../math/parsers/xy-parser'
 import {RectArray} from '../../math/rect-array'
 import {Image} from '../image/image'
-import {Atlas} from '../../atlas/atlas'
+import {Atlas} from '../../atlas/atlas/atlas'
 import {ImageScaleParser} from '../image-scale/image-scale-parser'
 import {ImageParser} from '../image/image-parser'
 

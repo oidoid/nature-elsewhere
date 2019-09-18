@@ -1,8 +1,8 @@
 import {Aseprite} from './aseprite'
 import {Atlas} from './atlas'
-import {WH} from '../math/wh'
-import {XY} from '../math/xy'
-import {AtlasIDParser} from './atlas-id-parser'
+import {AtlasIDParser} from '../atlas-id/atlas-id-parser'
+import {XY} from '../../math/xy'
+import {WH} from '../../math/wh'
 
 export namespace AtlasParser {
   export function parse({meta, frames}: Aseprite.File): Atlas {

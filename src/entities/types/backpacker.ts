@@ -3,8 +3,8 @@ import {XY} from '../../math/xy'
 import {EntityType} from './entity-type'
 import {Updater} from '../updaters/updater'
 import {UpdateStatus} from '../updaters/update-status'
-import {EntityCollider} from '../colliders/entity-collider'
 import {EntityState} from '../entity-state'
+import {EntityCollider} from '../../collision/entity-collider'
 
 export interface Backpacker extends Entity {
   readonly type: EntityType.CHAR_BACKPACKER

@@ -1,4 +1,4 @@
-import {Atlas} from '../atlas/atlas'
+import {Atlas} from '../atlas/atlas/atlas'
 import {Level} from './level'
 import {ShaderLayout} from '../graphics/shaders/shader-layout'
 import {Store} from '../store/store'

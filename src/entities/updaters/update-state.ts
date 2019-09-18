@@ -1,8 +1,8 @@
 import {Entity} from '../entity'
 import {Level} from '../../levels/level'
-import {EntityCollider} from '../colliders/entity-collider'
-import {EntityCollision} from '../colliders/entity-collision'
 import {Recorder} from '../../inputs/recorder'
+import {EntityCollision} from '../../collision/entity-collision'
+import {EntityCollider} from '../../collision/entity-collider'
 
 /** Game tick state to be applied. Cached values for commonly derived values are
     also included for convenience. */

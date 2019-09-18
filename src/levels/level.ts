@@ -4,7 +4,7 @@ import {LevelType} from './level-type'
 import {Camera} from './camera'
 import {Backpacker} from '../entities/types/backpacker'
 import {Cursor} from '../entities/types/ui/cursor'
-import {Atlas} from '../atlas/atlas'
+import {Atlas} from '../atlas/atlas/atlas'
 
 export interface Level {
   readonly type: LevelType

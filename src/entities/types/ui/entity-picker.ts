@@ -1,4 +1,4 @@
-import {Atlas} from '../../../atlas/atlas'
+import {Atlas} from '../../../atlas/atlas/atlas'
 import {Entity} from '../../entity'
 import {EntityParser} from '../../parsers/entity-parser'
 import {EntityState} from '../../entity-state'

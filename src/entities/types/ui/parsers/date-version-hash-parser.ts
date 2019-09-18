@@ -3,7 +3,7 @@ import {EntityType} from '../../entity-type'
 import {DateVersionHash} from '../date-version-hash'
 import {Build} from '../../../../utils/build'
 import {TextParser} from './text-parser'
-import {Atlas} from '../../../../atlas/atlas'
+import {Atlas} from '../../../../atlas/atlas/atlas'
 import {Text} from '../text'
 
 export namespace DateVersionHashParser {

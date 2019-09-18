@@ -8,7 +8,7 @@ import {PLANE} from './plane'
 import {Updater} from '../../updaters/updater'
 import {UpdateStatus} from '../../updaters/update-status'
 import {EntityPicker} from './entity-picker'
-import {Atlas} from '../../../atlas/atlas'
+import {Atlas} from '../../../atlas/atlas/atlas'
 import {EntityTypeConfigMap} from '../entity-type-config-map'
 import {NumberUtil} from '../../../math/number-util'
 

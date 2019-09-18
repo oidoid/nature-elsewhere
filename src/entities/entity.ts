@@ -1,5 +1,4 @@
-import {Atlas} from '../atlas/atlas'
-import {CollisionPredicate} from './colliders/collision-predicate'
+import {Atlas} from '../atlas/atlas/atlas'
 import {EntityID} from './entity-id'
 import {EntityState} from './entity-state'
 import {EntityType} from './types/entity-type'
@@ -13,6 +12,7 @@ import {Updater} from './updaters/updater'
 import {UpdateState} from './updaters/update-state'
 import {UpdateStatus} from './updaters/update-status'
 import {XY} from '../math/xy'
+import {CollisionPredicate} from '../collision/collision-predicate/collision-predicate'
 
 export interface Entity {
   /** A globally unique identifier for quick equality checks. It should be used
