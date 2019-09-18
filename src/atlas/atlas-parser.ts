@@ -2,17 +2,14 @@ import {Aseprite} from './aseprite'
 import {Atlas} from './atlas'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
-import {AnimationIDParser} from './animation-id-parser'
+import {AtlasIDParser} from './atlas-id-parser'
 
 export namespace AtlasParser {
   export function parse({meta, frames}: Aseprite.File): Atlas {
     return meta.frameTags.reduce(
       (sum: Atlas, frameTag) => ({
         ...sum,
-        [AnimationIDParser.parse(frameTag.name)]: parseAnimation(
-          frameTag,
-          frames
-        )
+        [AtlasIDParser.parse(frameTag.name)]: parseAnimation(frameTag, frames)
       }),
       <Atlas>{}
     )

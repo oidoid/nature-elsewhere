@@ -1,9 +1,9 @@
-import {AnimationID} from './animation-id'
+import {AtlasID} from './atlas-id'
 import {Aseprite} from './aseprite'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
 
-export interface Atlas extends Readonly<Record<AnimationID, Atlas.Animation>> {}
+export interface Atlas extends Readonly<Record<AtlasID, Atlas.Animation>> {}
 
 export namespace Atlas {
   /** Animation frames. */

@@ -1,4 +1,4 @@
-import {AnimationIDParser} from '../../atlas/animation-id-parser'
+import {AtlasIDParser} from '../../atlas/atlas-id-parser'
 import {AnimatorParser} from './animator-parser'
 import {ImageConfig} from './image-config'
 import {Image} from '../image'
@@ -6,13 +6,13 @@ import {LayerParser} from './layer-parser'
 import {XYParser} from '../../math/parsers/xy-parser'
 import {MillipixelIntXYParser} from './millipixel-xy-parser'
 import {Atlas} from '../../atlas/atlas'
-import {AnimationID} from '../../atlas/animation-id'
+import {AtlasID} from '../../atlas/atlas-id'
 import {Rect} from '../../math/rect'
 import {ImageScaleParser} from './image-scale-parser'
 
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
-    const id = AnimationIDParser.parse(config.id)
+    const id = AtlasIDParser.parse(config.id)
     return {
       id,
       bounds: parseBounds(config, id, atlas),
@@ -25,7 +25,7 @@ export namespace ImageParser {
   }
 }
 
-function parseBounds(config: ImageConfig, id: AnimationID, atlas: Atlas): Rect {
+function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
   const w =
     config.bounds && config.bounds.w !== undefined
       ? config.bounds.w

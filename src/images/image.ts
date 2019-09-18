@@ -1,4 +1,4 @@
-import {AnimationID} from '../atlas/animation-id'
+import {AtlasID} from '../atlas/atlas-id'
 import {Animator} from './animator'
 import {Atlas} from '../atlas/atlas'
 import {Layer} from './layer'
@@ -11,7 +11,7 @@ import {XY} from '../math/xy'
     truncates or repeats the scaled rendered source. Images do not affect
     collision tests but their bounds may be used. */
 export interface Image {
-  readonly id: AnimationID
+  readonly id: AtlasID
   /** Specified in fractional pixel level coordinates. Includes scaling.
 
       Images.bounds are used to determine when the image is on screen and

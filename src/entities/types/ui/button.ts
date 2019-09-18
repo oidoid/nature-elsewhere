@@ -1,6 +1,6 @@
 import {Entity} from '../../entity'
 import {EntityState} from '../../entity-state'
-import {AnimationID} from '../../../atlas/animation-id'
+import {AtlasID} from '../../../atlas/atlas-id'
 import {EntityType} from '../entity-type'
 import {UpdateStatus} from '../../updaters/update-status'
 import {UpdateState} from '../../updaters/update-state'
@@ -17,7 +17,7 @@ import {Recorder} from '../../../inputs/recorder'
 export interface Button extends Entity {
   readonly type: EntityType.UI_BUTTON
   state: EntityState | Button.State
-  iconID: AnimationID
+  iconID: AtlasID
   clicked: boolean
 }
 
@@ -62,7 +62,7 @@ export namespace Button {
   }
 }
 
-function newIcon(iconID: AnimationID, atlas: Atlas, position: XY): Image {
+function newIcon(iconID: AtlasID, atlas: Atlas, position: XY): Image {
   const bounds = {x: position.x, y: position.y}
   const config = {id: iconID, layer: 'UI_HIHI', bounds}
   return ImageParser.parse(config, atlas)

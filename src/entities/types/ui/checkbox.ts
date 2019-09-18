@@ -7,7 +7,7 @@ import {UpdateStatus} from '../../updaters/update-status'
 import {InputSource} from '../../../inputs/input-source'
 import {InputBit} from '../../../inputs/input-bit'
 import {Entity} from '../../entity'
-import {AnimationID} from '../../../atlas/animation-id'
+import {AtlasID} from '../../../atlas/atlas-id'
 import {Atlas} from '../../../atlas/atlas'
 import {Image} from '../../../images/image'
 import {ImageParser} from '../../../images/parsers/image-parser'
@@ -29,10 +29,10 @@ export namespace Checkbox {
     CHECKED = 'checked'
   }
   export const backgroundID: Readonly<
-    Record<Checkbox.State, AnimationID>
+    Record<Checkbox.State, AtlasID>
   > = Object.freeze({
-    [Checkbox.State.UNCHECKED]: AnimationID.PALETTE_PALE_GREEN,
-    [Checkbox.State.CHECKED]: AnimationID.PALETTE_LIGHT_GREEN
+    [Checkbox.State.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,
+    [Checkbox.State.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
   })
 
   export function parse(checkbox: Entity, atlas: Atlas): Checkbox {

@@ -3,7 +3,7 @@
     Atlas. These animations are mostly referenced directly from entity configs
     but also in some cases where Images are instantiated or manipulated
     dynamically in code. */
-export enum AnimationID {
+export enum AtlasID {
   CHAR_ARROW_DIAGONAL = 'arrow upRight',
   CHAR_ARROW_HORIZONTAL = 'arrow right',
   CHAR_ARROW_VERTICAL = 'arrow up',

@@ -2,7 +2,7 @@ import {ArrayUtil} from '../../utils/array-util'
 import {Atlas} from '../../atlas/atlas'
 import * as atlasJSON from './atlas.json'
 import {AtlasParser} from '../../atlas/atlas-parser'
-import {AnimationID} from '../../atlas/animation-id'
+import {AtlasID} from '../../atlas/atlas-id'
 import {Aseprite} from '../../atlas/aseprite'
 import {ObjectUtil} from '../../utils/object-util'
 
@@ -11,9 +11,7 @@ const atlas: Atlas = Object.freeze(AtlasParser.parse(file))
 const tags: readonly string[] = Object.freeze(
   file.meta.frameTags.map(frameTag => frameTag.name)
 )
-const ids: readonly AnimationID[] = Object.freeze(
-  ObjectUtil.values(AnimationID)
-)
+const ids: readonly AtlasID[] = Object.freeze(ObjectUtil.values(AtlasID))
 
 test.each(tags)('%# Tag %p is unique within the sheet', tag =>
   expect(tags.filter(val => val === tag)).toHaveLength(1)
@@ -59,10 +57,10 @@ test.each(Object.values(atlas))(
   ({cels}) => expect(cels.length).toBeGreaterThan(0)
 )
 
-test.each(ids)('%# AnimationID %p has an Animation', id =>
+test.each(ids)('%# AtlasID %p has an Animation', id =>
   expect(atlas).toHaveProperty(id)
 )
 
-test.each(ids)('%# animation ID %p has a AnimationID', id =>
+test.each(ids)('%# animation ID %p has a AtlasID', id =>
   expect(ids.filter(val => id === val)).toHaveLength(1)
 )
