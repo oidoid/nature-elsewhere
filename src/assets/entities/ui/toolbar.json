@@ -1,0 +1,18 @@
+{
+  "type": "uiToolbar",
+  "positionRelativeToCam": "southWest",
+  "camMargin": {"w": 1, "h": 1},
+  "state": "visible",
+  "imageStates": {
+    "visible": {
+      "images": [
+        {"id": "flag"},
+        {"id": "flag", "bounds": {"x": 4}},
+        {"id": "flag", "bounds": {"x": 8}},
+        {"id": "arrow upRight", "bounds": {"x": 12}}
+      ]
+    }
+  },
+  "updatePredicate": "always",
+  "updaters": ["uiFollowCam"]
+}

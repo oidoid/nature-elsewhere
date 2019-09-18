@@ -1,0 +1,127 @@
+{
+  "type": "playFields",
+  "prevLevel": "uiTitle",
+  "nextLevel": "playFields",
+  "size": {"w": 256, "h": 256},
+  "minViewport": {"w": 96, "h": 96},
+  "cam": {"followID": "uiPlayer"},
+  "cursor": {"type": "uiCursor"},
+  "destination": {"type": "uiDestinationMarker"},
+  "player": {
+    "id": "uiPlayer",
+    "type": "charBackpacker",
+    "position": {"x": 80, "y": 102}
+  },
+  "parentEntities": [
+    {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"},
+
+    {"type": "sceneryPlane", "state": "paleGreen"},
+    {
+      "type": "sceneryCloud",
+      "position": {"x": 20, "y": 20},
+      "velocity": {"x": -6}
+    },
+    {
+      "type": "sceneryCloud",
+      "state": "drizzle",
+      "position": {"x": 30, "y": 28}
+    },
+    {"type": "sceneryCloud", "state": "shower", "position": {"x": 54, "y": 50}},
+    {"type": "charBee", "position": {"x": 80, "y": 40}, "velocity": {"y": 15}},
+    {
+      "type": "sceneryCloud",
+      "state": "drizzle",
+      "position": {"x": 80, "y": 30}
+    },
+    {
+      "type": "sceneryCloud",
+      "state": "downpour",
+      "position": {"x": 110, "y": 5},
+      "velocity": {"y": 6}
+    },
+    {
+      "type": "group",
+      "position": {"x": 50},
+      "collisionPredicate": "children",
+      "children": [
+        {"type": "sceneryConifer", "position": {"x": 9, "y": 78}},
+        {"type": "sceneryConifer", "position": {"x": 14, "y": 85}},
+        {"type": "sceneryConifer", "position": {"x": 18, "y": 84}},
+        {"type": "sceneryConifer", "position": {"x": 10, "y": 83}},
+        {"type": "sceneryConifer", "position": {"x": 40, "y": 21}},
+        {"type": "sceneryMountain", "position": {"x": 30, "y": 83}},
+        {"type": "sceneryMountain", "position": {"x": 70, "y": 99}},
+        {"type": "sceneryMountain", "position": {"x": -30, "y": 130}}
+      ]
+    },
+    {"type": "sceneryTree", "position": {"x": 100, "y": 12}},
+    {"type": "sceneryTree", "position": {"x": 12, "y": 100}},
+    {"type": "sceneryTree", "position": {"x": 24, "y": 96}},
+    {"type": "sceneryTree", "position": {"x": 18, "y": 108}},
+    {
+      "type": "charBee",
+      "position": {"x": 50, "y": 114},
+      "velocity": {"x": 15, "y": 15}
+    },
+    {
+      "type": "charBee",
+      "position": {"x": 54, "y": 118},
+      "animator": {"period": 1},
+      "flipImages": {"x": -1},
+      "velocity": {"x": 15, "y": 15}
+    },
+    {
+      "type": "charBee",
+      "state": "dead",
+      "position": {"x": 55, "y": 122},
+      "flipImages": {"x": -1}
+    },
+    {"type": "charBee", "state": "dead", "position": {"x": 60, "y": 126}},
+    {"type": "sceneryClover", "position": {"x": 54, "y": 12}},
+    {"type": "sceneryClover", "state": "1", "position": {"x": 66, "y": 24}},
+    {"type": "sceneryGrass", "position": {"x": 45, "y": 117}},
+    {"type": "sceneryGrass", "state": "1", "position": {"x": 101, "y": 17}},
+    {"type": "sceneryGrass", "state": "1", "position": {"x": 111, "y": 57}},
+    {"type": "sceneryGrass", "state": "2", "position": {"x": 141, "y": 77}},
+    {"type": "sceneryBush", "position": {"x": 151, "y": 30}},
+    {"type": "scenerySubshrub", "position": {"x": 159, "y": 32}},
+    {"type": "scenerySubshrub", "position": {"x": 163, "y": 36}},
+    {"type": "sceneryPyramid", "position": {"x": 129, "y": 105}},
+    {"type": "sceneryTree", "position": {"x": 159, "y": 126}},
+    {"type": "sceneryConifer", "position": {"x": 119, "y": 116}},
+    {
+      "type": "charFly",
+      "position": {"x": 120, "y": 130},
+      "velocity": {"x": -9}
+    },
+    {"type": "charFly", "state": "dead", "position": {"x": 125, "y": 132}},
+    {"type": "sceneryCloud", "position": {"x": 90, "y": 122}},
+    {"type": "sceneryPond", "position": {"x": 80, "y": 148}},
+    {"type": "charFrog", "position": {"x": 12, "y": 58}},
+    {"type": "charBunny", "position": {"x": 40, "y": 48}},
+    {"type": "charBunny", "state": "dead", "position": {"x": 48, "y": 48}},
+    {"type": "sceneryFlag", "position": {"x": 77, "y": 17}},
+    {
+      "type": "charSnake",
+      "position": {"x": 121, "y": 30},
+      "velocity": {"x": -12}
+    },
+    {"type": "sceneryIsoGrass", "state": "/0", "position": {"x": 160, "y": 96}},
+    {"type": "sceneryPath", "state": "/", "position": {"x": 160, "y": 96}},
+    {"type": "sceneryPath", "state": "/", "position": {"x": 176, "y": 88}},
+    {"type": "sceneryPath", "state": "/", "position": {"x": 192, "y": 80}},
+    {"type": "sceneryPath", "state": ">", "position": {"x": 208, "y": 72}},
+    {"type": "sceneryPath", "state": "\\", "position": {"x": 192, "y": 64}},
+    {"type": "sceneryPath", "state": "^", "position": {"x": 176, "y": 56}},
+    {"type": "sceneryPath", "state": "v", "position": {"x": 160, "y": 64}},
+    {"type": "sceneryPath", "state": "\\", "position": {"x": 144, "y": 56}},
+    {"type": "sceneryPath", "state": "<", "position": {"x": 128, "y": 48}},
+    {"type": "sceneryPath", "state": "/", "position": {"x": 144, "y": 40}},
+    {"type": "sceneryPath", "state": "/", "position": {"x": 160, "y": 32}},
+    {"type": "sceneryPath", "state": "/", "position": {"x": 176, "y": 24}},
+    {"type": "sceneryPath", "state": "^", "position": {"x": 192, "y": 16}},
+    {"type": "sceneryConifer", "position": {"x": 188, "y": 27}},
+    {"type": "sceneryPond", "position": {"x": 160, "y": 48}},
+    {"type": "sceneryPond", "position": {"y": 64}}
+  ]
+}

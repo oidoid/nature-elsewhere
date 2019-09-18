@@ -5,10 +5,9 @@ import {ObjectUtil} from '../utils/object-util'
 
 describe('step()', () => {
   test('time < duration', () => {
-    const cel = {x: 0, y: 0, duration: 1}
+    const cel = {position: {x: 0, y: 0}, duration: 1}
     const animation = {
-      w: 0,
-      h: 0,
+      size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
@@ -18,10 +17,9 @@ describe('step()', () => {
   })
 
   test('time === duration', () => {
-    const cel = {x: 0, y: 0, duration: 1}
+    const cel = {position: {x: 0, y: 0}, duration: 1}
     const animation = {
-      w: 0,
-      h: 0,
+      size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
@@ -31,10 +29,9 @@ describe('step()', () => {
   })
 
   test('time > duration', () => {
-    const cel = {x: 0, y: 0, duration: 1}
+    const cel = {position: {x: 0, y: 0}, duration: 1}
     const animation = {
-      w: 0,
-      h: 0,
+      size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
       direction: Atlas.AnimationDirection.FORWARD
@@ -48,10 +45,9 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# direction %p array start',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1}
+      const cel = {position: {x: 0, y: 0}, duration: 1}
       const animation = {
-        w: 0,
-        h: 0,
+        size: {w: 0, h: 0},
         cels: [cel, cel],
         duration: 2,
         direction
@@ -65,10 +61,9 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# direction %p array end',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1}
+      const cel = {position: {x: 0, y: 0}, duration: 1}
       const animation = {
-        w: 0,
-        h: 0,
+        size: {w: 0, h: 0},
         cels: [cel, cel],
         duration: 2,
         direction
@@ -118,10 +113,9 @@ describe('index', () => {
       [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
     ]
   ])('%# direction %p bounds %p', (direction, period, expected) => {
-    const cel = {x: 0, y: 0, duration: 1}
+    const cel = {position: {x: 0, y: 0}, duration: 1}
     const animation = {
-      w: 0,
-      h: 0,
+      size: {w: 0, h: 0},
       cels: [cel, cel, cel, cel],
       duration: 4,
       direction
@@ -138,10 +132,9 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration met direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1}
+      const cel = {position: {x: 0, y: 0}, duration: 1}
       const animation = {
-        w: 0,
-        h: 0,
+        size: {w: 0, h: 0},
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
@@ -169,10 +162,9 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration exceeded direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1}
+      const cel = {position: {x: 0, y: 0}, duration: 1}
       const animation = {
-        w: 0,
-        h: 0,
+        size: {w: 0, h: 0},
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
@@ -200,10 +192,9 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# fractional duration met direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1}
+      const cel = {position: {x: 0, y: 0}, duration: 1}
       const animation = {
-        w: 0,
-        h: 0,
+        size: {w: 0, h: 0},
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
@@ -231,10 +222,9 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# duration not met direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1}
+      const cel = {position: {x: 0, y: 0}, duration: 1}
       const animation = {
-        w: 0,
-        h: 0,
+        size: {w: 0, h: 0},
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
@@ -262,10 +252,9 @@ describe('index', () => {
   test.each(ObjectUtil.values(Atlas.AnimationDirection))(
     '%# fractional duration exceeded direction %p cycles',
     direction => {
-      const cel = {x: 0, y: 0, duration: 1}
+      const cel = {position: {x: 0, y: 0}, duration: 1}
       const animation = {
-        w: 0,
-        h: 0,
+        size: {w: 0, h: 0},
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction

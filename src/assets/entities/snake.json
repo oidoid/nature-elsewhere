@@ -1,9 +1,0 @@
-{
-  "id": "snake",
-  "updateType": "IF_VISIBLE",
-  "behavior": "CIRCLE",
-  "state": "idle",
-  "states": {
-    "idle": [{"id": "snake"}, {"id": "snake shadow", "layer": "SHADOW"}]
-  }
-}

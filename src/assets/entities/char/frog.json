@@ -1,0 +1,19 @@
+{
+  "type": "charFrog",
+  "state": "idle",
+  "imageStates": {
+    "idle": {
+      "images": [
+        {"id": "frog idle"},
+        {
+          "id": "frog idleShadow",
+          "bounds": {"x": -1, "y": 1},
+          "layer": "SHADOW"
+        }
+      ]
+    }
+  },
+  "updatePredicate": "intersectsViewport",
+  "collisionPredicate": "bodies",
+  "collisionBodies": [{"x": 1, "y": 14, "w": 6, "h": 2}]
+}

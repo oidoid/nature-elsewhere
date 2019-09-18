@@ -1,0 +1,17 @@
+{
+  "type": "uiLevelEditor",
+  "size": {"w": 32767, "h": 32767},
+  "minViewport": {"w": 128, "h": 128},
+  "cursor": {"type": "uiCursor"},
+  "parentEntities": [
+    {"type": "sceneryPlane", "state": "paleGreen"},
+    {"id": "uiGrid", "type": "sceneryPlane", "state": "hidden"},
+    {"type": "uiLevelEditorPanel"},
+    {
+      "id": "uiLevelEditorSandbox",
+      "type": "group",
+      "updatePredicate": "always",
+      "collisionPredicate": "children"
+    }
+  ]
+}

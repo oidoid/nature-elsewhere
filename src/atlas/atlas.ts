@@ -1,24 +1,30 @@
+import {AnimationID} from './animation-id'
 import {Aseprite} from './aseprite'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
 
-export type Atlas = Readonly<Record<string, Atlas.Animation>>
+export interface Atlas extends Readonly<Record<AnimationID, Atlas.Animation>> {}
 
 export namespace Atlas {
-  /** Animation frames. Dimensions are identical for every cel and in pixels. */
-  export interface Animation extends WH {
+  /** Animation frames. */
+  export interface Animation {
+    /** Width and height within the source atlas image in integral pixels.
+        Dimensions are identical for every cel. */
+    readonly size: WH
     readonly cels: readonly Cel[]
     /** Positive animation length in milliseconds for a full cycle, possibly
         infinite. For a ping-pong animation, this is a full traversal forward
-        plus traversal backward excluding the first and last frame. */
-    readonly duration: number
+        plus the traversal backward excluding the first and last frame. */
+    readonly duration: Milliseconds
     readonly direction: AnimationDirection
   }
 
-  /** A single frame of an animation sequence. Positions are in pixels. */
-  export interface Cel extends XY {
+  /** A single frame of an animation sequence. */
+  export interface Cel {
+    /** Location within the source atlas image in integral pixels. */
+    readonly position: XY
     /** Positive cel exposure in milliseconds, possibly infinite. */
-    readonly duration: number
+    readonly duration: Milliseconds
   }
 
   export import AnimationDirection = Aseprite.AnimationDirection

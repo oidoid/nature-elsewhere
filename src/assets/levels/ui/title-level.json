@@ -1,0 +1,90 @@
+{
+  "type": "uiTitle",
+  "size": {"w": 256, "h": 256},
+  "minViewport": {"w": 256, "h": 128},
+  "cursor": {"type": "uiCursor", "scaleImages": {"x": 2, "y": 2}},
+  "parentEntities": [
+    {"type": "sceneryPlane", "state": "white"},
+    {
+      "type": "group",
+      "positionRelativeToCam": "center",
+      "state": "visible",
+      "imageStates": {
+        "visible": {
+          "images": [
+            {"id": "palette lightGreen", "bounds": {"y": 33, "w": 99, "h": 2}}
+          ]
+        }
+      },
+      "updatePredicate": "always",
+      "updaters": ["uiFollowCam"],
+      "collisionPredicate": "children",
+      "children": [
+        {
+          "type": "uiText",
+          "//": "[strings]",
+          "text": "nature\nelsewhere",
+          "textScale": {"x": 3, "y": 3}
+        },
+        {
+          "id": "uiLinkStart",
+          "type": "uiText",
+          "position": {"y": 48},
+          "//": "[strings]",
+          "text": "start",
+          "textScale": {"x": 2, "y": 2},
+          "link": "playFields",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        },
+        {
+          "id": "uiLinkOptions",
+          "type": "uiText",
+          "position": {"y": 60},
+          "//": "[strings]",
+          "text": "options",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiOptions",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        },
+        {
+          "id": "uiLinkLevelEditor",
+          "type": "uiText",
+          "position": {"y": 72},
+          "//": "[strings]",
+          "text": "level editor",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiLevelEditor",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        },
+        {
+          "id": "uiLinkExit",
+          "type": "uiText",
+          "position": {"y": 84},
+          "//": "[strings]",
+          "text": "exit",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiExit",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        }
+      ]
+    },
+    {
+      "type": "uiDateVersionHash",
+      "positionRelativeToCam": "southWest",
+      "camMargin": {"w": 1, "h": 1},
+      "updaters": ["uiFollowCam"]
+    },
+    {
+      "type": "uiText",
+      "//": "[strings]",
+      "text": "oddoid",
+      "positionRelativeToCam": "southEast",
+      "camMargin": {"w": 1, "h": 1},
+      "updaters": ["uiFollowCam"]
+    }
+  ]
+}

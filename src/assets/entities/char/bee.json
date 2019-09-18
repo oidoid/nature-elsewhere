@@ -1,0 +1,25 @@
+{
+  "type": "charBee",
+  "state": "idle",
+  "imageStates": {
+    "idle": {
+      "images": [
+        {"id": "bee"},
+        {"id": "bee shadow", "bounds": {"y": 2}, "layer": "SHADOW"}
+      ]
+    },
+    "dead": {
+      "images": [
+        {"id": "bee dead", "layer": "DEAD"},
+        {
+          "id": "bee deadShadow",
+          "bounds": {"x": -1, "y": 1},
+          "layer": "SHADOW"
+        },
+        {"id": "bee deadBlood", "bounds": {"y": 1}, "layer": "BLOOD"}
+      ]
+    }
+  },
+  "updatePredicate": "intersectsViewport",
+  "updaters": ["wraparound"]
+}

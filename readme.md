@@ -122,7 +122,9 @@ minimum size works the way I wanted.
   In the (frequent) latter case, the result is simply to show larger viewport
   than ideal. If different minimum viewport sizes are used, the scaling may
   vary which means that pixels will vary in size between levels. I think this
-  works visually.
+  works visually. Even with integral scaling, both dimensions (which are likely
+  disproportionate) must be considered and rounding up must be performed.
+  Otherwise, strange and often subtle visual artifacts will creep in.
 
 The scaling transformation can be done in a number of ways. I think the best is
 probably to change the canvas and viewport size to match the document every
@@ -133,8 +135,10 @@ of CSS.
 Listening for window size events asynchronously seems to be a common pitfall as
 well, which I stumbled into while working with Phaser.
 
-This was all quite a frustration when combined with updating all the different
-Phaser framework subsystems and eventually led me to pursue WebGL.
+There are many configurations that mostly work but I only found a couple that
+worked well. This was all quite a frustration when combined with synchronizing
+all the different Phaser framework subsystems and eventually led me to pursue
+WebGL.
 
 ### Renderer State Machine
 

@@ -1,0 +1,17 @@
+{
+  "type": "charBunny",
+  "state": "idle",
+  "imageStates": {
+    "idle": {
+      "images": [
+        {"id": "bunny"},
+        {"id": "bunny shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+      ]
+    },
+    "dead": {
+      "images": [{"id": "bunny dead"}, {"id": "bunny blood", "layer": "BLOOD"}]
+    }
+  },
+  "updatePredicate": "intersectsViewport",
+  "updaters": ["wraparound"]
+}

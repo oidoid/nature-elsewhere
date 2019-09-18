@@ -1,0 +1,47 @@
+{
+  "type": "charBackpacker",
+  "state": "idleDown",
+  "imageStates": {
+    "idleDown": {
+      "images": [
+        {"id": "backpacker idleDown"},
+        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+      ]
+    },
+    "idleUp": {
+      "images": [
+        {"id": "backpacker idleUp"},
+        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+      ]
+    },
+    "idleRight": {
+      "images": [
+        {"id": "backpacker idleRight"},
+        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+      ]
+    },
+    "walkRight": {
+      "images": [
+        {"id": "backpacker walkRight"},
+        {"id": "backpacker walkRightShadow", "layer": "SHADOW"}
+      ]
+    },
+    "walkDown": {
+      "images": [
+        {"id": "backpacker walkDown"},
+        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+      ]
+    },
+    "walkUp": {
+      "images": [
+        {"id": "backpacker walkUp"},
+        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+      ]
+    }
+  },
+  "updatePredicate": "always",
+  "updaters": ["charBackpacker"],
+  "collisionPredicate": "bodies",
+  "collisionBodies": [{"x": 2, "y": 12, "w": 4, "h": 3}],
+  "velocity": {"x": 90, "y": 90}
+}

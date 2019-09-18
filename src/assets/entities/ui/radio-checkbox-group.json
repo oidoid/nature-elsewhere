@@ -1,0 +1,5 @@
+{
+  "type": "uiRadioCheckboxGroup",
+  "updatePredicate": "always",
+  "collisionPredicate": "children"
+}

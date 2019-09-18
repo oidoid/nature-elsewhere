@@ -1,0 +1,20 @@
+{
+  "type": "sceneryClover",
+  "state": "0",
+  "imageStates": {
+    "0": {
+      "images": [
+        {"id": "clover 0-0", "layer": "DECAL"},
+        {"id": "clover 0-1", "bounds": {"x": 1, "y": 3}, "layer": "DECAL"},
+        {"id": "clover 0-0", "bounds": {"x": 4, "y": 1}, "layer": "DECAL"}
+      ]
+    },
+    "1": {
+      "images": [
+        {"id": "clover 1-0", "layer": "DECAL"},
+        {"id": "clover 0-1", "bounds": {"x": 1, "y": 3}, "layer": "DECAL"},
+        {"id": "clover 1-0", "bounds": {"x": 4, "y": 1}, "layer": "DECAL"}
+      ]
+    }
+  }
+}

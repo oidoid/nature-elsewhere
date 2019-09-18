@@ -6,22 +6,21 @@ export interface Animator {
       bounds depending on the animation interval selected by direction. This
       value should be carried over from each call unless the cel is manually
       set. Any integer in [0, len - 1] is always valid. */
-  readonly period: number
+  period: number
 
   /** Current cel exposure in milliseconds. When the value meets or exceeds the
       cel's exposure duration, the cel is advanced according to direction. This
       value should be carried over from each call with the current time step
       added, and zeroed on manual cel change. */
-  readonly exposure: number
+  exposure: Milliseconds
 }
-type t = Animator
 
 export namespace Animator {
-  export const animate = (
+  export function animate(
     {cels, direction, duration}: Atlas.Animation,
     period: number,
-    exposure: number
-  ): t => {
+    exposure: Milliseconds
+  ): Animator {
     exposure = exposure % duration
     while (exposure >= cels[index(cels, period)].duration) {
       exposure -= cels[index(cels, period)].duration
@@ -30,16 +29,19 @@ export namespace Animator {
     return {period, exposure}
   }
 
-  export const index = (cels: readonly Atlas.Cel[], period: number): number =>
-    Math.abs(period % cels.length)
+  export function index(cels: readonly Atlas.Cel[], period: number): number {
+    return Math.abs(period % cels.length)
+  }
 }
 
 const Period: Readonly<
   Record<Atlas.AnimationDirection, (period: number, len: number) => number>
 > = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
-  [Atlas.AnimationDirection.FORWARD]: period =>
-    (period % Number.MAX_SAFE_INTEGER) + 1,
+  [Atlas.AnimationDirection.FORWARD](period) {
+    return (period % Number.MAX_SAFE_INTEGER) + 1
+  },
+
   /** @arg period An integer in the domain (-∞, len - 1]. */
   [Atlas.AnimationDirection.REVERSE]: (period, len) =>
     (period % Number.MIN_SAFE_INTEGER) - 1 + len,

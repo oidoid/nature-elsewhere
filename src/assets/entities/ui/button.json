@@ -1,0 +1,21 @@
+{
+  "type": "uiButton",
+  "state": "unpressed",
+  "text": "",
+  "iconID": "ui-editor-button base",
+  "clicked": false,
+  "imageStates": {
+    "unpressed": {
+      "images": [{"id": "ui-editor-button base", "layer": "UI_MID"}]
+    },
+    "pressed": {
+      "images": [
+        {"id": "ui-editor-button base", "layer": "UI_MID"},
+        {"id": "ui-editor-button pressed", "layer": "UI_HI"}
+      ]
+    }
+  },
+  "updatePredicate": "always",
+  "updaters": ["uiButton"],
+  "collisionPredicate": "bounds"
+}

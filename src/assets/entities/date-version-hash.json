@@ -1,8 +1,0 @@
-{
-  "id": "dateVersionHash",
-  "updateType": "ALWAYS",
-  "behavior": "FOLLOW_CAM",
-  "text": "",
-  "state": "text",
-  "states": {"text": []}
-}

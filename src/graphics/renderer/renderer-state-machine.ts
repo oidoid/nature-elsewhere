@@ -21,22 +21,22 @@ export namespace RendererStateMachine {
 
   export const start = (val: t): void => (register(val, true), resume(val))
 
-  export const stop = (val: Mutable<t>): void => (
+  export const stop = (val: Writable<t>): void => (
     pause(val), register(val, false)
   )
 }
 
-const pause = (val: Mutable<t>): void => {
+const pause = (val: Writable<t>): void => {
   if (val.frameID) val.window.cancelAnimationFrame(val.frameID)
   ;(val.frameID = undefined), val.onPause()
 }
 
-const resume = (val: Mutable<t>): void => {
+const resume = (val: Writable<t>): void => {
   const context = !val.renderer.gl.isContextLost()
   if (val.window.document.hasFocus() && context && !val.frameID) loop(val)
 }
 
-const onEvent = (val: Mutable<t>, ev: Event): void => {
+const onEvent = (val: Writable<t>, ev: Event): void => {
   if (ev.type === 'webglcontextrestored')
     (val.renderer = val.newRenderer()), resume(val)
   else if (ev.type === 'focus') resume(val)
@@ -44,7 +44,7 @@ const onEvent = (val: Mutable<t>, ev: Event): void => {
   ev.preventDefault()
 }
 
-const loop = (val: Mutable<RendererStateMachine>, then?: number): void => {
+const loop = (val: Writable<RendererStateMachine>, then?: number): void => {
   val.frameID = val.window.requestAnimationFrame(now => {
     val.onFrame(now - (then || now)), loop(val, now)
   })

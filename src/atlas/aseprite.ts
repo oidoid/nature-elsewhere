@@ -13,9 +13,9 @@ import {WH} from '../math/wh'
 
 export namespace Aseprite {
   /** The topmost data type for JSON exported from Aseprite. This format
-      contains all the image, animation, and collision information for every
-      file packed in the atlas. **By convention**, every file has one or more
-      animations. Every animation has a Frame sequence and a Tag. */
+      contains all the image and animation information for every file packed in
+      the atlas. **By convention**, every file has one or more animations. Every
+      animation has a Frame sequence and a Tag. */
   export interface File {
     readonly meta: Meta
     /** All Frames for all files packed. */
@@ -45,12 +45,6 @@ export namespace Aseprite {
       `--filename-format '{tag} {frame}'`. */
   export type TagFrameNumber = string
 
-  /** **By convention**, Tags are a file stem followed by a space followed by a
-      possibly empty animation name and unique within the sheet. E.g.,
-      'cactus xs' describes the file named "cactus.aseprite" with animation
-      named "xs" and 'sun ' refers to the file named "sun.aseprite" with
-      animation named "". Animation names are use to distinguish different
-      variations like size (s, m, l) or state (walk, run, fly). */
   export type Tag = string
 
   /** A single animation frame and most primitive unit. Each file packed always
@@ -85,12 +79,12 @@ export namespace Aseprite {
     readonly direction: AnimationDirection | string
   }
 
-  /** Positive animation length in milliseconds or INFINITE_DURATION. */
-  export type Duration = number
+  /** Positive animation length in milliseconds. **By convention**, animations
+      that should pause use the special INFINITE value. */
+  export type Duration = Milliseconds | typeof INFINITE
 
-  /** **By convention**, animations that should never end have this reserved
-      value. Multi-Frame animations should never use this value. */
-  export const INFINITE_DURATION: Duration = 0xffff
+  /** **By convention**. */
+  export const INFINITE: 0xffff = 0xffff
 
   export enum AnimationDirection {
     /** Animate from start to end; when looping, return to start. */

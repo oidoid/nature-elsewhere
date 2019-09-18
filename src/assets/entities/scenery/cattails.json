@@ -1,0 +1,5 @@
+{
+  "type": "sceneryCattails",
+  "state": "visible",
+  "imageStates": {"visible": {"images": [{"id": "cattails"}]}}
+}

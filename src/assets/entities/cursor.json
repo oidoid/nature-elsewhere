@@ -1,6 +1,0 @@
-{
-  "id": "cursor",
-  "updateType": "ALWAYS",
-  "behavior": "CURSOR",
-  "states": {"visible": [{"id": "palette grey", "layer": "UI_CURSOR"}]}
-}

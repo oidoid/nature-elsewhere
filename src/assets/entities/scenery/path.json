@@ -1,0 +1,24 @@
+{
+  "type": "sceneryPath",
+  "state": "/",
+  "imageStates": {
+    "/": {
+      "images": [{"id": "path /", "layer": "ABOVE_PLANE"}]
+    },
+    "\\": {
+      "images": [{"id": "path /", "layer": "ABOVE_PLANE", "scale": {"x": -1}}]
+    },
+    ">": {
+      "images": [{"id": "path >", "layer": "ABOVE_PLANE"}]
+    },
+    "<": {
+      "images": [{"id": "path >", "layer": "ABOVE_PLANE", "scale": {"x": -1}}]
+    },
+    "^": {
+      "images": [{"id": "path ^", "layer": "ABOVE_PLANE"}]
+    },
+    "v": {
+      "images": [{"id": "path ^", "layer": "ABOVE_PLANE", "scale": {"y": -1}}]
+    }
+  }
+}

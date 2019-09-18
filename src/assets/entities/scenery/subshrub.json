@@ -1,0 +1,12 @@
+{
+  "type": "scenerySubshrub",
+  "state": "visible",
+  "imageStates": {
+    "visible": {
+      "images": [
+        {"id": "subshrub"},
+        {"id": "subshrub shadow", "layer": "SHADOW"}
+      ]
+    }
+  }
+}

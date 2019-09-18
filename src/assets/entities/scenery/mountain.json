@@ -1,0 +1,18 @@
+{
+  "type": "sceneryMountain",
+  "state": "visible",
+  "imageStates": {
+    "visible": {
+      "images": [
+        {"id": "mountain"},
+        {
+          "id": "mountain shadow",
+          "bounds": {"x": -2, "y": 1},
+          "layer": "SHADOW"
+        }
+      ]
+    }
+  },
+  "collisionPredicate": "bodies",
+  "collisionBodies": [{"x": 1, "y": 5, "w": 12, "h": 4}]
+}

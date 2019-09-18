@@ -1,0 +1,9 @@
+{
+  "type": "uiDateVersionHash",
+  "text": "",
+  "textScale": {"x": 1, "y": 1},
+  "textLayer": "UI_LO",
+  "state": "visible",
+  "imageStates": {"visible": {"images": []}},
+  "updatePredicate": "always"
+}

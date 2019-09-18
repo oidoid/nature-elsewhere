@@ -1,0 +1,20 @@
+{
+  "type": "sceneryGrass",
+  "state": "0",
+  "imageStates": {
+    "0": {"images": [{"id": "grass 0"}]},
+    "1": {
+      "images": [
+        {"id": "grass 1"},
+        {"id": "grass 3", "bounds": {"x": 4, "y": 1}}
+      ]
+    },
+    "2": {
+      "images": [
+        {"id": "grass 2"},
+        {"id": "grass 0", "bounds": {"x": 6, "y": 2}},
+        {"id": "grass 1", "bounds": {"x": 3, "y": 3}}
+      ]
+    }
+  }
+}

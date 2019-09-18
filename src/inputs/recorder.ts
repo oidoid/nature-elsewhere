@@ -15,7 +15,7 @@ export interface Recorder {
       necessary to persist in set and lastSet to distinguish the off state
       between repeated button presses like [UP, UP]. Starts empty after each
       update. */
-  readonly set: Mutable<InputSet>
+  readonly set: Writable<InputSet>
   /** The previous recording but not necessarily a combo member. */
   readonly lastSet: InputSet
   /** A sequence of nonzero input sets ordered from oldest (first) to latest
@@ -48,7 +48,7 @@ export namespace Recorder {
     (val.set[input.source] = <any>input)
 
   /** Update the combo with recorded input. */
-  export const update = (val: Mutable<t>, milliseconds: number): void => {
+  export const update = (val: Writable<t>, milliseconds: number): void => {
     const interval = val.timer + milliseconds
     const bits = InputSet.bits(val.set)
     const lastBits = InputSet.bits(val.lastSet)

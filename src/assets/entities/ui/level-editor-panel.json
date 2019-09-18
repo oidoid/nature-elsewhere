@@ -1,0 +1,155 @@
+{
+  "type": "uiLevelEditorPanel",
+  "state": "visible",
+  "imageStates": {
+    "visible": {
+      "images": [
+        {
+          "id": "palette white",
+          "bounds": {"x": 1, "y": 21, "w": 42, "h": 11},
+          "layer": "ABOVE_PLANE"
+        },
+        {
+          "id": "checkerboard blueGrey",
+          "bounds": {"y": 21, "w": 1, "h": 11},
+          "layer": "UI_MID"
+        },
+        {
+          "id": "checkerboard blueGrey",
+          "bounds": {"x": 1, "y": 20, "w": 42, "h": 1},
+          "layer": "UI_MID"
+        },
+        {
+          "id": "palette white",
+          "bounds": {"x": 43, "y": 19, "w": 45, "h": 13},
+          "layer": "UI_LO"
+        },
+        {
+          "id": "checkerboard blueGrey",
+          "bounds": {"x": 42, "y": 19, "w": 1},
+          "layer": "UI_MID"
+        },
+        {
+          "id": "checkerboard blueGrey",
+          "bounds": {"x": 43, "y": 18, "w": 44, "h": 1},
+          "layer": "UI_MID"
+        },
+        {
+          "id": "palette white",
+          "bounds": {"x": 87, "y": 1, "w": 34, "h": 31},
+          "layer": "UI_LO"
+        },
+        {
+          "id": "checkerboard blueGrey",
+          "bounds": {"x": 87, "y": 1, "w": 1, "h": 17},
+          "wrap": {"y": 1},
+          "layer": "UI_MID"
+        },
+        {
+          "id": "checkerboard blueGrey",
+          "bounds": {"x": 88, "y": 0, "w": 32, "h": 1},
+          "wrap": {"x": 1},
+          "layer": "UI_MID"
+        },
+        {
+          "id": "checkerboard blueGrey",
+          "bounds": {"x": 120, "y": 1, "w": 1, "h": 1},
+          "layer": "UI_MID"
+        }
+      ]
+    }
+  },
+  "updatePredicate": "always",
+  "positionRelativeToCam": "southEast",
+  "updaters": ["uiFollowCam", "uiLevelEditorPanel"],
+  "collisionPredicate": "children",
+  "children": [
+    {
+      "id": "uiLevelEditorPanelDecrement",
+      "type": "uiButton",
+      "iconID": "ui-editor-button decrement",
+      "position": {"x": 2, "y": 22}
+    },
+    {
+      "id": "uiLevelEditorPanelIncrement",
+      "type": "uiButton",
+      "iconID": "ui-editor-button increment",
+      "position": {"x": 10, "y": 22}
+    },
+    {
+      "id": "uiLevelEditorPanelRemove",
+      "type": "uiButton",
+      "iconID": "ui-editor-button remove",
+      "position": {"x": 18, "y": 22}
+    },
+    {
+      "id": "uiLevelEditorPanelAdd",
+      "type": "uiButton",
+      "iconID": "ui-editor-button add",
+      "position": {"x": 26, "y": 22}
+    },
+    {
+      "id": "uiLevelEditorPanelToggleGrid",
+      "type": "uiButton",
+      "iconID": "ui-editor-button grid",
+      "position": {"x": 34, "y": 22}
+    },
+    {
+      "id": "uiLevelEditorPanelEntityPicker",
+      "type": "uiEntityPicker",
+      "position": {"x": 88}
+    },
+    {
+      "id": "uiLevelEditorRadioGroup",
+      "type": "uiRadioCheckboxGroup",
+      "children": [
+        {
+          "type": "uiText",
+          "text": "st",
+          "textLayer": "UI_HI",
+          "position": {"x": 44, "y": 20}
+        },
+        {
+          "id": "uiLevelEditorPanelState",
+          "type": "uiCheckbox",
+          "textLayer": "UI_HI",
+          "textMaxSize": {"w": 34, "h": 5},
+          "position": {"x": 52, "y": 20}
+        },
+        {
+          "type": "uiText",
+          "text": "x",
+          "textLayer": "UI_HI",
+          "position": {"x": 42, "y": 26}
+        },
+        {
+          "id": "uiLevelEditorPanelX",
+          "type": "uiCheckbox",
+          "text": "2092",
+          "textLayer": "UI_HI",
+          "position": {"x": 46, "y": 26}
+        },
+        {
+          "type": "uiText",
+          "text": "y",
+          "textLayer": "UI_HI",
+          "position": {"x": 64, "y": 26}
+        },
+        {
+          "id": "uiLevelEditorPanelY",
+          "type": "uiCheckbox",
+          "text": "134",
+          "position": {"x": 68, "y": 26},
+          "layer": "UI_HI"
+        },
+        {
+          "id": "uiLevelEditorPanelEntity",
+          "type": "uiCheckbox",
+          "textMaxSize": {"w": 32, "h": 5},
+          "position": {"x": 88, "y": 2},
+          "layer": "UI_HI"
+        }
+      ]
+    }
+  ]
+}

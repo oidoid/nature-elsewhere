@@ -7,6 +7,8 @@ import {Viewport} from '../../graphics/viewport'
 import {WH} from '../../math/wh'
 import {ValueUtil} from '../../utils/value-util'
 
+// this is incorrect. an asynchronous event to polled input pattern is needed here to give hte mouse behavior desired
+
 export interface PointerRecorder {
   point?: PointerInput.Point
   pick?: PointerInput.Pick
@@ -31,9 +33,11 @@ export namespace PointerRecorder {
     cam: Rect,
     ev: PointerEvent
   ): void => {
-    if ((!val.pick || !val.pick.bits) && ev.type === 'pointermove')
-      val.point = point(canvasWH, cam, ev)
-    else (val.pick = pick(canvasWH, cam, ev)), delete val.point
+    if (canvasWH.w && canvasWH.h) {
+      if ((!val.pick || !val.pick.bits) && ev.type === 'pointermove')
+        val.point = point(canvasWH, cam, ev)
+      else (val.pick = pick(canvasWH, cam, ev)), delete val.point
+    }
     ev.preventDefault()
   }
 }

@@ -46,10 +46,10 @@ export namespace InputRouter {
   export const record = (
     val: t,
     recorder: Recorder,
-    viewport: WH,
+    canvasWH: WH,
     cam: Rect
   ): void => {
-    val.canvasWH = viewport
+    val.canvasWH = canvasWH
     val.cam = cam
     const input = {source: InputSource.KEYBOARD, bits: val.keyboardBits}
     Recorder.record(recorder, input)

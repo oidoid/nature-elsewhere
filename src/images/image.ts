@@ -1,42 +1,79 @@
+import {Rect} from '../math/rect'
 import {Animator} from './animator'
-import {Atlas} from '../atlas/atlas'
-import {Layer} from './layer'
-import {WH} from '../math/wh'
 import {XY} from '../math/xy'
+import {Layer} from './layer'
+import {Atlas} from '../atlas/atlas'
+import {AnimationID} from '../atlas/animation-id'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same
     size. Specifying a different target width or height than the source
-    truncates or repeats the scaled rendered source.
-    Bounds (x, y, w, and h members) are the union of all Entity images. This is
-    used for quick collision detections such checking if the Entity is on
-    screen. x and y are in in level coordinates. */
-export interface Image extends Mutable<XY>, WH, Mutable<Animator> {
-  readonly id: string
-  readonly scale: XY
-  readonly layer: Layer.Key
-  readonly tx: number
-  readonly ty: number
-  readonly tvx: number
-  readonly tvy: number
+    truncates or repeats the scaled rendered source. */
+export interface Image {
+  readonly id: AnimationID
+  /** Specified in level coordinates. Includes scaling.
+
+      Images.bounds are used to determine when the image is on screen (and
+      therefor) should be drawn as well as rendering itself.
+
+      Images.bounds are used for some collision tests (see CollisionPredicate)
+      as entity bounds are in part calculated by Image.bounds, ImageRect.bounds,
+      and Entity.bounds. */
+  readonly bounds: Writable<Rect>
+  layer: Layer
+  readonly animator: Animator
+  /** In Int units. See bounds. */
+  readonly scale: Writable<XY>
+  /** Specifies the initial marquee offset. In MillipixelInt units. */
+  readonly wrap: XY
+  /** Specifies the additional marquee offset added by the shader according to
+      the game clock. In MillipixelInt units. */
+  readonly wrapVelocity: XY
 }
-type t = Image
 
 export namespace Image {
-  export const moveBy = (val: t, {x, y}: XY): void => {
-    ;(val.x += x), (val.y += y)
+  export function moveBy(image: Image, by: XY): void {
+    image.bounds.x += by.x
+    image.bounds.y += by.y
   }
 
-  /** For sorting by draw order. E.g., `images.sort(Image.compare)`. */
-  export const compare = (lhs: t, rhs: t): number =>
-    Layer[lhs.layer] - Layer[rhs.layer] || lhs.y + lhs.h - (rhs.y + rhs.h)
-
-  export const animate = (val: t, atlas: Atlas, time: number): void => {
-    const exposure = val.exposure + time
-    const animator = Animator.animate(atlas[val.id], val.period, exposure)
-    Object.assign(val, animator)
+  export function setScale(image: Image, scale: XY): void {
+    image.bounds.w *= Math.abs(scale.x / image.scale.x)
+    image.bounds.h *= Math.abs(scale.y / image.scale.y)
+    image.scale.x = scale.x
+    image.scale.y = scale.y
   }
 
-  export const cel = ({id, period}: t, atlas: Atlas): Atlas.Cel =>
-    atlas[id].cels[Animator.index(atlas[id].cels, period)]
+  export function scale(image: Image, scale: XY): void {
+    image.bounds.w *= Math.abs(scale.x)
+    image.bounds.h *= Math.abs(scale.y)
+    image.scale.x *= scale.x
+    image.scale.y *= scale.y
+  }
+
+  /** For sorting by draw order. E.g., `images.sort(Image.compare)`. See
+      Layer. */
+  export function compare(lhs: Readonly<Image>, rhs: Readonly<Image>): number {
+    return (
+      lhs.layer - rhs.layer ||
+      lhs.bounds.y + lhs.bounds.h - (rhs.bounds.y + rhs.bounds.h)
+    )
+  }
+
+  export function animate(
+    image: Image,
+    time: Milliseconds,
+    atlas: Atlas
+  ): void {
+    const exposure = image.animator.exposure + time
+    ;({
+      period: image.animator.period,
+      exposure: image.animator.exposure
+    } = Animator.animate(atlas[image.id], image.animator.period, exposure))
+  }
+
+  export function cel(image: Readonly<Image>, atlas: Atlas): Atlas.Cel {
+    const index = Animator.index(atlas[image.id].cels, image.animator.period)
+    return atlas[image.id].cels[index]
+  }
 }

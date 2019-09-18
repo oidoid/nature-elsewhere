@@ -1,0 +1,14 @@
+{
+  "type": "sceneryTree",
+  "state": "visible",
+  "imageStates": {
+    "visible": {
+      "images": [
+        {"id": "tree"},
+        {"id": "tree shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+      ]
+    }
+  },
+  "collisionPredicate": "bodies",
+  "collisionBodies": [{"x": 3, "y": 8, "w": 4, "h": 3}]
+}

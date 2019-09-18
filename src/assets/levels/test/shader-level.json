@@ -1,0 +1,113 @@
+{
+  "type": "testShader",
+  "prevLevel": "uiPause",
+  "nextLevel": "testPerformance",
+  "size": {"w": 48, "h": 48},
+  "minViewport": {"w": 48, "h": 48},
+  "cursor": {"type": "uiCursor"},
+  "parentEntities": [
+    {"type": "sceneryPlane", "state": "white"},
+    {
+      "type": "group",
+      "state": "visible",
+      "imageStates": {
+        "visible": {
+          "images": [
+            {"id": "mem-font 90", "bounds": {"x": 1, "y": 1}},
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 1, "y": 6},
+              "scale": {"x": 2}
+            },
+            {"id": "mem-font 90", "bounds": {"x": 1, "y": 12, "w": 6}},
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 1, "y": 18},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 1, "y": 24},
+              "scale": {"x": 2},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 1, "y": 30},
+              "scale": {"x": 2},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 1, "y": 36, "w": 6},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 1, "y": 42},
+              "wrap": {"x": 1},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 15, "y": 1},
+              "scale": {"x": 4, "y": 4}
+            },
+
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 1},
+              "scale": {"x": -1}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 6},
+              "scale": {"x": -2}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 12, "w": 6},
+              "scale": {"x": -1}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 18},
+              "scale": {"x": -1},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 24},
+              "scale": {"x": -2},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 30},
+              "scale": {"x": -2},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 36, "w": 6},
+              "scale": {"x": -1},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 8, "y": 42},
+              "scale": {"x": -1},
+              "wrap": {"x": 1},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "mem-font 90",
+              "bounds": {"x": 15, "y": 24},
+              "scale": {"x": 4, "y": -4}
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

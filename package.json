@@ -19,7 +19,6 @@
     "test:unit": "jest -c jest.config.json",
     "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit",
     "build": "webpack -p",
-    "build:dry": "tsc --noEmit",
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{css,json,html,md,ts}'",
     "build:atlas": "aseprite -b assets/atlas/*.aseprite --filename-format '{tag} {frame}' --list-tags --data src/assets/atlas/atlas.json --sheet-pack --sheet src/assets/atlas/atlas.png",

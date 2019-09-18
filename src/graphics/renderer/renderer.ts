@@ -135,7 +135,8 @@ export namespace Renderer {
     // The viewport is a rendered in physical pixels. It's intentional to use
     // the camera dimensions instead of canvas dimensions since the camera often
     // exceeds the canvas and the viewport's dimensions must be an integer
-    // multiple of the camera.
+    // multiple of the camera. The negative consequence is that the first pixel
+    // on the y-axis and last pixel on the x-axis may be partly truncated.
     gl.viewport(0, 0, scale * cam.w, scale * cam.h)
   }
 

@@ -2,71 +2,78 @@ import {Aseprite} from './aseprite'
 import {Atlas} from './atlas'
 import {WH} from '../math/wh'
 import {XY} from '../math/xy'
+import {AnimationIDParser} from './animation-id-parser'
 
 export namespace AtlasParser {
-  export const parse = ({meta, frames}: Aseprite.File): Atlas =>
-    meta.frameTags.reduce(
-      (sum, val) => ({...sum, [val.name]: parseAnimation(val, frames)}),
-      {}
+  export function parse({meta, frames}: Aseprite.File): Atlas {
+    return meta.frameTags.reduce(
+      (sum: Atlas, frameTag) => ({
+        ...sum,
+        [AnimationIDParser.parse(frameTag.name)]: parseAnimation(
+          frameTag,
+          frames
+        )
+      }),
+      <Atlas>{}
     )
+  }
 
-  export const parseAnimation = (
+  export function parseAnimation(
     frameTag: Aseprite.FrameTag,
-    frames: Aseprite.FrameMap
-  ): Atlas.Animation => {
-    const cels = tagFrames(frameTag, frames).map(parseCel)
+    frameMap: Aseprite.FrameMap
+  ): Atlas.Animation {
+    const frames = tagFrames(frameTag, frameMap)
+    const cels = frames.map(parseCel)
 
-    let duration = cels.reduce((sum, {duration}) => sum + duration, 0)
+    let duration = cels.reduce((ret, {duration}) => ret + duration, 0)
     const pingPong =
       frameTag.direction === Aseprite.AnimationDirection.PING_PONG
     if (pingPong && cels.length > 2)
       duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
 
-    const size = frames[`${frameTag.name} ${frameTag.from}`].sourceSize
+    const size = frames[0].sourceSize
     const direction = parseAnimationDirection(frameTag)
-    return {...size, cels, duration, direction}
+    return {size, cels, duration, direction}
   }
 
-  const tagFrames = (
+  function tagFrames(
     {name, from, to}: Aseprite.FrameTag,
-    frames: Aseprite.FrameMap
-  ): readonly Aseprite.Frame[] => {
+    frameMap: Aseprite.FrameMap
+  ): readonly Aseprite.Frame[] {
     const ret = []
-    for (; from <= to; ++from) ret.push(frames[`${name} ${from}`])
+    for (; from <= to; ++from) ret.push(frameMap[`${name} ${from}`])
     return ret
   }
 
-  export const parseAnimationDirection = ({
+  export function parseAnimationDirection({
     direction
-  }: Aseprite.FrameTag): Atlas.AnimationDirection => {
+  }: Aseprite.FrameTag): Atlas.AnimationDirection {
     if (isAnimationDirection(direction)) return direction
     throw new Error(`"${direction}" is not a Direction.`)
   }
 
-  export const isAnimationDirection = (
-    val: string
-  ): val is Atlas.AnimationDirection =>
-    Object.values(Atlas.AnimationDirection).includes(<Atlas.AnimationDirection>(
-      val
-    ))
+  export function isAnimationDirection(
+    direction: string
+  ): direction is Atlas.AnimationDirection {
+    const vals = Object.values(Atlas.AnimationDirection)
+    return vals.includes(<Atlas.AnimationDirection>direction)
+  }
 
-  export const parseCel = (frame: Aseprite.Frame): Atlas.Cel => ({
-    ...parsePosition(frame),
-    duration: parseDuration(frame.duration)
-  })
+  export function parseCel(frame: Aseprite.Frame): Atlas.Cel {
+    const position = parsePosition(frame)
+    return {position, duration: parseDuration(frame.duration)}
+  }
 
-  export const parsePosition = (frame: Aseprite.Frame): XY => {
+  export function parsePosition(frame: Aseprite.Frame): XY {
     const padding = parsePadding(frame)
     return {x: frame.frame.x + padding.w / 2, y: frame.frame.y + padding.h / 2}
   }
 
-  export const parsePadding = ({frame, sourceSize}: Aseprite.Frame): WH => ({
-    w: frame.w - sourceSize.w,
-    h: frame.h - sourceSize.h
-  })
+  export function parsePadding({frame, sourceSize}: Aseprite.Frame): WH {
+    return {w: frame.w - sourceSize.w, h: frame.h - sourceSize.h}
+  }
 
-  export const parseDuration = (duration: Aseprite.Duration): number => {
-    const infinite = duration === Aseprite.INFINITE_DURATION
-    return infinite ? Number.POSITIVE_INFINITY : duration
+  export function parseDuration(duration: Aseprite.Duration): number {
+    return duration === Aseprite.INFINITE ? Number.POSITIVE_INFINITY : duration
   }
 }

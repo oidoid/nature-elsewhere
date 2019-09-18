@@ -1,0 +1,9 @@
+{
+  "type": "uiDestinationMarker",
+  "state": "hidden",
+  "imageStates": {
+    "visible": {"images": [{"id": "destination", "bounds": {"x": -1, "y": -1}}]}
+  },
+  "updatePredicate": "always",
+  "updaters": ["uiDestinationMarker"]
+}

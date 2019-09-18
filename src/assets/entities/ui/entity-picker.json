@@ -1,0 +1,5 @@
+{
+  "type": "uiEntityPicker",
+  "updatePredicate": "always",
+  "//": "HACK: appear above the grid and plane but below any entity image."
+}

@@ -1,5 +1,6 @@
 {
   "letterHeight": 4,
+  "leadingPadding": 1,
   "leading": 2,
   "lineHeight": 6,
   "kerning": {
@@ -24,7 +25,6 @@
     "'d": 0,
     "d;": 0,
     "lt": 0,
-    "ly": 0,
     "n'": 0,
     "pt": 0,
     "rj": 0,

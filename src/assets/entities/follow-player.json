@@ -1,5 +1,0 @@
-{
-  "id": "followPlayer",
-  "updateType": "ALWAYS",
-  "behavior": "FOLLOW_PLAYER"
-}

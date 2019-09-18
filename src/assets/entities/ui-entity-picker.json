@@ -1,7 +1,0 @@
-{
-  "//": "this needs to be entity rect with children, otherwise it needs to manage siblings which is weird, or else like an entity member AND an entities member",
-  "id": "uiEntityPicker",
-  "behavior": "UI_ENTITY_PICKER",
-  "state": "uiEntityPicker",
-  "states": {"uiEntityPicker": [{"id": "palette white", "w": 32, "h": 32}]}
-}

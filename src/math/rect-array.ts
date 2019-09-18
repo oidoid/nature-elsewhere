@@ -1,17 +1,22 @@
 import {Rect} from './rect'
 import {XY} from './xy'
 
-type t = readonly Rect[]
-
 export namespace RectArray {
-  export const union = (val: t): Maybe<Rect> =>
-    val.length ? val.reduce(Rect.union) : undefined
+  export function union(rects: readonly Rect[]): Maybe<Rect> {
+    return rects.length ? {...rects.reduce(Rect.union)} : undefined
+  }
 
-  export const intersects = (lhs: t, rhs: t | Rect): Maybe<Rect> =>
-    lhs.find(val =>
-      'length' in rhs ? intersects(rhs, val) : Rect.intersects(val, rhs)
+  export function intersects(
+    lhs: readonly Rect[],
+    rhs: readonly Rect[] | Rect
+  ): Maybe<Rect> {
+    return lhs.find(rect =>
+      'length' in rhs ? intersects(rhs, rect) : Rect.intersects(rect, rhs)
     )
+  }
 
-  export const moveBy = (val: t, by: XY): t =>
-    by.x || by.y ? val.map(val => Rect.moveBy(val, by)) : val
+  export function moveBy(rects: readonly Writable<Rect>[], by: XY): void {
+    if (!by.x && !by.y) return
+    rects.forEach(rect => Rect.moveBy(rect, by))
+  }
 }

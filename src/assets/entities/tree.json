@@ -1,8 +1,0 @@
-{
-  "id": "tree",
-  "collisions": [{"x": 3, "y": 8, "w": 4, "h": 3}],
-  "state": "tree",
-  "states": {
-    "tree": [{"id": "tree"}, {"id": "tree shadow", "y": 1, "layer": "SHADOW"}]
-  }
-}

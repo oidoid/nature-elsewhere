@@ -6,15 +6,16 @@ import {InputRouter} from './inputs/input-router'
 import {InputSet} from './inputs/input-set'
 import {LevelStateMachine} from './levels/level-state-machine'
 import {Recorder} from './inputs/recorder'
-import {Rect} from './math/rect'
 import {Renderer} from './graphics/renderer/renderer'
 import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
 import {Synth} from './audio/synth'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
+import {UpdateState} from './entities/updaters/update-state'
 
 export interface Game {
+  readonly win: Window
   readonly doc: Document
   /** The total execution time in milliseconds excluding pauses. */
   age: number
@@ -24,7 +25,6 @@ export interface Game {
       updates may occur per animation frame. */
   readonly tick: number
   levelStateMachine: LevelStateMachine
-  readonly cam: Mutable<Rect>
   readonly rendererStateMachine: RendererStateMachine
   readonly recorder: Recorder
   readonly inputRouter: InputRouter
@@ -36,22 +36,22 @@ type t = Game
 
 export namespace Game {
   export const make = (
-    window: Window,
+    win: Window,
     canvas: HTMLCanvasElement,
     {atlas, atlasImage, shaderLayout}: Assets,
     settings: Settings
   ): t => {
-    const doc = window.document
-    const inputRouter = InputRouter.make(window)
+    const doc = win.document
+    const inputRouter = InputRouter.make(win)
     const ret: t = {
+      win,
       doc,
-      cam: {x: 0, y: 0, w: 0, h: 0},
       age: 0,
       time: 0,
       tick: 1000 / 60,
       levelStateMachine: LevelStateMachine.make(shaderLayout, atlas),
       rendererStateMachine: RendererStateMachine.make({
-        window,
+        window: win,
         canvas,
         onFrame: time => onFrame(ret, time),
         onPause: () => InputRouter.reset(inputRouter),
@@ -87,17 +87,25 @@ export namespace Game {
   export const stop = (val: t): void => {
     InputRouter.register(val.inputRouter, false)
     RendererStateMachine.stop(val.rendererStateMachine)
+    val.win.close()
   }
 
   const onFrame = (val: t, time: number): void => {
     if (!val.levelStateMachine.level) return stop(val)
 
     const canvasWH = Viewport.canvasWH(val.doc)
-    const {minSize} = val.levelStateMachine.level
-    const scale = Viewport.scale(canvasWH, minSize, 0)
-    ;({w: val.cam.w, h: val.cam.h} = Viewport.camWH(canvasWH, scale))
+    const {minViewport} = val.levelStateMachine.level
+    const scale = Viewport.scale(canvasWH, minViewport, 0)
+    const camWH = Viewport.camWH(canvasWH, scale)
+    val.levelStateMachine.level.cam.bounds.w = camWH.w
+    val.levelStateMachine.level.cam.bounds.h = camWH.h
 
-    InputRouter.record(val.inputRouter, val.recorder, canvasWH, val.cam)
+    InputRouter.record(
+      val.inputRouter,
+      val.recorder,
+      canvasWH,
+      val.levelStateMachine.level.cam.bounds
+    )
     Recorder.update(val.recorder, time)
 
     const [set] = val.recorder.combo.slice(-1)
@@ -111,16 +119,21 @@ export namespace Game {
       val.time -= val.tick
       val.levelStateMachine = LevelStateMachine.update(
         val.levelStateMachine,
-        val.cam,
-        val.tick,
-        val.recorder
+        UpdateState.make(time, val.levelStateMachine.level, val.recorder)
       )
     }
 
     const {renderer} = val.rendererStateMachine
     const {level, store} = val.levelStateMachine
     if (level)
-      Renderer.render(renderer, val.age, canvasWH, scale, val.cam, store)
+      Renderer.render(
+        renderer,
+        val.age,
+        canvasWH,
+        scale,
+        level.cam.bounds,
+        store
+      )
     else stop(val)
   }
 

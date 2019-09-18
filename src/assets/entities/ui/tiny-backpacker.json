@@ -1,0 +1,10 @@
+{
+  "type": "uiTinyBackpacker",
+  "state": "visible",
+  "imageStates": {
+    "visible": {
+      "images": [{"id": "tiny-backpacker"}]
+    }
+  },
+  "updatePredicate": "always"
+}

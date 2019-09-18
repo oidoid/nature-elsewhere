@@ -1,0 +1,101 @@
+{
+  "type": "sceneryCloud",
+  "state": "none",
+  "imageStates": {
+    "none": {
+      "images": [
+        {"id": "cloud", "layer": "FLOATS"},
+        {"id": "cloud shadow", "bounds": {"y": 32}, "layer": "SHADOW"}
+      ]
+    },
+    "drizzle": {
+      "images": [
+        {"id": "cloud", "layer": "FLOATS"},
+        {"id": "cloud shadow", "bounds": {"y": 32}, "layer": "SHADOW"},
+        {
+          "id": "sprinkle",
+          "bounds": {"x": 2, "y": 2, "w": 5},
+          "wrapVelocity": {"y": 225}
+        },
+        {
+          "id": "rain",
+          "bounds": {"x": 2, "y": 6, "w": 7},
+          "wrap": {"y": 8},
+          "wrapVelocity": {"y": 340}
+        },
+        {"id": "rain-splash", "bounds": {"y": 35}}
+      ]
+    },
+    "shower": {
+      "images": [
+        {"id": "cloud", "layer": "FLOATS"},
+        {"id": "cloud shadow", "bounds": {"y": 32}, "layer": "SHADOW"},
+        {
+          "id": "rain",
+          "bounds": {"x": 2, "y": 2, "w": 7},
+          "wrapVelocity": {"y": 337}
+        },
+        {
+          "id": "rain",
+          "bounds": {"x": 2, "y": 2, "w": 7},
+          "wrapVelocity": {"y": 225}
+        },
+        {
+          "id": "sprinkle",
+          "bounds": {"x": 2, "y": 6, "w": 7},
+          "wrapVelocity": {"y": 300}
+        },
+        {"id": "rain-splash", "bounds": {"y": 35}},
+        {
+          "id": "rain pool",
+          "bounds": {"x": 2, "y": 36, "w": 5, "h": 3},
+          "layer": "DECAL",
+          "wrapVelocity": {"x": -44, "y": 22}
+        },
+        {
+          "id": "palette green",
+          "bounds": {"x": 1, "y": 37, "w": 7, "h": 1},
+          "layer": "DECAL",
+          "wrapVelocity": {"x": -90}
+        }
+      ]
+    },
+    "downpour": {
+      "images": [
+        {"id": "cloud", "layer": "FLOATS"},
+        {"id": "cloud shadow", "bounds": {"y": 32}, "layer": "SHADOW"},
+        {
+          "id": "sprinkle",
+          "bounds": {"x": 1, "y": 6, "w": 9},
+          "wrapVelocity": {"y": 323}
+        },
+        {
+          "id": "rain",
+          "bounds": {"x": 2, "y": 6, "w": 8},
+          "wrap": {"y": 12},
+          "wrapVelocity": {"y": 398}
+        },
+        {
+          "id": "sprinkle",
+          "bounds": {"x": 2, "y": 6, "w": 8},
+          "wrap": {"y": 4},
+          "wrapVelocity": {"y": 368}
+        },
+        {
+          "id": "rain pool",
+          "bounds": {"x": 2, "y": 35, "w": 7, "h": 5},
+          "layer": "DECAL",
+          "wrapVelocity": {"x": 8, "y": 215}
+        },
+        {
+          "id": "rain pool",
+          "bounds": {"y": 37, "w": 11, "h": 1},
+          "layer": "DECAL",
+          "wrapVelocity": {"x": -90}
+        }
+      ]
+    }
+  },
+  "updatePredicate": "intersectsViewport",
+  "updaters": ["wraparound"]
+}
