@@ -3,18 +3,17 @@ export interface Synth {
   oscillator?: OscillatorNode
   gain?: GainNode
 }
-type t = Synth
 
 export namespace Synth {
-  export const make = (): t => ({context: new AudioContext()})
+  export const make = (): Synth => ({context: new AudioContext()})
 
   export const play = (
-    val: t,
+    val: Synth,
     type: OscillatorType,
     startFrequency: number,
     endFrequency: number,
     duration: number
-  ): t => {
+  ): Synth => {
     const oscillator = val.context.createOscillator()
     const gain = val.context.createGain()
 

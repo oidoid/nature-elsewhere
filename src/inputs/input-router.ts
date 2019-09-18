@@ -15,13 +15,12 @@ export interface InputRouter {
   onKey(ev: KeyboardEvent): void
   onPointer(ev: Event): void
 }
-type t = InputRouter
 
 export namespace InputRouter {
-  export const make = (
+  export function make(
     window: Window,
     pointerRecorder: PointerRecorder = PointerRecorder.make()
-  ): t => {
+  ): InputRouter {
     const ret = {
       canvasWH: {w: 0, h: 0},
       cam: {x: 0, y: 0, w: 0, h: 0},
@@ -34,7 +33,7 @@ export namespace InputRouter {
     return ret
   }
 
-  export const register = (val: t, register: boolean): void => {
+  export function register(val: InputRouter, register: boolean): void {
     const fn = register ? 'addEventListener' : 'removeEventListener'
     ;['pointermove', 'pointerup', 'pointerdown'].forEach(ev =>
       val.window[fn](ev, val.onPointer)
@@ -43,12 +42,12 @@ export namespace InputRouter {
     val.window[fn]('keydown', <EventListenerOrEventListenerObject>val.onKey)
   }
 
-  export const record = (
-    val: t,
+  export function record(
+    val: InputRouter,
     recorder: Recorder,
     canvasWH: WH,
     cam: Rect
-  ): void => {
+  ): void {
     val.canvasWH = canvasWH
     val.cam = cam
     const input = {source: InputSource.KEYBOARD, bits: val.keyboardBits}
@@ -57,14 +56,15 @@ export namespace InputRouter {
     GamepadRecorder.record(recorder, val.window.navigator)
   }
 
-  export const reset = (val: t): void => (
-    (val.keyboardBits = 0), PointerRecorder.reset(val.pointerRecorder)
-  )
+  export function reset(val: InputRouter): void {
+    ;(val.keyboardBits = 0), PointerRecorder.reset(val.pointerRecorder)
+  }
 }
 
-const onKey = (val: t, event: KeyboardEvent): void => {
+function onKey(val: InputRouter, event: KeyboardEvent): void {
   val.keyboardBits = KeyboardRecorder.onKey(val.keyboardBits, event)
 }
 
-const onPointer = (val: t, event: PointerEvent): void =>
+function onPointer(val: InputRouter, event: PointerEvent): void {
   PointerRecorder.onEvent(val.pointerRecorder, val.canvasWH, val.cam, event)
+}

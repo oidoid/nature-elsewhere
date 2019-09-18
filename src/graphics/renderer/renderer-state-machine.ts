@@ -3,56 +3,64 @@ import {Renderer} from './renderer'
 export interface RendererStateMachine {
   readonly window: Window
   readonly canvas: HTMLCanvasElement
-  readonly renderer: Renderer
-  readonly frameID?: number
+  renderer: Renderer
+  frameID?: number
   onFrame(time: number): void
   onPause(): void
   newRenderer(): Renderer
   onEvent(ev: Event): void
 }
-type t = RendererStateMachine
 
 export namespace RendererStateMachine {
-  export const make = (start: Omit<t, 'renderer' | 'onEvent'>): t => {
+  export function make(
+    start: Omit<RendererStateMachine, 'renderer' | 'onEvent'>
+  ): RendererStateMachine {
     const renderer = start.newRenderer()
-    const ret = {...start, renderer, onEvent: (ev: Event) => onEvent(ret, ev)}
-    return ret
+    const machine = {
+      ...start,
+      renderer,
+      onEvent: (ev: Event) => onEvent(machine, ev)
+    }
+    return machine
   }
 
-  export const start = (val: t): void => (register(val, true), resume(val))
+  export function start(machine: RendererStateMachine): void {
+    register(machine, true), resume(machine)
+  }
 
-  export const stop = (val: Writable<t>): void => (
-    pause(val), register(val, false)
-  )
+  export function stop(machine: RendererStateMachine): void {
+    pause(machine), register(machine, false)
+  }
 }
 
-const pause = (val: Writable<t>): void => {
-  if (val.frameID) val.window.cancelAnimationFrame(val.frameID)
-  ;(val.frameID = undefined), val.onPause()
+function pause(machine: RendererStateMachine): void {
+  if (machine.frameID) machine.window.cancelAnimationFrame(machine.frameID)
+  ;(machine.frameID = undefined), machine.onPause()
 }
 
-const resume = (val: Writable<t>): void => {
-  const context = !val.renderer.gl.isContextLost()
-  if (val.window.document.hasFocus() && context && !val.frameID) loop(val)
+function resume(machine: RendererStateMachine): void {
+  const context = !machine.renderer.gl.isContextLost()
+  if (machine.window.document.hasFocus() && context && !machine.frameID)
+    loop(machine)
 }
 
-const onEvent = (val: Writable<t>, ev: Event): void => {
+function onEvent(machine: RendererStateMachine, ev: Event): void {
   if (ev.type === 'webglcontextrestored')
-    (val.renderer = val.newRenderer()), resume(val)
-  else if (ev.type === 'focus') resume(val)
-  else pause(val)
+    (machine.renderer = machine.newRenderer()), resume(machine)
+  else if (ev.type === 'focus') resume(machine)
+  else pause(machine)
   ev.preventDefault()
 }
 
-const loop = (val: Writable<RendererStateMachine>, then?: number): void => {
-  val.frameID = val.window.requestAnimationFrame(now => {
-    val.onFrame(now - (then || now)), loop(val, now)
+function loop(machine: RendererStateMachine, then?: number): void {
+  machine.frameID = machine.window.requestAnimationFrame(now => {
+    machine.onFrame(now - (then || now)), loop(machine, now)
   })
 }
 
-const register = (val: t, register: boolean): void => {
+function register(machine: RendererStateMachine, register: boolean): void {
   const fn = register ? 'addEventListener' : 'removeEventListener'
-  val.canvas[fn]('webglcontextrestored', val.onEvent)
-  val.canvas[fn]('webglcontextlost', val.onEvent)
-  ;['focus', 'blur'].forEach(ev => val.window[fn](ev, val.onEvent))
+  machine.canvas[fn]('webglcontextrestored', machine.onEvent)
+  machine.canvas[fn]('webglcontextlost', machine.onEvent)
+  ;['focus', 'blur'].forEach(ev => machine.window[fn](ev, machine.onEvent))
 }

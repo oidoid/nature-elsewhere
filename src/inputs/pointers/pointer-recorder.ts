@@ -13,26 +13,27 @@ export interface PointerRecorder {
   point?: PointerInput.Point
   pick?: PointerInput.Pick
 }
-type t = PointerRecorder
 
 export namespace PointerRecorder {
-  export const make = (): t => ({})
+  export function make(): PointerRecorder {
+    return {}
+  }
 
-  export const record = (val: t, recorder: Recorder): void => {
+  export function record(val: PointerRecorder, recorder: Recorder): void {
     const inputs = [val.pick, val.point].filter(ValueUtil.is)
     inputs.forEach(input => Recorder.record(recorder, input))
   }
 
-  export const reset = (val: t): void => {
+  export function reset(val: PointerRecorder): void {
     ;(val.point = undefined), (val.pick = undefined)
   }
 
-  export const onEvent = (
-    val: t,
+  export function onEvent(
+    val: PointerRecorder,
     canvasWH: WH,
     cam: Rect,
     ev: PointerEvent
-  ): void => {
+  ): void {
     if (canvasWH.w && canvasWH.h) {
       if ((!val.pick || !val.pick.bits) && ev.type === 'pointermove')
         val.point = point(canvasWH, cam, ev)
@@ -42,7 +43,7 @@ export namespace PointerRecorder {
   }
 }
 
-const pick = (canvasWH: WH, cam: Rect, ev: PointerEvent): PointerInput.Pick => {
+function pick(canvasWH: WH, cam: Rect, ev: PointerEvent): PointerInput.Pick {
   const active = ev.type === 'pointerdown' || ev.type === 'pointermove'
   const xy = Viewport.toLevelXY({x: ev.clientX, y: ev.clientY}, canvasWH, cam)
   const source = InputSource.POINTER_PICK
@@ -55,11 +56,7 @@ const pick = (canvasWH: WH, cam: Rect, ev: PointerEvent): PointerInput.Pick => {
  * @arg cam The coordinates and dimensions of the camera the input was made
  *          through.
  */
-const point = (
-  canvasWH: WH,
-  cam: Rect,
-  ev: PointerEvent
-): PointerInput.Point => {
+function point(canvasWH: WH, cam: Rect, ev: PointerEvent): PointerInput.Point {
   const xy = Viewport.toLevelXY({x: ev.clientX, y: ev.clientY}, canvasWH, cam)
   return {source: InputSource.POINTER_POINT, bits: InputBit.POINT, xy}
 }

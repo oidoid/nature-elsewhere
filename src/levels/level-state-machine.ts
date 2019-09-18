@@ -10,16 +10,18 @@ export interface LevelStateMachine {
   readonly level?: Level
   readonly store: Store
 }
-type t = LevelStateMachine
 
 export namespace LevelStateMachine {
-  export function make(layout: ShaderLayout, atlas: Atlas): t {
+  export function make(layout: ShaderLayout, atlas: Atlas): LevelStateMachine {
     if (!LevelTypeConfigMap.uiTitle) throw new Error('Missing level.')
     const level = LevelParser.parse(LevelTypeConfigMap.uiTitle, atlas)
     return {level, store: Store.make(layout, atlas)}
   }
 
-  export function update(machine: t, state: UpdateState): LevelStateMachine {
+  export function update(
+    machine: LevelStateMachine,
+    state: UpdateState
+  ): LevelStateMachine {
     const store = Store.update(machine.store, state)
     const level = updateLevel(machine)
     return {store, level}

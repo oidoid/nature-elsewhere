@@ -22,7 +22,7 @@ export namespace Aseprite {
     readonly frames: FrameMap
   }
 
-  export type FrameMap = Readonly<Record<TagFrameNumber, Frame>>
+  export interface FrameMap extends Readonly<Record<TagFrameNumber, Frame>> {}
 
   export interface Meta {
     /** E.g., 'http://www.aseprite.org/'. */

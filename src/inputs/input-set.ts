@@ -11,13 +11,13 @@ export interface InputSet {
   readonly [InputSource.POINTER_POINT]?: PointerInput.Point
   readonly [InputSource.GAMEPAD]?: Input
 }
-type t = InputSet
 
 export namespace InputSet {
   /** Coalesces and returns set bits. A set bit from any source overrides an
       unset bit from any other. */
-  export const bits = (val: t): InputBit =>
-    Object.values(val)
+  export function bits(val: InputSet): InputBit {
+    return Object.values(val)
       .filter(ValueUtil.is)
       .reduce((ret: number, {bits}) => ret | bits, 0)
+  }
 }

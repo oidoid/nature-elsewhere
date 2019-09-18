@@ -15,17 +15,21 @@ export interface Store {
   readonly dat: DataView
   readonly len: number
 }
-type t = Store
 
 export namespace Store {
-  export const make = (layout: ShaderLayout, atlas: Atlas): t => ({
-    atlas,
-    layout,
-    dat: InstanceBuffer.make(0),
-    len: 0
-  })
+  export function make(layout: ShaderLayout, atlas: Atlas): Store {
+    return {
+      atlas,
+      layout,
+      dat: InstanceBuffer.make(0),
+      len: 0
+    }
+  }
 
-  export const update = ({layout, atlas, dat}: t, state: UpdateState): t => {
+  export function update(
+    {layout, atlas, dat}: Store,
+    state: UpdateState
+  ): Store {
     let images: Image[] = []
     images.push(...process([state.level.cursor], state, atlas))
 

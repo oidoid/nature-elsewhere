@@ -22,33 +22,48 @@ export interface Recorder {
       (last). Combos are terminated only by expiration. */
   readonly combo: InputSet[]
 }
-type t = Recorder
 
 /** record(), update(), read (active(), trigger()) in that order. */
 export namespace Recorder {
-  export const make = (): t => ({timer: 0, set: {}, lastSet: {}, combo: []})
+  export function make(): Recorder {
+    return {
+      timer: 0,
+      set: {},
+      lastSet: {},
+      combo: []
+    }
+  }
 
   /** @arg combo A sequence of one or more InputBits. */
-  export const equal = (val: t, ...combo: readonly InputBit[]): boolean =>
-    active(val, true, combo)
+  export function equal(val: Recorder, ...combo: readonly InputBit[]): boolean {
+    return active(val, true, combo)
+  }
 
-  export const set = (val: t, ...combo: readonly InputBit[]): boolean =>
-    active(val, false, combo)
+  export function set(val: Recorder, ...combo: readonly InputBit[]): boolean {
+    return active(val, false, combo)
+  }
 
   /** Identical to active() but only true if combo is new. */
-  export const triggered = (val: t, ...combo: readonly InputBit[]): boolean =>
-    !val.timer && equal(val, ...combo)
-
-  export const triggeredSet = (
-    val: t,
+  export function triggered(
+    val: Recorder,
     ...combo: readonly InputBit[]
-  ): boolean => !val.timer && set(val, ...combo)
+  ): boolean {
+    return !val.timer && equal(val, ...combo)
+  }
 
-  export const record = (val: t, input: Input): void =>
-    (val.set[input.source] = <any>input)
+  export function triggeredSet(
+    val: Recorder,
+    ...combo: readonly InputBit[]
+  ): boolean {
+    return !val.timer && set(val, ...combo)
+  }
+
+  export function record(val: Recorder, input: Input): void {
+    return (val.set[input.source] = <any>input)
+  }
 
   /** Update the combo with recorded input. */
-  export const update = (val: Writable<t>, milliseconds: number): void => {
+  export function update(val: Writable<Recorder>, milliseconds: number): void {
     const interval = val.timer + milliseconds
     const bits = InputSet.bits(val.set)
     const lastBits = InputSet.bits(val.lastSet)
@@ -82,11 +97,11 @@ export namespace Recorder {
   }
 }
 
-const active = (
-  val: t,
+function active(
+  val: Recorder,
   exact: boolean,
   combo: readonly InputBit[]
-): boolean => {
+): boolean {
   // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
   const offset = val.combo.length - combo.length
   if (offset < 0) return false

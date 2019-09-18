@@ -16,18 +16,17 @@ export interface Renderer {
   readonly perInstanceBuffer: GLBuffer
   readonly loseContext: GLLoseContext
 }
-type t = Renderer
 
 const GL = WebGL2RenderingContext
 const uv: Int16Array = new Int16Array(Object.freeze([1, 1, 0, 1, 1, 0, 0, 0]))
 const uvLen: number = uv.length / 2 // dimensions
 
 export namespace Renderer {
-  export const make = (
+  export function make(
     canvas: HTMLCanvasElement,
     atlas: HTMLImageElement,
     layout: ShaderLayout
-  ): t => {
+  ): Renderer {
     const gl = canvas.getContext('webgl2', glConfig)
     if (!(gl instanceof GL)) throw new Error('WebGL 2 unsupported.')
 
@@ -103,14 +102,14 @@ export namespace Renderer {
    *               {w: window.innerWidth, h: window.innerHeight}.
    * @arg scale Positive integer zoom.
    */
-  export const render = (
-    val: t,
+  export function render(
+    val: Renderer,
     time: number,
     canvasWH: WH,
     scale: number,
     cam: Rect,
     {dat, len}: Store
-  ): void => {
+  ): void {
     resize(val, canvasWH, scale, cam)
     val.gl.uniform1ui(val.uniforms[val.layout.uniforms.time], time)
     const perInstanceBuffer = val.perInstanceBuffer
@@ -122,7 +121,7 @@ export namespace Renderer {
                     {w: window.innerWidth, h: window.innerHeight}.
       @arg scale Positive integer zoom. */
   export const resize = (
-    {gl, layout, uniforms, projection}: t,
+    {gl, layout, uniforms, projection}: Renderer,
     canvasWH: WH,
     scale: number,
     cam: Rect
@@ -140,7 +139,7 @@ export namespace Renderer {
     gl.viewport(0, 0, scale * cam.w, scale * cam.h)
   }
 
-  const project = (cam: Rect): readonly number[] => {
+  function project(cam: Rect): readonly number[] {
     // Convert the pixels to clipspace by taking them as a fraction of the cam
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
     // is downward, and translating to -1 to 1 and again by the camera position.

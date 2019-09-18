@@ -32,7 +32,6 @@ export interface Game {
   requestWindowSetting: FunctionUtil.Once
   readonly settings: Settings
 }
-type t = Game
 
 export namespace Game {
   export const make = (
@@ -40,10 +39,10 @@ export namespace Game {
     canvas: HTMLCanvasElement,
     {atlas, atlasImage, shaderLayout}: Assets,
     settings: Settings
-  ): t => {
+  ): Game => {
     const doc = win.document
     const inputRouter = InputRouter.make(win)
-    const ret: t = {
+    const ret: Game = {
       win,
       doc,
       age: 0,
@@ -76,7 +75,7 @@ export namespace Game {
       : FunctionUtil.never()
   }
 
-  export const start = (val: t): void => {
+  export const start = (val: Game): void => {
     // Disable the context menu.
     val.doc.oncontextmenu = () => false
     RendererStateMachine.start(val.rendererStateMachine)
@@ -84,13 +83,13 @@ export namespace Game {
     Synth.play(val.synth, 'sawtooth', 200, 500, 0.15)
   }
 
-  export const stop = (val: t): void => {
+  export const stop = (val: Game): void => {
     InputRouter.register(val.inputRouter, false)
     RendererStateMachine.stop(val.rendererStateMachine)
     val.win.close()
   }
 
-  const onFrame = (val: t, time: number): void => {
+  const onFrame = (val: Game, time: number): void => {
     if (!val.levelStateMachine.level) return stop(val)
 
     const canvasWH = Viewport.canvasWH(val.doc)
@@ -137,7 +136,7 @@ export namespace Game {
     else stop(val)
   }
 
-  const processDebugInput = ({rendererStateMachine, recorder}: t): void => {
+  const processDebugInput = ({rendererStateMachine, recorder}: Game): void => {
     const triggered = Recorder.triggeredSet(
       recorder,
       InputBit.DEBUG_CONTEXT_LOSS
