@@ -43,10 +43,7 @@ export namespace ImageRect {
     rect.flip.x = Math.sign(flip.x)
     rect.flip.y = Math.sign(flip.y)
     rect.images.forEach(image =>
-      Image.setScale(image, {
-        x: image.scale.x * (flipX ? -1 : 1),
-        y: image.scale.y * (flipY ? -1 : 1)
-      })
+      Image.scale(image, {x: flipX ? -1 : 1, y: flipY ? -1 : 1})
     )
   }
 

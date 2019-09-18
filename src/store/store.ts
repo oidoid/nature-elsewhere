@@ -43,7 +43,7 @@ export namespace Store {
         entity = state.level.player
       } else
         for (const parent of state.level.parentEntities) {
-          entity = Entity.findDescendant(parent, state.level.cam.followID)
+          entity = Entity.find(parent, state.level.cam.followID)
           if (entity) break
         }
       if (entity) {

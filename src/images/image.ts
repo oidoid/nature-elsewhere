@@ -45,10 +45,8 @@ export namespace Image {
   }
 
   export function scale(image: Image, scale: XY): void {
-    image.bounds.w *= Math.abs(scale.x)
-    image.bounds.h *= Math.abs(scale.y)
-    image.scale.x *= scale.x
-    image.scale.y *= scale.y
+    scale = {x: scale.x * image.scale.x, y: scale.y * image.scale.y}
+    Image.setScale(image, scale)
   }
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. See

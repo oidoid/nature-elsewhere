@@ -138,6 +138,7 @@ export namespace Entity {
       Rect.intersects(entity.bounds, viewport)
     )
   }
+
   export function setState(
     entity: Entity,
     state: EntityState | string
@@ -169,10 +170,10 @@ export namespace Entity {
     return status
   }
 
-  export function findDescendant(entity: Entity, id: EntityID): Maybe<Entity> {
+  export function find(entity: Entity, id: EntityID): Maybe<Entity> {
     if (entity.id === id) return entity
     for (const child of entity.children) {
-      const descendant = findDescendant(child, id)
+      const descendant = find(child, id)
       if (descendant) return descendant
     }
     return

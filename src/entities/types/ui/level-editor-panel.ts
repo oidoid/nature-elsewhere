@@ -37,47 +37,35 @@ export namespace LevelEditorPanel {
       )
     )
       throw new Error()
-    const radioGroup = Entity.findDescendant(
-      panel,
-      EntityID.UI_LEVEL_EDITOR_RADIO_GROUP
-    )
-    const xCheckbox = Entity.findDescendant(
-      panel,
-      EntityID.UI_LEVEL_EDITOR_PANEL_X
-    )
-    const yCheckbox = Entity.findDescendant(
-      panel,
-      EntityID.UI_LEVEL_EDITOR_PANEL_Y
-    )
-    const stateCheckbox = Entity.findDescendant(
+    const radioGroup = Entity.find(panel, EntityID.UI_LEVEL_EDITOR_RADIO_GROUP)
+    const xCheckbox = Entity.find(panel, EntityID.UI_LEVEL_EDITOR_PANEL_X)
+    const yCheckbox = Entity.find(panel, EntityID.UI_LEVEL_EDITOR_PANEL_Y)
+    const stateCheckbox = Entity.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_STATE
     )
-    const entityCheckbox = Entity.findDescendant(
+    const entityCheckbox = Entity.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY
     )
-    const entityPicker = Entity.findDescendant(
+    const entityPicker = Entity.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY_PICKER
     )
-    const decrementButton = Entity.findDescendant(
+    const decrementButton = Entity.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_DECREMENT
     )
-    const incrementButton = Entity.findDescendant(
+    const incrementButton = Entity.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_INCREMENT
     )
-    const removeButton = Entity.findDescendant(
+    const removeButton = Entity.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_REMOVE
     )
-    const addButton = Entity.findDescendant(
-      panel,
-      EntityID.UI_LEVEL_EDITOR_PANEL_ADD
-    )
-    const toggleGridButton = Entity.findDescendant(
+    const addButton = Entity.find(panel, EntityID.UI_LEVEL_EDITOR_PANEL_ADD)
+    const toggleGridButton = Entity.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_TOGGLE_GRID
     )
@@ -183,7 +171,7 @@ export namespace LevelEditorPanel {
     if (panel.toggleGridButton.clicked) {
       let grid
       for (const entity of state.level.parentEntities) {
-        grid = Entity.findDescendant(entity, EntityID.UI_GRID)
+        grid = Entity.find(entity, EntityID.UI_GRID)
         if (grid) break
       }
       if (!grid) throw new Error('Missing grid.')
