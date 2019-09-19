@@ -63,20 +63,23 @@ export namespace Backpacker {
 
     const collisionDirection = {x: !!collision, y: !!collision}
     if (diagonal && collision) {
-      Entity.moveTo(backpacker, {x: Math.trunc(x), y: Math.trunc(originalY)})
+      Entity.moveTo(backpacker, {x, y: originalY})
       collisionDirection.x = !!EntityCollider.collidesEntities(
         backpacker,
         state.activeParents
       )
+      if (!collisionDirection.x) y = originalY
+
       if (collisionDirection.x) {
-        Entity.moveTo(backpacker, {x: Math.trunc(originalX), y: Math.trunc(y)})
+        Entity.moveTo(backpacker, {x: originalX, y})
         collisionDirection.y = !!EntityCollider.collidesEntities(
           backpacker,
           state.activeParents
         )
+        if (!collisionDirection.y) x = originalX
       }
     }
-    if (collisionDirection.x) x = originalX // don't truncate these to allow the player to slide around obstacles
+    if (collisionDirection.x) x = originalX
     if (collisionDirection.y) y = originalY
 
     if (diagonal && !collisionDirection.x && !collisionDirection.y) {
@@ -86,7 +89,7 @@ export namespace Backpacker {
       // to synchronize.
       if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - (x % 1))
     }
-    Entity.moveTo(backpacker, {x, y}) // remove double move
+    Entity.moveTo(backpacker, {x, y})
 
     const idle =
       XY.equal(XY.trunc({x, y}), dst) ||
