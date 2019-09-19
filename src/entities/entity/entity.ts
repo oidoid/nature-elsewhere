@@ -128,6 +128,13 @@ export namespace Entity {
     ]
   }
 
+  export function resetAnimation(entity: Entity): void {
+    imageState(entity).images.forEach(({animator}) => {
+      animator.period = 0
+      animator.exposure = 0
+    })
+  }
+
   /** Returns whether the current entity is in the viewport or should always be
       updated. Children are not considered. */
   export function active(entity: Readonly<Entity>, viewport: Rect): boolean {

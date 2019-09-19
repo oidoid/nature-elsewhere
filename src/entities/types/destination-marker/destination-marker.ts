@@ -14,16 +14,14 @@ export namespace DestinationMarker {
     const pick = set && set[InputSource.POINTER_PICK]
 
     let status = UpdateStatus.UNCHANGED
-    if (pick && pick.bits === InputBit.PICK) {
-      status |= Entity.setState(marker, State.VISIBLE)
-      Entity.imageState(marker).images.forEach(
-        image => ((image.animator.exposure = 0), (image.animator.period = 0))
-      )
-      status |= Entity.moveTo(
-        marker,
-        XY.add(pick.xy, Entity.imageState(marker).origin)
-      )
-    }
+    if (!pick || pick.bits !== InputBit.PICK) return status
+
+    status |= Entity.setState(marker, State.VISIBLE)
+    Entity.resetAnimation(marker)
+    status |= Entity.moveTo(
+      marker,
+      XY.add(pick.xy, Entity.imageState(marker).origin)
+    )
 
     return status
   }
