@@ -1,6 +1,6 @@
-import {Input} from './input'
-import {InputBit} from './input-bit'
-import {InputSource} from './input-source'
+import {Input} from '../input'
+import {InputBit} from '../input-bit/input-bit'
+import {InputSource} from '../input-source/input-source'
 import {Recorder} from './recorder'
 
 const LEFT: InputBit = InputBit.LEFT

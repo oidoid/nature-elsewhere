@@ -1,4 +1,4 @@
-import {NumberUtil} from '../../math/number-util'
+import {NumberUtil} from '../../../math/number/number-util'
 import {ShaderLayout} from './shader-layout'
 import {ShaderLayoutConfig} from './shader-layout-config'
 

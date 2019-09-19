@@ -1,5 +1,5 @@
-import {WH} from './wh'
-import {XY} from './xy'
+import {WH} from '../wh/wh'
+import {XY} from '../xy/xy'
 
 /** Where XY describes the upper-left corner, or minimum, and XY + WH the
     bottom-right, or maximum. */

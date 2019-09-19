@@ -1,5 +1,5 @@
-import {Rect} from './rect'
-import {XY} from './xy'
+import {Rect} from '../rect/rect'
+import {XY} from '../xy/xy'
 
 export namespace RectArray {
   export function union(rects: readonly Rect[]): Maybe<Rect> {

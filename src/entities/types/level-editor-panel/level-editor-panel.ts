@@ -10,7 +10,7 @@ import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {EntityPicker} from '../entity-picker/entity-picker'
 import {Atlas} from '../../../atlas/atlas/atlas'
 import {EntityTypeConfigMap} from '../../entity-type-config-map/entity-type-config-map'
-import {NumberUtil} from '../../../math/number-util'
+import {NumberUtil} from '../../../math/number/number-util'
 
 export interface LevelEditorPanel extends Entity {
   readonly type: EntityType.UI_LEVEL_EDITOR_PANEL

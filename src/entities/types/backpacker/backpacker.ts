@@ -1,5 +1,5 @@
 import {Entity} from '../../entity/entity'
-import {XY} from '../../../math/xy'
+import {XY} from '../../../math/xy/xy'
 import {EntityType} from '../../entity-type/entity-type'
 import {Updater} from '../../updaters/updater/updater'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
@@ -13,12 +13,12 @@ export interface Backpacker extends Entity {
 
 export namespace Backpacker {
   export enum State {
-    IDLE_DOWN = 'idleDown',
     IDLE_UP = 'idleUp',
     IDLE_RIGHT = 'idleRight',
+    IDLE_DOWN = 'idleDown',
+    WALK_UP = 'walkUp',
     WALK_RIGHT = 'walkRight',
-    WALK_DOWN = 'walkDown',
-    WALK_UP = 'walkUp'
+    WALK_DOWN = 'walkDown'
   }
 
   export const update: Updater.Update = (backpacker, state) => {

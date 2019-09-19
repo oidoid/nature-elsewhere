@@ -1,6 +1,6 @@
-import {Input} from './input'
-import {InputBit} from './input-bit'
-import {InputSet} from './input-set'
+import {Input} from '../input'
+import {InputBit} from '../input-bit/input-bit'
+import {InputSet} from '../input-set'
 
 /** The maximum duration in milliseconds permitted between combo inputs. */
 const maxInterval: number = 255

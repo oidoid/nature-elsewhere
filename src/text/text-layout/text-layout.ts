@@ -1,6 +1,6 @@
 import {Font} from '../font'
 import * as memFont from '../../assets/mem-font.json'
-import {XY} from '../../math/xy'
+import {XY} from '../../math/xy/xy'
 
 export interface TextLayout {
   /** The length of this array matches the string length. */

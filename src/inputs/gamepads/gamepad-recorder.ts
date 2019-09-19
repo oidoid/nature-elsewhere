@@ -1,7 +1,7 @@
 import * as defaultGamepadMap from '../../assets/inputs/default-gamepad-map.json'
-import {InputBit, InvertInputBitDirection} from '../input-bit'
-import {InputSource} from '../input-source'
-import {Recorder} from '../recorder'
+import {InputBit, InvertInputBitDirection} from '../input-bit/input-bit'
+import {InputSource} from '../input-source/input-source'
+import {Recorder} from '../recorder/recorder'
 import {ValueUtil} from '../../utils/value-util'
 
 export namespace GamepadRecorder {

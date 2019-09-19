@@ -1,5 +1,5 @@
 import * as defaultKeyboardMap from '../../assets/inputs/default-keyboard-map.json'
-import {InputBit} from '../input-bit'
+import {InputBit} from '../input-bit/input-bit'
 
 type Key = KeyboardEvent['key']
 interface KeyMap extends Readonly<Partial<Record<Key, InputBit.Key>>> {}

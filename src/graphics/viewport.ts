@@ -1,6 +1,6 @@
-import {Rect} from '../math/rect'
-import {WH} from '../math/wh'
-import {XY} from '../math/xy'
+import {Rect} from '../math/rect/rect'
+import {WH} from '../math/wh/wh'
+import {XY} from '../math/xy/xy'
 
 export namespace Viewport {
   /** @return The maximum scale possible. */

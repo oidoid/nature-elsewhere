@@ -1,6 +1,6 @@
 import {Atlas} from '../atlas/atlas/atlas'
 import {Image} from '../images/image/image'
-import {ShaderLayout} from '../graphics/shaders/shader-layout'
+import {ShaderLayout} from '../graphics/shaders/shader-layout/shader-layout'
 
 const littleEndian: boolean = !!new Int8Array(new Int16Array([1]).buffer)[0]
 

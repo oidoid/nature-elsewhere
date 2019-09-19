@@ -1,5 +1,5 @@
 import {ImageConfig} from '../image/image-config'
-import {XYConfig} from '../../math/parsers/xy-config'
+import {XYConfig} from '../../math/xy/xy-config'
 import {ImageScaleConfig} from '../image-scale/image-scale-config'
 
 export type ImageRectConfig = Maybe<{

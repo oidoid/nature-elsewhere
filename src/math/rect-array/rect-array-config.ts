@@ -1,3 +1,3 @@
-import {RectConfig} from './rect-config'
+import {RectConfig} from '../rect/rect-config'
 
 export type RectArrayConfig = Maybe<readonly RectConfig[]>

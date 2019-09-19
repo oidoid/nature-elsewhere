@@ -1,5 +1,5 @@
-import {WH} from '../../math/wh'
-import {Rect} from '../../math/rect'
+import {WH} from '../../math/wh/wh'
+import {Rect} from '../../math/rect/rect'
 
 /** This typing assumes the options specified in package.json and annotated
     herein with **via CLI**. The JSON export format appears to be undocumented

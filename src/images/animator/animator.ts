@@ -1,5 +1,5 @@
 import {Atlas} from '../../atlas/atlas/atlas'
-import {NumberUtil} from '../../math/number-util'
+import {NumberUtil} from '../../math/number/number-util'
 
 export interface Animator {
   /** Cel index oscillation state. This integer may fall outside of animation

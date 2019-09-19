@@ -5,7 +5,7 @@ import {EntityTypeConfigMap} from '../../entity-type-config-map/entity-type-conf
 import {EntityType} from '../../entity-type/entity-type'
 import {Layer} from '../../../images/layer/layer'
 import {ObjectUtil} from '../../../utils/object-util'
-import {NumberUtil} from '../../../math/number-util'
+import {NumberUtil} from '../../../math/number/number-util'
 import {EntityParser} from '../../entity/entity-parser'
 
 export interface EntityPicker extends Entity {

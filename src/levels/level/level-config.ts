@@ -1,6 +1,6 @@
 import {CameraConfig} from '../camera/camera-config'
 import {EntityConfig} from '../../entities/entity/entity-config'
-import {WH} from '../../math/wh'
+import {WH} from '../../math/wh/wh'
 import {LevelTypeConfig} from '../level-type/level-type-config'
 
 export interface LevelConfig {

@@ -1,5 +1,5 @@
 import {ImageScaleConfig} from './image-scale-config'
-import {XY} from '../../math/xy'
+import {XY} from '../../math/xy/xy'
 
 export namespace ImageScaleParser {
   export function parse(config: ImageScaleConfig): XY {

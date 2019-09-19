@@ -1,6 +1,6 @@
 import {Atlas} from '../atlas/atlas/atlas'
 import {Level} from './level/level'
-import {ShaderLayout} from '../graphics/shaders/shader-layout'
+import {ShaderLayout} from '../graphics/shaders/shader-layout/shader-layout'
 import {Store} from '../store/store'
 import {LevelParser} from './level/level-parser'
 import {LevelTypeConfigMap} from './level-type-config/level-type-config-map'

@@ -1,6 +1,6 @@
 import {Entity} from '../entity/entity'
 import {Level} from '../../levels/level/level'
-import {Recorder} from '../../inputs/recorder'
+import {Recorder} from '../../inputs/recorder/recorder'
 import {EntityCollision} from '../../collision/entity-collision'
 import {EntityCollider} from '../../collision/entity-collider'
 

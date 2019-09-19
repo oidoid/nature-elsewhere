@@ -1,9 +1,9 @@
 import {AtlasID} from '../../atlas/atlas-id/atlas-id'
 import {Animator} from '../animator/animator'
 import {Atlas} from '../../atlas/atlas/atlas'
-import {DecamillipixelIntXY, IntXY, XY} from '../../math/xy'
+import {DecamillipixelIntXY, IntXY, XY} from '../../math/xy/xy'
 import {Layer} from '../layer/layer'
-import {Rect} from '../../math/rect'
+import {Rect} from '../../math/rect/rect'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same

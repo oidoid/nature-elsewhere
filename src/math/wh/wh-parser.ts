@@ -1,4 +1,4 @@
-import {WH} from '../wh'
+import {WH} from './wh'
 import {WHConfig} from './wh-config'
 
 export namespace WHParser {

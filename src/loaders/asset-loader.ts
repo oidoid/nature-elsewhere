@@ -1,8 +1,8 @@
 import {Assets} from './assets'
 import * as atlasJSON from '../assets/atlas/atlas.json'
 import {ImageLoader} from './image-loader'
-import * as shaderLayoutConfig from '../graphics/shaders/shader-layout-config.json'
-import {ShaderLayoutParser} from '../graphics/shaders/shader-layout-parser'
+import * as shaderLayoutConfig from '../graphics/shaders/shader-layout/shader-layout-config.json'
+import {ShaderLayoutParser} from '../graphics/shaders/shader-layout/shader-layout-parser'
 import {AtlasParser} from '../atlas/atlas/atlas-parser'
 
 export namespace AssetLoader {

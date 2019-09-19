@@ -1,10 +1,10 @@
-import {InputBit} from '../input-bit'
-import {InputSource} from '../input-source'
+import {InputBit} from '../input-bit/input-bit'
+import {InputSource} from '../input-source/input-source'
 import {PointerInput} from './pointer-input'
-import {Recorder} from '../recorder'
-import {Rect} from '../../math/rect'
+import {Recorder} from '../recorder/recorder'
+import {Rect} from '../../math/rect/rect'
 import {Viewport} from '../../graphics/viewport'
-import {WH} from '../../math/wh'
+import {WH} from '../../math/wh/wh'
 import {ValueUtil} from '../../utils/value-util'
 
 // this is incorrect. an asynchronous event to polled input pattern is needed here to give hte mouse behavior desired

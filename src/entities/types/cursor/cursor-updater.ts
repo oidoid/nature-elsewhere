@@ -1,8 +1,8 @@
 import {Updater} from '../../updaters/updater/updater'
 import {Entity} from '../../entity/entity'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
-import {InputSource} from '../../../inputs/input-source'
-import {InputBit} from '../../../inputs/input-bit'
+import {InputSource} from '../../../inputs/input-source/input-source'
+import {InputBit} from '../../../inputs/input-bit/input-bit'
 import {Cursor} from './cursor'
 
 export namespace CursorUpdater {

@@ -1,4 +1,4 @@
-import {Rect} from '../../math/rect'
+import {Rect} from '../../math/rect/rect'
 import {EntityID} from '../../entities/entity-id/entity-id'
 
 export interface Camera {

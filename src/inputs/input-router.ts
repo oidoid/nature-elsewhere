@@ -1,10 +1,10 @@
 import {GamepadRecorder} from './gamepads/gamepad-recorder'
-import {InputSource} from './input-source'
+import {InputSource} from './input-source/input-source'
 import {KeyboardRecorder} from './keyboards/keyboard-recorder'
 import {PointerRecorder} from './pointers/pointer-recorder'
-import {Recorder} from './recorder'
-import {Rect} from '../math/rect'
-import {WH} from '../math/wh'
+import {Recorder} from './recorder/recorder'
+import {Rect} from '../math/rect/rect'
+import {WH} from '../math/wh/wh'
 
 export interface InputRouter {
   canvasWH: WH

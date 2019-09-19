@@ -1,11 +1,11 @@
 import {Atlas} from '../atlas/atlas/atlas'
 import {Image} from '../images/image/image'
 import {InstanceBuffer} from './instance-buffer'
-import {ShaderLayout} from '../graphics/shaders/shader-layout'
+import {ShaderLayout} from '../graphics/shaders/shader-layout/shader-layout'
 import {UpdateState} from '../entities/updaters/update-state'
 import {Entity} from '../entities/entity/entity'
 import {EntityID} from '../entities/entity-id/entity-id'
-import {NumberUtil} from '../math/number-util'
+import {NumberUtil} from '../math/number/number-util'
 
 export interface Store {
   readonly layout: ShaderLayout

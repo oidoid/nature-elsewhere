@@ -1,10 +1,10 @@
 import {Updater} from '../../updaters/updater/updater'
 import {Entity} from '../../entity/entity'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
-import {XY} from '../../../math/xy'
-import {Rect} from '../../../math/rect'
-import {WH} from '../../../math/wh'
-import {WHParser} from '../../../math/parsers/wh-parser'
+import {XY} from '../../../math/xy/xy'
+import {Rect} from '../../../math/rect/rect'
+import {WH} from '../../../math/wh/wh'
+import {WHParser} from '../../../math/wh/wh-parser'
 
 export interface FollowCam {
   readonly positionRelativeToCam: FollowCam.Orientation

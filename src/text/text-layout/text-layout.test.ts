@@ -1,6 +1,6 @@
 import {lineHeight} from '../../assets/mem-font.json'
 import {TextLayout} from './text-layout'
-import {XY} from '../../math/xy'
+import {XY} from '../../math/xy/xy'
 
 describe('layout()', () =>
   test.each(<readonly [string, number, TextLayout][]>[

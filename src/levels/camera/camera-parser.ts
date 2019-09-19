@@ -1,6 +1,6 @@
 import {CameraConfig} from './camera-config'
 import {EntityIDParser} from '../../entities/entity-id/entity-id-parser'
-import {XYParser} from '../../math/parsers/xy-parser'
+import {XYParser} from '../../math/xy/xy-parser'
 import {EntityID} from '../../entities/entity-id/entity-id'
 import {Camera} from './camera'
 

@@ -1,4 +1,4 @@
-import {XY} from '../xy'
+import {XY} from './xy'
 import {XYConfig} from './xy-config'
 
 export namespace XYParser {

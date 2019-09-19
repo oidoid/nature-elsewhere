@@ -1,7 +1,7 @@
 import {Input} from '../input'
-import {InputBit} from '../input-bit'
-import {InputSource} from '../input-source'
-import {XY} from '../../math/xy'
+import {InputBit} from '../input-bit/input-bit'
+import {InputSource} from '../input-source/input-source'
+import {XY} from '../../math/xy/xy'
 
 export namespace PointerInput {
   export interface Pick extends Input {

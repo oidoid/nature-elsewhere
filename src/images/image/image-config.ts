@@ -1,5 +1,5 @@
-import {XYConfig} from '../../math/parsers/xy-config'
-import {RectConfig} from '../../math/parsers/rect-config'
+import {XYConfig} from '../../math/xy/xy-config'
+import {RectConfig} from '../../math/rect/rect-config'
 import {AnimatorConfig} from '../animator/animator-config'
 import {AtlasIDConfig} from '../../atlas/atlas-id/atlas-id-config'
 import {LayerKeyConfig} from '../layer/layer-config'

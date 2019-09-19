@@ -1,7 +1,7 @@
-import {Rect} from '../rect'
+import {Rect} from './rect'
 import {RectConfig} from './rect-config'
-import {WHParser} from './wh-parser'
-import {XYParser} from './xy-parser'
+import {WHParser} from '../wh/wh-parser'
+import {XYParser} from '../xy/xy-parser'
 
 export namespace RectParser {
   export function parse(config: RectConfig): Rect {

@@ -5,13 +5,13 @@ import {EntityType} from '../entity-type/entity-type'
 import {Image} from '../../images/image/image'
 import {ImageRect} from '../../images/image-rect/image-rect'
 import {ImageStateMap} from '../../images/image-state-map/image-state-map'
-import {RectArray} from '../../math/rect-array'
-import {Rect} from '../../math/rect'
+import {RectArray} from '../../math/rect-array/rect-array'
+import {Rect} from '../../math/rect/rect'
 import {UpdatePredicate} from '../updaters/update-predicate/update-predicate'
 import {Updater} from '../updaters/updater/updater'
 import {UpdateState} from '../updaters/update-state'
 import {UpdateStatus} from '../updaters/update-status/update-status'
-import {XY} from '../../math/xy'
+import {XY} from '../../math/xy/xy'
 import {CollisionPredicate} from '../../collision/collision-predicate/collision-predicate'
 
 export interface Entity {
@@ -47,7 +47,7 @@ export interface Entity {
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
-  readonly collisionBodies: readonly Writable<Rect>[]
+  readonly collisionBodies: readonly Writable<Rect>[] // Move to CollisionBody with CollisionType prop
   /** Operations are shallow by default (do not recurse children) unless
       specified otherwise. That is, only translation and animation are
       recursive. */

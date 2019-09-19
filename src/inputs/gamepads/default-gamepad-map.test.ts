@@ -1,5 +1,5 @@
 import * as defaultGamepadMap from '../../assets/inputs/default-gamepad-map.json'
-import {InputBit} from '../input-bit'
+import {InputBit} from '../input-bit/input-bit'
 
 test.each(Object.values(defaultGamepadMap.buttons))(
   '%# button %p is an InputBit key',

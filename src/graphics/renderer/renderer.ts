@@ -1,11 +1,11 @@
 import fragmentGLSL from '../shaders/fragment.glsl'
 import * as glConfig from './gl-config.json'
 import {GLUtil} from '../gl-util'
-import {Rect} from '../../math/rect'
-import {ShaderLayout} from '../shaders/shader-layout'
+import {Rect} from '../../math/rect/rect'
+import {ShaderLayout} from '../shaders/shader-layout/shader-layout'
 import {Store} from '../../store/store'
 import vertexGLSL from '../shaders/vertex.glsl'
-import {WH} from '../../math/wh'
+import {WH} from '../../math/wh/wh'
 
 export interface Renderer {
   readonly gl: GL

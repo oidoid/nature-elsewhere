@@ -2,12 +2,6 @@
   "type": "charBackpacker",
   "state": "idleDown",
   "imageStates": {
-    "idleDown": {
-      "images": [
-        {"id": "backpacker idleDown"},
-        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
-      ]
-    },
     "idleUp": {
       "images": [
         {"id": "backpacker idleUp"},
@@ -20,6 +14,18 @@
         {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
       ]
     },
+    "idleDown": {
+      "images": [
+        {"id": "backpacker idleDown"},
+        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+      ]
+    },
+    "walkUp": {
+      "images": [
+        {"id": "backpacker walkUp"},
+        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
+      ]
+    },
     "walkRight": {
       "images": [
         {"id": "backpacker walkRight"},
@@ -29,12 +35,6 @@
     "walkDown": {
       "images": [
         {"id": "backpacker walkDown"},
-        {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
-      ]
-    },
-    "walkUp": {
-      "images": [
-        {"id": "backpacker walkUp"},
         {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
       ]
     }

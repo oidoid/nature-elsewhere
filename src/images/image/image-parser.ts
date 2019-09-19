@@ -7,8 +7,8 @@ import {ImageConfig} from './image-config'
 import {Image} from './image'
 import {ImageScaleParser} from '../image-scale/image-scale-parser'
 import {LayerParser} from '../layer/layer-parser'
-import {Rect} from '../../math/rect'
-import {XYParser} from '../../math/parsers/xy-parser'
+import {Rect} from '../../math/rect/rect'
+import {XYParser} from '../../math/xy/xy-parser'
 
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {

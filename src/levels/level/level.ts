@@ -1,4 +1,4 @@
-import {WH} from '../../math/wh'
+import {WH} from '../../math/wh/wh'
 import {Entity} from '../../entities/entity/entity'
 import {LevelType} from '../level-type/level-type'
 import {Backpacker} from '../../entities/types/backpacker/backpacker'

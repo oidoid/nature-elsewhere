@@ -1,9 +1,9 @@
 import {Updater} from '../../updaters/updater/updater'
 import {Entity} from '../../entity/entity'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
-import {InputSource} from '../../../inputs/input-source'
-import {InputBit} from '../../../inputs/input-bit'
-import {XY} from '../../../math/xy'
+import {InputSource} from '../../../inputs/input-source/input-source'
+import {InputBit} from '../../../inputs/input-bit/input-bit'
+import {XY} from '../../../math/xy/xy'
 
 export namespace DestinationMarker {
   export enum State {
