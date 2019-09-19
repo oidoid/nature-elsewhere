@@ -35,7 +35,7 @@ export namespace InputRouter {
 
   export function register(val: InputRouter, register: boolean): void {
     const fn = register ? 'addEventListener' : 'removeEventListener'
-    ;['pointermove', 'pointerup', 'pointerdown'].forEach(ev =>
+    ;['pointermove', 'pointerup', 'pointerdown', 'pointercancel'].forEach(ev =>
       val.window[fn](ev, val.onPointer)
     )
     val.window[fn]('keyup', <EventListenerOrEventListenerObject>val.onKey)
@@ -51,9 +51,9 @@ export namespace InputRouter {
     val.canvasWH = canvasWH
     val.cam = cam
     const input = {source: InputSource.KEYBOARD, bits: val.keyboardBits}
-    Recorder.record(recorder, input)
     PointerRecorder.record(val.pointerRecorder, recorder)
     GamepadRecorder.record(recorder, val.window.navigator)
+    Recorder.record(recorder, input)
   }
 
   export function reset(val: InputRouter): void {

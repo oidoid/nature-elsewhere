@@ -23,7 +23,7 @@ export interface Button extends Entity {
 
 export namespace Button {
   export enum State {
-    UNPRESSED = 'unpressed',
+    UNPRESSED = 'unpressed', // renamed to clicked / unclicked
     PRESSED = 'pressed'
   }
   export function parse(button: Entity, atlas: Atlas): Button {
@@ -51,14 +51,20 @@ export namespace Button {
     const collision = UpdateState.collisionWithCursor(state, button)
     if (!collision) return Entity.setState(button, State.UNPRESSED)
 
-    let status = Entity.setState(button, Button.State.PRESSED)
+    let status = Entity.setState(button, State.PRESSED) // this is just presentation not click state
 
     const [set] = state.input.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
-    if (!pick || pick.bits !== InputBit.PICK) return status
 
-    button.clicked = Recorder.triggered(state.input, InputBit.PICK)
-    return status | UpdateStatus.TERMINATE
+    const nextClicked =
+      (pick &&
+        pick.bits === InputBit.PICK &&
+        Recorder.triggeredSet(state.input, InputBit.PICK)) ||
+      false
+    if (button.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
+    button.clicked = nextClicked
+
+    return status
   }
 }
 

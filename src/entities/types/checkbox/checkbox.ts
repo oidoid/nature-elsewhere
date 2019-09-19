@@ -93,13 +93,29 @@ export namespace Checkbox {
 
     const [set] = state.input.combo.slice(-1)
     const pick = set && set[InputSource.POINTER_PICK]
-    if (!pick || !Recorder.triggered(state.input, InputBit.PICK))
-      return UpdateStatus.UNCHANGED
 
+    console.log(
+      pick,
+      state.input.timer,
+      Recorder.triggeredSet(state.input, InputBit.PICK)
+    )
+    let status = UpdateStatus.UNCHANGED
     const toggle =
-      checkbox.state === State.UNCHECKED ? State.CHECKED : State.UNCHECKED
-    checkbox.checked = toggle === State.CHECKED
-    return Entity.setState(checkbox, toggle) | UpdateStatus.TERMINATE
+      (pick &&
+        pick.bits === InputBit.PICK &&
+        Recorder.triggeredSet(state.input, InputBit.PICK)) ||
+      false
+    const nextChecked = toggle ? !checkbox.checked : checkbox.checked
+    if (checkbox.checked !== nextChecked) status |= UpdateStatus.TERMINATE
+    checkbox.checked = nextChecked
+
+    return (
+      status |
+      Entity.setState(
+        checkbox,
+        checkbox.checked ? State.CHECKED : State.UNCHECKED
+      )
+    )
   }
 }
 
