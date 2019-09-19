@@ -3,6 +3,7 @@ import {Entity} from '../../entity/entity'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {InputSource} from '../../../inputs/input-source/input-source'
 import {InputBit} from '../../../inputs/input-bit/input-bit'
+import {XY} from '../../../math/xy/xy'
 
 export namespace DestinationMarker {
   export enum State {
@@ -18,7 +19,7 @@ export namespace DestinationMarker {
       Entity.imageState(marker).images.forEach(
         image => ((image.animator.exposure = 0), (image.animator.period = 0))
       )
-      status |= Entity.moveTo(marker, pick.xy)
+      status |= Entity.moveTo(marker, XY.sub(pick.xy, {x: 1, y: 1}))
     }
 
     return status
