@@ -118,7 +118,7 @@ export namespace Game {
       val.time -= val.tick
       val.levelStateMachine = LevelStateMachine.update(
         val.levelStateMachine,
-        UpdateState.make(time, val.levelStateMachine.level, val.recorder)
+        UpdateState.make(val.tick, val.levelStateMachine.level, val.recorder)
       )
     }
 
