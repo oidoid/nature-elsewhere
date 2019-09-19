@@ -1,7 +1,7 @@
 {
   "type": "uiTitle",
   "size": {"w": 256, "h": 256},
-  "minViewport": {"w": 256, "h": 128},
+  "minViewport": {"w": 132, "h": 128},
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
     {"type": "sceneryPlane", "state": "white"},
@@ -12,7 +12,7 @@
       "imageStates": {
         "visible": {
           "images": [
-            {"id": "palette lightGreen", "bounds": {"y": 44, "w": 132, "h": 2}}
+            {"id": "palette lightGreen", "bounds": {"y": 44, "w": 128, "h": 2}}
           ]
         }
       },

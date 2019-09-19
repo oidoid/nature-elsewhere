@@ -1,7 +1,7 @@
 {
   "type": "uiLevelEditor",
   "size": {"w": 32767, "h": 32767},
-  "minViewport": {"w": 128, "h": 128},
+  "minViewport": {"w": 128, "h": 96},
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
     {"type": "sceneryPlane", "state": "paleGreen"},
