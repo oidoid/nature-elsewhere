@@ -26,13 +26,11 @@ export namespace ImageRect {
     }
   }
   export function moveTo(rect: ImageRect, to: XY): void {
-    moveBy(rect, XY.sub(to, rect.origin))
+    moveBy(rect, XY.sub(to, rect.bounds))
   }
 
   export function moveBy(rect: ImageRect, by: XY): void {
     if (!by.x && !by.y) return
-    rect.origin.x += by.x
-    rect.origin.y += by.y
     rect.bounds.x += by.x
     rect.bounds.y += by.y
     rect.images.forEach(image => Image.moveBy(image, by))

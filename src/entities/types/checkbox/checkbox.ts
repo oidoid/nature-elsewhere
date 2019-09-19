@@ -57,7 +57,7 @@ export namespace Checkbox {
       textLayer: checkbox.textLayer,
       textScale: checkbox.textScale,
       textMaxSize: checkbox.textMaxSize,
-      position: {x: checkbox.bounds.x + 1, y: checkbox.bounds.y}
+      position: {x: checkbox.bounds.x, y: checkbox.bounds.y}
     }
     const child = EntityParser.parse(config, atlas)
     checkbox.children[0] = child
@@ -76,9 +76,12 @@ export namespace Checkbox {
       checkbox.imageStates[state].images.length = 0
       const images = newBackgroundImages(state, atlas, size)
       images.forEach(image => ImageRect.add(checkbox.imageStates[state], image))
-      checkbox.imageStates[state].origin.x = 0
-      checkbox.imageStates[state].origin.y = 0
-      ImageRect.moveTo(checkbox.imageStates[state], text.bounds)
+      checkbox.imageStates[state].bounds.x = 0
+      checkbox.imageStates[state].bounds.y = 0
+      ImageRect.moveTo(checkbox.imageStates[state], {
+        x: text.bounds.x,
+        y: checkbox.bounds.y
+      })
     }
   }
 

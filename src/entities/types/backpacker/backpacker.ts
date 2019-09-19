@@ -8,7 +8,6 @@ import {EntityCollider} from '../../../collision/entity-collider'
 
 export interface Backpacker extends Entity {
   readonly type: EntityType.CHAR_BACKPACKER
-  destination?: XY
 }
 
 export namespace Backpacker {
@@ -32,10 +31,10 @@ export namespace Backpacker {
     const {x: originalX, y: originalY} = backpacker.bounds
 
     const dst = XY.trunc(
-      XY.add(state.level.destination.bounds, {
-        x: -4,
-        y: -backpacker.bounds.h + 2
-      })
+      XY.add(
+        state.level.destination.bounds,
+        Entity.imageState(backpacker).origin
+      )
     )
     const left = dst.x < Math.trunc(x)
     const right = dst.x > Math.trunc(x)
@@ -87,7 +86,7 @@ export namespace Backpacker {
       // to synchronize.
       if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - (x % 1))
     }
-    Entity.moveTo(backpacker, {x, y})
+    Entity.moveTo(backpacker, {x, y}) // remove double move
 
     const idle =
       XY.equal(XY.trunc({x, y}), dst) ||
