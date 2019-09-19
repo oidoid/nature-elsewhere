@@ -8,7 +8,7 @@ describe('layout()', () =>
     [
       ' ',
       Number.MAX_VALUE,
-      {positions: [undefined], cursor: {x: 4, y: 0 * lineHeight}}
+      {positions: [undefined], cursor: {x: 3, y: 0 * lineHeight}}
     ],
     [
       '\n',
@@ -24,23 +24,23 @@ describe('layout()', () =>
           {x: 4, y: 0 * lineHeight},
           {x: 8, y: 0 * lineHeight},
           undefined,
-          {x: 15, y: 0 * lineHeight},
-          {x: 19, y: 0 * lineHeight},
-          {x: 23, y: 0 * lineHeight},
+          {x: 14, y: 0 * lineHeight},
+          {x: 18, y: 0 * lineHeight},
+          {x: 22, y: 0 * lineHeight},
           undefined,
-          {x: 29, y: 1 + 0 * lineHeight},
-          {x: 33, y: 0 * lineHeight},
-          {x: 37, y: 0 * lineHeight},
+          {x: 27, y: 1 + 0 * lineHeight},
+          {x: 31, y: 0 * lineHeight},
+          {x: 35, y: 0 * lineHeight},
           undefined,
-          {x: 42, y: 1 + 0 * lineHeight},
-          {x: 46, y: 0 * lineHeight},
-          {x: 50, y: 0 * lineHeight},
+          {x: 39, y: 1 + 0 * lineHeight},
+          {x: 43, y: 0 * lineHeight},
+          {x: 47, y: 0 * lineHeight},
           undefined,
-          {x: 56, y: 0 * lineHeight},
-          {x: 60, y: 0 * lineHeight},
-          {x: 64, y: 0 * lineHeight}
+          {x: 51, y: 0 * lineHeight},
+          {x: 55, y: 0 * lineHeight},
+          {x: 59, y: 0 * lineHeight}
         ],
-        cursor: {x: 67, y: 0 * lineHeight}
+        cursor: {x: 62, y: 0 * lineHeight}
       }
     ],
 
@@ -117,15 +117,15 @@ describe('layout()', () =>
           {x: 4, y: 2 * lineHeight},
           {x: 8, y: 2 * lineHeight},
           undefined,
-          {x: 0, y: 1 + 3 * lineHeight},
-          {x: 4, y: 3 * lineHeight},
-          {x: 8, y: 3 * lineHeight},
+          {x: 12, y: 1 + 2 * lineHeight},
+          {x: 16, y: 2 * lineHeight},
+          {x: 20, y: 2 * lineHeight},
           undefined,
-          {x: 0, y: 4 * lineHeight},
-          {x: 4, y: 4 * lineHeight},
-          {x: 8, y: 4 * lineHeight}
+          {x: 0, y: 3 * lineHeight},
+          {x: 4, y: 3 * lineHeight},
+          {x: 8, y: 3 * lineHeight}
         ],
-        cursor: {x: 11, y: 4 * lineHeight}
+        cursor: {x: 11, y: 3 * lineHeight}
       }
     ],
 
