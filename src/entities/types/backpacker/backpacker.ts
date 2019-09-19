@@ -5,6 +5,7 @@ import {Updater} from '../../updaters/updater/updater'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {EntityState} from '../../entity-state/entity-state'
 import {EntityCollider} from '../../../collision/entity-collider'
+import {NumberUtil} from '../../../math/number/number-util'
 
 export interface Backpacker extends Entity {
   readonly type: EntityType.CHAR_BACKPACKER
@@ -30,12 +31,13 @@ export namespace Backpacker {
     let {x, y} = backpacker.bounds
     const {x: originalX, y: originalY} = backpacker.bounds
 
-    const dst = XY.trunc(
-      XY.add(
-        state.level.destination.bounds,
-        Entity.imageState(backpacker).origin
-      )
-    )
+    let dst = XY.trunc(state.level.destination.bounds)
+    dst = XY.add(dst, Entity.imageState(backpacker).origin)
+    dst = {
+      x: NumberUtil.clamp(dst.x, 0, state.level.size.w - backpacker.bounds.w),
+      y: NumberUtil.clamp(dst.y, 0, state.level.size.h - backpacker.bounds.h)
+    }
+
     const left = dst.x < Math.trunc(x)
     const right = dst.x > Math.trunc(x)
     const up = dst.y < Math.trunc(y)
