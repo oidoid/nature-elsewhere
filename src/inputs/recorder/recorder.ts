@@ -2,14 +2,13 @@ import {Input} from '../input'
 import {InputBit} from '../input-bit/input-bit'
 import {InputSet} from '../input-set'
 
-/** The maximum duration in milliseconds permitted between combo inputs. */
-const maxInterval: number = 255
-
 export interface Recorder {
+  /** The maximum duration in milliseconds permitted between combo inputs. */
+  readonly maxInterval: Milliseconds
   /** The time in milliseconds since the input changed. When zero, the input
       is triggered. When exceeded, the combo is reset (either to the active
       input or empty). */
-  readonly timer: number
+  readonly timer: Milliseconds
   /** The current recording and prospective combo member. The last input
       overwrites any previous. A zero value can never be a combo member but is
       necessary to persist in set and lastSet to distinguish the off state
@@ -25,8 +24,9 @@ export interface Recorder {
 
 /** record(), update(), read (active(), trigger()) in that order. */
 export namespace Recorder {
-  export function make(): Recorder {
+  export function make(maxInterval: Milliseconds): Recorder {
     return {
+      maxInterval,
       timer: 0,
       set: {},
       lastSet: {},
@@ -35,84 +35,95 @@ export namespace Recorder {
   }
 
   /** @arg combo A sequence of one or more InputBits. */
-  export function equal(val: Recorder, ...combo: readonly InputBit[]): boolean {
-    return active(val, true, combo)
+  export function equal(
+    recorder: Recorder,
+    ...combo: readonly InputBit[]
+  ): boolean {
+    return active(recorder, true, combo)
   }
 
-  export function set(val: Recorder, ...combo: readonly InputBit[]): boolean {
-    return active(val, false, combo)
+  export function set(
+    recorder: Recorder,
+    ...combo: readonly InputBit[]
+  ): boolean {
+    return active(recorder, false, combo)
   }
 
   /** Identical to active() but only true if combo is new. */
   export function triggered(
-    val: Recorder,
+    recorder: Recorder,
     ...combo: readonly InputBit[]
   ): boolean {
-    return !val.timer && equal(val, ...combo)
+    return !recorder.timer && equal(recorder, ...combo)
   }
 
   export function triggeredSet(
-    val: Recorder,
+    recorder: Recorder,
     ...combo: readonly InputBit[]
   ): boolean {
-    return !val.timer && set(val, ...combo)
+    return !recorder.timer && set(recorder, ...combo)
   }
 
-  export function record(val: Recorder, input: Input): void {
-    return (val.set[input.source] = <any>input)
+  export function record(recorder: Recorder, input: Input): void {
+    return (recorder.set[input.source] = <any>input)
   }
 
   /** Update the combo with recorded input. */
-  export function update(val: Writable<Recorder>, milliseconds: number): void {
-    const interval = val.timer + milliseconds
-    const bits = InputSet.bits(val.set)
-    const lastBits = InputSet.bits(val.lastSet)
+  export function update(
+    recorder: Writable<Recorder>,
+    time: Milliseconds
+  ): void {
+    const interval = recorder.timer + time
+    const bits = InputSet.bits(recorder.set)
+    const lastBits = InputSet.bits(recorder.lastSet)
 
-    if (interval >= maxInterval && (!bits || bits !== lastBits)) {
+    if (interval >= recorder.maxInterval && (!bits || bits !== lastBits)) {
+      if (bits) debugger
       // Expired and released or changed.
-      val.timer = 0
-      val.combo.length = 0
+      recorder.timer = 0
+      recorder.combo.length = 0
       // If active and changed, start a new combo.
-      if (bits) val.combo.push(val.set)
+      if (bits) recorder.combo.push(recorder.set)
     } else if (bits && bits !== lastBits) {
+      debugger
       // Unexpired active and changed (triggered).
-      val.timer = 0
+      recorder.timer = 0
       // Input is now part of a combo and will not be modified by _lastInput.
-      val.combo.push(val.set)
+      recorder.combo.push(recorder.set)
     } else {
       // Held, possibly expired, or unexpired and released.
-      val.timer = interval
+      recorder.timer = interval
 
       if (bits && bits === lastBits) {
         // Held, update combo with the latest input.
-        val.combo.pop()
-        val.combo.push(val.set)
+        recorder.combo.pop()
+        recorder.combo.push(recorder.set)
       }
     }
 
     // Input is now last input and will not be be modified. Next input starts
     // empty. No carryovers.
-    val.lastSet = val.set
-    val.set = {}
+    recorder.lastSet = recorder.set
+    recorder.set = {}
   }
 }
 
 function active(
-  val: Recorder,
+  recorder: Recorder,
   exact: boolean,
   combo: readonly InputBit[]
 ): boolean {
   // Test from offset to allow subsets. E.g., [DOWN] matches [UP, DOWN].
-  const offset = val.combo.length - combo.length
+  const offset = recorder.combo.length - combo.length
   if (offset < 0) return false
   if (
-    ((exact ? ~0 : combo.slice(-1)[0]) & InputSet.bits(val.lastSet)) !==
+    ((exact ? ~0 : combo.slice(-1)[0]) & InputSet.bits(recorder.lastSet)) !==
     combo.slice(-1)[0]
   ) {
     return false
   }
   return combo.every(
     (bits, i) =>
-      ((exact ? ~0 : bits) & InputSet.bits(val.combo[offset + i])) === bits
+      ((exact ? ~0 : bits) & InputSet.bits(recorder.combo[offset + i])) === bits
   )
 }

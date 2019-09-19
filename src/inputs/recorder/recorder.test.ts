@@ -23,7 +23,7 @@ const keyboardDown: Input = Object.freeze({
 
 describe('Recorder', () => {
   test('Inputs are initially inactive and not triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
     Recorder.update(subject, 1)
     expect(Recorder.equal(subject, UP)).toStrictEqual(false)
     expect(Recorder.triggered(subject, UP)).toStrictEqual(false)
@@ -31,7 +31,7 @@ describe('Recorder', () => {
   })
 
   test('Recorded inputs are active and triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1)
     expect(Recorder.equal(subject, UP)).toStrictEqual(true)
@@ -40,7 +40,7 @@ describe('Recorder', () => {
   })
 
   test('Held input is active but not triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1)
@@ -54,7 +54,7 @@ describe('Recorder', () => {
   })
 
   test('Recorded inputs are checked from the end', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1)
@@ -79,7 +79,7 @@ describe('Recorder', () => {
   })
 
   test('Simultaneous recorded input bits are active and triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
     Recorder.record(subject, {source: InputSource.KEYBOARD, bits: UP | DOWN})
     Recorder.update(subject, 1)
     expect(Recorder.equal(subject, UP | DOWN)).toStrictEqual(true)
@@ -88,7 +88,7 @@ describe('Recorder', () => {
   })
 
   test('Short recorded combo is active and triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1)
     Recorder.record(subject, keyboardDown)
@@ -101,7 +101,7 @@ describe('Recorder', () => {
   })
 
   test('Long recorded combo is active and triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     const combo = [UP, UP, DOWN, DOWN, LEFT, RIGHT, LEFT, RIGHT]
     combo.forEach(bits => {
@@ -118,7 +118,7 @@ describe('Recorder', () => {
   })
 
   test('Combo is inactive and not triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
     Recorder.update(subject, 1)
     expect(Recorder.equal(subject, UP, DOWN, UP)).toStrictEqual(false)
     expect(Recorder.triggered(subject, UP, DOWN, UP)).toStrictEqual(false)
@@ -126,7 +126,7 @@ describe('Recorder', () => {
   })
 
   test('Recorded around the world combo is active and triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
     // prettier-ignore
     const combo = [
       UP, UP | LEFT, LEFT, LEFT | DOWN, DOWN, DOWN | RIGHT, RIGHT, UP | RIGHT
@@ -144,7 +144,7 @@ describe('Recorder', () => {
   })
 
   test('Recorded combo expired', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     expect(Recorder.equal(subject, UP)).toStrictEqual(false)
     expect(Recorder.triggered(subject, UP)).toStrictEqual(false)
@@ -172,7 +172,7 @@ describe('Recorder', () => {
   })
 
   test('Combo missed', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1)
@@ -191,7 +191,7 @@ describe('Recorder', () => {
   })
 
   test('Unreleased held and expired combo is active but not triggered', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1)
@@ -216,7 +216,7 @@ describe('Recorder', () => {
   })
 
   test('Held and expired', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1000)
@@ -226,7 +226,7 @@ describe('Recorder', () => {
   })
 
   test('Held and expired, changed, held and expired', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, keyboardUp)
     Recorder.update(subject, 1000)
@@ -245,7 +245,7 @@ describe('Recorder', () => {
   })
 
   test('Repeated input from single source overwrites previous', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, keyboardUp)
     Recorder.record(subject, keyboardDown)
@@ -257,7 +257,7 @@ describe('Recorder', () => {
   })
 
   test('Multiple input sources are coalesced', () => {
-    const subject = Recorder.make()
+    const subject = Recorder.make(100)
 
     Recorder.record(subject, {source: InputSource.GAMEPAD, bits: DOWN})
     Recorder.record(subject, keyboardUp)
