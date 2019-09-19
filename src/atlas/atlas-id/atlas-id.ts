@@ -250,3 +250,5 @@ export enum AtlasID {
   UI_WINDOW_MODE_CHART = 'ui-window-mode-chart',
   UI_ZOOM_MULTIPLIER_CHART = 'ui-zoom-multiplier-chart'
 }
+
+export const UI_MEM_FONT_PREFIX = 'mem-font '

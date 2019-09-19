@@ -11,6 +11,7 @@ import {RectArray} from '../../../math/rect-array/rect-array'
 import {XYParser} from '../../../math/xy/xy-parser'
 import {ImageParser} from '../../../images/image/image-parser'
 import {Text} from './text'
+import {UI_MEM_FONT_PREFIX} from '../../../atlas/atlas-id/atlas-id'
 
 export namespace TextParser {
   export function parse(text: Entity, atlas: Atlas): Text {
@@ -52,12 +53,12 @@ export namespace TextParser {
   }
 
   /** @arg y The vertical scroll offset in pixels. */
-  export function toImages(
+  function toImages(
     atlas: Atlas,
     string: string,
     layer: Layer.Key,
     scale: XY,
-    bounds: Rect = {x: 0, y: 0, w: Limits.maxShort, h: Limits.maxShort},
+    bounds: Rect,
     y: number = 0
   ): readonly Image[] {
     const images = []
@@ -89,6 +90,6 @@ function newCharacterImage(
   scale: XY,
   atlas: Atlas
 ): Image {
-  const config = {id: 'mem-font ' + char, bounds: position, layer, scale}
-  return ImageParser.parse(config, atlas)
+  const id = UI_MEM_FONT_PREFIX + char
+  return ImageParser.parse({id, bounds: position, layer, scale}, atlas)
 }

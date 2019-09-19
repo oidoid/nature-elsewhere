@@ -16,6 +16,7 @@ import {Rect} from '../../../math/rect/rect'
 import {ImageParser} from '../../../images/image/image-parser'
 import {EntityParser} from '../../entity/entity-parser'
 import {Text} from '../text/text'
+import {TextConfig} from '../text/text-config'
 
 export interface Checkbox extends Omit<Text, 'type'> {
   readonly type: EntityType.UI_CHECKBOX
@@ -49,7 +50,7 @@ export namespace Checkbox {
     atlas: Atlas
   ): void {
     checkbox.text = text
-    const config: Text.Config = {
+    const config: TextConfig = {
       type: EntityType.UI_TEXT,
       text: text,
       textLayer: checkbox.textLayer,
