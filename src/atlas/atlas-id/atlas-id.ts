@@ -247,7 +247,6 @@ export enum AtlasID {
   UI_MEM_FONT_127 = 'mem-font 127',
   UI_PICK = 'ui pick',
   UI_SWITCH = 'ui-switch',
-  UI_TINY_BACKPACKER = 'tiny-backpacker',
   UI_WINDOW_MODE_CHART = 'ui-window-mode-chart',
   UI_ZOOM_MULTIPLIER_CHART = 'ui-zoom-multiplier-chart'
 }

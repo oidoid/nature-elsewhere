@@ -3,13 +3,13 @@ import {Entity} from '../entity/entity'
 /** Identifier for distinguishing among entity classes and tracing configuration
     selection. */
 export enum EntityType {
-  GROUP = 'group',
   CHAR_BACKPACKER = 'charBackpacker',
   CHAR_BEE = 'charBee',
   CHAR_BUNNY = 'charBunny',
   CHAR_FLY = 'charFly',
   CHAR_FROG = 'charFrog',
   CHAR_SNAKE = 'charSnake',
+  GROUP = 'group',
   SCENERY_BUSH = 'sceneryBush',
   SCENERY_CATTAILS = 'sceneryCattails',
   SCENERY_CLOUD = 'sceneryCloud',
@@ -26,16 +26,15 @@ export enum EntityType {
   SCENERY_SUBSHRUB = 'scenerySubshrub',
   SCENERY_TREE = 'sceneryTree',
   UI_BUTTON = 'uiButton',
+  UI_CHECKBOX = 'uiCheckbox',
   UI_CURSOR = 'uiCursor',
   UI_DATE_VERSION_HASH = 'uiDateVersionHash',
-  UI_DESTINATION_MARKER = 'uiDestinationMarker', // maybe not
-  UI_LEVEL_EDITOR_PANEL = 'uiLevelEditorPanel',
+  UI_DESTINATION_MARKER = 'uiDestinationMarker',
   UI_ENTITY_PICKER = 'uiEntityPicker',
-  UI_TEXT = 'uiText',
+  UI_LEVEL_EDITOR_PANEL = 'uiLevelEditorPanel',
   UI_RADIO_CHECKBOX_GROUP = 'uiRadioCheckboxGroup',
-  UI_CHECKBOX = 'uiCheckbox',
-  UI_TOOLBAR = 'uiToolbar',
-  UI_TINY_BACKPACKER = 'uiTinyBackpacker'
+  UI_TEXT = 'uiText',
+  UI_TOOLBAR = 'uiToolbar'
 }
 
 export namespace EntityType {

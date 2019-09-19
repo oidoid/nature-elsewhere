@@ -32,7 +32,6 @@ import * as UI_TOOLBAR from '../../assets/entities/ui/toolbar.json'
 import * as UI_RADIO_BUTTON_GROUP from '../../assets/entities/ui/radio-checkbox-group.json'
 import * as UI_CHECKBOX from '../../assets/entities/ui/checkbox.json'
 import * as GROUP from '../../assets/entities/group.json'
-import * as UI_TINY_BACKPACKER from '../../assets/entities/ui/tiny-backpacker.json'
 
 export const EntityTypeConfigMap: Readonly<
   Record<EntityType, EntityConfig>
@@ -43,6 +42,7 @@ export const EntityTypeConfigMap: Readonly<
   [EntityType.CHAR_FLY]: CHAR_FLY,
   [EntityType.CHAR_FROG]: CHAR_FROG,
   [EntityType.CHAR_SNAKE]: CHAR_SNAKE,
+  [EntityType.GROUP]: GROUP,
   [EntityType.SCENERY_BUSH]: SCENERY_BUSH,
   [EntityType.SCENERY_CATTAILS]: SCENERY_CATTAILS,
   [EntityType.SCENERY_CLOUD]: SCENERY_CLOUD,
@@ -59,15 +59,13 @@ export const EntityTypeConfigMap: Readonly<
   [EntityType.SCENERY_SUBSHRUB]: SCENERY_SUBSHRUB,
   [EntityType.SCENERY_TREE]: SCENERY_TREE,
   [EntityType.UI_BUTTON]: UI_BUTTON,
+  [EntityType.UI_CHECKBOX]: UI_CHECKBOX,
   [EntityType.UI_CURSOR]: UI_CURSOR,
   [EntityType.UI_DATE_VERSION_HASH]: UI_DATE_VERSION_HASH,
   [EntityType.UI_DESTINATION_MARKER]: UI_DESTINATION_MARKER,
-  [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
   [EntityType.UI_ENTITY_PICKER]: UI_ENTITY_PICKER,
+  [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
   [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
-  [EntityType.UI_CHECKBOX]: UI_CHECKBOX,
   [EntityType.UI_TEXT]: UI_TEXT,
-  [EntityType.UI_TOOLBAR]: UI_TOOLBAR,
-  [EntityType.UI_TINY_BACKPACKER]: UI_TINY_BACKPACKER,
-  [EntityType.GROUP]: GROUP
+  [EntityType.UI_TOOLBAR]: UI_TOOLBAR
 })
