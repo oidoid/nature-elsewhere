@@ -77,7 +77,7 @@ export namespace Entity {
   }
 
   export function moveTo(entity: Entity, to: XY): UpdateStatus {
-    return moveBy(entity, XY.sub(to, entity.bounds))
+    return moveBy(entity, XY.sub(to, imageState(entity).origin))
   }
 
   /** Recursively move the entity, its images, its collision bodies, and all of
@@ -87,8 +87,6 @@ export namespace Entity {
     entity.bounds.x += by.x
     entity.bounds.y += by.y
     ImageRect.moveBy(imageState(entity), by)
-    // entity.bounds.x = imageState(entity).bounds.x
-    // entity.bounds.y = imageState(entity).bounds.y
     RectArray.moveBy(entity.collisionBodies, by)
     entity.children.forEach(child => moveBy(child, by))
     return UpdateStatus.UPDATED
@@ -144,9 +142,9 @@ export namespace Entity {
     state: EntityState | string
   ): UpdateStatus {
     if (entity.state === state) return UpdateStatus.UNCHANGED
-    const imagesPosition = imageState(entity).bounds
+    const {origin} = imageState(entity)
     entity.state = state
-    ImageRect.moveTo(imageState(entity), imagesPosition)
+    ImageRect.moveTo(imageState(entity), origin)
     setScale(entity, entity.scale)
     invalidateBounds(entity)
     return UpdateStatus.UPDATED

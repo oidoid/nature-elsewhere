@@ -10,18 +10,20 @@ import {ImageParser} from '../image/image-parser'
 export namespace ImageRectParser {
   export function parse(config: ImageRectConfig, atlas: Atlas): ImageRect {
     if (!config)
-      return {bounds: {x: 0, y: 0, w: 0, h: 0}, scale: {x: 1, y: 1}, images: []}
-    const position = XYParser.parse(config.position)
+      return {
+        origin: {x: 0, y: 0},
+        bounds: {x: 0, y: 0, w: 0, h: 0},
+        scale: {x: 1, y: 1},
+        images: []
+      }
     const images = (config.images || []).map(image =>
       ImageParser.parse(image, atlas)
     )
-    images.forEach(image => Image.moveBy(image, position))
     const union = RectArray.union(images.map(image => image.bounds))
-    const rect = {
-      bounds: union || {...position, w: 0, h: 0},
-      scale: {x: 1, y: 1},
-      images
-    }
+    const origin = XYParser.parse(config.position)
+    images.forEach(image => Image.moveBy(image, origin))
+    const bounds = union || {x: origin.x, y: origin.y, w: 0, h: 0}
+    const rect = {origin, bounds, scale: {x: 1, y: 1}, images}
     ImageRect.scale(rect, ImageScaleParser.parse(config.scale))
     return rect
   }

@@ -12,6 +12,7 @@ export namespace ImageStateMapParser {
   ): ImageStateMap {
     const init: ImageStateMap = {
       [EntityState.HIDDEN]: {
+        origin: {x: 0, y: 0},
         bounds: {x: 0, y: 0, w: 0, h: 0},
         scale: {x: 1, y: 1},
         images: []

@@ -23,8 +23,8 @@ export namespace TextParser {
       text.textLayer,
       XYParser.parse(text.textScale),
       {
-        x: Entity.imageState(text).bounds.x,
-        y: Entity.imageState(text).bounds.y,
+        x: Entity.imageState(text).origin.x,
+        y: Entity.imageState(text).origin.y,
         w:
           text.textMaxSize && text.textMaxSize.w
             ? text.textMaxSize.w

@@ -12,11 +12,12 @@ import {Image} from '../../../images/image/image'
 import * as memFont from '../../../assets/mem-font.json'
 import {ImageRect} from '../../../images/image-rect/image-rect'
 import {Recorder} from '../../../inputs/recorder/recorder'
-import {Rect} from '../../../math/rect/rect'
 import {ImageParser} from '../../../images/image/image-parser'
 import {EntityParser} from '../../entity/entity-parser'
 import {Text} from '../text/text'
 import {TextConfig} from '../text/text-config'
+import {ImageConfig} from '../../../images/image/image-config'
+import {WH} from '../../../math/wh/wh'
 
 export interface Checkbox extends Omit<Text, 'type'> {
   readonly type: EntityType.UI_CHECKBOX
@@ -67,16 +68,17 @@ export namespace Checkbox {
   function setBackground(checkbox: Checkbox, atlas: Atlas): void {
     const text = checkbox.children[0]
     for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
-      const bounds = {
-        x: text.bounds.x - 1,
-        y: text.bounds.y,
+      const size = {
         w: text.bounds.w,
         // Do not shrink when a descender is not present.
         h: Math.max(text.bounds.h, memFont.lineHeight - memFont.leadingPadding)
       }
       checkbox.imageStates[state].images.length = 0
-      const images = newBackgroundImages(state, atlas, bounds)
+      const images = newBackgroundImages(state, atlas, size)
       images.forEach(image => ImageRect.add(checkbox.imageStates[state], image))
+      checkbox.imageStates[state].origin.x = 0
+      checkbox.imageStates[state].origin.y = 0
+      ImageRect.moveTo(checkbox.imageStates[state], text.bounds)
     }
   }
 
@@ -101,12 +103,16 @@ export namespace Checkbox {
 function newBackgroundImages(
   state: Checkbox.State,
   atlas: Atlas,
-  {x, y, w, h}: Rect
+  {w, h}: WH
 ): Image[] {
   const id = Checkbox.backgroundID[state]
   const layer = 'UI_MID'
-  const background = {id, bounds: {x: x + 1, y, w, h}, layer}
-  const border = {id, bounds: {x, y: y + 1, w: w + 2, h: h - 2}, layer}
+  const background: ImageConfig = {id, bounds: {w, h}, layer}
+  const border: ImageConfig = {
+    id,
+    bounds: {x: -1, y: 1, w: w + 2, h: h - 2},
+    layer
+  }
   return [
     ImageParser.parse(background, atlas),
     ImageParser.parse(border, atlas)

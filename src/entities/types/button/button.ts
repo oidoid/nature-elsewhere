@@ -32,8 +32,8 @@ export namespace Button {
 
     for (const state of [Button.State.PRESSED, Button.State.UNPRESSED]) {
       const position = {
-        x: button.imageStates[state].bounds.x,
-        y: button.imageStates[state].bounds.y
+        x: button.imageStates[state].origin.x,
+        y: button.imageStates[state].origin.y
       }
       const icon = newIcon(button.iconID, atlas, position)
       ImageRect.add(button.imageStates[state], icon)
