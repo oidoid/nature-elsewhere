@@ -41,8 +41,8 @@ export namespace EntityParser {
       // Initialize position to ImageRect origin so that moveBy() is effectively
       // a moveTo().
       bounds: {
-        x: 0, //imageStates[state].bounds.x,
-        y: 0, //imageStates[state].bounds.y,
+        x: imageStates[state].bounds.x,
+        y: imageStates[state].bounds.y,
         w: 0,
         h: 0
       },
