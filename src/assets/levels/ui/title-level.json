@@ -36,7 +36,7 @@
               "id": "uiLinkStart",
               "type": "uiText",
               "//": "[strings]",
-              "text": "start",
+              "text": "play",
               "textScale": {"x": 2, "y": 2},
               "link": "playFields",
               "updaters": ["uiLink", "uiLevelLink"],
