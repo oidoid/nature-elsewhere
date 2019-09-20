@@ -7,30 +7,25 @@ export interface Rect extends XY, WH {}
 
 export namespace Rect {
   export function trunc(rect: Rect): Rect {
-    return {...XY.trunc(rect), ...WH.trunc(rect)}
+    const {x, y} = XY.trunc(rect)
+    const {w, h} = WH.trunc(rect)
+    return {x, y, w, h}
   }
 
   export function add(lhs: Rect, rhs: Rect): Rect {
-    return {...XY.add(lhs, rhs), ...WH.add(lhs, rhs)}
+    const {x, y} = XY.add(lhs, rhs)
+    const {w, h} = WH.add(lhs, rhs)
+    return {x, y, w, h}
   }
 
   export function moveAllBy(rects: readonly Writable<Rect>[], by: XY): void {
     if (!by.x && !by.y) return
-    rects.forEach(rect => moveBy(rect, by))
+    for (const rect of rects) moveBy(rect, by)
   }
 
   export function moveBy(rect: Writable<Rect>, by: XY): void {
     rect.x += by.x
     rect.y += by.y
-  }
-
-  export function intersectsAny(
-    lhs: readonly Rect[],
-    rhs: readonly Rect[] | Rect
-  ): Maybe<Rect> {
-    return lhs.find(rect =>
-      'length' in rhs ? intersectsAny(rhs, rect) : intersects(rect, rhs)
-    )
   }
 
   // less-than-or-equal?
@@ -66,11 +61,15 @@ export namespace Rect {
   }
 
   export function unionAll(rects: readonly Rect[]): Maybe<Rect> {
-    return rects.length ? {...rects.reduce(union)} : undefined
+    // Make a copy of the first element, rects[0], in case it's modified. When
+    // rects has a length of one, union is not called and rects[0] would be
+    // returned directly. This behavior differs from all other nonzero cases in
+    // that no element of the array is ever returned (union() returns a new Rect
+    // instance). If that first element is modified by the caller, it changes
+    // the unionAll() result implicitly which is probably unexpected.
+    return rects.length ? rects.reduce(union, {...rects[0]}) : undefined
   }
 
-  /** The union or bounds of an array of Rects may be computed thus:
-      `{...rects.reduce(Rect.union)}`. */
   export function union(lhs: Rect, rhs: Rect): Rect {
     const {x, y} = XY.min(lhs, rhs)
     const w = Math.max(lhs.x + lhs.w, rhs.x + rhs.w) - x

@@ -9,6 +9,8 @@ export namespace RectParser {
   }
 
   export function parse(config: RectConfig): Rect {
-    return {...XYParser.parse(config), ...WHParser.parse(config)}
+    const {x, y} = XYParser.parse(config)
+    const {w, h} = WHParser.parse(config)
+    return {x, y, w, h}
   }
 }
