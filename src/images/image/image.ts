@@ -79,11 +79,6 @@ export namespace Image {
     image.animator.exposure = animator.exposure
   }
 
-  export function cel(image: Readonly<Image>, atlas: Atlas): Atlas.Cel {
-    const index = Animator.index(image.animator.period, atlas[image.id].cels)
-    return atlas[image.id].cels[index]
-  }
-
   /** Raise or lower by offset. */
   export function elevate(image: Image, offset: Layer): void {
     image.layer += offset

@@ -1,7 +1,7 @@
 import {ObjectUtil} from '../../utils/object-util'
 import {Atlas} from '../../atlas/atlas/atlas'
 import * as atlasJSON from '../../atlas/atlas-assets/atlas.json'
-import {LevelTypeConfigMap} from './level-type-config-map'
+import {LevelConfigMap} from './level-config-map'
 import {LevelParser} from '../level/level-parser'
 import {LevelConfig} from '../level/level-config'
 import {ValueUtil} from '../../utils/value-util'
@@ -9,7 +9,7 @@ import {AtlasParser} from '../../atlas/atlas/atlas-parser'
 
 const atlas: Atlas = Object.freeze(AtlasParser.parse(atlasJSON))
 const configs: readonly LevelConfig[] = ObjectUtil.values(
-  LevelTypeConfigMap
+  LevelConfigMap
 ).filter(ValueUtil.is)
 
 test.each(configs)(`%# LevelConfig %p is parsable`, config =>
