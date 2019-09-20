@@ -1,4 +1,3 @@
-import {EntityParser} from '../../entity/entity-parser'
 import {Entity} from '../../entity/entity'
 import {EntityType} from '../../entity-type/entity-type'
 import {DateVersionHash} from './date-version-hash'
@@ -7,11 +6,13 @@ import {Atlas} from '../../../atlas/atlas/atlas'
 import {TextConfig} from '../text/text-config'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
+import {RecursiveEntityParser} from '../../entity-type-parser'
 
 export namespace DateVersionHashParser {
   export function parse(
     dateVersionHash: Entity,
-    atlas: Atlas
+    atlas: Atlas,
+    parser: RecursiveEntityParser
   ): DateVersionHash {
     if (
       !EntityTypeUtil.assert<DateVersionHash>(
@@ -30,7 +31,7 @@ export namespace DateVersionHashParser {
       textMaxSize: dateVersionHash.textMaxSize,
       position: {x: dateVersionHash.bounds.x, y: dateVersionHash.bounds.y}
     }
-    const text = EntityParser.parse(config, atlas)
+    const text = parser(config, atlas)
     dateVersionHash.children.push(text)
     EntityUtil.invalidateBounds(dateVersionHash)
 

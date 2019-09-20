@@ -8,6 +8,7 @@ import {LevelEditorPanelParser} from './level-editor-panel-parser'
 import {LevelEditorPanel} from './level-editor-panel'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
+import {EntityParser} from '../../entity/entity-parser'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -48,7 +49,8 @@ export namespace LevelEditorPanelUpdater {
           panel.entityCheckbox,
           panel.entityPicker,
           -1,
-          state.level.atlas
+          state.level.atlas,
+          EntityParser.parse
         )
       else if (panel.stateCheckbox.checked)
         LevelEditorPanelParser.updatePickerAndStufForState(
@@ -57,7 +59,8 @@ export namespace LevelEditorPanelUpdater {
           panel.stateCheckbox,
           panel.entityPicker,
           -1,
-          state.level.atlas
+          state.level.atlas,
+          EntityParser.parse
         )
     }
     if (panel.incrementButton.clicked) {
@@ -71,7 +74,8 @@ export namespace LevelEditorPanelUpdater {
           panel.entityCheckbox,
           panel.entityPicker,
           1,
-          state.level.atlas
+          state.level.atlas,
+          EntityParser.parse
         )
       else if (panel.stateCheckbox.checked)
         LevelEditorPanelParser.updatePickerAndStufForState(
@@ -80,7 +84,8 @@ export namespace LevelEditorPanelUpdater {
           panel.stateCheckbox,
           panel.entityPicker,
           1,
-          state.level.atlas
+          state.level.atlas,
+          EntityParser.parse
         )
     }
     if (panel.toggleGridButton.clicked) {

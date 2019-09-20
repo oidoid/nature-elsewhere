@@ -12,10 +12,11 @@ import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
 import {CheckboxParser} from '../checkbox/checkbox-parser'
 import {EntityPickerParser} from '../entity-picker/entity-picker-parser'
-import {EntityParser} from '../../entity/entity-parser'
+import {defaultTypeState} from '../../type-config-map'
+import {RecursiveEntityParser} from '../../entity-type-parser'
 
 export namespace LevelEditorPanelParser {
-  export const parse: UpdaterParser = (panel, atlas) => {
+  export const parse: UpdaterParser = (panel, atlas, parser) => {
     if (
       !EntityTypeUtil.assert<LevelEditorPanel>(
         panel,
@@ -78,7 +79,8 @@ export namespace LevelEditorPanelParser {
       <Checkbox>entityCheckbox,
       <EntityPicker>entityPicker,
       0,
-      atlas
+      atlas,
+      parser
     )
 
     return ret
@@ -90,11 +92,17 @@ export namespace LevelEditorPanelParser {
     checkbox: Checkbox,
     picker: EntityPicker,
     offset: number,
-    atlas: Atlas
+    atlas: Atlas,
+    parser: RecursiveEntityParser
   ): void {
     EntityPickerParser.setVisibleChild(picker, picker.activeChildIndex + offset)
     const text = EntityPickerParser.getVisibleChild(picker).type
-    CheckboxParser.setText(checkbox, text.replace(/^(scenery|char)/, ''), atlas)
+    CheckboxParser.setText(
+      checkbox,
+      text.replace(/^(scenery|char)/, ''),
+      atlas,
+      parser
+    )
     panel.stateIndex = defaultStateIndex(picker)
     updatePickerAndStufForState(
       panel,
@@ -102,7 +110,8 @@ export namespace LevelEditorPanelParser {
       panel.stateCheckbox,
       picker,
       0,
-      atlas
+      atlas,
+      parser
     )
   }
 
@@ -112,7 +121,8 @@ export namespace LevelEditorPanelParser {
     checkbox: Checkbox,
     picker: EntityPicker,
     offset: number,
-    atlas: Atlas
+    atlas: Atlas,
+    parser: RecursiveEntityParser
   ): void {
     const child = EntityPickerParser.getVisibleChild(picker)
     panel.stateIndex = NumberUtil.wrap(
@@ -126,14 +136,14 @@ export namespace LevelEditorPanelParser {
       state => state !== EntityState.HIDDEN
     )[panel.stateIndex]
     EntityUtil.setState(child, state)
-    CheckboxParser.setText(checkbox, state, atlas)
+    CheckboxParser.setText(checkbox, state, atlas, parser)
     EntityUtil.invalidateBounds(radioGroup)
   }
 }
 
 function defaultStateIndex(picker: EntityPicker) {
   const child = EntityPickerParser.getVisibleChild(picker)
-  const defaultState = EntityParser.defaultState(child.type)
+  const defaultState = defaultTypeState(child.type)
   if (!defaultState) return 0
   return Object.keys(child.imageStates)
     .filter(state => state !== EntityState.HIDDEN)

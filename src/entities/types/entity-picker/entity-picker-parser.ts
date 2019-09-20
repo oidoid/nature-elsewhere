@@ -1,4 +1,3 @@
-import {EntityParser} from '../../entity/entity-parser'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
 import {EntityState} from '../../entity-state/entity-state'
@@ -9,6 +8,8 @@ import {Layer} from '../../../images/layer/layer'
 import {ObjectUtil} from '../../../utils/object-util'
 import {NumberUtil} from '../../../math/number/number-util'
 import {EntityPicker} from './entity-picker'
+import {RecursiveEntityParser} from '../../entity-type-parser'
+import {defaultTypeState} from '../../type-config-map'
 
 const size = Object.freeze({w: 32, h: 26})
 const typeBlacklist: readonly string[] = Object.freeze([
@@ -19,14 +20,18 @@ const typeBlacklist: readonly string[] = Object.freeze([
 ])
 
 export namespace EntityPickerParser {
-  export function parse(picker: Entity, atlas: Atlas): EntityPicker {
+  export function parse(
+    picker: Entity,
+    atlas: Atlas,
+    parser: RecursiveEntityParser
+  ): EntityPicker {
     if (
       !EntityTypeUtil.assert<EntityPicker>(picker, EntityType.UI_ENTITY_PICKER)
     )
       throw new Error()
     for (const type of Object.values(EntityType)) {
       if (typeBlacklist.includes(type)) continue
-      const entity = EntityParser.parse({type}, atlas)
+      const entity = parser({type}, atlas)
       EntityUtil.moveTo(entity, {
         x: Math.max(
           picker.bounds.x,
@@ -59,7 +64,7 @@ export namespace EntityPickerParser {
     }
     picker.activeChildIndex = NumberUtil.wrap(index, 0, picker.children.length)
     const child = picker.children[Math.abs(picker.activeChildIndex)]
-    const defaultState = EntityParser.defaultState(child.type)
+    const defaultState = defaultTypeState(child.type)
     if (defaultState) EntityUtil.setState(child, defaultState)
     EntityUtil.elevate(child, Layer.UI_PICKER_OFFSET)
   }

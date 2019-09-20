@@ -4,7 +4,6 @@ import {Atlas} from '../../../atlas/atlas/atlas'
 import {Checkbox} from './checkbox'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {TextConfig} from '../text/text-config'
-import {EntityParser} from '../../entity/entity-parser'
 import {EntityUtil} from '../../entity/entity-util'
 import {Image} from '../../../images/image/image'
 import * as memFont from '../../../text/text-layout/mem-font.json'
@@ -14,12 +13,17 @@ import {ImageConfig} from '../../../images/image/image-config'
 import {WH} from '../../../math/wh/wh'
 import {AtlasID} from '../../../atlas/atlas-id/atlas-id'
 import {CheckboxState} from './checkbox-state'
+import {RecursiveEntityParser} from '../../entity-type-parser'
 
 export namespace CheckboxParser {
-  export function parse(checkbox: Entity, atlas: Atlas): Checkbox {
+  export function parse(
+    checkbox: Entity,
+    atlas: Atlas,
+    parser: RecursiveEntityParser
+  ): Checkbox {
     if (!EntityTypeUtil.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
-    setText(checkbox, checkbox.text, atlas)
+    setText(checkbox, checkbox.text, atlas, parser)
     if (!('checked' in checkbox)) (<Checkbox>checkbox).checked = false
     return <Checkbox>checkbox
   }
@@ -27,7 +31,8 @@ export namespace CheckboxParser {
   export function setText(
     checkbox: Checkbox,
     text: string,
-    atlas: Atlas
+    atlas: Atlas,
+    parser: RecursiveEntityParser
   ): void {
     checkbox.text = text
     const config: TextConfig = {
@@ -38,7 +43,7 @@ export namespace CheckboxParser {
       textMaxSize: checkbox.textMaxSize,
       position: {x: checkbox.bounds.x, y: checkbox.bounds.y}
     }
-    const child = EntityParser.parse(config, atlas)
+    const child = parser(config, atlas)
     checkbox.children[0] = child
     setBackground(checkbox, atlas)
     EntityUtil.invalidateBounds(checkbox)
