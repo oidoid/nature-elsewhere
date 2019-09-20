@@ -7,7 +7,6 @@ import {Layer} from '../../../images/layer/layer'
 import {XY} from '../../../math/xy/xy'
 import {TextLayout} from '../../../text/text-layout/text-layout'
 import {Rect} from '../../../math/rect/rect'
-import {RectArray} from '../../../math/rect-array/rect-array'
 import {XYParser} from '../../../math/xy/xy-parser'
 import {ImageParser} from '../../../images/image/image-parser'
 import {Text} from './text'
@@ -42,7 +41,7 @@ export namespace TextParser {
     // Images are added dynamically but ImageRect expects a static configuration
     // determined at parse time. Recalculate the bounds.
     EntityUtil.imageState(text).images.push(...textImages)
-    const union = RectArray.union(
+    const union = Rect.unionAll(
       EntityUtil.imageState(text).images.map(image => image.bounds)
     )
     if (union) {

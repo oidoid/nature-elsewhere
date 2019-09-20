@@ -14,9 +14,23 @@ export namespace Rect {
     return {...XY.add(lhs, rhs), ...WH.add(lhs, rhs)}
   }
 
+  export function moveAllBy(rects: readonly Writable<Rect>[], by: XY): void {
+    if (!by.x && !by.y) return
+    rects.forEach(rect => moveBy(rect, by))
+  }
+
   export function moveBy(rect: Writable<Rect>, by: XY): void {
     rect.x += by.x
     rect.y += by.y
+  }
+
+  export function intersectsAny(
+    lhs: readonly Rect[],
+    rhs: readonly Rect[] | Rect
+  ): Maybe<Rect> {
+    return lhs.find(rect =>
+      'length' in rhs ? intersectsAny(rhs, rect) : intersects(rect, rhs)
+    )
   }
 
   // less-than-or-equal?
@@ -49,6 +63,10 @@ export namespace Rect {
     const w = Math.min(lhs.x + lhs.w, rhs.x + rhs.w) - upperLeft.x
     const h = Math.min(lhs.y + lhs.h, rhs.y + rhs.h) - upperLeft.y
     return {x: upperLeft.x, y: upperLeft.y, w, h}
+  }
+
+  export function unionAll(rects: readonly Rect[]): Maybe<Rect> {
+    return rects.length ? {...rects.reduce(union)} : undefined
   }
 
   /** The union or bounds of an array of Rects may be computed thus:

@@ -1,4 +1,3 @@
-import {EntityTypeConfigMap} from '../../entity-type-config-map/entity-type-config-map'
 import {LevelEditorPanel} from './level-editor-panel'
 import {EntityPicker} from '../entity-picker/entity-picker'
 import {UpdaterParser} from '../../updaters/updater-parser'
@@ -13,6 +12,7 @@ import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
 import {CheckboxParser} from '../checkbox/checkbox-parser'
 import {EntityPickerParser} from '../entity-picker/entity-picker-parser'
+import {EntityParser} from '../../entity/entity-parser'
 
 export namespace LevelEditorPanelParser {
   export const parse: UpdaterParser = (panel, atlas) => {
@@ -133,7 +133,7 @@ export namespace LevelEditorPanelParser {
 
 function defaultStateIndex(picker: EntityPicker) {
   const child = EntityPickerParser.getVisibleChild(picker)
-  const defaultState = EntityTypeConfigMap[child.type].state
+  const defaultState = EntityParser.defaultState(child.type)
   if (!defaultState) return 0
   return Object.keys(child.imageStates)
     .filter(state => state !== EntityState.HIDDEN)

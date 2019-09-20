@@ -28,7 +28,7 @@ export namespace LevelParser {
       player: config.player
         ? <Backpacker>EntityParser.parse(config.player, atlas)
         : undefined,
-      parentEntities: EntityParser.parseArray(config.parentEntities, atlas),
+      parentEntities: EntityParser.parseAll(config.parentEntities, atlas),
       atlas
     }
   }

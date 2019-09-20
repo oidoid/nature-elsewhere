@@ -1,7 +1,6 @@
 import {Image} from '../image/image'
 import {Rect} from '../../math/rect/rect'
 import {XY} from '../../math/xy/xy'
-import {RectArray} from '../../math/rect-array/rect-array'
 import {Layer} from '../layer/layer'
 
 export interface ImageRect {
@@ -20,7 +19,7 @@ export interface ImageRect {
 export namespace ImageRect {
   export function add(rect: ImageRect, image: Image): void {
     rect.images.push(image)
-    const union = RectArray.union(rect.images.map(image => image.bounds))
+    const union = Rect.unionAll(rect.images.map(image => image.bounds))
     if (union) {
       rect.bounds.x = union.x
       rect.bounds.y = union.y
@@ -44,7 +43,7 @@ export namespace ImageRect {
     rect.images.forEach(image => Image.scale(image, XY.div(scale, rect.scale)))
     rect.scale.x = scale.x
     rect.scale.y = scale.y
-    const union = RectArray.union(rect.images.map(image => image.bounds))
+    const union = Rect.unionAll(rect.images.map(image => image.bounds))
     if (union) {
       rect.bounds.x = union.x
       rect.bounds.y = union.y
@@ -58,7 +57,11 @@ export namespace ImageRect {
     ImageRect.setScale(rect, XY.mul(scale, rect.scale))
   }
 
-  export function elevate(rect: ImageRect, offset: Layer): void {
-    for (const image of rect.images) Image.elevate(image, offset)
+  export function elevate(
+    rect: ImageRect | readonly Image[],
+    offset: Layer
+  ): void {
+    const images = 'images' in rect ? rect.images : rect
+    for (const image of images) Image.elevate(image, offset)
   }
 }

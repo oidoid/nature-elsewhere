@@ -1,9 +1,8 @@
 import {EntityParser} from '../../entity/entity-parser'
-import {EntityTypeConfigMap} from '../../entity-type-config-map/entity-type-config-map'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
 import {EntityState} from '../../entity-state/entity-state'
-import {EntityType} from '../../entity-type/entity-type'
+import {EntityType, UI_KEY_PREFIX} from '../../entity-type/entity-type'
 import {Atlas} from '../../../atlas/atlas/atlas'
 import {Entity} from '../../entity/entity'
 import {Layer} from '../../../images/layer/layer'
@@ -15,7 +14,7 @@ const size = Object.freeze({w: 32, h: 26})
 const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
   ...ObjectUtil.keys(EntityType)
-    .filter(type => type.startsWith(EntityType.UI_KEY_PREFIX))
+    .filter(type => type.startsWith(UI_KEY_PREFIX))
     .map(key => EntityType[key])
 ])
 
@@ -60,7 +59,7 @@ export namespace EntityPickerParser {
     }
     picker.activeChildIndex = NumberUtil.wrap(index, 0, picker.children.length)
     const child = picker.children[Math.abs(picker.activeChildIndex)]
-    const defaultState = EntityTypeConfigMap[child.type].state
+    const defaultState = EntityParser.defaultState(child.type)
     if (defaultState) EntityUtil.setState(child, defaultState)
     EntityUtil.elevate(child, Layer.UI_PICKER_OFFSET)
   }

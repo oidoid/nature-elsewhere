@@ -4,7 +4,6 @@ import {EntityID} from '../entity-id/entity-id'
 import {EntityState} from '../entity-state/entity-state'
 import {Image} from '../../images/image/image'
 import {ImageRect} from '../../images/image-rect/image-rect'
-import {RectArray} from '../../math/rect-array/rect-array'
 import {Rect} from '../../math/rect/rect'
 import {UpdatePredicate} from '../updaters/update-predicate/update-predicate'
 import {UpdateStatus} from '../updaters/update-status/update-status'
@@ -22,7 +21,7 @@ export namespace EntityUtil {
   /** This is a shallow invalidation. If a child changes state, or is added, the
       parents' bounds should be updated. */
   export function invalidateBounds(entity: Entity): void {
-    const bounds = RectArray.union([
+    const bounds = Rect.unionAll([
       imageState(entity).bounds,
       ...entity.collisionBodies,
       ...entity.children.map(child => child.bounds)
@@ -46,7 +45,7 @@ export namespace EntityUtil {
     entity.bounds.x += by.x
     entity.bounds.y += by.y
     ImageRect.moveBy(imageState(entity), by)
-    RectArray.moveBy(entity.collisionBodies, by)
+    Rect.moveAllBy(entity.collisionBodies, by)
     entity.children.forEach(child => moveBy(child, by))
     return UpdateStatus.UPDATED
   }
