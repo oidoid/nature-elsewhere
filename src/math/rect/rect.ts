@@ -76,4 +76,10 @@ export namespace Rect {
     const h = Math.max(lhs.y + lhs.h, rhs.y + rhs.h) - y
     return {x, y, w, h}
   }
+
+  export function centerOn(rect: Rect, on: Rect): XY {
+    const x = Math.trunc(on.x) + Math.trunc(on.w / 2) - Math.trunc(rect.w / 2)
+    const y = Math.trunc(on.y) + Math.trunc(on.h / 2) - Math.trunc(rect.h / 2)
+    return {x, y}
+  }
 }

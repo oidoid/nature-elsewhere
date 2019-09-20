@@ -15,7 +15,7 @@ export namespace LevelStateMachine {
   export function make(layout: ShaderLayout, atlas: Atlas): LevelStateMachine {
     if (!LevelTypeConfigMap.uiTitle) throw new Error('Missing level.')
     const level = LevelParser.parse(LevelTypeConfigMap.uiTitle, atlas)
-    return {level, store: Store.make(layout, atlas)}
+    return {level, store: Store.make(layout)}
   }
 
   export function update(machine: LevelStateMachine, state: UpdateState): void {

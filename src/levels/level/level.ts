@@ -8,6 +8,7 @@ import {Camera} from '../camera/camera'
 import {EntityCollider} from '../../collision/entity-collider'
 import {EntityCollision} from '../../collision/entity-collision'
 import {EntityUtil} from '../../entities/entity/entity-util'
+import {XY} from '../../math/xy/xy'
 
 export interface Level {
   readonly type: LevelType
@@ -58,5 +59,14 @@ export namespace Level {
     if (EntityUtil.equal(collisionWithCursor.rhs.descendant, entity))
       return collisionWithCursor
     return
+  }
+
+  export function clamp(level: Level, position: XY, size: WH): XY {
+    const min = {x: 0, y: 0}
+    const max = {
+      x: Math.max(0, level.size.w - size.w),
+      y: Math.max(0, level.size.h - size.h)
+    }
+    return XY.clamp(position, min, max)
   }
 }

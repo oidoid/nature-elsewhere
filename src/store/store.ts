@@ -1,17 +1,15 @@
-import {Atlas} from '../atlas/atlas/atlas'
 import {Image} from '../images/image/image'
 import {InstanceBuffer} from './instance-buffer'
 import {ShaderLayout} from '../graphics/shaders/shader-layout/shader-layout'
 import {UpdateState} from '../entities/updaters/update-state'
 import {Entity} from '../entities/entity/entity'
 import {EntityID} from '../entities/entity-id/entity-id'
-import {NumberUtil} from '../math/number/number-util'
 import {Level} from '../levels/level/level'
 import {EntityUtil} from '../entities/entity/entity-util'
+import {CameraUtil} from '../levels/camera/camera-util'
 
 export interface Store {
   readonly layout: ShaderLayout
-  readonly atlas: Atlas
   /** dat.byteLength may exceed bytes to be rendered. len is the only accurate
       number of instances. */
   dat: DataView
@@ -19,21 +17,15 @@ export interface Store {
 }
 
 export namespace Store {
-  export function make(layout: ShaderLayout, atlas: Atlas): Store {
-    return {
-      atlas,
-      layout,
-      dat: InstanceBuffer.make(0),
-      len: 0
-    }
+  export function make(layout: ShaderLayout): Store {
+    return {layout, dat: InstanceBuffer.make(0), len: 0}
   }
 
   export function update(store: Store, state: UpdateState): void {
-    const {atlas} = store
     let images: Image[] = []
 
     if (state.level.player)
-      images.push(...process([state.level.player], state, atlas))
+      images.push(...updateAndAnimate([state.level.player], state))
 
     if (state.level.cam.followID !== EntityID.ANONYMOUS) {
       let entity
@@ -47,27 +39,13 @@ export namespace Store {
           entity = EntityUtil.find(parent, state.level.cam.followID)
           if (entity) break
         }
-      if (entity) {
-        state.level.cam.bounds.x = NumberUtil.clamp(
-          Math.trunc(entity.bounds.x) +
-            Math.trunc(entity.bounds.w / 2) -
-            Math.trunc(state.level.cam.bounds.w / 2),
-          0,
-          Math.max(0, state.level.size.w - state.level.cam.bounds.w)
-        )
-        state.level.cam.bounds.y = NumberUtil.clamp(
-          Math.trunc(entity.bounds.y) +
-            Math.trunc(entity.bounds.h / 2) -
-            Math.trunc(state.level.cam.bounds.h / 2),
-          0,
-          Math.max(0, state.level.size.h - state.level.cam.bounds.h)
-        )
-      }
+      if (entity)
+        CameraUtil.centerOn(state.level.cam, state.level, entity.bounds)
     }
-    images.push(...process([state.level.cursor], state, atlas))
+    images.push(...updateAndAnimate([state.level.cursor], state))
     if (state.level.destination)
-      images.push(...process([state.level.destination], state, atlas))
-    images.push(...process(Level.activeParents(state.level), state, atlas))
+      images.push(...updateAndAnimate([state.level.destination], state))
+    images.push(...updateAndAnimate(Level.activeParents(state.level), state))
     images = images.sort(Image.compare)
     // [todo] now I'm getting the now stale parents.
 
@@ -75,21 +53,25 @@ export namespace Store {
     if (store.dat.byteLength < size) store.dat = InstanceBuffer.make(size * 2)
     store.len = images.length
     images.forEach((img, i) =>
-      InstanceBuffer.set(store.layout, atlas, store.dat, i, img)
+      InstanceBuffer.set(store.layout, state.level.atlas, store.dat, i, img)
     )
   }
 }
 
-function process(
+function updateAndAnimate(
   entities: readonly Entity[],
-  state: UpdateState,
-  atlas: Atlas
+  state: UpdateState
 ): Image[] {
   entities.forEach(entity => EntityUtil.update(entity, state))
   return entities.reduce(
     (images: Image[], entity) => [
       ...images,
-      ...EntityUtil.animate(entity, state.time, state.level.cam.bounds, atlas)
+      ...EntityUtil.animate(
+        entity,
+        state.time,
+        state.level.cam.bounds,
+        state.level.atlas
+      )
     ],
     []
   )

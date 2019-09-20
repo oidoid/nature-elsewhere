@@ -1,3 +1,5 @@
+import {NumberUtil} from '../number/number-util'
+
 export interface XY {
   readonly x: number
   readonly y: number
@@ -39,5 +41,11 @@ export namespace XY {
 
   export function trunc({x, y}: XY): XY {
     return {x: Math.trunc(x), y: Math.trunc(y)}
+  }
+
+  export function clamp(xy: XY, min: XY, max: XY): XY {
+    const x = NumberUtil.clamp(xy.x, min.x, max.x)
+    const y = NumberUtil.clamp(xy.y, min.y, max.y)
+    return {x, y}
   }
 }
