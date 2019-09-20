@@ -1,5 +1,3 @@
-import {ObjectUtil} from '../utils/object-util'
-
 export interface Font {
   /** Height of lines, not including descenders, in pixels. */
   readonly letterHeight: number
@@ -26,23 +24,20 @@ export interface Font {
 }
 
 export namespace Font {
-  export const kerning = (font: Font, lhs: string, rhs?: string): number => {
+  export function kerning(font: Font, lhs: string, rhs?: string): number {
     if (rhs === undefined) return font.endOfLineKerning
     if (/\s/.test(lhs + rhs)) return font.whitespaceKerning
-    return ObjectUtil.defaultIfAbsent(
-      font.kerning,
-      lhs + rhs,
-      font.defaultKerning
-    )
+    const kerning = font.kerning[lhs + rhs]
+    return kerning === undefined ? font.defaultKerning : kerning
   }
 
-  export const letterOffset = (font: Font, char: string): number =>
-    ObjectUtil.defaultIfAbsent(
-      font.letterOffset,
-      char,
-      font.defaultLetterOffset
-    )
+  export function letterOffset(font: Font, char: string): number {
+    const offset = font.letterOffset[char]
+    return offset === undefined ? font.defaultLetterOffset : offset
+  }
 
-  export const letterWidth = (font: Font, char: string): number =>
-    ObjectUtil.defaultIfAbsent(font.letterWidth, char, font.defaultLetterWidth)
+  export function letterWidth(font: Font, char: string): number {
+    const width = font.letterWidth[char]
+    return width === undefined ? font.defaultLetterWidth : width
+  }
 }

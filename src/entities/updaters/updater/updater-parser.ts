@@ -9,7 +9,7 @@ export namespace UpdaterParser {
 
   export function parse(config: UpdaterConfig): Updater {
     const updater = config || Updater.NO_UPDATE
-    if (ObjectUtil.isValueOf(Updater, updater)) return <Updater>updater
+    if (ObjectUtil.hasValue(Updater, updater)) return <Updater>updater
     throw new Error(`Unknown Updater "${updater}".`)
   }
 }

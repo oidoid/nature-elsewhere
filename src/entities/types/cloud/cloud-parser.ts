@@ -9,8 +9,8 @@ export namespace CloudParser {
     if (!EntityTypeUtil.assert<Cloud>(cloud, EntityType.SCENERY_CLOUD))
       throw new Error()
     if (
-      ObjectUtil.isValueOf(EntityType, cloud.state) ||
-      ObjectUtil.isValueOf(Cloud.Precipitation, cloud.state)
+      ObjectUtil.hasValue(EntityType, cloud.state) ||
+      ObjectUtil.hasValue(Cloud.Precipitation, cloud.state)
     )
       return cloud
     throw new Error(`Unknown EntityState "${cloud.state}".`)

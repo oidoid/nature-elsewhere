@@ -5,7 +5,7 @@ import {ObjectUtil} from '../../utils/object-util'
 export namespace CollisionPredicateParser {
   export function parse(config: CollisionPredicateConfig): CollisionPredicate {
     const predicate = config || CollisionPredicate.NEVER
-    if (ObjectUtil.isValueOf(CollisionPredicate, predicate)) return predicate
+    if (ObjectUtil.hasValue(CollisionPredicate, predicate)) return predicate
     throw new Error(`Unknown CollisionPredicate "${predicate}".`)
   }
 }
