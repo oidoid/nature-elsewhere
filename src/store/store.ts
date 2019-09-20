@@ -14,8 +14,8 @@ export interface Store {
   readonly atlas: Atlas
   /** dat.byteLength may exceed bytes to be rendered. len is the only accurate
       number of instances. */
-  readonly dat: DataView
-  readonly len: number
+  dat: DataView
+  len: number
 }
 
 export namespace Store {
@@ -28,10 +28,8 @@ export namespace Store {
     }
   }
 
-  export function update(
-    {layout, atlas, dat}: Store,
-    state: UpdateState
-  ): Store {
+  export function update(store: Store, state: UpdateState): void {
+    const {atlas} = store
     let images: Image[] = []
 
     if (state.level.player)
@@ -73,10 +71,12 @@ export namespace Store {
     images = images.sort(Image.compare)
     // [todo] now I'm getting the now stale parents.
 
-    const size = InstanceBuffer.size(layout, images.length)
-    if (dat.byteLength < size) dat = InstanceBuffer.make(size * 2)
-    images.forEach((img, i) => InstanceBuffer.set(layout, atlas, dat, i, img))
-    return {layout, atlas, dat, len: images.length}
+    const size = InstanceBuffer.size(store.layout, images.length)
+    if (store.dat.byteLength < size) store.dat = InstanceBuffer.make(size * 2)
+    store.len = images.length
+    images.forEach((img, i) =>
+      InstanceBuffer.set(store.layout, atlas, store.dat, i, img)
+    )
   }
 }
 

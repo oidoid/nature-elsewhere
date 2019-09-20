@@ -1,27 +1,27 @@
 import {Assets} from './loaders/assets'
 import {FunctionUtil} from './utils/function-util'
+import {InputPoller} from './inputs/input-poller'
+import {InputState} from './inputs/input-state'
 import {LevelStateMachine} from './levels/level-state-machine'
 import {Renderer} from './graphics/renderer/renderer'
 import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
 import {Synth} from './audio/synth'
+import {UpdateState} from './entities/updaters/update-state'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
-import {UpdateState} from './entities/updaters/update-state'
-import {InputPoller} from './inputs/input-poller'
-import {InputState} from './inputs/input-state'
 
 export interface Game {
   readonly win: Window
   readonly doc: Document
   /** The total execution time in milliseconds excluding pauses. */
   age: Milliseconds
-  /** The outstanding time to execute in milliseconds. */
+  /** The outstanding time accrual to execute in milliseconds. */
   time: Milliseconds
   /** The exact duration in milliseconds to apply each update. Any number of
       updates may occur per animation frame. */
   readonly tick: Milliseconds
-  levelStateMachine: LevelStateMachine
+  readonly levelStateMachine: LevelStateMachine
   readonly rendererStateMachine: RendererStateMachine
   readonly inputPoller: InputPoller
   readonly synth: Synth
@@ -102,7 +102,7 @@ function onFrame(game: Game, time: number): void {
   game.age += game.time - (game.time % game.tick)
   while (game.levelStateMachine.level && game.time >= game.tick) {
     game.time -= game.tick
-    game.levelStateMachine = LevelStateMachine.update(
+    LevelStateMachine.update(
       game.levelStateMachine,
       UpdateState.make(
         game.tick,

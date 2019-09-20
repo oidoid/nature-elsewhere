@@ -7,7 +7,7 @@ import {LevelTypeConfigMap} from './level-type-config/level-type-config-map'
 import {UpdateState} from '../entities/updaters/update-state'
 
 export interface LevelStateMachine {
-  readonly level?: Level
+  level?: Level
   readonly store: Store
 }
 
@@ -18,13 +18,9 @@ export namespace LevelStateMachine {
     return {level, store: Store.make(layout, atlas)}
   }
 
-  export function update(
-    machine: LevelStateMachine,
-    state: UpdateState
-  ): LevelStateMachine {
-    const store = Store.update(machine.store, state)
-    const level = updateLevel(machine)
-    return {store, level}
+  export function update(machine: LevelStateMachine, state: UpdateState): void {
+    Store.update(machine.store, state)
+    machine.level = updateLevel(machine)
   }
 }
 
