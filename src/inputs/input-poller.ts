@@ -20,10 +20,9 @@ export namespace InputPoller {
     win: Window,
     register: boolean
   ): void {
-    const fn = register ? 'addEventListener' : 'removeEventListener'
-    ;['pointerup', 'pointermove', 'pointerdown', 'pointercancel'].forEach(
-      type => win[fn](type, <EventListener>poller.onEvent)
-    )
+    const fn = win[register ? 'addEventListener' : 'removeEventListener']
+    const types = ['pointerup', 'pointermove', 'pointerdown', 'pointercancel']
+    for (const type of types) fn(type, <EventListener>poller.onEvent)
   }
 
   /** Call this function *after* processing the collected input. This function

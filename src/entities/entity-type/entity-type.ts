@@ -8,6 +8,7 @@ export enum EntityType {
   CHAR_FROG = 'charFrog',
   CHAR_SNAKE = 'charSnake',
   GROUP = 'group',
+  IMAGE = 'image',
   SCENERY_BUSH = 'sceneryBush',
   SCENERY_CATTAILS = 'sceneryCattails',
   SCENERY_CLOUD = 'sceneryCloud',

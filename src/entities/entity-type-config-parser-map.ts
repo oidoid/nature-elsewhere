@@ -6,9 +6,9 @@ import {CloudParser} from './types/cloud/cloud-parser'
 import {DateVersionHashParser} from './types/date-version-hash/date-version-hash-parser'
 import {BackpackerParser} from './types/backpacker/backpacker-parser'
 import {EntityTypeParse} from './entity-type-parser'
-import {ButtonParser} from './types/button/button-parser'
 import {CheckboxParser} from './types/checkbox/checkbox-parser'
 import {EntityPickerParser} from './types/entity-picker/entity-picker-parser'
+import {ImageEntityParser} from './types/image-entity/image-entity-parser'
 
 export namespace EntityTypeConfigParserMap {
   export function map(type: EntityType): Maybe<EntityTypeParse> {
@@ -22,6 +22,7 @@ export namespace EntityTypeConfigParserMap {
       [EntityType.CHAR_FROG]: entity => entity,
       [EntityType.CHAR_SNAKE]: entity => entity,
       [EntityType.SCENERY_BUSH]: entity => entity,
+      [EntityType.IMAGE]: ImageEntityParser.parse,
       [EntityType.SCENERY_CATTAILS]: entity => entity,
       [EntityType.SCENERY_CLOUD]: CloudParser.parse,
       [EntityType.SCENERY_CLOVER]: entity => entity,
@@ -36,7 +37,6 @@ export namespace EntityTypeConfigParserMap {
       [EntityType.SCENERY_PYRAMID]: entity => entity,
       [EntityType.SCENERY_SUBSHRUB]: entity => entity,
       [EntityType.SCENERY_TREE]: entity => entity,
-      [EntityType.UI_BUTTON]: ButtonParser.parse,
       [EntityType.UI_CURSOR]: CursorParser.parse,
       [EntityType.UI_DATE_VERSION_HASH]: DateVersionHashParser.parse,
       [EntityType.UI_CHECKBOX]: CheckboxParser.parse,

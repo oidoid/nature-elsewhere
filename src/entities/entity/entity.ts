@@ -32,7 +32,9 @@ export interface Entity {
   // [todo] a string superset isn't ideal but a template param is needed
   //        otherwise for specialization.
   state: EntityState | string
-  /** Images in level coordinates. */
+  /** Images in level coordinates. These should usually only be passed
+      statically by the entity configuration JSON. If additional imagery is
+      needed, it is often best to add a child instead. */
   readonly imageStates: ImageStateMap
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */

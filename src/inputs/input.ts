@@ -7,7 +7,7 @@ export interface Input {
   /** True if input is on. */
   readonly active: boolean
   /** 0 on state change. When 0 and active, triggered on. When 0 and inactive,
-     triggered off. */
+      triggered off. */
   readonly timer: Milliseconds
   /** The position of the input in window coordinates. Pointer state polling is
       simulated through events so level position must be recalculated through

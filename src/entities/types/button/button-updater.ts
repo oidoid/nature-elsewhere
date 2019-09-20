@@ -15,9 +15,9 @@ export namespace ButtonUpdater {
 
     button.clicked = false
     const collision = Level.collisionWithCursor(state.level, button)
-    if (!collision) return EntityUtil.setState(button, 'unpressed')
+    if (!collision) return EntityUtil.setState(button, ButtonState.UNCLICKED)
 
-    let status = EntityUtil.setState(button, ButtonState.PRESSED) // this is just presentation not click state
+    let status = EntityUtil.setState(button, ButtonState.CLICKED) // this is just presentation not click state
 
     const nextClicked = Input.activeTriggered(state.inputs.pick)
     if (button.clicked !== nextClicked) status |= UpdateStatus.TERMINATE

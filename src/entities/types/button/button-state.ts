@@ -1,4 +1,4 @@
 export enum ButtonState {
-  UNPRESSED = 'unpressed', // renamed to clicked / unclicked
-  PRESSED = 'pressed'
+  UNCLICKED = 'unclicked',
+  CLICKED = 'clicked'
 }

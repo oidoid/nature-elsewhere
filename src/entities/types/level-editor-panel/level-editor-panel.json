@@ -67,32 +67,57 @@
     {
       "id": "uiLevelEditorPanelDecrement",
       "type": "uiButton",
-      "iconID": "ui-editor-button decrement",
-      "position": {"x": 2, "y": 22}
+      "position": {"x": 2, "y": 22},
+      "children": [
+        {
+          "type": "image",
+          "image": {"id": "ui-editor-button decrement", "layer": "UI_HIHI"}
+        }
+      ]
     },
     {
       "id": "uiLevelEditorPanelIncrement",
       "type": "uiButton",
-      "iconID": "ui-editor-button increment",
-      "position": {"x": 10, "y": 22}
+      "position": {"x": 10, "y": 22},
+      "children": [
+        {
+          "type": "image",
+          "image": {"id": "ui-editor-button increment", "layer": "UI_HIHI"}
+        }
+      ]
     },
     {
       "id": "uiLevelEditorPanelRemove",
       "type": "uiButton",
-      "iconID": "ui-editor-button remove",
-      "position": {"x": 18, "y": 22}
+      "position": {"x": 18, "y": 22},
+      "children": [
+        {
+          "type": "image",
+          "image": {"id": "ui-editor-button remove", "layer": "UI_HIHI"}
+        }
+      ]
     },
     {
       "id": "uiLevelEditorPanelAdd",
       "type": "uiButton",
-      "iconID": "ui-editor-button add",
-      "position": {"x": 26, "y": 22}
+      "position": {"x": 26, "y": 22},
+      "children": [
+        {
+          "type": "image",
+          "image": {"id": "ui-editor-button add", "layer": "UI_HIHI"}
+        }
+      ]
     },
     {
       "id": "uiLevelEditorPanelToggleGrid",
       "type": "uiButton",
-      "iconID": "ui-editor-button grid",
-      "position": {"x": 34, "y": 22}
+      "position": {"x": 34, "y": 22},
+      "children": [
+        {
+          "type": "image",
+          "image": {"id": "ui-editor-button grid", "layer": "UI_HIHI"}
+        }
+      ]
     },
     {
       "id": "uiLevelEditorPanelEntityPicker",

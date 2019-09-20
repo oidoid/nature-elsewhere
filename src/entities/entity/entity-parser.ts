@@ -5,6 +5,7 @@ import * as CHAR_FLY from '../types/entity-configs/char/fly.json'
 import * as CHAR_FROG from '../types/entity-configs/char/frog.json'
 import * as CHAR_SNAKE from '../types/entity-configs/char/snake.json'
 import * as GROUP from '../types/entity-configs/group.json'
+import * as IMAGE_ENTITY from '../types/image-entity/image-entity.json'
 import * as SCENERY_BUSH from '../types/entity-configs/scenery/bush.json'
 import * as SCENERY_CATTAILS from '../types/entity-configs/scenery/cattails.json'
 import * as SCENERY_CLOUD from '../types/entity-configs/scenery/cloud.json'
@@ -153,6 +154,7 @@ const defaultTypeConfigs: Readonly<
   [EntityType.CHAR_FROG]: CHAR_FROG,
   [EntityType.CHAR_SNAKE]: CHAR_SNAKE,
   [EntityType.GROUP]: GROUP,
+  [EntityType.IMAGE]: IMAGE_ENTITY,
   [EntityType.SCENERY_BUSH]: SCENERY_BUSH,
   [EntityType.SCENERY_CATTAILS]: SCENERY_CATTAILS,
   [EntityType.SCENERY_CLOUD]: SCENERY_CLOUD,

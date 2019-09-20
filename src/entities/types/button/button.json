@@ -1,14 +1,14 @@
 {
   "type": "uiButton",
-  "state": "unpressed",
+  "state": "unclicked",
   "text": "",
   "iconID": "ui-editor-button base",
   "clicked": false,
   "imageStates": {
-    "unpressed": {
+    "unclicked": {
       "images": [{"id": "ui-editor-button base", "layer": "UI_MID"}]
     },
-    "pressed": {
+    "clicked": {
       "images": [
         {"id": "ui-editor-button base", "layer": "UI_MID"},
         {"id": "ui-editor-button pressed", "layer": "UI_HI"}

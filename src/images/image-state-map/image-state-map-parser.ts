@@ -10,7 +10,7 @@ export namespace ImageStateMapParser {
     config: ImageStateMapConfig,
     atlas: Atlas
   ): ImageStateMap {
-    const init: ImageStateMap = {
+    const map: Writable<ImageStateMap> = {
       [EntityState.HIDDEN]: {
         origin: {x: 0, y: 0},
         bounds: {x: 0, y: 0, w: 0, h: 0},
@@ -18,18 +18,11 @@ export namespace ImageStateMapParser {
         images: []
       }
     }
-    if (!config) return init
-    return {
-      ...Object.entries(config).reduce(
-        (system, [stateConfig, rectConfig]) => ({
-          ...system,
-          [EntityStateParser.parse(stateConfig)]: ImageRectParser.parse(
-            rectConfig,
-            atlas
-          )
-        }),
-        init
-      )
+    if (!config) return map
+    for (const stateConfig in config) {
+      const state = EntityStateParser.parse(stateConfig)
+      map[state] = ImageRectParser.parse(config[stateConfig], atlas)
     }
+    return map
   }
 }
