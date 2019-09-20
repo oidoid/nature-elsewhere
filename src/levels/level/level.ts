@@ -7,6 +7,7 @@ import {Atlas} from '../../atlas/atlas/atlas'
 import {Camera} from '../camera/camera'
 import {EntityCollider} from '../../collision/entity-collider'
 import {EntityCollision} from '../../collision/entity-collision'
+import {EntityUtil} from '../../entities/entity/entity-util'
 
 export interface Level {
   readonly type: LevelType
@@ -39,7 +40,7 @@ export namespace Level {
 
   export function activeParents(level: Level): readonly Entity[] {
     return level.parentEntities.filter(entity =>
-      Entity.active(entity, level.cam.bounds)
+      EntityUtil.active(entity, level.cam.bounds)
     )
   }
 
@@ -54,7 +55,7 @@ export namespace Level {
         )
       : undefined
     if (!collisionWithCursor) return
-    if (Entity.equal(collisionWithCursor.rhs.descendant, entity))
+    if (EntityUtil.equal(collisionWithCursor.rhs.descendant, entity))
       return collisionWithCursor
     return
   }

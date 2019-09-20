@@ -1,9 +1,9 @@
 import {ArrayUtil} from '../../utils/array-util'
 import * as atlasJSON from './atlas.json'
-import {Aseprite} from '../../atlas/atlas/aseprite'
-import {Atlas} from '../../atlas/atlas/atlas'
-import {AtlasID} from '../../atlas/atlas-id/atlas-id'
-import {AtlasParser} from '../../atlas/atlas/atlas-parser'
+import {Aseprite} from '../atlas/aseprite'
+import {Atlas} from '../atlas/atlas'
+import {AtlasID} from '../atlas-id/atlas-id'
+import {AtlasParser} from '../atlas/atlas-parser'
 import {ObjectUtil} from '../../utils/object-util'
 
 const file: Aseprite.File = Object.freeze(atlasJSON)

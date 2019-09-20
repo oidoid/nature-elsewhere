@@ -1,5 +1,3 @@
-import {Entity} from '../entity/entity'
-
 /** Identifier for distinguishing among entity classes and tracing configuration
     selection. */
 export enum EntityType {
@@ -35,22 +33,4 @@ export enum EntityType {
   UI_RADIO_CHECKBOX_GROUP = 'uiRadioCheckboxGroup',
   UI_TEXT = 'uiText',
   UI_TOOLBAR = 'uiToolbar'
-}
-
-export namespace EntityType {
-  export function is<T extends Entity>(
-    entity: Entity,
-    type: T['type']
-  ): entity is T {
-    return entity.type === type
-  }
-
-  export function assert<T extends Entity>(
-    entity: Entity,
-    type: T['type']
-  ): entity is T {
-    const msg = `Unexpected entity type "${entity.type}". Expected "${type}".`
-    if (!is(entity, type)) throw new Error(msg)
-    return true
-  }
 }

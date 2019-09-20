@@ -7,6 +7,7 @@ import {Entity} from '../entities/entity/entity'
 import {EntityID} from '../entities/entity-id/entity-id'
 import {NumberUtil} from '../math/number/number-util'
 import {Level} from '../levels/level/level'
+import {EntityUtil} from '../entities/entity/entity-util'
 
 export interface Store {
   readonly layout: ShaderLayout
@@ -45,7 +46,7 @@ export namespace Store {
         entity = state.level.player
       } else
         for (const parent of state.level.parentEntities) {
-          entity = Entity.find(parent, state.level.cam.followID)
+          entity = EntityUtil.find(parent, state.level.cam.followID)
           if (entity) break
         }
       if (entity) {
@@ -84,11 +85,11 @@ function process(
   state: UpdateState,
   atlas: Atlas
 ): Image[] {
-  entities.forEach(entity => Entity.update(entity, state))
+  entities.forEach(entity => EntityUtil.update(entity, state))
   return entities.reduce(
     (images: Image[], entity) => [
       ...images,
-      ...Entity.animate(entity, state.time, state.level.cam.bounds, atlas)
+      ...EntityUtil.animate(entity, state.time, state.level.cam.bounds, atlas)
     ],
     []
   )

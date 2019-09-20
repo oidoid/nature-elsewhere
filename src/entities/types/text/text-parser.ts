@@ -12,10 +12,13 @@ import {XYParser} from '../../../math/xy/xy-parser'
 import {ImageParser} from '../../../images/image/image-parser'
 import {Text} from './text'
 import {UI_MEM_FONT_PREFIX} from '../../../atlas/atlas-id/atlas-id'
+import {EntityTypeUtil} from '../../entity-type/entity-type-util'
+import {EntityUtil} from '../../entity/entity-util'
 
 export namespace TextParser {
   export function parse(text: Entity, atlas: Atlas): Text {
-    if (!EntityType.assert<Text>(text, EntityType.UI_TEXT)) throw new Error()
+    if (!EntityTypeUtil.assert<Text>(text, EntityType.UI_TEXT))
+      throw new Error()
 
     const textImages = toImages(
       atlas,
@@ -23,8 +26,8 @@ export namespace TextParser {
       text.textLayer,
       XYParser.parse(text.textScale),
       {
-        x: Entity.imageState(text).bounds.x,
-        y: Entity.imageState(text).bounds.y,
+        x: EntityUtil.imageState(text).bounds.x,
+        y: EntityUtil.imageState(text).bounds.y,
         w:
           text.textMaxSize && text.textMaxSize.w
             ? text.textMaxSize.w
@@ -38,17 +41,17 @@ export namespace TextParser {
 
     // Images are added dynamically but ImageRect expects a static configuration
     // determined at parse time. Recalculate the bounds.
-    Entity.imageState(text).images.push(...textImages)
+    EntityUtil.imageState(text).images.push(...textImages)
     const union = RectArray.union(
-      Entity.imageState(text).images.map(image => image.bounds)
+      EntityUtil.imageState(text).images.map(image => image.bounds)
     )
     if (union) {
-      Entity.imageState(text).bounds.x = union.x
-      Entity.imageState(text).bounds.y = union.y
-      Entity.imageState(text).bounds.w = union.w
-      Entity.imageState(text).bounds.h = union.h
+      EntityUtil.imageState(text).bounds.x = union.x
+      EntityUtil.imageState(text).bounds.y = union.y
+      EntityUtil.imageState(text).bounds.w = union.w
+      EntityUtil.imageState(text).bounds.h = union.h
     }
-    Entity.invalidateBounds(text)
+    EntityUtil.invalidateBounds(text)
     return text
   }
 

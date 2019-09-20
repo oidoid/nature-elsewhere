@@ -5,6 +5,9 @@ import {XY} from '../../../math/xy/xy'
 import {Rect} from '../../../math/rect/rect'
 import {WH} from '../../../math/wh/wh'
 import {WHParser} from '../../../math/wh/wh-parser'
+import {UpdaterParser} from '../../updaters/updater-parser'
+import {Update} from '../../updaters/update'
+import {EntityUtil} from '../../entity/entity-util'
 
 export interface FollowCam {
   readonly positionRelativeToCam: FollowCam.Orientation
@@ -38,7 +41,7 @@ export namespace FollowCam {
     CENTER = 'center'
   }
 
-  export const parse: Updater.Parse = entity => {
+  export const parse: UpdaterParser = entity => {
     const orientation =
       'positionRelativeToCam' in entity
         ? entity['positionRelativeToCam']
@@ -55,7 +58,7 @@ export namespace FollowCam {
     return entity.updaters.includes(Updater.UI_FOLLOW_CAM)
   }
 
-  export const update: Updater.Update = (entity, state) => {
+  export const update: Update = (entity, state) => {
     if (!is(entity)) throw new Error()
     const to = orientationToXY(
       entity.bounds,
@@ -66,7 +69,7 @@ export namespace FollowCam {
 
     if (XY.equal(entity.bounds, to)) return UpdateStatus.UNCHANGED
 
-    Entity.moveTo(entity, to)
+    EntityUtil.moveTo(entity, to)
     return UpdateStatus.UPDATED
 
     // const orientation = ObjectUtil.prop(

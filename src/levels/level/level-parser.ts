@@ -1,7 +1,6 @@
 import {LevelConfig} from './level-config'
 import {Level} from './level'
 import {LevelTypeParser} from '../level-type/level-type-parser'
-import {EntityArrayParser} from '../../entities/entity-array/entity-array-parser'
 import {CameraParser} from '../camera/camera-parser'
 import {Cursor} from '../../entities/types/cursor/cursor'
 import {Backpacker} from '../../entities/types/backpacker/backpacker'
@@ -29,7 +28,7 @@ export namespace LevelParser {
       player: config.player
         ? <Backpacker>EntityParser.parse(config.player, atlas)
         : undefined,
-      parentEntities: EntityArrayParser.parse(config.parentEntities, atlas),
+      parentEntities: EntityParser.parseArray(config.parentEntities, atlas),
       atlas
     }
   }

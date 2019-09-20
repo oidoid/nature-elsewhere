@@ -1,22 +1,19 @@
-import {LevelEditorPanel} from './types/level-editor-panel/level-editor-panel'
-import {Atlas} from '../atlas/atlas/atlas'
-import {Entity} from './entity/entity'
+import {LevelEditorPanelParser} from './types/level-editor-panel/level-editor-panel-parser'
 import {EntityType} from './entity-type/entity-type'
-import {EntityPicker} from './types/entity-picker/entity-picker'
-import {Checkbox} from './types/checkbox/checkbox'
-import {Button} from './types/button/button'
 import {CursorParser} from './types/cursor/cursor-parser'
 import {TextParser} from './types/text/text-parser'
 import {CloudParser} from './types/cloud/cloud-parser'
 import {DateVersionHashParser} from './types/date-version-hash/date-version-hash-parser'
 import {BackpackerParser} from './types/backpacker/backpacker-parser'
+import {EntityTypeParse} from './entity-type-parser'
+import {ButtonParser} from './types/button/button-parser'
+import {CheckboxParser} from './types/checkbox/checkbox-parser'
+import {EntityPickerParser} from './types/entity-picker/entity-picker-parser'
 
 export namespace EntityTypeConfigParserMap {
-  export type Parser = (entity: Entity, atlas: Atlas) => Entity
-
-  export function map(type: EntityType): Maybe<Parser> {
+  export function map(type: EntityType): Maybe<EntityTypeParse> {
     const EntityTypeConfigParserMap: Readonly<
-      Partial<Record<EntityType, EntityTypeConfigParserMap.Parser>>
+      Partial<Record<EntityType, EntityTypeParse>>
     > = {
       [EntityType.CHAR_BACKPACKER]: BackpackerParser.parse,
       [EntityType.CHAR_BEE]: entity => entity,
@@ -39,13 +36,13 @@ export namespace EntityTypeConfigParserMap {
       [EntityType.SCENERY_PYRAMID]: entity => entity,
       [EntityType.SCENERY_SUBSHRUB]: entity => entity,
       [EntityType.SCENERY_TREE]: entity => entity,
-      [EntityType.UI_BUTTON]: Button.parse,
+      [EntityType.UI_BUTTON]: ButtonParser.parse,
       [EntityType.UI_CURSOR]: CursorParser.parse,
       [EntityType.UI_DATE_VERSION_HASH]: DateVersionHashParser.parse,
-      [EntityType.UI_CHECKBOX]: Checkbox.parse,
+      [EntityType.UI_CHECKBOX]: CheckboxParser.parse,
       [EntityType.UI_DESTINATION_MARKER]: entity => entity,
-      [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanel.parse,
-      [EntityType.UI_ENTITY_PICKER]: EntityPicker.parse,
+      [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelParser.parse,
+      [EntityType.UI_ENTITY_PICKER]: EntityPickerParser.parse,
       [EntityType.UI_TEXT]: TextParser.parse,
       [EntityType.UI_TOOLBAR]: entity => entity
     }

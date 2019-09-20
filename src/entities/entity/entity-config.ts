@@ -1,4 +1,3 @@
-import {EntityArrayConfig} from '../entity-array/entity-array-config'
 import {EntityIDConfig} from '../entity-id/entity-id-config'
 import {EntityStateConfig} from '../entity-state/entity-state-config'
 import {EntityTypeConfig} from '../entity-type/entity-type-config'
@@ -31,3 +30,5 @@ export interface EntityConfig {
   /** Defaults to []. */
   readonly children?: EntityArrayConfig
 }
+
+export type EntityArrayConfig = Maybe<readonly EntityConfig[]>

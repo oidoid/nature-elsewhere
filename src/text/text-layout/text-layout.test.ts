@@ -1,4 +1,4 @@
-import {lineHeight} from '../../assets/mem-font.json'
+import {lineHeight} from './mem-font.json'
 import {TextLayout} from './text-layout'
 import {XY} from '../../math/xy/xy'
 

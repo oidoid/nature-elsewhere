@@ -1,5 +1,5 @@
 import {Font} from '../font'
-import * as memFont from '../../assets/mem-font.json'
+import * as memFont from './mem-font.json'
 import {XY} from '../../math/xy/xy'
 
 export interface TextLayout {

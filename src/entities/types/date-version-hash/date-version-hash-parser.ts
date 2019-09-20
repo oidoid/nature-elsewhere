@@ -1,10 +1,12 @@
+import {EntityParser} from '../../entity/entity-parser'
 import {Entity} from '../../entity/entity'
 import {EntityType} from '../../entity-type/entity-type'
 import {DateVersionHash} from './date-version-hash'
 import {Build} from '../../../utils/build'
 import {Atlas} from '../../../atlas/atlas/atlas'
 import {TextConfig} from '../text/text-config'
-import {EntityParser} from '../../entity/entity-parser'
+import {EntityTypeUtil} from '../../entity-type/entity-type-util'
+import {EntityUtil} from '../../entity/entity-util'
 
 export namespace DateVersionHashParser {
   export function parse(
@@ -12,7 +14,7 @@ export namespace DateVersionHashParser {
     atlas: Atlas
   ): DateVersionHash {
     if (
-      !EntityType.assert<DateVersionHash>(
+      !EntityTypeUtil.assert<DateVersionHash>(
         dateVersionHash,
         EntityType.UI_DATE_VERSION_HASH
       )
@@ -30,7 +32,7 @@ export namespace DateVersionHashParser {
     }
     const text = EntityParser.parse(config, atlas)
     dateVersionHash.children.push(text)
-    Entity.invalidateBounds(dateVersionHash)
+    EntityUtil.invalidateBounds(dateVersionHash)
 
     return dateVersionHash
   }

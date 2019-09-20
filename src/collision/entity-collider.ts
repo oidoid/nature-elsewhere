@@ -2,6 +2,7 @@ import {CollisionPredicate} from './collision-predicate/collision-predicate'
 import {EntityCollision, ParentDescendant} from './entity-collision'
 import {Entity} from '../entities/entity/entity'
 import {Rect} from '../math/rect/rect'
+import {EntityUtil} from '../entities/entity/entity-util'
 
 export namespace EntityCollider {
   export function collidesEntities(
@@ -41,7 +42,9 @@ export namespace EntityCollider {
       if (collision)
         return {
           lhs: {
-            parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
+            parent: EntityUtil.equal(lhs, collision.descendant)
+              ? undefined
+              : lhs,
             descendant: collision.descendant
           },
           rhs: {descendant: rhs}
@@ -61,7 +64,9 @@ export namespace EntityCollider {
         if (collision)
           return {
             lhs: {
-              parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
+              parent: EntityUtil.equal(lhs, collision.descendant)
+                ? undefined
+                : lhs,
               descendant: collision.descendant
             },
             rhs: {descendant: rhs}
@@ -77,7 +82,7 @@ export namespace EntityCollider {
         return {
           lhs: collision.lhs,
           rhs: {
-            parent: Entity.equal(rhs, collision.rhs.descendant)
+            parent: EntityUtil.equal(rhs, collision.rhs.descendant)
               ? undefined
               : lhs,
             descendant: collision.rhs.descendant

@@ -1,12 +1,12 @@
 import {LevelConfig} from '../level/level-config'
 import {LevelType} from '../level-type/level-type'
-import * as UI_TITLE from '../../assets/levels/ui/title-level.json'
-import * as UI_PAUSE from '../../assets/levels/ui/pause-level.json'
-import * as UI_LEVEL_EDITOR from '../../assets/levels/ui/level-editor-level.json'
-import * as UI_OPTIONS from '../../assets/levels/ui/options-level.json'
-import * as PLAY_FIELDS from '../../assets/levels/play/fields-level.json'
-import * as TEST_PERFORMANCE from '../../assets/levels/test/performance-level.json'
-import * as TEST_SHADER from '../../assets/levels/test/shader-level.json'
+import * as UI_TITLE from '../level-configs/ui/title-level.json'
+import * as UI_PAUSE from '../level-configs/ui/pause-level.json'
+import * as UI_LEVEL_EDITOR from '../level-configs/ui/level-editor-level.json'
+import * as UI_OPTIONS from '../level-configs/ui/options-level.json'
+import * as PLAY_FIELDS from '../level-configs/play/fields-level.json'
+import * as TEST_PERFORMANCE from '../level-configs/test/performance-level.json'
+import * as TEST_SHADER from '../level-configs/test/shader-level.json'
 
 export const LevelTypeConfigMap: Readonly<
   Partial<Record<LevelType, LevelConfig>>
