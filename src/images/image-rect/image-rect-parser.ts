@@ -19,7 +19,7 @@ export namespace ImageRectParser {
       ImageParser.parse(image, atlas)
     )
     const union = RectArray.union(images.map(image => image.bounds))
-    const origin = XYParser.parse(config.position)
+    const origin = XYParser.parse(config.origin)
     const bounds = union || {x: 0, y: 0, w: 0, h: 0}
     const rect = {origin, bounds, scale: {x: 1, y: 1}, images}
     ImageRect.scale(rect, ImageScaleParser.parse(config.scale))

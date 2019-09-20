@@ -6,8 +6,10 @@ import {RectArray} from '../../math/rect-array/rect-array'
 export interface ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
       moved relative this position. */
-  readonly origin: Writable<XY>
   readonly bounds: Writable<Rect>
+  /** For images that require a center offset, an origin may be specified and
+      referenced manually in translation calculations. */
+  readonly origin: Writable<XY>
   readonly scale: Writable<XY>
   /** Image coordinates are not relative the bounds origin, they're in level
       coordinates. */

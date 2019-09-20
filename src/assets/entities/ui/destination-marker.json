@@ -3,7 +3,7 @@
   "state": "hidden",
   "imageStates": {
     "visible": {
-      "position": {"x": -2, "y": -1},
+      "origin": {"x": -2, "y": -1},
       "images": [{"id": "destination"}]
     }
   },

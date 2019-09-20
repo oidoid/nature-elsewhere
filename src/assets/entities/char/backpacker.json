@@ -3,42 +3,42 @@
   "state": "idleDown",
   "imageStates": {
     "idleUp": {
-      "position": {"x": -3, "y": -13},
+      "origin": {"x": -2, "y": -13},
       "images": [
         {"id": "backpacker idleUp"},
         {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
       ]
     },
     "idleRight": {
-      "position": {"x": -3, "y": -13},
+      "origin": {"x": -2, "y": -13},
       "images": [
         {"id": "backpacker idleRight"},
         {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
       ]
     },
     "idleDown": {
-      "position": {"x": -3, "y": -13},
+      "origin": {"x": -2, "y": -13},
       "images": [
         {"id": "backpacker idleDown"},
         {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
       ]
     },
     "walkUp": {
-      "position": {"x": -3, "y": -13},
+      "origin": {"x": -2, "y": -13},
       "images": [
         {"id": "backpacker walkUp"},
         {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
       ]
     },
     "walkRight": {
-      "position": {"x": -3, "y": -13},
+      "origin": {"x": -2, "y": -13},
       "images": [
         {"id": "backpacker walkRight"},
         {"id": "backpacker walkRightShadow", "layer": "SHADOW"}
       ]
     },
     "walkDown": {
-      "position": {"x": -3, "y": -13},
+      "origin": {"x": -2, "y": -13},
       "images": [
         {"id": "backpacker walkDown"},
         {"id": "backpacker walkUpDownShadow", "layer": "SHADOW"}
