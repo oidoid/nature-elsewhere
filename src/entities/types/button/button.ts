@@ -3,16 +3,14 @@ import {EntityState} from '../../entity-state/entity-state'
 import {AtlasID} from '../../../atlas/atlas-id/atlas-id'
 import {EntityType} from '../../entity-type/entity-type'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
-import {UpdateState} from '../../updaters/update-state'
 import {Updater} from '../../updaters/updater/updater'
-import {InputSource} from '../../../inputs/input-source/input-source'
-import {InputBit} from '../../../inputs/input-bit/input-bit'
 import {Atlas} from '../../../atlas/atlas/atlas'
 import {XY} from '../../../math/xy/xy'
 import {Image} from '../../../images/image/image'
 import {ImageRect} from '../../../images/image-rect/image-rect'
-import {Recorder} from '../../../inputs/recorder/recorder'
 import {ImageParser} from '../../../images/image/image-parser'
+import {Input} from '../../../inputs/input'
+import {Level} from '../../../levels/level/level'
 
 export interface Button extends Entity {
   readonly type: EntityType.UI_BUTTON
@@ -48,19 +46,12 @@ export namespace Button {
       throw new Error()
 
     button.clicked = false
-    const collision = UpdateState.collisionWithCursor(state, button)
+    const collision = Level.collisionWithCursor(state.level, button)
     if (!collision) return Entity.setState(button, State.UNPRESSED)
 
     let status = Entity.setState(button, State.PRESSED) // this is just presentation not click state
 
-    const [set] = state.input.combo.slice(-1)
-    const pick = set && set[InputSource.POINTER_PICK]
-
-    const nextClicked =
-      (pick &&
-        pick.bits === InputBit.PICK &&
-        Recorder.triggeredSet(state.input, InputBit.PICK)) ||
-      false
+    const nextClicked = Input.activeTriggered(state.inputs.pick)
     if (button.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
     button.clicked = nextClicked
 

@@ -37,7 +37,6 @@ function updateLevel(machine: LevelStateMachine): Maybe<Level> {
     const level = config
       ? LevelParser.parse(config, machine.level.atlas)
       : undefined
-    console.log(level)
     return level
   }
   const config =
@@ -45,6 +44,5 @@ function updateLevel(machine: LevelStateMachine): Maybe<Level> {
   const level = config
     ? LevelParser.parse(config, machine.level.atlas)
     : undefined
-  console.log(level)
   return level
 }

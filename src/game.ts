@@ -1,11 +1,6 @@
 import {Assets} from './loaders/assets'
-import {Build} from './utils/build'
 import {FunctionUtil} from './utils/function-util'
-import {InputBit} from './inputs/input-bit/input-bit'
-import {InputRouter} from './inputs/input-router'
-import {InputSet} from './inputs/input-set'
 import {LevelStateMachine} from './levels/level-state-machine'
-import {Recorder} from './inputs/recorder/recorder'
 import {Renderer} from './graphics/renderer/renderer'
 import {RendererStateMachine} from './graphics/renderer/renderer-state-machine'
 import {Settings} from './settings/settings'
@@ -13,6 +8,8 @@ import {Synth} from './audio/synth'
 import {Viewport} from './graphics/viewport'
 import {WindowModeSetting} from './settings/window-mode-setting'
 import {UpdateState} from './entities/updaters/update-state'
+import {InputPoller} from './inputs/input-poller'
+import {InputState} from './inputs/input-state'
 
 export interface Game {
   readonly win: Window
@@ -26,22 +23,20 @@ export interface Game {
   readonly tick: Milliseconds
   levelStateMachine: LevelStateMachine
   readonly rendererStateMachine: RendererStateMachine
-  readonly recorder: Recorder
-  readonly inputRouter: InputRouter
+  readonly inputPoller: InputPoller
   readonly synth: Synth
   requestWindowSetting: FunctionUtil.Once
   readonly settings: Settings
 }
 
 export namespace Game {
-  export const make = (
+  export function make(
     win: Window,
     canvas: HTMLCanvasElement,
     {atlas, atlasImage, shaderLayout}: Assets,
     settings: Settings
-  ): Game => {
+  ): Game {
     const doc = win.document
-    const inputRouter = InputRouter.make(win)
     const tick = 1000 / 60
     const ret: Game = {
       win,
@@ -54,11 +49,10 @@ export namespace Game {
         window: win,
         canvas,
         onFrame: time => onFrame(ret, time),
-        onPause: () => InputRouter.reset(inputRouter),
+        onPause: () => {},
         newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
       }),
-      recorder: Recorder.make(tick * 6),
-      inputRouter,
+      inputPoller: InputPoller.make(),
       synth: Synth.make(),
       requestWindowSetting: newRequestWindowSetting(settings.windowMode, doc),
       settings
@@ -66,86 +60,70 @@ export namespace Game {
     return ret
   }
 
-  const newRequestWindowSetting = (
-    windowMode: WindowModeSetting,
-    doc: Document
-  ): FunctionUtil.Once => {
-    const full = () => doc.documentElement.requestFullscreen().catch(() => {})
-    return windowMode === WindowModeSetting.FULLSCREEN
-      ? FunctionUtil.once(full)
-      : FunctionUtil.never()
-  }
-
-  export const start = (val: Game): void => {
+  export function start(game: Game): void {
     // Disable the context menu.
-    val.doc.oncontextmenu = () => false
-    RendererStateMachine.start(val.rendererStateMachine)
-    InputRouter.register(val.inputRouter, true)
-    Synth.play(val.synth, 'sawtooth', 200, 500, 0.15)
+    game.doc.oncontextmenu = () => false
+    RendererStateMachine.start(game.rendererStateMachine)
+    InputPoller.register(game.inputPoller, game.win, true)
+    Synth.play(game.synth, 'sawtooth', 200, 500, 0.15)
   }
 
-  export const stop = (val: Game): void => {
-    InputRouter.register(val.inputRouter, false)
-    RendererStateMachine.stop(val.rendererStateMachine)
-    val.win.close()
+  export function stop(game: Game): void {
+    InputPoller.register(game.inputPoller, game.win, false)
+    RendererStateMachine.stop(game.rendererStateMachine)
+    game.win.close()
   }
+}
 
-  const onFrame = (game: Game, time: number): void => {
-    if (!game.levelStateMachine.level) return stop(game)
+function newRequestWindowSetting(
+  windowMode: WindowModeSetting,
+  doc: Document
+): FunctionUtil.Once {
+  const full = () => doc.documentElement.requestFullscreen().catch(() => {})
+  return windowMode === WindowModeSetting.FULLSCREEN
+    ? FunctionUtil.once(full)
+    : FunctionUtil.never()
+}
 
-    const canvasWH = Viewport.canvasWH(game.doc)
-    const {minViewport} = game.levelStateMachine.level
-    const scale = Viewport.scale(canvasWH, minViewport, 0)
-    const camWH = Viewport.camWH(canvasWH, scale)
-    game.levelStateMachine.level.cam.bounds.w = camWH.w
-    game.levelStateMachine.level.cam.bounds.h = camWH.h
+function onFrame(game: Game, time: number): void {
+  if (!game.levelStateMachine.level) return Game.stop(game)
 
-    InputRouter.record(
-      game.inputRouter,
-      game.recorder,
-      canvasWH,
-      game.levelStateMachine.level.cam.bounds
-    )
-    Recorder.update(game.recorder, time)
+  const canvasWH = Viewport.canvasWH(game.doc)
+  const {minViewport} = game.levelStateMachine.level
+  const scale = Viewport.scale(canvasWH, minViewport, 0)
+  const camWH = Viewport.camWH(canvasWH, scale)
+  game.levelStateMachine.level.cam.bounds.w = camWH.w
+  game.levelStateMachine.level.cam.bounds.h = camWH.h
 
-    const [set] = game.recorder.combo.slice(-1)
-    const bits = set && InputSet.bits(set) & ~InputBit.POINT
-    game.requestWindowSetting = game.requestWindowSetting(!!bits)
-    if (Build.dev) processDebugInput(game)
+  const anyInput = InputState.anyActive(game.inputPoller.inputs)
+  game.requestWindowSetting = game.requestWindowSetting(anyInput)
 
-    game.time += time
-    game.age += game.time - (game.time % game.tick)
-    while (game.levelStateMachine.level && game.time >= game.tick) {
-      game.time -= game.tick
-      game.levelStateMachine = LevelStateMachine.update(
-        game.levelStateMachine,
-        UpdateState.make(game.tick, game.levelStateMachine.level, game.recorder)
-      )
-    }
-
-    const {renderer} = game.rendererStateMachine
-    const {level, store} = game.levelStateMachine
-    if (level)
-      Renderer.render(
-        renderer,
-        game.age,
+  game.time += time
+  game.age += game.time - (game.time % game.tick)
+  while (game.levelStateMachine.level && game.time >= game.tick) {
+    game.time -= game.tick
+    game.levelStateMachine = LevelStateMachine.update(
+      game.levelStateMachine,
+      UpdateState.make(
+        game.tick,
+        game.levelStateMachine.level,
         canvasWH,
-        scale,
-        level.cam.bounds,
-        store
+        game.inputPoller.inputs
       )
-    else stop(game)
+    )
+    InputPoller.update(game.inputPoller, game.tick)
   }
 
-  const processDebugInput = ({rendererStateMachine, recorder}: Game): void => {
-    const triggered = Recorder.triggeredSet(
-      recorder,
-      InputBit.DEBUG_CONTEXT_LOSS
+  const {renderer} = game.rendererStateMachine
+  const {level, store} = game.levelStateMachine
+  if (level)
+    Renderer.render(
+      renderer,
+      game.age,
+      canvasWH,
+      scale,
+      level.cam.bounds,
+      store
     )
-    const {loseContext} = rendererStateMachine.renderer
-    if (triggered && loseContext) {
-      loseContext.loseContext()
-      setTimeout(() => loseContext.restoreContext(), 3 * 1000)
-    }
-  }
+  else Game.stop(game)
 }

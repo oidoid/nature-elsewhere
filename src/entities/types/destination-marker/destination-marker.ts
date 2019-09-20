@@ -1,27 +1,24 @@
 import {Updater} from '../../updaters/updater/updater'
 import {Entity} from '../../entity/entity'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
-import {InputSource} from '../../../inputs/input-source/input-source'
-import {InputBit} from '../../../inputs/input-bit/input-bit'
 import {XY} from '../../../math/xy/xy'
+import {Input} from '../../../inputs/input'
 
 export namespace DestinationMarker {
   export enum State {
     VISIBLE = 'visible'
   }
   export const update: Updater.Update = (marker, state) => {
-    const [set] = state.input.combo.slice(-1)
-    const pick = set && set[InputSource.POINTER_PICK]
-
     let status = UpdateStatus.UNCHANGED
-    if (!pick || pick.bits !== InputBit.PICK) return status
-
+    const {pick} = state.inputs
+    if (!pick || !pick.active) return status
+    const position = XY.trunc(
+      Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
+    )
     status |= Entity.setState(marker, State.VISIBLE)
     Entity.resetAnimation(marker)
-    status |= Entity.moveTo(
-      marker,
-      XY.add(pick.xy, Entity.imageState(marker).origin)
-    )
+    const destination = XY.add(position, Entity.imageState(marker).origin)
+    status |= Entity.moveTo(marker, destination)
 
     return status
   }

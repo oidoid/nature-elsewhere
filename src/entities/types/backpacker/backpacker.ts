@@ -6,6 +6,7 @@ import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {EntityState} from '../../entity-state/entity-state'
 import {EntityCollider} from '../../../collision/entity-collider'
 import {NumberUtil} from '../../../math/number/number-util'
+import {Level} from '../../../levels/level/level'
 
 export interface Backpacker extends Entity {
   readonly type: EntityType.CHAR_BACKPACKER
@@ -48,7 +49,6 @@ export namespace Backpacker {
       left || right,
       up || down
     )
-    const animateHorizontal = Math.abs(x - dst.x) > 8
 
     if (up) y -= speed.y
     if (down) y += speed.y
@@ -60,7 +60,7 @@ export namespace Backpacker {
     const diagonal = (left || right) && (up || down)
     const collision = EntityCollider.collidesEntities(
       backpacker,
-      state.activeParents
+      Level.activeParents(state.level)
     )
 
     const collisionDirection = {x: !!collision, y: !!collision}
@@ -68,7 +68,7 @@ export namespace Backpacker {
       Entity.moveTo(backpacker, {x, y: originalY})
       collisionDirection.x = !!EntityCollider.collidesEntities(
         backpacker,
-        state.activeParents
+        Level.activeParents(state.level)
       )
       if (!collisionDirection.x) y = originalY
 
@@ -76,7 +76,7 @@ export namespace Backpacker {
         Entity.moveTo(backpacker, {x: originalX, y})
         collisionDirection.y = !!EntityCollider.collidesEntities(
           backpacker,
-          state.activeParents
+          Level.activeParents(state.level)
         )
         if (!collisionDirection.y) x = originalX
       }
@@ -97,6 +97,7 @@ export namespace Backpacker {
       XY.equal(XY.trunc({x, y}), dst) ||
       (collisionDirection.x && collisionDirection.y)
 
+    const animateHorizontal = Math.abs(x - dst.x) > 8
     let nextState = backpacker.state
     if (idle) {
       nextState =
@@ -110,13 +111,14 @@ export namespace Backpacker {
     } else {
       if (up) nextState = State.WALK_UP
       if (down) nextState = State.WALK_DOWN
-      if ((left || right) && animateHorizontal) nextState = State.WALK_RIGHT
+      if ((left || right) && (!diagonal || animateHorizontal))
+        nextState = State.WALK_RIGHT
     }
 
     let flipX = backpacker.scale.x
     if (up || down) flipX = 1
-    if (left && animateHorizontal) flipX = -1
-    if (right && animateHorizontal) flipX = 1
+    if (left && (!diagonal || animateHorizontal)) flipX = -1
+    if (right && (!diagonal || animateHorizontal)) flipX = 1
 
     Entity.setScale(backpacker, {x: flipX, y: backpacker.scale.y})
     Entity.setState(backpacker, nextState)

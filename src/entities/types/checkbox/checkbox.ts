@@ -1,23 +1,21 @@
 import {EntityState} from '../../entity-state/entity-state'
 import {EntityType} from '../../entity-type/entity-type'
 import {Updater} from '../../updaters/updater/updater'
-import {UpdateState} from '../../updaters/update-state'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
-import {InputSource} from '../../../inputs/input-source/input-source'
-import {InputBit} from '../../../inputs/input-bit/input-bit'
 import {Entity} from '../../entity/entity'
 import {AtlasID} from '../../../atlas/atlas-id/atlas-id'
 import {Atlas} from '../../../atlas/atlas/atlas'
 import {Image} from '../../../images/image/image'
 import * as memFont from '../../../assets/mem-font.json'
 import {ImageRect} from '../../../images/image-rect/image-rect'
-import {Recorder} from '../../../inputs/recorder/recorder'
 import {ImageParser} from '../../../images/image/image-parser'
 import {EntityParser} from '../../entity/entity-parser'
 import {Text} from '../text/text'
 import {TextConfig} from '../text/text-config'
 import {ImageConfig} from '../../../images/image/image-config'
 import {WH} from '../../../math/wh/wh'
+import {Input} from '../../../inputs/input'
+import {Level} from '../../../levels/level/level'
 
 export interface Checkbox extends Omit<Text, 'type'> {
   readonly type: EntityType.UI_CHECKBOX
@@ -88,23 +86,11 @@ export namespace Checkbox {
   export const update: Updater.Update = (checkbox, state) => {
     if (!EntityType.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
-    const collision = UpdateState.collisionWithCursor(state, checkbox)
+    const collision = Level.collisionWithCursor(state.level, checkbox)
     if (!collision) return UpdateStatus.UNCHANGED
 
-    const [set] = state.input.combo.slice(-1)
-    const pick = set && set[InputSource.POINTER_PICK]
-
-    console.log(
-      pick,
-      state.input.timer,
-      Recorder.triggeredSet(state.input, InputBit.PICK)
-    )
     let status = UpdateStatus.UNCHANGED
-    const toggle =
-      (pick &&
-        pick.bits === InputBit.PICK &&
-        Recorder.triggeredSet(state.input, InputBit.PICK)) ||
-      false
+    const toggle = Input.activeTriggered(state.inputs.pick)
     const nextChecked = toggle ? !checkbox.checked : checkbox.checked
     if (checkbox.checked !== nextChecked) status |= UpdateStatus.TERMINATE
     checkbox.checked = nextChecked

@@ -6,6 +6,7 @@ import {UpdateState} from '../entities/updaters/update-state'
 import {Entity} from '../entities/entity/entity'
 import {EntityID} from '../entities/entity-id/entity-id'
 import {NumberUtil} from '../math/number/number-util'
+import {Level} from '../levels/level/level'
 
 export interface Store {
   readonly layout: ShaderLayout
@@ -31,10 +32,7 @@ export namespace Store {
     state: UpdateState
   ): Store {
     let images: Image[] = []
-    images.push(...process([state.level.cursor], state, atlas))
 
-    if (state.level.destination)
-      images.push(...process([state.level.destination], state, atlas))
     if (state.level.player)
       images.push(...process([state.level.player], state, atlas))
 
@@ -67,8 +65,10 @@ export namespace Store {
         )
       }
     }
-    images.push(...process(state.activeParents, state, atlas))
-
+    images.push(...process([state.level.cursor], state, atlas))
+    if (state.level.destination)
+      images.push(...process([state.level.destination], state, atlas))
+    images.push(...process(Level.activeParents(state.level), state, atlas))
     images = images.sort(Image.compare)
     // [todo] now I'm getting the now stale parents.
 

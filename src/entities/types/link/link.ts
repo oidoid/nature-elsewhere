@@ -1,10 +1,10 @@
 import {Updater} from '../../updaters/updater/updater'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
-import {UpdateState} from '../../updaters/update-state'
+import {Level} from '../../../levels/level/level'
 
 export namespace Link {
   export const update: Updater.Update = (link, state) => {
-    const collision = UpdateState.collisionWithCursor(state, link)
+    const collision = Level.collisionWithCursor(state.level, link)
     if (!collision) return UpdateStatus.UNCHANGED
 
     console.log(link.id, 'change color here')

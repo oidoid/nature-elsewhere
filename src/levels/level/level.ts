@@ -5,6 +5,8 @@ import {Backpacker} from '../../entities/types/backpacker/backpacker'
 import {Cursor} from '../../entities/types/cursor/cursor'
 import {Atlas} from '../../atlas/atlas/atlas'
 import {Camera} from '../camera/camera'
+import {EntityCollider} from '../../collision/entity-collider'
+import {EntityCollision} from '../../collision/entity-collision'
 
 export interface Level {
   readonly type: LevelType
@@ -33,5 +35,27 @@ export namespace Level {
   export function advance(level: Level, nextLevel: LevelType): void {
     level.nextLevel = nextLevel
     level.advance = Advance.NEXT
+  }
+
+  export function activeParents(level: Level): readonly Entity[] {
+    return level.parentEntities.filter(entity =>
+      Entity.active(entity, level.cam.bounds)
+    )
+  }
+
+  export function collisionWithCursor(
+    level: Level,
+    entity: Entity
+  ): Maybe<EntityCollision> {
+    const collisionWithCursor = level.cursor
+      ? EntityCollider.collidesEntities(
+          level.cursor,
+          Level.activeParents(level)
+        )
+      : undefined
+    if (!collisionWithCursor) return
+    if (Entity.equal(collisionWithCursor.rhs.descendant, entity))
+      return collisionWithCursor
+    return
   }
 }
