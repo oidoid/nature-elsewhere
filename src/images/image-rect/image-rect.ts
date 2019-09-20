@@ -2,6 +2,7 @@ import {Image} from '../image/image'
 import {Rect} from '../../math/rect/rect'
 import {XY} from '../../math/xy/xy'
 import {RectArray} from '../../math/rect-array/rect-array'
+import {Layer} from '../layer/layer'
 
 export interface ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
@@ -55,5 +56,9 @@ export namespace ImageRect {
   export function scale(rect: ImageRect, scale: XY): void {
     scale = {x: rect.scale.x * scale.x, y: rect.scale.y * scale.y}
     ImageRect.setScale(rect, XY.mul(scale, rect.scale))
+  }
+
+  export function elevate(rect: ImageRect, offset: Layer): void {
+    for (const image of rect.images) Image.elevate(image, offset)
   }
 }

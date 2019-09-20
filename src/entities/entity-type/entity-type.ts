@@ -34,3 +34,7 @@ export enum EntityType {
   UI_TEXT = 'uiText',
   UI_TOOLBAR = 'uiToolbar'
 }
+
+export namespace EntityType {
+  export const UI_KEY_PREFIX = 'UI_'
+}

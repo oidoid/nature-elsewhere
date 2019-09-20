@@ -11,6 +11,7 @@ import {UpdateStatus} from '../updaters/update-status/update-status'
 import {XY} from '../../math/xy/xy'
 import {UpdateState} from '../updaters/update-state'
 import {UpdaterMap} from '../updaters/updater-map'
+import {Layer} from '../../images/layer/layer'
 
 export namespace EntityUtil {
   /** See Entity.spawnID. */
@@ -161,5 +162,12 @@ export namespace EntityUtil {
         : Math.sign(vy) * Math.sqrt(vx * vx + vy * vy)
       : 0
     return {x: (x * time) / 10000, y: (y * time) / 10000}
+  }
+
+  /** Raise or lower an entity's images and its descendants' images. */
+  export function elevate(entity: Entity, offset: Layer): void {
+    for (const state in entity.imageStates)
+      ImageRect.elevate(entity.imageStates[state], offset)
+    for (const child of entity.children) elevate(child, offset)
   }
 }

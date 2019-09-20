@@ -47,14 +47,7 @@ export namespace EntityParser {
       spawnID: Symbol(),
       id: EntityIDParser.parse(config.id),
       type: type,
-      // Initialize position to ImageRect origin so that moveBy() is effectively
-      // a moveTo().
-      bounds: {
-        x: 0, //imageStates[state].bounds.x,
-        y: 0, //imageStates[state].bounds.y,
-        w: 0,
-        h: 0
-      },
+      bounds: {x: 0, y: 0, w: 0, h: 0},
       scale,
       state,
       imageStates,
