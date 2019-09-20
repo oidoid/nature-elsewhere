@@ -20,25 +20,27 @@ export namespace LevelStateMachine {
 
   export function update(machine: LevelStateMachine, state: UpdateState): void {
     Store.update(machine.store, state)
-    machine.level = updateLevel(machine)
+    updateLevel(machine)
   }
 }
 
-function updateLevel(machine: LevelStateMachine): Maybe<Level> {
+function updateLevel(machine: LevelStateMachine): void {
   if (!machine.level) return
-  if (machine.level.advance === Level.Advance.UNCHANGED) return machine.level
+
+  if (machine.level.advance === Level.Advance.UNCHANGED) return
+
   if (machine.level.advance === Level.Advance.PREV) {
     const config =
       machine.level.prevLevel && LevelTypeConfigMap[machine.level.prevLevel]
-    const level = config
+    machine.level = config
       ? LevelParser.parse(config, machine.level.atlas)
       : undefined
-    return level
+    return
   }
+
   const config =
     machine.level.nextLevel && LevelTypeConfigMap[machine.level.nextLevel]
-  const level = config
+  machine.level = config
     ? LevelParser.parse(config, machine.level.atlas)
     : undefined
-  return level
 }

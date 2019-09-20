@@ -55,7 +55,10 @@ export namespace Image {
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. See
       Layer. */
-  export function compare(lhs: Readonly<Image>, rhs: Readonly<Image>): number {
+  export function compareElevation(
+    lhs: Readonly<Image>,
+    rhs: Readonly<Image>
+  ): number {
     return (
       lhs.layer - rhs.layer ||
       lhs.bounds.y + lhs.bounds.h - (rhs.bounds.y + rhs.bounds.h)

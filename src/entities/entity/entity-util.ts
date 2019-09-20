@@ -1,5 +1,4 @@
 import {Entity} from './entity'
-import {Atlas} from '../../atlas/atlas/atlas'
 import {EntityID} from '../entity-id/entity-id'
 import {EntityState} from '../entity-state/entity-state'
 import {Image} from '../../images/image/image'
@@ -63,24 +62,18 @@ export namespace EntityUtil {
   /** Recursively animate the entity and its children. Only visible entities are
       animated so its possible for a composition entity's children to be fully,
       *partly*, or not animated together. */
-  export function animate(
-    entity: Entity,
-    time: Milliseconds,
-    viewport: Rect,
-    atlas: Atlas
-  ): Image[] {
-    if (!Rect.intersects(viewport, entity.bounds)) return []
+  export function animate(entity: Entity, state: UpdateState): Image[] {
+    if (!Rect.intersects(state.level.cam.bounds, entity.bounds)) return []
     const visible = imageState(entity).images.filter(image =>
-      Rect.intersects(viewport, image.bounds)
+      Rect.intersects(state.level.cam.bounds, image.bounds)
     )
-    visible.forEach(image => Image.animate(image, time, atlas))
+    visible.forEach(image =>
+      Image.animate(image, state.time, state.level.atlas)
+    )
     return [
       ...visible,
       ...entity.children.reduce(
-        (images: Image[], child) => [
-          ...images,
-          ...animate(child, time, viewport, atlas)
-        ],
+        (images: Image[], child) => [...images, ...animate(child, state)],
         []
       )
     ]

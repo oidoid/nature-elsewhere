@@ -31,14 +31,14 @@ export namespace Store {
     if (state.level.destination)
       images.push(...updateAndAnimate([state.level.destination], state))
     images.push(...updateAndAnimate(Level.activeParents(state.level), state))
-    images = images.sort(Image.compare)
-    // [todo] now I'm getting the now stale parents.
+    images = images.sort(Image.compareElevation)
 
     const size = InstanceBuffer.size(store.layout, images.length)
     if (store.dat.byteLength < size) store.dat = InstanceBuffer.make(size * 2)
     store.len = images.length
-    images.forEach((img, i) =>
-      InstanceBuffer.set(store.layout, state.level.atlas, store.dat, i, img)
+
+    images.forEach((image, i) =>
+      InstanceBuffer.set(store.layout, state.level.atlas, store.dat, i, image)
     )
   }
 }
@@ -47,17 +47,10 @@ function updateAndAnimate(
   entities: readonly Entity[],
   state: UpdateState
 ): Image[] {
-  entities.forEach(entity => EntityUtil.update(entity, state))
-  return entities.reduce(
-    (images: Image[], entity) => [
-      ...images,
-      ...EntityUtil.animate(
-        entity,
-        state.time,
-        state.level.cam.bounds,
-        state.level.atlas
-      )
-    ],
-    []
-  )
+  const images: Image[] = []
+  for (const entity of entities) {
+    EntityUtil.update(entity, state)
+    images.push(...EntityUtil.animate(entity, state))
+  }
+  return images
 }
