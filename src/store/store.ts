@@ -3,10 +3,8 @@ import {InstanceBuffer} from './instance-buffer'
 import {ShaderLayout} from '../graphics/shaders/shader-layout/shader-layout'
 import {UpdateState} from '../entities/updaters/update-state'
 import {Entity} from '../entities/entity/entity'
-import {EntityID} from '../entities/entity-id/entity-id'
 import {Level} from '../levels/level/level'
 import {EntityUtil} from '../entities/entity/entity-util'
-import {CameraUtil} from '../levels/camera/camera-util'
 
 export interface Store {
   readonly layout: ShaderLayout
@@ -27,21 +25,8 @@ export namespace Store {
     if (state.level.player)
       images.push(...updateAndAnimate([state.level.player], state))
 
-    if (state.level.cam.followID !== EntityID.ANONYMOUS) {
-      let entity
-      if (
-        state.level.player &&
-        state.level.player.id === state.level.cam.followID
-      ) {
-        entity = state.level.player
-      } else
-        for (const parent of state.level.parentEntities) {
-          entity = EntityUtil.find(parent, state.level.cam.followID)
-          if (entity) break
-        }
-      if (entity)
-        CameraUtil.centerOn(state.level.cam, state.level, entity.bounds)
-    }
+    Level.updateCamera(state.level)
+
     images.push(...updateAndAnimate([state.level.cursor], state))
     if (state.level.destination)
       images.push(...updateAndAnimate([state.level.destination], state))

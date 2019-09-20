@@ -9,6 +9,8 @@ import {EntityCollider} from '../../collision/entity-collider'
 import {EntityCollision} from '../../collision/entity-collision'
 import {EntityUtil} from '../../entities/entity/entity-util'
 import {XY} from '../../math/xy/xy'
+import {EntityID} from '../../entities/entity-id/entity-id'
+import {Rect} from '../../math/rect/rect'
 
 export interface Level {
   readonly type: LevelType
@@ -69,4 +71,29 @@ export namespace Level {
     }
     return XY.clamp(position, min, max)
   }
+
+  export function updateCamera(level: Level): void {
+    if (level.cam.followID === EntityID.ANONYMOUS) return
+
+    let follow
+    if (level.player && level.player.id === level.cam.followID)
+      follow = level.player
+    else
+      for (const parent of level.parentEntities) {
+        follow = EntityUtil.find(parent, level.cam.followID)
+        if (follow) break
+      }
+
+    if (follow) centerCameraOn(level, follow.bounds)
+  }
+}
+
+function centerCameraOn(level: Level, on: Rect): void {
+  const {x, y} = Level.clamp(
+    level,
+    Rect.centerOn(level.cam.bounds, on),
+    level.cam.bounds
+  )
+  level.cam.bounds.x = x
+  level.cam.bounds.y = y
 }

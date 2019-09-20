@@ -3,6 +3,6 @@ import {EntityID} from '../../entities/entity-id/entity-id'
 
 export interface Camera {
   readonly bounds: Writable<Rect>
-  /** EntityID.UNDEFINED if not following. */
+  /** EntityID.ANONYMOUS if not following. */
   followID: EntityID
 }
