@@ -9,7 +9,7 @@ import {EntityIDParser} from '../entity-id/entity-id-parser'
 import {EntityPickerParser} from '../types/entity-picker/entity-picker-parser'
 import {EntityStateParser} from '../entity-state/entity-state-parser'
 import {EntityType} from '../entity-type/entity-type'
-import {EntityTypeParse} from '../entity-type-parser'
+import {RecursiveEntityParser} from '../recursive-entity-parser'
 import {EntityTypeParser} from '../entity-type/entity-type-parser'
 import {EntityUtil} from './entity-util'
 import {ImageEntityParser} from '../types/image-entity/image-entity-parser'
@@ -120,7 +120,7 @@ function withDefaults(config: EntityConfig, type: EntityType): EntityConfig {
 }
 
 const TypeParserMap: Readonly<
-  Partial<Record<EntityType, EntityTypeParse>>
+  Partial<Record<EntityType, RecursiveEntityParser>>
 > = Object.freeze({
   [EntityType.IMAGE]: ImageEntityParser.parse,
   [EntityType.SCENERY_CLOUD]: CloudParser.parse,

@@ -8,7 +8,7 @@ import {Layer} from '../../../images/layer/layer'
 import {ObjectUtil} from '../../../utils/object-util'
 import {NumberUtil} from '../../../math/number/number-util'
 import {EntityPicker} from './entity-picker'
-import {RecursiveEntityParser} from '../../entity-type-parser'
+import {IEntityParser} from '../../recursive-entity-parser'
 import {defaultTypeState} from '../../type-config-map'
 
 const size = Object.freeze({w: 32, h: 26})
@@ -23,7 +23,7 @@ export namespace EntityPickerParser {
   export function parse(
     picker: Entity,
     atlas: Atlas,
-    parser: RecursiveEntityParser
+    parser: IEntityParser
   ): EntityPicker {
     if (
       !EntityTypeUtil.assert<EntityPicker>(picker, EntityType.UI_ENTITY_PICKER)

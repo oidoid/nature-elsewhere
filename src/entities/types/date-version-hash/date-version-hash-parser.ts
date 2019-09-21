@@ -6,13 +6,13 @@ import {Atlas} from '../../../atlas/atlas/atlas'
 import {TextConfig} from '../text/text-config'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
-import {RecursiveEntityParser} from '../../entity-type-parser'
+import {IEntityParser} from '../../recursive-entity-parser'
 
 export namespace DateVersionHashParser {
   export function parse(
     dateVersionHash: Entity,
     atlas: Atlas,
-    parser: RecursiveEntityParser
+    parser: IEntityParser
   ): DateVersionHash {
     if (
       !EntityTypeUtil.assert<DateVersionHash>(

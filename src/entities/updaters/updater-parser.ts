@@ -1,9 +1,9 @@
 import {Entity} from '../entity/entity'
 import {Atlas} from '../../atlas/atlas/atlas'
-import {RecursiveEntityParser} from '../entity-type-parser'
+import {IEntityParser} from '../recursive-entity-parser'
 
 export type UpdaterParser = (
   config: Entity,
   atlas: Atlas,
-  parser: RecursiveEntityParser
+  parser: IEntityParser
 ) => Entity

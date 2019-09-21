@@ -13,13 +13,13 @@ import {ImageConfig} from '../../../images/image/image-config'
 import {WH} from '../../../math/wh/wh'
 import {AtlasID} from '../../../atlas/atlas-id/atlas-id'
 import {CheckboxState} from './checkbox-state'
-import {RecursiveEntityParser} from '../../entity-type-parser'
+import {IEntityParser} from '../../recursive-entity-parser'
 
 export namespace CheckboxParser {
   export function parse(
     checkbox: Entity,
     atlas: Atlas,
-    parser: RecursiveEntityParser
+    parser: IEntityParser
   ): Checkbox {
     if (!EntityTypeUtil.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
@@ -32,7 +32,7 @@ export namespace CheckboxParser {
     checkbox: Checkbox,
     text: string,
     atlas: Atlas,
-    parser: RecursiveEntityParser
+    parser: IEntityParser
   ): void {
     checkbox.text = text
     const config: TextConfig = {

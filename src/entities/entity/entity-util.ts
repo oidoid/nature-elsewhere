@@ -114,7 +114,7 @@ export namespace EntityUtil {
 
     let status = UpdateStatus.UNCHANGED
     for (const updater of entity.updaters) {
-      status |= UpdaterMap.Update[updater](entity, state)
+      status |= UpdaterMap[updater](entity, state)
       if (UpdateStatus.terminate(status)) return status
     }
 

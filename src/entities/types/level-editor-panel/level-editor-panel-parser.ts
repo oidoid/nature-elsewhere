@@ -13,7 +13,7 @@ import {EntityUtil} from '../../entity/entity-util'
 import {CheckboxParser} from '../checkbox/checkbox-parser'
 import {EntityPickerParser} from '../entity-picker/entity-picker-parser'
 import {defaultTypeState} from '../../type-config-map'
-import {RecursiveEntityParser} from '../../entity-type-parser'
+import {IEntityParser} from '../../recursive-entity-parser'
 
 export namespace LevelEditorPanelParser {
   export const parse: UpdaterParser = (panel, atlas, parser) => {
@@ -93,7 +93,7 @@ export namespace LevelEditorPanelParser {
     picker: EntityPicker,
     offset: number,
     atlas: Atlas,
-    parser: RecursiveEntityParser
+    parser: IEntityParser
   ): void {
     EntityPickerParser.setVisibleChild(picker, picker.activeChildIndex + offset)
     const text = EntityPickerParser.getVisibleChild(picker).type
@@ -122,7 +122,7 @@ export namespace LevelEditorPanelParser {
     picker: EntityPicker,
     offset: number,
     atlas: Atlas,
-    parser: RecursiveEntityParser
+    parser: IEntityParser
   ): void {
     const child = EntityPickerParser.getVisibleChild(picker)
     panel.stateIndex = NumberUtil.wrap(
