@@ -20,10 +20,10 @@ export namespace LevelEditorPanelUtil {
     if (!child) return
     const entityLabel = child.type.replace(/^(scenery|char)/, '')
     CheckboxParser.setText(panel.entityCheckbox, entityLabel, atlas, parser)
-    setStateFields(panel, 0, atlas, parser)
+    setEntityStateFields(panel, 0, atlas, parser)
   }
 
-  export function setStateFields(
+  export function setEntityStateFields(
     {entityPicker, radioGroup, stateCheckbox}: LevelEditorPanel,
     offset: number,
     atlas: Atlas,
