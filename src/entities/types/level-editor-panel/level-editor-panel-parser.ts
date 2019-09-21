@@ -1,16 +1,10 @@
 import {LevelEditorPanel} from './level-editor-panel'
-import {EntityPicker} from '../entity-picker/entity-picker'
 import {UpdaterParser} from '../../updaters/updater-parser'
 import {EntityType} from '../../entity-type/entity-type'
-import {Entity} from '../../entity/entity'
 import {EntityID} from '../../entity-id/entity-id'
-import {Checkbox} from '../checkbox/checkbox'
-import {Atlas} from '../../../atlas/atlas/atlas'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
-import {CheckboxParser} from '../checkbox/checkbox-parser'
-import {EntityPickerParser} from '../entity-picker/entity-picker-parser'
-import {IEntityParser} from '../../recursive-entity-parser'
+import {LevelEditorPanelUtil} from './level-editor-panel-util'
 
 export namespace LevelEditorPanelParser {
   export const parse: UpdaterParser = (panel, atlas, parser) => {
@@ -70,60 +64,13 @@ export namespace LevelEditorPanelParser {
       addButton,
       toggleGridButton
     }
-    updatePickerAndStuf(
+    LevelEditorPanelUtil.setEntityFields(
       <LevelEditorPanel>ret,
-      <Entity>radioGroup,
-      <Checkbox>entityCheckbox,
-      <EntityPicker>entityPicker,
       0,
       atlas,
       parser
     )
 
     return ret
-  }
-
-  export function updatePickerAndStuf(
-    panel: LevelEditorPanel,
-    radioGroup: Entity,
-    checkbox: Checkbox,
-    picker: EntityPicker,
-    offset: number,
-    atlas: Atlas,
-    parser: IEntityParser
-  ): void {
-    EntityPickerParser.setActiveChild(picker, picker.activeChildIndex + offset)
-    const child = EntityPickerParser.getActiveChild(picker)
-    if (!child) return
-    const text = child.type
-    CheckboxParser.setText(
-      checkbox,
-      text.replace(/^(scenery|char)/, ''),
-      atlas,
-      parser
-    )
-    updatePickerAndStufForState(
-      radioGroup,
-      panel.stateCheckbox,
-      picker,
-      0,
-      atlas,
-      parser
-    )
-  }
-
-  export function updatePickerAndStufForState(
-    radioGroup: Entity,
-    checkbox: Checkbox,
-    picker: EntityPicker,
-    offset: number,
-    atlas: Atlas,
-    parser: IEntityParser
-  ): void {
-    const child = EntityPickerParser.getActiveChild(picker)
-    if (!child) return
-    EntityPickerParser.offsetActiveChildStateIndex(picker, offset)
-    CheckboxParser.setText(checkbox, child.state, atlas, parser)
-    EntityUtil.invalidateBounds(radioGroup)
   }
 }

@@ -4,11 +4,11 @@ import {EntityType} from '../../entity-type/entity-type'
 import {PlaneState} from '../plane/plane-state'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {Update} from '../../updaters/update'
-import {LevelEditorPanelParser} from './level-editor-panel-parser'
 import {LevelEditorPanel} from './level-editor-panel'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
 import {EntityParser} from '../../entity/entity-parser'
+import {LevelEditorPanelUtil} from './level-editor-panel-util'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -43,20 +43,15 @@ export namespace LevelEditorPanelUpdater {
       if (panel.xCheckbox.checked) {
       } else if (panel.yCheckbox.checked) {
       } else if (panel.entityCheckbox.checked)
-        LevelEditorPanelParser.updatePickerAndStuf(
+        LevelEditorPanelUtil.setEntityFields(
           panel,
-          panel.radioGroup,
-          panel.entityCheckbox,
-          panel.entityPicker,
           -1,
           state.level.atlas,
           EntityParser.parse
         )
       else if (panel.stateCheckbox.checked)
-        LevelEditorPanelParser.updatePickerAndStufForState(
-          panel.radioGroup,
-          panel.stateCheckbox,
-          panel.entityPicker,
+        LevelEditorPanelUtil.setStateFields(
+          panel,
           -1,
           state.level.atlas,
           EntityParser.parse
@@ -67,20 +62,15 @@ export namespace LevelEditorPanelUpdater {
         console.log('increment')
       } else if (panel.yCheckbox.checked) {
       } else if (panel.entityCheckbox.checked)
-        LevelEditorPanelParser.updatePickerAndStuf(
+        LevelEditorPanelUtil.setEntityFields(
           panel,
-          panel.radioGroup,
-          panel.entityCheckbox,
-          panel.entityPicker,
           1,
           state.level.atlas,
           EntityParser.parse
         )
       else if (panel.stateCheckbox.checked)
-        LevelEditorPanelParser.updatePickerAndStufForState(
-          panel.radioGroup,
-          panel.stateCheckbox,
-          panel.entityPicker,
+        LevelEditorPanelUtil.setStateFields(
+          panel,
           1,
           state.level.atlas,
           EntityParser.parse

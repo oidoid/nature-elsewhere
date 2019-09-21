@@ -1,6 +1,7 @@
 import {UpdaterParser} from '../../updaters/updater-parser'
 import {FollowCamOrientation} from './follow-cam-orientation'
 import {WHParser} from '../../../math/wh/wh-parser'
+import {ObjectUtil} from '../../../utils/object-util'
 
 export namespace FollowCamParser {
   export const parse: UpdaterParser = entity => {
@@ -10,12 +11,16 @@ export namespace FollowCamParser {
         : undefined
     if (
       !orientation ||
-      !Object.values(FollowCamOrientation).includes(orientation)
+      !ObjectUtil.assertValueOf(
+        FollowCamOrientation,
+        orientation,
+        'FollowCamOrientation'
+      )
     )
-      throw new Error(`Invalid Orientation "${orientation}".`)
+      throw new Error()
     const camMargin = WHParser.parse(
       'camMargin' in entity ? entity['camMargin'] : undefined
     )
-    return {...entity, camMargin}
+    return {...entity, orientation, camMargin}
   }
 }
