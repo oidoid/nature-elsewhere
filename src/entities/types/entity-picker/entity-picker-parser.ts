@@ -10,8 +10,11 @@ import {NumberUtil} from '../../../math/number/number-util'
 import {EntityPicker} from './entity-picker'
 import {IEntityParser} from '../../recursive-entity-parser'
 import {defaultTypeState} from '../../type-config-map'
+import {Rect} from '../../../math/rect/rect'
+import {XY} from '../../../math/xy/xy'
+import * as memFont from '../../../text/text-layout/mem-font.json'
 
-const size = Object.freeze({w: 32, h: 26})
+const entityWindowSize = Object.freeze({w: 32, h: 26})
 const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
   ...ObjectUtil.keys(EntityType)
@@ -32,40 +35,48 @@ export namespace EntityPickerParser {
     for (const type of Object.values(EntityType)) {
       if (typeBlacklist.includes(type)) continue
       const entity = parser({type}, atlas)
-      EntityUtil.moveTo(entity, {
-        x: Math.max(
-          picker.bounds.x,
-          picker.bounds.x + (size.w - entity.bounds.w) / 2
-        ),
-        y: Math.max(
-          picker.bounds.y + 6,
-          picker.bounds.y + 6 + (size.h - entity.bounds.h) / 2
-        )
-      })
+      const entityWindowBounds = {
+        x: Math.trunc(picker.bounds.x),
+        y: Math.trunc(picker.bounds.y) + memFont.lineHeight,
+        w: entityWindowSize.w,
+        h: entityWindowSize.h
+      }
+      const center = XY.max(
+        Rect.centerOn(entity.bounds, entityWindowBounds),
+        entityWindowBounds
+      )
+      EntityUtil.moveTo(entity, center)
       EntityUtil.setState(entity, EntityState.HIDDEN)
       picker.children.push(entity)
     }
     picker.activeChildIndex = 0
-    EntityUtil.elevate(picker.children[0], Layer.UI_PICKER_OFFSET)
-    setVisibleChild(picker, 0)
+    showActiveChild(picker)
     return picker
   }
 
-  export function getVisibleChild(picker: EntityPicker): Entity {
+  export function getActiveChild(picker: EntityPicker): Maybe<Entity> {
     return picker.children[picker.activeChildIndex]
   }
 
-  export function setVisibleChild(picker: EntityPicker, index: number): void {
+  export function setActiveChild(picker: EntityPicker, index: number): void {
     if (!picker.children.length) return
-    const oldChild = picker.children[Math.abs(picker.activeChildIndex)]
-    if (oldChild) {
-      EntityUtil.elevate(oldChild, -Layer.UI_PICKER_OFFSET)
-      EntityUtil.setState(oldChild, EntityState.HIDDEN)
-    }
+    hideActiveChild(picker)
     picker.activeChildIndex = NumberUtil.wrap(index, 0, picker.children.length)
-    const child = picker.children[Math.abs(picker.activeChildIndex)]
-    const defaultState = defaultTypeState(child.type)
-    if (defaultState) EntityUtil.setState(child, defaultState)
-    EntityUtil.elevate(child, Layer.UI_PICKER_OFFSET)
+    showActiveChild(picker)
   }
+}
+
+function hideActiveChild(picker: EntityPicker): void {
+  const child = EntityPickerParser.getActiveChild(picker)
+  if (!child) return
+  EntityUtil.elevate(child, -Layer.UI_PICKER_OFFSET)
+  EntityUtil.setState(child, EntityState.HIDDEN)
+}
+
+function showActiveChild(picker: EntityPicker): void {
+  const child = EntityPickerParser.getActiveChild(picker)
+  if (!child) return
+  const defaultState = defaultTypeState(child.type)
+  if (defaultState) EntityUtil.setState(child, defaultState)
+  EntityUtil.elevate(child, Layer.UI_PICKER_OFFSET)
 }

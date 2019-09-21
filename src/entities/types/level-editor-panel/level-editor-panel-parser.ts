@@ -95,8 +95,10 @@ export namespace LevelEditorPanelParser {
     atlas: Atlas,
     parser: IEntityParser
   ): void {
-    EntityPickerParser.setVisibleChild(picker, picker.activeChildIndex + offset)
-    const text = EntityPickerParser.getVisibleChild(picker).type
+    EntityPickerParser.setActiveChild(picker, picker.activeChildIndex + offset)
+    const child = EntityPickerParser.getActiveChild(picker)
+    if (!child) return
+    const text = child.type
     CheckboxParser.setText(
       checkbox,
       text.replace(/^(scenery|char)/, ''),
@@ -124,7 +126,8 @@ export namespace LevelEditorPanelParser {
     atlas: Atlas,
     parser: IEntityParser
   ): void {
-    const child = EntityPickerParser.getVisibleChild(picker)
+    const child = EntityPickerParser.getActiveChild(picker)
+    if (!child) return
     panel.stateIndex = NumberUtil.wrap(
       panel.stateIndex + offset,
       0,
@@ -141,8 +144,9 @@ export namespace LevelEditorPanelParser {
   }
 }
 
-function defaultStateIndex(picker: EntityPicker) {
-  const child = EntityPickerParser.getVisibleChild(picker)
+function defaultStateIndex(picker: EntityPicker): number {
+  const child = EntityPickerParser.getActiveChild(picker)
+  if (!child) return 0
   const defaultState = defaultTypeState(child.type)
   if (!defaultState) return 0
   return Object.keys(child.imageStates)
