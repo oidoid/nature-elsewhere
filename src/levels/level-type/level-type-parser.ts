@@ -4,7 +4,7 @@ import {LevelType} from './level-type'
 
 export namespace LevelTypeParser {
   export function parse(config: LevelTypeConfig): LevelType {
-    if (ObjectUtil.hasValue(LevelType, config)) return config
-    throw new Error(`Unknown LevelType "${config}".`)
+    if (ObjectUtil.assertValueOf(LevelType, config, 'LevelType')) return config
+    throw new Error()
   }
 }

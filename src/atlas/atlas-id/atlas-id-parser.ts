@@ -4,7 +4,7 @@ import {ObjectUtil} from '../../utils/object-util'
 
 export namespace AtlasIDParser {
   export function parse(config: AtlasIDConfig): AtlasID {
-    if (ObjectUtil.hasValue(AtlasID, config)) return config
-    throw new Error(`Unknown AtlasID "${config}".`)
+    if (ObjectUtil.assertValueOf(AtlasID, config, 'AtlasID')) return config
+    throw new Error()
   }
 }
