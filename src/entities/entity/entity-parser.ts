@@ -24,10 +24,10 @@ import {UpdatePredicateParser} from '../updaters/update-predicate/update-predica
 import {XYParser} from '../../math/xy/xy-parser'
 import {TypeConfigMap} from '../type-config-map'
 import {UpdaterType} from '../updaters/updater-type/updater-type'
-import {LevelLink} from '../types/level-link/level-link'
-import {FollowCam} from '../types/follow-cam/follow-cam'
 import {UpdaterTypeParser} from '../updaters/updater-type/updater-type-parser'
 import {UpdaterParser} from '../updaters/updater-parser'
+import {FollowCamParser} from '../types/follow-cam/follow-cam-parser'
+import {LevelLinkParser} from '../types/level-link/level-link-parser'
 
 export namespace EntityParser {
   export function parseAll(config: EntityArrayConfig, atlas: Atlas): Entity[] {
@@ -134,6 +134,6 @@ const TypeParserMap: Readonly<
 const UpdaterParserMap: Readonly<
   Partial<Record<UpdaterType, UpdaterParser>>
 > = Object.freeze({
-  [UpdaterType.UI_LEVEL_LINK]: LevelLink.parse,
-  [UpdaterType.UI_FOLLOW_CAM]: FollowCam.parse
+  [UpdaterType.UI_LEVEL_LINK]: LevelLinkParser.parse,
+  [UpdaterType.UI_FOLLOW_CAM]: FollowCamParser.parse
 })

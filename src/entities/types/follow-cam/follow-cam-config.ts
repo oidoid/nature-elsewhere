@@ -1,7 +1,7 @@
-import {WH} from '../../../math/wh/wh'
 import {FollowCamOrientation} from './follow-cam-orientation'
+import {WH} from '../../../math/wh/wh'
 
-export interface FollowCam {
+export interface FollowCamConfig {
   readonly positionRelativeToCam: FollowCamOrientation
-  readonly camMargin: WH
+  readonly camMargin?: Partial<WH>
 }
