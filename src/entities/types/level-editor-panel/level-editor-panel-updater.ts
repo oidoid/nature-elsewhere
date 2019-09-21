@@ -21,7 +21,7 @@ export namespace LevelEditorPanelUpdater {
     )
       throw new Error()
 
-    const status = updateChildren(panel, state)
+    let status = UpdateStatus.UNCHANGED
     if (panel.addButton.clicked) {
     }
     if (panel.decrementButton.clicked) {
@@ -51,31 +51,8 @@ export namespace LevelEditorPanelUpdater {
     }
     if (panel.toggleGridButton.clicked) toggleGrid(state)
 
-    return status
+    return status | UpdateStatus.UPDATED
   }
-}
-
-function updateChildren(
-  panel: LevelEditorPanel,
-  state: UpdateState
-): UpdateStatus {
-  let status = UpdateStatus.UNCHANGED
-  for (const ui of [
-    panel.xCheckbox,
-    panel.yCheckbox,
-    panel.stateCheckbox,
-    panel.entityCheckbox,
-    panel.entityPicker,
-    panel.decrementButton,
-    panel.incrementButton,
-    panel.removeButton,
-    panel.addButton,
-    panel.toggleGridButton
-  ]) {
-    status |= EntityUtil.update(ui, state)
-    if (UpdateStatus.terminate(status)) break
-  }
-  return status
 }
 
 function updateEntity(
