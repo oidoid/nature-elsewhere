@@ -150,7 +150,7 @@
         {
           "id": "uiLevelEditorPanelX",
           "type": "uiCheckbox",
-          "text": "2092",
+          "text": "0",
           "textLayer": "UI_HI",
           "position": {"x": 47, "y": 26}
         },
@@ -163,7 +163,7 @@
         {
           "id": "uiLevelEditorPanelY",
           "type": "uiCheckbox",
-          "text": "134",
+          "text": "0",
           "position": {"x": 69, "y": 26},
           "layer": "UI_HI"
         },

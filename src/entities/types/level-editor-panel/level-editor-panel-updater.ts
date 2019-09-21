@@ -10,6 +10,9 @@ import {EntityUtil} from '../../entity/entity-util'
 import {EntityParser} from '../../entity/entity-parser'
 import {LevelEditorPanelUtil} from './level-editor-panel-util'
 import {UpdateState} from '../../updaters/update-state'
+import {CheckboxParser} from '../checkbox/checkbox-parser'
+import {Checkbox} from '../checkbox/checkbox'
+import {EntityPickerParser} from '../entity-picker/entity-picker-parser'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -22,37 +25,63 @@ export namespace LevelEditorPanelUpdater {
       throw new Error()
 
     let status = UpdateStatus.UNCHANGED
-    if (panel.addButton.clicked) {
-    }
-    if (panel.decrementButton.clicked) {
-      if (panel.xCheckbox.checked) {
-      } else if (panel.yCheckbox.checked) {
-      } else if (panel.entityCheckbox.checked)
-        LevelEditorPanelUtil.setEntityFields(
-          panel,
-          -1,
-          state.level.atlas,
-          EntityParser.parse
-        )
+    if (panel.decrementButton.clicked || panel.incrementButton.clicked) {
+      const offset = panel.decrementButton.clicked
+        ? -1
+        : panel.incrementButton.clicked
+        ? 1
+        : 0
+      if (panel.xCheckbox.checked)
+        updateNumberCheckbox(panel.xCheckbox, state, offset)
+      else if (panel.yCheckbox.checked)
+        updateNumberCheckbox(panel.yCheckbox, state, offset)
+      else if (panel.entityCheckbox.checked) updateEntity(panel, state, offset)
       else if (panel.stateCheckbox.checked)
-        LevelEditorPanelUtil.setEntityStateFields(
-          panel,
-          -1,
-          state.level.atlas,
-          EntityParser.parse
-        )
+        updateEntityState(panel, state, offset)
     }
-    if (panel.incrementButton.clicked) {
-      if (panel.xCheckbox.checked) {
-        console.log('increment')
-      } else if (panel.yCheckbox.checked) {
-      } else if (panel.entityCheckbox.checked) updateEntity(panel, state, 1)
-      else if (panel.stateCheckbox.checked) updateEntityState(panel, state, 1)
+    if (panel.removeButton.clicked) {
+    }
+    if (panel.addButton.clicked) {
+      const child = EntityPickerParser.getActiveChild(panel.entityPicker)
+      if (child) {
+        const position = {
+          x: checkboxNumber(panel.xCheckbox),
+          y: checkboxNumber(panel.yCheckbox)
+        }
+        const entity = EntityParser.parse(
+          {
+            type: child.type,
+            state: child.state,
+            position
+          },
+          state.level.atlas
+        )
+        state.level.parentEntities.push(entity)
+      }
     }
     if (panel.toggleGridButton.clicked) toggleGrid(state)
 
     return status | UpdateStatus.UPDATED
   }
+}
+
+function updateNumberCheckbox(
+  checkbox: Checkbox,
+  state: UpdateState,
+  offset: number
+): void {
+  const num = checkboxNumber(checkbox) + offset
+  CheckboxParser.setText(
+    checkbox,
+    num.toString(),
+    state.level.atlas,
+    EntityParser.parse
+  )
+}
+
+function checkboxNumber(checkbox: Checkbox) {
+  const text = checkbox.text
+  return Number.parseInt(text)
 }
 
 function updateEntity(
