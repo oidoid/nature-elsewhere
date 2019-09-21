@@ -1,7 +1,7 @@
 import {EntityID} from '../../entity-id/entity-id'
 import {EntityState} from '../../entity-state/entity-state'
 import {EntityType} from '../../entity-type/entity-type'
-import {PLANE} from '../plane/plane'
+import {PlaneState} from '../plane/plane-state'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {Update} from '../../updaters/update'
 import {LevelEditorPanelParser} from './level-editor-panel-parser'
@@ -96,9 +96,7 @@ export namespace LevelEditorPanelUpdater {
       }
       if (!grid) throw new Error('Missing grid.')
       const toggle =
-        grid.state === EntityState.HIDDEN
-          ? PLANE.State.GRID
-          : EntityState.HIDDEN
+        grid.state === EntityState.HIDDEN ? PlaneState.GRID : EntityState.HIDDEN
       EntityUtil.setState(grid, toggle)
     }
 
