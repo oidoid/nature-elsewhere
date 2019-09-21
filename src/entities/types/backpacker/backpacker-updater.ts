@@ -9,6 +9,7 @@ import {Update} from '../../updaters/update'
 import {Backpacker} from './backpacker'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
+import {BackpackerState} from './backpacker-state'
 
 export namespace BackpackerUpdater {
   export const update: Update = (backpacker, state) => {
@@ -92,20 +93,20 @@ export namespace BackpackerUpdater {
     let nextState = backpacker.state
     if (idle) {
       nextState =
-        nextState === Backpacker.State.WALK_UP ||
-        nextState === Backpacker.State.IDLE_UP
-          ? Backpacker.State.IDLE_UP
-          : nextState === Backpacker.State.IDLE_RIGHT ||
-            nextState === Backpacker.State.WALK_RIGHT
-          ? Backpacker.State.IDLE_RIGHT
-          : Backpacker.State.IDLE_DOWN
+        nextState === BackpackerState.WALK_UP ||
+        nextState === BackpackerState.IDLE_UP
+          ? BackpackerState.IDLE_UP
+          : nextState === BackpackerState.IDLE_RIGHT ||
+            nextState === BackpackerState.WALK_RIGHT
+          ? BackpackerState.IDLE_RIGHT
+          : BackpackerState.IDLE_DOWN
       if (state.level.destination)
         EntityUtil.setState(state.level.destination, EntityState.HIDDEN)
     } else {
-      if (up) nextState = Backpacker.State.WALK_UP
-      if (down) nextState = Backpacker.State.WALK_DOWN
+      if (up) nextState = BackpackerState.WALK_UP
+      if (down) nextState = BackpackerState.WALK_DOWN
       if ((left || right) && (!diagonal || animateHorizontal))
-        nextState = Backpacker.State.WALK_RIGHT
+        nextState = BackpackerState.WALK_RIGHT
     }
 
     let flipX = backpacker.scale.x

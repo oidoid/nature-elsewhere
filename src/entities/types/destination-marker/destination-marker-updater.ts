@@ -2,7 +2,7 @@ import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {XY} from '../../../math/xy/xy'
 import {Input} from '../../../inputs/input'
 import {Update} from '../../updaters/update'
-import {DestinationMarker} from './destination-marker'
+import {DestinationMarkerState} from './destination-marker-state'
 import {EntityUtil} from '../../entity/entity-util'
 
 export namespace DestinationMarkerUpdater {
@@ -13,7 +13,7 @@ export namespace DestinationMarkerUpdater {
     const position = XY.trunc(
       Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
     )
-    status |= EntityUtil.setState(marker, DestinationMarker.State.VISIBLE)
+    status |= EntityUtil.setState(marker, DestinationMarkerState.VISIBLE)
     EntityUtil.resetAnimation(marker)
     const destination = XY.add(position, EntityUtil.imageState(marker).origin)
     status |= EntityUtil.moveTo(marker, destination)

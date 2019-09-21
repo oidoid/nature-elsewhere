@@ -71,15 +71,14 @@ export namespace TextParser {
       if (TextLayout.nextLine(position.y, scale).y < y) continue
       if (position.y > y + bounds.h) break
 
-      images.push(
-        newCharacterImage(
-          string.charCodeAt(i),
-          {x: bounds.x + position.x, y: bounds.y + position.y - y},
-          layer,
-          scale,
-          atlas
-        )
+      const char = newCharacterImage(
+        string.charCodeAt(i),
+        {x: bounds.x + position.x, y: bounds.y + position.y - y},
+        layer,
+        scale,
+        atlas
       )
+      images.push(char)
     }
     return images
   }

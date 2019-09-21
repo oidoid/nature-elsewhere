@@ -1,17 +1,9 @@
 import {Entity} from '../../entity/entity'
 import {EntityType} from '../../entity-type/entity-type'
+import {EntityState} from '../../entity-state/entity-state'
+import {BackpackerState} from './backpacker-state'
 
 export interface Backpacker extends Entity {
   readonly type: EntityType.CHAR_BACKPACKER
-}
-
-export namespace Backpacker {
-  export enum State {
-    IDLE_UP = 'idleUp',
-    IDLE_RIGHT = 'idleRight',
-    IDLE_DOWN = 'idleDown',
-    WALK_UP = 'walkUp',
-    WALK_RIGHT = 'walkRight',
-    WALK_DOWN = 'walkDown'
-  }
+  state: EntityState | BackpackerState
 }

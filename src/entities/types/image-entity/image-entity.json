@@ -1,1 +1,5 @@
-{"type": "image", "state": "image", "imageStates": {"image": {"images": []}}}
+{
+  "type": "image",
+  "state": "visible",
+  "imageStates": {"visible": {"images": []}}
+}
