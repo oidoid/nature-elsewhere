@@ -1,6 +1,6 @@
-import {AssetLoader} from './loaders/asset-loader'
-import {Game} from './game'
-import {Settings} from './settings/settings'
+import {AssetLoader} from './loaders/AssetLoader'
+import {Game} from './Game'
+import {Settings} from './settings/Settings'
 ;(async () => {
   const canvas = document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing.')
