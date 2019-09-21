@@ -1,4 +1,4 @@
-import {Updater} from '../../updaters/updater/updater'
+import {UpdaterType} from '../../updaters/updater-type/updater-type'
 import {Entity} from '../../entity/entity'
 import {UpdateStatus} from '../../updaters/update-status/update-status'
 import {XY} from '../../../math/xy/xy'
@@ -55,7 +55,7 @@ export namespace FollowCam {
   }
 
   export function is(entity: Entity): entity is FollowCam & Entity {
-    return entity.updaters.includes(Updater.UI_FOLLOW_CAM)
+    return entity.updaters.includes(UpdaterType.UI_FOLLOW_CAM)
   }
 
   export const update: Update = (entity, state) => {
@@ -71,17 +71,6 @@ export namespace FollowCam {
 
     EntityUtil.moveTo(entity, to)
     return UpdateStatus.UPDATED
-
-    // const orientation = ObjectUtil.prop(
-    //   <FollowCam>(<unknown>entity),
-    //   'positionRelativeToCam'
-    // )
-    // const followCam = ObjectUtil.assertHasKey<FollowCam & Entity>(
-    //   entity,
-    //   'FollowCam',
-    //   'positionRelativeToCam'
-    // )
-    // ObjectUtil.assertValueOf(Orientation, 'Orientation', followCam.positionRelativeToCam)
   }
 }
 

@@ -4,7 +4,7 @@ import {EntityType} from '../entity-type/entity-type'
 import {ImageStateMap} from '../../images/image-state-map/image-state-map'
 import {Rect} from '../../math/rect/rect'
 import {UpdatePredicate} from '../updaters/update-predicate/update-predicate'
-import {Updater} from '../updaters/updater/updater'
+import {UpdaterType} from '../updaters/updater-type/updater-type'
 import {XY} from '../../math/xy/xy'
 import {CollisionPredicate} from '../../collision/collision-predicate/collision-predicate'
 
@@ -38,7 +38,7 @@ export interface Entity {
   readonly imageStates: ImageStateMap
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
-  readonly updaters: readonly Updater[]
+  readonly updaters: readonly UpdaterType[]
   readonly collisionPredicate: CollisionPredicate
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for

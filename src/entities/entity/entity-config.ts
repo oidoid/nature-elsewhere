@@ -6,7 +6,7 @@ import {ImageStateMapConfig} from '../../images/image-state-map/image-state-map-
 import {UpdatePredicateConfig} from '../updaters/update-predicate/update-predicate-config'
 import {XYConfig} from '../../math/xy/xy-config'
 import {CollisionPredicateConfig} from '../../collision/collision-predicate/collision-predicate-config'
-import {UpdaterArrayConfig} from '../updaters/updater/updater-config'
+import {UpdaterTypeArrayConfig} from '../updaters/updater-type/updater-type-config'
 import {RectArrayConfig} from '../../math/rect/rect-config'
 
 export interface EntityConfig {
@@ -22,7 +22,7 @@ export interface EntityConfig {
   /** Defaults to BehaviorPredicate.NEVER. */
   readonly updatePredicate?: UpdatePredicateConfig
   /** Defaults to []. */
-  readonly updaters?: UpdaterArrayConfig
+  readonly updaters?: UpdaterTypeArrayConfig
   /** Defaults to CollisionPredicate.NEVER. */
   readonly collisionPredicate?: CollisionPredicateConfig
   /** Defaults to []. */

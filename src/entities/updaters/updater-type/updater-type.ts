@@ -1,5 +1,5 @@
 /** See UpdatePredicate. */
-export enum Updater {
+export enum UpdaterType {
   NO_UPDATE = 'noUpdate', // i think i need this for animation? can i move it just to updatepredicate.never?
   UI_LEVEL_EDITOR_PANEL = 'uiLevelEditorPanel',
   WRAPAROUND = 'wraparound',

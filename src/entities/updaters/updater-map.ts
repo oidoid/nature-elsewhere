@@ -1,4 +1,4 @@
-import {Updater} from './updater/updater'
+import {UpdaterType} from './updater-type/updater-type'
 import {UpdateStatus} from './update-status/update-status'
 import {FollowCam} from '../types/follow-cam/follow-cam'
 import {LevelLink} from '../types/level-link/level-link'
@@ -16,20 +16,20 @@ const wraparound: Update = () => {
 }
 
 export namespace UpdaterMap {
-  export const Update: Readonly<Record<Updater, Update>> = {
-    [Updater.NO_UPDATE]() {
+  export const Update: Readonly<Record<UpdaterType, Update>> = {
+    [UpdaterType.NO_UPDATE]() {
       return UpdateStatus.UNCHANGED
     },
-    [Updater.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelUpdater.update,
-    [Updater.WRAPAROUND]: wraparound,
-    [Updater.CIRCLE]: wraparound,
-    [Updater.UI_CURSOR]: CursorUpdater.update,
-    [Updater.UI_FOLLOW_CAM]: FollowCam.update,
-    [Updater.UI_BUTTON]: ButtonUpdater.update,
-    [Updater.UI_CHECKBOX]: CheckboxUpdater.update,
-    [Updater.UI_LINK]: Link.update,
-    [Updater.UI_LEVEL_LINK]: LevelLink.update,
-    [Updater.UI_DESTINATION_MARKER]: DestinationMarkerUpdater.update,
-    [Updater.CHAR_BACKPACKER]: BackpackerUpdater.update
+    [UpdaterType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelUpdater.update,
+    [UpdaterType.WRAPAROUND]: wraparound,
+    [UpdaterType.CIRCLE]: wraparound,
+    [UpdaterType.UI_CURSOR]: CursorUpdater.update,
+    [UpdaterType.UI_FOLLOW_CAM]: FollowCam.update,
+    [UpdaterType.UI_BUTTON]: ButtonUpdater.update,
+    [UpdaterType.UI_CHECKBOX]: CheckboxUpdater.update,
+    [UpdaterType.UI_LINK]: Link.update,
+    [UpdaterType.UI_LEVEL_LINK]: LevelLink.update,
+    [UpdaterType.UI_DESTINATION_MARKER]: DestinationMarkerUpdater.update,
+    [UpdaterType.CHAR_BACKPACKER]: BackpackerUpdater.update
   }
 }
