@@ -10,7 +10,6 @@ export interface LevelEditorPanel extends Entity {
   readonly xCheckbox: Checkbox
   readonly yCheckbox: Checkbox
   readonly stateCheckbox: Checkbox
-  stateIndex: number
   readonly entityCheckbox: Checkbox
   readonly entityPicker: EntityPicker
   readonly decrementButton: Button

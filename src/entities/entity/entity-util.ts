@@ -126,6 +126,17 @@ export namespace EntityUtil {
     return status
   }
 
+  export function findAny(
+    entities: readonly Entity[],
+    id: EntityID
+  ): Maybe<Entity> {
+    for (const entity of entities) {
+      const found = EntityUtil.find(entity, id)
+      if (found) return found
+    }
+    return
+  }
+
   export function find(entity: Entity, id: EntityID): Maybe<Entity> {
     if (entity.id === id) return entity
     for (const child of entity.children) {

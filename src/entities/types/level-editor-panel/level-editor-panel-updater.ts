@@ -54,7 +54,6 @@ export namespace LevelEditorPanelUpdater {
         )
       else if (panel.stateCheckbox.checked)
         LevelEditorPanelParser.updatePickerAndStufForState(
-          panel,
           panel.radioGroup,
           panel.stateCheckbox,
           panel.entityPicker,
@@ -79,7 +78,6 @@ export namespace LevelEditorPanelUpdater {
         )
       else if (panel.stateCheckbox.checked)
         LevelEditorPanelParser.updatePickerAndStufForState(
-          panel,
           panel.radioGroup,
           panel.stateCheckbox,
           panel.entityPicker,
@@ -89,11 +87,10 @@ export namespace LevelEditorPanelUpdater {
         )
     }
     if (panel.toggleGridButton.clicked) {
-      let grid
-      for (const entity of state.level.parentEntities) {
-        grid = EntityUtil.find(entity, EntityID.UI_GRID)
-        if (grid) break
-      }
+      const grid = EntityUtil.findAny(
+        state.level.parentEntities,
+        EntityID.UI_GRID
+      )
       if (!grid) throw new Error('Missing grid.')
       const toggle =
         grid.state === EntityState.HIDDEN ? PlaneState.GRID : EntityState.HIDDEN

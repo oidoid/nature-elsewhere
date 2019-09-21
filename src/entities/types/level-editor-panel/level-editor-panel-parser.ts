@@ -6,13 +6,10 @@ import {Entity} from '../../entity/entity'
 import {EntityID} from '../../entity-id/entity-id'
 import {Checkbox} from '../checkbox/checkbox'
 import {Atlas} from '../../../atlas/atlas/atlas'
-import {NumberUtil} from '../../../math/number/number-util'
-import {EntityState} from '../../entity-state/entity-state'
 import {EntityTypeUtil} from '../../entity-type/entity-type-util'
 import {EntityUtil} from '../../entity/entity-util'
 import {CheckboxParser} from '../checkbox/checkbox-parser'
 import {EntityPickerParser} from '../entity-picker/entity-picker-parser'
-import {defaultTypeState} from '../../type-config-map'
 import {IEntityParser} from '../../recursive-entity-parser'
 
 export namespace LevelEditorPanelParser {
@@ -105,9 +102,7 @@ export namespace LevelEditorPanelParser {
       atlas,
       parser
     )
-    panel.stateIndex = defaultStateIndex(picker)
     updatePickerAndStufForState(
-      panel,
       radioGroup,
       panel.stateCheckbox,
       picker,
@@ -118,7 +113,6 @@ export namespace LevelEditorPanelParser {
   }
 
   export function updatePickerAndStufForState(
-    panel: LevelEditorPanel,
     radioGroup: Entity,
     checkbox: Checkbox,
     picker: EntityPicker,
@@ -128,28 +122,8 @@ export namespace LevelEditorPanelParser {
   ): void {
     const child = EntityPickerParser.getActiveChild(picker)
     if (!child) return
-    panel.stateIndex = NumberUtil.wrap(
-      panel.stateIndex + offset,
-      0,
-      Object.keys(child.imageStates).filter(
-        state => state !== EntityState.HIDDEN
-      ).length
-    )
-    const state = Object.keys(child.imageStates).filter(
-      state => state !== EntityState.HIDDEN
-    )[panel.stateIndex]
-    EntityUtil.setState(child, state)
-    CheckboxParser.setText(checkbox, state, atlas, parser)
+    EntityPickerParser.offsetActiveChildStateIndex(picker, offset)
+    CheckboxParser.setText(checkbox, child.state, atlas, parser)
     EntityUtil.invalidateBounds(radioGroup)
   }
-}
-
-function defaultStateIndex(picker: EntityPicker): number {
-  const child = EntityPickerParser.getActiveChild(picker)
-  if (!child) return 0
-  const defaultState = defaultTypeState(child.type)
-  if (!defaultState) return 0
-  return Object.keys(child.imageStates)
-    .filter(state => state !== EntityState.HIDDEN)
-    .indexOf(defaultState)
 }

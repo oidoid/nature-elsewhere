@@ -17,6 +17,7 @@ import * as memFont from '../../../text/text-layout/mem-font.json'
 const entityWindowSize = Object.freeze({w: 32, h: 26})
 const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
+  EntityType.IMAGE,
   ...ObjectUtil.keys(EntityType)
     .filter(type => type.startsWith(UI_KEY_PREFIX))
     .map(key => EntityType[key])
@@ -32,15 +33,15 @@ export namespace EntityPickerParser {
       !EntityTypeUtil.assert<EntityPicker>(picker, EntityType.UI_ENTITY_PICKER)
     )
       throw new Error()
+    const entityWindowBounds = {
+      x: Math.trunc(picker.bounds.x),
+      y: Math.trunc(picker.bounds.y) + memFont.lineHeight,
+      w: entityWindowSize.w,
+      h: entityWindowSize.h
+    }
     for (const type of Object.values(EntityType)) {
       if (typeBlacklist.includes(type)) continue
       const entity = parser({type}, atlas)
-      const entityWindowBounds = {
-        x: Math.trunc(picker.bounds.x),
-        y: Math.trunc(picker.bounds.y) + memFont.lineHeight,
-        w: entityWindowSize.w,
-        h: entityWindowSize.h
-      }
       const center = XY.max(
         Rect.centerOn(entity.bounds, entityWindowBounds),
         entityWindowBounds
@@ -64,6 +65,28 @@ export namespace EntityPickerParser {
     picker.activeChildIndex = NumberUtil.wrap(index, 0, picker.children.length)
     showActiveChild(picker)
   }
+
+  export function getActiveChildStateIndex(picker: EntityPicker): number {
+    const child = getActiveChild(picker)
+    if (!child) return 0
+    return getChildStates(child).indexOf(child.state)
+  }
+
+  export function offsetActiveChildStateIndex(
+    picker: EntityPicker,
+    offset: number
+  ): void {
+    const child = getActiveChild(picker)
+    if (!child) return
+    const states = getChildStates(child)
+    const index = NumberUtil.wrap(
+      states.indexOf(child.state) + offset,
+      0,
+      states.length
+    )
+    const state = states[index]
+    EntityUtil.setState(child, state)
+  }
 }
 
 function hideActiveChild(picker: EntityPicker): void {
@@ -79,4 +102,10 @@ function showActiveChild(picker: EntityPicker): void {
   const defaultState = defaultTypeState(child.type)
   if (defaultState) EntityUtil.setState(child, defaultState)
   EntityUtil.elevate(child, Layer.UI_PICKER_OFFSET)
+}
+
+function getChildStates(child: Entity): readonly (EntityState | string)[] {
+  return Object.keys(child.imageStates).filter(
+    state => state !== EntityState.HIDDEN
+  )
 }
