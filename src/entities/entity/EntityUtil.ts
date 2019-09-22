@@ -50,9 +50,11 @@ export namespace EntityUtil {
   }
 
   export function setScale(entity: Entity, scale: XY): void {
-    entity.scale.x = scale.x
-    entity.scale.y = scale.y
     ImageRect.setScale(imageState(entity), scale)
+  }
+
+  export function getScale(entity: Readonly<Entity>): XY {
+    return imageState(entity).scale
   }
 
   export function imageState(entity: Readonly<Entity>): ImageRect {
@@ -64,8 +66,9 @@ export namespace EntityUtil {
       *partly*, or not animated together. */
   export function animate(entity: Entity, state: UpdateState): Image[] {
     if (!Rect.intersects(state.level.cam.bounds, entity.bounds)) return []
-    const visible = imageState(entity).images.filter(image =>
-      Rect.intersects(state.level.cam.bounds, image.bounds)
+    const visible = ImageRect.intersects(
+      imageState(entity),
+      state.level.cam.bounds
     )
     visible.forEach(image =>
       Image.animate(image, state.time, state.level.atlas)
@@ -100,10 +103,10 @@ export namespace EntityUtil {
     state: EntityState | string
   ): UpdateStatus {
     if (entity.state === state) return UpdateStatus.UNCHANGED
-    const {bounds} = imageState(entity)
+    const {bounds, scale} = imageState(entity)
     entity.state = state
     ImageRect.moveTo(imageState(entity), bounds)
-    setScale(entity, entity.scale)
+    setScale(entity, scale)
     invalidateBounds(entity)
     return UpdateStatus.UPDATED
   }
@@ -131,7 +134,7 @@ export namespace EntityUtil {
     id: EntityID
   ): Maybe<Entity> {
     for (const entity of entities) {
-      const found = EntityUtil.find(entity, id)
+      const found = find(entity, id)
       if (found) return found
     }
     return

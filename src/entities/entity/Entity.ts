@@ -5,7 +5,6 @@ import {ImageStateMap} from '../../images/imageStateMap/ImageStateMap'
 import {Rect} from '../../math/rect/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
-import {XY} from '../../math/xy/XY'
 import {CollisionPredicate} from '../../collision/collisionPredicate/CollisionPredicate'
 
 export interface Entity {
@@ -23,12 +22,6 @@ export interface Entity {
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
   readonly bounds: Writable<Rect>
-  /** Collision bodies are not scaled. Image.bounds includes scaling so
-      Entity.bounds does as well. flipImages only controls whether each image
-      in the ImageRect is flipped or not. The original orientation is considered
-      so a flipped entity composed of a mishmash of flipped images will mirror
-      that mishmash and not lose each individual's image's relative flip. */
-  readonly scale: Writable<XY>
   // [todo] a string superset isn't ideal but a template param is needed
   //        otherwise for specialization.
   state: EntityState | string

@@ -10,6 +10,11 @@ export interface ImageRect {
   /** For images that require a center offset, an origin may be specified and
       referenced manually in translation calculations. */
   readonly origin: Writable<XY>
+  /** Collision bodies are not scaled. Image.bounds includes scaling so
+      ImageRect.bounds does as well. flipImages only controls whether each image
+      in the ImageRect is flipped or not. The original orientation is considered
+      so a flipped entity composed of a mishmash of flipped images will mirror
+      that mishmash and not lose each individual's image's relative flip. */
   readonly scale: Writable<XY>
   /** Image coordinates are not relative the bounds origin, they're in level
       coordinates. */
@@ -63,5 +68,12 @@ export namespace ImageRect {
   ): void {
     const images = 'images' in rect ? rect.images : rect
     for (const image of images) Image.elevate(image, offset)
+  }
+
+  export function intersects(
+    rect: Readonly<ImageRect>,
+    bounds: Rect
+  ): readonly Image[] {
+    return rect.images.filter(image => Rect.intersects(bounds, image.bounds))
   }
 }

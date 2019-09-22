@@ -55,7 +55,6 @@ export namespace EntityParser {
       id: EntityIDParser.parse(config.id),
       type: type,
       bounds: {x: 0, y: 0, w: 0, h: 0},
-      scale,
       state,
       imageStates,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
@@ -71,7 +70,7 @@ export namespace EntityParser {
     const position = XYParser.parse(config.position)
     EntityUtil.moveTo(entity, position)
 
-    EntityUtil.setScale(entity, entity.scale)
+    EntityUtil.setScale(entity, scale)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.

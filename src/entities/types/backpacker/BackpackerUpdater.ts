@@ -109,12 +109,13 @@ export namespace BackpackerUpdater {
         nextState = BackpackerState.WALK_RIGHT
     }
 
-    let flipX = backpacker.scale.x
-    if (up || down) flipX = 1
-    if (left && (!diagonal || animateHorizontal)) flipX = -1
-    if (right && (!diagonal || animateHorizontal)) flipX = 1
+    const scale = {...EntityUtil.getScale(backpacker)}
+    if (up || down) scale.x = Math.abs(scale.x)
+    if (left && (!diagonal || animateHorizontal))
+      scale.x = -1 * Math.abs(scale.x)
+    if (right && (!diagonal || animateHorizontal)) scale.x = Math.abs(scale.x)
 
-    EntityUtil.setScale(backpacker, {x: flipX, y: backpacker.scale.y})
+    EntityUtil.setScale(backpacker, scale)
     EntityUtil.setState(backpacker, nextState)
 
     return status

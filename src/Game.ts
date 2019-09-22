@@ -13,7 +13,6 @@ import {WindowModeSetting} from './settings/WindowModeSettings'
 
 export interface Game {
   readonly win: Window
-  readonly doc: Document
   /** The total execution time in milliseconds excluding pauses. */
   age: Milliseconds
   /** The outstanding time accrual to execute in milliseconds. */
@@ -36,11 +35,9 @@ export namespace Game {
     {atlas, atlasImage, shaderLayout}: Assets,
     settings: Settings
   ): Game {
-    const doc = win.document
     const tick = 1000 / 60
     const ret: Game = {
       win,
-      doc,
       age: 0,
       time: 0,
       tick,
@@ -54,7 +51,10 @@ export namespace Game {
       }),
       inputPoller: InputPoller.make(),
       synth: Synth.make(),
-      requestWindowSetting: newRequestWindowSetting(settings.windowMode, doc),
+      requestWindowSetting: newRequestWindowSetting(
+        settings.windowMode,
+        win.document
+      ),
       settings
     }
     return ret
@@ -62,7 +62,7 @@ export namespace Game {
 
   export function start(game: Game): void {
     // Disable the context menu.
-    game.doc.oncontextmenu = () => false
+    game.win.document.oncontextmenu = () => false
     RendererStateMachine.start(game.rendererStateMachine)
     InputPoller.register(game.inputPoller, game.win, true)
     Synth.play(game.synth, 'sawtooth', 200, 500, 0.15)
@@ -88,7 +88,7 @@ function newRequestWindowSetting(
 function onFrame(game: Game, time: number): void {
   if (!game.levelStateMachine.level) return Game.stop(game)
 
-  const canvasWH = Viewport.canvasWH(game.doc)
+  const canvasWH = Viewport.canvasWH(game.win.document)
   const {minViewport} = game.levelStateMachine.level
   const scale = Viewport.scale(canvasWH, minViewport, 0)
   const camWH = Viewport.camWH(canvasWH, scale)
