@@ -1,12 +1,14 @@
 {
   "type": "sceneryBush",
-  "state": "visible",
-  "imageStates": {
-    "visible": {
-      "images": [
-        {"id": "sceneryBush"},
-        {"id": "sceneryBush-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
-      ]
+  "machine": {
+    "state": "visible",
+    "map": {
+      "visible": {
+        "images": [
+          {"id": "sceneryBush"},
+          {"id": "sceneryBush-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+        ]
+      }
     }
   },
   "collisionPredicate": "bodies",

@@ -32,7 +32,7 @@ export namespace LevelEditorPanelUtil {
     const child = EntityPickerParser.getActiveChild(entityPicker)
     if (!child) return
     EntityPickerParser.offsetActiveChildStateIndex(entityPicker, offset)
-    CheckboxParser.setText(stateCheckbox, child.state, atlas, parser)
+    CheckboxParser.setText(stateCheckbox, child.machine.state, atlas, parser)
     EntityUtil.invalidateBounds(radioGroup)
   }
 }

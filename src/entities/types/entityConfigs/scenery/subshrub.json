@@ -1,12 +1,14 @@
 {
   "type": "scenerySubshrub",
-  "state": "visible",
-  "imageStates": {
-    "visible": {
-      "images": [
-        {"id": "scenerySubshrub"},
-        {"id": "scenerySubshrub-shadow", "layer": "SHADOW"}
-      ]
+  "machine": {
+    "state": "visible",
+    "map": {
+      "visible": {
+        "images": [
+          {"id": "scenerySubshrub"},
+          {"id": "scenerySubshrub-shadow", "layer": "SHADOW"}
+        ]
+      }
     }
   }
 }

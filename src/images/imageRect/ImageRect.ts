@@ -17,7 +17,9 @@ export interface ImageRect {
       that mishmash and not lose each individual's image's relative flip. */
   readonly scale: Writable<XY>
   /** Image coordinates are not relative the bounds origin, they're in level
-      coordinates. */
+      coordinates. These should usually only be passed statically by the entity
+      configuration JSON. If additional imagery is needed, it is often best to
+      add a child Entity instead. */
   readonly images: Image[]
 }
 

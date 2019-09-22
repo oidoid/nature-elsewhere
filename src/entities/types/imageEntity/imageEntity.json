@@ -1,5 +1,4 @@
 {
   "type": "image",
-  "state": "visible",
-  "imageStates": {"visible": {"images": []}}
+  "machine": {"state": "visible", "map": {"visible": {"images": []}}}
 }

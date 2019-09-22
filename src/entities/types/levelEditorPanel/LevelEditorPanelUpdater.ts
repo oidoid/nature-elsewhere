@@ -51,7 +51,7 @@ export namespace LevelEditorPanelUpdater {
         const entity = EntityParser.parse(
           {
             type: child.type,
-            state: child.state,
+            machine: {state: child.machine.state},
             position
           },
           state.level.atlas
@@ -114,6 +114,8 @@ function toggleGrid(state: UpdateState): void {
   const grid = EntityUtil.findAny(state.level.parentEntities, EntityID.UI_GRID)
   if (!grid) throw new Error('Missing grid.')
   const toggle =
-    grid.state === EntityState.HIDDEN ? PlaneState.GRID : EntityState.HIDDEN
+    grid.machine.state === EntityState.HIDDEN
+      ? PlaneState.GRID
+      : EntityState.HIDDEN
   EntityUtil.setState(grid, toggle)
 }

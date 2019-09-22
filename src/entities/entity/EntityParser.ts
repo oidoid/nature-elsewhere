@@ -1,13 +1,11 @@
 import {Atlas} from '../../atlas/atlas/Atlas'
 import {CheckboxParser} from '../types/checkbox/CheckboxParser'
-import {CloudParser} from '../types/cloud/CloudParser'
 import {CollisionPredicateParser} from '../../collision/collisionPredicate/CollisionPredicateParser'
 import {DateVersionHashParser} from '../types/dateVersionHash/DateVersionHashParser'
 import {EntityConfig, EntityArrayConfig} from './EntityConfig'
 import {Entity} from './Entity'
 import {EntityIDParser} from '../entityID/EntityIDParser'
 import {EntityPickerParser} from '../types/entityPicker/EntityPickerParser'
-import {EntityStateParser} from '../entityState/EntityStateParser'
 import {EntityType} from '../entityType/EntityType'
 import {RecursiveEntityParser} from '../RecursiveEntityParser'
 import {EntityTypeParser} from '../entityType/EntityTypeParser'
@@ -15,7 +13,7 @@ import {EntityUtil} from './EntityUtil'
 import {ImageEntityParser} from '../types/imageEntity/ImageEntityParser'
 import {ImageRect} from '../../images/imageRect/ImageRect'
 import {ImageScaleParser} from '../../images/imageScale/ImageScaleParser'
-import {ImageStateMapParser} from '../../images/imageStateMap/ImageStateMapParser'
+import {ImageStateMachineParser} from '../../images/imageStateMachine/ImageStateMachineParser'
 import {JSONUtil, JSONObject} from '../../utils/jsonUtil/JSONUtil'
 import {LevelEditorPanelParser} from '../types/levelEditorPanel/LevelEditorPanelParser'
 import {RectParser} from '../../math/rect/RectParser'
@@ -42,11 +40,10 @@ export namespace EntityParser {
 
     config = withDefaults(config, type)
 
-    const state = EntityStateParser.parse(config.state)
-    const imageStates = ImageStateMapParser.parse(config.imageStates, atlas)
+    const machine = ImageStateMachineParser.parse(config.machine, atlas)
     const children = parseAll(config.children, atlas)
     const scale = ImageScaleParser.parse(config.scale)
-    for (const state of Object.values(imageStates))
+    for (const state of Object.values(machine.map))
       ImageRect.scale(state, scale)
 
     let entity: Entity = {
@@ -55,8 +52,7 @@ export namespace EntityParser {
       id: EntityIDParser.parse(config.id),
       type: type,
       bounds: {x: 0, y: 0, w: 0, h: 0},
-      state,
-      imageStates,
+      machine,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
       updaters: UpdaterTypeParser.parseAll(config.updaters),
       collisionPredicate: CollisionPredicateParser.parse(
@@ -95,8 +91,7 @@ function specialization(config: EntityConfig): Partial<EntityConfig> {
     type,
     position,
     scale,
-    state,
-    imageStates,
+    machine,
     updatePredicate,
     updaters,
     collisionPredicate,
@@ -122,7 +117,6 @@ const TypeParserMap: Readonly<
   Partial<Record<EntityType, RecursiveEntityParser>>
 > = Object.freeze({
   [EntityType.IMAGE]: ImageEntityParser.parse,
-  [EntityType.SCENERY_CLOUD]: CloudParser.parse,
   [EntityType.UI_DATE_VERSION_HASH]: DateVersionHashParser.parse,
   [EntityType.UI_CHECKBOX]: CheckboxParser.parse,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelParser.parse,

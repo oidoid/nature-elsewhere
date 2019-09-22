@@ -1,7 +1,9 @@
 {
   "type": "sceneryIsoGrass",
-  "state": "/0",
-  "imageStates": {
-    "/0": {"images": [{"id": "sceneryIsoGrass-/0"}]}
+  "machine": {
+    "state": "/0",
+    "map": {
+      "/0": {"images": [{"id": "sceneryIsoGrass-/0"}]}
+    }
   }
 }

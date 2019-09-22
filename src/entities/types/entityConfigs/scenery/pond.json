@@ -1,19 +1,21 @@
 {
   "type": "sceneryPond",
-  "state": "visible",
-  "imageStates": {
-    "visible": {
-      "images": [
-        {"id": "sceneryPond", "layer": "ABOVE_PLANE"},
-        {"id": "sceneryCattails", "bounds": {"x": 15, "y": -3}},
-        {"id": "sceneryGrass-1", "bounds": {"x": 1, "y": 4}},
-        {"id": "sceneryGrass-2", "bounds": {"x": 12, "y": 11}},
-        {"id": "sceneryGrass-6", "bounds": {"x": 24, "y": 4}},
-        {"id": "sceneryGrass-8", "bounds": {"x": 26, "y": 6}},
-        {"id": "sceneryGrass-9", "bounds": {"x": 11, "y": -1}},
-        {"id": "sceneryGrass-10", "bounds": {"x": 6, "y": 10}},
-        {"id": "sceneryGrass-5", "bounds": {"x": 21, "y": 10}}
-      ]
+  "machine": {
+    "state": "visible",
+    "map": {
+      "visible": {
+        "images": [
+          {"id": "sceneryPond", "layer": "ABOVE_PLANE"},
+          {"id": "sceneryCattails", "bounds": {"x": 15, "y": -3}},
+          {"id": "sceneryGrass-1", "bounds": {"x": 1, "y": 4}},
+          {"id": "sceneryGrass-2", "bounds": {"x": 12, "y": 11}},
+          {"id": "sceneryGrass-6", "bounds": {"x": 24, "y": 4}},
+          {"id": "sceneryGrass-8", "bounds": {"x": 26, "y": 6}},
+          {"id": "sceneryGrass-9", "bounds": {"x": 11, "y": -1}},
+          {"id": "sceneryGrass-10", "bounds": {"x": 6, "y": 10}},
+          {"id": "sceneryGrass-5", "bounds": {"x": 21, "y": 10}}
+        ]
+      }
     }
   }
 }

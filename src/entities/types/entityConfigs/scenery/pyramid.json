@@ -1,12 +1,14 @@
 {
   "type": "sceneryPyramid",
-  "state": "visible",
-  "imageStates": {
-    "visible": {
-      "images": [
-        {"id": "sceneryPyramid"},
-        {"id": "sceneryPyramid-shadow", "layer": "SHADOW"}
-      ]
+  "machine": {
+    "state": "visible",
+    "map": {
+      "visible": {
+        "images": [
+          {"id": "sceneryPyramid"},
+          {"id": "sceneryPyramid-shadow", "layer": "SHADOW"}
+        ]
+      }
     }
   },
   "collisionPredicate": "bodies",

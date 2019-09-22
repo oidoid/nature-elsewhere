@@ -4,16 +4,21 @@
   "minViewport": {"w": 132, "h": 128},
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
-    {"type": "sceneryPlane", "state": "white"},
+    {"type": "sceneryPlane", "machine": {"state": "white"}},
     {
       "type": "group",
       "positionRelativeToCam": "center",
-      "state": "visible",
-      "imageStates": {
-        "visible": {
-          "images": [
-            {"id": "palette-lightGreen", "bounds": {"y": 44, "w": 128, "h": 2}}
-          ]
+      "machine": {
+        "state": "visible",
+        "map": {
+          "visible": {
+            "images": [
+              {
+                "id": "palette-lightGreen",
+                "bounds": {"y": 44, "w": 128, "h": 2}
+              }
+            ]
+          }
         }
       },
       "updatePredicate": "always",

@@ -1,20 +1,22 @@
 {
   "type": "sceneryGrass",
-  "state": "0",
-  "imageStates": {
-    "0": {"images": [{"id": "sceneryGrass-0"}]},
-    "1": {
-      "images": [
-        {"id": "sceneryGrass-1"},
-        {"id": "sceneryGrass-3", "bounds": {"x": 4, "y": 1}}
-      ]
-    },
-    "2": {
-      "images": [
-        {"id": "sceneryGrass-2"},
-        {"id": "sceneryGrass-0", "bounds": {"x": 6, "y": 2}},
-        {"id": "sceneryGrass-1", "bounds": {"x": 3, "y": 3}}
-      ]
+  "machine": {
+    "state": "0",
+    "map": {
+      "0": {"images": [{"id": "sceneryGrass-0"}]},
+      "1": {
+        "images": [
+          {"id": "sceneryGrass-1"},
+          {"id": "sceneryGrass-3", "bounds": {"x": 4, "y": 1}}
+        ]
+      },
+      "2": {
+        "images": [
+          {"id": "sceneryGrass-2"},
+          {"id": "sceneryGrass-0", "bounds": {"x": 6, "y": 2}},
+          {"id": "sceneryGrass-1", "bounds": {"x": 3, "y": 3}}
+        ]
+      }
     }
   }
 }

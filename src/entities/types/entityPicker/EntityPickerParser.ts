@@ -69,7 +69,7 @@ export namespace EntityPickerParser {
   export function getActiveChildStateIndex(picker: EntityPicker): number {
     const child = getActiveChild(picker)
     if (!child) return 0
-    return getChildStates(child).indexOf(child.state)
+    return getChildStates(child).indexOf(child.machine.state)
   }
 
   export function offsetActiveChildStateIndex(
@@ -80,7 +80,7 @@ export namespace EntityPickerParser {
     if (!child) return
     const states = getChildStates(child)
     const index = NumberUtil.wrap(
-      states.indexOf(child.state) + offset,
+      states.indexOf(child.machine.state) + offset,
       0,
       states.length
     )
@@ -105,7 +105,7 @@ function showActiveChild(picker: EntityPicker): void {
 }
 
 function getChildStates(child: Entity): readonly (EntityState | string)[] {
-  return Object.keys(child.imageStates).filter(
+  return Object.keys(child.machine.map).filter(
     state => state !== EntityState.HIDDEN
   )
 }

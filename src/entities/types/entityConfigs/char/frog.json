@@ -1,16 +1,18 @@
 {
   "type": "charFrog",
-  "state": "idle",
-  "imageStates": {
-    "idle": {
-      "images": [
-        {"id": "charFrog-idle"},
-        {
-          "id": "charFrog-idleShadow",
-          "bounds": {"x": -1, "y": 1},
-          "layer": "SHADOW"
-        }
-      ]
+  "machine": {
+    "state": "idle",
+    "map": {
+      "idle": {
+        "images": [
+          {"id": "charFrog-idle"},
+          {
+            "id": "charFrog-idleShadow",
+            "bounds": {"x": -1, "y": 1},
+            "layer": "SHADOW"
+          }
+        ]
+      }
     }
   },
   "updatePredicate": "intersectsViewport",

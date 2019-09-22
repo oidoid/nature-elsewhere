@@ -1,9 +1,9 @@
+import {Atlas} from '../../atlas/atlas/Atlas'
 import {EntityState} from '../../entities/entityState/EntityState'
 import {EntityStateParser} from '../../entities/entityState/EntityStateParser'
+import {ImageRectParser} from '../imageRect/ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
 import {ImageStateMapConfig} from './ImageStateMapConfig'
-import {ImageRectParser} from '../imageRect/ImageRectParser'
-import {Atlas} from '../../atlas/atlas/Atlas'
 
 export namespace ImageStateMapParser {
   export function parse(
@@ -21,7 +21,8 @@ export namespace ImageStateMapParser {
     if (!config) return map
     for (const stateConfig in config) {
       const state = EntityStateParser.parse(stateConfig)
-      map[state] = ImageRectParser.parse(config[stateConfig], atlas)
+      const rectConfig = config[stateConfig]
+      map[state] = ImageRectParser.parse(rectConfig, atlas)
     }
     return map
   }

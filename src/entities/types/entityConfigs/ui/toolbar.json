@@ -2,15 +2,17 @@
   "type": "uiToolbar",
   "positionRelativeToCam": "southWest",
   "camMargin": {"w": 1, "h": 1},
-  "state": "visible",
-  "imageStates": {
-    "visible": {
-      "images": [
-        {"id": "sceneryFlag"},
-        {"id": "sceneryFlag", "bounds": {"x": 4}},
-        {"id": "sceneryFlag", "bounds": {"x": 8}},
-        {"id": "charArrow-upRight", "bounds": {"x": 12}}
-      ]
+  "machine": {
+    "state": "visible",
+    "map": {
+      "visible": {
+        "images": [
+          {"id": "sceneryFlag"},
+          {"id": "sceneryFlag", "bounds": {"x": 4}},
+          {"id": "sceneryFlag", "bounds": {"x": 8}},
+          {"id": "charArrow-upRight", "bounds": {"x": 12}}
+        ]
+      }
     }
   },
   "updatePredicate": "always",

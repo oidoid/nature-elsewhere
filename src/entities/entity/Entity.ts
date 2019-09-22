@@ -1,7 +1,6 @@
 import {EntityID} from '../entityID/EntityID'
-import {EntityState} from '../entityState/EntityState'
 import {EntityType} from '../entityType/EntityType'
-import {ImageStateMap} from '../../images/imageStateMap/ImageStateMap'
+import {ImageStateMachine} from '../../images/imageStateMachine/ImageStateMachine'
 import {Rect} from '../../math/rect/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
@@ -22,13 +21,7 @@ export interface Entity {
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
   readonly bounds: Writable<Rect>
-  // [todo] a string superset isn't ideal but a template param is needed
-  //        otherwise for specialization.
-  state: EntityState | string
-  /** Images in level coordinates. These should usually only be passed
-      statically by the entity configuration JSON. If additional imagery is
-      needed, it is often best to add a child instead. */
-  readonly imageStates: ImageStateMap
+  readonly machine: ImageStateMachine
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
   readonly updaters: readonly UpdaterType[]

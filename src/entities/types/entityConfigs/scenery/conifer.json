@@ -1,12 +1,14 @@
 {
   "type": "sceneryConifer",
-  "state": "visible",
-  "imageStates": {
-    "visible": {
-      "images": [
-        {"id": "sceneryConifer"},
-        {"id": "sceneryConifer-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
-      ]
+  "machine": {
+    "state": "visible",
+    "map": {
+      "visible": {
+        "images": [
+          {"id": "sceneryConifer"},
+          {"id": "sceneryConifer-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+        ]
+      }
     }
   },
   "collisionPredicate": "bodies",

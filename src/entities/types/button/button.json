@@ -1,18 +1,20 @@
 {
   "type": "uiButton",
-  "state": "unclicked",
   "text": "",
   "iconID": "uiLevelEditorButton-base",
   "clicked": false,
-  "imageStates": {
-    "unclicked": {
-      "images": [{"id": "uiLevelEditorButton-base", "layer": "UI_MID"}]
-    },
-    "clicked": {
-      "images": [
-        {"id": "uiLevelEditorButton-base", "layer": "UI_MID"},
-        {"id": "uiLevelEditorButton-pressed", "layer": "UI_HI"}
-      ]
+  "machine": {
+    "state": "unclicked",
+    "map": {
+      "unclicked": {
+        "images": [{"id": "uiLevelEditorButton-base", "layer": "UI_MID"}]
+      },
+      "clicked": {
+        "images": [
+          {"id": "uiLevelEditorButton-base", "layer": "UI_MID"},
+          {"id": "uiLevelEditorButton-pressed", "layer": "UI_HI"}
+        ]
+      }
     }
   },
   "updatePredicate": "always",

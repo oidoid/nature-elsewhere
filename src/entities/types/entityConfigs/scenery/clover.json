@@ -1,36 +1,38 @@
 {
   "type": "sceneryClover",
-  "state": "0",
-  "imageStates": {
-    "0": {
-      "images": [
-        {"id": "sceneryClover-0x0", "layer": "DECAL"},
-        {
-          "id": "sceneryClover-0x1",
-          "bounds": {"x": 1, "y": 3},
-          "layer": "DECAL"
-        },
-        {
-          "id": "sceneryClover-0x0",
-          "bounds": {"x": 4, "y": 1},
-          "layer": "DECAL"
-        }
-      ]
-    },
-    "1": {
-      "images": [
-        {"id": "sceneryClover-1x0", "layer": "DECAL"},
-        {
-          "id": "sceneryClover-0x1",
-          "bounds": {"x": 1, "y": 3},
-          "layer": "DECAL"
-        },
-        {
-          "id": "sceneryClover-1x0",
-          "bounds": {"x": 4, "y": 1},
-          "layer": "DECAL"
-        }
-      ]
+  "machine": {
+    "state": "0",
+    "map": {
+      "0": {
+        "images": [
+          {"id": "sceneryClover-0x0", "layer": "DECAL"},
+          {
+            "id": "sceneryClover-0x1",
+            "bounds": {"x": 1, "y": 3},
+            "layer": "DECAL"
+          },
+          {
+            "id": "sceneryClover-0x0",
+            "bounds": {"x": 4, "y": 1},
+            "layer": "DECAL"
+          }
+        ]
+      },
+      "1": {
+        "images": [
+          {"id": "sceneryClover-1x0", "layer": "DECAL"},
+          {
+            "id": "sceneryClover-0x1",
+            "bounds": {"x": 1, "y": 3},
+            "layer": "DECAL"
+          },
+          {
+            "id": "sceneryClover-1x0",
+            "bounds": {"x": 4, "y": 1},
+            "layer": "DECAL"
+          }
+        ]
+      }
     }
   }
 }

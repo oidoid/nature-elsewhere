@@ -3,10 +3,9 @@
   "text": "",
   "textScale": {"x": 1, "y": 1},
   "textLayer": "UI_HI",
-  "state": "unchecked",
-  "imageStates": {
-    "unchecked": {"images": []},
-    "checked": {"images": []}
+  "machine": {
+    "state": "unchecked",
+    "map": {"unchecked": {"images": []}, "checked": {"images": []}}
   },
   "updatePredicate": "always",
   "updaters": ["uiCheckbox"],

@@ -1,12 +1,14 @@
 {
   "type": "charSnake",
-  "state": "idle",
-  "imageStates": {
-    "idle": {
-      "images": [
-        {"id": "charSnake"},
-        {"id": "charSnake-shadow", "layer": "SHADOW"}
-      ]
+  "machine": {
+    "state": "idle",
+    "map": {
+      "idle": {
+        "images": [
+          {"id": "charSnake"},
+          {"id": "charSnake-shadow", "layer": "SHADOW"}
+        ]
+      }
     }
   },
   "updatePredicate": "intersectsViewport",

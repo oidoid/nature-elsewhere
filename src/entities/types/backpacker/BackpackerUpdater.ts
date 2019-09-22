@@ -90,7 +90,7 @@ export namespace BackpackerUpdater {
       (collisionDirection.x && collisionDirection.y)
 
     const animateHorizontal = Math.abs(x - dst.x) > 8
-    let nextState = backpacker.state
+    let nextState = backpacker.machine.state
     if (idle) {
       nextState =
         nextState === BackpackerState.WALK_UP ||

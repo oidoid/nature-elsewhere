@@ -75,5 +75,8 @@ export const TypeConfigMap: Readonly<
 })
 
 export function defaultTypeState(type: EntityType): EntityState | string {
-  return EntityStateParser.parse(TypeConfigMap[type].state)
+  const config = TypeConfigMap[type]
+  return EntityStateParser.parse(
+    config.machine ? config.machine.state : undefined
+  )
 }

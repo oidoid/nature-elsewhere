@@ -58,12 +58,12 @@ function setBackground(checkbox: Checkbox, atlas: Atlas): void {
       // Do not shrink when a descender is not present.
       h: Math.max(text.bounds.h, memFont.lineHeight - memFont.leadingPadding)
     }
-    checkbox.imageStates[state].images.length = 0
+    checkbox.machine.map[state].images.length = 0
     const images = newBackgroundImages(state, atlas, size)
-    images.forEach(image => ImageRect.add(checkbox.imageStates[state], image))
-    checkbox.imageStates[state].bounds.x = 0
-    checkbox.imageStates[state].bounds.y = 0
-    ImageRect.moveTo(checkbox.imageStates[state], {
+    images.forEach(image => ImageRect.add(checkbox.machine.map[state], image))
+    checkbox.machine.map[state].bounds.x = 0
+    checkbox.machine.map[state].bounds.y = 0
+    ImageRect.moveTo(checkbox.machine.map[state], {
       x: text.bounds.x,
       y: checkbox.bounds.y
     })

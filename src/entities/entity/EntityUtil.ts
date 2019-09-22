@@ -10,6 +10,7 @@ import {XY} from '../../math/xy/XY'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdaterMap} from '../updaters/UpdaterMap'
 import {Layer} from '../../images/layer/layer'
+import {ImageStateMachine} from '../../images/imageStateMachine/ImageStateMachine'
 
 export namespace EntityUtil {
   /** See Entity.spawnID. */
@@ -49,16 +50,16 @@ export namespace EntityUtil {
     return UpdateStatus.UPDATED
   }
 
-  export function setScale(entity: Entity, scale: XY): void {
-    ImageRect.setScale(imageState(entity), scale)
-  }
-
   export function getScale(entity: Readonly<Entity>): XY {
     return imageState(entity).scale
   }
 
+  export function setScale(entity: Entity, scale: XY): void {
+    ImageRect.setScale(imageState(entity), scale)
+  }
+
   export function imageState(entity: Readonly<Entity>): ImageRect {
-    return entity.imageStates[entity.state]
+    return ImageStateMachine.imageRect(entity.machine)
   }
 
   /** Recursively animate the entity and its children. Only visible entities are
@@ -70,9 +71,8 @@ export namespace EntityUtil {
       imageState(entity),
       state.level.cam.bounds
     )
-    visible.forEach(image =>
+    for (const image of visible)
       Image.animate(image, state.time, state.level.atlas)
-    )
     return [
       ...visible,
       ...entity.children.reduce(
@@ -83,10 +83,7 @@ export namespace EntityUtil {
   }
 
   export function resetAnimation(entity: Entity): void {
-    imageState(entity).images.forEach(({animator}) => {
-      animator.period = 0
-      animator.exposure = 0
-    })
+    ImageStateMachine.resetAnimation(entity.machine)
   }
 
   /** Returns whether the current entity is in the viewport or should always be
@@ -102,13 +99,9 @@ export namespace EntityUtil {
     entity: Entity,
     state: EntityState | string
   ): UpdateStatus {
-    if (entity.state === state) return UpdateStatus.UNCHANGED
-    const {bounds, scale} = imageState(entity)
-    entity.state = state
-    ImageRect.moveTo(imageState(entity), bounds)
-    setScale(entity, scale)
-    invalidateBounds(entity)
-    return UpdateStatus.UPDATED
+    const status = ImageStateMachine.setState(entity.machine, state)
+    if (status & UpdateStatus.UPDATED) invalidateBounds(entity)
+    return status
   }
 
   /** See UpdatePredicate. Actually this is going to go ahead and go into children so updte the docs */
@@ -170,10 +163,10 @@ export namespace EntityUtil {
     return {x: (x * time) / 10000, y: (y * time) / 10000}
   }
 
-  /** Raise or lower an entity's images and its descendants' images. */
+  /** Raise or lower an entity's images and its descendants' images for all
+      states. */
   export function elevate(entity: Entity, offset: Layer): void {
-    for (const state in entity.imageStates)
-      ImageRect.elevate(entity.imageStates[state], offset)
+    ImageStateMachine.elevate(entity.machine, offset)
     for (const child of entity.children) elevate(child, offset)
   }
 }

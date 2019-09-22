@@ -1,5 +1,7 @@
 {
   "type": "sceneryCattails",
-  "state": "visible",
-  "imageStates": {"visible": {"images": [{"id": "sceneryCattails"}]}}
+  "machine": {
+    "state": "visible",
+    "map": {"visible": {"images": [{"id": "sceneryCattails"}]}}
+  }
 }
