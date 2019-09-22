@@ -4,8 +4,8 @@
   "imageStates": {
     "visible": {
       "images": [
-        {"id": "conifer"},
-        {"id": "conifer shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+        {"id": "sceneryConifer"},
+        {"id": "sceneryConifer-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
       ]
     }
   },

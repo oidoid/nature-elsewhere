@@ -3,7 +3,10 @@
   "state": "visible",
   "imageStates": {
     "visible": {
-      "images": [{"id": "pyramid"}, {"id": "pyramid shadow", "layer": "SHADOW"}]
+      "images": [
+        {"id": "sceneryPyramid"},
+        {"id": "sceneryPyramid-shadow", "layer": "SHADOW"}
+      ]
     }
   },
   "collisionPredicate": "bodies",

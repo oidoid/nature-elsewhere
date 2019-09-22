@@ -2,7 +2,7 @@
   "type": "uiCursor",
   "state": "hidden",
   "imageStates": {
-    "visible": {"images": [{"id": "palette black", "layer": "UI_CURSOR"}]}
+    "visible": {"images": [{"id": "palette-black", "layer": "UI_CURSOR"}]}
   },
   "updatePredicate": "always",
   "updaters": ["uiCursor"],

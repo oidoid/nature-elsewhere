@@ -6,10 +6,10 @@
   "imageStates": {
     "visible": {
       "images": [
-        {"id": "flag"},
-        {"id": "flag", "bounds": {"x": 4}},
-        {"id": "flag", "bounds": {"x": 8}},
-        {"id": "arrow upRight", "bounds": {"x": 12}}
+        {"id": "sceneryFlag"},
+        {"id": "sceneryFlag", "bounds": {"x": 4}},
+        {"id": "sceneryFlag", "bounds": {"x": 8}},
+        {"id": "charArrow-upRight", "bounds": {"x": 12}}
       ]
     }
   },

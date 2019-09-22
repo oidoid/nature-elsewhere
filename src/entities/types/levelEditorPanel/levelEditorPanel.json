@@ -5,54 +5,54 @@
     "visible": {
       "images": [
         {
-          "id": "palette white",
+          "id": "palette-white",
           "bounds": {"x": 1, "y": 21, "w": 42, "h": 11},
           "layer": "ABOVE_PLANE"
         },
         {
-          "id": "checkerboard blueGrey",
+          "id": "uiCheckerboard-blueGrey",
           "bounds": {"y": 21, "w": 1, "h": 11},
           "layer": "UI_MID"
         },
         {
-          "id": "checkerboard blueGrey",
+          "id": "uiCheckerboard-blueGrey",
           "bounds": {"x": 1, "y": 20, "w": 42, "h": 1},
           "layer": "UI_MID"
         },
         {
-          "id": "palette white",
+          "id": "palette-white",
           "bounds": {"x": 43, "y": 19, "w": 45, "h": 13},
           "layer": "UI_LO"
         },
         {
-          "id": "checkerboard blueGrey",
+          "id": "uiCheckerboard-blueGrey",
           "bounds": {"x": 42, "y": 19, "w": 1},
           "layer": "UI_MID"
         },
         {
-          "id": "checkerboard blueGrey",
+          "id": "uiCheckerboard-blueGrey",
           "bounds": {"x": 43, "y": 18, "w": 44, "h": 1},
           "layer": "UI_MID"
         },
         {
-          "id": "palette white",
+          "id": "palette-white",
           "bounds": {"x": 87, "y": 1, "w": 34, "h": 31},
           "layer": "UI_LO"
         },
         {
-          "id": "checkerboard blueGrey",
+          "id": "uiCheckerboard-blueGrey",
           "bounds": {"x": 87, "y": 1, "w": 1, "h": 17},
           "wrap": {"y": 1},
           "layer": "UI_MID"
         },
         {
-          "id": "checkerboard blueGrey",
+          "id": "uiCheckerboard-blueGrey",
           "bounds": {"x": 88, "y": 0, "w": 32, "h": 1},
           "wrap": {"x": 1},
           "layer": "UI_MID"
         },
         {
-          "id": "checkerboard blueGrey",
+          "id": "uiCheckerboard-blueGrey",
           "bounds": {"x": 120, "y": 1, "w": 1, "h": 1},
           "layer": "UI_MID"
         }
@@ -71,7 +71,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "ui-editor-button decrement", "layer": "UI_HIHI"}
+          "image": {"id": "uiLevelEditorButton-decrement", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -82,7 +82,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "ui-editor-button increment", "layer": "UI_HIHI"}
+          "image": {"id": "uiLevelEditorButton-increment", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -93,7 +93,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "ui-editor-button remove", "layer": "UI_HIHI"}
+          "image": {"id": "uiLevelEditorButton-destroy", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -104,7 +104,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "ui-editor-button add", "layer": "UI_HIHI"}
+          "image": {"id": "uiLevelEditorButton-create", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -115,7 +115,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "ui-editor-button grid", "layer": "UI_HIHI"}
+          "image": {"id": "uiLevelEditorButton-toggleGrid", "layer": "UI_HIHI"}
         }
       ]
     },

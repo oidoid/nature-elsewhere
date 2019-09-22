@@ -4,8 +4,8 @@
   "imageStates": {
     "visible": {
       "images": [
-        {"id": "bush"},
-        {"id": "bush shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+        {"id": "sceneryBush"},
+        {"id": "sceneryBush-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
       ]
     }
   },

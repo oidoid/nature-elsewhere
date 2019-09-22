@@ -3,7 +3,10 @@
   "state": "idle",
   "imageStates": {
     "idle": {
-      "images": [{"id": "snake"}, {"id": "snake shadow", "layer": "SHADOW"}]
+      "images": [
+        {"id": "charSnake"},
+        {"id": "charSnake-shadow", "layer": "SHADOW"}
+      ]
     }
   },
   "updatePredicate": "intersectsViewport",

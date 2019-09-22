@@ -5,13 +5,17 @@
   "imageStates": {
     "grid": {
       "images": [
-        {"id": "grid", "bounds": {"w": 32767, "h": 32767}, "layer": "GRID"}
+        {
+          "id": "uiGrid",
+          "bounds": {"w": 32767, "h": 32767},
+          "layer": "GRID"
+        }
       ]
     },
     "transparent": {
       "images": [
         {
-          "id": "palette transparent",
+          "id": "palette-transparent",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -20,7 +24,7 @@
     "white": {
       "images": [
         {
-          "id": "palette white",
+          "id": "palette-white",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -29,7 +33,7 @@
     "paleGreen": {
       "images": [
         {
-          "id": "palette paleGreen",
+          "id": "palette-paleGreen",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -38,7 +42,7 @@
     "lightGreen": {
       "images": [
         {
-          "id": "palette lightGreen",
+          "id": "palette-lightGreen",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -47,7 +51,7 @@
     "green": {
       "images": [
         {
-          "id": "palette green",
+          "id": "palette-green",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -56,7 +60,7 @@
     "darkGreen": {
       "images": [
         {
-          "id": "palette darkGreen",
+          "id": "palette-darkGreen",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -65,7 +69,7 @@
     "black": {
       "images": [
         {
-          "id": "palette black",
+          "id": "palette-black",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -74,7 +78,7 @@
     "grey": {
       "images": [
         {
-          "id": "palette grey",
+          "id": "palette-grey",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -83,7 +87,7 @@
     "blue": {
       "images": [
         {
-          "id": "palette blue",
+          "id": "palette-blue",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -92,7 +96,7 @@
     "lightBlue": {
       "images": [
         {
-          "id": "palette lightBlue",
+          "id": "palette-lightBlue",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -101,7 +105,7 @@
     "red": {
       "images": [
         {
-          "id": "palette red",
+          "id": "palette-red",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -110,7 +114,7 @@
     "orange": {
       "images": [
         {
-          "id": "palette orange",
+          "id": "palette-orange",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }
@@ -119,7 +123,7 @@
     "lightGrey": {
       "images": [
         {
-          "id": "palette lightGrey",
+          "id": "palette-lightGrey",
           "bounds": {"w": 32767, "h": 32767},
           "layer": "PLANE"
         }

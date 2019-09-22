@@ -4,13 +4,13 @@ import {AtlasParser} from './AtlasParser'
 describe('parse()', () => {
   test('Parses Animations.', () => {
     const frameTags = [
-      {name: 'cloud', from: 0, to: 0, direction: 'forward'},
-      {name: 'palette red', from: 1, to: 1, direction: 'forward'},
-      {name: 'conifer', from: 2, to: 2, direction: 'forward'},
-      {name: 'conifer shadow', from: 3, to: 3, direction: 'forward'}
+      {name: 'sceneryCloud', from: 0, to: 0, direction: 'forward'},
+      {name: 'palette-red', from: 1, to: 1, direction: 'forward'},
+      {name: 'sceneryConifer', from: 2, to: 2, direction: 'forward'},
+      {name: 'sceneryConifer-shadow', from: 3, to: 3, direction: 'forward'}
     ]
     const frames = {
-      'cloud 0': {
+      'sceneryCloud 0': {
         frame: {x: 220, y: 18, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -18,7 +18,7 @@ describe('parse()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 1
       },
-      'palette red 1': {
+      'palette-red 1': {
         frame: {x: 90, y: 54, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -26,7 +26,7 @@ describe('parse()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 65535
       },
-      'conifer 2': {
+      'sceneryConifer 2': {
         frame: {x: 72, y: 54, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -34,7 +34,7 @@ describe('parse()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 65535
       },
-      'conifer shadow 3': {
+      'sceneryConifer-shadow 3': {
         frame: {x: 54, y: 54, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -46,25 +46,25 @@ describe('parse()', () => {
     expect(
       AtlasParser.parse({meta: <Aseprite.Meta>(<unknown>{frameTags}), frames})
     ).toStrictEqual({
-      cloud: {
+      sceneryCloud: {
         size: {w: 16, h: 16},
         cels: [{position: {x: 221, y: 19}, duration: 1}],
         duration: 1,
         direction: 'forward'
       },
-      'palette red': {
+      'palette-red': {
         size: {w: 16, h: 16},
         cels: [{position: {x: 91, y: 55}, duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
-      conifer: {
+      sceneryConifer: {
         size: {w: 16, h: 16},
         cels: [{position: {x: 73, y: 55}, duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
-      'conifer shadow': {
+      'sceneryConifer-shadow': {
         size: {w: 16, h: 16},
         cels: [{position: {x: 55, y: 55}, duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
@@ -76,9 +76,14 @@ describe('parse()', () => {
 
 describe('parseAnimation()', () => {
   test('Parses FrameTag and Frame from Frame[].', () => {
-    const frameTag = {name: 'cloud s', from: 1, to: 1, direction: 'forward'}
+    const frameTag = {
+      name: 'sceneryCloud s',
+      from: 1,
+      to: 1,
+      direction: 'forward'
+    }
     const frames = {
-      'cloud xs 0': {
+      'sceneryCloud xs 0': {
         frame: {x: 202, y: 36, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -86,7 +91,7 @@ describe('parseAnimation()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 65535
       },
-      'cloud s 1': {
+      'sceneryCloud s 1': {
         frame: {x: 184, y: 36, w: 18, h: 18},
         rotated: false,
         trimmed: false,
@@ -94,7 +99,7 @@ describe('parseAnimation()', () => {
         sourceSize: {w: 16, h: 16},
         duration: 65535
       },
-      'cloud m 2': {
+      'sceneryCloud m 2': {
         frame: {x: 166, y: 36, w: 18, h: 18},
         rotated: false,
         trimmed: false,

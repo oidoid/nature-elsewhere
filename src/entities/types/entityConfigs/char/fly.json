@@ -4,12 +4,12 @@
   "imageStates": {
     "idle": {
       "images": [
-        {"id": "palette grey"},
-        {"id": "palette lightGrey", "bounds": {"y": 2}, "layer": "SHADOW"}
+        {"id": "palette-grey"},
+        {"id": "palette-lightGrey", "bounds": {"y": 2}, "layer": "SHADOW"}
       ]
     },
     "dead": {
-      "images": [{"id": "palette red", "layer": "BLOOD"}]
+      "images": [{"id": "palette-red", "layer": "BLOOD"}]
     }
   },
   "updatePredicate": "intersectsViewport",

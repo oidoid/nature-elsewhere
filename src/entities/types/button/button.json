@@ -2,16 +2,16 @@
   "type": "uiButton",
   "state": "unclicked",
   "text": "",
-  "iconID": "ui-editor-button base",
+  "iconID": "uiLevelEditorButton-base",
   "clicked": false,
   "imageStates": {
     "unclicked": {
-      "images": [{"id": "ui-editor-button base", "layer": "UI_MID"}]
+      "images": [{"id": "uiLevelEditorButton-base", "layer": "UI_MID"}]
     },
     "clicked": {
       "images": [
-        {"id": "ui-editor-button base", "layer": "UI_MID"},
-        {"id": "ui-editor-button pressed", "layer": "UI_HI"}
+        {"id": "uiLevelEditorButton-base", "layer": "UI_MID"},
+        {"id": "uiLevelEditorButton-pressed", "layer": "UI_HI"}
       ]
     }
   },

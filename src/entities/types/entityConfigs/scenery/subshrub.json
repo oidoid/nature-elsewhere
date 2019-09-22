@@ -4,8 +4,8 @@
   "imageStates": {
     "visible": {
       "images": [
-        {"id": "subshrub"},
-        {"id": "subshrub shadow", "layer": "SHADOW"}
+        {"id": "scenerySubshrub"},
+        {"id": "scenerySubshrub-shadow", "layer": "SHADOW"}
       ]
     }
   }

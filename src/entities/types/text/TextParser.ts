@@ -10,7 +10,7 @@ import {Rect} from '../../../math/rect/Rect'
 import {XYParser} from '../../../math/xy/XYParser'
 import {ImageParser} from '../../../images/image/ImageParser'
 import {Text} from './Text'
-import {UI_MEM_FONT_PREFIX} from '../../../atlas/atlasID/AtlasID'
+import {MEM_FONT_PREFIX} from '../../../atlas/atlasID/AtlasID'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {EntityUtil} from '../../entity/EntityUtil'
 
@@ -91,6 +91,6 @@ function newCharacterImage(
   scale: XY,
   atlas: Atlas
 ): Image {
-  const id = UI_MEM_FONT_PREFIX + char
+  const id = MEM_FONT_PREFIX + char.toString().padStart(3, '0')
   return ImageParser.parse({id, bounds: position, layer, scale}, atlas)
 }

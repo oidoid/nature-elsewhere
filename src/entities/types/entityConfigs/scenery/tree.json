@@ -4,8 +4,8 @@
   "imageStates": {
     "visible": {
       "images": [
-        {"id": "tree"},
-        {"id": "tree shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+        {"id": "sceneryTree"},
+        {"id": "sceneryTree-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
       ]
     }
   },
