@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://natureelsewhere.com/schemas/math/Rect.schema.json",
+  "type": "object",
+  "title": "Rect",
+  "deepDefaults": true,
+  "properties": {
+    "x": {"type": "number", "default": 0},
+    "y": {"type": "number", "default": 0},
+    "w": {"type": "number", "default": 0},
+    "h": {"type": "number", "default": 0}
+  },
+  "additionalProperties": false
+}

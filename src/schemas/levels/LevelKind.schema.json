@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://natureelsewhere.com/schemas/levels/LevelKind.schema.json",
+  "type": "string",
+  "title": "LevelKind",
+  "enum": [
+    "uiExit",
+    "uiTitle",
+    "uiPause",
+    "uiOptions",
+    "uiLevelEditor",
+    "playFields",
+    "testPerformance",
+    "testShader"
+  ]
+}

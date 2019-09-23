@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://natureelsewhere.com/schemas/math/WH.schema.json",
+  "type": "object",
+  "title": "WH",
+  "deepDefaults": true,
+  "properties": {
+    "x": {"type": "number", "default": 0},
+    "y": {"type": "number", "default": 0}
+  },
+  "additionalProperties": false
+}
