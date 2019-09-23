@@ -23,7 +23,7 @@ export namespace ImageStateMachine {
     if (machine.state === state) return UpdateStatus.UNCHANGED
     const {bounds, scale} = machine.map[machine.state]
     machine.state = state
-    ImageRect.moveTo(machine.map[machine.state], bounds)
+    ImageRect.moveTo(machine.map[machine.state], bounds.position)
     setScale(machine, scale)
     return UpdateStatus.UPDATED
   }

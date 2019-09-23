@@ -11,7 +11,7 @@ export namespace ImageRectParser {
     if (!config)
       return {
         origin: {x: 0, y: 0},
-        bounds: {x: 0, y: 0, w: 0, h: 0},
+        bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
         scale: {x: 0, y: 0},
         images: []
       }
@@ -20,7 +20,7 @@ export namespace ImageRectParser {
     )
     const union = Rect.unionAll(images.map(image => image.bounds))
     const origin = XYParser.parse(config.origin)
-    const bounds = union || {x: 0, y: 0, w: 0, h: 0}
+    const bounds = union || {position: {x: 0, y: 0}, size: {w: 0, h: 0}}
     const rect = {origin, bounds, scale: {x: 1, y: 1}, images}
     ImageRect.scale(rect, ImageScaleParser.parse(config.scale))
     return rect

@@ -29,7 +29,7 @@ export namespace DateVersionHashParser {
       textLayer: dateVersionHash.textLayer,
       textScale: dateVersionHash.textScale,
       textMaxSize: dateVersionHash.textMaxSize,
-      position: {x: dateVersionHash.bounds.x, y: dateVersionHash.bounds.y}
+      position: {...dateVersionHash.bounds.position}
     }
     const text = parser(config, atlas)
     dateVersionHash.children.push(text)

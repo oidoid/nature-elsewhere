@@ -51,7 +51,7 @@ export namespace EntityParser {
       spawnID: Symbol(),
       id: EntityIDParser.parse(config.id),
       type: type,
-      bounds: {x: 0, y: 0, w: 0, h: 0},
+      bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
       machine,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
       updaters: UpdaterTypeParser.parseAll(config.updaters),

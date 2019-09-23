@@ -23,7 +23,7 @@ export namespace FollowCamUpdater {
       entity.positionRelativeToCam
     )
 
-    if (XY.equal(entity.bounds, to)) return UpdateStatus.UNCHANGED
+    if (XY.equal(entity.bounds.position, to)) return UpdateStatus.UNCHANGED
 
     return EntityUtil.moveTo(entity, to)
   }
@@ -48,7 +48,7 @@ function orientationToX(
   margin: WH,
   orientation: FollowCamOrientation
 ): number {
-  let x = cam.x
+  let x = cam.position.x
   switch (orientation) {
     case FollowCamOrientation.SOUTH_WEST:
     case FollowCamOrientation.WEST:
@@ -58,12 +58,12 @@ function orientationToX(
     case FollowCamOrientation.SOUTH_EAST:
     case FollowCamOrientation.EAST:
     case FollowCamOrientation.NORTH_EAST:
-      x += cam.w - (entity.w + margin.w)
+      x += cam.size.w - (entity.size.w + margin.w)
       break
     case FollowCamOrientation.NORTH:
     case FollowCamOrientation.SOUTH:
     case FollowCamOrientation.CENTER:
-      x += cam.w / 2 - (entity.w / 2 + margin.w)
+      x += cam.size.w / 2 - (entity.size.w / 2 + margin.w)
       break
   }
   return x
@@ -75,7 +75,7 @@ function orientationToY(
   margin: WH,
   orientation: FollowCamOrientation
 ): number {
-  let y = cam.y
+  let y = cam.position.y
   switch (orientation) {
     case FollowCamOrientation.NORTH:
     case FollowCamOrientation.NORTH_EAST:
@@ -85,12 +85,12 @@ function orientationToY(
     case FollowCamOrientation.SOUTH_EAST:
     case FollowCamOrientation.SOUTH:
     case FollowCamOrientation.SOUTH_WEST:
-      y += cam.h - (entity.h + margin.h)
+      y += cam.size.h - (entity.size.h + margin.h)
       break
     case FollowCamOrientation.EAST:
     case FollowCamOrientation.WEST:
     case FollowCamOrientation.CENTER:
-      y += cam.h / 2 - (entity.h / 2 + margin.h)
+      y += cam.size.h / 2 - (entity.size.h / 2 + margin.h)
       break
   }
   return y

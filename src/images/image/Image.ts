@@ -20,11 +20,11 @@ export interface Image {
       Images.bounds are used for some collision tests (see CollisionPredicate)
       as entity bounds are calculated in part by Image.bounds, ImageRect.bounds,
       and Entity.bounds. */
-  readonly bounds: Writable<Rect>
+  readonly bounds: Rect
   layer: Layer
   readonly animator: Animator
   /** See bounds. */
-  readonly scale: Writable<IntXY>
+  readonly scale: IntXY
   /** Specifies the initial marquee offset. */
   readonly wrap: DecamillipixelIntXY
   /** Specifies the additional marquee offset added by the shader according to
@@ -35,14 +35,14 @@ export interface Image {
 export namespace Image {
   /** Translate by. */
   export function moveBy(image: Image, by: XY): void {
-    image.bounds.x += by.x
-    image.bounds.y += by.y
+    image.bounds.position.x += by.x
+    image.bounds.position.y += by.y
   }
 
   /** Set absolute scale. */
   export function setScale(image: Image, to: XY): void {
-    image.bounds.w *= Math.abs(to.x / image.scale.x)
-    image.bounds.h *= Math.abs(to.y / image.scale.y)
+    image.bounds.size.w *= Math.abs(to.x / image.scale.x)
+    image.bounds.size.h *= Math.abs(to.y / image.scale.y)
     image.scale.x = to.x
     image.scale.y = to.y
   }
@@ -61,7 +61,9 @@ export namespace Image {
   ): number {
     return (
       lhs.layer - rhs.layer ||
-      lhs.bounds.y + lhs.bounds.h - (rhs.bounds.y + rhs.bounds.h)
+      lhs.bounds.position.y +
+        lhs.bounds.size.h -
+        (rhs.bounds.position.y + rhs.bounds.size.h)
     )
   }
 

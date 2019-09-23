@@ -13,7 +13,7 @@ export namespace ImageStateMapParser {
     const map: Writable<ImageStateMap> = {
       [EntityState.HIDDEN]: {
         origin: {x: 0, y: 0},
-        bounds: {x: 0, y: 0, w: 0, h: 0},
+        bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
         scale: {x: 0, y: 0},
         images: []
       }

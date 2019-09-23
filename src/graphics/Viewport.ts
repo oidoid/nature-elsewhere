@@ -26,6 +26,9 @@ export namespace Viewport {
                through in level pixels.
       @return The fractional position in level coordinates. */
   export function toLevelXY({x, y}: XY, {w, h}: WH, cam: Rect): XY {
-    return {x: cam.x + (x / w) * cam.w, y: cam.y + (y / h) * cam.h}
+    return {
+      x: cam.position.x + (x / w) * cam.size.w,
+      y: cam.position.y + (y / h) * cam.size.h
+    }
   }
 }

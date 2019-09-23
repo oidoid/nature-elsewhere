@@ -25,16 +25,17 @@ export namespace TextParser {
       text.textLayer,
       XYParser.parse(text.textScale),
       {
-        x: EntityUtil.imageState(text).bounds.x,
-        y: EntityUtil.imageState(text).bounds.y,
-        w:
-          text.textMaxSize && text.textMaxSize.w
-            ? text.textMaxSize.w
-            : Limits.maxShort,
-        h:
-          text.textMaxSize && text.textMaxSize.h
-            ? text.textMaxSize.h
-            : Limits.maxShort
+        position: EntityUtil.imageState(text).bounds.position,
+        size: {
+          w:
+            text.textMaxSize && text.textMaxSize.w
+              ? text.textMaxSize.w
+              : Limits.maxShort,
+          h:
+            text.textMaxSize && text.textMaxSize.h
+              ? text.textMaxSize.h
+              : Limits.maxShort
+        }
       }
     )
 
@@ -45,10 +46,10 @@ export namespace TextParser {
       EntityUtil.imageState(text).images.map(image => image.bounds)
     )
     if (union) {
-      EntityUtil.imageState(text).bounds.x = union.x
-      EntityUtil.imageState(text).bounds.y = union.y
-      EntityUtil.imageState(text).bounds.w = union.w
-      EntityUtil.imageState(text).bounds.h = union.h
+      EntityUtil.imageState(text).bounds.position.x = union.position.x
+      EntityUtil.imageState(text).bounds.position.y = union.position.y
+      EntityUtil.imageState(text).bounds.size.w = union.size.w
+      EntityUtil.imageState(text).bounds.size.h = union.size.h
     }
     EntityUtil.invalidateBounds(text)
     return text
@@ -64,16 +65,19 @@ export namespace TextParser {
     y: number = 0
   ): readonly Image[] {
     const images = []
-    const {positions} = TextLayout.layout(string, bounds.w, scale)
+    const {positions} = TextLayout.layout(string, bounds.size.w, scale)
     for (let i = 0; i < positions.length; ++i) {
       const position = positions[i]
       if (!position) continue
       if (TextLayout.nextLine(position.y, scale).y < y) continue
-      if (position.y > y + bounds.h) break
+      if (position.y > y + bounds.size.h) break
 
       const char = newCharacterImage(
         string.charCodeAt(i),
-        {x: bounds.x + position.x, y: bounds.y + position.y - y},
+        {
+          x: bounds.position.x + position.x,
+          y: bounds.position.y + position.y - y
+        },
         layer,
         scale,
         atlas

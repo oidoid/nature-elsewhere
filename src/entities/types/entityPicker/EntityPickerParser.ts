@@ -34,17 +34,18 @@ export namespace EntityPickerParser {
     )
       throw new Error()
     const entityWindowBounds = {
-      x: Math.trunc(picker.bounds.x),
-      y: Math.trunc(picker.bounds.y) + memFont.lineHeight,
-      w: entityWindowSize.w,
-      h: entityWindowSize.h
+      position: {
+        x: Math.trunc(picker.bounds.position.x),
+        y: Math.trunc(picker.bounds.position.y) + memFont.lineHeight
+      },
+      size: {...entityWindowSize}
     }
     for (const type of Object.values(EntityType)) {
       if (typeBlacklist.includes(type)) continue
       const entity = parser({type}, atlas)
       const center = XY.max(
         Rect.centerOn(entity.bounds, entityWindowBounds),
-        entityWindowBounds
+        entityWindowBounds.position
       )
       EntityUtil.moveTo(entity, center)
       EntityUtil.setState(entity, EntityState.HIDDEN)

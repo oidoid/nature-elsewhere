@@ -36,6 +36,8 @@ function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
       ? config.bounds.size.h
       : Math.abs(config.scale && config.scale.y ? config.scale.y : 1) *
         atlas[id].size.h
-  const xy = XYParser.parse(config.bounds ? config.bounds.position : undefined)
-  return {...xy, w, h}
+  const position = XYParser.parse(
+    config.bounds ? config.bounds.position : undefined
+  )
+  return {position, size: {w, h}}
 }

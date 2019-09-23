@@ -1,6 +1,3 @@
-import {WH} from '../../math/wh/WH'
-import {Rect} from '../../math/rect/Rect'
-
 /** This typing assumes the options specified in package.json and annotated
     herein with **via CLI**. The JSON export format appears to be undocumented
     but the related [binary format] is. Types marked "**by convention**" are
@@ -96,5 +93,16 @@ export namespace Aseprite {
         is lesser. A traversal from start to end - 1 then end to start + 1 is
         considered a complete loop. */
     PING_PONG = 'pingpong'
+  }
+
+  export interface Rect {
+    readonly x: number
+    readonly y: number
+    readonly w: number
+    readonly h: number
+  }
+  export interface WH {
+    readonly w: number
+    readonly h: number
   }
 }

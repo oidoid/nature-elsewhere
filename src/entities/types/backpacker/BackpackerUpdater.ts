@@ -21,14 +21,22 @@ export namespace BackpackerUpdater {
 
     let status = UpdateStatus.UNCHANGED
 
-    let {x, y} = backpacker.bounds
-    const {x: originalX, y: originalY} = backpacker.bounds
+    let {x, y} = backpacker.bounds.position
+    const {x: originalX, y: originalY} = backpacker.bounds.position
 
-    let dst = XY.trunc(state.level.destination.bounds)
+    let dst = XY.trunc(state.level.destination.bounds.position)
     dst = XY.add(dst, EntityUtil.imageState(backpacker).origin)
     dst = {
-      x: NumberUtil.clamp(dst.x, 0, state.level.size.w - backpacker.bounds.w),
-      y: NumberUtil.clamp(dst.y, 0, state.level.size.h - backpacker.bounds.h)
+      x: NumberUtil.clamp(
+        dst.x,
+        0,
+        state.level.size.w - backpacker.bounds.size.w
+      ),
+      y: NumberUtil.clamp(
+        dst.y,
+        0,
+        state.level.size.h - backpacker.bounds.size.h
+      )
     }
 
     const left = dst.x < Math.trunc(x)

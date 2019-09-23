@@ -1,8 +1,8 @@
 import {NumberUtil} from '../number/NumberUtil'
 
 export interface XY {
-  readonly x: number
-  readonly y: number
+  x: number
+  y: number
 }
 
 /** An integral XY. */
@@ -11,45 +11,49 @@ export type IntXY = XY
 export type DecamillipixelIntXY = XY
 
 export namespace XY {
-  export function add({x, y}: XY, rhs: XY): XY {
+  export function add({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
     return {x: x + rhs.x, y: y + rhs.y}
   }
 
-  export function sub({x, y}: XY, rhs: XY): XY {
+  export function sub({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
     return {x: x - rhs.x, y: y - rhs.y}
   }
 
-  export function mul({x, y}: XY, rhs: XY): XY {
+  export function mul({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
     return {x: x * rhs.x, y: y * rhs.y}
   }
 
-  export function div({x, y}: XY, rhs: XY): XY {
+  export function div({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
     return {x: x / rhs.x, y: y / rhs.y}
   }
 
-  export function equal({x, y}: XY, rhs: XY): boolean {
+  export function equal({x, y}: Readonly<XY>, rhs: Readonly<XY>): boolean {
     return x === rhs.x && y === rhs.y
   }
 
-  export function min({x, y}: XY, rhs: XY): XY {
+  export function min({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
     return {x: Math.min(x, rhs.x), y: Math.min(y, rhs.y)}
   }
 
-  export function max({x, y}: XY, rhs: XY): XY {
+  export function max({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
     return {x: Math.max(x, rhs.x), y: Math.max(y, rhs.y)}
   }
 
-  export function trunc({x, y}: XY): XY {
+  export function trunc({x, y}: Readonly<XY>): XY {
     return {x: Math.trunc(x), y: Math.trunc(y)}
   }
 
-  export function clamp(xy: XY, min: XY, max: XY): XY {
+  export function clamp(
+    xy: Readonly<XY>,
+    min: Readonly<XY>,
+    max: Readonly<XY>
+  ): XY {
     const x = NumberUtil.clamp(xy.x, min.x, max.x)
     const y = NumberUtil.clamp(xy.y, min.y, max.y)
     return {x, y}
   }
 
-  export function distance(lhs: XY, rhs: XY): number {
+  export function distance(lhs: Readonly<XY>, rhs: Readonly<XY>): number {
     const {x, y} = XY.sub(lhs, rhs)
     return Math.sqrt(x * x + y * y)
   }

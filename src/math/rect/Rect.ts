@@ -3,29 +3,30 @@ import {XY} from '../xy/XY'
 
 /** Where XY describes the upper-left corner, or minimum, and XY + WH the
     bottom-right, or maximum. */
-export interface Rect extends XY, WH {}
+export interface Rect {
+  readonly position: XY
+  readonly size: WH
+}
 
 export namespace Rect {
   export function trunc(rect: Rect): Rect {
-    const {x, y} = XY.trunc(rect)
-    const {w, h} = WH.trunc(rect)
-    return {x, y, w, h}
+    return {position: XY.trunc(rect.position), size: WH.trunc(rect.size)}
   }
 
   export function add(lhs: Rect, rhs: Rect): Rect {
-    const {x, y} = XY.add(lhs, rhs)
-    const {w, h} = WH.add(lhs, rhs)
-    return {x, y, w, h}
+    const position = XY.add(lhs.position, rhs.position)
+    const size = WH.add(lhs.size, rhs.size)
+    return {position, size}
   }
 
-  export function moveAllBy(rects: readonly Writable<Rect>[], by: XY): void {
+  export function moveAllBy(rects: readonly Rect[], by: XY): void {
     if (!by.x && !by.y) return
     for (const rect of rects) moveBy(rect, by)
   }
 
-  export function moveBy(rect: Writable<Rect>, by: XY): void {
-    rect.x += by.x
-    rect.y += by.y
+  export function moveBy(rect: Rect, by: XY): void {
+    rect.position.x += by.x
+    rect.position.y += by.y
   }
 
   // less-than-or-equal?
@@ -33,19 +34,19 @@ export namespace Rect {
       independent. */
   export function intersects(lhs: Rect, rhs: Rect): boolean {
     return (
-      lhs.x + lhs.w > rhs.x &&
-      lhs.x < rhs.x + rhs.w &&
-      lhs.y + lhs.h > rhs.y &&
-      lhs.y < rhs.y + rhs.h
+      lhs.position.x + lhs.size.w > rhs.position.x &&
+      lhs.position.x < rhs.position.x + rhs.size.w &&
+      lhs.position.y + lhs.size.h > rhs.position.y &&
+      lhs.position.y < rhs.position.y + rhs.size.h
     )
   }
 
-  export function within({x, y, w, h}: Rect, rhs: Rect): boolean {
+  export function within({position, size}: Rect, rhs: Rect): boolean {
     return (
-      x >= rhs.x &&
-      x + w <= rhs.x + rhs.w &&
-      y >= rhs.y &&
-      y + h <= rhs.y + rhs.h
+      position.x >= rhs.position.x &&
+      position.x + size.w <= rhs.position.x + rhs.size.w &&
+      position.y >= rhs.position.y &&
+      position.y + size.h <= rhs.position.y + rhs.size.h
     )
   }
 
@@ -54,10 +55,14 @@ export namespace Rect {
               overlapping. */
   export function intersection(lhs: Rect, rhs: Rect): Rect {
     // The bottom-rightmost coordinates is the upper-left of the intersection.
-    const upperLeft = XY.max(lhs, rhs)
-    const w = Math.min(lhs.x + lhs.w, rhs.x + rhs.w) - upperLeft.x
-    const h = Math.min(lhs.y + lhs.h, rhs.y + rhs.h) - upperLeft.y
-    return {x: upperLeft.x, y: upperLeft.y, w, h}
+    const upperLeft = XY.max(lhs.position, rhs.position)
+    const w =
+      Math.min(lhs.position.x + lhs.size.w, rhs.position.x + rhs.size.w) -
+      upperLeft.x
+    const h =
+      Math.min(lhs.position.y + lhs.size.h, rhs.position.y + rhs.size.h) -
+      upperLeft.y
+    return {position: upperLeft, size: {w, h}}
   }
 
   export function unionAll(rects: readonly Rect[]): Maybe<Rect> {
@@ -71,15 +76,23 @@ export namespace Rect {
   }
 
   export function union(lhs: Rect, rhs: Rect): Rect {
-    const {x, y} = XY.min(lhs, rhs)
-    const w = Math.max(lhs.x + lhs.w, rhs.x + rhs.w) - x
-    const h = Math.max(lhs.y + lhs.h, rhs.y + rhs.h) - y
-    return {x, y, w, h}
+    const {x, y} = XY.min(lhs.position, rhs.position)
+    const w =
+      Math.max(lhs.position.x + lhs.size.w, rhs.position.x + rhs.size.w) - x
+    const h =
+      Math.max(lhs.position.y + lhs.size.h, rhs.position.y + rhs.size.h) - y
+    return {position: {x, y}, size: {w, h}}
   }
 
   export function centerOn(rect: Rect, on: Rect): XY {
-    const x = Math.trunc(on.x) + Math.trunc(on.w / 2) - Math.trunc(rect.w / 2)
-    const y = Math.trunc(on.y) + Math.trunc(on.h / 2) - Math.trunc(rect.h / 2)
+    const x =
+      Math.trunc(on.position.x) +
+      Math.trunc(on.size.w / 2) -
+      Math.trunc(rect.size.w / 2)
+    const y =
+      Math.trunc(on.position.y) +
+      Math.trunc(on.size.h / 2) -
+      Math.trunc(rect.size.h / 2)
     return {x, y}
   }
 }

@@ -92,8 +92,8 @@ function onFrame(game: Game, time: number): void {
   const {minViewport} = game.levelStateMachine.level
   const scale = Viewport.scale(canvasWH, minViewport, 0)
   const camWH = Viewport.camWH(canvasWH, scale)
-  game.levelStateMachine.level.cam.bounds.w = camWH.w
-  game.levelStateMachine.level.cam.bounds.h = camWH.h
+  game.levelStateMachine.level.cam.bounds.size.w = camWH.w
+  game.levelStateMachine.level.cam.bounds.size.h = camWH.h
 
   const anyInput = InputState.anyActive(game.inputPoller.inputs)
   game.requestWindowSetting = game.requestWindowSetting(anyInput)

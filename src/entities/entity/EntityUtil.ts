@@ -27,23 +27,23 @@ export namespace EntityUtil {
       ...entity.children.map(child => child.bounds)
     ])
     if (bounds) {
-      entity.bounds.x = bounds.x
-      entity.bounds.y = bounds.y
-      entity.bounds.w = bounds.w
-      entity.bounds.h = bounds.h
+      entity.bounds.position.x = bounds.position.x
+      entity.bounds.position.y = bounds.position.y
+      entity.bounds.size.w = bounds.size.w
+      entity.bounds.size.h = bounds.size.h
     }
   }
 
   export function moveTo(entity: Entity, to: XY): UpdateStatus {
-    return moveBy(entity, XY.sub(to, entity.bounds))
+    return moveBy(entity, XY.sub(to, entity.bounds.position))
   }
 
   /** Recursively move the entity, its images, its collision bodies, and all of
       its children. */
   export function moveBy(entity: Entity, by: XY): UpdateStatus {
     if (!by.x && !by.y) return UpdateStatus.UNCHANGED
-    entity.bounds.x += by.x
-    entity.bounds.y += by.y
+    entity.bounds.position.x += by.x
+    entity.bounds.position.y += by.y
     ImageRect.moveBy(imageState(entity), by)
     Rect.moveAllBy(entity.collisionBodies, by)
     entity.children.forEach(child => moveBy(child, by))

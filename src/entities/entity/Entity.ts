@@ -20,7 +20,7 @@ export interface Entity {
       local coordinate system is necessary for calculating absolute translations
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
-  readonly bounds: Writable<Rect>
+  readonly bounds: Rect
   readonly machine: ImageStateMachine
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
@@ -29,7 +29,7 @@ export interface Entity {
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
-  readonly collisionBodies: readonly Writable<Rect>[] // Move to CollisionBody with CollisionType prop
+  readonly collisionBodies: readonly Rect[] // Move to CollisionBody with CollisionType prop
   /** Operations are shallow by default (do not recurse children) unless
       specified otherwise. That is, only translation and animation are
       recursive. */

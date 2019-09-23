@@ -139,17 +139,17 @@ export namespace Renderer {
     // exceeds the canvas and the viewport's dimensions must be an integer
     // multiple of the camera. The negative consequence is that the first pixel
     // on the y-axis and last pixel on the x-axis may be partly truncated.
-    gl.viewport(0, 0, scale * cam.w, scale * cam.h)
+    gl.viewport(0, 0, scale * cam.size.w, scale * cam.size.h)
   }
 
   function project(cam: Rect): readonly number[] {
     // Convert the pixels to clipspace by taking them as a fraction of the cam
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
     // is downward, and translating to -1 to 1 and again by the camera position.
-    const {w, h} = {w: 2 / cam.w, h: 2 / cam.h}
+    const {w, h} = {w: 2 / cam.size.w, h: 2 / cam.size.h}
     return [
-      w,  0, 0, -1 - cam.x * w,
-      0, -h, 0,  1 + cam.y * h,
+      w,  0, 0, -1 - cam.position.x * w,
+      0, -h, 0,  1 + cam.position.y * h,
       0,  0, 1,              0,
       0,  0, 0,              1
     ] // prettier-ignore

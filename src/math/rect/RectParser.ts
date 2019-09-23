@@ -11,6 +11,6 @@ export namespace RectParser {
   export function parse(config: RectConfig): Rect {
     const position = config ? XYParser.parse(config.position) : {x: 0, y: 0}
     const size = config ? WHParser.parse(config.size) : {w: 0, h: 0}
-    return {...position, ...size}
+    return {position, size}
   }
 }

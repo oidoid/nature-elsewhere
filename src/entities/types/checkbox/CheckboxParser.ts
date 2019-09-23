@@ -39,9 +39,9 @@ export namespace CheckboxParser {
       type: EntityType.UI_TEXT,
       text: text,
       textLayer: checkbox.textLayer,
-      textScale: checkbox.textScale,
-      textMaxSize: checkbox.textMaxSize,
-      position: {x: checkbox.bounds.x, y: checkbox.bounds.y}
+      textScale: {...checkbox.textScale},
+      textMaxSize: {...checkbox.textMaxSize},
+      position: {...checkbox.bounds.position}
     }
     const child = parser(config, atlas)
     checkbox.children[0] = child
@@ -54,18 +54,21 @@ function setBackground(checkbox: Checkbox, atlas: Atlas): void {
   const text = checkbox.children[0]
   for (const state of [CheckboxState.UNCHECKED, CheckboxState.CHECKED]) {
     const size = {
-      w: text.bounds.w,
+      w: text.bounds.size.w,
       // Do not shrink when a descender is not present.
-      h: Math.max(text.bounds.h, memFont.lineHeight - memFont.leadingPadding)
+      h: Math.max(
+        text.bounds.size.h,
+        memFont.lineHeight - memFont.leadingPadding
+      )
     }
     checkbox.machine.map[state].images.length = 0
     const images = newBackgroundImages(state, atlas, size)
     images.forEach(image => ImageRect.add(checkbox.machine.map[state], image))
-    checkbox.machine.map[state].bounds.x = 0
-    checkbox.machine.map[state].bounds.y = 0
+    checkbox.machine.map[state].bounds.position.x = 0
+    checkbox.machine.map[state].bounds.position.y = 0
     ImageRect.moveTo(checkbox.machine.map[state], {
-      x: text.bounds.x,
-      y: checkbox.bounds.y
+      x: text.bounds.position.x,
+      y: checkbox.bounds.position.y
     })
   }
 }

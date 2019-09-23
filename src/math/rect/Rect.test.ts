@@ -20,11 +20,11 @@ const tests: readonly Test[] = Object.freeze(
         └─╄━┹─┘
           │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 0, y: -1, w: 2, h: 2},
-      {x: 0, y: -1, w: 1, h: 2},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -1}, size: {w: 1, h: 2}},
       true,
-      {x: -1, y: -1, w: 3, h: 2}
+      {position: {x: -1, y: -1}, size: {w: 3, h: 2}}
     ],
     [
       `
@@ -34,11 +34,11 @@ const tests: readonly Test[] = Object.freeze(
         └─┼─┘
           │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 0, y: -2, w: 2, h: 2},
-      {x: 0, y: -1, w: 1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -2}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -1}, size: {w: 1, h: 1}},
       true,
-      {x: -1, y: -2, w: 3, h: 3}
+      {position: {x: -1, y: -2}, size: {w: 3, h: 3}}
     ],
     [
       `
@@ -48,11 +48,11 @@ const tests: readonly Test[] = Object.freeze(
         └─┼─┘
           │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: -2, w: 2, h: 2},
-      {x: -1, y: -1, w: 2, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -2}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 1}},
       true,
-      {x: -1, y: -2, w: 2, h: 3}
+      {position: {x: -1, y: -2}, size: {w: 2, h: 3}}
     ],
     [
       `
@@ -62,11 +62,11 @@ const tests: readonly Test[] = Object.freeze(
         └─┼─┘
           │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -2, y: -2, w: 2, h: 2},
-      {x: -1, y: -1, w: 1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -2, y: -2}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 1, h: 1}},
       true,
-      {x: -2, y: -2, w: 3, h: 3}
+      {position: {x: -2, y: -2}, size: {w: 3, h: 3}}
     ],
     [
       `
@@ -76,11 +76,11 @@ const tests: readonly Test[] = Object.freeze(
       └─┺━╃─┘
           │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -2, y: -1, w: 2, h: 2},
-      {x: -1, y: -1, w: 1, h: 2},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -2, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 1, h: 2}},
       true,
-      {x: -2, y: -1, w: 3, h: 2}
+      {position: {x: -2, y: -1}, size: {w: 3, h: 2}}
     ],
     [
       `
@@ -90,11 +90,11 @@ const tests: readonly Test[] = Object.freeze(
       │R┗━╃─┘
       └───┤
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -2, y: 0, w: 2, h: 2},
-      {x: -1, y: 0, w: 1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -2, y: 0}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 0}, size: {w: 1, h: 1}},
       true,
-      {x: -2, y: -1, w: 3, h: 3}
+      {position: {x: -2, y: -1}, size: {w: 3, h: 3}}
     ],
     [
       `
@@ -104,11 +104,11 @@ const tests: readonly Test[] = Object.freeze(
         ┡━┿━┩
         └─R─┘
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: 0, w: 2, h: 2},
-      {x: -1, y: 0, w: 2, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 0}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 0}, size: {w: 2, h: 1}},
       true,
-      {x: -1, y: -1, w: 2, h: 3}
+      {position: {x: -1, y: -1}, size: {w: 2, h: 3}}
     ],
     [
       `
@@ -118,11 +118,11 @@ const tests: readonly Test[] = Object.freeze(
         └─╄━┛R│
           ├───┘
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 0, y: 0, w: 2, h: 2},
-      {x: 0, y: 0, w: 1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: 0}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: 0}, size: {w: 1, h: 1}},
       true,
-      {x: -1, y: -1, w: 3, h: 3}
+      {position: {x: -1, y: -1}, size: {w: 3, h: 3}}
     ],
     [
       `
@@ -134,11 +134,11 @@ const tests: readonly Test[] = Object.freeze(
           └─┼─┘
             │
     `,
-      {x: -1, y: -2, w: 2, h: 4},
-      {x: -2, y: -3, w: 4, h: 2},
-      {x: -1, y: -2, w: 2, h: 1},
+      {position: {x: -1, y: -2}, size: {w: 2, h: 4}},
+      {position: {x: -2, y: -3}, size: {w: 4, h: 2}},
+      {position: {x: -1, y: -2}, size: {w: 2, h: 1}},
       true,
-      {x: -2, y: -3, w: 4, h: 5}
+      {position: {x: -2, y: -3}, size: {w: 4, h: 5}}
     ],
     [
       `
@@ -150,11 +150,11 @@ const tests: readonly Test[] = Object.freeze(
           └─┼─┘
             │
     `,
-      {x: -1, y: -2, w: 2, h: 4},
-      {x: -2, y: -1, w: 4, h: 2},
-      {x: -1, y: -1, w: 2, h: 2},
+      {position: {x: -1, y: -2}, size: {w: 2, h: 4}},
+      {position: {x: -2, y: -1}, size: {w: 4, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
       true,
-      {x: -2, y: -2, w: 4, h: 4}
+      {position: {x: -2, y: -2}, size: {w: 4, h: 4}}
     ],
     [
       `
@@ -166,11 +166,11 @@ const tests: readonly Test[] = Object.freeze(
         │ ┗━┿━┛R│
         └───┼───┘
     `,
-      {x: -1, y: -2, w: 2, h: 4},
-      {x: -2, y: 1, w: 4, h: 2},
-      {x: -1, y: 1, w: 2, h: 1},
+      {position: {x: -1, y: -2}, size: {w: 2, h: 4}},
+      {position: {x: -2, y: 1}, size: {w: 4, h: 2}},
+      {position: {x: -1, y: 1}, size: {w: 2, h: 1}},
       true,
-      {x: -2, y: -2, w: 4, h: 5}
+      {position: {x: -2, y: -2}, size: {w: 4, h: 5}}
     ],
     [
       `
@@ -181,11 +181,11 @@ const tests: readonly Test[] = Object.freeze(
       ┼────┼───┼
       └────┼───┘
     `,
-      {x: -3, y: -4, w: 5, h: 5},
-      {x: -2, y: -2, w: 1, h: 2},
-      {x: -2, y: -2, w: 1, h: 2},
+      {position: {x: -3, y: -4}, size: {w: 5, h: 5}},
+      {position: {x: -2, y: -2}, size: {w: 1, h: 2}},
+      {position: {x: -2, y: -2}, size: {w: 1, h: 2}},
       true,
-      {x: -3, y: -4, w: 5, h: 5}
+      {position: {x: -3, y: -4}, size: {w: 5, h: 5}}
     ],
     [
       `
@@ -195,11 +195,11 @@ const tests: readonly Test[] = Object.freeze(
         ┗━┿━┛
           │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: -1, w: 2, h: 2},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
       true,
-      {x: -1, y: -1, w: 2, h: 2}
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}}
     ],
     [
       `
@@ -209,11 +209,11 @@ const tests: readonly Test[] = Object.freeze(
           │
           │
     `,
-      {x: 0, y: 0, w: 0, h: 0},
-      {x: 0, y: 0, w: 0, h: 0},
-      {x: 0, y: 0, w: 0, h: 0},
+      {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
+      {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
+      {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
       false,
-      {x: 0, y: 0, w: 0, h: 0}
+      {position: {x: 0, y: 0}, size: {w: 0, h: 0}}
     ],
     [
       `
@@ -225,11 +225,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 1, y: -1, w: 2, h: 2},
-      {x: 1, y: -1, w: 0, h: 2},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: -1}, size: {w: 0, h: 2}},
       false,
-      {x: -1, y: -1, w: 4, h: 2}
+      {position: {x: -1, y: -1}, size: {w: 4, h: 2}}
     ],
     [
       `
@@ -241,11 +241,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 1, y: -2, w: 2, h: 2},
-      {x: 1, y: -1, w: 0, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: -2}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: -1}, size: {w: 0, h: 1}},
       false,
-      {x: -1, y: -2, w: 4, h: 3}
+      {position: {x: -1, y: -2}, size: {w: 4, h: 3}}
     ],
     [
       `
@@ -257,11 +257,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 1, y: -3, w: 2, h: 2},
-      {x: 1, y: -1, w: 0, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: -3}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: -1}, size: {w: 0, h: 0}},
       false,
-      {x: -1, y: -3, w: 4, h: 4}
+      {position: {x: -1, y: -3}, size: {w: 4, h: 4}}
     ],
     [
       `
@@ -273,11 +273,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 0, y: -3, w: 2, h: 2},
-      {x: 0, y: -1, w: 1, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -3}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -1}, size: {w: 1, h: 0}},
       false,
-      {x: -1, y: -3, w: 3, h: 4}
+      {position: {x: -1, y: -3}, size: {w: 3, h: 4}}
     ],
     [
       `
@@ -289,11 +289,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: -3, w: 2, h: 2},
-      {x: -1, y: -1, w: 2, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -3}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 0}},
       false,
-      {x: -1, y: -3, w: 2, h: 4}
+      {position: {x: -1, y: -3}, size: {w: 2, h: 4}}
     ],
     [
       `
@@ -305,11 +305,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -2, y: -3, w: 2, h: 2},
-      {x: -1, y: -1, w: 1, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -2, y: -3}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 1, h: 0}},
       false,
-      {x: -2, y: -3, w: 3, h: 4}
+      {position: {x: -2, y: -3}, size: {w: 3, h: 4}}
     ],
     [
       `
@@ -321,11 +321,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -3, y: -3, w: 2, h: 2},
-      {x: -1, y: -1, w: 0, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -3, y: -3}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 0, h: 0}},
       false,
-      {x: -3, y: -3, w: 4, h: 4}
+      {position: {x: -3, y: -3}, size: {w: 4, h: 4}}
     ],
     [
       `
@@ -337,11 +337,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -3, y: -2, w: 2, h: 2},
-      {x: -1, y: -1, w: 0, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -3, y: -2}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 0, h: 1}},
       false,
-      {x: -3, y: -2, w: 4, h: 3}
+      {position: {x: -3, y: -2}, size: {w: 4, h: 3}}
     ],
     [
       `
@@ -353,11 +353,11 @@ const tests: readonly Test[] = Object.freeze(
             │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -3, y: -1, w: 2, h: 2},
-      {x: -1, y: -1, w: 0, h: 2},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -3, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 0, h: 2}},
       false,
-      {x: -3, y: -1, w: 4, h: 2}
+      {position: {x: -3, y: -1}, size: {w: 4, h: 2}}
     ],
     [
       `
@@ -369,11 +369,11 @@ const tests: readonly Test[] = Object.freeze(
       └───┘ │
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -3, y: 0, w: 2, h: 2},
-      {x: -1, y: 0, w: 0, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -3, y: 0}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 0}, size: {w: 0, h: 1}},
       false,
-      {x: -3, y: -1, w: 4, h: 3}
+      {position: {x: -3, y: -1}, size: {w: 4, h: 3}}
     ],
     [
       `
@@ -385,11 +385,11 @@ const tests: readonly Test[] = Object.freeze(
       │  R│ │
       └───┘ │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -3, y: 1, w: 2, h: 2},
-      {x: -1, y: 1, w: 0, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -3, y: 1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 1}, size: {w: 0, h: 0}},
       false,
-      {x: -3, y: -1, w: 4, h: 4}
+      {position: {x: -3, y: -1}, size: {w: 4, h: 4}}
     ],
     [
       `
@@ -401,11 +401,11 @@ const tests: readonly Test[] = Object.freeze(
         │  R│
         └───┤
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -2, y: 1, w: 2, h: 2},
-      {x: -1, y: 1, w: 1, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -2, y: 1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 1}, size: {w: 1, h: 0}},
       false,
-      {x: -2, y: -1, w: 3, h: 4}
+      {position: {x: -2, y: -1}, size: {w: 3, h: 4}}
     ],
     [
       `
@@ -417,11 +417,11 @@ const tests: readonly Test[] = Object.freeze(
           │ │R│
           └─┼─┘
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: 1, w: 2, h: 2},
-      {x: -1, y: 1, w: 2, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 1}, size: {w: 2, h: 0}},
       false,
-      {x: -1, y: -1, w: 2, h: 4}
+      {position: {x: -1, y: -1}, size: {w: 2, h: 4}}
     ],
     [
       `
@@ -433,11 +433,11 @@ const tests: readonly Test[] = Object.freeze(
             │  R│
             ├───┘
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 0, y: 1, w: 2, h: 2},
-      {x: 0, y: 1, w: 1, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: 1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: 1}, size: {w: 1, h: 0}},
       false,
-      {x: -1, y: -1, w: 3, h: 4}
+      {position: {x: -1, y: -1}, size: {w: 3, h: 4}}
     ],
     [
       `
@@ -449,11 +449,11 @@ const tests: readonly Test[] = Object.freeze(
             │ │  R│
             │ └───┘
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 1, y: 1, w: 2, h: 2},
-      {x: 1, y: 1, w: 0, h: 0},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: 1}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: 1}, size: {w: 0, h: 0}},
       false,
-      {x: -1, y: -1, w: 4, h: 4}
+      {position: {x: -1, y: -1}, size: {w: 4, h: 4}}
     ],
     [
       `
@@ -465,11 +465,11 @@ const tests: readonly Test[] = Object.freeze(
             │ └───┘
             │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 1, y: 0, w: 2, h: 2},
-      {x: 1, y: 0, w: 0, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: 0}, size: {w: 2, h: 2}},
+      {position: {x: 1, y: 0}, size: {w: 0, h: 1}},
       false,
-      {x: -1, y: -1, w: 4, h: 3}
+      {position: {x: -1, y: -1}, size: {w: 4, h: 3}}
     ],
     [
       `
@@ -483,11 +483,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 2, y: -1, w: 2, h: 2},
-      {x: 2, y: -1, w: -1, h: 2},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 2, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 2, y: -1}, size: {w: -1, h: 2}},
       false,
-      {x: -1, y: -1, w: 5, h: 2}
+      {position: {x: -1, y: -1}, size: {w: 5, h: 2}}
     ],
     [
       `
@@ -501,11 +501,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 2, y: -2, w: 2, h: 2},
-      {x: 2, y: -1, w: -1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 2, y: -2}, size: {w: 2, h: 2}},
+      {position: {x: 2, y: -1}, size: {w: -1, h: 1}},
       false,
-      {x: -1, y: -2, w: 5, h: 3}
+      {position: {x: -1, y: -2}, size: {w: 5, h: 3}}
     ],
     [
       `
@@ -519,11 +519,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 0, y: -4, w: 2, h: 2},
-      {x: 0, y: -1, w: 1, h: -1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -4}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: -1}, size: {w: 1, h: -1}},
       false,
-      {x: -1, y: -4, w: 3, h: 5}
+      {position: {x: -1, y: -4}, size: {w: 3, h: 5}}
     ],
     [
       `
@@ -537,11 +537,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: -4, w: 2, h: 2},
-      {x: -1, y: -1, w: 2, h: -1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -4}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 2, h: -1}},
       false,
-      {x: -1, y: -4, w: 2, h: 5}
+      {position: {x: -1, y: -4}, size: {w: 2, h: 5}}
     ],
     [
       `
@@ -555,11 +555,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -2, y: -4, w: 2, h: 2},
-      {x: -1, y: -1, w: 1, h: -1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -2, y: -4}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: 1, h: -1}},
       false,
-      {x: -2, y: -4, w: 3, h: 5}
+      {position: {x: -2, y: -4}, size: {w: 3, h: 5}}
     ],
     [
       `
@@ -573,11 +573,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -4, y: -2, w: 2, h: 2},
-      {x: -1, y: -1, w: -1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -4, y: -2}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: -1, h: 1}},
       false,
-      {x: -4, y: -2, w: 5, h: 3}
+      {position: {x: -4, y: -2}, size: {w: 5, h: 3}}
     ],
     [
       `
@@ -591,11 +591,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -4, y: -1, w: 2, h: 2},
-      {x: -1, y: -1, w: -1, h: 2},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -4, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: -1}, size: {w: -1, h: 2}},
       false,
-      {x: -4, y: -1, w: 5, h: 2}
+      {position: {x: -4, y: -1}, size: {w: 5, h: 2}}
     ],
     [
       `
@@ -609,11 +609,11 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -4, y: 0, w: 2, h: 2},
-      {x: -1, y: 0, w: -1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -4, y: 0}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 0}, size: {w: -1, h: 1}},
       false,
-      {x: -4, y: -1, w: 5, h: 3}
+      {position: {x: -4, y: -1}, size: {w: 5, h: 3}}
     ],
     [
       `
@@ -627,11 +627,11 @@ const tests: readonly Test[] = Object.freeze(
          │  R│
          └───┤
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -2, y: 2, w: 2, h: 2},
-      {x: -1, y: 2, w: 1, h: -1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -2, y: 2}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 2}, size: {w: 1, h: -1}},
       false,
-      {x: -2, y: -1, w: 3, h: 5}
+      {position: {x: -2, y: -1}, size: {w: 3, h: 5}}
     ],
     [
       `
@@ -645,11 +645,11 @@ const tests: readonly Test[] = Object.freeze(
            │ │R│
            └─┼─┘
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: -1, y: 2, w: 2, h: 2},
-      {x: -1, y: 2, w: 2, h: -1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 2}, size: {w: 2, h: 2}},
+      {position: {x: -1, y: 2}, size: {w: 2, h: -1}},
       false,
-      {x: -1, y: -1, w: 2, h: 5}
+      {position: {x: -1, y: -1}, size: {w: 2, h: 5}}
     ],
     [
       `
@@ -663,11 +663,11 @@ const tests: readonly Test[] = Object.freeze(
              │  R│
              ├───┘
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 0, y: 2, w: 2, h: 2},
-      {x: 0, y: 2, w: 1, h: -1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: 2}, size: {w: 2, h: 2}},
+      {position: {x: 0, y: 2}, size: {w: 1, h: -1}},
       false,
-      {x: -1, y: -1, w: 3, h: 5}
+      {position: {x: -1, y: -1}, size: {w: 3, h: 5}}
     ],
     [
       `
@@ -681,75 +681,75 @@ const tests: readonly Test[] = Object.freeze(
              │
              │
     `,
-      {x: -1, y: -1, w: 2, h: 2},
-      {x: 2, y: 0, w: 2, h: 2},
-      {x: 2, y: 0, w: -1, h: 1},
+      {position: {x: -1, y: -1}, size: {w: 2, h: 2}},
+      {position: {x: 2, y: 0}, size: {w: 2, h: 2}},
+      {position: {x: 2, y: 0}, size: {w: -1, h: 1}},
       false,
-      {x: -1, y: -1, w: 5, h: 3}
+      {position: {x: -1, y: -1}, size: {w: 5, h: 3}}
     ],
     [
       `0 Distant Disjoint`,
-      {x: 0, y: 0, w: 10, h: 10},
-      {x: 17, y: -22, w: 8, h: 5},
-      {x: 17, y: 0, w: -7, h: -17},
+      {position: {x: 0, y: 0}, size: {w: 10, h: 10}},
+      {position: {x: 17, y: -22}, size: {w: 8, h: 5}},
+      {position: {x: 17, y: 0}, size: {w: -7, h: -17}},
       false,
-      {x: 0, y: -22, w: 25, h: 32}
+      {position: {x: 0, y: -22}, size: {w: 25, h: 32}}
     ],
     [
       `1 Distant Disjoint`,
-      {x: 0, y: 0, w: 10, h: 10},
-      {x: -17, y: -22, w: 8, h: 5},
-      {x: 0, y: 0, w: -9, h: -17},
+      {position: {x: 0, y: 0}, size: {w: 10, h: 10}},
+      {position: {x: -17, y: -22}, size: {w: 8, h: 5}},
+      {position: {x: 0, y: 0}, size: {w: -9, h: -17}},
       false,
-      {x: -17, y: -22, w: 27, h: 32}
+      {position: {x: -17, y: -22}, size: {w: 27, h: 32}}
     ],
     [
       `2 Distant Disjoint`,
-      {x: 0, y: 0, w: 10, h: 10},
-      {x: -17, y: 22, w: 8, h: 5},
-      {x: 0, y: 22, w: -9, h: -12},
+      {position: {x: 0, y: 0}, size: {w: 10, h: 10}},
+      {position: {x: -17, y: 22}, size: {w: 8, h: 5}},
+      {position: {x: 0, y: 22}, size: {w: -9, h: -12}},
       false,
-      {x: -17, y: 0, w: 27, h: 27}
+      {position: {x: -17, y: 0}, size: {w: 27, h: 27}}
     ],
     [
       `3 Distant Disjoint`,
-      {x: 0, y: 0, w: 10, h: 10},
-      {x: 17, y: 22, w: 8, h: 5},
-      {x: 17, y: 22, w: -7, h: -12},
+      {position: {x: 0, y: 0}, size: {w: 10, h: 10}},
+      {position: {x: 17, y: 22}, size: {w: 8, h: 5}},
+      {position: {x: 17, y: 22}, size: {w: -7, h: -12}},
       false,
-      {x: 0, y: 0, w: 25, h: 27}
+      {position: {x: 0, y: 0}, size: {w: 25, h: 27}}
     ],
     [
       `0 Disparate Disjoint`,
-      {x: 100, y: 100, w: 400, h: 1000},
-      {x: 20, y: -39, w: 12, h: 38},
-      {x: 100, y: 100, w: -68, h: -101},
+      {position: {x: 100, y: 100}, size: {w: 400, h: 1000}},
+      {position: {x: 20, y: -39}, size: {w: 12, h: 38}},
+      {position: {x: 100, y: 100}, size: {w: -68, h: -101}},
       false,
-      {x: 20, y: -39, w: 480, h: 1139}
+      {position: {x: 20, y: -39}, size: {w: 480, h: 1139}}
     ],
     [
       `1 Disparate Disjoint`,
-      {x: 100, y: 100, w: 400, h: 1000},
-      {x: -20, y: -39, w: 12, h: 38},
-      {x: 100, y: 100, w: -108, h: -101},
+      {position: {x: 100, y: 100}, size: {w: 400, h: 1000}},
+      {position: {x: -20, y: -39}, size: {w: 12, h: 38}},
+      {position: {x: 100, y: 100}, size: {w: -108, h: -101}},
       false,
-      {x: -20, y: -39, w: 520, h: 1139}
+      {position: {x: -20, y: -39}, size: {w: 520, h: 1139}}
     ],
     [
       `2 Disparate Disjoint`,
-      {x: 100, y: 100, w: 400, h: 1000},
-      {x: -20, y: 39, w: 12, h: 38},
-      {x: 100, y: 100, w: -108, h: -23},
+      {position: {x: 100, y: 100}, size: {w: 400, h: 1000}},
+      {position: {x: -20, y: 39}, size: {w: 12, h: 38}},
+      {position: {x: 100, y: 100}, size: {w: -108, h: -23}},
       false,
-      {x: -20, y: 39, w: 520, h: 1061}
+      {position: {x: -20, y: 39}, size: {w: 520, h: 1061}}
     ],
     [
       `3 Disparate Disjoint`,
-      {x: 100, y: 100, w: 400, h: 1000},
-      {x: 20, y: 39, w: 12, h: 38},
-      {x: 100, y: 100, w: -68, h: -23},
+      {position: {x: 100, y: 100}, size: {w: 400, h: 1000}},
+      {position: {x: 20, y: 39}, size: {w: 12, h: 38}},
+      {position: {x: 100, y: 100}, size: {w: -68, h: -23}},
       false,
-      {x: 20, y: 39, w: 480, h: 1061}
+      {position: {x: 20, y: 39}, size: {w: 480, h: 1061}}
     ]
   ].reduce(
     (ret: Test[], val) => [...ret, <Test>[...val, false], <Test>[...val, true]],

@@ -32,10 +32,10 @@ export namespace InstanceBuffer {
     dat.setInt16(i + 4, animation.size.w, littleEndian)
     dat.setInt16(i + 6, animation.size.h, littleEndian)
 
-    dat.setInt16(i + 8, image.bounds.x, littleEndian)
-    dat.setInt16(i + 10, image.bounds.y, littleEndian)
-    dat.setInt16(i + 12, image.bounds.w, littleEndian)
-    dat.setInt16(i + 14, image.bounds.h, littleEndian)
+    dat.setInt16(i + 8, image.bounds.position.x, littleEndian)
+    dat.setInt16(i + 10, image.bounds.position.y, littleEndian)
+    dat.setInt16(i + 12, image.bounds.size.w, littleEndian)
+    dat.setInt16(i + 14, image.bounds.size.h, littleEndian)
 
     dat.setInt16(i + 16, image.scale.x, littleEndian)
     dat.setInt16(i + 18, image.scale.y, littleEndian)

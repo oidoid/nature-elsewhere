@@ -92,8 +92,8 @@ function centerCameraOn(level: Level, on: Rect): void {
   const {x, y} = Level.clamp(
     level,
     Rect.centerOn(level.cam.bounds, on),
-    level.cam.bounds
+    level.cam.bounds.size
   )
-  level.cam.bounds.x = x
-  level.cam.bounds.y = y
+  level.cam.bounds.position.x = x
+  level.cam.bounds.position.y = y
 }
