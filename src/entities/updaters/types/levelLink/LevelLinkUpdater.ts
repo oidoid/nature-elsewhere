@@ -1,6 +1,6 @@
-import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
-import {Level} from '../../../levels/level/Level'
-import {Update} from '../../updaters/Update'
+import {UpdateStatus} from '../../updateStatus/UpdateStatus'
+import {Level} from '../../../../levels/level/Level'
+import {Update} from '../../Update'
 import {LevelLink} from './LevelLink'
 
 export namespace LevelLinkUpdater {

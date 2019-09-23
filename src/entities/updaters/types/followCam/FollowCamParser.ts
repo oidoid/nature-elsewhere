@@ -1,7 +1,7 @@
-import {UpdaterParser} from '../../updaters/UpdaterParser'
+import {UpdaterParser} from '../../UpdaterParser'
 import {FollowCamOrientation} from './FollowCamOrientation'
-import {WHParser} from '../../../math/wh/WHParser'
-import {ObjectUtil} from '../../../utils/ObjectUtil'
+import {WHParser} from '../../../../math/wh/WHParser'
+import {ObjectUtil} from '../../../../utils/ObjectUtil'
 
 export namespace FollowCamParser {
   export const parse: UpdaterParser = entity => {

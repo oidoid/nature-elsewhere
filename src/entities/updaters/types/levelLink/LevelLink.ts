@@ -1,5 +1,5 @@
-import {LevelType} from '../../../levels/levelType/LevelType'
-import {Entity} from '../../entity/Entity'
+import {LevelType} from '../../../../levels/levelType/LevelType'
+import {Entity} from '../../../entity/Entity'
 
 export interface LevelLink {
   readonly link: LevelType

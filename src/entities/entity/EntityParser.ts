@@ -24,8 +24,8 @@ import {TypeConfigMap} from '../TypeConfigMap'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdaterTypeParser} from '../updaters/updaterType/UpdaterTypeParser'
 import {UpdaterParser} from '../updaters/UpdaterParser'
-import {FollowCamParser} from '../types/followCam/FollowCamParser'
-import {LevelLinkParser} from '../types/levelLink/LevelLinkParser'
+import {FollowCamParser} from '../updaters/types/followCam/FollowCamParser'
+import {LevelLinkParser} from '../updaters/types/levelLink/LevelLinkParser'
 
 export namespace EntityParser {
   export function parseAll(config: EntityArrayConfig, atlas: Atlas): Entity[] {

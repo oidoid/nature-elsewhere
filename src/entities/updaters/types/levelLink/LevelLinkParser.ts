@@ -1,5 +1,5 @@
-import {UpdaterParser} from '../../updaters/UpdaterParser'
-import {LevelTypeParser} from '../../../levels/levelType/LevelTypeParser'
+import {UpdaterParser} from '../../UpdaterParser'
+import {LevelTypeParser} from '../../../../levels/levelType/LevelTypeParser'
 import {LevelLink} from './LevelLink'
 
 export namespace LevelLinkParser {

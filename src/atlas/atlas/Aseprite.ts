@@ -95,12 +95,11 @@ export namespace Aseprite {
     PING_PONG = 'pingpong'
   }
 
-  export interface Rect {
+  export interface Rect extends WH {
     readonly x: number
     readonly y: number
-    readonly w: number
-    readonly h: number
   }
+
   export interface WH {
     readonly w: number
     readonly h: number

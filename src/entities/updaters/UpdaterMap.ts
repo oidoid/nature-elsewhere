@@ -8,8 +8,8 @@ import {Update} from './Update'
 import {CheckboxUpdater} from '../types/checkbox/CheckboxUpdater'
 import {DestinationMarkerUpdater} from '../types/destinationMarker/DestinationMarkerUpdater'
 import {BackpackerUpdater} from '../types/backpacker/BackpackerUpdater'
-import {FollowCamUpdater} from '../types/followCam/FollowCamUpdater'
-import {LevelLinkUpdater} from '../types/levelLink/LevelLinkUpdater'
+import {FollowCamUpdater} from './types/followCam/FollowCamUpdater'
+import {LevelLinkUpdater} from './types/levelLink/LevelLinkUpdater'
 
 const wraparound: Update = () => {
   return UpdateStatus.UNCHANGED
