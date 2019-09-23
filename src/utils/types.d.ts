@@ -5,3 +5,4 @@ type Milliseconds = number
 type Int = number
 /** An integer in units of a thousandth of a pixel. */
 type DecamillipixelInt = Int
+type ValueOf<T> = T[keyof T]

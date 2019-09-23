@@ -48,4 +48,9 @@ export namespace XY {
     const y = NumberUtil.clamp(xy.y, min.y, max.y)
     return {x, y}
   }
+
+  export function distance(lhs: XY, rhs: XY): number {
+    const {x, y} = XY.sub(lhs, rhs)
+    return Math.sqrt(x * x + y * y)
+  }
 }

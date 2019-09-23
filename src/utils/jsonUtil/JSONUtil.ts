@@ -4,13 +4,12 @@ import {ObjectUtil} from '../ObjectUtil'
 export type JSON = string | number | boolean | JSONObject | JSONArray
 export interface JSONObject extends Readonly<Record<string, JSON>> {}
 export interface JSONArray extends ReadonlyArray<JSON> {}
-type t = JSON
 
 export namespace JSONUtil {
-  export const merge = (...val: readonly JSONObject[]): JSONObject => {
-    return val
+  export function merge(...objects: readonly JSONObject[]): JSONObject {
+    return objects
       .map(ObjectUtil.entries)
-      .reduce((ret, val) => ret.concat(val), [])
+      .reduce((entries, entriesArray) => entries.concat(entriesArray), [])
       .reduce((ret: JSONObject, [key, val]) => {
         const prev = ret[key]
         if (isJSONObject(prev) && isJSONObject(val)) val = merge(prev, val)
@@ -23,8 +22,11 @@ export namespace JSONUtil {
       }, {})
   }
 
-  export const copy = <T>(val: Readonly<T> & t): T =>
-    JSON.parse(JSON.stringify(val))
+  export function copy<T>(val: Readonly<T> & JSON): T {
+    return JSON.parse(JSON.stringify(val))
+  }
 }
 
-const isJSONObject = (val: t): val is JSONObject => ObjectUtil.is(val)
+function isJSONObject(val: JSON): val is JSONObject {
+  return ObjectUtil.is(val)
+}
