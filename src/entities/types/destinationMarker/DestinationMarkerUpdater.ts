@@ -14,8 +14,8 @@ export namespace DestinationMarkerUpdater {
       Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
     )
     status |= EntityUtil.setState(marker, DestinationMarkerState.VISIBLE)
-    EntityUtil.resetAnimation(marker)
-    const destination = XY.add(position, EntityUtil.imageState(marker).origin)
+    if (!(status & UpdateStatus.UPDATED)) EntityUtil.resetAnimation(marker)
+    const destination = XY.add(position, EntityUtil.imageRect(marker).origin)
     status |= EntityUtil.moveTo(marker, destination)
 
     return status

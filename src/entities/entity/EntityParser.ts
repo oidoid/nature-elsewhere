@@ -75,10 +75,10 @@ export namespace EntityParser {
     const parser = TypeParserMap[type]
     entity = parser ? parser(entity, atlas, parse) : entity
 
-    entity.updaters.forEach(updater => {
+    for (const updater of entity.updaters) {
       const parser = UpdaterParserMap[updater]
       entity = parser ? parser(entity, atlas, parse) : entity
-    })
+    }
 
     return entity
   }

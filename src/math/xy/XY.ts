@@ -53,7 +53,7 @@ export namespace XY {
     return {x, y}
   }
 
-  export function distance(lhs: Readonly<XY>, rhs: Readonly<XY>): number {
+  export function magnitude(lhs: Readonly<XY>, rhs: Readonly<XY>): number {
     const {x, y} = XY.sub(lhs, rhs)
     return Math.sqrt(x * x + y * y)
   }

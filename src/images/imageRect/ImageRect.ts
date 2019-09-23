@@ -2,6 +2,7 @@ import {Image} from '../image/Image'
 import {Rect} from '../../math/rect/Rect'
 import {XY} from '../../math/xy/XY'
 import {Layer} from '../layer/layer'
+import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
 
 export interface ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
@@ -34,20 +35,22 @@ export namespace ImageRect {
       rect.bounds.size.h = union.size.h
     }
   }
-  export function moveTo(rect: ImageRect, to: Readonly<XY>): void {
-    moveBy(rect, XY.sub(to, rect.bounds.position))
+  export function moveTo(rect: ImageRect, to: Readonly<XY>): UpdateStatus {
+    return moveBy(rect, XY.sub(to, rect.bounds.position))
   }
 
-  export function moveBy(rect: ImageRect, by: Readonly<XY>): void {
-    if (!by.x && !by.y) return
+  export function moveBy(rect: ImageRect, by: Readonly<XY>): UpdateStatus {
+    if (!by.x && !by.y) return UpdateStatus.UNCHANGED
     rect.bounds.position.x += by.x
     rect.bounds.position.y += by.y
-    rect.images.forEach(image => Image.moveBy(image, by))
+    for (const image of rect.images) Image.moveBy(image, by)
+    return UpdateStatus.UPDATED
   }
 
-  export function setScale(rect: ImageRect, scale: Readonly<XY>): void {
-    if (XY.equal(rect.scale, scale)) return
-    rect.images.forEach(image => Image.scale(image, XY.div(scale, rect.scale)))
+  export function setScale(rect: ImageRect, scale: Readonly<XY>): UpdateStatus {
+    if (XY.equal(rect.scale, scale)) return UpdateStatus.UNCHANGED
+    for (const image of rect.images)
+      Image.scale(image, XY.div(scale, rect.scale))
     rect.scale.x = scale.x
     rect.scale.y = scale.y
     const union = Rect.unionAll(rect.images.map(image => image.bounds))
@@ -57,10 +60,10 @@ export namespace ImageRect {
       rect.bounds.size.w = union.size.w
       rect.bounds.size.h = union.size.h
     }
+    return UpdateStatus.UPDATED
   }
 
   export function scale(rect: ImageRect, scale: XY): void {
-    scale = {x: rect.scale.x * scale.x, y: rect.scale.y * scale.y}
     ImageRect.setScale(rect, XY.mul(scale, rect.scale))
   }
 

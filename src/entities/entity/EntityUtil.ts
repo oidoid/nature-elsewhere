@@ -22,7 +22,7 @@ export namespace EntityUtil {
       parents' bounds should be updated. */
   export function invalidateBounds(entity: Entity): void {
     const bounds = Rect.unionAll([
-      imageState(entity).bounds,
+      imageRect(entity).bounds,
       ...entity.collisionBodies,
       ...entity.children.map(child => child.bounds)
     ])
@@ -34,31 +34,32 @@ export namespace EntityUtil {
     }
   }
 
-  export function moveTo(entity: Entity, to: XY): UpdateStatus {
+  export function moveTo(entity: Entity, to: Readonly<XY>): UpdateStatus {
     return moveBy(entity, XY.sub(to, entity.bounds.position))
   }
 
   /** Recursively move the entity, its images, its collision bodies, and all of
       its children. */
-  export function moveBy(entity: Entity, by: XY): UpdateStatus {
-    if (!by.x && !by.y) return UpdateStatus.UNCHANGED
+  export function moveBy(entity: Entity, by: Readonly<XY>): UpdateStatus {
+    let status = UpdateStatus.UNCHANGED
+    if (!by.x && !by.y) return status
     entity.bounds.position.x += by.x
     entity.bounds.position.y += by.y
-    ImageRect.moveBy(imageState(entity), by)
+    status |= ImageRect.moveBy(imageRect(entity), by)
     Rect.moveAllBy(entity.collisionBodies, by)
-    entity.children.forEach(child => moveBy(child, by))
-    return UpdateStatus.UPDATED
+    for (const child of entity.children) moveBy(child, by)
+    return status | UpdateStatus.UPDATED
   }
 
   export function getScale(entity: Readonly<Entity>): XY {
-    return imageState(entity).scale
+    return imageRect(entity).scale
   }
 
-  export function setScale(entity: Entity, scale: XY): void {
-    ImageRect.setScale(imageState(entity), scale)
+  export function setScale(entity: Entity, scale: Readonly<XY>): void {
+    ImageRect.setScale(imageRect(entity), scale)
   }
 
-  export function imageState(entity: Readonly<Entity>): ImageRect {
+  export function imageRect(entity: Readonly<Entity>): ImageRect {
     return ImageStateMachine.imageRect(entity.machine)
   }
 
@@ -68,7 +69,7 @@ export namespace EntityUtil {
   export function animate(entity: Entity, state: UpdateState): Image[] {
     if (!Rect.intersects(state.level.cam.bounds, entity.bounds)) return []
     const visible = ImageRect.intersects(
-      imageState(entity),
+      imageRect(entity),
       state.level.cam.bounds
     )
     for (const image of visible)

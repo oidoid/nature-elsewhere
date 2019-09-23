@@ -14,7 +14,7 @@ export namespace ImageEntityParser {
     const imageConfig = (<ImageEntityConfig>(<unknown>imageEntity)).image
     if (imageConfig) {
       const image = ImageParser.parse(imageConfig, atlas)
-      EntityUtil.imageState(imageEntity).images.push(image)
+      EntityUtil.imageRect(imageEntity).images.push(image)
     }
     return imageEntity
   }

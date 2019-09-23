@@ -24,6 +24,7 @@ export namespace ImageStateMachine {
     const {bounds, scale} = machine.map[machine.state]
     machine.state = state
     ImageRect.moveTo(machine.map[machine.state], bounds.position)
+    resetAnimation(machine)
     setScale(machine, scale)
     return UpdateStatus.UPDATED
   }

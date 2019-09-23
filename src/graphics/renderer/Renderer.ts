@@ -57,7 +57,7 @@ export namespace Renderer {
     gl.bindVertexArray(vertexArray)
 
     const perVertexBuffer = gl.createBuffer()
-    layout.perVertex.attributes.forEach(attr =>
+    for (const attr of layout.perVertex.attributes)
       GLUtil.initAttribute(
         gl,
         layout.perVertex.stride,
@@ -66,11 +66,10 @@ export namespace Renderer {
         attributes[attr.name],
         attr
       )
-    )
     GLUtil.bufferData(gl, perVertexBuffer, uv, GL.STATIC_READ)
 
     const perInstanceBuffer = gl.createBuffer()
-    layout.perInstance.attributes.forEach(attr =>
+    for (const attr of layout.perInstance.attributes)
       GLUtil.initAttribute(
         gl,
         layout.perInstance.stride,
@@ -79,7 +78,6 @@ export namespace Renderer {
         attributes[attr.name],
         attr
       )
-    )
 
     // Leave vertexArray bound.
 

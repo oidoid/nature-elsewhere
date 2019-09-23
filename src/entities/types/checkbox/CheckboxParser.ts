@@ -63,7 +63,8 @@ function setBackground(checkbox: Checkbox, atlas: Atlas): void {
     }
     checkbox.machine.map[state].images.length = 0
     const images = newBackgroundImages(state, atlas, size)
-    images.forEach(image => ImageRect.add(checkbox.machine.map[state], image))
+    for (const image of images)
+      ImageRect.add(checkbox.machine.map[state], image)
     checkbox.machine.map[state].bounds.position.x = 0
     checkbox.machine.map[state].bounds.position.y = 0
     ImageRect.moveTo(checkbox.machine.map[state], {
