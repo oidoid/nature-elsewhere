@@ -16,7 +16,7 @@
             "images": [
               {
                 "id": "palette-lightGreen",
-                "bounds": {"y": 44, "w": 128, "h": 2}
+                "bounds": {"position": {"y": 44}, "size": {"w": 128, "h": 2}}
               }
             ]
           }

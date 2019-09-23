@@ -77,10 +77,10 @@ function newBackgroundImages(
 ): Image[] {
   const id = backgroundID[state]
   const layer = 'UI_MID'
-  const background: ImageConfig = {id, bounds: {w, h}, layer}
+  const background: ImageConfig = {id, bounds: {size: {w, h}}, layer}
   const border: ImageConfig = {
     id,
-    bounds: {x: -1, y: 1, w: w + 2, h: h - 2},
+    bounds: {position: {x: -1, y: 1}, size: {w: w + 2, h: h - 2}},
     layer
   }
   return [

@@ -7,11 +7,15 @@
       "visible": {
         "images": [
           {"id": "sceneryTree"},
-          {"id": "sceneryTree-shadow", "bounds": {"y": 1}, "layer": "SHADOW"}
+          {
+            "id": "sceneryTree-shadow",
+            "bounds": {"position": {"y": 1}},
+            "layer": "SHADOW"
+          }
         ]
       }
     }
   },
   "collisionPredicate": "bodies",
-  "collisionBodies": [{"x": 3, "y": 8, "w": 4, "h": 3}]
+  "collisionBodies": [{"position": {"x": 3, "y": 8}, "size": {"w": 4, "h": 3}}]
 }

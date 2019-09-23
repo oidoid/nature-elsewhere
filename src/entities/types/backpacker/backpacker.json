@@ -51,6 +51,8 @@
   "updatePredicate": "always",
   "updaters": ["charBackpacker"],
   "collisionPredicate": "bodies",
-  "collisionBodies": [{"x": 2, "y": 12, "w": 4, "h": 3}],
+  "collisionBodies": [
+    {"position": {"x": 2, "y": 12}, "size": {"w": 4, "h": 3}}
+  ],
   "velocity": {"x": 90, "y": 90}
 }

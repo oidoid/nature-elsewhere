@@ -1,4 +1,7 @@
-import {Rect} from './Rect'
+import {WH} from '../wh/WH'
+import {XY} from '../xy/XY'
 
-export type RectConfig = Maybe<Partial<Rect>>
+export type RectConfig = Maybe<
+  Partial<{position?: Partial<XY>; size?: Partial<WH>}>
+>
 export type RectArrayConfig = Maybe<readonly RectConfig[]>

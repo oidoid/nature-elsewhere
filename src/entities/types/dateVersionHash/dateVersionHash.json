@@ -4,9 +4,6 @@
   "text": "",
   "textScale": {"x": 1, "y": 1},
   "textLayer": "UI_LO",
-  "machine": {
-    "state": "visible",
-    "map": {"visible": {"images": []}}
-  },
+  "machine": {"state": "visible", "map": {"visible": {"images": []}}},
   "updatePredicate": "always"
 }

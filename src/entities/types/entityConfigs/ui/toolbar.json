@@ -9,9 +9,9 @@
       "visible": {
         "images": [
           {"id": "sceneryFlag"},
-          {"id": "sceneryFlag", "bounds": {"x": 4}},
-          {"id": "sceneryFlag", "bounds": {"x": 8}},
-          {"id": "charArrow-upRight", "bounds": {"x": 12}}
+          {"id": "sceneryFlag", "bounds": {"position": {"x": 4}}},
+          {"id": "sceneryFlag", "bounds": {"position": {"x": 8}}},
+          {"id": "charArrow-upRight", "bounds": {"position": {"x": 12}}}
         ]
       }
     }

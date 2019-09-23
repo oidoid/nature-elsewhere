@@ -9,7 +9,7 @@
           {"id": "charFrog-idle"},
           {
             "id": "charFrog-idleShadow",
-            "bounds": {"x": -1, "y": 1},
+            "bounds": {"position": {"x": -1, "y": 1}},
             "layer": "SHADOW"
           }
         ]
@@ -18,5 +18,5 @@
   },
   "updatePredicate": "intersectsViewport",
   "collisionPredicate": "bodies",
-  "collisionBodies": [{"x": 1, "y": 14, "w": 6, "h": 2}]
+  "collisionBodies": [{"position": {"x": 1, "y": 14}, "size": {"w": 6, "h": 2}}]
 }

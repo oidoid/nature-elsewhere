@@ -7,9 +7,6 @@
   "minViewport": {"w": 1024, "h": 1024},
   "cam": {"followID": "uiPlayer"},
   "cursor": {"type": "uiCursor"},
-  "player": {
-    "id": "uiPlayer",
-    "type": "charBackpacker"
-  },
+  "player": {"id": "uiPlayer", "type": "charBackpacker"},
   "parentEntities": []
 }

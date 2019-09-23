@@ -15,7 +15,6 @@
   },
   "parentEntities": [
     {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"},
-
     {"type": "sceneryPlane", "machine": {"state": "paleGreen"}},
     {
       "type": "sceneryCloud",

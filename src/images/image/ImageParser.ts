@@ -27,15 +27,15 @@ export namespace ImageParser {
 
 function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
   const w =
-    config.bounds && config.bounds.w !== undefined
-      ? config.bounds.w
+    config.bounds && config.bounds.size && config.bounds.size.w !== undefined
+      ? config.bounds.size.w
       : Math.abs(config.scale && config.scale.x ? config.scale.x : 1) *
         atlas[id].size.w
   const h =
-    config.bounds && config.bounds.h !== undefined
-      ? config.bounds.h
+    config.bounds && config.bounds.size && config.bounds.size.h !== undefined
+      ? config.bounds.size.h
       : Math.abs(config.scale && config.scale.y ? config.scale.y : 1) *
         atlas[id].size.h
-  const xy = XYParser.parse(config.bounds)
+  const xy = XYParser.parse(config.bounds ? config.bounds.position : undefined)
   return {...xy, w, h}
 }

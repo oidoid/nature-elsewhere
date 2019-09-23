@@ -92,5 +92,5 @@ function newCharacterImage(
   atlas: Atlas
 ): Image {
   const id = MEM_FONT_PREFIX + char.toString().padStart(3, '0')
-  return ImageParser.parse({id, bounds: position, layer, scale}, atlas)
+  return ImageParser.parse({id, bounds: {position}, layer, scale}, atlas)
 }
