@@ -1,4 +1,5 @@
 {
+  "version": "0.0.0",
   "type": "uiTitle",
   "size": {"w": 256, "h": 256},
   "minViewport": {"w": 132, "h": 128},
