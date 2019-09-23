@@ -1,7 +1,0 @@
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://natureelsewhere.com/schemas/collision/CollisionPredicate.schema.json",
-  "type": "string",
-  "title": "CollisionPredicate",
-  "enum": ["never", "bounds", "bodies", "children"]
-}
