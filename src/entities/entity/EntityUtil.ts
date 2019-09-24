@@ -55,8 +55,20 @@ export namespace EntityUtil {
     return imageRect(entity).scale
   }
 
-  export function setScale(entity: Entity, scale: Readonly<XY>): void {
-    ImageRect.setScale(imageRect(entity), scale)
+  export function setScale(entity: Entity, scale: Readonly<XY>): UpdateStatus {
+    const collisionScale =
+      getScale(entity).x && getScale(entity).y
+        ? XY.div(scale, getScale(entity))
+        : undefined
+    const status = ImageRect.setScale(imageRect(entity), scale)
+    if (collisionScale && status & UpdateStatus.UPDATED) {
+      for (const body of entity.collisionBodies) {
+        body.size.w *= Math.abs(collisionScale.x)
+        body.size.h *= Math.abs(collisionScale.y)
+      }
+    }
+    invalidateBounds(entity)
+    return status
   }
 
   export function imageRect(entity: Readonly<Entity>): ImageRect {

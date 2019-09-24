@@ -43,8 +43,6 @@ export namespace EntityParser {
     const machine = ImageStateMachineParser.parse(config.machine, atlas)
     const children = parseAll(config.children, atlas)
     const scale = ImageScaleParser.parse(config.scale)
-    for (const state of Object.values(machine.map))
-      ImageRect.scale(state, scale)
 
     let entity: Entity = {
       ...specialization(config),

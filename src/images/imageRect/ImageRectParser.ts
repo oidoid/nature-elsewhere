@@ -12,7 +12,9 @@ export namespace ImageRectParser {
       return {
         origin: {x: 0, y: 0},
         bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
-        scale: {x: 0, y: 0},
+        // Always use non-zero scaling so that Entity can determine
+        // relative scaling of collision bodies.
+        scale: {x: 1, y: 1},
         images: []
       }
     const images = (config.images || []).map(image =>
