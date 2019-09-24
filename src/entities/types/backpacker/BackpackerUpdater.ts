@@ -17,7 +17,11 @@ export namespace BackpackerUpdater {
       !EntityTypeUtil.assert<Backpacker>(backpacker, EntityType.CHAR_BACKPACKER)
     )
       throw new Error()
-    if (!state.level.destination) return UpdateStatus.UNCHANGED
+    if (
+      !state.level.destination ||
+      state.level.destination.machine.state === EntityState.HIDDEN
+    )
+      return UpdateStatus.UNCHANGED
 
     let status = UpdateStatus.UNCHANGED
 
