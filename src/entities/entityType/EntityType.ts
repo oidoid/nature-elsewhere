@@ -37,3 +37,5 @@ export enum EntityType {
 }
 
 export const UI_KEY_PREFIX = 'UI_'
+export const CHAR_VALUE_PREFIX = 'char'
+export const SCENERY_VALUE_PREFIX = 'scenery'

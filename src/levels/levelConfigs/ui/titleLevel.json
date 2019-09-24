@@ -15,7 +15,7 @@
           "visible": {
             "images": [
               {
-                "id": "palette-lightGreen",
+                "id": "palette-paleGreen",
                 "bounds": {"position": {"y": 44}, "size": {"w": 128, "h": 2}}
               }
             ]
@@ -30,7 +30,8 @@
           "type": "uiText",
           "//": "[strings]",
           "text": "nature\nelsewhere",
-          "textScale": {"x": 4, "y": 4}
+          "textScale": {"x": 4, "y": 4},
+          "colorID": "palette-black"
         },
         {
           "type": "group",
