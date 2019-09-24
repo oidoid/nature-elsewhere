@@ -41,7 +41,8 @@ export namespace CheckboxParser {
       textLayer: checkbox.textLayer,
       textScale: {...checkbox.textScale},
       textMaxSize: {...checkbox.textMaxSize},
-      position: {...checkbox.bounds.position}
+      position: {...checkbox.bounds.position},
+      colorID: EntityUtil.imageRect(checkbox).colorID
     }
     const child = parser(config, atlas)
     checkbox.children[0] = child

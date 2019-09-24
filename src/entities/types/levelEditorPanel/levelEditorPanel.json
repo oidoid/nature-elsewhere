@@ -163,7 +163,8 @@
           "type": "uiCheckbox",
           "textLayer": "UI_HI",
           "textMaxSize": {"w": 34, "h": 5},
-          "position": {"x": 53, "y": 20}
+          "position": {"x": 53, "y": 20},
+          "colorID": "palette-black"
         },
         {
           "type": "uiText",
@@ -176,7 +177,8 @@
           "type": "uiCheckbox",
           "text": "0",
           "textLayer": "UI_HI",
-          "position": {"x": 47, "y": 26}
+          "position": {"x": 47, "y": 26},
+          "colorID": "palette-black"
         },
         {
           "type": "uiText",
@@ -189,14 +191,16 @@
           "type": "uiCheckbox",
           "text": "0",
           "position": {"x": 69, "y": 26},
-          "layer": "UI_HI"
+          "layer": "UI_HI",
+          "colorID": "palette-black"
         },
         {
           "id": "uiLevelEditorPanelEntity",
           "type": "uiCheckbox",
           "textMaxSize": {"w": 32, "h": 5},
           "position": {"x": 89, "y": 2},
-          "layer": "UI_HI"
+          "layer": "UI_HI",
+          "colorID": "palette-black"
         }
       ]
     }
