@@ -32,28 +32,28 @@ export namespace InstanceBuffer {
     dat.setInt16(i + 4, animation.size.w, littleEndian)
     dat.setInt16(i + 6, animation.size.h, littleEndian)
 
-    dat.setInt16(i + 8, image.bounds.position.x, littleEndian)
-    dat.setInt16(i + 10, image.bounds.position.y, littleEndian)
-    dat.setInt16(i + 12, image.bounds.size.w, littleEndian)
-    dat.setInt16(i + 14, image.bounds.size.h, littleEndian)
-
-    dat.setInt16(i + 16, image.scale.x, littleEndian)
-    dat.setInt16(i + 18, image.scale.y, littleEndian)
-
-    dat.setInt16(i + 20, image.wrap.x, littleEndian)
-    dat.setInt16(i + 22, image.wrap.y, littleEndian)
-    dat.setInt16(i + 24, image.wrapVelocity.x, littleEndian)
-    dat.setInt16(i + 26, image.wrapVelocity.y, littleEndian)
-
     const colorAnimation = atlas[image.colorID]
     const colorCelIndex = Animator.index(
       image.animator.period,
       colorAnimation.cels
     )
     const colorCel = colorAnimation.cels[colorCelIndex]
-    dat.setInt16(i + 28, colorCel.position.x, littleEndian)
-    dat.setInt16(i + 30, colorCel.position.y, littleEndian)
-    dat.setInt16(i + 32, colorAnimation.size.w, littleEndian)
-    dat.setInt16(i + 34, colorAnimation.size.h, littleEndian)
+    dat.setInt16(i + 8, colorCel.position.x, littleEndian)
+    dat.setInt16(i + 10, colorCel.position.y, littleEndian)
+    dat.setInt16(i + 12, colorAnimation.size.w, littleEndian)
+    dat.setInt16(i + 14, colorAnimation.size.h, littleEndian)
+
+    dat.setInt16(i + 16, image.bounds.position.x, littleEndian)
+    dat.setInt16(i + 18, image.bounds.position.y, littleEndian)
+    dat.setInt16(i + 20, image.bounds.size.w, littleEndian)
+    dat.setInt16(i + 22, image.bounds.size.h, littleEndian)
+
+    dat.setInt16(i + 24, image.scale.x, littleEndian)
+    dat.setInt16(i + 26, image.scale.y, littleEndian)
+
+    dat.setInt16(i + 28, image.wrap.x, littleEndian)
+    dat.setInt16(i + 30, image.wrap.y, littleEndian)
+    dat.setInt16(i + 32, image.wrapVelocity.x, littleEndian)
+    dat.setInt16(i + 34, image.wrapVelocity.y, littleEndian)
   }
 }
