@@ -3,6 +3,7 @@ import {ImageRect} from '../imageRect/ImageRect'
 import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
 import {Layer} from '../layer/layer'
 import {XY} from '../../math/xy/XY'
+import {AtlasID} from '../../atlas/atlasID/AtlasID'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.
@@ -12,6 +13,13 @@ export interface ImageStateMachine {
 }
 
 export namespace ImageStateMachine {
+  export function setColorID(
+    machine: ImageStateMachine,
+    id: AtlasID
+  ): UpdateStatus {
+    return ImageRect.setColorID(imageRect(machine), id)
+  }
+
   export function imageRect(machine: ImageStateMachine): ImageRect {
     return machine.map[machine.state]
   }

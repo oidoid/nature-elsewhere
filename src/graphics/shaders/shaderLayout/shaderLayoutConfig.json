@@ -10,6 +10,7 @@
     {"name": "source", "type": "SHORT", "len": 4},
     {"name": "target", "type": "SHORT", "len": 4},
     {"name": "scale", "type": "SHORT", "len": 2},
-    {"name": "translate", "type": "SHORT", "len": 4}
+    {"name": "translate", "type": "SHORT", "len": 4},
+    {"name": "colorSource", "type": "SHORT", "len": 4}
   ]
 }

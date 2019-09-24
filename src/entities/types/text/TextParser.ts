@@ -10,7 +10,7 @@ import {Rect} from '../../../math/rect/Rect'
 import {XYParser} from '../../../math/xy/XYParser'
 import {ImageParser} from '../../../images/image/ImageParser'
 import {Text} from './Text'
-import {MEM_FONT_PREFIX} from '../../../atlas/atlasID/AtlasID'
+import {MEM_FONT_PREFIX, AtlasID} from '../../../atlas/atlasID/AtlasID'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {EntityUtil} from '../../entity/EntityUtil'
 
@@ -36,7 +36,8 @@ export namespace TextParser {
               ? text.textMaxSize.h
               : Limits.maxShort
         }
-      }
+      },
+      EntityUtil.imageRect(text).colorID
     )
 
     // Images are added dynamically but ImageRect expects a static configuration
@@ -62,6 +63,7 @@ export namespace TextParser {
     layer: Layer.Key,
     scale: XY,
     bounds: Rect,
+    colorID?: AtlasID,
     y: number = 0
   ): readonly Image[] {
     const images = []
@@ -80,6 +82,7 @@ export namespace TextParser {
         },
         layer,
         scale,
+        colorID,
         atlas
       )
       images.push(char)
@@ -93,8 +96,12 @@ function newCharacterImage(
   position: XY,
   layer: Layer.Key,
   scale: XY,
+  colorID: Maybe<AtlasID>,
   atlas: Atlas
 ): Image {
   const id = MEM_FONT_PREFIX + char.toString().padStart(3, '0')
-  return ImageParser.parse({id, bounds: {position}, layer, scale}, atlas)
+  return ImageParser.parse(
+    {id, bounds: {position}, layer, scale, colorID},
+    atlas
+  )
 }

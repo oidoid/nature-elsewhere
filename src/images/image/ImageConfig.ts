@@ -7,6 +7,7 @@ import {DecamillipixelIntXYConfig} from '../decamillipixelIntXY/DecamillipixelIn
 
 export interface ImageConfig {
   readonly id: AtlasIDConfig
+  readonly colorID?: AtlasIDConfig
   readonly bounds?: RectConfig
   readonly layer?: LayerKeyConfig
   readonly animator?: AnimatorConfig

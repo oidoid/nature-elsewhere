@@ -13,8 +13,10 @@ import {XYParser} from '../../math/xy/XYParser'
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
     const id = AtlasIDParser.parse(config.id)
+    const colorID = AtlasIDParser.parse(config.colorID || config.id)
     return {
       id,
+      colorID,
       bounds: parseBounds(config, id, atlas),
       layer: LayerParser.parse(config.layer),
       animator: AnimatorParser.parse(config.animator),

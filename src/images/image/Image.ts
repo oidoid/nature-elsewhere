@@ -12,6 +12,8 @@ import {Rect} from '../../math/rect/Rect'
     collision tests but their bounds may be used. */
 export interface Image {
   readonly id: AtlasID
+  /** If different than id, use id for masking and colorID for coloring. */
+  colorID: AtlasID
   /** Specified in fractional pixel level coordinates. Includes scaling.
 
       Images.bounds are used to determine when the image is on screen and

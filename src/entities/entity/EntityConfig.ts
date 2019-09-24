@@ -7,6 +7,7 @@ import {RectArrayConfig} from '../../math/rect/RectConfig'
 import {UpdatePredicateConfig} from '../updaters/updatePredicate/UpdatePredicateConfig'
 import {UpdaterTypeArrayConfig} from '../updaters/updaterType/UpdaterTypeConfig'
 import {XYConfig} from '../../math/xy/XYConfig'
+import {AtlasIDConfig} from '../../atlas/atlasID/AtlasIDConfig'
 
 export interface EntityConfig {
   /** Defaults to EntityID.UNDEFINED. */
@@ -14,6 +15,7 @@ export interface EntityConfig {
   readonly type: EntityTypeConfig
   /** Defaults to (0, 0). */
   readonly position?: XYConfig
+  readonly colorID?: AtlasIDConfig
   readonly scale?: ImageScaleConfig
   /** Defaults to {}. */
   readonly machine?: ImageStateMachineConfig

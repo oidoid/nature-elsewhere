@@ -3,6 +3,7 @@ import {Rect} from '../../math/rect/Rect'
 import {XY} from '../../math/xy/XY'
 import {Layer} from '../layer/layer'
 import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
+import {AtlasID} from '../../atlas/atlasID/AtlasID'
 
 export interface ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
@@ -22,9 +23,18 @@ export interface ImageRect {
       configuration JSON. If additional imagery is needed, it is often best to
       add a child Entity instead. */
   readonly images: Image[]
+
+  colorID?: AtlasID
 }
 
 export namespace ImageRect {
+  export function setColorID(rect: ImageRect, id: AtlasID): UpdateStatus {
+    if (rect.colorID === id) return UpdateStatus.UNCHANGED
+    rect.colorID = id
+    for (const image of rect.images) image.colorID = id
+    return UpdateStatus.UPDATED
+  }
+
   export function add(rect: ImageRect, image: Image): void {
     rect.images.push(image)
     const union = Rect.unionAll(rect.images.map(image => image.bounds))

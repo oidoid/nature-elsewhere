@@ -26,6 +26,7 @@ import {UpdaterTypeParser} from '../updaters/updaterType/UpdaterTypeParser'
 import {UpdaterParser} from '../updaters/UpdaterParser'
 import {FollowCamParser} from '../updaters/types/followCam/FollowCamParser'
 import {LevelLinkParser} from '../updaters/types/levelLink/LevelLinkParser'
+import {AtlasIDParser} from '../../atlas/atlasID/AtlasIDParser'
 
 export namespace EntityParser {
   export function parseAll(config: EntityArrayConfig, atlas: Atlas): Entity[] {
@@ -40,9 +41,15 @@ export namespace EntityParser {
 
     config = withDefaults(config, type)
 
+    const colorID = config.colorID
+      ? AtlasIDParser.parse(config.colorID)
+      : undefined
     const machine = ImageStateMachineParser.parse(config.machine, atlas)
     const children = parseAll(config.children, atlas)
     const scale = ImageScaleParser.parse(config.scale)
+    for (const rect of Object.values(machine.map)) {
+      if (colorID) ImageRect.setColorID(rect, colorID)
+    }
 
     let entity: Entity = {
       ...specialization(config),

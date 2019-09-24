@@ -18,9 +18,11 @@ in ivec4 target;
 in ivec2 scale;
 in ivec4 translate; // Translation (x, y) and translation velocity (z, w) in
                     // units of 1/10000 pixels.
+in ivec4 colorSource;
 
 flat out ivec4 vSource;
 out vec2 vOffset;
+flat out ivec4 vColorSource;
 
 void main() {
   // Offset flipped images by their width or height.
@@ -28,4 +30,5 @@ void main() {
   vSource = source;
   vOffset = (vec2(-translate.xy + uv * target.zw) - vec2(translate.zw) * float(time) / 10000.) / vec2(scale);
   vOffset = vOffset - mod(vOffset, 1. / vec2(abs(scale)));
+  vColorSource = colorSource;
 }

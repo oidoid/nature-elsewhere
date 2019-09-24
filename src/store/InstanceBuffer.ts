@@ -44,5 +44,16 @@ export namespace InstanceBuffer {
     dat.setInt16(i + 22, image.wrap.y, littleEndian)
     dat.setInt16(i + 24, image.wrapVelocity.x, littleEndian)
     dat.setInt16(i + 26, image.wrapVelocity.y, littleEndian)
+
+    const colorAnimation = atlas[image.colorID]
+    const colorCelIndex = Animator.index(
+      image.animator.period,
+      colorAnimation.cels
+    )
+    const colorCel = colorAnimation.cels[colorCelIndex]
+    dat.setInt16(i + 28, colorCel.position.x, littleEndian)
+    dat.setInt16(i + 30, colorCel.position.y, littleEndian)
+    dat.setInt16(i + 32, colorAnimation.size.w, littleEndian)
+    dat.setInt16(i + 34, colorAnimation.size.h, littleEndian)
   }
 }

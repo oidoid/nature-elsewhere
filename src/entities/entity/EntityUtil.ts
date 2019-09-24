@@ -11,8 +11,13 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdaterMap} from '../updaters/UpdaterMap'
 import {Layer} from '../../images/layer/layer'
 import {ImageStateMachine} from '../../images/imageStateMachine/ImageStateMachine'
+import {AtlasID} from '../../atlas/atlasID/AtlasID'
 
 export namespace EntityUtil {
+  export function setColorID(entity: Entity, id: AtlasID): UpdateStatus {
+    return ImageStateMachine.setColorID(entity.machine, id)
+  }
+
   /** See Entity.spawnID. */
   export function equal(lhs: Entity, rhs: Entity): boolean {
     return lhs.spawnID === rhs.spawnID
