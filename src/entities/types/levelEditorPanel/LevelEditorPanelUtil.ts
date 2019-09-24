@@ -8,6 +8,7 @@ import {
   SCENERY_VALUE_PREFIX,
   CHAR_VALUE_PREFIX
 } from '../../entityType/EntityType'
+import {Layer} from '../../../images/layer/Layer'
 
 export namespace LevelEditorPanelUtil {
   export function setEntityFields(
@@ -26,7 +27,13 @@ export namespace LevelEditorPanelUtil {
       new RegExp(`^(${SCENERY_VALUE_PREFIX}|${CHAR_VALUE_PREFIX})`),
       ''
     )
-    CheckboxParser.setText(panel.entityCheckbox, entityLabel, atlas, parser)
+    CheckboxParser.setText(
+      panel.entityCheckbox,
+      Layer.UI_PICKER_OFFSET,
+      entityLabel,
+      atlas,
+      parser
+    )
     setEntityStateFields(panel, 0, atlas, parser)
   }
 
@@ -39,7 +46,13 @@ export namespace LevelEditorPanelUtil {
     const child = EntityPickerParser.getActiveChild(entityPicker)
     if (!child) return
     EntityPickerParser.offsetActiveChildStateIndex(entityPicker, offset)
-    CheckboxParser.setText(stateCheckbox, child.machine.state, atlas, parser)
+    CheckboxParser.setText(
+      stateCheckbox,
+      Layer.UI_PICKER_OFFSET,
+      child.machine.state,
+      atlas,
+      parser
+    )
     EntityUtil.invalidateBounds(radioGroup)
   }
 }

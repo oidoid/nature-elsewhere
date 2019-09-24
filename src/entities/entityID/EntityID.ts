@@ -4,11 +4,13 @@
 export enum EntityID {
   ANONYMOUS = 'anonymous',
   UI_GRID = 'uiGrid',
+  UI_MARQUEE = 'uiMarquee',
   UI_PLAYER = 'uiPlayer',
   UI_LINK_START = 'uiLinkStart',
   UI_LINK_OPTIONS = 'uiLinkOptions',
   UI_LINK_LEVEL_EDITOR = 'uiLinkLevelEditor',
   UI_LINK_EXIT = 'uiLinkExit',
+  UI_LEVEL_EDITOR_PANEL = 'uiLevelEditorPanel',
   UI_LEVEL_EDITOR_RADIO_GROUP = 'uiLevelEditorRadioGroup',
   UI_LEVEL_EDITOR_PANEL_X = 'uiLevelEditorPanelX',
   UI_LEVEL_EDITOR_PANEL_Y = 'uiLevelEditorPanelY',

@@ -13,6 +13,8 @@ import {UpdateState} from '../../updaters/UpdateState'
 import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {Checkbox} from '../checkbox/Checkbox'
 import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
+import {LevelUtil} from '../../../levels/level/LevelUtil'
+import {Layer} from '../../../images/layer/Layer'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -25,6 +27,7 @@ export namespace LevelEditorPanelUpdater {
       throw new Error()
 
     let status = UpdateStatus.UNCHANGED
+    if (LevelUtil.collisionWithCursor(state.level, panel)) console.log('cursor')
     if (panel.decrementButton.clicked || panel.incrementButton.clicked) {
       const offset = panel.decrementButton.clicked
         ? -1
@@ -39,9 +42,9 @@ export namespace LevelEditorPanelUpdater {
       else if (panel.stateCheckbox.checked)
         updateEntityState(panel, state, offset)
     }
-    if (panel.removeButton.clicked) {
+    if (panel.destroyButton.clicked) {
     }
-    if (panel.addButton.clicked) {
+    if (panel.createButton.clicked) {
       const child = EntityPickerParser.getActiveChild(panel.entityPicker)
       if (child) {
         const position = {
@@ -56,7 +59,14 @@ export namespace LevelEditorPanelUpdater {
           },
           state.level.atlas
         )
-        state.level.parentEntities.push(entity)
+        const sandbox = EntityUtil.findAny(
+          state.level.parentEntities,
+          EntityID.UI_LEVEL_EDITOR_SANDBOX
+        )
+        if (!sandbox) throw new Error('Missing sandbox.')
+
+        sandbox.children.push(entity)
+        EntityUtil.invalidateBounds(sandbox)
       }
     }
     if (panel.toggleGridButton.clicked) toggleGrid(state)
@@ -73,6 +83,7 @@ function updateNumberCheckbox(
   const num = checkboxNumber(checkbox) + offset
   CheckboxParser.setText(
     checkbox,
+    Layer.UI_PICKER_OFFSET,
     num.toString(),
     state.level.atlas,
     EntityParser.parse

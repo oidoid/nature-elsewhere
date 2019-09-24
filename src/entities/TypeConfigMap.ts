@@ -28,6 +28,7 @@ import * as UI_DATE_VERSION_HASH from './types/dateVersionHash/dateVersionHash.j
 import * as UI_DESTINATION_MARKER from './types/destinationMarker/destinationMarker.json'
 import * as UI_ENTITY_PICKER from './types/entityPicker/entityPicker.json'
 import * as UI_LEVEL_EDITOR_PANEL from './types/levelEditorPanel/levelEditorPanel.json'
+import * as UI_MARQUEE from './types/marquee/marquee.json'
 import * as UI_RADIO_BUTTON_GROUP from './types/entityConfigs/ui/radioCheckboxGroup.json'
 import * as UI_TEXT from './types/text/text.json'
 import * as UI_TOOLBAR from './types/entityConfigs/ui/toolbar.json'
@@ -69,6 +70,7 @@ export const TypeConfigMap: Readonly<
   [EntityType.UI_DESTINATION_MARKER]: UI_DESTINATION_MARKER,
   [EntityType.UI_ENTITY_PICKER]: UI_ENTITY_PICKER,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
+  [EntityType.UI_MARQUEE]: UI_MARQUEE,
   [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
   [EntityType.UI_TEXT]: UI_TEXT,
   [EntityType.UI_TOOLBAR]: UI_TOOLBAR

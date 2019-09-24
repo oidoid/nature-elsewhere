@@ -31,6 +31,7 @@ export enum EntityType {
   UI_DESTINATION_MARKER = 'uiDestinationMarker',
   UI_ENTITY_PICKER = 'uiEntityPicker',
   UI_LEVEL_EDITOR_PANEL = 'uiLevelEditorPanel',
+  UI_MARQUEE = 'uiMarquee',
   UI_RADIO_CHECKBOX_GROUP = 'uiRadioCheckboxGroup',
   UI_TEXT = 'uiText',
   UI_TOOLBAR = 'uiToolbar'

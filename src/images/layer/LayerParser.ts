@@ -1,4 +1,4 @@
-import {Layer} from './layer'
+import {Layer} from './Layer'
 import {LayerKeyConfig} from './LayerConfig'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 

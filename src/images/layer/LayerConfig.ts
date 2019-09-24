@@ -1,3 +1,3 @@
-import {Layer} from './layer'
+import {Layer} from './Layer'
 
 export type LayerKeyConfig = Maybe<Layer.Key | string>

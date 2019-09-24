@@ -12,5 +12,6 @@ export enum UpdaterType {
   UI_LINK = 'uiLink',
   UI_LEVEL_LINK = 'uiLevelLink',
   UI_DESTINATION_MARKER = 'uiDestinationMarker',
-  CHAR_BACKPACKER = 'charBackpacker'
+  CHAR_BACKPACKER = 'charBackpacker',
+  UI_MARQUEE = 'uiMarquee'
 }

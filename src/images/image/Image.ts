@@ -2,7 +2,7 @@ import {AtlasID} from '../../atlas/atlasID/AtlasID'
 import {Animator} from '../animator/Animator'
 import {Atlas} from '../../atlas/atlas/Atlas'
 import {DecamillipixelIntXY, IntXY, XY} from '../../math/xy/XY'
-import {Layer} from '../layer/layer'
+import {Layer} from '../layer/Layer'
 import {Rect} from '../../math/rect/Rect'
 
 /** A mapping from a source atlas subtexture to a target. The target region

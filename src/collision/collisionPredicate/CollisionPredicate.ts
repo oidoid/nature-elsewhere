@@ -20,6 +20,7 @@ export enum CollisionPredicate {
       bodies. The bounds and _any_ body must intersect to pass the test. If the
       entity has no bodies, the test fails. Children are not solicited. */
   BODIES = 'bodies',
+  IMAGES = 'images',
   /** Intersection tests on the specifying entity's bounds and, if passed, test
       all descendants recursively as specified by each parent in the chain for
       the first passing child. If a child collides, the top-most parents are

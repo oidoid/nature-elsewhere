@@ -10,6 +10,7 @@ import {DestinationMarkerUpdater} from '../types/destinationMarker/DestinationMa
 import {BackpackerUpdater} from '../types/backpacker/BackpackerUpdater'
 import {FollowCamUpdater} from './types/followCam/FollowCamUpdater'
 import {LevelLinkUpdater} from './types/levelLink/LevelLinkUpdater'
+import {MarqueeUpdater} from '../types/marquee/MarqueeUpdater'
 
 const wraparound: Update = () => {
   return UpdateStatus.UNCHANGED
@@ -29,5 +30,6 @@ export const UpdaterMap: Readonly<Record<UpdaterType, Update>> = {
   [UpdaterType.UI_LINK]: Link.update,
   [UpdaterType.UI_LEVEL_LINK]: LevelLinkUpdater.update,
   [UpdaterType.UI_DESTINATION_MARKER]: DestinationMarkerUpdater.update,
-  [UpdaterType.CHAR_BACKPACKER]: BackpackerUpdater.update
+  [UpdaterType.CHAR_BACKPACKER]: BackpackerUpdater.update,
+  [UpdaterType.UI_MARQUEE]: MarqueeUpdater.update
 }

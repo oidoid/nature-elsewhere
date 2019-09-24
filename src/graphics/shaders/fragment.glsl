@@ -17,5 +17,6 @@ void main() {
   vec4 alphaPx = texture(atlas, alphaPosition / vec2(atlasSize));
   vec2 colorPosition = vec2(vSourceColor) + trunc(mod(vOffset, vec2(vSourceColor.zw)));
   vec4 colorPx = texture(atlas, colorPosition / vec2(atlasSize));
+  // Mask operation is source alpha.
   frag = vec4(colorPx.rgb, alphaPx.a);
 }

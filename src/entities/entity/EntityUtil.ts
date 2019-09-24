@@ -9,7 +9,7 @@ import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../math/xy/XY'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdaterMap} from '../updaters/UpdaterMap'
-import {Layer} from '../../images/layer/layer'
+import {Layer} from '../../images/layer/Layer'
 import {ImageStateMachine} from '../../images/imageStateMachine/ImageStateMachine'
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
 

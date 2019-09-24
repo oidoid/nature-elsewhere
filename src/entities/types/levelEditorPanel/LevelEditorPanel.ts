@@ -14,7 +14,7 @@ export interface LevelEditorPanel extends Entity {
   readonly entityPicker: EntityPicker
   readonly decrementButton: Button
   readonly incrementButton: Button
-  readonly removeButton: Button
-  readonly addButton: Button
+  readonly destroyButton: Button
+  readonly createButton: Button
   readonly toggleGridButton: Button
 }

@@ -1,7 +1,7 @@
 import {Image} from '../image/Image'
 import {Rect} from '../../math/rect/Rect'
 import {XY} from '../../math/xy/XY'
-import {Layer} from '../layer/layer'
+import {Layer} from '../layer/Layer'
 import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
 

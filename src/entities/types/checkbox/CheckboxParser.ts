@@ -13,6 +13,7 @@ import {WH} from '../../../math/wh/WH'
 import {AtlasID} from '../../../atlas/atlasID/AtlasID'
 import {CheckboxState} from './CheckboxState'
 import {IEntityParser} from '../../RecursiveEntityParser'
+import {Layer} from '../../../images/layer/Layer'
 
 export namespace CheckboxParser {
   export function parse(
@@ -22,13 +23,14 @@ export namespace CheckboxParser {
   ): Checkbox {
     if (!EntityTypeUtil.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
-    setText(checkbox, checkbox.text, atlas, parser)
+    setText(checkbox, 0, checkbox.text, atlas, parser)
     if (!('checked' in checkbox)) (<Checkbox>checkbox).checked = false
     return <Checkbox>checkbox
   }
 
   export function setText(
     checkbox: Checkbox,
+    layer: Layer,
     text: string,
     atlas: Atlas,
     parser: IEntityParser
@@ -40,28 +42,30 @@ export namespace CheckboxParser {
       textLayer: checkbox.textLayer,
       textScale: {...checkbox.textScale},
       textMaxSize: {...checkbox.textMaxSize},
-      position: {...checkbox.bounds.position},
+      position: {
+        x: checkbox.bounds.position.x + 1,
+        y: checkbox.bounds.position.y
+      },
       colorID: EntityUtil.imageRect(checkbox).colorID
     }
     const child = parser(config, atlas)
+    EntityUtil.elevate(child, layer)
     checkbox.children[0] = child
-    setBackground(checkbox, atlas)
+    setBackground(checkbox, layer, atlas)
     EntityUtil.invalidateBounds(checkbox)
   }
 }
 
-function setBackground(checkbox: Checkbox, atlas: Atlas): void {
+function setBackground(checkbox: Checkbox, layer: Layer, atlas: Atlas): void {
   const text = checkbox.children[0]
   for (const state of [CheckboxState.UNCHECKED, CheckboxState.CHECKED]) {
     const size = {w: text.bounds.size.w, h: text.bounds.size.h}
     checkbox.machine.map[state].images.length = 0
-    const images = newBackgroundImages(state, atlas, size)
+    const images = newBackgroundImages(state, layer, atlas, size)
     for (const image of images)
       ImageRect.add(checkbox.machine.map[state], image)
-    checkbox.machine.map[state].bounds.position.x = 0
-    checkbox.machine.map[state].bounds.position.y = 0
     ImageRect.moveTo(checkbox.machine.map[state], {
-      x: text.bounds.position.x,
+      x: text.bounds.position.x - 1,
       y: checkbox.bounds.position.y
     })
   }
@@ -69,21 +73,27 @@ function setBackground(checkbox: Checkbox, atlas: Atlas): void {
 
 function newBackgroundImages(
   state: CheckboxState,
+  layerOffset: Layer,
   atlas: Atlas,
   {w, h}: WH
 ): Image[] {
   const id = backgroundID[state]
   const layer = 'UI_MID'
-  const background: ImageConfig = {id, bounds: {size: {w, h}}, layer}
-  const border: ImageConfig = {
+  const background: ImageConfig = {
     id,
-    bounds: {position: {x: -1, y: 1}, size: {w: w + 2, h: h - 2}},
+    bounds: {position: {x: 1}, size: {w, h}},
     layer
   }
-  return [
-    ImageParser.parse(background, atlas),
-    ImageParser.parse(border, atlas)
-  ]
+  const border: ImageConfig = {
+    id,
+    bounds: {position: {y: 1}, size: {w: w + 2, h: h - 2}},
+    layer
+  }
+  const backgroundImage = ImageParser.parse(background, atlas)
+  const borderImage = ImageParser.parse(border, atlas)
+  Image.elevate(backgroundImage, layerOffset)
+  Image.elevate(borderImage, layerOffset)
+  return [backgroundImage, borderImage]
 }
 const backgroundID: Readonly<Record<CheckboxState, AtlasID>> = Object.freeze({
   [CheckboxState.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,

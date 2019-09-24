@@ -1,7 +1,7 @@
 import {EntityState} from '../../entities/entityState/EntityState'
 import {ImageRect} from '../imageRect/ImageRect'
 import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
-import {Layer} from '../layer/layer'
+import {Layer} from '../layer/Layer'
 import {XY} from '../../math/xy/XY'
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
 

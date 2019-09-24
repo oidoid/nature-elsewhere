@@ -1,88 +1,7 @@
 {
   "version": "0.0.0",
+  "id": "uiLevelEditorPanel",
   "type": "uiLevelEditorPanel",
-  "machine": {
-    "state": "visible",
-    "map": {
-      "visible": {
-        "images": [
-          {
-            "id": "palette-white",
-            "bounds": {
-              "position": {"x": 1, "y": 21},
-              "size": {"w": 42, "h": 11}
-            },
-            "layer": "ABOVE_PLANE"
-          },
-          {
-            "id": "uiCheckerboard-blueGrey",
-            "bounds": {"position": {"y": 21}, "size": {"w": 1, "h": 11}},
-            "layer": "UI_MID"
-          },
-          {
-            "id": "uiCheckerboard-blueGrey",
-            "bounds": {
-              "position": {"x": 1, "y": 20},
-              "size": {"w": 42, "h": 1}
-            },
-            "layer": "UI_MID"
-          },
-          {
-            "id": "palette-white",
-            "bounds": {
-              "position": {"x": 43, "y": 19},
-              "size": {"w": 45, "h": 13}
-            },
-            "layer": "UI_LO"
-          },
-          {
-            "id": "uiCheckerboard-blueGrey",
-            "bounds": {"position": {"x": 42, "y": 19}, "size": {"w": 1}},
-            "layer": "UI_MID"
-          },
-          {
-            "id": "uiCheckerboard-blueGrey",
-            "bounds": {
-              "position": {"x": 43, "y": 18},
-              "size": {"w": 44, "h": 1}
-            },
-            "layer": "UI_MID"
-          },
-          {
-            "id": "palette-white",
-            "bounds": {
-              "position": {"x": 87, "y": 1},
-              "size": {"w": 34, "h": 31}
-            },
-            "layer": "UI_LO"
-          },
-          {
-            "id": "uiCheckerboard-blueGrey",
-            "bounds": {
-              "position": {"x": 87, "y": 1},
-              "size": {"w": 1, "h": 17}
-            },
-            "wrap": {"y": 1},
-            "layer": "UI_MID"
-          },
-          {
-            "id": "uiCheckerboard-blueGrey",
-            "bounds": {"position": {"x": 88}, "size": {"w": 32, "h": 1}},
-            "wrap": {"x": 1},
-            "layer": "UI_MID"
-          },
-          {
-            "id": "uiCheckerboard-blueGrey",
-            "bounds": {
-              "position": {"x": 120, "y": 1},
-              "size": {"w": 1, "h": 1}
-            },
-            "layer": "UI_MID"
-          }
-        ]
-      }
-    }
-  },
   "updatePredicate": "always",
   "positionRelativeToCam": "southEast",
   "updaters": ["uiFollowCam", "uiLevelEditorPanel"],
@@ -163,7 +82,7 @@
           "type": "uiCheckbox",
           "textLayer": "UI_HI",
           "textMaxSize": {"w": 34, "h": 5},
-          "position": {"x": 53, "y": 20},
+          "position": {"x": 52, "y": 20},
           "colorID": "palette-black"
         },
         {
@@ -177,7 +96,7 @@
           "type": "uiCheckbox",
           "text": "0",
           "textLayer": "UI_HI",
-          "position": {"x": 47, "y": 26},
+          "position": {"x": 46, "y": 26},
           "colorID": "palette-black"
         },
         {
@@ -190,7 +109,7 @@
           "id": "uiLevelEditorPanelY",
           "type": "uiCheckbox",
           "text": "0",
-          "position": {"x": 69, "y": 26},
+          "position": {"x": 68, "y": 26},
           "layer": "UI_HI",
           "colorID": "palette-black"
         },
@@ -198,11 +117,106 @@
           "id": "uiLevelEditorPanelEntity",
           "type": "uiCheckbox",
           "textMaxSize": {"w": 32, "h": 5},
-          "position": {"x": 89, "y": 2},
+          "position": {"x": 88, "y": 2},
           "layer": "UI_HI",
           "colorID": "palette-black"
         }
       ]
+    },
+    {
+      "type": "group",
+      "collisionPredicate": "images",
+      "machine": {
+        "state": "visible",
+        "map": {
+          "visible": {
+            "images": [
+              {
+                "id": "palette-white",
+                "bounds": {
+                  "position": {"x": 1, "y": 21},
+                  "size": {"w": 42, "h": 11}
+                },
+                "layer": "ABOVE_PLANE"
+              },
+              {
+                "id": "uiCheckerboard-blueGrey",
+                "bounds": {
+                  "position": {"y": 21},
+                  "size": {"w": 1, "h": 11}
+                },
+                "layer": "UI_MID"
+              },
+              {
+                "id": "uiCheckerboard-blueGrey",
+                "bounds": {
+                  "position": {"x": 1, "y": 20},
+                  "size": {"w": 42, "h": 1}
+                },
+                "layer": "UI_MID"
+              },
+              {
+                "id": "palette-white",
+                "bounds": {
+                  "position": {"x": 43, "y": 19},
+                  "size": {"w": 45, "h": 13}
+                },
+                "layer": "UI_LO"
+              },
+              {
+                "id": "uiCheckerboard-blueGrey",
+                "bounds": {
+                  "position": {"x": 42, "y": 19},
+                  "size": {"w": 1}
+                },
+                "layer": "UI_MID"
+              },
+              {
+                "id": "uiCheckerboard-blueGrey",
+                "bounds": {
+                  "position": {"x": 43, "y": 18},
+                  "size": {"w": 44, "h": 1}
+                },
+                "layer": "UI_MID"
+              },
+              {
+                "id": "palette-white",
+                "bounds": {
+                  "position": {"x": 87, "y": 1},
+                  "size": {"w": 34, "h": 31}
+                },
+                "layer": "UI_LO"
+              },
+              {
+                "id": "uiCheckerboard-blueGrey",
+                "bounds": {
+                  "position": {"x": 87, "y": 1},
+                  "size": {"w": 1, "h": 17}
+                },
+                "wrap": {"y": 1},
+                "layer": "UI_MID"
+              },
+              {
+                "id": "uiCheckerboard-blueGrey",
+                "bounds": {
+                  "position": {"x": 88},
+                  "size": {"w": 32, "h": 1}
+                },
+                "wrap": {"x": 1},
+                "layer": "UI_MID"
+              },
+              {
+                "id": "uiCheckerboard-blueGrey",
+                "bounds": {
+                  "position": {"x": 120, "y": 1},
+                  "size": {"w": 1, "h": 1}
+                },
+                "layer": "UI_MID"
+              }
+            ]
+          }
+        }
+      }
     }
   ]
 }

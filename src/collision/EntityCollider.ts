@@ -53,7 +53,7 @@ export namespace EntityCollider {
       return
     }
 
-    // The RHS entity has body or children collision.
+    // The RHS entity has body, image, or children collision.
 
     if (rhs.collisionPredicate === CollisionPredicate.BODIES) {
       // The RHS entity only has collision bodies. If the LHS or its children
@@ -61,6 +61,26 @@ export namespace EntityCollider {
       // Otherwise, no collision has occurred.
       for (const body of rhs.collisionBodies) {
         const collision = collidesRect(lhs, body)
+        if (collision)
+          return {
+            lhs: {
+              parent: EntityUtil.equal(lhs, collision.descendant)
+                ? undefined
+                : lhs,
+              descendant: collision.descendant
+            },
+            rhs: {descendant: rhs}
+          }
+      }
+      return
+    }
+
+    if (rhs.collisionPredicate === CollisionPredicate.IMAGES) {
+      // The RHS entity only has image collision. If the LHS or its children
+      // collide with any of the RHS's images, a collision has occurred.
+      // Otherwise, no collision has occurred.
+      for (const image of EntityUtil.imageRect(rhs).images) {
+        const collision = collidesRect(lhs, image.bounds)
         if (collision)
           return {
             lhs: {
@@ -111,6 +131,17 @@ export namespace EntityCollider {
     if (entity.collisionPredicate === CollisionPredicate.BODIES) {
       // Test if any body collides.
       if (entity.collisionBodies.some(body => Rect.intersects(rect, body)))
+        return {descendant: entity}
+      return
+    }
+
+    if (entity.collisionPredicate === CollisionPredicate.IMAGES) {
+      // Test if any image collides.
+      if (
+        EntityUtil.imageRect(entity).images.some(image =>
+          Rect.intersects(rect, image.bounds)
+        )
+      )
         return {descendant: entity}
       return
     }

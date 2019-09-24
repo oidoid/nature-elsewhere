@@ -5,6 +5,7 @@ import {EntityID} from '../../entityID/EntityID'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {EntityUtil} from '../../entity/EntityUtil'
 import {LevelEditorPanelUtil} from './LevelEditorPanelUtil'
+import {Layer} from '../../../images/layer/Layer'
 
 export namespace LevelEditorPanelParser {
   export const parse: UpdaterParser = (panel, atlas, parser) => {
@@ -41,11 +42,14 @@ export namespace LevelEditorPanelParser {
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_INCREMENT
     )
-    const removeButton = EntityUtil.find(
+    const destroyButton = EntityUtil.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_REMOVE
     )
-    const addButton = EntityUtil.find(panel, EntityID.UI_LEVEL_EDITOR_PANEL_ADD)
+    const createButton = EntityUtil.find(
+      panel,
+      EntityID.UI_LEVEL_EDITOR_PANEL_ADD
+    )
     const toggleGridButton = EntityUtil.find(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_TOGGLE_GRID
@@ -60,8 +64,8 @@ export namespace LevelEditorPanelParser {
       entityPicker,
       decrementButton,
       incrementButton,
-      removeButton,
-      addButton,
+      destroyButton,
+      createButton,
       toggleGridButton
     }
     LevelEditorPanelUtil.setEntityFields(
@@ -70,6 +74,7 @@ export namespace LevelEditorPanelParser {
       atlas,
       parser
     )
+    EntityUtil.elevate(ret, Layer.UI_PICKER_OFFSET)
 
     return ret
   }
