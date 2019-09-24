@@ -84,7 +84,7 @@ export namespace EntityCollider {
           rhs: {
             parent: EntityUtil.equal(rhs, collision.rhs.descendant)
               ? undefined
-              : lhs,
+              : rhs,
             descendant: collision.rhs.descendant
           }
         }
