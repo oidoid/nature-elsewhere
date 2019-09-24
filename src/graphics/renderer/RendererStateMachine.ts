@@ -54,7 +54,11 @@ function onEvent(machine: RendererStateMachine, ev: Event): void {
 
 function loop(machine: RendererStateMachine, then?: number): void {
   machine.frameID = machine.window.requestAnimationFrame(now => {
-    machine.onFrame(now - (then || now)), loop(machine, now)
+    // Duration can be great when frame is held for debugging. Limit it to one
+    // second.
+    const time = Math.min(now - (then || now), 1000)
+    machine.onFrame(time)
+    loop(machine, now)
   })
 }
 
