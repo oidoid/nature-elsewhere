@@ -4,15 +4,15 @@ import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
-import {Level} from '../../../levels/level/Level'
 import {Checkbox} from './Checkbox'
 import {CheckboxState} from './CheckboxState'
+import {LevelUtil} from '../../../levels/level/LevelUtil'
 
 export namespace CheckboxUpdater {
   export const update: Update = (checkbox, state) => {
     if (!EntityTypeUtil.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
-    const collision = Level.collisionWithCursor(state.level, checkbox)
+    const collision = LevelUtil.collisionWithCursor(state.level, checkbox)
     if (!collision) return UpdateStatus.UNCHANGED
 
     let status = UpdateStatus.UNCHANGED

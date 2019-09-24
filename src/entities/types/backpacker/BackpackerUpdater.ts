@@ -4,12 +4,12 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {EntityState} from '../../entityState/EntityState'
 import {EntityCollider} from '../../../collision/EntityCollider'
 import {NumberUtil} from '../../../math/number/NumberUtil'
-import {Level} from '../../../levels/level/Level'
 import {Update} from '../../updaters/Update'
 import {Backpacker} from './Backpacker'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {EntityUtil} from '../../entity/EntityUtil'
 import {BackpackerState} from './BackpackerState'
+import {LevelUtil} from '../../../levels/level/LevelUtil'
 
 export namespace BackpackerUpdater {
   export const update: Update = (backpacker, state) => {
@@ -60,7 +60,7 @@ export namespace BackpackerUpdater {
     const diagonal = (left || right) && (up || down)
     const collision = EntityCollider.collidesEntities(
       backpacker,
-      Level.activeParents(state.level)
+      LevelUtil.activeParents(state.level)
     )
 
     const collisionDirection = {x: !!collision, y: !!collision}
@@ -68,7 +68,7 @@ export namespace BackpackerUpdater {
       EntityUtil.moveTo(backpacker, {x, y: originalY})
       collisionDirection.x = !!EntityCollider.collidesEntities(
         backpacker,
-        Level.activeParents(state.level)
+        LevelUtil.activeParents(state.level)
       )
       if (!collisionDirection.x) y = originalY
 
@@ -76,7 +76,7 @@ export namespace BackpackerUpdater {
         EntityUtil.moveTo(backpacker, {x: originalX, y})
         collisionDirection.y = !!EntityCollider.collidesEntities(
           backpacker,
-          Level.activeParents(state.level)
+          LevelUtil.activeParents(state.level)
         )
         if (!collisionDirection.y) x = originalX
       }

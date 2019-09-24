@@ -3,8 +3,8 @@ import {InstanceBuffer} from './InstanceBuffer'
 import {ShaderLayout} from '../graphics/shaders/shaderLayout/ShaderLayout'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {Entity} from '../entities/entity/Entity'
-import {Level} from '../levels/level/Level'
 import {EntityUtil} from '../entities/entity/EntityUtil'
+import {LevelUtil} from '../levels/level/LevelUtil'
 
 export interface Store {
   readonly layout: ShaderLayout
@@ -25,12 +25,14 @@ export namespace Store {
     if (state.level.player)
       images.push(...updateAndAnimate([state.level.player], state))
 
-    Level.updateCamera(state.level)
+    LevelUtil.updateCamera(state.level)
 
     images.push(...updateAndAnimate([state.level.cursor], state))
     if (state.level.destination)
       images.push(...updateAndAnimate([state.level.destination], state))
-    images.push(...updateAndAnimate(Level.activeParents(state.level), state))
+    images.push(
+      ...updateAndAnimate(LevelUtil.activeParents(state.level), state)
+    )
     images = images.sort(Image.compareElevation)
 
     const size = InstanceBuffer.size(store.layout, images.length)

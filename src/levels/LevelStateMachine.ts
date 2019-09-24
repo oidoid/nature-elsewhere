@@ -5,6 +5,7 @@ import {Store} from '../store/Store'
 import {LevelParser} from './level/LevelParser'
 import {LevelConfigMap} from './levelConfigs/LevelConfigMap'
 import {UpdateState} from '../entities/updaters/UpdateState'
+import {LevelAdvance} from './level/LevelAdvance'
 
 export interface LevelStateMachine {
   level?: Level
@@ -27,9 +28,9 @@ export namespace LevelStateMachine {
 function updateLevel(machine: LevelStateMachine): void {
   if (!machine.level) return
 
-  if (machine.level.advance === Level.Advance.UNCHANGED) return
+  if (machine.level.advance === LevelAdvance.UNCHANGED) return
 
-  if (machine.level.advance === Level.Advance.PREV) {
+  if (machine.level.advance === LevelAdvance.PREV) {
     const config =
       machine.level.prevLevel && LevelConfigMap[machine.level.prevLevel]
     machine.level = config
