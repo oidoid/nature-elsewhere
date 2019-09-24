@@ -95,7 +95,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "uiLevelEditorButton-decrement", "layer": "UI_HIHI"}
+          "image": {"id": "uiButton-decrement", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -106,7 +106,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "uiLevelEditorButton-increment", "layer": "UI_HIHI"}
+          "image": {"id": "uiButton-increment", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -117,7 +117,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "uiLevelEditorButton-destroy", "layer": "UI_HIHI"}
+          "image": {"id": "uiButton-destroy", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -128,7 +128,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "uiLevelEditorButton-create", "layer": "UI_HIHI"}
+          "image": {"id": "uiButton-create", "layer": "UI_HIHI"}
         }
       ]
     },
@@ -139,7 +139,7 @@
       "children": [
         {
           "type": "image",
-          "image": {"id": "uiLevelEditorButton-toggleGrid", "layer": "UI_HIHI"}
+          "image": {"id": "uiButton-toggleGrid", "layer": "UI_HIHI"}
         }
       ]
     },
