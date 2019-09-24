@@ -1,6 +1,6 @@
 {
   "name": "nature-elsewhere",
-  "author": "rndmem",
+  "author": "oddoid",
   "version": "0.0.0",
   "//": "[strings]",
   "description": "An isometric adventure in an idealized state of nature.",
@@ -10,9 +10,9 @@
     "isometric",
     "adventure"
   ],
-  "homepage": "https://github.com/rndmem/nature-elsewhere",
-  "repository": "github:rndmem/nature-elsewhere",
-  "bugs": "https://github.com/rndmem/nature-elsewhere/issues",
+  "homepage": "https://github.com/oddoid/nature-elsewhere",
+  "repository": "github:oddoid/nature-elsewhere",
+  "bugs": "https://github.com/oddoid/nature-elsewhere/issues",
   "license": "GPL-3.0-only AND CC-BY-SA-4.0",
   "scripts": {
     "start": "webpack-dev-server",
