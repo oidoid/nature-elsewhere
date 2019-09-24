@@ -63,7 +63,8 @@ function orientationToX(
     case FollowCamOrientation.NORTH:
     case FollowCamOrientation.SOUTH:
     case FollowCamOrientation.CENTER:
-      x += cam.size.w / 2 - (entity.size.w / 2 + margin.w)
+      x +=
+        Math.trunc(cam.size.w / 2) - (Math.trunc(entity.size.w / 2) + margin.w)
       break
   }
   return x
@@ -90,7 +91,8 @@ function orientationToY(
     case FollowCamOrientation.EAST:
     case FollowCamOrientation.WEST:
     case FollowCamOrientation.CENTER:
-      y += cam.size.h / 2 - (entity.size.h / 2 + margin.h)
+      y +=
+        Math.trunc(cam.size.h / 2) - (Math.trunc(entity.size.h / 2) + margin.h)
       break
   }
   return y

@@ -1,7 +1,6 @@
 {
-  "letterHeight": 4,
-  "leadingPadding": 1,
-  "leading": 2,
+  "letterHeight": 5,
+  "leading": 1,
   "lineHeight": 6,
   "kerning": {
     ",'": 0,
@@ -165,16 +164,6 @@
   "defaultKerning": 1,
   "whitespaceKerning": 0,
   "endOfLineKerning": 0,
-  "letterOffset": {
-    ",": 1,
-    ";": 1,
-    "g": 1,
-    "j": 1,
-    "p": 1,
-    "q": 1,
-    "y": 1
-  },
-  "defaultLetterOffset": 0,
   "letterWidth": {
     "\n": 1,
     " ": 3,

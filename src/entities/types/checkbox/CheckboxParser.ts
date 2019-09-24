@@ -6,7 +6,6 @@ import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {TextConfig} from '../text/TextConfig'
 import {EntityUtil} from '../../entity/EntityUtil'
 import {Image} from '../../../images/image/Image'
-import * as memFont from '../../../text/textLayout/memFont.json'
 import {ImageRect} from '../../../images/imageRect/ImageRect'
 import {ImageParser} from '../../../images/image/ImageParser'
 import {ImageConfig} from '../../../images/image/ImageConfig'
@@ -54,14 +53,7 @@ export namespace CheckboxParser {
 function setBackground(checkbox: Checkbox, atlas: Atlas): void {
   const text = checkbox.children[0]
   for (const state of [CheckboxState.UNCHECKED, CheckboxState.CHECKED]) {
-    const size = {
-      w: text.bounds.size.w,
-      // Do not shrink when a descender is not present.
-      h: Math.max(
-        text.bounds.size.h,
-        memFont.lineHeight - memFont.leadingPadding
-      )
-    }
+    const size = {w: text.bounds.size.w, h: text.bounds.size.h}
     checkbox.machine.map[state].images.length = 0
     const images = newBackgroundImages(state, atlas, size)
     for (const image of images)

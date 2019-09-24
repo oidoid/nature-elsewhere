@@ -28,11 +28,11 @@ describe('layout()', () =>
           {x: 18, y: 0 * lineHeight},
           {x: 22, y: 0 * lineHeight},
           undefined,
-          {x: 27, y: 1 + 0 * lineHeight},
+          {x: 27, y: 0 * lineHeight},
           {x: 31, y: 0 * lineHeight},
           {x: 35, y: 0 * lineHeight},
           undefined,
-          {x: 39, y: 1 + 0 * lineHeight},
+          {x: 39, y: 0 * lineHeight},
           {x: 43, y: 0 * lineHeight},
           {x: 47, y: 0 * lineHeight},
           undefined,
@@ -57,11 +57,11 @@ describe('layout()', () =>
           {x: 4, y: 2 * lineHeight},
           {x: 8, y: 2 * lineHeight},
           undefined,
-          {x: 0, y: 1 + 3 * lineHeight},
+          {x: 0, y: 3 * lineHeight},
           {x: 4, y: 3 * lineHeight},
           {x: 8, y: 3 * lineHeight},
           undefined,
-          {x: 0, y: 1 + 4 * lineHeight},
+          {x: 0, y: 4 * lineHeight},
           {x: 4, y: 4 * lineHeight},
           {x: 8, y: 4 * lineHeight},
           undefined,
@@ -85,11 +85,11 @@ describe('layout()', () =>
           {x: 4, y: 1 * lineHeight},
           {x: 8, y: 1 * lineHeight},
           undefined,
-          {x: 0, y: 1 + 2 * lineHeight},
+          {x: 0, y: 2 * lineHeight},
           {x: 4, y: 2 * lineHeight},
           {x: 8, y: 2 * lineHeight},
           undefined,
-          {x: 0, y: 1 + 3 * lineHeight},
+          {x: 0, y: 3 * lineHeight},
           {x: 4, y: 3 * lineHeight},
           {x: 8, y: 3 * lineHeight},
           undefined,
@@ -113,11 +113,11 @@ describe('layout()', () =>
           {x: 4, y: 1 * lineHeight},
           {x: 8, y: 1 * lineHeight},
           undefined,
-          {x: 0, y: 1 + 2 * lineHeight},
+          {x: 0, y: 2 * lineHeight},
           {x: 4, y: 2 * lineHeight},
           {x: 8, y: 2 * lineHeight},
           undefined,
-          {x: 12, y: 1 + 2 * lineHeight},
+          {x: 12, y: 2 * lineHeight},
           {x: 16, y: 2 * lineHeight},
           {x: 20, y: 2 * lineHeight},
           undefined,
@@ -281,7 +281,7 @@ describe('layoutWord()', () =>
       'g',
       0,
       {
-        positions: [{x: 0, y: 1 + 0 * lineHeight}],
+        positions: [{x: 0, y: 0 * lineHeight}],
         cursor: {x: 3, y: 0 * lineHeight}
       }
     ],
@@ -298,7 +298,7 @@ describe('layoutWord()', () =>
           {x: 12, y: 0 * lineHeight},
           {x: 16, y: 0 * lineHeight},
           {x: 20, y: 0 * lineHeight},
-          {x: 23, y: 1 + 0 * lineHeight},
+          {x: 23, y: 0 * lineHeight},
           {x: 27, y: 0 * lineHeight}
         ],
         cursor: {x: 30, y: 0 * lineHeight}
@@ -317,7 +317,7 @@ describe('layoutWord()', () =>
           {x: 8, y: 0 * lineHeight},
           {x: 12, y: 0 * lineHeight},
           {x: 16, y: 0 * lineHeight},
-          {x: 19, y: 1 + 0 * lineHeight},
+          {x: 19, y: 0 * lineHeight},
           {x: 23, y: 0 * lineHeight}
         ],
         cursor: {x: 26, y: 0 * lineHeight}
@@ -344,7 +344,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 3 * lineHeight},
           {x: 0, y: 4 * lineHeight},
           {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 1 + 6 * lineHeight},
+          {x: 0, y: 6 * lineHeight},
           {x: 0, y: 7 * lineHeight}
         ],
         cursor: {x: 3, y: 7 * lineHeight}
@@ -363,7 +363,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 3 * lineHeight},
           {x: 0, y: 4 * lineHeight},
           {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 1 + 6 * lineHeight},
+          {x: 0, y: 6 * lineHeight},
           {x: 0, y: 7 * lineHeight}
         ],
         cursor: {x: 3, y: 7 * lineHeight}
@@ -382,7 +382,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 3 * lineHeight},
           {x: 0, y: 4 * lineHeight},
           {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 1 + 6 * lineHeight},
+          {x: 0, y: 6 * lineHeight},
           {x: 0, y: 7 * lineHeight}
         ],
         cursor: {x: 3, y: 7 * lineHeight}
@@ -401,7 +401,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 3 * lineHeight},
           {x: 0, y: 4 * lineHeight},
           {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 1 + 6 * lineHeight},
+          {x: 0, y: 6 * lineHeight},
           {x: 0, y: 7 * lineHeight}
         ],
         cursor: {x: 3, y: 7 * lineHeight}
@@ -420,7 +420,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 3 * lineHeight},
           {x: 0, y: 4 * lineHeight},
           {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 1 + 6 * lineHeight},
+          {x: 0, y: 6 * lineHeight},
           {x: 0, y: 7 * lineHeight}
         ],
         cursor: {x: 3, y: 7 * lineHeight}
@@ -439,7 +439,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 3 * lineHeight},
           {x: 0, y: 4 * lineHeight},
           {x: 4, y: 4 * lineHeight},
-          {x: 0, y: 1 + 5 * lineHeight},
+          {x: 0, y: 5 * lineHeight},
           {x: 4, y: 5 * lineHeight}
         ],
         cursor: {x: 7, y: 5 * lineHeight}
@@ -458,7 +458,7 @@ describe('layoutWord()', () =>
           {x: 4, y: 1 * lineHeight},
           {x: 0, y: 2 * lineHeight},
           {x: 4, y: 2 * lineHeight},
-          {x: 0, y: 1 + 3 * lineHeight},
+          {x: 0, y: 3 * lineHeight},
           {x: 4, y: 3 * lineHeight}
         ],
         cursor: {x: 7, y: 3 * lineHeight}
@@ -477,7 +477,7 @@ describe('layoutWord()', () =>
           {x: 4, y: 1 * lineHeight},
           {x: 0, y: 2 * lineHeight},
           {x: 4, y: 2 * lineHeight},
-          {x: 0, y: 1 + 3 * lineHeight},
+          {x: 0, y: 3 * lineHeight},
           {x: 4, y: 3 * lineHeight}
         ],
         cursor: {x: 7, y: 3 * lineHeight}
@@ -496,7 +496,7 @@ describe('layoutWord()', () =>
           {x: 4, y: 1 * lineHeight},
           {x: 0, y: 2 * lineHeight},
           {x: 4, y: 2 * lineHeight},
-          {x: 0, y: 1 + 3 * lineHeight},
+          {x: 0, y: 3 * lineHeight},
           {x: 4, y: 3 * lineHeight}
         ],
         cursor: {x: 7, y: 3 * lineHeight}
@@ -515,7 +515,7 @@ describe('layoutWord()', () =>
           {x: 4, y: 1 * lineHeight},
           {x: 0, y: 2 * lineHeight},
           {x: 4, y: 2 * lineHeight},
-          {x: 7, y: 1 + 2 * lineHeight},
+          {x: 7, y: 2 * lineHeight},
           {x: 0, y: 3 * lineHeight}
         ],
         cursor: {x: 3, y: 3 * lineHeight}
@@ -534,7 +534,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 1 * lineHeight},
           {x: 4, y: 1 * lineHeight},
           {x: 8, y: 1 * lineHeight},
-          {x: 0, y: 1 + 2 * lineHeight},
+          {x: 0, y: 2 * lineHeight},
           {x: 4, y: 2 * lineHeight}
         ],
         cursor: {x: 7, y: 2 * lineHeight}
@@ -554,7 +554,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 3 * lineHeight},
           {x: 0, y: 4 * lineHeight},
           {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 1 + 6 * lineHeight},
+          {x: 0, y: 6 * lineHeight},
           {x: 0, y: 7 * lineHeight}
         ],
         cursor: {x: 3, y: 7 * lineHeight}
@@ -573,7 +573,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 4 * lineHeight},
           {x: 0, y: 5 * lineHeight},
           {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 1 + 7 * lineHeight},
+          {x: 0, y: 7 * lineHeight},
           {x: 0, y: 8 * lineHeight}
         ],
         cursor: {x: 3, y: 8 * lineHeight}
@@ -593,7 +593,7 @@ describe('layoutWord()', () =>
           {x: 0, y: 1 + 4 * lineHeight},
           {x: 0, y: 1 + 5 * lineHeight},
           {x: 0, y: 1 + 6 * lineHeight},
-          {x: 0, y: 1 + 1 + 7 * lineHeight},
+          {x: 0, y: 1 + 7 * lineHeight},
           {x: 0, y: 1 + 8 * lineHeight}
         ],
         cursor: {x: 3, y: 1 + 8 * lineHeight}

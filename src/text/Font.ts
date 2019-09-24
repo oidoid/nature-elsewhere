@@ -1,5 +1,5 @@
 export interface Font {
-  /** Height of lines, not including descenders, in pixels. */
+  /** Height of lines, including descenders, in pixels. */
   readonly letterHeight: number
 
   /** Distance between lines in pixels. */
@@ -14,10 +14,6 @@ export interface Font {
   readonly whitespaceKerning: number
   readonly endOfLineKerning: number
 
-  /** Vertical top offset in pixels. */
-  readonly letterOffset: Readonly<Record<string, number>>
-  readonly defaultLetterOffset: number
-
   /** Character width in pixels. */
   readonly letterWidth: Readonly<Record<string, number>>
   readonly defaultLetterWidth: number
@@ -29,11 +25,6 @@ export namespace Font {
     if (/\s/.test(lhs + rhs)) return font.whitespaceKerning
     const kerning = font.kerning[lhs + rhs]
     return kerning === undefined ? font.defaultKerning : kerning
-  }
-
-  export function letterOffset(font: Font, char: string): number {
-    const offset = font.letterOffset[char]
-    return offset === undefined ? font.defaultLetterOffset : offset
   }
 
   export function letterWidth(font: Font, char: string): number {

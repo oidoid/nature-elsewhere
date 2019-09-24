@@ -88,7 +88,7 @@
     {
       "type": "uiDateVersionHash",
       "positionRelativeToCam": "southWest",
-      "camMargin": {"w": 1, "h": 1},
+      "camMargin": {"w": 1},
       "updaters": ["uiFollowCam"]
     },
     {
@@ -96,7 +96,7 @@
       "//": "[strings]",
       "text": "oddoid",
       "positionRelativeToCam": "southEast",
-      "camMargin": {"w": 1, "h": 1},
+      "camMargin": {"w": 1},
       "updaters": ["uiFollowCam"]
     }
   ]

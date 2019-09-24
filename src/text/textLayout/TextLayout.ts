@@ -59,10 +59,7 @@ export namespace TextLayout {
     while (index < string.length && !/\s/.test(string[index])) {
       const span = tracking(string[index], scale, string[index + 1])
       if (x && x + span > width) ({x, y} = nextLine(y, scale))
-      positions.push({
-        x,
-        y: y + scale.y * Font.letterOffset(font, string[index])
-      })
+      positions.push({x, y})
       x += span
       ++index
     }
