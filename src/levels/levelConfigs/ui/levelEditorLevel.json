@@ -2,7 +2,7 @@
   "version": "0.0.0",
   "type": "uiLevelEditor",
   "size": {"w": 32767, "h": 32767},
-  "minViewport": {"w": 128, "h": 96},
+  "minViewport": {"w": 128, "h": 64},
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
     {"type": "sceneryPlane", "machine": {"state": "paleGreen"}},
