@@ -46,7 +46,7 @@ function eventToPoint(
   if (type === 'pointercancel') return undefined
   const active = type === 'pointermove' || type === 'pointerdown'
   const {point} = inputs
-  const timer = !point || point.active !== active ? 0 : point.timer
+  const timer = !point ? 1 : point.active !== active ? 0 : point.timer
   return {active, timer, windowPosition: {x: clientX, y: clientY}}
 }
 
@@ -60,6 +60,6 @@ function eventToPick(
     type === 'pointerdown' ||
     (type === 'pointermove' && pick && pick.active) ||
     false
-  const timer = !pick || pick.active !== active ? 0 : pick.timer
+  const timer = !pick ? 1 : pick.active !== active ? 0 : pick.timer
   return {active, timer, windowPosition: {x: clientX, y: clientY}}
 }

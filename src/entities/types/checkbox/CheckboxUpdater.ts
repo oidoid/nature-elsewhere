@@ -13,10 +13,9 @@ export namespace CheckboxUpdater {
     if (!EntityTypeUtil.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
     const collision = LevelUtil.collisionWithCursor(state.level, checkbox)
-    if (!collision) return UpdateStatus.UNCHANGED
 
     let status = UpdateStatus.UNCHANGED
-    const toggle = Input.activeTriggered(state.inputs.pick)
+    const toggle = collision && Input.inactiveTriggered(state.inputs.pick)
     const nextChecked = toggle ? !checkbox.checked : checkbox.checked
     if (checkbox.checked !== nextChecked) status |= UpdateStatus.TERMINATE
     checkbox.checked = nextChecked

@@ -7,7 +7,7 @@ import {EntityUtil} from '../../entity/EntityUtil'
 import {CursorState} from './CursorState'
 
 export namespace CursorUpdater {
-  export const update: Update = (entity, state) => {
+  export const update: Update = (cursor, state) => {
     let status = UpdateStatus.UNCHANGED
     let nextState: CursorState | EntityState = EntityState.HIDDEN
     const {point, pick} = state.inputs
@@ -16,15 +16,15 @@ export namespace CursorUpdater {
       const position = XY.trunc(
         Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
       )
-      status |= EntityUtil.moveTo(entity, position)
+      status |= EntityUtil.moveTo(cursor, position)
     } else if (point && point.active) {
       nextState = CursorState.VISIBLE
       const position = XY.trunc(
         Input.levelXY(point, state.canvasWH, state.level.cam.bounds)
       )
-      status |= EntityUtil.moveTo(entity, position)
+      status |= EntityUtil.moveTo(cursor, position)
     }
-    status |= EntityUtil.setState(entity, nextState)
+    status |= EntityUtil.setState(cursor, nextState)
 
     return status
   }

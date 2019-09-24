@@ -20,6 +20,10 @@ export namespace Input {
     return (input && input.active && !input.timer) || false
   }
 
+  export function inactiveTriggered(input: Maybe<Input>): boolean {
+    return (input && !input.active && !input.timer) || false
+  }
+
   export function levelXY(input: Input, canvasWH: WH, cam: Rect): XY {
     return Viewport.toLevelXY(input.windowPosition, canvasWH, cam)
   }

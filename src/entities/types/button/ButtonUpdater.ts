@@ -19,7 +19,7 @@ export namespace ButtonUpdater {
 
     let status = EntityUtil.setState(button, ButtonState.CLICKED) // this is just presentation not click state
 
-    const nextClicked = Input.activeTriggered(state.inputs.pick)
+    const nextClicked = Input.inactiveTriggered(state.inputs.pick)
     if (button.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
     button.clicked = nextClicked
 
