@@ -1,10 +1,10 @@
 export enum UpdateStatus {
   /** No change in state. Up./UpdateStatusinuation allowed. */
-  UNCHANGED = 0b00,
+  UNCHANGED = 0,
   /** Updated state. Update chain continuation allowed. */
-  UPDATED = 0b01,
+  UPDATED = 1 << 0,
   /** Update chain continuation forbidden. */
-  TERMINATE = 0b10
+  TERMINATE = 1 << 1
 }
 
 export namespace UpdateStatus {

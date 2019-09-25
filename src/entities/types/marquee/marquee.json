@@ -9,22 +9,22 @@
           {
             "id": "uiCheckerboard-blackTransparent",
             "layer": "UI_HIHI",
-            "wrapVelocity": {"y": 10}
+            "wrapVelocity": {"x": 10}
           },
           {
             "id": "uiCheckerboard-blackTransparent",
             "layer": "UI_HIHI",
-            "wrapVelocity": {"y": 10}
+            "wrapVelocity": {"x": 10}
           },
           {
             "id": "uiCheckerboard-blackTransparent",
             "layer": "UI_HIHI",
-            "wrapVelocity": {"y": 10}
+            "wrapVelocity": {"x": 10}
           },
           {
             "id": "uiCheckerboard-blackTransparent",
             "layer": "UI_HIHI",
-            "wrapVelocity": {"y": 10}
+            "wrapVelocity": {"x": 10}
           }
         ]
       }

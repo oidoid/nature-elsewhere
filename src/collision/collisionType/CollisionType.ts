@@ -1,10 +1,10 @@
 export enum CollisionType {
-  NONE = 0b000,
-  SCENERY = 0b001,
+  NONE = 0,
+  SCENERY = 1 << 0,
   /** For example, deep water. */
-  DEEP = 0b0010,
-  CHAR = 0b0100,
-  HARM = 0b1000
+  DEEP = 1 << 1,
+  CHAR = 1 << 2,
+  HARM = 1 << 3
 }
 
 export namespace CollisionType {
