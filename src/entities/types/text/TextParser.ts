@@ -37,7 +37,7 @@ export namespace TextParser {
               : Limits.maxShort
         }
       },
-      EntityUtil.imageRect(text).colorID
+      EntityUtil.imageRect(text).maskID
     )
 
     // Images are added dynamically but ImageRect expects a static configuration

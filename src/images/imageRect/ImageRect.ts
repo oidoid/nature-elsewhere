@@ -24,14 +24,14 @@ export interface ImageRect {
       add a child Entity instead. */
   readonly images: Image[]
 
-  colorID?: AtlasID
+  maskID?: AtlasID
 }
 
 export namespace ImageRect {
   export function setColorID(rect: ImageRect, id: AtlasID): UpdateStatus {
-    if (rect.colorID === id) return UpdateStatus.UNCHANGED
-    rect.colorID = id
-    for (const image of rect.images) image.colorID = id
+    if (rect.maskID === id) return UpdateStatus.UNCHANGED
+    rect.maskID = id
+    for (const image of rect.images) image.maskID = id
     return UpdateStatus.UPDATED
   }
 

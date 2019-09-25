@@ -4,6 +4,7 @@ import {Atlas} from '../../atlas/atlas/Atlas'
 import {DecamillipixelIntXY, IntXY, XY} from '../../math/xy/XY'
 import {Layer} from '../layer/Layer'
 import {Rect} from '../../math/rect/Rect'
+import {AlphaComposition} from '../alphaComposition/AlphaComposition'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same
@@ -13,7 +14,7 @@ import {Rect} from '../../math/rect/Rect'
 export interface Image {
   readonly id: AtlasID
   /** If different than id, use id for masking and colorID for coloring. */
-  colorID: AtlasID
+  maskID: AtlasID
   /** Specified in fractional pixel level coordinates. Includes scaling.
 
       Images.bounds are used to determine when the image is on screen and
@@ -32,6 +33,7 @@ export interface Image {
   /** Specifies the additional marquee offset added by the shader according to
       the game clock. */
   readonly wrapVelocity: DecamillipixelIntXY
+  readonly alphaComposition: AlphaComposition
 }
 
 export namespace Image {

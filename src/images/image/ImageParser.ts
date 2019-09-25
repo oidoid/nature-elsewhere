@@ -9,6 +9,7 @@ import {ImageScaleParser} from '../imageScale/ImageScaleParser'
 import {LayerParser} from '../layer/LayerParser'
 import {Rect} from '../../math/rect/Rect'
 import {XYParser} from '../../math/xy/XYParser'
+import {AlphaCompositionParser} from '../alphaComposition/AlphaCompositionParser'
 
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
@@ -16,13 +17,14 @@ export namespace ImageParser {
     const colorID = AtlasIDParser.parse(config.colorID || config.id)
     return {
       id,
-      colorID,
+      maskID: colorID,
       bounds: parseBounds(config, id, atlas),
-      layer: LayerParser.parse(config.layer),
+      layer: LayerParser.parseKey(config.layer),
       animator: AnimatorParser.parse(config.animator),
       scale: ImageScaleParser.parse(config.scale),
       wrap: DecamillipixelIntXYParser.parse(config.wrap),
-      wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity)
+      wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity),
+      alphaComposition: AlphaCompositionParser.parseKey(config.alphaComposition)
     }
   }
 }

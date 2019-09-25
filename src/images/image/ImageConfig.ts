@@ -4,6 +4,7 @@ import {AnimatorConfig} from '../animator/AnimatorConfig'
 import {AtlasIDConfig} from '../../atlas/atlasID/AtlasIDConfig'
 import {LayerKeyConfig} from '../layer/LayerConfig'
 import {DecamillipixelIntXYConfig} from '../decamillipixelIntXY/DecamillipixelIntXYConfig'
+import {AlphaCompositionKeyConfig} from '../alphaComposition/AlphaCompositionConfig'
 
 export interface ImageConfig {
   readonly id: AtlasIDConfig
@@ -14,4 +15,5 @@ export interface ImageConfig {
   readonly scale?: XYConfig
   readonly wrap?: DecamillipixelIntXYConfig
   readonly wrapVelocity?: DecamillipixelIntXYConfig
+  readonly alphaComposition?: AlphaCompositionKeyConfig
 }

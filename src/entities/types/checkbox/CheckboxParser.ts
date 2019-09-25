@@ -46,7 +46,7 @@ export namespace CheckboxParser {
         x: checkbox.bounds.position.x + 1,
         y: checkbox.bounds.position.y
       },
-      colorID: EntityUtil.imageRect(checkbox).colorID
+      colorID: EntityUtil.imageRect(checkbox).maskID
     }
     const child = parser(config, atlas)
     EntityUtil.elevate(child, layer)

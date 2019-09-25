@@ -32,28 +32,30 @@ export namespace InstanceBuffer {
     dat.setInt16(i + 4, animation.size.w, littleEndian)
     dat.setInt16(i + 6, animation.size.h, littleEndian)
 
-    const colorAnimation = atlas[image.colorID]
-    const colorCelIndex = Animator.index(
+    const maskAnimation = atlas[image.maskID]
+    const maskCelIndex = Animator.index(
       image.animator.period,
-      colorAnimation.cels
+      maskAnimation.cels
     )
-    const colorCel = colorAnimation.cels[colorCelIndex]
-    dat.setInt16(i + 8, colorCel.position.x, littleEndian)
-    dat.setInt16(i + 10, colorCel.position.y, littleEndian)
-    dat.setInt16(i + 12, colorAnimation.size.w, littleEndian)
-    dat.setInt16(i + 14, colorAnimation.size.h, littleEndian)
+    const maskCel = maskAnimation.cels[maskCelIndex]
+    dat.setInt16(i + 8, maskCel.position.x, littleEndian)
+    dat.setInt16(i + 10, maskCel.position.y, littleEndian)
+    dat.setInt16(i + 12, maskAnimation.size.w, littleEndian)
+    dat.setInt16(i + 14, maskAnimation.size.h, littleEndian)
 
-    dat.setInt16(i + 16, image.bounds.position.x, littleEndian)
-    dat.setInt16(i + 18, image.bounds.position.y, littleEndian)
-    dat.setInt16(i + 20, image.bounds.size.w, littleEndian)
-    dat.setInt16(i + 22, image.bounds.size.h, littleEndian)
+    dat.setUint8(i + 16, image.alphaComposition)
 
-    dat.setInt16(i + 24, image.scale.x, littleEndian)
-    dat.setInt16(i + 26, image.scale.y, littleEndian)
+    dat.setInt16(i + 18, image.bounds.position.x, littleEndian)
+    dat.setInt16(i + 20, image.bounds.position.y, littleEndian)
+    dat.setInt16(i + 22, image.bounds.size.w, littleEndian)
+    dat.setInt16(i + 24, image.bounds.size.h, littleEndian)
 
-    dat.setInt16(i + 28, image.wrap.x, littleEndian)
-    dat.setInt16(i + 30, image.wrap.y, littleEndian)
-    dat.setInt16(i + 32, image.wrapVelocity.x, littleEndian)
-    dat.setInt16(i + 34, image.wrapVelocity.y, littleEndian)
+    dat.setInt16(i + 26, image.scale.x, littleEndian)
+    dat.setInt16(i + 28, image.scale.y, littleEndian)
+
+    dat.setInt16(i + 30, image.wrap.x, littleEndian)
+    dat.setInt16(i + 32, image.wrap.y, littleEndian)
+    dat.setInt16(i + 34, image.wrapVelocity.x, littleEndian)
+    dat.setInt16(i + 36, image.wrapVelocity.y, littleEndian)
   }
 }
