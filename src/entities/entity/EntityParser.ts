@@ -41,14 +41,14 @@ export namespace EntityParser {
 
     config = withDefaults(config, type)
 
-    const colorID = config.colorID
-      ? AtlasIDParser.parse(config.colorID)
+    const imageID = config.imageID
+      ? AtlasIDParser.parse(config.imageID)
       : undefined
     const machine = ImageStateMachineParser.parse(config.machine, atlas)
     const children = parseAll(config.children, atlas)
     const scale = ImageScaleParser.parse(config.scale)
     for (const rect of Object.values(machine.map)) {
-      if (colorID) ImageRect.setColorID(rect, colorID)
+      if (imageID) ImageRect.setImageID(rect, imageID)
     }
 
     let entity: Entity = {

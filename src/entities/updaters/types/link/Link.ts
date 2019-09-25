@@ -6,7 +6,7 @@ import {AtlasID} from '../../../../atlas/atlasID/AtlasID'
 export namespace Link {
   export const update: Update = (link, state) => {
     const collision = LevelUtil.collisionWithCursor(state.level, link)
-    const color = collision ? AtlasID.PALETTE_LIGHT_GREEN : AtlasID.PALETTE_GREY
-    return EntityUtil.setColorID(link, color)
+    const color = collision ? AtlasID.PALETTE_BLACK : AtlasID.PALETTE_GREY
+    return EntityUtil.setImageID(link, color)
   }
 }

@@ -20,6 +20,10 @@ export namespace Input {
     return (input && input.active && !input.timer) || false
   }
 
+  export function activeLong(input: Maybe<Input>): boolean {
+    return (input && input.active && input.timer > 500) || false
+  }
+
   export function inactiveTriggered(input: Maybe<Input>): boolean {
     return (input && !input.active && !input.timer) || false
   }

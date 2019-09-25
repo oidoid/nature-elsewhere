@@ -6,7 +6,7 @@ export namespace AlphaCompositionParser {
   export function parseKey(
     config: AlphaCompositionKeyConfig
   ): AlphaComposition {
-    const key = config || 'SOURCE'
+    const key = config || 'IMAGE'
     if (ObjectUtil.assertKeyOf(AlphaComposition, key, 'AlphaComposition.Key'))
       return AlphaComposition[key]
     throw new Error()

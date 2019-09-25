@@ -83,7 +83,7 @@
           "textLayer": "UI_HI",
           "textMaxSize": {"w": 34, "h": 5},
           "position": {"x": 52, "y": 20},
-          "colorID": "palette-black"
+          "imageID": "palette-black"
         },
         {
           "type": "uiText",
@@ -97,7 +97,7 @@
           "text": "0",
           "textLayer": "UI_HI",
           "position": {"x": 46, "y": 26},
-          "colorID": "palette-black"
+          "imageID": "palette-black"
         },
         {
           "type": "uiText",
@@ -111,7 +111,7 @@
           "text": "0",
           "position": {"x": 68, "y": 26},
           "layer": "UI_HI",
-          "colorID": "palette-black"
+          "imageID": "palette-black"
         },
         {
           "id": "uiLevelEditorPanelEntity",
@@ -119,7 +119,7 @@
           "textMaxSize": {"w": 32, "h": 5},
           "position": {"x": 88, "y": 2},
           "layer": "UI_HI",
-          "colorID": "palette-black"
+          "imageID": "palette-black"
         }
       ]
     },

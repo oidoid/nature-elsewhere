@@ -37,7 +37,7 @@ export namespace TextParser {
               : Limits.maxShort
         }
       },
-      EntityUtil.imageRect(text).maskID
+      EntityUtil.imageRect(text).imageID
     )
 
     // Images are added dynamically but ImageRect expects a static configuration
@@ -63,7 +63,7 @@ export namespace TextParser {
     layer: Layer.Key,
     scale: XY,
     bounds: Rect,
-    colorID?: AtlasID,
+    imageID?: AtlasID,
     y: number = 0
   ): readonly Image[] {
     const images = []
@@ -82,7 +82,7 @@ export namespace TextParser {
         },
         layer,
         scale,
-        colorID,
+        imageID,
         atlas
       )
       images.push(char)
@@ -96,12 +96,19 @@ function newCharacterImage(
   position: XY,
   layer: Layer.Key,
   scale: XY,
-  colorID: Maybe<AtlasID>,
+  imageID: Maybe<AtlasID>,
   atlas: Atlas
 ): Image {
   const id = MEM_FONT_PREFIX + char.toString().padStart(3, '0')
   return ImageParser.parse(
-    {id, bounds: {position}, layer, scale, colorID},
+    {
+      id,
+      bounds: {position},
+      layer,
+      scale,
+      imageID,
+      alphaComposition: 'SOURCE_MASK'
+    },
     atlas
   )
 }

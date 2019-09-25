@@ -14,10 +14,10 @@ import {AlphaCompositionParser} from '../alphaComposition/AlphaCompositionParser
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
     const id = AtlasIDParser.parse(config.id)
-    const colorID = AtlasIDParser.parse(config.colorID || config.id)
+    const imageID = AtlasIDParser.parse(config.imageID || config.id)
     return {
       id,
-      maskID: colorID,
+      imageID,
       bounds: parseBounds(config, id, atlas),
       layer: LayerParser.parseKey(config.layer),
       animator: AnimatorParser.parse(config.animator),

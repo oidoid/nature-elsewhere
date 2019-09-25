@@ -16,41 +16,47 @@ export namespace LevelEditorPanelParser {
       )
     )
       throw new Error()
-    const radioGroup = EntityUtil.find(
+    const radioGroup = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_RADIO_GROUP
     )
-    const xCheckbox = EntityUtil.find(panel, EntityID.UI_LEVEL_EDITOR_PANEL_X)
-    const yCheckbox = EntityUtil.find(panel, EntityID.UI_LEVEL_EDITOR_PANEL_Y)
-    const stateCheckbox = EntityUtil.find(
+    const xCheckbox = EntityUtil.findByID(
+      panel,
+      EntityID.UI_LEVEL_EDITOR_PANEL_X
+    )
+    const yCheckbox = EntityUtil.findByID(
+      panel,
+      EntityID.UI_LEVEL_EDITOR_PANEL_Y
+    )
+    const stateCheckbox = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_STATE
     )
-    const entityCheckbox = EntityUtil.find(
+    const entityCheckbox = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY
     )
-    const entityPicker = EntityUtil.find(
+    const entityPicker = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY_PICKER
     )
-    const decrementButton = EntityUtil.find(
+    const decrementButton = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_DECREMENT
     )
-    const incrementButton = EntityUtil.find(
+    const incrementButton = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_INCREMENT
     )
-    const destroyButton = EntityUtil.find(
+    const destroyButton = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_REMOVE
     )
-    const createButton = EntityUtil.find(
+    const createButton = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ADD
     )
-    const toggleGridButton = EntityUtil.find(
+    const toggleGridButton = EntityUtil.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_TOGGLE_GRID
     )

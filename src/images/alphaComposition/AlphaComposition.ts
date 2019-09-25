@@ -1,10 +1,9 @@
 export enum AlphaComposition {
-  /** The source image is rendered with its own alpha. */
-  SOURCE,
-  /** The source image is rendered with the mask alpha. */
-  MASK,
-  /** The source image is rendered where the source AND mask alpha are
-      nonzero. */
+  /** The image is rendered with its own alpha. */
+  IMAGE,
+  /** The image is rendered with the source's alpha. */
+  SOURCE_MASK,
+  /** The image is rendered where the image AND source alpha are nonzero. */
   AND
 }
 

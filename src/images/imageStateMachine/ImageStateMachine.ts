@@ -13,11 +13,11 @@ export interface ImageStateMachine {
 }
 
 export namespace ImageStateMachine {
-  export function setColorID(
+  export function setImageID(
     machine: ImageStateMachine,
     id: AtlasID
   ): UpdateStatus {
-    return ImageRect.setColorID(imageRect(machine), id)
+    return ImageRect.setImageID(imageRect(machine), id)
   }
 
   export function imageRect(machine: ImageStateMachine): ImageRect {

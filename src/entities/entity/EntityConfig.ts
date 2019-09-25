@@ -15,7 +15,7 @@ export interface EntityConfig {
   readonly type: EntityTypeConfig
   /** Defaults to (0, 0). */
   readonly position?: XYConfig
-  readonly colorID?: AtlasIDConfig
+  readonly imageID?: AtlasIDConfig
   readonly scale?: ImageScaleConfig
   /** Defaults to {}. */
   readonly machine?: ImageStateMachineConfig

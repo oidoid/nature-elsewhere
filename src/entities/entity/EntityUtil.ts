@@ -14,8 +14,8 @@ import {ImageStateMachine} from '../../images/imageStateMachine/ImageStateMachin
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
 
 export namespace EntityUtil {
-  export function setColorID(entity: Entity, id: AtlasID): UpdateStatus {
-    return ImageStateMachine.setColorID(entity.machine, id)
+  export function setImageID(entity: Entity, id: AtlasID): UpdateStatus {
+    return ImageStateMachine.setImageID(entity.machine, id)
   }
 
   /** See Entity.spawnID. */
@@ -140,21 +140,46 @@ export namespace EntityUtil {
     return status
   }
 
-  export function findAny(
+  export function findAnyByID(
     entities: readonly Entity[],
     id: EntityID
   ): Maybe<Entity> {
     for (const entity of entities) {
-      const found = find(entity, id)
+      const found = findByID(entity, id)
       if (found) return found
     }
     return
   }
 
-  export function find(entity: Entity, id: EntityID): Maybe<Entity> {
-    if (entity.id === id) return entity
+  export function findAnyBySpawnID(
+    entities: readonly Entity[],
+    spawnID: Symbol
+  ): Maybe<Entity> {
+    for (const entity of entities) {
+      const found = findBySpawnID(entity, spawnID)
+      if (found) return found
+    }
+    return
+  }
+
+  export function findByID(entity: Entity, id: EntityID): Maybe<Entity> {
+    return find(entity, entity => entity.id === id)
+  }
+
+  export function findBySpawnID(
+    entity: Entity,
+    spawnID: Symbol
+  ): Maybe<Entity> {
+    return find(entity, entity => entity.spawnID === spawnID)
+  }
+
+  export function find(
+    entity: Entity,
+    predicate: (entity: Entity) => boolean
+  ): Maybe<Entity> {
+    if (predicate(entity)) return entity
     for (const child of entity.children) {
-      const descendant = find(child, id)
+      const descendant = find(child, predicate)
       if (descendant) return descendant
     }
     return

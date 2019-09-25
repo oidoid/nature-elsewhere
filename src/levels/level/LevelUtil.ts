@@ -56,7 +56,7 @@ export namespace LevelUtil {
       follow = level.player
     else
       for (const parent of level.parentEntities) {
-        follow = EntityUtil.find(parent, level.cam.followID)
+        follow = EntityUtil.findByID(parent, level.cam.followID)
         if (follow) break
       }
 

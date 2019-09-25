@@ -15,6 +15,7 @@ import {Checkbox} from '../checkbox/Checkbox'
 import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
 import {LevelUtil} from '../../../levels/level/LevelUtil'
 import {Layer} from '../../../images/layer/Layer'
+import {Marquee} from '../marquee/Marquee'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -28,12 +29,18 @@ export namespace LevelEditorPanelUpdater {
 
     let status = UpdateStatus.UNCHANGED
     if (LevelUtil.collisionWithCursor(state.level, panel)) console.log('cursor')
-    if (panel.decrementButton.clicked || panel.incrementButton.clicked) {
-      const offset = panel.decrementButton.clicked
-        ? -1
-        : panel.incrementButton.clicked
-        ? 1
-        : 0
+    if (
+      panel.decrementButton.clicked ||
+      panel.decrementButton.longClicked ||
+      panel.incrementButton.clicked ||
+      panel.incrementButton.longClicked
+    ) {
+      const offset =
+        panel.decrementButton.clicked || panel.decrementButton.longClicked
+          ? -1
+          : panel.incrementButton.clicked || panel.incrementButton.longClicked
+          ? 1
+          : 0
       if (panel.xCheckbox.checked)
         updateNumberCheckbox(panel.xCheckbox, state, offset)
       else if (panel.yCheckbox.checked)
@@ -42,8 +49,7 @@ export namespace LevelEditorPanelUpdater {
       else if (panel.stateCheckbox.checked)
         updateEntityState(panel, state, offset)
     }
-    if (panel.destroyButton.clicked) {
-    }
+
     if (panel.createButton.clicked) {
       const child = EntityPickerParser.getActiveChild(panel.entityPicker)
       if (child) {
@@ -59,7 +65,7 @@ export namespace LevelEditorPanelUpdater {
           },
           state.level.atlas
         )
-        const sandbox = EntityUtil.findAny(
+        const sandbox = EntityUtil.findAnyByID(
           state.level.parentEntities,
           EntityID.UI_LEVEL_EDITOR_SANDBOX
         )
@@ -67,9 +73,63 @@ export namespace LevelEditorPanelUpdater {
 
         sandbox.children.push(entity)
         EntityUtil.invalidateBounds(sandbox)
+        // [todo] set selection here
       }
     }
     if (panel.toggleGridButton.clicked) toggleGrid(state)
+
+    const marquee = <Maybe<Marquee>>(
+      EntityUtil.findAnyByID(state.level.parentEntities, EntityID.UI_MARQUEE)
+    )
+    if (
+      marquee &&
+      marquee.selection &&
+      marquee.machine.state !== EntityState.HIDDEN
+    ) {
+      const selection = EntityUtil.findAnyBySpawnID(
+        state.level.parentEntities,
+        marquee.selection
+      )
+      if (!selection) throw new Error('Missing selection.')
+      const sandbox = EntityUtil.findAnyByID(
+        state.level.parentEntities,
+        EntityID.UI_LEVEL_EDITOR_SANDBOX
+      )
+      if (!sandbox) throw new Error('Missing sandbox.')
+      if (panel.destroyButton.clicked) {
+        marquee.selection = undefined
+        marquee.machine.state = EntityState.HIDDEN
+        const index = sandbox.children.findIndex(entity =>
+          EntityUtil.equal(entity, selection)
+        )
+        sandbox.children.splice(index, 1)
+      }
+      if (
+        panel.decrementButton.clicked ||
+        panel.decrementButton.longClicked ||
+        panel.incrementButton.clicked ||
+        panel.incrementButton.longClicked
+      ) {
+        const position = {
+          x: checkboxNumber(panel.xCheckbox),
+          y: checkboxNumber(panel.yCheckbox)
+        }
+        EntityUtil.moveTo(selection, position)
+        EntityUtil.invalidateBounds(sandbox)
+        EntityUtil.moveTo(marquee, {x: position.x - 1, y: position.y - 1})
+      } else {
+        updateNumberCheckbox(
+          panel.xCheckbox,
+          state,
+          selection.bounds.position.x - checkboxNumber(panel.xCheckbox)
+        )
+        updateNumberCheckbox(
+          panel.yCheckbox,
+          state,
+          selection.bounds.position.y - checkboxNumber(panel.yCheckbox)
+        )
+      }
+    }
 
     return status | UpdateStatus.UPDATED
   }
@@ -122,7 +182,10 @@ function updateEntityState(
 }
 
 function toggleGrid(state: UpdateState): void {
-  const grid = EntityUtil.findAny(state.level.parentEntities, EntityID.UI_GRID)
+  const grid = EntityUtil.findAnyByID(
+    state.level.parentEntities,
+    EntityID.UI_GRID
+  )
   if (!grid) throw new Error('Missing grid.')
   const toggle =
     grid.machine.state === EntityState.HIDDEN

@@ -31,7 +31,7 @@
           "//": "[strings]",
           "text": "nature\nelsewhere",
           "textScale": {"x": 4, "y": 4},
-          "colorID": "palette-black"
+          "imageID": "palette-black"
         },
         {
           "type": "group",

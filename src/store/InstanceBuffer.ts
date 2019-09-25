@@ -32,16 +32,16 @@ export namespace InstanceBuffer {
     dat.setInt16(i + 4, animation.size.w, littleEndian)
     dat.setInt16(i + 6, animation.size.h, littleEndian)
 
-    const maskAnimation = atlas[image.maskID]
-    const maskCelIndex = Animator.index(
+    const imageAnimation = atlas[image.imageID]
+    const imageCelIndex = Animator.index(
       image.animator.period,
-      maskAnimation.cels
+      imageAnimation.cels
     )
-    const maskCel = maskAnimation.cels[maskCelIndex]
-    dat.setInt16(i + 8, maskCel.position.x, littleEndian)
-    dat.setInt16(i + 10, maskCel.position.y, littleEndian)
-    dat.setInt16(i + 12, maskAnimation.size.w, littleEndian)
-    dat.setInt16(i + 14, maskAnimation.size.h, littleEndian)
+    const imageCel = imageAnimation.cels[imageCelIndex]
+    dat.setInt16(i + 8, imageCel.position.x, littleEndian)
+    dat.setInt16(i + 10, imageCel.position.y, littleEndian)
+    dat.setInt16(i + 12, imageAnimation.size.w, littleEndian)
+    dat.setInt16(i + 14, imageAnimation.size.h, littleEndian)
 
     dat.setUint8(i + 16, image.alphaComposition)
 
