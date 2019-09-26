@@ -2,9 +2,6 @@ import {EntityType} from '../../entityType/EntityType'
 import {Entity} from '../../entity/Entity'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {Checkbox} from './Checkbox'
-
-import {TextConfig} from '../text/TextConfig'
-
 import {Image} from '../../../images/image/Image'
 import {ImageRect} from '../../../images/imageRect/ImageRect'
 import {ImageParser, ImageConfig} from '../../../images/image/ImageParser'
@@ -13,6 +10,7 @@ import {AtlasID} from '../../../atlas/atlasID/AtlasID'
 import {CheckboxState} from './CheckboxState'
 import {IEntityParser} from '../../RecursiveEntityParser'
 import {Layer} from '../../../images/layer/Layer'
+import {TextConfig} from '../text/TextParser'
 
 export namespace CheckboxParser {
   export function parse(

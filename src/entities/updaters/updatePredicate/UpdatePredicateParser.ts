@@ -1,6 +1,7 @@
 import {ObjectUtil} from '../../../utils/ObjectUtil'
 import {UpdatePredicate} from './UpdatePredicate'
-import {UpdatePredicateConfig} from './UpdatePredicateConfig'
+
+export type UpdatePredicateConfig = Maybe<UpdatePredicate | string>
 
 export namespace UpdatePredicateParser {
   export function parse(config: UpdatePredicateConfig): UpdatePredicate {

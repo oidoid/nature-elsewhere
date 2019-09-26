@@ -3,9 +3,9 @@ import {EntityType} from '../../entityType/EntityType'
 import {DateVersionHash} from './DateVersionHash'
 import {Build} from '../../../utils/Build'
 import {Atlas} from '../../../atlas/atlas/Atlas'
-import {TextConfig} from '../text/TextConfig'
 
 import {IEntityParser} from '../../RecursiveEntityParser'
+import {TextConfig} from '../text/TextParser'
 
 export namespace DateVersionHashParser {
   export function parse(

@@ -7,10 +7,21 @@ import {Layer} from '../../../images/layer/Layer'
 import {XY} from '../../../math/xy/XY'
 import {TextLayout} from '../../../text/textLayout/TextLayout'
 import {Rect} from '../../../math/rect/Rect'
-import {XYParser} from '../../../math/xy/XYParser'
+import {XYParser, XYConfig} from '../../../math/xy/XYParser'
 import {ImageParser} from '../../../images/image/ImageParser'
 import {Text} from './Text'
 import {MEM_FONT_PREFIX, AtlasID} from '../../../atlas/atlasID/AtlasID'
+import {EntityConfig} from '../../entity/EntityParser'
+import {LayerKeyConfig} from '../../../images/layer/LayerConfig'
+import {WHConfig} from '../../../math/wh/WHParser'
+
+export interface TextConfig extends EntityConfig {
+  readonly type: EntityType.UI_TEXT
+  readonly text?: string
+  readonly textLayer: LayerKeyConfig
+  readonly textScale?: XYConfig
+  readonly textMaxSize?: WHConfig
+}
 
 export namespace TextParser {
   export function parse(text: Entity, atlas: Atlas): Text {

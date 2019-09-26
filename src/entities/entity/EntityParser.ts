@@ -30,12 +30,16 @@ import {RectParser, RectArrayConfig} from '../../math/rect/RectParser'
 import {RecursiveEntityParser} from '../RecursiveEntityParser'
 import {TextParser} from '../types/text/TextParser'
 import {TypeConfigMap} from '../TypeConfigMap'
-import {UpdatePredicateConfig} from '../updaters/updatePredicate/UpdatePredicateConfig'
-import {UpdatePredicateParser} from '../updaters/updatePredicate/UpdatePredicateParser'
+import {
+  UpdatePredicateParser,
+  UpdatePredicateConfig
+} from '../updaters/updatePredicate/UpdatePredicateParser'
 import {UpdaterParser} from '../updaters/UpdaterParser'
-import {UpdaterTypeArrayConfig} from '../updaters/updaterType/UpdaterTypeConfig'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
-import {UpdaterTypeParser} from '../updaters/updaterType/UpdaterTypeParser'
+import {
+  UpdaterTypeParser,
+  UpdaterTypeArrayConfig
+} from '../updaters/updaterType/UpdaterTypeParser'
 import {XYParser, XYConfig} from '../../math/xy/XYParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>

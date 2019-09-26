@@ -1,6 +1,8 @@
 import {ObjectUtil} from '../../../utils/ObjectUtil'
 import {UpdaterType} from './UpdaterType'
-import {UpdaterTypeConfig, UpdaterTypeArrayConfig} from './UpdaterTypeConfig'
+
+export type UpdaterTypeConfig = Maybe<UpdaterType | string>
+export type UpdaterTypeArrayConfig = Maybe<readonly UpdaterTypeConfig[]>
 
 export namespace UpdaterTypeParser {
   export function parseAll(config: UpdaterTypeArrayConfig): UpdaterType[] {
