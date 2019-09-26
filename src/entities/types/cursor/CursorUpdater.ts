@@ -1,25 +1,23 @@
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../../math/xy/XY'
 import {Input} from '../../../inputs/Input'
-import {EntityState} from '../../entityState/EntityState'
 import {Update} from '../../updaters/Update'
-
-import {CursorState} from './CursorState'
 import {Entity} from '../../entity/Entity'
+import {Cursor} from './Cursor'
 
 export namespace CursorUpdater {
   export const update: Update = (cursor, state) => {
     let status = UpdateStatus.UNCHANGED
-    let nextState: CursorState | EntityState = EntityState.HIDDEN
+    let nextState: Cursor.State | Entity.State = Entity.State.HIDDEN
     const {point, pick} = state.inputs
     if (pick && pick.active) {
-      nextState = CursorState.VISIBLE
+      nextState = Cursor.State.VISIBLE
       const position = XY.trunc(
         Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
       )
       status |= Entity.moveTo(cursor, position)
     } else if (point && point.active) {
-      nextState = CursorState.VISIBLE
+      nextState = Cursor.State.VISIBLE
       const position = XY.trunc(
         Input.levelXY(point, state.canvasWH, state.level.cam.bounds)
       )

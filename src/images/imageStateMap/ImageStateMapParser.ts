@@ -1,11 +1,11 @@
 import {Atlas} from '../../atlas/atlas/Atlas'
-import {EntityState} from '../../entities/entityState/EntityState'
 import {
   EntityStateParser,
   EntityStateConfig
-} from '../../entities/entityState/EntityStateParser'
+} from '../../entities/entity/EntityStateParser'
 import {ImageRectParser, ImageRectConfig} from '../imageRect/ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
+import {Entity} from '../../entities/entity/Entity'
 
 export type ImageStateMapConfig = Maybe<
   Readonly<Record<Exclude<EntityStateConfig, undefined>, ImageRectConfig>>
@@ -17,7 +17,7 @@ export namespace ImageStateMapParser {
     atlas: Atlas
   ): ImageStateMap {
     const map: Writable<ImageStateMap> = {
-      [EntityState.HIDDEN]: {
+      [Entity.State.HIDDEN]: {
         origin: {x: 0, y: 0},
         bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
         // Always use non-zero scaling so that Entity can determine relative

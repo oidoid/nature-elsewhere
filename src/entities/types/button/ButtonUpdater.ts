@@ -3,9 +3,6 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Update} from '../../updaters/Update'
 import {Button} from './Button'
-
-import {ButtonState} from './ButtonState'
-
 import {Entity} from '../../entity/Entity'
 import {Level} from '../../../levels/level/Level'
 
@@ -15,9 +12,9 @@ export namespace ButtonUpdater {
 
     button.clicked = false
     const collision = Level.collisionWithCursor(state.level, button)
-    if (!collision) return Entity.setState(button, ButtonState.UNCLICKED)
+    if (!collision) return Entity.setState(button, Button.State.UNCLICKED)
 
-    let status = Entity.setState(button, ButtonState.CLICKED) // this is just presentation not click state
+    let status = Entity.setState(button, Button.State.CLICKED) // this is just presentation not click state
 
     const nextClicked = Input.inactiveTriggered(state.inputs.pick)
     const nextLongClicked = Input.activeLong(state.inputs.pick)

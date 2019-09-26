@@ -6,3 +6,10 @@ export interface Button extends Entity {
   clicked: boolean
   longClicked: boolean
 }
+
+export namespace Button {
+  export enum State {
+    UNCLICKED = 'unclicked',
+    CLICKED = 'clicked'
+  }
+}

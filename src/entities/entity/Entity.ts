@@ -1,7 +1,6 @@
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
 import {CollisionPredicate} from '../../collision/collisionPredicate/CollisionPredicate'
 import {EntityID} from '../entityID/EntityID'
-import {EntityState} from '../entityState/EntityState'
 import {EntityType} from '../entityType/EntityType'
 import {Image} from '../../images/image/Image'
 import {ImageRect} from '../../images/imageRect/ImageRect'
@@ -46,6 +45,10 @@ export interface Entity {
 }
 
 export namespace Entity {
+  export enum State {
+    HIDDEN = 'hidden'
+  }
+
   export function setImageID(entity: Entity, id: AtlasID): UpdateStatus {
     return ImageStateMachine.setImageID(entity.machine, id)
   }
@@ -147,7 +150,7 @@ export namespace Entity {
 
   export function setState(
     entity: Entity,
-    state: EntityState | string
+    state: State | string
   ): UpdateStatus {
     const status = ImageStateMachine.setState(entity.machine, state)
     if (status & UpdateStatus.UPDATED) invalidateBounds(entity)

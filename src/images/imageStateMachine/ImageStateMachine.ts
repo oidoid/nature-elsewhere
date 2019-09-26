@@ -1,15 +1,15 @@
-import {EntityState} from '../../entities/entityState/EntityState'
 import {ImageRect} from '../imageRect/ImageRect'
 import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
 import {Layer} from '../layer/Layer'
 import {XY} from '../../math/xy/XY'
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
+import {Entity} from '../../entities/entity/Entity'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.
 export interface ImageStateMachine {
-  state: EntityState | string
-  map: Readonly<Record<EntityState | string, ImageRect>>
+  state: Entity.State | string
+  map: Readonly<Record<Entity.State | string, ImageRect>>
 }
 
 export namespace ImageStateMachine {
@@ -26,7 +26,7 @@ export namespace ImageStateMachine {
 
   export function setState(
     machine: ImageStateMachine,
-    state: EntityState | string
+    state: Entity.State | string
   ): UpdateStatus {
     if (machine.state === state) return UpdateStatus.UNCHANGED
     const {bounds, scale} = machine.map[machine.state]

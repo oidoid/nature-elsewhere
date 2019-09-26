@@ -34,9 +34,9 @@ import * as UI_TEXT from './types/text/text.json'
 import * as UI_TOOLBAR from './types/entityConfigs/ui/toolbar.json'
 
 import {EntityType} from './entityType/EntityType'
-import {EntityStateParser} from './entityState/EntityStateParser'
-import {EntityState} from './entityState/EntityState'
+import {EntityStateParser} from './entity/EntityStateParser'
 import {EntityConfig} from './entity/EntityParser.js'
+import {Entity} from './entity/Entity.js'
 
 export const TypeConfigMap: Readonly<
   Record<EntityType, EntityConfig>
@@ -77,7 +77,7 @@ export const TypeConfigMap: Readonly<
   [EntityType.UI_TOOLBAR]: UI_TOOLBAR
 })
 
-export function defaultTypeState(type: EntityType): EntityState | string {
+export function defaultTypeState(type: EntityType): Entity.State | string {
   const config = TypeConfigMap[type]
   return EntityStateParser.parse(
     config.machine ? config.machine.state : undefined

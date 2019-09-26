@@ -1,7 +1,7 @@
 import {
   EntityStateParser,
   EntityStateConfig
-} from '../../entities/entityState/EntityStateParser'
+} from '../../entities/entity/EntityStateParser'
 import {ImageStateMachine} from './ImageStateMachine'
 import {Atlas} from '../../atlas/atlas/Atlas'
 import {ObjectUtil} from '../../utils/ObjectUtil'
@@ -9,7 +9,7 @@ import {
   ImageStateMapParser,
   ImageStateMapConfig
 } from '../imageStateMap/ImageStateMapParser'
-import {EntityState} from '../../entities/entityState/EntityState'
+import {Entity} from '../../entities/entity/Entity'
 
 export type ImageStateMachineConfig = Maybe<
   Readonly<{state?: EntityStateConfig; map?: ImageStateMapConfig}>
@@ -22,7 +22,7 @@ export namespace ImageStateMachineParser {
   ): ImageStateMachine {
     if (!config)
       return {
-        state: EntityState.HIDDEN,
+        state: Entity.State.HIDDEN,
         map: ImageStateMapParser.parse(undefined, atlas)
       }
     const state = EntityStateParser.parse(config.state)

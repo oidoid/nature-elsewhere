@@ -7,7 +7,6 @@ import {ImageRect} from '../../../images/imageRect/ImageRect'
 import {ImageParser, ImageConfig} from '../../../images/image/ImageParser'
 import {WH} from '../../../math/wh/WH'
 import {AtlasID} from '../../../atlas/atlasID/AtlasID'
-import {CheckboxState} from './CheckboxState'
 import {IEntityParser} from '../../RecursiveEntityParser'
 import {Layer} from '../../../images/layer/Layer'
 import {TextConfig} from '../text/TextParser'
@@ -55,7 +54,7 @@ export namespace CheckboxParser {
 
 function setBackground(checkbox: Checkbox, layer: Layer, atlas: Atlas): void {
   const text = checkbox.children[0]
-  for (const state of [CheckboxState.UNCHECKED, CheckboxState.CHECKED]) {
+  for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
     const size = {w: text.bounds.size.w, h: text.bounds.size.h}
     checkbox.machine.map[state].images.length = 0
     const images = newBackgroundImages(state, layer, atlas, size)
@@ -69,7 +68,7 @@ function setBackground(checkbox: Checkbox, layer: Layer, atlas: Atlas): void {
 }
 
 function newBackgroundImages(
-  state: CheckboxState,
+  state: Checkbox.State,
   layerOffset: Layer,
   atlas: Atlas,
   {w, h}: WH
@@ -92,7 +91,7 @@ function newBackgroundImages(
   Image.elevate(borderImage, layerOffset)
   return [backgroundImage, borderImage]
 }
-const backgroundID: Readonly<Record<CheckboxState, AtlasID>> = Object.freeze({
-  [CheckboxState.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,
-  [CheckboxState.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
+const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({
+  [Checkbox.State.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,
+  [Checkbox.State.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
 })

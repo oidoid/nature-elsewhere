@@ -1,4 +1,3 @@
-import {EntityState} from '../../entityState/EntityState'
 import {EntityType, UI_KEY_PREFIX} from '../../entityType/EntityType'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {Entity} from '../../entity/Entity'
@@ -44,7 +43,7 @@ export namespace EntityPickerParser {
         entityWindowBounds.position
       )
       Entity.moveTo(entity, center)
-      Entity.setState(entity, EntityState.HIDDEN)
+      Entity.setState(entity, Entity.State.HIDDEN)
       picker.children.push(entity)
     }
     picker.activeChildIndex = 0
@@ -90,7 +89,7 @@ function hideActiveChild(picker: EntityPicker): void {
   const child = EntityPickerParser.getActiveChild(picker)
   if (!child) return
   Entity.elevate(child, -Layer.UI_PICKER_OFFSET)
-  Entity.setState(child, EntityState.HIDDEN)
+  Entity.setState(child, Entity.State.HIDDEN)
 }
 
 function showActiveChild(picker: EntityPicker): void {
@@ -101,8 +100,8 @@ function showActiveChild(picker: EntityPicker): void {
   Entity.elevate(child, Layer.UI_PICKER_OFFSET)
 }
 
-function getChildStates(child: Entity): readonly (EntityState | string)[] {
+function getChildStates(child: Entity): readonly (Entity.State | string)[] {
   return Object.keys(child.machine.map).filter(
-    state => state !== EntityState.HIDDEN
+    state => state !== Entity.State.HIDDEN
   )
 }

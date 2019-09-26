@@ -1,7 +1,6 @@
 import {EntityID} from '../../entityID/EntityID'
-import {EntityState} from '../../entityState/EntityState'
 import {EntityType} from '../../entityType/EntityType'
-import {PlaneState} from '../plane/PlaneState'
+import {PlaneState} from '../PlaneState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Update} from '../../updaters/Update'
 import {LevelEditorPanel} from './LevelEditorPanel'
@@ -81,7 +80,7 @@ export namespace LevelEditorPanelUpdater {
     if (
       marquee &&
       marquee.selection &&
-      marquee.machine.state !== EntityState.HIDDEN
+      marquee.machine.state !== Entity.State.HIDDEN
     ) {
       const selection = Entity.findAnyBySpawnID(
         state.level.parentEntities,
@@ -95,7 +94,7 @@ export namespace LevelEditorPanelUpdater {
       if (!sandbox) throw new Error('Missing sandbox.')
       if (panel.destroyButton.clicked) {
         marquee.selection = undefined
-        marquee.machine.state = EntityState.HIDDEN
+        marquee.machine.state = Entity.State.HIDDEN
         const index = sandbox.children.findIndex(entity =>
           Entity.equal(entity, selection)
         )
@@ -182,8 +181,8 @@ function toggleGrid(state: UpdateState): void {
   const grid = Entity.findAnyByID(state.level.parentEntities, EntityID.UI_GRID)
   if (!grid) throw new Error('Missing grid.')
   const toggle =
-    grid.machine.state === EntityState.HIDDEN
+    grid.machine.state === Entity.State.HIDDEN
       ? PlaneState.GRID
-      : EntityState.HIDDEN
+      : Entity.State.HIDDEN
   Entity.setState(grid, toggle)
 }

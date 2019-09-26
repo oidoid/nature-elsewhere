@@ -1,14 +1,10 @@
 import {EntityType} from '../../entityType/EntityType'
-
 import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Marquee} from './Marquee'
-
-import {MarqueeState} from './MarqueeState'
 import {EntityCollider} from '../../../collision/EntityCollider'
 import {EntityID} from '../../entityID/EntityID'
-import {EntityState} from '../../entityState/EntityState'
 import {Entity} from '../../entity/Entity'
 import {XY} from '../../../math/xy/XY'
 
@@ -52,7 +48,7 @@ export namespace MarqueeUpdater {
       sandbox
     )
     if (!panelCollision && cursorSandboxCollision) {
-      status |= Entity.setState(marquee, MarqueeState.VISIBLE)
+      status |= Entity.setState(marquee, Marquee.State.VISIBLE)
 
       const sandboxEntity = cursorSandboxCollision.rhs.descendant // this won't work correctly for sub-entities
       marquee.selection = sandboxEntity.spawnID
@@ -64,7 +60,7 @@ export namespace MarqueeUpdater {
       status |= Entity.moveTo(marquee, destination)
       doTheStuffAndThings(marquee, destination, sandboxEntity)
     } else if (!panelCollision) {
-      status |= Entity.setState(marquee, EntityState.HIDDEN)
+      status |= Entity.setState(marquee, Entity.State.HIDDEN)
       marquee.selection = undefined
     }
 

@@ -1,14 +1,10 @@
 import {XY} from '../../../math/xy/XY'
 import {EntityType} from '../../entityType/EntityType'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
-import {EntityState} from '../../entityState/EntityState'
 import {EntityCollider} from '../../../collision/EntityCollider'
 import {NumberUtil} from '../../../math/number/NumberUtil'
 import {Update} from '../../updaters/Update'
 import {Backpacker} from './Backpacker'
-
-import {BackpackerState} from './BackpackerState'
-
 import {Entity} from '../../entity/Entity'
 import {Level} from '../../../levels/level/Level'
 
@@ -18,7 +14,7 @@ export namespace BackpackerUpdater {
       throw new Error()
     if (
       !state.level.destination ||
-      state.level.destination.machine.state === EntityState.HIDDEN
+      state.level.destination.machine.state === Entity.State.HIDDEN
     )
       return UpdateStatus.UNCHANGED
 
@@ -104,20 +100,20 @@ export namespace BackpackerUpdater {
     let nextState = backpacker.machine.state
     if (idle) {
       nextState =
-        nextState === BackpackerState.WALK_UP ||
-        nextState === BackpackerState.IDLE_UP
-          ? BackpackerState.IDLE_UP
-          : nextState === BackpackerState.IDLE_RIGHT ||
-            nextState === BackpackerState.WALK_RIGHT
-          ? BackpackerState.IDLE_RIGHT
-          : BackpackerState.IDLE_DOWN
+        nextState === Backpacker.State.WALK_UP ||
+        nextState === Backpacker.State.IDLE_UP
+          ? Backpacker.State.IDLE_UP
+          : nextState === Backpacker.State.IDLE_RIGHT ||
+            nextState === Backpacker.State.WALK_RIGHT
+          ? Backpacker.State.IDLE_RIGHT
+          : Backpacker.State.IDLE_DOWN
       if (state.level.destination)
-        Entity.setState(state.level.destination, EntityState.HIDDEN)
+        Entity.setState(state.level.destination, Entity.State.HIDDEN)
     } else {
-      if (up) nextState = BackpackerState.WALK_UP
-      if (down) nextState = BackpackerState.WALK_DOWN
+      if (up) nextState = Backpacker.State.WALK_UP
+      if (down) nextState = Backpacker.State.WALK_DOWN
       if ((left || right) && (!diagonal || animateHorizontal))
-        nextState = BackpackerState.WALK_RIGHT
+        nextState = Backpacker.State.WALK_RIGHT
     }
 
     const scale = {...Entity.getScale(backpacker)}
