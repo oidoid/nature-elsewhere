@@ -1,5 +1,5 @@
 import {Atlas} from '../atlas/Atlas'
-import {ShaderLayout} from '../graphics/shaders/shaderLayout/ShaderLayout'
+import {ShaderLayout} from '../graphics/shaders/ShaderLayout'
 
 export interface Assets {
   readonly atlas: Atlas

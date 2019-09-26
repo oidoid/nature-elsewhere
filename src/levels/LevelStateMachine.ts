@@ -1,11 +1,11 @@
-import {Level} from './level/Level'
-import {ShaderLayout} from '../graphics/shaders/shaderLayout/ShaderLayout'
+import {Level} from './Level'
+import {ShaderLayout} from '../graphics/shaders/ShaderLayout'
 import {Store} from '../store/Store'
-import {LevelParser} from './level/LevelParser'
 import {LevelConfigMap} from './levelConfigs/LevelConfigMap'
 import {UpdateState} from '../entities/updaters/UpdateState'
-import {LevelAdvance} from './level/LevelAdvance'
+import {LevelAdvance} from './LevelAdvance'
 import {Atlas} from '../atlas/Atlas'
+import {LevelParser} from './LevelParser'
 
 export interface LevelStateMachine {
   level?: Level

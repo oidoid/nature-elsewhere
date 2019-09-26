@@ -1,6 +1,6 @@
-import {Level} from '../../levels/level/Level'
+import {Level} from '../../levels/Level'
 import {InputState} from '../../inputs/InputState'
-import {WH} from '../../math/wh/WH'
+import {WH} from '../../math/WH'
 
 /** Game tick state to be applied. Cached values for commonly derived values are
     also included for convenience. */

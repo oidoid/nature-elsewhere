@@ -1,15 +1,15 @@
 import {EntityType, UI_KEY_PREFIX} from '../../../entity/EntityType'
 import {Atlas} from '../../../atlas/Atlas'
 import {Entity} from '../../../entity/Entity'
-import {Layer} from '../../../images/layer/Layer'
+import {Layer} from '../../../images/Layer'
 import {ObjectUtil} from '../../../utils/ObjectUtil'
-import {NumberUtil} from '../../../math/number/NumberUtil'
+import {NumberUtil} from '../../../math/NumberUtil'
 import {EntityPicker} from './EntityPicker'
 import {IEntityParser} from '../../RecursiveEntityParser'
 import {defaultTypeState} from '../../TypeConfigMap'
-import {Rect} from '../../../math/rect/Rect'
-import {XY} from '../../../math/xy/XY'
-import * as memFont from '../../../text/textLayout/memFont.json'
+import {Rect} from '../../../math/Rect'
+import {XY} from '../../../math/XY'
+import * as memFont from '../../../text/memFont.json'
 
 const entityWindowSize = Object.freeze({w: 32, h: 26})
 const typeBlacklist: readonly string[] = Object.freeze([

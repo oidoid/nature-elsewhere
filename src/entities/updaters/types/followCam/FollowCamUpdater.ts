@@ -4,9 +4,9 @@ import {UpdaterType} from '../../updaterType/UpdaterType'
 import {Update} from '../../Update'
 
 import {UpdateStatus} from '../../updateStatus/UpdateStatus'
-import {XY} from '../../../../math/xy/XY'
-import {Rect} from '../../../../math/rect/Rect'
-import {WH} from '../../../../math/wh/WH'
+import {XY} from '../../../../math/XY'
+import {Rect} from '../../../../math/Rect'
+import {WH} from '../../../../math/WH'
 import {FollowCamOrientation} from './FollowCamOrientation'
 
 export namespace FollowCamUpdater {

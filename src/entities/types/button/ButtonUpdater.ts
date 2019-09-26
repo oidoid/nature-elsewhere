@@ -4,7 +4,7 @@ import {Input} from '../../../inputs/Input'
 import {Update} from '../../updaters/Update'
 import {Button} from './Button'
 import {Entity} from '../../../entity/Entity'
-import {Level} from '../../../levels/level/Level'
+import {Level} from '../../../levels/Level'
 
 export namespace ButtonUpdater {
   export const update: Update = (button, state) => {

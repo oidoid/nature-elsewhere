@@ -5,7 +5,7 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Checkbox} from './Checkbox'
 import {Entity} from '../../../entity/Entity'
-import {Level} from '../../../levels/level/Level'
+import {Level} from '../../../levels/Level'
 
 export namespace CheckboxUpdater {
   export const update: Update = (checkbox, state) => {

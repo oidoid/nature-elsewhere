@@ -1,7 +1,7 @@
-import {XY} from '../math/xy/XY'
+import {XY} from '../math/XY'
 import {Viewport} from '../graphics/Viewport'
-import {WH} from '../math/wh/WH'
-import {Rect} from '../math/rect/Rect'
+import {WH} from '../math/WH'
+import {Rect} from '../math/Rect'
 
 export interface Input {
   /** True if input is on. */

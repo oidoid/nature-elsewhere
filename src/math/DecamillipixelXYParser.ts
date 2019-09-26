@@ -1,4 +1,4 @@
-import {XY} from './xy/XY'
+import {XY} from './XY'
 import {IntParser} from './IntParser'
 
 export type DecamillipixelIntXYConfig = Maybe<Partial<XY>>

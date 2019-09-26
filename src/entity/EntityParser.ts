@@ -12,16 +12,16 @@ import {EntityType} from './EntityType'
 import {EntityTypeParser, EntityTypeConfig} from './EntityTypeParser'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
 import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
-import {ImageRect} from '../images/imageRect/ImageRect'
+import {ImageRect} from '../images/ImageRect'
 import {ImageScaleConfig, ImageScaleParser} from '../images/ImageScaleParser'
 import {
   ImageStateMachineParser,
   ImageStateMachineConfig
-} from '../images/imageStateMachine/ImageStateMachineParser'
-import {JSONUtil, JSONObject} from '../utils/jsonUtil/JSONUtil'
+} from '../images/ImageStateMachineParser'
+import {JSONUtil, JSONObject} from '../utils/JSONUtil'
 import {LevelEditorPanelParser} from '../entities/types/levelEditorPanel/LevelEditorPanelParser'
 import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
-import {RectParser, RectArrayConfig} from '../math/rect/RectParser'
+import {RectParser, RectArrayConfig} from '../math/RectParser'
 import {RecursiveEntityParser} from '../entities/RecursiveEntityParser'
 import {TextParser} from '../entities/types/text/TextParser'
 import {TypeConfigMap} from '../entities/TypeConfigMap'
@@ -35,7 +35,7 @@ import {
   UpdaterTypeParser,
   UpdaterTypeArrayConfig
 } from '../entities/updaters/updaterType/UpdaterTypeParser'
-import {XYParser, XYConfig} from '../math/xy/XYParser'
+import {XYParser, XYConfig} from '../math/XYParser'
 import {EntityIDConfig, EntityIDParser} from './EntityIDParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>

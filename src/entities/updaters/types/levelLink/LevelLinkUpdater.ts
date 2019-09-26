@@ -3,7 +3,7 @@ import {Update} from '../../Update'
 import {LevelLink} from './LevelLink'
 
 import {Input} from '../../../../inputs/Input'
-import {Level} from '../../../../levels/level/Level'
+import {Level} from '../../../../levels/Level'
 
 export namespace LevelLinkUpdater {
   export const update: Update = (link, state) => {

@@ -11,10 +11,10 @@ import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {Checkbox} from '../checkbox/Checkbox'
 import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
 
-import {Layer} from '../../../images/layer/Layer'
+import {Layer} from '../../../images/Layer'
 import {Marquee} from '../marquee/Marquee'
 import {Entity} from '../../../entity/Entity'
-import {Level} from '../../../levels/level/Level'
+import {Level} from '../../../levels/Level'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {

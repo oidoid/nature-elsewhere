@@ -1,5 +1,5 @@
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
-import {XY} from '../../../math/xy/XY'
+import {XY} from '../../../math/XY'
 import {Input} from '../../../inputs/Input'
 import {Update} from '../../updaters/Update'
 import {DestinationMarkerState} from './DestinationMarkerState'

@@ -1,12 +1,12 @@
-import {XY} from '../../../math/xy/XY'
+import {XY} from '../../../math/XY'
 import {EntityType} from '../../../entity/EntityType'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {EntityCollider} from '../../../collision/EntityCollider'
-import {NumberUtil} from '../../../math/number/NumberUtil'
+import {NumberUtil} from '../../../math/NumberUtil'
 import {Update} from '../../updaters/Update'
 import {Backpacker} from './Backpacker'
 import {Entity} from '../../../entity/Entity'
-import {Level} from '../../../levels/level/Level'
+import {Level} from '../../../levels/Level'
 
 export namespace BackpackerUpdater {
   export const update: Update = (backpacker, state) => {

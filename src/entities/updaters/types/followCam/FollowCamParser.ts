@@ -1,8 +1,8 @@
 import {UpdaterParser} from '../../UpdaterParser'
 import {FollowCamOrientation} from './FollowCamOrientation'
-import {WHParser} from '../../../../math/wh/WHParser'
+import {WHParser} from '../../../../math/WHParser'
 import {ObjectUtil} from '../../../../utils/ObjectUtil'
-import {WH} from '../../../../math/wh/WH'
+import {WH} from '../../../../math/WH'
 
 export interface FollowCamConfig {
   readonly positionRelativeToCam: FollowCamOrientation

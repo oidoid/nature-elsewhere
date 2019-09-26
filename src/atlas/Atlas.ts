@@ -1,7 +1,7 @@
 import {Aseprite} from './Aseprite'
 import {AtlasID} from './AtlasID'
-import {WH} from '../math/wh/WH'
-import {XY} from '../math/xy/XY'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 export interface Atlas extends Readonly<Record<AtlasID, Atlas.Animation>> {}
 

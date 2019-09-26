@@ -6,7 +6,7 @@ import {Marquee} from './Marquee'
 import {EntityCollider} from '../../../collision/EntityCollider'
 import {EntityID} from '../../../entity/EntityID'
 import {Entity} from '../../../entity/Entity'
-import {XY} from '../../../math/xy/XY'
+import {XY} from '../../../math/XY'
 
 enum Images {
   TOP = 0,

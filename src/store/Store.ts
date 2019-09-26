@@ -1,9 +1,9 @@
-import {Image} from '../images/image/Image'
+import {Image} from '../images/Image'
 import {InstanceBuffer} from './InstanceBuffer'
-import {ShaderLayout} from '../graphics/shaders/shaderLayout/ShaderLayout'
+import {ShaderLayout} from '../graphics/shaders/ShaderLayout'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {Entity} from '../entity/Entity'
-import {Level} from '../levels/level/Level'
+import {Level} from '../levels/Level'
 
 export interface Store {
   readonly layout: ShaderLayout

@@ -2,7 +2,7 @@ import {Update} from '../../Update'
 
 import {AtlasID} from '../../../../atlas/AtlasID'
 import {Entity} from '../../../../entity/Entity'
-import {Level} from '../../../../levels/level/Level'
+import {Level} from '../../../../levels/Level'
 
 export namespace Link {
   export const update: Update = (link, state) => {

@@ -1,8 +1,8 @@
 import {Entity} from '../../../entity/Entity'
 import {EntityType} from '../../../entity/EntityType'
-import {XY} from '../../../math/xy/XY'
-import {Layer} from '../../../images/layer/Layer'
-import {WH} from '../../../math/wh/WH'
+import {XY} from '../../../math/XY'
+import {Layer} from '../../../images/Layer'
+import {WH} from '../../../math/WH'
 
 export interface Text extends Entity {
   readonly type: EntityType.UI_TEXT

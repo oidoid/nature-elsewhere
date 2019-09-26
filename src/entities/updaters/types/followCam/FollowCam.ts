@@ -1,4 +1,4 @@
-import {WH} from '../../../../math/wh/WH'
+import {WH} from '../../../../math/WH'
 import {FollowCamOrientation} from './FollowCamOrientation'
 
 export interface FollowCam {

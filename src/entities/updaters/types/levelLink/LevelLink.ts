@@ -1,4 +1,4 @@
-import {LevelType} from '../../../../levels/levelType/LevelType'
+import {LevelType} from '../../../../levels/LevelType'
 import {Entity} from '../../../../entity/Entity'
 
 export interface LevelLink {
