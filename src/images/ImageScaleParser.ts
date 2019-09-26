@@ -1,5 +1,7 @@
-import {ImageScaleConfig} from './ImageScaleConfig'
-import {XY} from '../../math/xy/XY'
+import {XY} from '../math/xy/XY'
+
+/** Defaults to (1, 1). */
+export type ImageScaleConfig = Maybe<Partial<XY>>
 
 export namespace ImageScaleParser {
   export function parse(config: ImageScaleConfig): XY {

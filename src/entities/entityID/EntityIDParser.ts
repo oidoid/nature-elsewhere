@@ -1,6 +1,7 @@
 import {EntityID} from './EntityID'
-import {EntityIDConfig} from './EntityIDConfig'
 import {ObjectUtil} from '../../utils/ObjectUtil'
+
+export type EntityIDConfig = Maybe<EntityID | string>
 
 export namespace EntityIDParser {
   export function parse(config: EntityIDConfig): EntityID {

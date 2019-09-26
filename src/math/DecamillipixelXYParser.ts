@@ -1,6 +1,7 @@
-import {XY} from '../../math/xy/XY'
-import {IntParser} from '../../math/IntParser'
-import {DecamillipixelIntXYConfig} from './DecamillipixelIntXYConfig'
+import {XY} from './xy/XY'
+import {IntParser} from './IntParser'
+
+export type DecamillipixelIntXYConfig = Maybe<Partial<XY>>
 
 export namespace DecamillipixelIntXYParser {
   export function parse(config: DecamillipixelIntXYConfig): XY {

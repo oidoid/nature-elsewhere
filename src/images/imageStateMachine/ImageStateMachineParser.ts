@@ -1,10 +1,19 @@
-import {EntityStateParser} from '../../entities/entityState/EntityStateParser'
+import {
+  EntityStateParser,
+  EntityStateConfig
+} from '../../entities/entityState/EntityStateParser'
 import {ImageStateMachine} from './ImageStateMachine'
-import {ImageStateMachineConfig} from './ImageStateMachineConfig'
 import {Atlas} from '../../atlas/atlas/Atlas'
 import {ObjectUtil} from '../../utils/ObjectUtil'
-import {ImageStateMapParser} from '../imageStateMap/ImageStateMapParser'
+import {
+  ImageStateMapParser,
+  ImageStateMapConfig
+} from '../imageStateMap/ImageStateMapParser'
 import {EntityState} from '../../entities/entityState/EntityState'
+
+export type ImageStateMachineConfig = Maybe<
+  Readonly<{state?: EntityStateConfig; map?: ImageStateMapConfig}>
+>
 
 export namespace ImageStateMachineParser {
   export function parse(

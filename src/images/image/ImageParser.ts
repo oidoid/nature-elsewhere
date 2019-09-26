@@ -1,15 +1,36 @@
-import {AnimatorParser} from '../animator/AnimatorParser'
+import {
+  AlphaCompositionParser,
+  AlphaCompositionKeyConfig
+} from '../alphaComposition/AlphaCompositionParser'
+import {AnimatorParser, AnimatorConfig} from '../animator/AnimatorParser'
 import {Atlas} from '../../atlas/atlas/Atlas'
+import {AtlasIDConfig} from '../../atlas/atlasID/AtlasIDConfig'
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
 import {AtlasIDParser} from '../../atlas/atlasID/AtlasIDParser'
-import {DecamillipixelIntXYParser} from '../decamillipixelIntXY/DecamillipixelXYParser'
-import {ImageConfig} from './ImageConfig'
+import {
+  DecamillipixelIntXYParser,
+  DecamillipixelIntXYConfig
+} from '../../math/DecamillipixelXYParser'
 import {Image} from './Image'
-import {ImageScaleParser} from '../imageScale/ImageScaleParser'
+import {ImageScaleParser} from '../ImageScaleParser'
+import {LayerKeyConfig} from '../layer/LayerConfig'
 import {LayerParser} from '../layer/LayerParser'
+import {RectConfig} from '../../math/rect/RectParser'
 import {Rect} from '../../math/rect/Rect'
+import {XYConfig} from '../../math/xy/XYParser'
 import {XYParser} from '../../math/xy/XYParser'
-import {AlphaCompositionParser} from '../alphaComposition/AlphaCompositionParser'
+
+export interface ImageConfig {
+  readonly id: AtlasIDConfig
+  readonly imageID?: AtlasIDConfig
+  readonly bounds?: RectConfig
+  readonly layer?: LayerKeyConfig
+  readonly animator?: AnimatorConfig
+  readonly scale?: XYConfig
+  readonly wrap?: DecamillipixelIntXYConfig
+  readonly wrapVelocity?: DecamillipixelIntXYConfig
+  readonly alphaComposition?: AlphaCompositionKeyConfig
+}
 
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {

@@ -1,6 +1,7 @@
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {EntityType} from './EntityType'
-import {EntityTypeConfig} from './EntityTypeConfig'
+
+export type EntityTypeConfig = EntityType | string
 
 export namespace EntityTypeParser {
   export function parse(config: EntityTypeConfig): EntityType {

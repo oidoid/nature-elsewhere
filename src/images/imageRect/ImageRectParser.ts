@@ -1,10 +1,15 @@
 import {ImageRect} from './ImageRect'
-import {XYParser} from '../../math/xy/XYParser'
+import {XYParser, XYConfig} from '../../math/xy/XYParser'
 import {Atlas} from '../../atlas/atlas/Atlas'
-import {ImageScaleParser} from '../imageScale/ImageScaleParser'
-import {ImageParser} from '../image/ImageParser'
+import {ImageScaleParser, ImageScaleConfig} from '../ImageScaleParser'
+import {ImageParser, ImageConfig} from '../image/ImageParser'
 import {Rect} from '../../math/rect/Rect'
-import {ImageRectConfig} from './ImageRectConfig'
+
+export type ImageRectConfig = Maybe<{
+  readonly origin?: XYConfig
+  readonly scale?: ImageScaleConfig
+  readonly images?: readonly ImageConfig[]
+}>
 
 export namespace ImageRectParser {
   export function parse(config: ImageRectConfig, atlas: Atlas): ImageRect {

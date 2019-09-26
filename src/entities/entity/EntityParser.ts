@@ -2,23 +2,27 @@ import {Atlas} from '../../atlas/atlas/Atlas'
 import {AtlasIDConfig} from '../../atlas/atlasID/AtlasIDConfig'
 import {AtlasIDParser} from '../../atlas/atlasID/AtlasIDParser'
 import {CheckboxParser} from '../types/checkbox/CheckboxParser'
-import {CollisionPredicateConfig} from '../../collision/collisionPredicate/CollisionPredicateConfig'
-import {CollisionPredicateParser} from '../../collision/collisionPredicate/CollisionPredicateParser'
+import {
+  CollisionPredicateConfig,
+  CollisionPredicateParser
+} from '../../collision/collisionPredicate/CollisionPredicateParser'
 import {DateVersionHashParser} from '../types/dateVersionHash/DateVersionHashParser'
 import {Entity} from './Entity'
-import {EntityIDConfig} from '../entityID/EntityIDConfig'
-import {EntityIDParser} from '../entityID/EntityIDParser'
+import {EntityIDConfig, EntityIDParser} from '../entityID/EntityIDParser'
 import {EntityPickerParser} from '../types/entityPicker/EntityPickerParser'
-import {EntityTypeConfig} from '../entityType/EntityTypeConfig'
 import {EntityType} from '../entityType/EntityType'
-import {EntityTypeParser} from '../entityType/EntityTypeParser'
+import {
+  EntityTypeParser,
+  EntityTypeConfig
+} from '../entityType/EntityTypeParser'
 import {FollowCamParser} from '../updaters/types/followCam/FollowCamParser'
 import {ImageEntityParser} from '../types/imageEntity/ImageEntityParser'
 import {ImageRect} from '../../images/imageRect/ImageRect'
-import {ImageScaleConfig} from '../../images/imageScale/ImageScaleConfig'
-import {ImageScaleParser} from '../../images/imageScale/ImageScaleParser'
-import {ImageStateMachineConfig} from '../../images/imageStateMachine/ImageStateMachineConfig'
-import {ImageStateMachineParser} from '../../images/imageStateMachine/ImageStateMachineParser'
+import {ImageScaleConfig, ImageScaleParser} from '../../images/ImageScaleParser'
+import {
+  ImageStateMachineParser,
+  ImageStateMachineConfig
+} from '../../images/imageStateMachine/ImageStateMachineParser'
 import {JSONUtil, JSONObject} from '../../utils/jsonUtil/JSONUtil'
 import {LevelEditorPanelParser} from '../types/levelEditorPanel/LevelEditorPanelParser'
 import {LevelLinkParser} from '../updaters/types/levelLink/LevelLinkParser'

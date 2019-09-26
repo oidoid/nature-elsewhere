@@ -1,9 +1,15 @@
 import {Atlas} from '../../atlas/atlas/Atlas'
 import {EntityState} from '../../entities/entityState/EntityState'
-import {EntityStateParser} from '../../entities/entityState/EntityStateParser'
-import {ImageRectParser} from '../imageRect/ImageRectParser'
+import {
+  EntityStateParser,
+  EntityStateConfig
+} from '../../entities/entityState/EntityStateParser'
+import {ImageRectParser, ImageRectConfig} from '../imageRect/ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
-import {ImageStateMapConfig} from './ImageStateMapConfig'
+
+export type ImageStateMapConfig = Maybe<
+  Readonly<Record<Exclude<EntityStateConfig, undefined>, ImageRectConfig>>
+>
 
 export namespace ImageStateMapParser {
   export function parse(

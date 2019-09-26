@@ -1,5 +1,6 @@
 import {EntityState} from './EntityState'
-import {EntityStateConfig} from './EntityStateConfig'
+
+export type EntityStateConfig = Maybe<EntityState | string>
 
 export namespace EntityStateParser {
   export function parse(config: EntityStateConfig): EntityState | string {

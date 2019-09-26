@@ -1,5 +1,9 @@
 import {Animator} from './Animator'
-import {AnimatorConfig} from './AnimatorConfig'
+
+export type AnimatorConfig = Maybe<{
+  readonly period?: number
+  readonly exposure?: Milliseconds
+}>
 
 export namespace AnimatorParser {
   export function parse(config: AnimatorConfig): Animator {
