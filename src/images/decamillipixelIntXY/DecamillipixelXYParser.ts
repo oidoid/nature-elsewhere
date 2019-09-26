@@ -1,6 +1,6 @@
-import {DecamillipixelIntXYConfig} from './DecamillipixelIntXYConfig'
 import {XY} from '../../math/xy/XY'
 import {IntParser} from '../../math/IntParser'
+import {DecamillipixelIntXYConfig} from './DecamillipixelIntXYConfig'
 
 export namespace DecamillipixelIntXYParser {
   export function parse(config: DecamillipixelIntXYConfig): XY {

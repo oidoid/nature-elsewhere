@@ -1,5 +1,6 @@
 import {WH} from './WH'
-import {WHConfig} from './WHConfig'
+
+export type WHConfig = Maybe<Partial<WH>>
 
 export namespace WHParser {
   export function parse(config: WHConfig): WH {

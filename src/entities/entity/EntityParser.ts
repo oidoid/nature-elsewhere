@@ -22,8 +22,7 @@ import {ImageStateMachineParser} from '../../images/imageStateMachine/ImageState
 import {JSONUtil, JSONObject} from '../../utils/jsonUtil/JSONUtil'
 import {LevelEditorPanelParser} from '../types/levelEditorPanel/LevelEditorPanelParser'
 import {LevelLinkParser} from '../updaters/types/levelLink/LevelLinkParser'
-import {RectArrayConfig} from '../../math/rect/RectConfig'
-import {RectParser} from '../../math/rect/RectParser'
+import {RectParser, RectArrayConfig} from '../../math/rect/RectParser'
 import {RecursiveEntityParser} from '../RecursiveEntityParser'
 import {TextParser} from '../types/text/TextParser'
 import {TypeConfigMap} from '../TypeConfigMap'
@@ -33,8 +32,7 @@ import {UpdaterParser} from '../updaters/UpdaterParser'
 import {UpdaterTypeArrayConfig} from '../updaters/updaterType/UpdaterTypeConfig'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdaterTypeParser} from '../updaters/updaterType/UpdaterTypeParser'
-import {XYConfig} from '../../math/xy/XYConfig'
-import {XYParser} from '../../math/xy/XYParser'
+import {XYParser, XYConfig} from '../../math/xy/XYParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 

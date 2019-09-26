@@ -1,6 +1,6 @@
 import {ImageConfig} from '../image/ImageConfig'
-import {XYConfig} from '../../math/xy/XYConfig'
 import {ImageScaleConfig} from '../imageScale/ImageScaleConfig'
+import {XYConfig} from '../../math/xy/XYParser'
 
 export type ImageRectConfig = Maybe<{
   readonly origin?: XYConfig

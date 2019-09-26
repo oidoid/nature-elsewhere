@@ -1,5 +1,6 @@
 import {XY} from './XY'
-import {XYConfig} from './XYConfig'
+
+export type XYConfig = Maybe<Partial<XY>>
 
 export namespace XYParser {
   export function parse(config: XYConfig): XY {

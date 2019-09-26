@@ -1,10 +1,10 @@
-import {XYConfig} from '../../math/xy/XYConfig'
-import {RectConfig} from '../../math/rect/RectConfig'
 import {AnimatorConfig} from '../animator/AnimatorConfig'
 import {AtlasIDConfig} from '../../atlas/atlasID/AtlasIDConfig'
 import {LayerKeyConfig} from '../layer/LayerConfig'
-import {DecamillipixelIntXYConfig} from '../decamillipixelIntXY/DecamillipixelIntXYConfig'
 import {AlphaCompositionKeyConfig} from '../alphaComposition/AlphaCompositionConfig'
+import {DecamillipixelIntXYConfig} from '../decamillipixelIntXY/DecamillipixelIntXYConfig'
+import {XYConfig} from '../../math/xy/XYParser'
+import {RectConfig} from '../../math/rect/RectParser'
 
 export interface ImageConfig {
   readonly id: AtlasIDConfig
