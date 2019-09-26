@@ -1,6 +1,6 @@
 import {CollisionPredicate} from './CollisionPredicate'
 import {EntityCollision, ParentDescendant} from './EntityCollision'
-import {Entity} from '../entities/entity/Entity'
+import {Entity} from '../entity/Entity'
 import {Rect} from '../math/rect/Rect'
 
 export namespace EntityCollider {

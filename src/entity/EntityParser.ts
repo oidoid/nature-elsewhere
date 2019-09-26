@@ -1,41 +1,41 @@
-import {Atlas} from '../../atlas/Atlas'
-import {AtlasIDParser, AtlasIDConfig} from '../../atlas/AtlasIDParser'
-import {CheckboxParser} from '../types/checkbox/CheckboxParser'
+import {Atlas} from '../atlas/Atlas'
+import {AtlasIDParser, AtlasIDConfig} from '../atlas/AtlasIDParser'
+import {CheckboxParser} from '../entities/types/checkbox/CheckboxParser'
 import {
   CollisionPredicateConfig,
   CollisionPredicateParser
-} from '../../collision/CollisionPredicateParser'
-import {DateVersionHashParser} from '../types/dateVersionHash/DateVersionHashParser'
+} from '../collision/CollisionPredicateParser'
+import {DateVersionHashParser} from '../entities/types/dateVersionHash/DateVersionHashParser'
 import {Entity} from './Entity'
-import {EntityPickerParser} from '../types/entityPicker/EntityPickerParser'
+import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerParser'
 import {EntityType} from './EntityType'
 import {EntityTypeParser, EntityTypeConfig} from './EntityTypeParser'
-import {FollowCamParser} from '../updaters/types/followCam/FollowCamParser'
-import {ImageEntityParser} from '../types/imageEntity/ImageEntityParser'
-import {ImageRect} from '../../images/imageRect/ImageRect'
-import {ImageScaleConfig, ImageScaleParser} from '../../images/ImageScaleParser'
+import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
+import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
+import {ImageRect} from '../images/imageRect/ImageRect'
+import {ImageScaleConfig, ImageScaleParser} from '../images/ImageScaleParser'
 import {
   ImageStateMachineParser,
   ImageStateMachineConfig
-} from '../../images/imageStateMachine/ImageStateMachineParser'
-import {JSONUtil, JSONObject} from '../../utils/jsonUtil/JSONUtil'
-import {LevelEditorPanelParser} from '../types/levelEditorPanel/LevelEditorPanelParser'
-import {LevelLinkParser} from '../updaters/types/levelLink/LevelLinkParser'
-import {RectParser, RectArrayConfig} from '../../math/rect/RectParser'
-import {RecursiveEntityParser} from '../RecursiveEntityParser'
-import {TextParser} from '../types/text/TextParser'
-import {TypeConfigMap} from '../TypeConfigMap'
+} from '../images/imageStateMachine/ImageStateMachineParser'
+import {JSONUtil, JSONObject} from '../utils/jsonUtil/JSONUtil'
+import {LevelEditorPanelParser} from '../entities/types/levelEditorPanel/LevelEditorPanelParser'
+import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
+import {RectParser, RectArrayConfig} from '../math/rect/RectParser'
+import {RecursiveEntityParser} from '../entities/RecursiveEntityParser'
+import {TextParser} from '../entities/types/text/TextParser'
+import {TypeConfigMap} from '../entities/TypeConfigMap'
 import {
   UpdatePredicateParser,
   UpdatePredicateConfig
-} from '../updaters/updatePredicate/UpdatePredicateParser'
-import {UpdaterParser} from '../updaters/UpdaterParser'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
+} from '../entities/updaters/updatePredicate/UpdatePredicateParser'
+import {UpdaterParser} from '../entities/updaters/UpdaterParser'
+import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {
   UpdaterTypeParser,
   UpdaterTypeArrayConfig
-} from '../updaters/updaterType/UpdaterTypeParser'
-import {XYParser, XYConfig} from '../../math/xy/XYParser'
+} from '../entities/updaters/updaterType/UpdaterTypeParser'
+import {XYParser, XYConfig} from '../math/xy/XYParser'
 import {EntityIDConfig, EntityIDParser} from './EntityIDParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>

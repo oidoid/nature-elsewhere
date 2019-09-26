@@ -3,7 +3,7 @@ import {XY} from '../../../math/xy/XY'
 import {Input} from '../../../inputs/Input'
 import {Update} from '../../updaters/Update'
 import {DestinationMarkerState} from './DestinationMarkerState'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 
 export namespace DestinationMarkerUpdater {
   export const update: Update = (marker, state) => {

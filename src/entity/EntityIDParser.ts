@@ -1,5 +1,5 @@
 import {EntityID} from './EntityID'
-import {ObjectUtil} from '../../utils/ObjectUtil'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export type EntityIDConfig = Maybe<EntityID | string>
 

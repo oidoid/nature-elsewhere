@@ -1,7 +1,7 @@
 import {
   EntityStateParser,
   EntityStateConfig
-} from '../../entities/entity/EntityStateParser'
+} from '../../entity/EntityStateParser'
 import {ImageStateMachine} from './ImageStateMachine'
 import {Atlas} from '../../atlas/Atlas'
 import {ObjectUtil} from '../../utils/ObjectUtil'
@@ -9,7 +9,7 @@ import {
   ImageStateMapParser,
   ImageStateMapConfig
 } from '../imageStateMap/ImageStateMapParser'
-import {Entity} from '../../entities/entity/Entity'
+import {Entity} from '../../entity/Entity'
 
 export type ImageStateMachineConfig = Maybe<
   Readonly<{state?: EntityStateConfig; map?: ImageStateMapConfig}>

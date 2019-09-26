@@ -1,4 +1,4 @@
-import {Entity} from '../entity/Entity'
+import {Entity} from '../../entity/Entity'
 import {UpdateState} from './UpdateState'
 import {UpdateStatus} from './updateStatus/UpdateStatus'
 

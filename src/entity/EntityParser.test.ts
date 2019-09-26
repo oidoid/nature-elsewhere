@@ -1,6 +1,6 @@
-import {Atlas} from '../../atlas/Atlas'
-import * as atlasJSON from '../../atlas/atlas.json'
-import {AtlasParser} from '../../atlas/AtlasParser'
+import {Atlas} from '../atlas/Atlas'
+import * as atlasJSON from '../atlas/atlas.json'
+import {AtlasParser} from '../atlas/AtlasParser'
 import {EntityParser} from './EntityParser'
 import {EntityType} from './EntityType'
 

@@ -1,5 +1,5 @@
-import {EntityType} from '../../entity/EntityType'
-import {Entity} from '../../entity/Entity'
+import {EntityType} from '../../../entity/EntityType'
+import {Entity} from '../../../entity/Entity'
 import {Atlas} from '../../../atlas/Atlas'
 import {Checkbox} from './Checkbox'
 import {Image} from '../../../images/image/Image'

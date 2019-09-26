@@ -1,10 +1,10 @@
-import {EntityType} from '../../entity/EntityType'
+import {EntityType} from '../../../entity/EntityType'
 
 import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Checkbox} from './Checkbox'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../levels/level/Level'
 
 export namespace CheckboxUpdater {

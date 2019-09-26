@@ -2,7 +2,7 @@ import {Image} from '../images/image/Image'
 import {InstanceBuffer} from './InstanceBuffer'
 import {ShaderLayout} from '../graphics/shaders/shaderLayout/ShaderLayout'
 import {UpdateState} from '../entities/updaters/UpdateState'
-import {Entity} from '../entities/entity/Entity'
+import {Entity} from '../entity/Entity'
 import {Level} from '../levels/level/Level'
 
 export interface Store {

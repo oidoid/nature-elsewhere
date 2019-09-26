@@ -2,10 +2,10 @@ import {Atlas} from '../../atlas/Atlas'
 import {
   EntityStateParser,
   EntityStateConfig
-} from '../../entities/entity/EntityStateParser'
+} from '../../entity/EntityStateParser'
 import {ImageRectParser, ImageRectConfig} from '../imageRect/ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
-import {Entity} from '../../entities/entity/Entity'
+import {Entity} from '../../entity/Entity'
 
 export type ImageStateMapConfig = Maybe<
   Readonly<Record<Exclude<EntityStateConfig, undefined>, ImageRectConfig>>

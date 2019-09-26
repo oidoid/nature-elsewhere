@@ -1,4 +1,4 @@
-import {Entity} from '../entities/entity/Entity'
+import {Entity} from '../entity/Entity'
 
 export interface EntityCollision {
   // type: CollisionType

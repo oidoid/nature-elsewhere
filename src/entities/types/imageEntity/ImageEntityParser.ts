@@ -1,9 +1,9 @@
 import {ImageEntity} from './ImageEntity'
-import {Entity} from '../../entity/Entity'
-import {EntityType} from '../../entity/EntityType'
+import {Entity} from '../../../entity/Entity'
+import {EntityType} from '../../../entity/EntityType'
 import {ImageParser, ImageConfig} from '../../../images/image/ImageParser'
 import {Atlas} from '../../../atlas/Atlas'
-import {EntityConfig} from '../../entity/EntityParser'
+import {EntityConfig} from '../../../entity/EntityParser'
 
 export interface ImageEntityConfig extends EntityConfig {
   /** A single image to be added to the default state. */

@@ -1,10 +1,10 @@
 import {LevelEditorPanel} from './LevelEditorPanel'
 import {UpdaterParser} from '../../updaters/UpdaterParser'
-import {EntityType} from '../../entity/EntityType'
-import {EntityID} from '../../entity/EntityID'
+import {EntityType} from '../../../entity/EntityType'
+import {EntityID} from '../../../entity/EntityID'
 
 import {Layer} from '../../../images/layer/Layer'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 
 export namespace LevelEditorPanelParser {
   export const parse: UpdaterParser = (panel, atlas, parser) => {

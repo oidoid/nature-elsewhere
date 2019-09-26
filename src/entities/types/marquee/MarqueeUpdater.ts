@@ -1,11 +1,11 @@
-import {EntityType} from '../../entity/EntityType'
+import {EntityType} from '../../../entity/EntityType'
 import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Marquee} from './Marquee'
 import {EntityCollider} from '../../../collision/EntityCollider'
-import {EntityID} from '../../entity/EntityID'
-import {Entity} from '../../entity/Entity'
+import {EntityID} from '../../../entity/EntityID'
+import {Entity} from '../../../entity/Entity'
 import {XY} from '../../../math/xy/XY'
 
 enum Images {

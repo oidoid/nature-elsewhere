@@ -2,7 +2,7 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../../math/xy/XY'
 import {Input} from '../../../inputs/Input'
 import {Update} from '../../updaters/Update'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 import {Cursor} from './Cursor'
 
 export namespace CursorUpdater {

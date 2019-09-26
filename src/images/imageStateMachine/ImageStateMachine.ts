@@ -3,7 +3,7 @@ import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
 import {Layer} from '../layer/Layer'
 import {XY} from '../../math/xy/XY'
 import {AtlasID} from '../../atlas/AtlasID'
-import {Entity} from '../../entities/entity/Entity'
+import {Entity} from '../../entity/Entity'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.

@@ -1,9 +1,9 @@
-import {EntityType} from '../../entity/EntityType'
+import {EntityType} from '../../../entity/EntityType'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Update} from '../../updaters/Update'
 import {Button} from './Button'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../levels/level/Level'
 
 export namespace ButtonUpdater {

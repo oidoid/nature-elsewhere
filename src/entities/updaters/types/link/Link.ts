@@ -1,7 +1,7 @@
 import {Update} from '../../Update'
 
 import {AtlasID} from '../../../../atlas/AtlasID'
-import {Entity} from '../../../entity/Entity'
+import {Entity} from '../../../../entity/Entity'
 import {Level} from '../../../../levels/level/Level'
 
 export namespace Link {

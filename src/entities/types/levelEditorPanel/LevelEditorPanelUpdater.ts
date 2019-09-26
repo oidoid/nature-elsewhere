@@ -1,11 +1,11 @@
-import {EntityID} from '../../entity/EntityID'
-import {EntityType} from '../../entity/EntityType'
+import {EntityID} from '../../../entity/EntityID'
+import {EntityType} from '../../../entity/EntityType'
 import {PlaneState} from '../PlaneState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Update} from '../../updaters/Update'
 import {LevelEditorPanel} from './LevelEditorPanel'
 
-import {EntityParser} from '../../entity/EntityParser'
+import {EntityParser} from '../../../entity/EntityParser'
 import {UpdateState} from '../../updaters/UpdateState'
 import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {Checkbox} from '../checkbox/Checkbox'
@@ -13,7 +13,7 @@ import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
 
 import {Layer} from '../../../images/layer/Layer'
 import {Marquee} from '../marquee/Marquee'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../levels/level/Level'
 
 export namespace LevelEditorPanelUpdater {

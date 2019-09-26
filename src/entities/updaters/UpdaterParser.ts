@@ -1,4 +1,4 @@
-import {Entity} from '../entity/Entity'
+import {Entity} from '../../entity/Entity'
 import {Atlas} from '../../atlas/Atlas'
 import {IEntityParser} from '../RecursiveEntityParser'
 

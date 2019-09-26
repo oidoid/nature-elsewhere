@@ -1,4 +1,4 @@
-import {Entity} from '../../../entity/Entity'
+import {Entity} from '../../../../entity/Entity'
 import {FollowCam} from './FollowCam'
 import {UpdaterType} from '../../updaterType/UpdaterType'
 import {Update} from '../../Update'

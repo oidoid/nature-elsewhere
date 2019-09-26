@@ -1,6 +1,6 @@
-import {EntityType, UI_KEY_PREFIX} from '../../entity/EntityType'
+import {EntityType, UI_KEY_PREFIX} from '../../../entity/EntityType'
 import {Atlas} from '../../../atlas/Atlas'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 import {Layer} from '../../../images/layer/Layer'
 import {ObjectUtil} from '../../../utils/ObjectUtil'
 import {NumberUtil} from '../../../math/number/NumberUtil'

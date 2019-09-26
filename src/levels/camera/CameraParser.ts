@@ -1,10 +1,7 @@
 import {XYParser, XYConfig} from '../../math/xy/XYParser'
-import {EntityID} from '../../entities/entity/EntityID'
+import {EntityID} from '../../entity/EntityID'
 import {Camera} from './Camera'
-import {
-  EntityIDConfig,
-  EntityIDParser
-} from '../../entities/entity/EntityIDParser'
+import {EntityIDConfig, EntityIDParser} from '../../entity/EntityIDParser'
 
 export type CameraConfig = Maybe<
   Readonly<{position?: XYConfig; followID?: EntityIDConfig}>

@@ -1,11 +1,11 @@
 import {XY} from '../../../math/xy/XY'
-import {EntityType} from '../../entity/EntityType'
+import {EntityType} from '../../../entity/EntityType'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {EntityCollider} from '../../../collision/EntityCollider'
 import {NumberUtil} from '../../../math/number/NumberUtil'
 import {Update} from '../../updaters/Update'
 import {Backpacker} from './Backpacker'
-import {Entity} from '../../entity/Entity'
+import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../levels/level/Level'
 
 export namespace BackpackerUpdater {

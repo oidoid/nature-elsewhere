@@ -1,4 +1,4 @@
-import {ObjectUtil} from '../../utils/ObjectUtil'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {EntityType} from './EntityType'
 
 export type EntityTypeConfig = EntityType | string

@@ -1,5 +1,5 @@
-import {Entity} from '../../entity/Entity'
-import {EntityType} from '../../entity/EntityType'
+import {Entity} from '../../../entity/Entity'
+import {EntityType} from '../../../entity/EntityType'
 
 export interface EntityPicker extends Entity {
   readonly type: EntityType.UI_ENTITY_PICKER
