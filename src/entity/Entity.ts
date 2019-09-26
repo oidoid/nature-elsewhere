@@ -29,6 +29,7 @@ export interface Entity {
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
   readonly bounds: Rect
+  readonly velocity: XY
   readonly machine: ImageStateMachine
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
@@ -221,22 +222,28 @@ export namespace Entity {
   }
 
   export function velocity(
-    _entity: Entity,
+    entity: Entity,
     time: Milliseconds,
     horizontal: boolean,
     vertical: boolean
   ): XY {
-    const vx = 90
-    const vy = 90
     const x = horizontal
       ? vertical
-        ? vx
-        : Math.sign(vx) * Math.sqrt(vx * vx + vy * vy)
+        ? entity.velocity.x
+        : Math.sign(entity.velocity.x) *
+          Math.sqrt(
+            entity.velocity.x * entity.velocity.x +
+              entity.velocity.y * entity.velocity.y
+          )
       : 0
     const y = vertical
       ? horizontal
-        ? vy
-        : Math.sign(vy) * Math.sqrt(vx * vx + vy * vy)
+        ? entity.velocity.y
+        : Math.sign(entity.velocity.y) *
+          Math.sqrt(
+            entity.velocity.x * entity.velocity.x +
+              entity.velocity.y * entity.velocity.y
+          )
       : 0
     return {x: (x * time) / 10000, y: (y * time) / 10000}
   }

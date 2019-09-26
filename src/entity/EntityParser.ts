@@ -79,6 +79,7 @@ export interface EntityConfig {
   readonly type: EntityTypeConfig
   /** Defaults to (0, 0). */
   readonly position?: XYConfig
+  readonly velocity?: XYConfig
   readonly imageID?: AtlasIDConfig
   readonly scale?: ImageScaleConfig
   /** Defaults to {}. */
@@ -128,6 +129,7 @@ export namespace EntityParser {
       id: parseID(config.id),
       type: type,
       bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
+      velocity: XYParser.parse(config.velocity),
       machine,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
       updaters: UpdaterTypeParser.parseAll(config.updaters),
