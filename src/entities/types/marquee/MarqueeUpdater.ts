@@ -4,7 +4,7 @@ import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Marquee} from './Marquee'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {MarqueeState} from './MarqueeState'
 import {EntityCollider} from '../../../collision/EntityCollider'
 import {EntityID} from '../../entityID/EntityID'
@@ -25,13 +25,13 @@ export namespace MarqueeUpdater {
       throw new Error()
     let status = UpdateStatus.UNCHANGED
 
-    const sandbox = EntityUtil.findAnyByID(
+    const sandbox = Entity.findAnyByID(
       state.level.parentEntities,
       EntityID.UI_LEVEL_EDITOR_SANDBOX
     )
     if (!sandbox) return status
 
-    // const collision = LevelUtil.collisionWithCursor(state.level, marquee)
+    // const collision = Level.collisionWithCursor(state.level, marquee)
 
     // const toggle = collision && Input.inactiveTriggered(state.inputs.pick)
     // console.log(toggle)
@@ -40,7 +40,7 @@ export namespace MarqueeUpdater {
 
     if (!pick || !Input.inactiveTriggered(state.inputs.pick)) return status
 
-    const panel = EntityUtil.findAnyByID(
+    const panel = Entity.findAnyByID(
       state.level.parentEntities,
       EntityID.UI_LEVEL_EDITOR_PANEL
     )
@@ -52,7 +52,7 @@ export namespace MarqueeUpdater {
       sandbox
     )
     if (!panelCollision && cursorSandboxCollision) {
-      status |= EntityUtil.setState(marquee, MarqueeState.VISIBLE)
+      status |= Entity.setState(marquee, MarqueeState.VISIBLE)
 
       const sandboxEntity = cursorSandboxCollision.rhs.descendant // this won't work correctly for sub-entities
       marquee.selection = sandboxEntity.spawnID
@@ -61,10 +61,10 @@ export namespace MarqueeUpdater {
         x: sandboxEntity.bounds.position.x - 1,
         y: sandboxEntity.bounds.position.y - 1
       }
-      status |= EntityUtil.moveTo(marquee, destination)
+      status |= Entity.moveTo(marquee, destination)
       doTheStuffAndThings(marquee, destination, sandboxEntity)
     } else if (!panelCollision) {
-      status |= EntityUtil.setState(marquee, EntityState.HIDDEN)
+      status |= Entity.setState(marquee, EntityState.HIDDEN)
       marquee.selection = undefined
     }
 
@@ -77,7 +77,7 @@ function doTheStuffAndThings(
   destination: XY,
   sandboxEntity: Entity
 ): void {
-  const rect = EntityUtil.imageRect(marquee)
+  const rect = Entity.imageRect(marquee)
   const marqueeImages = rect.images
 
   rect.bounds.position.x = destination.x

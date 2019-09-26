@@ -4,7 +4,7 @@ import {Atlas} from '../../../atlas/atlas/Atlas'
 import {Checkbox} from './Checkbox'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {TextConfig} from '../text/TextConfig'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {Image} from '../../../images/image/Image'
 import {ImageRect} from '../../../images/imageRect/ImageRect'
 import {ImageParser} from '../../../images/image/ImageParser'
@@ -46,13 +46,13 @@ export namespace CheckboxParser {
         x: checkbox.bounds.position.x + 1,
         y: checkbox.bounds.position.y
       },
-      imageID: EntityUtil.imageRect(checkbox).imageID
+      imageID: Entity.imageRect(checkbox).imageID
     }
     const child = parser(config, atlas)
-    EntityUtil.elevate(child, layer)
+    Entity.elevate(child, layer)
     checkbox.children[0] = child
     setBackground(checkbox, layer, atlas)
-    EntityUtil.invalidateBounds(checkbox)
+    Entity.invalidateBounds(checkbox)
   }
 }
 

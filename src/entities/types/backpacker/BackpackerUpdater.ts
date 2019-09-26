@@ -7,9 +7,11 @@ import {NumberUtil} from '../../../math/number/NumberUtil'
 import {Update} from '../../updaters/Update'
 import {Backpacker} from './Backpacker'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {BackpackerState} from './BackpackerState'
-import {LevelUtil} from '../../../levels/level/LevelUtil'
+
+import {Entity} from '../../entity/Entity'
+import {Level} from '../../../levels/level/Level'
 
 export namespace BackpackerUpdater {
   export const update: Update = (backpacker, state) => {
@@ -29,7 +31,7 @@ export namespace BackpackerUpdater {
     const {x: originalX, y: originalY} = backpacker.bounds.position
 
     let dst = XY.trunc(state.level.destination.bounds.position)
-    dst = XY.add(dst, EntityUtil.imageRect(backpacker).origin)
+    dst = XY.add(dst, Entity.imageRect(backpacker).origin)
     dst = {
       x: NumberUtil.clamp(
         dst.x,
@@ -47,7 +49,7 @@ export namespace BackpackerUpdater {
     const right = dst.x > Math.trunc(x)
     const up = dst.y < Math.trunc(y)
     const down = dst.y > Math.trunc(y)
-    const speed = EntityUtil.velocity(
+    const speed = Entity.velocity(
       backpacker,
       state.time,
       left || right,
@@ -59,28 +61,28 @@ export namespace BackpackerUpdater {
     if (left) x -= speed.x
     if (right) x += speed.x
 
-    EntityUtil.moveTo(backpacker, {x, y})
+    Entity.moveTo(backpacker, {x, y})
 
     const diagonal = (left || right) && (up || down)
     const collision = EntityCollider.collidesEntities(
       backpacker,
-      LevelUtil.activeParents(state.level)
+      Level.activeParents(state.level)
     )
 
     const collisionDirection = {x: !!collision, y: !!collision}
     if (diagonal && collision) {
-      EntityUtil.moveTo(backpacker, {x, y: originalY})
+      Entity.moveTo(backpacker, {x, y: originalY})
       collisionDirection.x = !!EntityCollider.collidesEntities(
         backpacker,
-        LevelUtil.activeParents(state.level)
+        Level.activeParents(state.level)
       )
       if (!collisionDirection.x) y = originalY
 
       if (collisionDirection.x) {
-        EntityUtil.moveTo(backpacker, {x: originalX, y})
+        Entity.moveTo(backpacker, {x: originalX, y})
         collisionDirection.y = !!EntityCollider.collidesEntities(
           backpacker,
-          LevelUtil.activeParents(state.level)
+          Level.activeParents(state.level)
         )
         if (!collisionDirection.y) x = originalX
       }
@@ -95,7 +97,7 @@ export namespace BackpackerUpdater {
       // to synchronize.
       if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - (x % 1))
     }
-    EntityUtil.moveTo(backpacker, {x, y})
+    Entity.moveTo(backpacker, {x, y})
 
     const idle =
       XY.equal(XY.trunc({x, y}), dst) ||
@@ -113,7 +115,7 @@ export namespace BackpackerUpdater {
           ? BackpackerState.IDLE_RIGHT
           : BackpackerState.IDLE_DOWN
       if (state.level.destination)
-        EntityUtil.setState(state.level.destination, EntityState.HIDDEN)
+        Entity.setState(state.level.destination, EntityState.HIDDEN)
     } else {
       if (up) nextState = BackpackerState.WALK_UP
       if (down) nextState = BackpackerState.WALK_DOWN
@@ -121,14 +123,14 @@ export namespace BackpackerUpdater {
         nextState = BackpackerState.WALK_RIGHT
     }
 
-    const scale = {...EntityUtil.getScale(backpacker)}
+    const scale = {...Entity.getScale(backpacker)}
     if (up || down) scale.x = Math.abs(scale.x)
     if (left && (!diagonal || animateHorizontal))
       scale.x = -1 * Math.abs(scale.x)
     if (right && (!diagonal || animateHorizontal)) scale.x = Math.abs(scale.x)
 
-    EntityUtil.setScale(backpacker, scale)
-    EntityUtil.setState(backpacker, nextState)
+    Entity.setScale(backpacker, scale)
+    Entity.setState(backpacker, nextState)
 
     return status
   }

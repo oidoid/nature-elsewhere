@@ -1,18 +1,20 @@
 import {EntityType} from '../../entityType/EntityType'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Checkbox} from './Checkbox'
 import {CheckboxState} from './CheckboxState'
-import {LevelUtil} from '../../../levels/level/LevelUtil'
+
+import {Entity} from '../../entity/Entity'
+import {Level} from '../../../levels/level/Level'
 
 export namespace CheckboxUpdater {
   export const update: Update = (checkbox, state) => {
     if (!EntityTypeUtil.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
-    const collision = LevelUtil.collisionWithCursor(state.level, checkbox)
+    const collision = Level.collisionWithCursor(state.level, checkbox)
 
     let status = UpdateStatus.UNCHANGED
     const toggle = collision && Input.inactiveTriggered(state.inputs.pick)
@@ -22,7 +24,7 @@ export namespace CheckboxUpdater {
 
     return (
       status |
-      EntityUtil.setState(
+      Entity.setState(
         checkbox,
         checkbox.checked ? CheckboxState.CHECKED : CheckboxState.UNCHECKED
       )

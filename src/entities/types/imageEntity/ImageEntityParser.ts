@@ -3,7 +3,7 @@ import {Entity} from '../../entity/Entity'
 import {EntityType} from '../../entityType/EntityType'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 import {ImageParser} from '../../../images/image/ImageParser'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {ImageEntityConfig} from './ImageEntityConfig'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 
@@ -14,7 +14,7 @@ export namespace ImageEntityParser {
     const imageConfig = (<ImageEntityConfig>(<unknown>imageEntity)).image
     if (imageConfig) {
       const image = ImageParser.parse(imageConfig, atlas)
-      EntityUtil.imageRect(imageEntity).images.push(image)
+      Entity.imageRect(imageEntity).images.push(image)
     }
     return imageEntity
   }

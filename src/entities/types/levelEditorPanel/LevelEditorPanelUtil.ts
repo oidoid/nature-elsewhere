@@ -3,12 +3,12 @@ import {Atlas} from '../../../atlas/atlas/Atlas'
 import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
 import {LevelEditorPanel} from './LevelEditorPanel'
 import {CheckboxParser} from '../checkbox/CheckboxParser'
-import {EntityUtil} from '../../entity/EntityUtil'
 import {
   SCENERY_VALUE_PREFIX,
   CHAR_VALUE_PREFIX
 } from '../../entityType/EntityType'
 import {Layer} from '../../../images/layer/Layer'
+import {Entity} from '../../entity/Entity'
 
 export namespace LevelEditorPanelUtil {
   export function setEntityFields(
@@ -53,6 +53,6 @@ export namespace LevelEditorPanelUtil {
       atlas,
       parser
     )
-    EntityUtil.invalidateBounds(radioGroup)
+    Entity.invalidateBounds(radioGroup)
   }
 }

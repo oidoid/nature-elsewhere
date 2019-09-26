@@ -2,7 +2,6 @@ import {CollisionPredicate} from './collisionPredicate/CollisionPredicate'
 import {EntityCollision, ParentDescendant} from './EntityCollision'
 import {Entity} from '../entities/entity/Entity'
 import {Rect} from '../math/rect/Rect'
-import {EntityUtil} from '../entities/entity/EntityUtil'
 
 export namespace EntityCollider {
   export function collidesEntities(
@@ -42,9 +41,7 @@ export namespace EntityCollider {
       if (collision)
         return {
           lhs: {
-            parent: EntityUtil.equal(lhs, collision.descendant)
-              ? undefined
-              : lhs,
+            parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
             descendant: collision.descendant
           },
           rhs: {descendant: rhs}
@@ -64,9 +61,7 @@ export namespace EntityCollider {
         if (collision)
           return {
             lhs: {
-              parent: EntityUtil.equal(lhs, collision.descendant)
-                ? undefined
-                : lhs,
+              parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
               descendant: collision.descendant
             },
             rhs: {descendant: rhs}
@@ -79,14 +74,12 @@ export namespace EntityCollider {
       // The RHS entity only has image collision. If the LHS or its children
       // collide with any of the RHS's images, a collision has occurred.
       // Otherwise, no collision has occurred.
-      for (const image of EntityUtil.imageRect(rhs).images) {
+      for (const image of Entity.imageRect(rhs).images) {
         const collision = collidesRect(lhs, image.bounds)
         if (collision)
           return {
             lhs: {
-              parent: EntityUtil.equal(lhs, collision.descendant)
-                ? undefined
-                : lhs,
+              parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
               descendant: collision.descendant
             },
             rhs: {descendant: rhs}
@@ -102,7 +95,7 @@ export namespace EntityCollider {
         return {
           lhs: collision.lhs,
           rhs: {
-            parent: EntityUtil.equal(rhs, collision.rhs.descendant)
+            parent: Entity.equal(rhs, collision.rhs.descendant)
               ? undefined
               : rhs,
             descendant: collision.rhs.descendant
@@ -138,7 +131,7 @@ export namespace EntityCollider {
     if (entity.collisionPredicate === CollisionPredicate.IMAGES) {
       // Test if any image collides.
       if (
-        EntityUtil.imageRect(entity).images.some(image =>
+        Entity.imageRect(entity).images.some(image =>
           Rect.intersects(rect, image.bounds)
         )
       )

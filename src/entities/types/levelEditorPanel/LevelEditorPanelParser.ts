@@ -3,9 +3,10 @@ import {UpdaterParser} from '../../updaters/UpdaterParser'
 import {EntityType} from '../../entityType/EntityType'
 import {EntityID} from '../../entityID/EntityID'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {LevelEditorPanelUtil} from './LevelEditorPanelUtil'
 import {Layer} from '../../../images/layer/Layer'
+import {Entity} from '../../entity/Entity'
 
 export namespace LevelEditorPanelParser {
   export const parse: UpdaterParser = (panel, atlas, parser) => {
@@ -16,47 +17,41 @@ export namespace LevelEditorPanelParser {
       )
     )
       throw new Error()
-    const radioGroup = EntityUtil.findByID(
+    const radioGroup = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_RADIO_GROUP
     )
-    const xCheckbox = EntityUtil.findByID(
-      panel,
-      EntityID.UI_LEVEL_EDITOR_PANEL_X
-    )
-    const yCheckbox = EntityUtil.findByID(
-      panel,
-      EntityID.UI_LEVEL_EDITOR_PANEL_Y
-    )
-    const stateCheckbox = EntityUtil.findByID(
+    const xCheckbox = Entity.findByID(panel, EntityID.UI_LEVEL_EDITOR_PANEL_X)
+    const yCheckbox = Entity.findByID(panel, EntityID.UI_LEVEL_EDITOR_PANEL_Y)
+    const stateCheckbox = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_STATE
     )
-    const entityCheckbox = EntityUtil.findByID(
+    const entityCheckbox = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY
     )
-    const entityPicker = EntityUtil.findByID(
+    const entityPicker = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY_PICKER
     )
-    const decrementButton = EntityUtil.findByID(
+    const decrementButton = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_DECREMENT
     )
-    const incrementButton = EntityUtil.findByID(
+    const incrementButton = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_INCREMENT
     )
-    const destroyButton = EntityUtil.findByID(
+    const destroyButton = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_REMOVE
     )
-    const createButton = EntityUtil.findByID(
+    const createButton = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_ADD
     )
-    const toggleGridButton = EntityUtil.findByID(
+    const toggleGridButton = Entity.findByID(
       panel,
       EntityID.UI_LEVEL_EDITOR_PANEL_TOGGLE_GRID
     )
@@ -80,7 +75,7 @@ export namespace LevelEditorPanelParser {
       atlas,
       parser
     )
-    EntityUtil.elevate(ret, Layer.UI_PICKER_OFFSET)
+    Entity.elevate(ret, Layer.UI_PICKER_OFFSET)
 
     return ret
   }

@@ -2,7 +2,7 @@ import {Entity} from '../../../entity/Entity'
 import {FollowCam} from './FollowCam'
 import {UpdaterType} from '../../updaterType/UpdaterType'
 import {Update} from '../../Update'
-import {EntityUtil} from '../../../entity/EntityUtil'
+
 import {UpdateStatus} from '../../updateStatus/UpdateStatus'
 import {XY} from '../../../../math/xy/XY'
 import {Rect} from '../../../../math/rect/Rect'
@@ -25,7 +25,7 @@ export namespace FollowCamUpdater {
 
     if (XY.equal(entity.bounds.position, to)) return UpdateStatus.UNCHANGED
 
-    return EntityUtil.moveTo(entity, to)
+    return Entity.moveTo(entity, to)
   }
 }
 

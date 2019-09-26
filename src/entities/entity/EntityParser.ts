@@ -9,7 +9,7 @@ import {EntityPickerParser} from '../types/entityPicker/EntityPickerParser'
 import {EntityType} from '../entityType/EntityType'
 import {RecursiveEntityParser} from '../RecursiveEntityParser'
 import {EntityTypeParser} from '../entityType/EntityTypeParser'
-import {EntityUtil} from './EntityUtil'
+
 import {ImageEntityParser} from '../types/imageEntity/ImageEntityParser'
 import {ImageRect} from '../../images/imageRect/ImageRect'
 import {ImageScaleParser} from '../../images/imageScale/ImageScaleParser'
@@ -69,13 +69,13 @@ export namespace EntityParser {
 
     // Move the images, collision, and children.
     const position = XYParser.parse(config.position)
-    EntityUtil.moveTo(entity, position)
+    Entity.moveTo(entity, position)
 
-    EntityUtil.setScale(entity, scale)
+    Entity.setScale(entity, scale)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.
-    EntityUtil.invalidateBounds(entity)
+    Entity.invalidateBounds(entity)
 
     const parser = TypeParserMap[type]
     entity = parser ? parser(entity, atlas, parse) : entity

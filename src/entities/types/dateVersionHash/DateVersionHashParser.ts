@@ -5,7 +5,7 @@ import {Build} from '../../../utils/Build'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {TextConfig} from '../text/TextConfig'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {IEntityParser} from '../../RecursiveEntityParser'
 
 export namespace DateVersionHashParser {
@@ -33,7 +33,7 @@ export namespace DateVersionHashParser {
     }
     const text = parser(config, atlas)
     dateVersionHash.children.push(text)
-    EntityUtil.invalidateBounds(dateVersionHash)
+    Entity.invalidateBounds(dateVersionHash)
 
     return dateVersionHash
   }

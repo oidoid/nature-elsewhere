@@ -6,16 +6,18 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Update} from '../../updaters/Update'
 import {LevelEditorPanel} from './LevelEditorPanel'
 import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {EntityParser} from '../../entity/EntityParser'
 import {LevelEditorPanelUtil} from './LevelEditorPanelUtil'
 import {UpdateState} from '../../updaters/UpdateState'
 import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {Checkbox} from '../checkbox/Checkbox'
 import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
-import {LevelUtil} from '../../../levels/level/LevelUtil'
+
 import {Layer} from '../../../images/layer/Layer'
 import {Marquee} from '../marquee/Marquee'
+import {Entity} from '../../entity/Entity'
+import {Level} from '../../../levels/level/Level'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -28,7 +30,7 @@ export namespace LevelEditorPanelUpdater {
       throw new Error()
 
     let status = UpdateStatus.UNCHANGED
-    if (LevelUtil.collisionWithCursor(state.level, panel)) console.log('cursor')
+    if (Level.collisionWithCursor(state.level, panel)) console.log('cursor')
     if (
       panel.decrementButton.clicked ||
       panel.decrementButton.longClicked ||
@@ -65,33 +67,33 @@ export namespace LevelEditorPanelUpdater {
           },
           state.level.atlas
         )
-        const sandbox = EntityUtil.findAnyByID(
+        const sandbox = Entity.findAnyByID(
           state.level.parentEntities,
           EntityID.UI_LEVEL_EDITOR_SANDBOX
         )
         if (!sandbox) throw new Error('Missing sandbox.')
 
         sandbox.children.push(entity)
-        EntityUtil.invalidateBounds(sandbox)
+        Entity.invalidateBounds(sandbox)
         // [todo] set selection here
       }
     }
     if (panel.toggleGridButton.clicked) toggleGrid(state)
 
     const marquee = <Maybe<Marquee>>(
-      EntityUtil.findAnyByID(state.level.parentEntities, EntityID.UI_MARQUEE)
+      Entity.findAnyByID(state.level.parentEntities, EntityID.UI_MARQUEE)
     )
     if (
       marquee &&
       marquee.selection &&
       marquee.machine.state !== EntityState.HIDDEN
     ) {
-      const selection = EntityUtil.findAnyBySpawnID(
+      const selection = Entity.findAnyBySpawnID(
         state.level.parentEntities,
         marquee.selection
       )
       if (!selection) throw new Error('Missing selection.')
-      const sandbox = EntityUtil.findAnyByID(
+      const sandbox = Entity.findAnyByID(
         state.level.parentEntities,
         EntityID.UI_LEVEL_EDITOR_SANDBOX
       )
@@ -100,7 +102,7 @@ export namespace LevelEditorPanelUpdater {
         marquee.selection = undefined
         marquee.machine.state = EntityState.HIDDEN
         const index = sandbox.children.findIndex(entity =>
-          EntityUtil.equal(entity, selection)
+          Entity.equal(entity, selection)
         )
         sandbox.children.splice(index, 1)
       }
@@ -114,9 +116,9 @@ export namespace LevelEditorPanelUpdater {
           x: checkboxNumber(panel.xCheckbox),
           y: checkboxNumber(panel.yCheckbox)
         }
-        EntityUtil.moveTo(selection, position)
-        EntityUtil.invalidateBounds(sandbox)
-        EntityUtil.moveTo(marquee, {x: position.x - 1, y: position.y - 1})
+        Entity.moveTo(selection, position)
+        Entity.invalidateBounds(sandbox)
+        Entity.moveTo(marquee, {x: position.x - 1, y: position.y - 1})
       } else {
         updateNumberCheckbox(
           panel.xCheckbox,
@@ -182,14 +184,11 @@ function updateEntityState(
 }
 
 function toggleGrid(state: UpdateState): void {
-  const grid = EntityUtil.findAnyByID(
-    state.level.parentEntities,
-    EntityID.UI_GRID
-  )
+  const grid = Entity.findAnyByID(state.level.parentEntities, EntityID.UI_GRID)
   if (!grid) throw new Error('Missing grid.')
   const toggle =
     grid.machine.state === EntityState.HIDDEN
       ? PlaneState.GRID
       : EntityState.HIDDEN
-  EntityUtil.setState(grid, toggle)
+  Entity.setState(grid, toggle)
 }

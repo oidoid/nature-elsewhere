@@ -3,8 +3,9 @@ import {XY} from '../../../math/xy/XY'
 import {Input} from '../../../inputs/Input'
 import {EntityState} from '../../entityState/EntityState'
 import {Update} from '../../updaters/Update'
-import {EntityUtil} from '../../entity/EntityUtil'
+
 import {CursorState} from './CursorState'
+import {Entity} from '../../entity/Entity'
 
 export namespace CursorUpdater {
   export const update: Update = (cursor, state) => {
@@ -16,15 +17,15 @@ export namespace CursorUpdater {
       const position = XY.trunc(
         Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
       )
-      status |= EntityUtil.moveTo(cursor, position)
+      status |= Entity.moveTo(cursor, position)
     } else if (point && point.active) {
       nextState = CursorState.VISIBLE
       const position = XY.trunc(
         Input.levelXY(point, state.canvasWH, state.level.cam.bounds)
       )
-      status |= EntityUtil.moveTo(cursor, position)
+      status |= Entity.moveTo(cursor, position)
     }
-    status |= EntityUtil.setState(cursor, nextState)
+    status |= Entity.setState(cursor, nextState)
 
     return status
   }
