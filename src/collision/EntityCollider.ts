@@ -21,9 +21,10 @@ export namespace EntityCollider {
   ): Maybe<EntityCollision> {
     if (
       lhs.collisionPredicate === CollisionPredicate.NEVER ||
-      rhs.collisionPredicate === CollisionPredicate.NEVER
+      rhs.collisionPredicate === CollisionPredicate.NEVER ||
+      Entity.equal(lhs, rhs)
     )
-      // One or both of the entities have no collision.
+      // One or both of the entities have no collision or are identical.
       return
 
     // Both of the entities have collision.

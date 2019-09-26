@@ -70,6 +70,7 @@ import {
 } from '../entities/updaters/updaterType/UpdaterTypeParser'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {XYParser, XYConfig} from '../math/XYParser'
+import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser.js'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 
@@ -79,7 +80,7 @@ export interface EntityConfig {
   readonly type: EntityTypeConfig
   /** Defaults to (0, 0). */
   readonly position?: XYConfig
-  readonly velocity?: XYConfig
+  readonly velocity?: DecamillipixelIntXYConfig
   readonly imageID?: AtlasIDConfig
   readonly scale?: ImageScaleConfig
   /** Defaults to {}. */
@@ -90,7 +91,7 @@ export interface EntityConfig {
   readonly updaters?: UpdaterTypeArrayConfig
   /** Defaults to CollisionPredicate.NEVER. */
   readonly collisionPredicate?: CollisionPredicateConfig
-  /** Defaults to []. */
+  /** Defaults to []. In local coordinates (converted to level by parser). */
   readonly collisionBodies?: RectArrayConfig
   /** Defaults to []. */
   readonly children?: EntityArrayConfig

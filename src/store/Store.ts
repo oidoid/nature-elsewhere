@@ -29,7 +29,9 @@ export namespace Store {
     images.push(...updateAndAnimate([state.level.cursor], state))
     if (state.level.destination)
       images.push(...updateAndAnimate([state.level.destination], state))
-    images.push(...updateAndAnimate(Level.activeParents(state.level), state))
+    images.push(
+      ...updateAndAnimate(Level.activeParentsNoPlayer(state.level), state)
+    )
     images = images.sort(Image.compareElevation)
 
     const size = InstanceBuffer.size(store.layout, images.length)

@@ -35,10 +35,25 @@ export namespace Level {
     level.advance = LevelAdvance.NEXT
   }
 
-  export function activeParents(level: Level): readonly Entity[] {
-    return level.parentEntities.filter(entity =>
-      Entity.active(entity, level.cam.bounds)
+  export function activeParentsNoPlayer(level: Level): readonly Entity[] {
+    const entities = []
+    entities.push(
+      ...level.parentEntities.filter(entity =>
+        Entity.active(entity, level.cam.bounds)
+      )
     )
+    return entities
+  }
+
+  export function activeParentsWithPlayer(level: Level): readonly Entity[] {
+    const entities = []
+    if (level.player) entities.push(level.player)
+    entities.push(
+      ...level.parentEntities.filter(entity =>
+        Entity.active(entity, level.cam.bounds)
+      )
+    )
+    return entities
   }
 
   export function collisionWithCursor(
@@ -46,7 +61,10 @@ export namespace Level {
     entity: Entity
   ): Maybe<EntityCollision> {
     const collisionWithCursor = level.cursor
-      ? EntityCollider.collidesEntities(level.cursor, activeParents(level))
+      ? EntityCollider.collidesEntities(
+          level.cursor,
+          activeParentsNoPlayer(level)
+        )
       : undefined
     if (!collisionWithCursor) return
     if (Entity.equal(collisionWithCursor.rhs.descendant, entity))

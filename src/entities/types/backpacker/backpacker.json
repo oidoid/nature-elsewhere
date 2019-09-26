@@ -1,7 +1,6 @@
 {
   "version": "0.0.0",
   "type": "charBackpacker",
-  "velocity": {"x": 90, "y": 90},
   "machine": {
     "state": "idleDown",
     "map": {

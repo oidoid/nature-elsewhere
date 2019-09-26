@@ -9,6 +9,7 @@ export interface XY {
 export type IntXY = XY
 /** An integral XY in 1/10000 of a pixel. */
 export type DecamillipixelIntXY = XY
+export type DecamillipixelXY = XY
 
 export namespace XY {
   export function add({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {

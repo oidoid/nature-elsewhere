@@ -12,7 +12,9 @@ import {UpdaterMap} from '../entities/updaters/UpdaterMap'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
-import {XY} from '../math/XY'
+import {XY, DecamillipixelXY} from '../math/XY'
+import {EntityCollider} from '../collision/EntityCollider'
+import {Level} from '../levels/Level'
 
 export interface Entity {
   /** A globally unique identifier for quick equality checks. It should be used
@@ -29,7 +31,7 @@ export interface Entity {
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
   readonly bounds: Rect
-  readonly velocity: XY
+  readonly velocity: DecamillipixelXY
   readonly machine: ImageStateMachine
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
@@ -117,8 +119,8 @@ export namespace Entity {
   }
 
   /** Recursively animate the entity and its children. Only visible entities are
-          animated so its possible for a composition entity's children to be fully,
-          *partly*, or not animated together. */
+      animated so its possible for a composition entity's children to be fully,
+      *partly*, or not animated together. */
   export function animate(entity: Entity, state: UpdateState): Image[] {
     if (!Rect.intersects(state.level.cam.bounds, entity.bounds)) return []
     const visible = ImageRect.intersects(
@@ -141,7 +143,7 @@ export namespace Entity {
   }
 
   /** Returns whether the current entity is in the viewport or should always be
-          updated. Children are not considered. */
+      updated. Children are not considered. */
   export function active(entity: Readonly<Entity>, viewport: Rect): boolean {
     return (
       entity.updatePredicate === UpdatePredicate.ALWAYS ||
@@ -167,6 +169,8 @@ export namespace Entity {
       status |= UpdaterMap[updater](entity, state)
       if (UpdateStatus.terminate(status)) return status
     }
+
+    status |= updatePosition(entity, state)
 
     for (const child of entity.children) {
       status |= update(child, state)
@@ -222,34 +226,26 @@ export namespace Entity {
   }
 
   export function velocity(
-    entity: Entity,
-    time: Milliseconds,
+    _entity: Entity,
+    _time: Milliseconds,
     horizontal: boolean,
     vertical: boolean
   ): XY {
     const x = horizontal
       ? vertical
-        ? entity.velocity.x
-        : Math.sign(entity.velocity.x) *
-          Math.sqrt(
-            entity.velocity.x * entity.velocity.x +
-              entity.velocity.y * entity.velocity.y
-          )
+        ? 90
+        : Math.sign(90) * Math.sqrt(90 * 90 + 90 * 90)
       : 0
     const y = vertical
       ? horizontal
-        ? entity.velocity.y
-        : Math.sign(entity.velocity.y) *
-          Math.sqrt(
-            entity.velocity.x * entity.velocity.x +
-              entity.velocity.y * entity.velocity.y
-          )
+        ? 90
+        : Math.sign(90) * Math.sqrt(90 * 90 + 90 * 90)
       : 0
-    return {x: (x * time) / 10000, y: (y * time) / 10000}
+    return {x, y}
   }
 
   /** Raise or lower an entity's images and its descendants' images for all
-          states. */
+      states. */
   export function elevate(entity: Entity, offset: Layer): void {
     ImageStateMachine.elevate(entity.machine, offset)
     for (const child of entity.children) elevate(child, offset)
@@ -270,4 +266,56 @@ export namespace Entity {
     if (!is(entity, type)) throw new Error(msg)
     return true
   }
+}
+
+function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
+  // [todo] level bounds checking
+  const left = entity.velocity.x < 0
+  const right = entity.velocity.x > 0
+  const up = entity.velocity.y < 0
+  const down = entity.velocity.y > 0
+  const diagonal = (left || right) && (up || down)
+
+  const {x: originalX, y: originalY} = entity.bounds.position
+  let x = entity.bounds.position.x + (entity.velocity.x * state.time) / 10000
+  let y = entity.bounds.position.y + (entity.velocity.y * state.time) / 10000
+  let status = Entity.moveTo(entity, {x, y})
+  if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
+
+  const collision = EntityCollider.collidesEntities(
+    entity,
+    Level.activeParentsWithPlayer(state.level)
+  )
+
+  const collisionDirection = {x: !!collision, y: !!collision}
+  if (diagonal && collision) {
+    status |= Entity.moveTo(entity, {x, y: originalY})
+    collisionDirection.x = !!EntityCollider.collidesEntities(
+      entity,
+      Level.activeParentsWithPlayer(state.level)
+    )
+    if (!collisionDirection.x) y = originalY
+
+    if (collisionDirection.x) {
+      status |= Entity.moveTo(entity, {x: originalX, y})
+      collisionDirection.y = !!EntityCollider.collidesEntities(
+        entity,
+        Level.activeParentsWithPlayer(state.level)
+      )
+      if (!collisionDirection.y) x = originalX
+    }
+  }
+  if (collisionDirection.x) x = originalX
+  if (collisionDirection.y) y = originalY
+
+  if (diagonal && !collisionDirection.x && !collisionDirection.y) {
+    // Synchronize x and y pixel diagonal movement.
+    if ((left && up) || (right && down)) y = Math.trunc(y) + (x % 1)
+    // One direction is negative, the other is positive. Offset by 1 - speed
+    // to synchronize.
+    if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - (x % 1))
+  }
+  status |= Entity.moveTo(entity, {x, y})
+
+  return status
 }
