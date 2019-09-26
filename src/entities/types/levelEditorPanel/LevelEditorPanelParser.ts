@@ -3,7 +3,6 @@ import {UpdaterParser} from '../../updaters/UpdaterParser'
 import {EntityType} from '../../entityType/EntityType'
 import {EntityID} from '../../entityID/EntityID'
 
-import {LevelEditorPanelUtil} from './LevelEditorPanelUtil'
 import {Layer} from '../../../images/layer/Layer'
 import {Entity} from '../../entity/Entity'
 
@@ -65,12 +64,7 @@ export namespace LevelEditorPanelParser {
       createButton,
       toggleGridButton
     }
-    LevelEditorPanelUtil.setEntityFields(
-      <LevelEditorPanel>ret,
-      0,
-      atlas,
-      parser
-    )
+    LevelEditorPanel.setEntityFields(<LevelEditorPanel>ret, 0, atlas, parser)
     Entity.elevate(ret, Layer.UI_PICKER_OFFSET)
 
     return ret

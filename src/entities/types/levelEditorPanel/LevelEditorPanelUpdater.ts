@@ -7,7 +7,6 @@ import {Update} from '../../updaters/Update'
 import {LevelEditorPanel} from './LevelEditorPanel'
 
 import {EntityParser} from '../../entity/EntityParser'
-import {LevelEditorPanelUtil} from './LevelEditorPanelUtil'
 import {UpdateState} from '../../updaters/UpdateState'
 import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {Checkbox} from '../checkbox/Checkbox'
@@ -158,7 +157,7 @@ function updateEntity(
   state: UpdateState,
   offset: number
 ): void {
-  LevelEditorPanelUtil.setEntityFields(
+  LevelEditorPanel.setEntityFields(
     panel,
     offset,
     state.level.atlas,
@@ -171,7 +170,7 @@ function updateEntityState(
   state: UpdateState,
   offset: number
 ): void {
-  LevelEditorPanelUtil.setEntityStateFields(
+  LevelEditorPanel.setEntityStateFields(
     panel,
     offset,
     state.level.atlas,
