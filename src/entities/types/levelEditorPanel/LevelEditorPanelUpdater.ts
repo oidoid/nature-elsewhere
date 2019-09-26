@@ -5,7 +5,6 @@ import {PlaneState} from '../plane/PlaneState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Update} from '../../updaters/Update'
 import {LevelEditorPanel} from './LevelEditorPanel'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 
 import {EntityParser} from '../../entity/EntityParser'
 import {LevelEditorPanelUtil} from './LevelEditorPanelUtil'
@@ -22,10 +21,7 @@ import {Level} from '../../../levels/level/Level'
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
     if (
-      !EntityTypeUtil.assert<LevelEditorPanel>(
-        panel,
-        EntityType.UI_LEVEL_EDITOR_PANEL
-      )
+      !Entity.assert<LevelEditorPanel>(panel, EntityType.UI_LEVEL_EDITOR_PANEL)
     )
       throw new Error()
 

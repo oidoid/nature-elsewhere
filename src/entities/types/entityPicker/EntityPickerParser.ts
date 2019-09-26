@@ -1,5 +1,3 @@
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
-
 import {EntityState} from '../../entityState/EntityState'
 import {EntityType, UI_KEY_PREFIX} from '../../entityType/EntityType'
 import {Atlas} from '../../../atlas/atlas/Atlas'
@@ -29,9 +27,7 @@ export namespace EntityPickerParser {
     atlas: Atlas,
     parser: IEntityParser
   ): EntityPicker {
-    if (
-      !EntityTypeUtil.assert<EntityPicker>(picker, EntityType.UI_ENTITY_PICKER)
-    )
+    if (!Entity.assert<EntityPicker>(picker, EntityType.UI_ENTITY_PICKER))
       throw new Error()
     const entityWindowBounds = {
       position: {

@@ -3,7 +3,6 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
 import {Update} from '../../updaters/Update'
 import {Button} from './Button'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 
 import {ButtonState} from './ButtonState'
 
@@ -12,8 +11,7 @@ import {Level} from '../../../levels/level/Level'
 
 export namespace ButtonUpdater {
   export const update: Update = (button, state) => {
-    if (!EntityTypeUtil.assert<Button>(button, EntityType.UI_BUTTON))
-      throw new Error()
+    if (!Entity.assert<Button>(button, EntityType.UI_BUTTON)) throw new Error()
 
     button.clicked = false
     const collision = Level.collisionWithCursor(state.level, button)

@@ -2,7 +2,6 @@ import {LevelEditorPanel} from './LevelEditorPanel'
 import {UpdaterParser} from '../../updaters/UpdaterParser'
 import {EntityType} from '../../entityType/EntityType'
 import {EntityID} from '../../entityID/EntityID'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 
 import {LevelEditorPanelUtil} from './LevelEditorPanelUtil'
 import {Layer} from '../../../images/layer/Layer'
@@ -11,10 +10,7 @@ import {Entity} from '../../entity/Entity'
 export namespace LevelEditorPanelParser {
   export const parse: UpdaterParser = (panel, atlas, parser) => {
     if (
-      !EntityTypeUtil.assert<LevelEditorPanel>(
-        panel,
-        EntityType.UI_LEVEL_EDITOR_PANEL
-      )
+      !Entity.assert<LevelEditorPanel>(panel, EntityType.UI_LEVEL_EDITOR_PANEL)
     )
       throw new Error()
     const radioGroup = Entity.findByID(

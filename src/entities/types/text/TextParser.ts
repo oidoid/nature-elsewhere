@@ -11,12 +11,10 @@ import {XYParser} from '../../../math/xy/XYParser'
 import {ImageParser} from '../../../images/image/ImageParser'
 import {Text} from './Text'
 import {MEM_FONT_PREFIX, AtlasID} from '../../../atlas/atlasID/AtlasID'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 
 export namespace TextParser {
   export function parse(text: Entity, atlas: Atlas): Text {
-    if (!EntityTypeUtil.assert<Text>(text, EntityType.UI_TEXT))
-      throw new Error()
+    if (!Entity.assert<Text>(text, EntityType.UI_TEXT)) throw new Error()
 
     const textImages = toImages(
       atlas,

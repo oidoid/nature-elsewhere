@@ -1,5 +1,5 @@
 import {EntityType} from '../../entityType/EntityType'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
+
 import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Input} from '../../../inputs/Input'
@@ -21,7 +21,7 @@ enum Images {
 
 export namespace MarqueeUpdater {
   export const update: Update = (marquee, state) => {
-    if (!EntityTypeUtil.assert<Marquee>(marquee, EntityType.UI_MARQUEE))
+    if (!Entity.assert<Marquee>(marquee, EntityType.UI_MARQUEE))
       throw new Error()
     let status = UpdateStatus.UNCHANGED
 

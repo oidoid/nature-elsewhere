@@ -4,7 +4,6 @@ import {DateVersionHash} from './DateVersionHash'
 import {Build} from '../../../utils/Build'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {TextConfig} from '../text/TextConfig'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 
 import {IEntityParser} from '../../RecursiveEntityParser'
 
@@ -15,7 +14,7 @@ export namespace DateVersionHashParser {
     parser: IEntityParser
   ): DateVersionHash {
     if (
-      !EntityTypeUtil.assert<DateVersionHash>(
+      !Entity.assert<DateVersionHash>(
         dateVersionHash,
         EntityType.UI_DATE_VERSION_HASH
       )

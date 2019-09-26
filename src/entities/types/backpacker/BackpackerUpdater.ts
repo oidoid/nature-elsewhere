@@ -6,7 +6,6 @@ import {EntityCollider} from '../../../collision/EntityCollider'
 import {NumberUtil} from '../../../math/number/NumberUtil'
 import {Update} from '../../updaters/Update'
 import {Backpacker} from './Backpacker'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
 
 import {BackpackerState} from './BackpackerState'
 
@@ -15,9 +14,7 @@ import {Level} from '../../../levels/level/Level'
 
 export namespace BackpackerUpdater {
   export const update: Update = (backpacker, state) => {
-    if (
-      !EntityTypeUtil.assert<Backpacker>(backpacker, EntityType.CHAR_BACKPACKER)
-    )
+    if (!Entity.assert<Backpacker>(backpacker, EntityType.CHAR_BACKPACKER))
       throw new Error()
     if (
       !state.level.destination ||

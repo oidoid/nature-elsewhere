@@ -2,7 +2,7 @@ import {EntityType} from '../../entityType/EntityType'
 import {Entity} from '../../entity/Entity'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {Checkbox} from './Checkbox'
-import {EntityTypeUtil} from '../../entityType/EntityTypeUtil'
+
 import {TextConfig} from '../text/TextConfig'
 
 import {Image} from '../../../images/image/Image'
@@ -21,7 +21,7 @@ export namespace CheckboxParser {
     atlas: Atlas,
     parser: IEntityParser
   ): Checkbox {
-    if (!EntityTypeUtil.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
+    if (!Entity.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
       throw new Error()
     setText(checkbox, 0, checkbox.text, atlas, parser)
     if (!('checked' in checkbox)) (<Checkbox>checkbox).checked = false
