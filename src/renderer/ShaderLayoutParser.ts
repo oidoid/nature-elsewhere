@@ -1,4 +1,4 @@
-import {NumberUtil} from '../../math/NumberUtil'
+import {NumberUtil} from '../math/NumberUtil'
 import {ShaderLayout} from './ShaderLayout'
 
 export interface ShaderLayoutConfig {

@@ -2,7 +2,7 @@ import {
   AlphaCompositionParser,
   AlphaCompositionKeyConfig
 } from './AlphaCompositionParser'
-import {AnimatorParser, AnimatorConfig} from './AnimatorParser'
+import {AnimatorParser, AnimatorConfig} from '../animator/AnimatorParser'
 import {Atlas} from '../atlas/Atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {AtlasIDParser, AtlasIDConfig} from '../atlas/AtlasIDParser'
@@ -11,12 +11,13 @@ import {
   DecamillipixelIntXYConfig
 } from '../math/DecamillipixelXYParser'
 import {Image} from './Image'
-import {ImageScaleParser} from './ImageScaleParser'
-import {LayerParser, LayerKeyConfig} from './LayerParser'
 import {RectConfig} from '../math/RectParser'
 import {Rect} from '../math/Rect'
 import {XYConfig} from '../math/XYParser'
 import {XYParser} from '../math/XYParser'
+import {XY} from '../math/XY'
+import {ObjectUtil} from '../utils/ObjectUtil'
+import {Layer} from './Layer'
 
 export interface ImageConfig {
   readonly id: AtlasIDConfig
@@ -30,6 +31,10 @@ export interface ImageConfig {
   readonly alphaComposition?: AlphaCompositionKeyConfig
 }
 
+/** Defaults to (1, 1). */
+export type ImageScaleConfig = Maybe<Partial<XY>>
+export type LayerKeyConfig = Maybe<Layer.Key | string>
+
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
     const id = AtlasIDParser.parse(config.id)
@@ -38,13 +43,26 @@ export namespace ImageParser {
       id,
       imageID,
       bounds: parseBounds(config, id, atlas),
-      layer: LayerParser.parseKey(config.layer),
+      layer: parseLayerKey(config.layer),
       animator: AnimatorParser.parse(config.animator),
-      scale: ImageScaleParser.parse(config.scale),
+      scale: parseScale(config.scale),
       wrap: DecamillipixelIntXYParser.parse(config.wrap),
       wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity),
       alphaComposition: AlphaCompositionParser.parseKey(config.alphaComposition)
     }
+  }
+
+  export function parseScale(config: ImageScaleConfig): XY {
+    return {
+      x: config && config.x !== undefined ? config.x : 1,
+      y: config && config.y !== undefined ? config.y : 1
+    }
+  }
+
+  export function parseLayerKey(config: LayerKeyConfig): Layer {
+    const key = config || 'DEFAULT'
+    if (ObjectUtil.assertKeyOf(Layer, key, 'Layer.Key')) return Layer[key]
+    throw new Error()
   }
 }
 

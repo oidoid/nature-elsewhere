@@ -1,8 +1,8 @@
 import {Atlas} from '../atlas/Atlas'
-import {EntityStateParser, EntityStateConfig} from '../entity/EntityStateParser'
 import {ImageRectParser, ImageRectConfig} from './ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
 import {Entity} from '../entity/Entity'
+import {EntityParser, EntityStateConfig} from '../entity/EntityParser'
 
 export type ImageStateMapConfig = Maybe<
   Readonly<Record<Exclude<EntityStateConfig, undefined>, ImageRectConfig>>
@@ -25,7 +25,7 @@ export namespace ImageStateMapParser {
     }
     if (!config) return map
     for (const stateConfig in config) {
-      const state = EntityStateParser.parse(stateConfig)
+      const state = EntityParser.parseState(stateConfig)
       const rectConfig = config[stateConfig]
       map[state] = ImageRectParser.parse(rectConfig, atlas)
     }

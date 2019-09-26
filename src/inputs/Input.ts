@@ -1,5 +1,5 @@
 import {XY} from '../math/XY'
-import {Viewport} from '../graphics/Viewport'
+import {Viewport} from '../renderer/Viewport'
 import {WH} from '../math/WH'
 import {Rect} from '../math/Rect'
 

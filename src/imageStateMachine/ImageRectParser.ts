@@ -1,8 +1,7 @@
 import {ImageRect} from './ImageRect'
 import {XYParser, XYConfig} from '../math/XYParser'
 import {Atlas} from '../atlas/Atlas'
-import {ImageScaleParser, ImageScaleConfig} from './ImageScaleParser'
-import {ImageParser, ImageConfig} from './ImageParser'
+import {ImageParser, ImageConfig, ImageScaleConfig} from '../image/ImageParser'
 import {Rect} from '../math/Rect'
 
 export type ImageRectConfig = Maybe<{
@@ -29,7 +28,7 @@ export namespace ImageRectParser {
     const origin = XYParser.parse(config.origin)
     const bounds = union || {position: {x: 0, y: 0}, size: {w: 0, h: 0}}
     const rect = {origin, bounds, scale: {x: 1, y: 1}, images}
-    ImageRect.scale(rect, ImageScaleParser.parse(config.scale))
+    ImageRect.scale(rect, ImageParser.parseScale(config.scale))
     return rect
   }
 }

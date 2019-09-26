@@ -1,6 +1,6 @@
 import {ImageRect} from './ImageRect'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
-import {Layer} from './Layer'
+import {Layer} from '../image/Layer'
 import {XY} from '../math/XY'
 import {AtlasID} from '../atlas/AtlasID'
 import {Entity} from '../entity/Entity'

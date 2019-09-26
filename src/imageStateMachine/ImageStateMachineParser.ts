@@ -1,9 +1,9 @@
-import {EntityStateParser, EntityStateConfig} from '../entity/EntityStateParser'
 import {ImageStateMachine} from './ImageStateMachine'
 import {Atlas} from '../atlas/Atlas'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {ImageStateMapParser, ImageStateMapConfig} from './ImageStateMapParser'
 import {Entity} from '../entity/Entity'
+import {EntityStateConfig, EntityParser} from '../entity/EntityParser'
 
 export type ImageStateMachineConfig = Maybe<
   Readonly<{state?: EntityStateConfig; map?: ImageStateMapConfig}>
@@ -19,7 +19,7 @@ export namespace ImageStateMachineParser {
         state: Entity.State.HIDDEN,
         map: ImageStateMapParser.parse(undefined, atlas)
       }
-    const state = EntityStateParser.parse(config.state)
+    const state = EntityParser.parseState(config.state)
     const map = ImageStateMapParser.parse(config.map, atlas)
     ObjectUtil.assertKeyOf(map, state, 'ImageStateMachine')
     return {state, map}

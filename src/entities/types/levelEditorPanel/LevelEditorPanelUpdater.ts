@@ -11,7 +11,7 @@ import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {Checkbox} from '../checkbox/Checkbox'
 import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
 
-import {Layer} from '../../../images/Layer'
+import {Layer} from '../../../image/Layer'
 import {Marquee} from '../marquee/Marquee'
 import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../levels/Level'

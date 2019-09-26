@@ -1,4 +1,4 @@
-import {ShaderLayout} from './shaders/ShaderLayout'
+import {ShaderLayout} from './ShaderLayout'
 
 const GL = WebGL2RenderingContext
 

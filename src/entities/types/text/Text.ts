@@ -1,7 +1,7 @@
 import {Entity} from '../../../entity/Entity'
 import {EntityType} from '../../../entity/EntityType'
 import {XY} from '../../../math/XY'
-import {Layer} from '../../../images/Layer'
+import {Layer} from '../../../image/Layer'
 import {WH} from '../../../math/WH'
 
 export interface Text extends Entity {

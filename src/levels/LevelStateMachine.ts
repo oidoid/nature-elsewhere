@@ -1,5 +1,5 @@
 import {Level} from './Level'
-import {ShaderLayout} from '../graphics/shaders/ShaderLayout'
+import {ShaderLayout} from '../renderer/ShaderLayout'
 import {Store} from '../store/Store'
 import {LevelConfigMap} from './levelConfigs/LevelConfigMap'
 import {UpdateState} from '../entities/updaters/UpdateState'
