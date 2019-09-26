@@ -4,8 +4,8 @@ import {EntityType} from '../../entityType/EntityType'
 
 import {ImageParser} from '../../../images/image/ImageParser'
 
-import {ImageEntityConfig} from './ImageEntityConfig'
 import {Atlas} from '../../../atlas/atlas/Atlas'
+import {ImageEntityConfig} from './ImageEntityConfig'
 
 export namespace ImageEntityParser {
   export function parse(imageEntity: Entity, atlas: Atlas): ImageEntity {

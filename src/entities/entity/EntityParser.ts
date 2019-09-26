@@ -1,32 +1,64 @@
 import {Atlas} from '../../atlas/atlas/Atlas'
+import {AtlasIDConfig} from '../../atlas/atlasID/AtlasIDConfig'
+import {AtlasIDParser} from '../../atlas/atlasID/AtlasIDParser'
 import {CheckboxParser} from '../types/checkbox/CheckboxParser'
+import {CollisionPredicateConfig} from '../../collision/collisionPredicate/CollisionPredicateConfig'
 import {CollisionPredicateParser} from '../../collision/collisionPredicate/CollisionPredicateParser'
 import {DateVersionHashParser} from '../types/dateVersionHash/DateVersionHashParser'
-import {EntityConfig, EntityArrayConfig} from './EntityConfig'
 import {Entity} from './Entity'
+import {EntityIDConfig} from '../entityID/EntityIDConfig'
 import {EntityIDParser} from '../entityID/EntityIDParser'
 import {EntityPickerParser} from '../types/entityPicker/EntityPickerParser'
+import {EntityTypeConfig} from '../entityType/EntityTypeConfig'
 import {EntityType} from '../entityType/EntityType'
-import {RecursiveEntityParser} from '../RecursiveEntityParser'
 import {EntityTypeParser} from '../entityType/EntityTypeParser'
-
+import {FollowCamParser} from '../updaters/types/followCam/FollowCamParser'
 import {ImageEntityParser} from '../types/imageEntity/ImageEntityParser'
 import {ImageRect} from '../../images/imageRect/ImageRect'
+import {ImageScaleConfig} from '../../images/imageScale/ImageScaleConfig'
 import {ImageScaleParser} from '../../images/imageScale/ImageScaleParser'
+import {ImageStateMachineConfig} from '../../images/imageStateMachine/ImageStateMachineConfig'
 import {ImageStateMachineParser} from '../../images/imageStateMachine/ImageStateMachineParser'
 import {JSONUtil, JSONObject} from '../../utils/jsonUtil/JSONUtil'
 import {LevelEditorPanelParser} from '../types/levelEditorPanel/LevelEditorPanelParser'
+import {LevelLinkParser} from '../updaters/types/levelLink/LevelLinkParser'
+import {RectArrayConfig} from '../../math/rect/RectConfig'
 import {RectParser} from '../../math/rect/RectParser'
+import {RecursiveEntityParser} from '../RecursiveEntityParser'
 import {TextParser} from '../types/text/TextParser'
-import {UpdatePredicateParser} from '../updaters/updatePredicate/UpdatePredicateParser'
-import {XYParser} from '../../math/xy/XYParser'
 import {TypeConfigMap} from '../TypeConfigMap'
+import {UpdatePredicateConfig} from '../updaters/updatePredicate/UpdatePredicateConfig'
+import {UpdatePredicateParser} from '../updaters/updatePredicate/UpdatePredicateParser'
+import {UpdaterParser} from '../updaters/UpdaterParser'
+import {UpdaterTypeArrayConfig} from '../updaters/updaterType/UpdaterTypeConfig'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdaterTypeParser} from '../updaters/updaterType/UpdaterTypeParser'
-import {UpdaterParser} from '../updaters/UpdaterParser'
-import {FollowCamParser} from '../updaters/types/followCam/FollowCamParser'
-import {LevelLinkParser} from '../updaters/types/levelLink/LevelLinkParser'
-import {AtlasIDParser} from '../../atlas/atlasID/AtlasIDParser'
+import {XYConfig} from '../../math/xy/XYConfig'
+import {XYParser} from '../../math/xy/XYParser'
+
+export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
+
+export interface EntityConfig {
+  /** Defaults to EntityID.UNDEFINED. */
+  readonly id?: EntityIDConfig
+  readonly type: EntityTypeConfig
+  /** Defaults to (0, 0). */
+  readonly position?: XYConfig
+  readonly imageID?: AtlasIDConfig
+  readonly scale?: ImageScaleConfig
+  /** Defaults to {}. */
+  readonly machine?: ImageStateMachineConfig
+  /** Defaults to BehaviorPredicate.NEVER. */
+  readonly updatePredicate?: UpdatePredicateConfig
+  /** Defaults to []. */
+  readonly updaters?: UpdaterTypeArrayConfig
+  /** Defaults to CollisionPredicate.NEVER. */
+  readonly collisionPredicate?: CollisionPredicateConfig
+  /** Defaults to []. */
+  readonly collisionBodies?: RectArrayConfig
+  /** Defaults to []. */
+  readonly children?: EntityArrayConfig
+}
 
 export namespace EntityParser {
   export function parseAll(config: EntityArrayConfig, atlas: Atlas): Entity[] {

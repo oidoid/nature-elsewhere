@@ -1,6 +1,6 @@
 import {Entity} from './entity/Entity'
 import {Atlas} from '../atlas/atlas/Atlas'
-import {EntityConfig} from './entity/EntityConfig'
+import {EntityConfig} from './entity/EntityParser'
 
 export type RecursiveEntityParser = (
   entity: Entity,

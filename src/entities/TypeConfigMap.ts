@@ -32,10 +32,11 @@ import * as UI_MARQUEE from './types/marquee/marquee.json'
 import * as UI_RADIO_BUTTON_GROUP from './types/entityConfigs/ui/radioCheckboxGroup.json'
 import * as UI_TEXT from './types/text/text.json'
 import * as UI_TOOLBAR from './types/entityConfigs/ui/toolbar.json'
-import {EntityConfig} from './entity/EntityConfig'
+
 import {EntityType} from './entityType/EntityType'
 import {EntityStateParser} from './entityState/EntityStateParser'
 import {EntityState} from './entityState/EntityState'
+import {EntityConfig} from './entity/EntityParser.js'
 
 export const TypeConfigMap: Readonly<
   Record<EntityType, EntityConfig>

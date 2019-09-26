@@ -1,7 +1,8 @@
 import {CameraConfig} from '../camera/CameraConfig'
-import {EntityConfig} from '../../entities/entity/EntityConfig'
+
 import {WH} from '../../math/wh/WH'
 import {LevelTypeConfig} from '../levelType/LevelTypeConfig'
+import {EntityConfig} from '../../entities/entity/EntityParser'
 
 export interface LevelConfig {
   readonly type: LevelTypeConfig
