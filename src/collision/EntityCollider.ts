@@ -1,4 +1,4 @@
-import {CollisionPredicate} from './collisionPredicate/CollisionPredicate'
+import {CollisionPredicate} from './CollisionPredicate'
 import {EntityCollision, ParentDescendant} from './EntityCollision'
 import {Entity} from '../entities/entity/Entity'
 import {Rect} from '../math/rect/Rect'

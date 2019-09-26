@@ -1,5 +1,5 @@
 import {CollisionPredicate} from './CollisionPredicate'
-import {ObjectUtil} from '../../utils/ObjectUtil'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export type CollisionPredicateConfig = Maybe<CollisionPredicate | string>
 

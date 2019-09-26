@@ -1,5 +1,5 @@
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
-import {CollisionPredicate} from '../../collision/collisionPredicate/CollisionPredicate'
+import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {Image} from '../../images/image/Image'

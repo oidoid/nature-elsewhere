@@ -4,7 +4,7 @@ import {CheckboxParser} from '../types/checkbox/CheckboxParser'
 import {
   CollisionPredicateConfig,
   CollisionPredicateParser
-} from '../../collision/collisionPredicate/CollisionPredicateParser'
+} from '../../collision/CollisionPredicateParser'
 import {DateVersionHashParser} from '../types/dateVersionHash/DateVersionHashParser'
 import {Entity} from './Entity'
 import {EntityPickerParser} from '../types/entityPicker/EntityPickerParser'
