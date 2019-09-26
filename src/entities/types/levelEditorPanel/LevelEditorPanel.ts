@@ -5,13 +5,10 @@ import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {Entity} from '../../entity/Entity'
 import {EntityPicker} from '../entityPicker/EntityPicker'
 import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 import {IEntityParser} from '../../RecursiveEntityParser'
 import {Layer} from '../../../images/layer/Layer'
-import {
-  SCENERY_VALUE_PREFIX,
-  CHAR_VALUE_PREFIX
-} from '../../entityType/EntityType'
+import {SCENERY_VALUE_PREFIX, CHAR_VALUE_PREFIX} from '../../entity/EntityType'
 
 export interface LevelEditorPanel extends Entity {
   readonly type: EntityType.UI_LEVEL_EDITOR_PANEL

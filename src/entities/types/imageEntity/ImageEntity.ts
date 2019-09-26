@@ -1,5 +1,5 @@
 import {Entity} from '../../entity/Entity'
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 
 /** A single image. */
 export interface ImageEntity extends Entity {

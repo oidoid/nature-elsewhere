@@ -1,5 +1,5 @@
 import {Entity} from '../../entity/Entity'
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 
 export interface Marquee extends Entity {
   readonly type: EntityType.UI_MARQUEE

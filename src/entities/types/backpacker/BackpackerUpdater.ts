@@ -1,5 +1,5 @@
 import {XY} from '../../../math/xy/XY'
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {EntityCollider} from '../../../collision/EntityCollider'
 import {NumberUtil} from '../../../math/number/NumberUtil'

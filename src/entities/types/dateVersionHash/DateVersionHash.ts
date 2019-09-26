@@ -1,4 +1,4 @@
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 import {Text} from '../text/Text'
 
 export interface DateVersionHash extends Omit<Text, 'type'> {

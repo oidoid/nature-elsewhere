@@ -1,5 +1,5 @@
 import {Rect} from '../../math/rect/Rect'
-import {EntityID} from '../../entities/entityID/EntityID'
+import {EntityID} from '../../entities/entity/EntityID'
 
 export interface Camera {
   readonly bounds: Rect

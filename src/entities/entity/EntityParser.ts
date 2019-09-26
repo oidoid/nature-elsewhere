@@ -7,13 +7,9 @@ import {
 } from '../../collision/collisionPredicate/CollisionPredicateParser'
 import {DateVersionHashParser} from '../types/dateVersionHash/DateVersionHashParser'
 import {Entity} from './Entity'
-import {EntityIDConfig, EntityIDParser} from '../entityID/EntityIDParser'
 import {EntityPickerParser} from '../types/entityPicker/EntityPickerParser'
-import {EntityType} from '../entityType/EntityType'
-import {
-  EntityTypeParser,
-  EntityTypeConfig
-} from '../entityType/EntityTypeParser'
+import {EntityType} from './EntityType'
+import {EntityTypeParser, EntityTypeConfig} from './EntityTypeParser'
 import {FollowCamParser} from '../updaters/types/followCam/FollowCamParser'
 import {ImageEntityParser} from '../types/imageEntity/ImageEntityParser'
 import {ImageRect} from '../../images/imageRect/ImageRect'
@@ -40,6 +36,7 @@ import {
   UpdaterTypeArrayConfig
 } from '../updaters/updaterType/UpdaterTypeParser'
 import {XYParser, XYConfig} from '../../math/xy/XYParser'
+import {EntityIDConfig, EntityIDParser} from './EntityIDParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 

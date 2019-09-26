@@ -1,6 +1,6 @@
 import {ImageEntity} from './ImageEntity'
 import {Entity} from '../../entity/Entity'
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 import {ImageParser, ImageConfig} from '../../../images/image/ImageParser'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {EntityConfig} from '../../entity/EntityParser'

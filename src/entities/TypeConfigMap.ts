@@ -33,7 +33,7 @@ import * as UI_RADIO_BUTTON_GROUP from './types/entityConfigs/ui/radioCheckboxGr
 import * as UI_TEXT from './types/text/text.json'
 import * as UI_TOOLBAR from './types/entityConfigs/ui/toolbar.json'
 
-import {EntityType} from './entityType/EntityType'
+import {EntityType} from './entity/EntityType'
 import {EntityStateParser} from './entity/EntityStateParser'
 import {EntityConfig} from './entity/EntityParser.js'
 import {Entity} from './entity/Entity.js'

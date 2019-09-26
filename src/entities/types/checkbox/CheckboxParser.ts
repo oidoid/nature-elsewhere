@@ -1,4 +1,4 @@
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 import {Entity} from '../../entity/Entity'
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {Checkbox} from './Checkbox'

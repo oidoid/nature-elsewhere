@@ -1,6 +1,6 @@
 import {Atlas} from '../../../atlas/atlas/Atlas'
 import {Entity} from '../../entity/Entity'
-import {EntityType} from '../../entityType/EntityType'
+import {EntityType} from '../../entity/EntityType'
 import {Limits} from '../../../math/Limits'
 import {Image} from '../../../images/image/Image'
 import {Layer} from '../../../images/layer/Layer'

@@ -1,5 +1,5 @@
-import {EntityID} from '../../entityID/EntityID'
-import {EntityType} from '../../entityType/EntityType'
+import {EntityID} from '../../entity/EntityID'
+import {EntityType} from '../../entity/EntityType'
 import {PlaneState} from '../PlaneState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {Update} from '../../updaters/Update'
