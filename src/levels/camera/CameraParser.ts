@@ -1,8 +1,12 @@
-import {CameraConfig} from './CameraConfig'
 import {EntityIDParser} from '../../entities/entityID/EntityIDParser'
-import {XYParser} from '../../math/xy/XYParser'
+import {XYParser, XYConfig} from '../../math/xy/XYParser'
 import {EntityID} from '../../entities/entityID/EntityID'
 import {Camera} from './Camera'
+import {EntityIDConfig} from '../../entities/entityID/EntityIDConfig'
+
+export type CameraConfig = Maybe<
+  Readonly<{position?: XYConfig; followID?: EntityIDConfig}>
+>
 
 export namespace CameraParser {
   export function parse(config: CameraConfig): Camera {

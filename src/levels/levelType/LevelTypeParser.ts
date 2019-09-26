@@ -1,6 +1,7 @@
 import {ObjectUtil} from '../../utils/ObjectUtil'
-import {LevelTypeConfig} from './LevelTypeConfig'
 import {LevelType} from './LevelType'
+
+export type LevelTypeConfig = LevelType | string
 
 export namespace LevelTypeParser {
   export function parse(config: LevelTypeConfig): LevelType {
