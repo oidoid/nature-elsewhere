@@ -1,6 +1,7 @@
 import {AtlasID} from './AtlasID'
-import {AtlasIDConfig} from './AtlasIDConfig'
 import {ObjectUtil} from '../../utils/ObjectUtil'
+
+export type AtlasIDConfig = AtlasID | string
 
 export namespace AtlasIDParser {
   export function parse(config: AtlasIDConfig): AtlasID {

@@ -12,8 +12,8 @@ import {ImageParser} from '../../../images/image/ImageParser'
 import {Text} from './Text'
 import {MEM_FONT_PREFIX, AtlasID} from '../../../atlas/atlasID/AtlasID'
 import {EntityConfig} from '../../entity/EntityParser'
-import {LayerKeyConfig} from '../../../images/layer/LayerConfig'
 import {WHConfig} from '../../../math/wh/WHParser'
+import {LayerKeyConfig} from '../../../images/layer/LayerParser'
 
 export interface TextConfig extends EntityConfig {
   readonly type: EntityType.UI_TEXT

@@ -4,17 +4,15 @@ import {
 } from '../alphaComposition/AlphaCompositionParser'
 import {AnimatorParser, AnimatorConfig} from '../animator/AnimatorParser'
 import {Atlas} from '../../atlas/atlas/Atlas'
-import {AtlasIDConfig} from '../../atlas/atlasID/AtlasIDConfig'
 import {AtlasID} from '../../atlas/atlasID/AtlasID'
-import {AtlasIDParser} from '../../atlas/atlasID/AtlasIDParser'
+import {AtlasIDParser, AtlasIDConfig} from '../../atlas/atlasID/AtlasIDParser'
 import {
   DecamillipixelIntXYParser,
   DecamillipixelIntXYConfig
 } from '../../math/DecamillipixelXYParser'
 import {Image} from './Image'
 import {ImageScaleParser} from '../ImageScaleParser'
-import {LayerKeyConfig} from '../layer/LayerConfig'
-import {LayerParser} from '../layer/LayerParser'
+import {LayerParser, LayerKeyConfig} from '../layer/LayerParser'
 import {RectConfig} from '../../math/rect/RectParser'
 import {Rect} from '../../math/rect/Rect'
 import {XYConfig} from '../../math/xy/XYParser'

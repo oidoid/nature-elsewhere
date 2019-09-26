@@ -1,11 +1,14 @@
 import {ImageEntity} from './ImageEntity'
 import {Entity} from '../../entity/Entity'
 import {EntityType} from '../../entityType/EntityType'
-
-import {ImageParser} from '../../../images/image/ImageParser'
-
+import {ImageParser, ImageConfig} from '../../../images/image/ImageParser'
 import {Atlas} from '../../../atlas/atlas/Atlas'
-import {ImageEntityConfig} from './ImageEntityConfig'
+import {EntityConfig} from '../../entity/EntityParser'
+
+export interface ImageEntityConfig extends EntityConfig {
+  /** A single image to be added to the default state. */
+  readonly image?: ImageConfig
+}
 
 export namespace ImageEntityParser {
   export function parse(imageEntity: Entity, atlas: Atlas): ImageEntity {
