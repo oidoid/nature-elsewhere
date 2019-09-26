@@ -1,6 +1,7 @@
 import {Atlas} from '../atlas/Atlas'
 import {NumberUtil} from '../math/NumberUtil'
 
+/** Record and update an Image's Atlas.Animation's Atlas.Cel state. */
 export interface Animator {
   /** Cel index oscillation state. This integer may fall outside of animation
       bounds depending on the animation interval selected by direction. This

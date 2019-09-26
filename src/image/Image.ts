@@ -13,7 +13,8 @@ import {AlphaComposition} from './AlphaComposition'
     collision tests but their bounds may be used. */
 export interface Image {
   readonly id: AtlasID
-  /** If different than id, use id for masking and imageID for coloring. */
+  /** If different than id, use id for masking and imageID for coloring. See
+      AlphaComposition. */
   imageID: AtlasID
   /** Specified in fractional pixel level coordinates. Includes scaling.
 
