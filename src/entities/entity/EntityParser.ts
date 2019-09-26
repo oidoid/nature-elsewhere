@@ -1,5 +1,5 @@
-import {Atlas} from '../../atlas/atlas/Atlas'
-import {AtlasIDParser, AtlasIDConfig} from '../../atlas/atlasID/AtlasIDParser'
+import {Atlas} from '../../atlas/Atlas'
+import {AtlasIDParser, AtlasIDConfig} from '../../atlas/AtlasIDParser'
 import {CheckboxParser} from '../types/checkbox/CheckboxParser'
 import {
   CollisionPredicateConfig,

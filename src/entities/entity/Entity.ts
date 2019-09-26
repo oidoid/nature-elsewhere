@@ -1,4 +1,4 @@
-import {AtlasID} from '../../atlas/atlasID/AtlasID'
+import {AtlasID} from '../../atlas/AtlasID'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'

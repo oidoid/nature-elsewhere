@@ -3,7 +3,7 @@ import {
   EntityStateConfig
 } from '../../entities/entity/EntityStateParser'
 import {ImageStateMachine} from './ImageStateMachine'
-import {Atlas} from '../../atlas/atlas/Atlas'
+import {Atlas} from '../../atlas/Atlas'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {
   ImageStateMapParser,

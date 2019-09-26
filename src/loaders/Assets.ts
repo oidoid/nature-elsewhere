@@ -1,4 +1,4 @@
-import {Atlas} from '../atlas/atlas/Atlas'
+import {Atlas} from '../atlas/Atlas'
 import {ShaderLayout} from '../graphics/shaders/shaderLayout/ShaderLayout'
 
 export interface Assets {

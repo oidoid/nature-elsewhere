@@ -2,7 +2,7 @@ import {ImageRect} from '../imageRect/ImageRect'
 import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
 import {Layer} from '../layer/Layer'
 import {XY} from '../../math/xy/XY'
-import {AtlasID} from '../../atlas/atlasID/AtlasID'
+import {AtlasID} from '../../atlas/AtlasID'
 import {Entity} from '../../entities/entity/Entity'
 
 // origin in level XY

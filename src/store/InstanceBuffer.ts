@@ -1,4 +1,4 @@
-import {Atlas} from '../atlas/atlas/Atlas'
+import {Atlas} from '../atlas/Atlas'
 import {Image} from '../images/image/Image'
 import {ShaderLayout} from '../graphics/shaders/shaderLayout/ShaderLayout'
 import {Animator} from '../images/animator/Animator'

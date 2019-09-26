@@ -1,4 +1,4 @@
-import {Atlas} from '../../atlas/atlas/Atlas'
+import {Atlas} from '../../atlas/Atlas'
 import {NumberUtil} from '../../math/number/NumberUtil'
 
 export interface Animator {

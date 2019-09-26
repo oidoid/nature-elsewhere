@@ -2,7 +2,7 @@ import {Entity} from '../../entity/Entity'
 import {EntityType} from '../../entity/EntityType'
 import {DateVersionHash} from './DateVersionHash'
 import {Build} from '../../../utils/Build'
-import {Atlas} from '../../../atlas/atlas/Atlas'
+import {Atlas} from '../../../atlas/Atlas'
 
 import {IEntityParser} from '../../RecursiveEntityParser'
 import {TextConfig} from '../text/TextParser'

@@ -1,6 +1,6 @@
 import {Update} from '../../Update'
 
-import {AtlasID} from '../../../../atlas/atlasID/AtlasID'
+import {AtlasID} from '../../../../atlas/AtlasID'
 import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../../levels/level/Level'
 

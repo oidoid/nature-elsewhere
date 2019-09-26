@@ -1,5 +1,5 @@
 import {AtlasID} from './AtlasID'
-import {ObjectUtil} from '../../utils/ObjectUtil'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export type AtlasIDConfig = AtlasID | string
 

@@ -1,6 +1,6 @@
 import {ImageRect} from './ImageRect'
 import {XYParser, XYConfig} from '../../math/xy/XYParser'
-import {Atlas} from '../../atlas/atlas/Atlas'
+import {Atlas} from '../../atlas/Atlas'
 import {ImageScaleParser, ImageScaleConfig} from '../ImageScaleParser'
 import {ImageParser, ImageConfig} from '../image/ImageParser'
 import {Rect} from '../../math/rect/Rect'

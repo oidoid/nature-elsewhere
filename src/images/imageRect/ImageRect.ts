@@ -3,7 +3,7 @@ import {Rect} from '../../math/rect/Rect'
 import {XY} from '../../math/xy/XY'
 import {Layer} from '../layer/Layer'
 import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
-import {AtlasID} from '../../atlas/atlasID/AtlasID'
+import {AtlasID} from '../../atlas/AtlasID'
 
 export interface ImageRect {
   /** The upper-left and size of the local coordinate system. The images are

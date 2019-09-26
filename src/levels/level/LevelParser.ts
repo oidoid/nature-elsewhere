@@ -1,4 +1,4 @@
-import {Atlas} from '../../atlas/atlas/Atlas'
+import {Atlas} from '../../atlas/Atlas'
 import {Backpacker} from '../../entities/types/backpacker/Backpacker'
 import {CameraConfig} from '../camera/CameraParser'
 import {CameraParser} from '../camera/CameraParser'

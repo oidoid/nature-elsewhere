@@ -3,9 +3,9 @@ import {
   AlphaCompositionKeyConfig
 } from '../alphaComposition/AlphaCompositionParser'
 import {AnimatorParser, AnimatorConfig} from '../animator/AnimatorParser'
-import {Atlas} from '../../atlas/atlas/Atlas'
-import {AtlasID} from '../../atlas/atlasID/AtlasID'
-import {AtlasIDParser, AtlasIDConfig} from '../../atlas/atlasID/AtlasIDParser'
+import {Atlas} from '../../atlas/Atlas'
+import {AtlasID} from '../../atlas/AtlasID'
+import {AtlasIDParser, AtlasIDConfig} from '../../atlas/AtlasIDParser'
 import {
   DecamillipixelIntXYParser,
   DecamillipixelIntXYConfig
