@@ -12,7 +12,7 @@ import {UpdaterMap} from '../entities/updaters/UpdaterMap'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
-import {XY, DecamillipixelXY, FloatXY} from '../math/XY'
+import {DecamillipixelXY, FloatXY, XY} from '../math/XY'
 import {EntityCollider} from '../collision/EntityCollider'
 import {Level} from '../levels/Level'
 

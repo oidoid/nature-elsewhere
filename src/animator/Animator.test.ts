@@ -1,7 +1,7 @@
 import {Animator} from './Animator'
+import {Aseprite} from '../atlas/Aseprite'
 import {Atlas} from '../atlas/Atlas'
 import {ObjectUtil} from '../utils/ObjectUtil'
-import {Aseprite} from '../atlas/Aseprite'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 

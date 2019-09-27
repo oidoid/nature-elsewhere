@@ -9,8 +9,8 @@ import {EntityType} from '../../../entity/EntityType'
 import {IEntityParser} from '../../RecursiveEntityParser'
 import {Layer} from '../../../image/Layer'
 import {
-  SCENERY_VALUE_PREFIX,
-  CHAR_VALUE_PREFIX
+  CHAR_VALUE_PREFIX,
+  SCENERY_VALUE_PREFIX
 } from '../../../entity/EntityType'
 
 export interface LevelEditorPanel extends Entity {

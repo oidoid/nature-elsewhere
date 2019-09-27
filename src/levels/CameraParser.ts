@@ -1,4 +1,4 @@
-import {XYParser, XYConfig} from '../math/XYParser'
+import {XYConfig, XYParser} from '../math/XYParser'
 import {EntityID} from '../entity/EntityID'
 import {Camera} from './Camera'
 import {EntityIDConfig, EntityParser} from '../entity/EntityParser'

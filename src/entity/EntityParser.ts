@@ -33,7 +33,7 @@ import * as UI_RADIO_BUTTON_GROUP from '../entities/types/entityConfigs/ui/radio
 import * as UI_TEXT from '../entities/types/text/text.json'
 import * as UI_TOOLBAR from '../entities/types/entityConfigs/ui/toolbar.json'
 import {Atlas} from '../atlas/Atlas'
-import {AtlasIDParser, AtlasIDConfig} from '../atlas/AtlasIDParser'
+import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {CheckboxParser} from '../entities/types/checkbox/CheckboxParser'
 import {
   CollisionPredicateConfig,
@@ -47,16 +47,16 @@ import {EntityType} from './EntityType'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
 import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
 import {ImageRect} from '../imageStateMachine/ImageRect'
-import {ImageScaleConfig, ImageParser} from '../image/ImageParser'
+import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
 import {
   ImageStateMachineConfig,
   ImageStateMachineParser
 } from '../imageStateMachine/ImageStateMachineParser'
-import {JSONUtil, JSONObject} from '../utils/JSONUtil'
+import {JSONObject, JSONUtil} from '../utils/JSONUtil'
 import {LevelEditorPanelParser} from '../entities/types/levelEditorPanel/LevelEditorPanelParser'
 import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
-import {RectParser, RectArrayConfig} from '../math/RectParser'
+import {RectArrayConfig, RectParser} from '../math/RectParser'
 import {RecursiveEntityParser} from '../entities/RecursiveEntityParser'
 import {TextParser} from '../entities/types/text/TextParser'
 import {
@@ -69,7 +69,7 @@ import {
   UpdaterTypeParser
 } from '../entities/updaters/updaterType/UpdaterTypeParser'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
-import {XYParser, XYConfig} from '../math/XYParser'
+import {XYConfig, XYParser} from '../math/XYParser'
 import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'

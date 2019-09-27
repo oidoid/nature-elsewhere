@@ -1,14 +1,14 @@
 import {
-  AlphaCompositionParser,
-  AlphaCompositionKeyConfig
+  AlphaCompositionKeyConfig,
+  AlphaCompositionParser
 } from './AlphaCompositionParser'
-import {AnimatorParser, AnimatorConfig} from '../animator/AnimatorParser'
+import {AnimatorConfig, AnimatorParser} from '../animator/AnimatorParser'
 import {Atlas} from '../atlas/Atlas'
 import {AtlasID} from '../atlas/AtlasID'
-import {AtlasIDParser, AtlasIDConfig} from '../atlas/AtlasIDParser'
+import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {
-  DecamillipixelIntXYParser,
-  DecamillipixelIntXYConfig
+  DecamillipixelIntXYConfig,
+  DecamillipixelIntXYParser
 } from '../math/DecamillipixelXYParser'
 import {Image} from './Image'
 import {RectConfig} from '../math/RectParser'

@@ -1,5 +1,5 @@
 import {Atlas} from '../atlas/Atlas'
-import {ImageRectParser, ImageRectConfig} from './ImageRectParser'
+import {ImageRectConfig, ImageRectParser} from './ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
 import {Entity} from '../entity/Entity'
 import {EntityParser, EntityStateConfig} from '../entity/EntityParser'

@@ -1,4 +1,4 @@
-import {XY, FloatXY} from '../math/XY'
+import {FloatXY, XY} from '../math/XY'
 import {Viewport} from '../renderer/Viewport'
 import {WH} from '../math/WH'
 import {Rect} from '../math/Rect'

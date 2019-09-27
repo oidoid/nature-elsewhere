@@ -1,9 +1,9 @@
 import {ImageStateMachine} from './ImageStateMachine'
 import {Atlas} from '../atlas/Atlas'
 import {ObjectUtil} from '../utils/ObjectUtil'
-import {ImageStateMapParser, ImageStateMapConfig} from './ImageStateMapParser'
+import {ImageStateMapConfig, ImageStateMapParser} from './ImageStateMapParser'
 import {Entity} from '../entity/Entity'
-import {EntityStateConfig, EntityParser} from '../entity/EntityParser'
+import {EntityParser, EntityStateConfig} from '../entity/EntityParser'
 
 export type ImageStateMachineConfig = Maybe<
   Readonly<{state?: EntityStateConfig; map?: ImageStateMapConfig}>
