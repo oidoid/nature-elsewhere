@@ -47,9 +47,13 @@ export namespace Backpacker {
       if (state.level.destination)
         Entity.setState(state.level.destination, Entity.State.HIDDEN)
     } else {
+      const horizontalDistance = Math.abs(
+        destination.x - backpacker.bounds.position.x
+      )
       if (up) nextState = State.WALK_UP
       if (down) nextState = State.WALK_DOWN
-      if (left || right) nextState = State.WALK_RIGHT
+      if ((left || right) && ((!up && !down) || horizontalDistance > 5))
+        nextState = State.WALK_RIGHT
     }
 
     const scale = Entity.getScale(backpacker).copy()
