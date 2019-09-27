@@ -1,16 +1,16 @@
+import {Backpacker} from '../types/backpacker/Backpacker'
+import {ButtonUpdater} from '../types/button/ButtonUpdater'
+import {CheckboxUpdater} from '../types/checkbox/CheckboxUpdater'
+import {CursorUpdater} from '../types/cursor/CursorUpdater'
+import {DestinationMarkerUpdater} from '../types/destinationMarker/DestinationMarkerUpdater'
+import {FollowCamUpdater} from './types/followCam/FollowCamUpdater'
+import {LevelEditorPanelUpdater} from '../types/levelEditorPanel/LevelEditorPanelUpdater'
+import {LevelLinkUpdater} from './types/levelLink/LevelLinkUpdater'
+import {Link} from './types/link/Link'
+import {MarqueeUpdater} from '../types/marquee/MarqueeUpdater'
+import {Update} from './Update'
 import {UpdaterType} from './updaterType/UpdaterType'
 import {UpdateStatus} from './updateStatus/UpdateStatus'
-import {LevelEditorPanelUpdater} from '../types/levelEditorPanel/LevelEditorPanelUpdater'
-import {ButtonUpdater} from '../types/button/ButtonUpdater'
-import {Link} from './types/link/Link'
-import {CursorUpdater} from '../types/cursor/CursorUpdater'
-import {Update} from './Update'
-import {CheckboxUpdater} from '../types/checkbox/CheckboxUpdater'
-import {DestinationMarkerUpdater} from '../types/destinationMarker/DestinationMarkerUpdater'
-import {BackpackerUpdater} from '../types/backpacker/BackpackerUpdater'
-import {FollowCamUpdater} from './types/followCam/FollowCamUpdater'
-import {LevelLinkUpdater} from './types/levelLink/LevelLinkUpdater'
-import {MarqueeUpdater} from '../types/marquee/MarqueeUpdater'
 
 const wraparound: Update = () => {
   return UpdateStatus.UNCHANGED
@@ -30,6 +30,6 @@ export const UpdaterMap: Readonly<Record<UpdaterType, Update>> = {
   [UpdaterType.UI_LINK]: Link.update,
   [UpdaterType.UI_LEVEL_LINK]: LevelLinkUpdater.update,
   [UpdaterType.UI_DESTINATION_MARKER]: DestinationMarkerUpdater.update,
-  [UpdaterType.CHAR_BACKPACKER]: BackpackerUpdater.update,
+  [UpdaterType.CHAR_BACKPACKER]: Backpacker.update,
   [UpdaterType.UI_MARQUEE]: MarqueeUpdater.update
 }
