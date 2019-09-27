@@ -72,7 +72,12 @@ export namespace Rect {
     // that no element of the array is ever returned (union() returns a new Rect
     // instance). If that first element is modified by the caller, it changes
     // the unionAll() result implicitly which is probably unexpected.
-    return rects.length ? rects.reduce(union, {...rects[0]}) : undefined
+    return rects.length
+      ? rects.reduce(union, {
+          position: rects[0].position.copy(),
+          size: rects[0].size.copy()
+        })
+      : undefined
   }
 
   export function union(lhs: Rect, rhs: Rect): Rect {

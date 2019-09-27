@@ -14,6 +14,10 @@ export type DecamillipixelXY = XY
     rounding errors easier to debug by encapsulating mutation in setters with
     integer state checks. */
 export class XY {
+  static trunc(x: number, y: number): XY {
+    return new XY(Math.trunc(x), Math.trunc(y))
+  }
+
   constructor(private _x: number, private _y: number) {}
 
   get x(): number {
@@ -40,8 +44,9 @@ export class XY {
     return new XY(this.x, this.y)
   }
 
-  add({x, y}: Readonly<XY>): XY {
-    return new XY(this.x + x, this.y + y)
+  add(val: Readonly<XY> | number): XY {
+    val = toXY(val)
+    return new XY(this.x + val.x, this.y + val.y)
   }
 
   sub({x, y}: Readonly<XY>): XY {
@@ -78,4 +83,14 @@ export class XY {
     const {x, y} = this.sub(xy)
     return Math.sqrt(x * x + y * y)
   }
+
+  lerp(to: Readonly<XY>, ratio: number): XY {
+    const x = this.x * (1 - ratio) + to.x * ratio
+    const y = this.y * (1 - ratio) + to.y * ratio
+    return XY.trunc(x, y)
+  }
+}
+
+function toXY(val: Readonly<XY> | number): Readonly<XY> {
+  return typeof val === 'number' ? new XY(val, val) : val
 }

@@ -18,10 +18,10 @@ export namespace BackpackerUpdater {
     let status = UpdateStatus.UNCHANGED
 
     const {x, y} = backpacker.bounds.position
-    const left = destination.x < Math.trunc(x)
-    const right = destination.x > Math.trunc(x)
-    const up = destination.y < Math.trunc(y)
-    const down = destination.y > Math.trunc(y)
+    const left = destination.x < x
+    const right = destination.x > x
+    const up = destination.y < y
+    const down = destination.y > y
     backpacker.velocity.x = (left ? -1 : right ? 1 : 0) * 80
     backpacker.velocity.y = (up ? -1 : down ? 1 : 0) * 80
 
@@ -46,9 +46,8 @@ export namespace BackpackerUpdater {
     }
 
     const scale = Entity.getScale(backpacker).copy()
-    if (up || down) scale.x = Math.abs(scale.x)
+    if (up || down || right) scale.x = Math.abs(scale.x)
     if (left) scale.x = -1 * Math.abs(scale.x)
-    if (right) scale.x = Math.abs(scale.x)
 
     Entity.setScale(backpacker, scale)
     Entity.setState(backpacker, nextState)

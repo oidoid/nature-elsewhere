@@ -271,65 +271,47 @@ export namespace Entity {
 
 function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
   // [todo] level bounds checking
-  const left = entity.velocity.x < 0
-  const right = entity.velocity.x > 0
-  const up = entity.velocity.y < 0
-  const down = entity.velocity.y > 0
-  const diagonal = (left || right) && (up || down)
+  const from: Readonly<XY> = entity.bounds.position.copy()
 
-  const {x: originalX, y: originalY} = entity.bounds.position
+  const diagonal = entity.velocity.x && entity.velocity.y
+
   entity.velocityFraction.x += entity.velocity.x * state.time
   entity.velocityFraction.y += entity.velocity.y * state.time
 
   if (diagonal) {
+    // When moving diagonally, synchronize / group integer boundary changes
+    // across directions to minimize pixel changes per frame and avoid jarring.
     const max = Math.max(
       Math.abs(entity.velocityFraction.x),
       Math.abs(entity.velocityFraction.y)
     )
-    entity.velocityFraction.x = max * Math.sign(entity.velocityFraction.x)
-    entity.velocityFraction.y = max * Math.sign(entity.velocityFraction.y)
+    entity.velocityFraction.x = max * Math.sign(entity.velocity.x)
+    entity.velocityFraction.y = max * Math.sign(entity.velocity.y)
   }
 
-  const velocity = new XY(
-    Math.trunc(entity.velocityFraction.x / 10000),
-    Math.trunc(entity.velocityFraction.y / 10000)
+  const translate: Readonly<XY> = XY.trunc(
+    entity.velocityFraction.x / 10_000,
+    entity.velocityFraction.y / 10_000
   )
-  entity.velocityFraction.x -= velocity.x * 10000
-  entity.velocityFraction.y -= velocity.y * 10000
-  const to = new XY(
-    entity.bounds.position.x + velocity.x,
-    entity.bounds.position.y + velocity.y
-  )
+  entity.velocityFraction.x -= translate.x * 10_000
+  entity.velocityFraction.y -= translate.y * 10_000
+
+  const to: Readonly<XY> = entity.bounds.position.add(translate)
   let status = Entity.moveTo(entity, to)
   if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
 
-  const collision = EntityCollider.collidesEntities(
-    entity,
-    Level.activeParentsWithPlayer(state.level)
-  )
-
-  const collisionDirection = {x: !!collision, y: !!collision}
+  const entities = Level.activeParentsWithPlayer(state.level)
+  let collision = EntityCollider.collidesEntities(entity, entities)
   if (diagonal && collision) {
-    status |= Entity.moveTo(entity, new XY(to.x, originalY))
-    collisionDirection.x = !!EntityCollider.collidesEntities(
-      entity,
-      Level.activeParentsWithPlayer(state.level)
-    )
-    if (!collisionDirection.x) to.y = originalY
-
-    if (collisionDirection.x) {
-      status |= Entity.moveTo(entity, new XY(originalX, to.y))
-      collisionDirection.y = !!EntityCollider.collidesEntities(
-        entity,
-        Level.activeParentsWithPlayer(state.level)
-      )
-      if (!collisionDirection.y) to.x = originalX
+    status |= Entity.moveTo(entity, new XY(to.x, from.y))
+    collision = EntityCollider.collidesEntities(entity, entities)
+    if (collision) {
+      status |= Entity.moveTo(entity, new XY(from.x, to.y))
+      collision = EntityCollider.collidesEntities(entity, entities)
     }
   }
-  if (collisionDirection.x) to.x = originalX
-  if (collisionDirection.y) to.y = originalY
 
-  status |= Entity.moveTo(entity, new XY(to.x, to.y))
+  if (collision) status |= Entity.moveTo(entity, new XY(from.x, from.y))
 
   return status
 }
