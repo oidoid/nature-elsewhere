@@ -4,43 +4,43 @@ import {XY} from '../math/XY'
 
 describe('layout()', () =>
   test.each(<readonly [string, number, TextLayout][]>[
-    ['', Number.MAX_VALUE, {positions: [], cursor: {x: 0, y: 0 * lineHeight}}],
+    ['', Number.MAX_VALUE, {positions: [], cursor: new XY(0, 0 * lineHeight)}],
     [
       ' ',
       Number.MAX_VALUE,
-      {positions: [undefined], cursor: {x: 3, y: 0 * lineHeight}}
+      {positions: [undefined], cursor: new XY(3, 0 * lineHeight)}
     ],
     [
       '\n',
       Number.MAX_VALUE,
-      {positions: [undefined], cursor: {x: 0, y: 1 * lineHeight}}
+      {positions: [undefined], cursor: new XY(0, 1 * lineHeight)}
     ],
     [
       'abc def ghi jkl mno',
       Number.MAX_VALUE,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 8, y: 0 * lineHeight},
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(8, 0 * lineHeight),
           undefined,
-          {x: 14, y: 0 * lineHeight},
-          {x: 18, y: 0 * lineHeight},
-          {x: 22, y: 0 * lineHeight},
+          new XY(14, 0 * lineHeight),
+          new XY(18, 0 * lineHeight),
+          new XY(22, 0 * lineHeight),
           undefined,
-          {x: 27, y: 0 * lineHeight},
-          {x: 31, y: 0 * lineHeight},
-          {x: 35, y: 0 * lineHeight},
+          new XY(27, 0 * lineHeight),
+          new XY(31, 0 * lineHeight),
+          new XY(35, 0 * lineHeight),
           undefined,
-          {x: 39, y: 0 * lineHeight},
-          {x: 43, y: 0 * lineHeight},
-          {x: 47, y: 0 * lineHeight},
+          new XY(39, 0 * lineHeight),
+          new XY(43, 0 * lineHeight),
+          new XY(47, 0 * lineHeight),
           undefined,
-          {x: 51, y: 0 * lineHeight},
-          {x: 55, y: 0 * lineHeight},
-          {x: 59, y: 0 * lineHeight}
+          new XY(51, 0 * lineHeight),
+          new XY(55, 0 * lineHeight),
+          new XY(59, 0 * lineHeight)
         ],
-        cursor: {x: 62, y: 0 * lineHeight}
+        cursor: new XY(62, 0 * lineHeight)
       }
     ],
 
@@ -49,27 +49,27 @@ describe('layout()', () =>
       10,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
           undefined,
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight},
-          {x: 8, y: 2 * lineHeight},
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight),
+          new XY(8, 2 * lineHeight),
           undefined,
-          {x: 0, y: 3 * lineHeight},
-          {x: 4, y: 3 * lineHeight},
-          {x: 8, y: 3 * lineHeight},
+          new XY(0, 3 * lineHeight),
+          new XY(4, 3 * lineHeight),
+          new XY(8, 3 * lineHeight),
           undefined,
-          {x: 0, y: 4 * lineHeight},
-          {x: 4, y: 4 * lineHeight},
-          {x: 8, y: 4 * lineHeight},
+          new XY(0, 4 * lineHeight),
+          new XY(4, 4 * lineHeight),
+          new XY(8, 4 * lineHeight),
           undefined,
-          {x: 0, y: 5 * lineHeight},
-          {x: 4, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight}
+          new XY(0, 5 * lineHeight),
+          new XY(4, 5 * lineHeight),
+          new XY(0, 6 * lineHeight)
         ],
-        cursor: {x: 3, y: 6 * lineHeight}
+        cursor: new XY(3, 6 * lineHeight)
       }
     ],
     [
@@ -77,27 +77,27 @@ describe('layout()', () =>
       20,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 8, y: 0 * lineHeight},
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(8, 0 * lineHeight),
           undefined,
-          {x: 0, y: 1 * lineHeight},
-          {x: 4, y: 1 * lineHeight},
-          {x: 8, y: 1 * lineHeight},
+          new XY(0, 1 * lineHeight),
+          new XY(4, 1 * lineHeight),
+          new XY(8, 1 * lineHeight),
           undefined,
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight},
-          {x: 8, y: 2 * lineHeight},
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight),
+          new XY(8, 2 * lineHeight),
           undefined,
-          {x: 0, y: 3 * lineHeight},
-          {x: 4, y: 3 * lineHeight},
-          {x: 8, y: 3 * lineHeight},
+          new XY(0, 3 * lineHeight),
+          new XY(4, 3 * lineHeight),
+          new XY(8, 3 * lineHeight),
           undefined,
-          {x: 0, y: 4 * lineHeight},
-          {x: 4, y: 4 * lineHeight},
-          {x: 8, y: 4 * lineHeight}
+          new XY(0, 4 * lineHeight),
+          new XY(4, 4 * lineHeight),
+          new XY(8, 4 * lineHeight)
         ],
-        cursor: {x: 11, y: 4 * lineHeight}
+        cursor: new XY(11, 4 * lineHeight)
       }
     ],
     [
@@ -105,27 +105,27 @@ describe('layout()', () =>
       21,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 8, y: 0 * lineHeight},
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(8, 0 * lineHeight),
           undefined,
-          {x: 0, y: 1 * lineHeight},
-          {x: 4, y: 1 * lineHeight},
-          {x: 8, y: 1 * lineHeight},
+          new XY(0, 1 * lineHeight),
+          new XY(4, 1 * lineHeight),
+          new XY(8, 1 * lineHeight),
           undefined,
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight},
-          {x: 8, y: 2 * lineHeight},
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight),
+          new XY(8, 2 * lineHeight),
           undefined,
-          {x: 12, y: 2 * lineHeight},
-          {x: 16, y: 2 * lineHeight},
-          {x: 20, y: 2 * lineHeight},
+          new XY(12, 2 * lineHeight),
+          new XY(16, 2 * lineHeight),
+          new XY(20, 2 * lineHeight),
           undefined,
-          {x: 0, y: 3 * lineHeight},
-          {x: 4, y: 3 * lineHeight},
-          {x: 8, y: 3 * lineHeight}
+          new XY(0, 3 * lineHeight),
+          new XY(4, 3 * lineHeight),
+          new XY(8, 3 * lineHeight)
         ],
-        cursor: {x: 11, y: 3 * lineHeight}
+        cursor: new XY(11, 3 * lineHeight)
       }
     ],
 
@@ -134,12 +134,12 @@ describe('layout()', () =>
       4,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
+          new XY(0, 0 * lineHeight),
           undefined,
           undefined,
-          {x: 0, y: 2 * lineHeight}
+          new XY(0, 2 * lineHeight)
         ],
-        cursor: {x: 3, y: 2 * lineHeight}
+        cursor: new XY(3, 2 * lineHeight)
       }
     ],
     [
@@ -147,463 +147,466 @@ describe('layout()', () =>
       4,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
+          new XY(0, 0 * lineHeight),
           undefined,
           undefined,
-          {x: 0, y: 2 * lineHeight},
+          new XY(0, 2 * lineHeight),
           undefined
         ],
-        cursor: {x: 0, y: 3 * lineHeight}
+        cursor: new XY(0, 3 * lineHeight)
       }
     ]
   ])('%#) %p %p => %p', (string, width, expected) =>
     expect(
-      TextLayout.layout(string, width, {x: 1, y: 1 + 0 * lineHeight})
+      TextLayout.layout(string, width, new XY(1, 1 + 0 * lineHeight))
     ).toStrictEqual(expected)
   ))
 
 describe('layoutWord()', () =>
   test.each(<readonly [XY, number, string, number, TextLayout][]>[
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       ' ',
       0,
-      {positions: [], cursor: {x: 0, y: 0 * lineHeight}}
+      {positions: [], cursor: new XY(0, 0 * lineHeight)}
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       '',
       0,
-      {positions: [], cursor: {x: 0, y: 0 * lineHeight}}
+      {positions: [], cursor: new XY(0, 0 * lineHeight)}
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       '\n',
       0,
-      {positions: [], cursor: {x: 0, y: 0 * lineHeight}}
+      {positions: [], cursor: new XY(0, 0 * lineHeight)}
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'a',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}],
-        cursor: {x: 3, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight)],
+        cursor: new XY(3, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       '.',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}],
-        cursor: {x: 1, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight)],
+        cursor: new XY(1, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'a ',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}],
-        cursor: {x: 3, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight)],
+        cursor: new XY(3, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'a\n',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}],
-        cursor: {x: 3, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight)],
+        cursor: new XY(3, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'a a',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}],
-        cursor: {x: 3, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight)],
+        cursor: new XY(3, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'a.',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}, {x: 4, y: 0 * lineHeight}],
-        cursor: {x: 5, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight), new XY(4, 0 * lineHeight)],
+        cursor: new XY(5, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'aa',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}, {x: 4, y: 0 * lineHeight}],
-        cursor: {x: 7, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight), new XY(4, 0 * lineHeight)],
+        cursor: new XY(7, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'aa\n',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}, {x: 4, y: 0 * lineHeight}],
-        cursor: {x: 7, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight), new XY(4, 0 * lineHeight)],
+        cursor: new XY(7, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'aa aa',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}, {x: 4, y: 0 * lineHeight}],
-        cursor: {x: 7, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight), new XY(4, 0 * lineHeight)],
+        cursor: new XY(7, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'g',
       0,
       {
-        positions: [{x: 0, y: 0 * lineHeight}],
-        cursor: {x: 3, y: 0 * lineHeight}
+        positions: [new XY(0, 0 * lineHeight)],
+        cursor: new XY(3, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 8, y: 0 * lineHeight},
-          {x: 12, y: 0 * lineHeight},
-          {x: 16, y: 0 * lineHeight},
-          {x: 20, y: 0 * lineHeight},
-          {x: 23, y: 0 * lineHeight},
-          {x: 27, y: 0 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(8, 0 * lineHeight),
+          new XY(12, 0 * lineHeight),
+          new XY(16, 0 * lineHeight),
+          new XY(20, 0 * lineHeight),
+          new XY(23, 0 * lineHeight),
+          new XY(27, 0 * lineHeight)
         ],
-        cursor: {x: 30, y: 0 * lineHeight}
+        cursor: new XY(30, 0 * lineHeight)
       }
     ],
 
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'abcdefgh',
       1,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 8, y: 0 * lineHeight},
-          {x: 12, y: 0 * lineHeight},
-          {x: 16, y: 0 * lineHeight},
-          {x: 19, y: 0 * lineHeight},
-          {x: 23, y: 0 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(8, 0 * lineHeight),
+          new XY(12, 0 * lineHeight),
+          new XY(16, 0 * lineHeight),
+          new XY(19, 0 * lineHeight),
+          new XY(23, 0 * lineHeight)
         ],
-        cursor: {x: 26, y: 0 * lineHeight}
+        cursor: new XY(26, 0 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       Number.MAX_VALUE,
       'abcdefgh',
       8,
-      {positions: [], cursor: {x: 0, y: 0 * lineHeight}}
+      {positions: [], cursor: new XY(0, 0 * lineHeight)}
     ],
 
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       0,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 7 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(0, 6 * lineHeight),
+          new XY(0, 7 * lineHeight)
         ],
-        cursor: {x: 3, y: 7 * lineHeight}
+        cursor: new XY(3, 7 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       1,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 7 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(0, 6 * lineHeight),
+          new XY(0, 7 * lineHeight)
         ],
-        cursor: {x: 3, y: 7 * lineHeight}
+        cursor: new XY(3, 7 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       3,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 7 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(0, 6 * lineHeight),
+          new XY(0, 7 * lineHeight)
         ],
-        cursor: {x: 3, y: 7 * lineHeight}
+        cursor: new XY(3, 7 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       5,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 7 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(0, 6 * lineHeight),
+          new XY(0, 7 * lineHeight)
         ],
-        cursor: {x: 3, y: 7 * lineHeight}
+        cursor: new XY(3, 7 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       6,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 7 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(0, 6 * lineHeight),
+          new XY(0, 7 * lineHeight)
         ],
-        cursor: {x: 3, y: 7 * lineHeight}
+        cursor: new XY(3, 7 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       7,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 4, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 4, y: 5 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(4, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(4, 5 * lineHeight)
         ],
-        cursor: {x: 7, y: 5 * lineHeight}
+        cursor: new XY(7, 5 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       8,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 4, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 4, y: 3 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(4, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(4, 3 * lineHeight)
         ],
-        cursor: {x: 7, y: 3 * lineHeight}
+        cursor: new XY(7, 3 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       9,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 4, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 4, y: 3 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(4, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(4, 3 * lineHeight)
         ],
-        cursor: {x: 7, y: 3 * lineHeight}
+        cursor: new XY(7, 3 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       10,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 4, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 4, y: 3 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(4, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(4, 3 * lineHeight)
         ],
-        cursor: {x: 7, y: 3 * lineHeight}
+        cursor: new XY(7, 3 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       11,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 4, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight},
-          {x: 7, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(4, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight),
+          new XY(7, 2 * lineHeight),
+          new XY(0, 3 * lineHeight)
         ],
-        cursor: {x: 3, y: 3 * lineHeight}
+        cursor: new XY(3, 3 * lineHeight)
       }
     ],
     [
-      {x: 0, y: 0 * lineHeight},
+      new XY(0, 0 * lineHeight),
       12,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 0 * lineHeight},
-          {x: 4, y: 0 * lineHeight},
-          {x: 8, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 4, y: 1 * lineHeight},
-          {x: 8, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 4, y: 2 * lineHeight}
+          new XY(0, 0 * lineHeight),
+          new XY(4, 0 * lineHeight),
+          new XY(8, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(4, 1 * lineHeight),
+          new XY(8, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(4, 2 * lineHeight)
         ],
-        cursor: {x: 7, y: 2 * lineHeight}
+        cursor: new XY(7, 2 * lineHeight)
       }
     ],
 
     [
-      {x: 1, y: 0 * lineHeight},
+      new XY(1, 0 * lineHeight),
       5,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 1, y: 0 * lineHeight},
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 7 * lineHeight}
+          new XY(1, 0 * lineHeight),
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(0, 6 * lineHeight),
+          new XY(0, 7 * lineHeight)
         ],
-        cursor: {x: 3, y: 7 * lineHeight}
+        cursor: new XY(3, 7 * lineHeight)
       }
     ],
     [
-      {x: 2, y: 0 * lineHeight},
+      new XY(2, 0 * lineHeight),
       5,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 1 * lineHeight},
-          {x: 0, y: 2 * lineHeight},
-          {x: 0, y: 3 * lineHeight},
-          {x: 0, y: 4 * lineHeight},
-          {x: 0, y: 5 * lineHeight},
-          {x: 0, y: 6 * lineHeight},
-          {x: 0, y: 7 * lineHeight},
-          {x: 0, y: 8 * lineHeight}
+          new XY(0, 1 * lineHeight),
+          new XY(0, 2 * lineHeight),
+          new XY(0, 3 * lineHeight),
+          new XY(0, 4 * lineHeight),
+          new XY(0, 5 * lineHeight),
+          new XY(0, 6 * lineHeight),
+          new XY(0, 7 * lineHeight),
+          new XY(0, 8 * lineHeight)
         ],
-        cursor: {x: 3, y: 8 * lineHeight}
+        cursor: new XY(3, 8 * lineHeight)
       }
     ],
 
     [
-      {x: 2, y: 1 + 0 * lineHeight},
+      new XY(2, 1 + 0 * lineHeight),
       5,
       'abcdefgh',
       0,
       {
         positions: [
-          {x: 0, y: 1 + 1 * lineHeight},
-          {x: 0, y: 1 + 2 * lineHeight},
-          {x: 0, y: 1 + 3 * lineHeight},
-          {x: 0, y: 1 + 4 * lineHeight},
-          {x: 0, y: 1 + 5 * lineHeight},
-          {x: 0, y: 1 + 6 * lineHeight},
-          {x: 0, y: 1 + 7 * lineHeight},
-          {x: 0, y: 1 + 8 * lineHeight}
+          new XY(0, 1 + 1 * lineHeight),
+          new XY(0, 1 + 2 * lineHeight),
+          new XY(0, 1 + 3 * lineHeight),
+          new XY(0, 1 + 4 * lineHeight),
+          new XY(0, 1 + 5 * lineHeight),
+          new XY(0, 1 + 6 * lineHeight),
+          new XY(0, 1 + 7 * lineHeight),
+          new XY(0, 1 + 8 * lineHeight)
         ],
-        cursor: {x: 3, y: 1 + 8 * lineHeight}
+        cursor: new XY(3, 1 + 8 * lineHeight)
       }
     ]
   ])('%#) %p %p %p %p => %p', (cursor, width, string, index, expected) =>
     expect(
-      TextLayout.layoutWord(cursor, width, string, index, {
-        x: 1,
-        y: 1 + 0 * lineHeight
-      })
+      TextLayout.layoutWord(
+        cursor,
+        width,
+        string,
+        index,
+        new XY(1, 1 + 0 * lineHeight)
+      )
     ).toStrictEqual(expected)
   ))

@@ -19,8 +19,8 @@ export interface LevelConfig {
   /** The level shown when the current level is completed. For the last level,
       this is undefined. */
   readonly nextLevel?: LevelTypeConfig
-  readonly size: WH
-  readonly minViewport: WH
+  readonly size: {w: number; h: number}
+  readonly minViewport: {w: number; h: number}
   readonly cam?: CameraConfig
   readonly cursor: EntityConfig
   readonly destination?: EntityConfig
@@ -51,8 +51,8 @@ export namespace LevelParser {
         ? LevelTypeParser.parse(config.nextLevel)
         : undefined,
       advance: LevelAdvance.UNCHANGED,
-      size: config.size,
-      minViewport: config.minViewport,
+      size: new WH(config.size.w, config.size.h),
+      minViewport: new WH(config.minViewport.w, config.minViewport.h),
       cam: CameraParser.parse(config.cam),
       cursor: <Cursor>EntityParser.parse(config.cursor, atlas),
       destination: config.destination

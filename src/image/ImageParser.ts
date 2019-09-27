@@ -18,6 +18,7 @@ import {XYParser} from '../math/XYParser'
 import {XY} from '../math/XY'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Layer} from './Layer'
+import {WH} from '../math/WH'
 
 export interface ImageConfig {
   readonly id: AtlasIDConfig
@@ -53,10 +54,10 @@ export namespace ImageParser {
   }
 
   export function parseScale(config: ImageScaleConfig): XY {
-    return {
-      x: config && config.x !== undefined ? config.x : 1,
-      y: config && config.y !== undefined ? config.y : 1
-    }
+    return new XY(
+      config && config.x !== undefined ? config.x : 1,
+      config && config.y !== undefined ? config.y : 1
+    )
   }
 
   export function parseLayerKey(config: LayerKeyConfig): Layer {
@@ -80,5 +81,5 @@ function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
   const position = XYParser.parse(
     config.bounds ? config.bounds.position : undefined
   )
-  return {position, size: {w, h}}
+  return {position, size: new WH(w, h)}
 }

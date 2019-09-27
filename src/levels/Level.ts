@@ -77,12 +77,12 @@ export namespace Level {
     position: Readonly<XY>,
     size: Readonly<WH>
   ): XY {
-    const min = {x: 0, y: 0}
-    const max = {
-      x: Math.max(0, level.size.w - size.w),
-      y: Math.max(0, level.size.h - size.h)
-    }
-    return XY.clamp(position, min, max)
+    const min = new XY(0, 0)
+    const max = new XY(
+      Math.max(0, level.size.w - size.w),
+      Math.max(0, level.size.h - size.h)
+    )
+    return position.clamp(min, max)
   }
 
   export function updateCamera(level: Level): void {

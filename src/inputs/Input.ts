@@ -1,4 +1,4 @@
-import {XY} from '../math/XY'
+import {XY, FloatXY} from '../math/XY'
 import {Viewport} from '../renderer/Viewport'
 import {WH} from '../math/WH'
 import {Rect} from '../math/Rect'
@@ -12,7 +12,7 @@ export interface Input {
   /** The position of the input in window coordinates. Pointer state polling is
       simulated through events so level position must be recalculated through
       the camera lens of each frame. */
-  readonly windowPosition: XY
+  readonly windowPosition: FloatXY
 }
 
 export namespace Input {

@@ -13,6 +13,7 @@ import {Text} from './Text'
 import {MEM_FONT_PREFIX, AtlasID} from '../../../atlas/AtlasID'
 import {EntityConfig} from '../../../entity/EntityParser'
 import {WHConfig} from '../../../math/WHParser'
+import {WH} from '../../../math/WH'
 
 export interface TextConfig extends EntityConfig {
   readonly type: EntityType.UI_TEXT
@@ -33,16 +34,15 @@ export namespace TextParser {
       XYParser.parse(text.textScale),
       {
         position: Entity.imageRect(text).bounds.position,
-        size: {
-          w:
-            text.textMaxSize && text.textMaxSize.w
-              ? text.textMaxSize.w
-              : Limits.maxShort,
-          h:
-            text.textMaxSize && text.textMaxSize.h
-              ? text.textMaxSize.h
-              : Limits.maxShort
-        }
+        size: new WH(
+          text.textMaxSize && text.textMaxSize.w
+            ? text.textMaxSize.w
+            : Limits.maxShort,
+
+          text.textMaxSize && text.textMaxSize.h
+            ? text.textMaxSize.h
+            : Limits.maxShort
+        )
       },
       Entity.imageRect(text).imageID
     )
@@ -83,10 +83,10 @@ export namespace TextParser {
 
       const char = newCharacterImage(
         string.charCodeAt(i),
-        {
-          x: bounds.position.x + position.x,
-          y: bounds.position.y + position.y - y
-        },
+        new XY(
+          bounds.position.x + position.x,
+          bounds.position.y + position.y - y
+        ),
         layer,
         scale,
         imageID,

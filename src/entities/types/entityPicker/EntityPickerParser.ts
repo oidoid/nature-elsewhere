@@ -9,8 +9,9 @@ import {IEntityParser} from '../../RecursiveEntityParser'
 import {Rect} from '../../../math/Rect'
 import {XY} from '../../../math/XY'
 import * as memFont from '../../../text/memFont.json'
+import {WH} from '../../../math/WH'
 
-const entityWindowSize = Object.freeze({w: 32, h: 26})
+const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
   EntityType.IMAGE,
@@ -28,17 +29,16 @@ export namespace EntityPickerParser {
     if (!Entity.assert<EntityPicker>(picker, EntityType.UI_ENTITY_PICKER))
       throw new Error()
     const entityWindowBounds = {
-      position: {
-        x: Math.trunc(picker.bounds.position.x),
-        y: Math.trunc(picker.bounds.position.y) + memFont.lineHeight
-      },
-      size: {...entityWindowSize}
+      position: new XY(
+        Math.trunc(picker.bounds.position.x),
+        Math.trunc(picker.bounds.position.y) + memFont.lineHeight
+      ),
+      size: entityWindowSize.copy()
     }
     for (const type of Object.values(EntityType)) {
       if (typeBlacklist.includes(type)) continue
       const entity = parser({type}, atlas)
-      const center = XY.max(
-        Rect.centerOn(entity.bounds, entityWindowBounds),
+      const center = Rect.centerOn(entity.bounds, entityWindowBounds).max(
         entityWindowBounds.position
       )
       Entity.moveTo(entity, center)

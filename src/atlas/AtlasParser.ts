@@ -28,9 +28,9 @@ export namespace AtlasParser {
     if (pingPong && cels.length > 2)
       duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
 
-    const size = frames[0].sourceSize
+    const {w, h} = frames[0].sourceSize
     const direction = parseAnimationDirection(frameTag)
-    return {size, cels, duration, direction}
+    return {size: new WH(w, h), cels, duration, direction}
   }
 
   function tagFrames(
@@ -63,11 +63,11 @@ export namespace AtlasParser {
 
   export function parsePosition(frame: Aseprite.Frame): XY {
     const padding = parsePadding(frame)
-    return {x: frame.frame.x + padding.w / 2, y: frame.frame.y + padding.h / 2}
+    return new XY(frame.frame.x + padding.w / 2, frame.frame.y + padding.h / 2)
   }
 
   export function parsePadding({frame, sourceSize}: Aseprite.Frame): WH {
-    return {w: frame.w - sourceSize.w, h: frame.h - sourceSize.h}
+    return new WH(frame.w - sourceSize.w, frame.h - sourceSize.h)
   }
 
   export function parseDuration(duration: Aseprite.Duration): number {

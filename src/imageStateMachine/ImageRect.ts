@@ -46,7 +46,7 @@ export namespace ImageRect {
     }
   }
   export function moveTo(rect: ImageRect, to: Readonly<XY>): UpdateStatus {
-    return moveBy(rect, XY.sub(to, rect.bounds.position))
+    return moveBy(rect, to.sub(rect.bounds.position))
   }
 
   export function moveBy(rect: ImageRect, by: Readonly<XY>): UpdateStatus {
@@ -58,9 +58,8 @@ export namespace ImageRect {
   }
 
   export function setScale(rect: ImageRect, scale: Readonly<XY>): UpdateStatus {
-    if (XY.equal(rect.scale, scale)) return UpdateStatus.UNCHANGED
-    for (const image of rect.images)
-      Image.scale(image, XY.div(scale, rect.scale))
+    if (rect.scale.equal(scale)) return UpdateStatus.UNCHANGED
+    for (const image of rect.images) Image.scale(image, scale.div(rect.scale))
     rect.scale.x = scale.x
     rect.scale.y = scale.y
     const union = Rect.unionAll(rect.images.map(image => image.bounds))
@@ -73,8 +72,8 @@ export namespace ImageRect {
     return UpdateStatus.UPDATED
   }
 
-  export function scale(rect: ImageRect, scale: XY): void {
-    ImageRect.setScale(rect, XY.mul(scale, rect.scale))
+  export function scale(rect: ImageRect, scale: Readonly<XY>): void {
+    ImageRect.setScale(rect, scale.mul(rect.scale))
   }
 
   export function elevate(

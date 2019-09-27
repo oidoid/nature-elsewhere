@@ -15,7 +15,7 @@ export namespace TextLayout {
   /** @arg width The allowed layout width in pixels. */
   export function layout(string: string, width: number, scale: XY): TextLayout {
     const positions: Maybe<XY>[] = []
-    let cursor = {x: 0, y: 0}
+    let cursor = new XY(0, 0)
     for (let i = 0; i < string.length; ) {
       let layout
       if (string[i] === '\n') layout = layoutNewline(cursor, scale)
@@ -59,18 +59,15 @@ export namespace TextLayout {
     while (index < string.length && !/\s/.test(string[index])) {
       const span = tracking(string[index], scale, string[index + 1])
       if (x && x + span > width) ({x, y} = nextLine(y, scale))
-      positions.push({x, y})
+      positions.push(new XY(x, y))
       x += span
       ++index
     }
-    return {positions, cursor: {x, y}}
+    return {positions, cursor: new XY(x, y)}
   }
 
   export function nextLine(y: number, scale: XY): XY {
-    return {
-      x: 0,
-      y: y + scale.y * font.lineHeight
-    }
+    return new XY(0, y + scale.y * font.lineHeight)
   }
 }
 
@@ -93,7 +90,7 @@ function layoutSpace(
   scale: XY
 ): TextLayout {
   const cursor =
-    x && x + span >= width ? TextLayout.nextLine(y, scale) : {x: x + span, y}
+    x && x + span >= width ? TextLayout.nextLine(y, scale) : new XY(x + span, y)
   return {positions: [undefined], cursor}
 }
 

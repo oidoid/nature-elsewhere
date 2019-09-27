@@ -1,7 +1,7 @@
 import {AtlasID} from '../atlas/AtlasID'
 import {Animator} from '../animator/Animator'
 import {Atlas} from '../atlas/Atlas'
-import {DecamillipixelIntXY, IntXY, XY} from '../math/XY'
+import {DecamillipixelIntXY, XY} from '../math/XY'
 import {Layer} from './Layer'
 import {Rect} from '../math/Rect'
 import {AlphaComposition} from './AlphaComposition'
@@ -28,7 +28,7 @@ export interface Image {
   layer: Layer
   readonly animator: Animator
   /** See bounds. */
-  readonly scale: IntXY
+  readonly scale: XY
   /** Specifies the initial marquee offset. */
   readonly wrap: DecamillipixelIntXY
   /** Specifies the additional marquee offset added by the shader according to
@@ -39,13 +39,13 @@ export interface Image {
 
 export namespace Image {
   /** Translate by. */
-  export function moveBy(image: Image, by: XY): void {
+  export function moveBy(image: Image, by: Readonly<XY>): void {
     image.bounds.position.x += by.x
     image.bounds.position.y += by.y
   }
 
   /** Set absolute scale. */
-  export function setScale(image: Image, to: XY): void {
+  export function setScale(image: Image, to: Readonly<XY>): void {
     image.bounds.size.w *= Math.abs(to.x / image.scale.x)
     image.bounds.size.h *= Math.abs(to.y / image.scale.y)
     image.scale.x = to.x
@@ -53,8 +53,8 @@ export namespace Image {
   }
 
   /** Multiply by scale. */
-  export function scale(image: Image, by: XY): void {
-    by = {x: by.x * image.scale.x, y: by.y * image.scale.y}
+  export function scale(image: Image, by: Readonly<XY>): void {
+    by = new XY(by.x * image.scale.x, by.y * image.scale.y)
     Image.setScale(image, by)
   }
 

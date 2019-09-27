@@ -1,61 +1,81 @@
 import {NumberUtil} from './NumberUtil'
+import {Build} from '../utils/Build'
 
-export interface XY {
+export interface FloatXY {
   x: number
   y: number
 }
 
-/** An integral XY. */
-export type IntXY = XY
-/** An integral XY in 1/10000 of a pixel. */
+/** Integral XY in 1/10000 of a pixel. */
 export type DecamillipixelIntXY = XY
 export type DecamillipixelXY = XY
 
-export namespace XY {
-  export function add({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
-    return {x: x + rhs.x, y: y + rhs.y}
+/** Integral wrapper of x and y-axis components. This class exists to make
+    rounding errors easier to debug by encapsulating mutation in setters with
+    integer state checks. */
+export class XY {
+  constructor(private _x: number, private _y: number) {}
+
+  get x(): number {
+    return this._x
   }
 
-  export function sub({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
-    return {x: x - rhs.x, y: y - rhs.y}
+  set x(x: number) {
+    if (Build.dev && !Number.isInteger(x))
+      throw new Error(`${x} fractional x is forbidden.`)
+    this._x = x
   }
 
-  export function mul({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
-    return {x: x * rhs.x, y: y * rhs.y}
+  get y(): number {
+    return this._y
   }
 
-  export function div({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
-    return {x: x / rhs.x, y: y / rhs.y}
+  set y(y: number) {
+    if (Build.dev && !Number.isInteger(y))
+      throw new Error(`${y} fractional y is forbidden.`)
+    this._y = y
   }
 
-  export function equal({x, y}: Readonly<XY>, rhs: Readonly<XY>): boolean {
-    return x === rhs.x && y === rhs.y
+  copy(): XY {
+    return new XY(this.x, this.y)
   }
 
-  export function min({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
-    return {x: Math.min(x, rhs.x), y: Math.min(y, rhs.y)}
+  add({x, y}: Readonly<XY>): XY {
+    return new XY(this.x + x, this.y + y)
   }
 
-  export function max({x, y}: Readonly<XY>, rhs: Readonly<XY>): XY {
-    return {x: Math.max(x, rhs.x), y: Math.max(y, rhs.y)}
+  sub({x, y}: Readonly<XY>): XY {
+    return new XY(this.x - x, this.y - y)
   }
 
-  export function trunc({x, y}: Readonly<XY>): XY {
-    return {x: Math.trunc(x), y: Math.trunc(y)}
+  mul({x, y}: Readonly<XY>): XY {
+    return new XY(this.x * x, this.y * y)
   }
 
-  export function clamp(
-    xy: Readonly<XY>,
-    min: Readonly<XY>,
-    max: Readonly<XY>
-  ): XY {
-    const x = NumberUtil.clamp(xy.x, min.x, max.x)
-    const y = NumberUtil.clamp(xy.y, min.y, max.y)
-    return {x, y}
+  div({x, y}: Readonly<XY>): XY {
+    return new XY(this.x / x, this.y / y)
   }
 
-  export function magnitude(lhs: Readonly<XY>, rhs: Readonly<XY>): number {
-    const {x, y} = XY.sub(lhs, rhs)
+  equal({x, y}: Readonly<XY>): boolean {
+    return this.x === x && this.y === y
+  }
+
+  min({x, y}: Readonly<XY>): XY {
+    return new XY(Math.min(this.x, x), Math.min(this.y, y))
+  }
+
+  max({x, y}: Readonly<XY>): XY {
+    return new XY(Math.max(this.x, x), Math.max(this.y, y))
+  }
+
+  clamp(min: Readonly<XY>, max: Readonly<XY>): XY {
+    const x = NumberUtil.clamp(this.x, min.x, max.x)
+    const y = NumberUtil.clamp(this.y, min.y, max.y)
+    return new XY(x, y)
+  }
+
+  magnitude(xy: Readonly<XY>): number {
+    const {x, y} = this.sub(xy)
     return Math.sqrt(x * x + y * y)
   }
 }

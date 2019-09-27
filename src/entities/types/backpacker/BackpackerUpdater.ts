@@ -22,8 +22,8 @@ export namespace BackpackerUpdater {
     const right = destination.x > Math.trunc(x)
     const up = destination.y < Math.trunc(y)
     const down = destination.y > Math.trunc(y)
-    backpacker.velocity.x = (left ? -1 : right ? 1 : 0) * 90
-    backpacker.velocity.y = (up ? -1 : down ? 1 : 0) * 90
+    backpacker.velocity.x = (left ? -1 : right ? 1 : 0) * 80
+    backpacker.velocity.y = (up ? -1 : down ? 1 : 0) * 80
 
     const idle = !backpacker.velocity.x && !backpacker.velocity.y
 
@@ -45,7 +45,7 @@ export namespace BackpackerUpdater {
       if (left || right) nextState = Backpacker.State.WALK_RIGHT
     }
 
-    const scale = {...Entity.getScale(backpacker)}
+    const scale = Entity.getScale(backpacker).copy()
     if (up || down) scale.x = Math.abs(scale.x)
     if (left) scale.x = -1 * Math.abs(scale.x)
     if (right) scale.x = Math.abs(scale.x)
@@ -66,12 +66,11 @@ function calculateDestination(
     state.level.destination.machine.state === Entity.State.HIDDEN
   )
     return
-  const {x, y} = XY.add(
-    XY.trunc(state.level.destination.bounds.position),
+  const {x, y} = state.level.destination.bounds.position.add(
     Entity.imageRect(backpacker).origin
   )
-  return {
-    x: NumberUtil.clamp(x, 0, state.level.size.w - backpacker.bounds.size.w),
-    y: NumberUtil.clamp(y, 0, state.level.size.h - backpacker.bounds.size.h)
-  }
+  return new XY(
+    NumberUtil.clamp(x, 0, state.level.size.w - backpacker.bounds.size.w),
+    NumberUtil.clamp(y, 0, state.level.size.h - backpacker.bounds.size.h)
+  )
 }

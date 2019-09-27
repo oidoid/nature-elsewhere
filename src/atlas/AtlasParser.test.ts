@@ -1,5 +1,7 @@
 import {Aseprite} from './Aseprite'
 import {AtlasParser} from './AtlasParser'
+import {XY} from '../math/XY'
+import {WH} from '../math/WH'
 
 describe('parse()', () => {
   test('Parses Animations.', () => {
@@ -47,26 +49,26 @@ describe('parse()', () => {
       AtlasParser.parse({meta: <Aseprite.Meta>(<unknown>{frameTags}), frames})
     ).toStrictEqual({
       sceneryCloud: {
-        size: {w: 16, h: 16},
-        cels: [{position: {x: 221, y: 19}, duration: 1}],
+        size: new WH(16, 16),
+        cels: [{position: new XY(221, 19), duration: 1}],
         duration: 1,
         direction: 'forward'
       },
       'palette-red': {
-        size: {w: 16, h: 16},
-        cels: [{position: {x: 91, y: 55}, duration: Number.POSITIVE_INFINITY}],
+        size: new WH(16, 16),
+        cels: [{position: new XY(91, 55), duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
       sceneryConifer: {
-        size: {w: 16, h: 16},
-        cels: [{position: {x: 73, y: 55}, duration: Number.POSITIVE_INFINITY}],
+        size: new WH(16, 16),
+        cels: [{position: new XY(73, 55), duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       },
       'sceneryConifer-shadow': {
-        size: {w: 16, h: 16},
-        cels: [{position: {x: 55, y: 55}, duration: Number.POSITIVE_INFINITY}],
+        size: new WH(16, 16),
+        cels: [{position: new XY(55, 55), duration: Number.POSITIVE_INFINITY}],
         duration: Number.POSITIVE_INFINITY,
         direction: 'forward'
       }
@@ -109,8 +111,8 @@ describe('parseAnimation()', () => {
       }
     }
     expect(AtlasParser.parseAnimation(frameTag, frames)).toStrictEqual({
-      size: {w: 16, h: 16},
-      cels: [{position: {x: 185, y: 37}, duration: Number.POSITIVE_INFINITY}],
+      size: new WH(16, 16),
+      cels: [{position: new XY(185, 37), duration: Number.POSITIVE_INFINITY}],
       duration: Number.POSITIVE_INFINITY,
       direction: 'forward'
     })
@@ -139,7 +141,7 @@ describe('parseCel()', () => {
       duration: 65535
     }
     expect(AtlasParser.parseCel(frame)).toStrictEqual({
-      position: {x: 131, y: 19},
+      position: new XY(131, 19),
       duration: Number.POSITIVE_INFINITY
     })
   })
@@ -155,7 +157,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AtlasParser.parsePosition(frame)).toStrictEqual({x: 1, y: 2})
+    expect(AtlasParser.parsePosition(frame)).toStrictEqual(new XY(1, 2))
   })
 
   test('Parses texture mapping with padding.', () => {
@@ -167,7 +169,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AtlasParser.parsePosition(frame)).toStrictEqual({x: 2, y: 3})
+    expect(AtlasParser.parsePosition(frame)).toStrictEqual(new XY(2, 3))
   })
 })
 
@@ -181,7 +183,7 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AtlasParser.parsePadding(frame)).toStrictEqual({w: 0, h: 0})
+    expect(AtlasParser.parsePadding(frame)).toStrictEqual(new WH(0, 0))
   })
 
   test('Parses nonzero padding.', () => {
@@ -193,7 +195,7 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AtlasParser.parsePadding(frame)).toStrictEqual({w: 1, h: 1})
+    expect(AtlasParser.parsePadding(frame)).toStrictEqual(new WH(1, 1))
   })
 
   test('Parses mixed padding.', () => {
@@ -205,7 +207,7 @@ describe('parsePadding()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(AtlasParser.parsePadding(frame)).toStrictEqual({w: 1, h: 2})
+    expect(AtlasParser.parsePadding(frame)).toStrictEqual(new WH(1, 2))
   })
 })
 

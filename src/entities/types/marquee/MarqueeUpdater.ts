@@ -53,10 +53,10 @@ export namespace MarqueeUpdater {
       const sandboxEntity = cursorSandboxCollision.rhs.descendant // this won't work correctly for sub-entities
       marquee.selection = sandboxEntity.spawnID
 
-      const destination = {
-        x: sandboxEntity.bounds.position.x - 1,
-        y: sandboxEntity.bounds.position.y - 1
-      }
+      const destination = new XY(
+        sandboxEntity.bounds.position.x - 1,
+        sandboxEntity.bounds.position.y - 1
+      )
       status |= Entity.moveTo(marquee, destination)
       doTheStuffAndThings(marquee, destination, sandboxEntity)
     } else if (!panelCollision) {

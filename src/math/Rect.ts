@@ -10,21 +10,21 @@ export interface Rect {
 
 export namespace Rect {
   export function trunc(rect: Rect): Rect {
-    return {position: XY.trunc(rect.position), size: WH.trunc(rect.size)}
+    return {position: rect.position.copy(), size: rect.size.copy()}
   }
 
   export function add(lhs: Rect, rhs: Rect): Rect {
-    const position = XY.add(lhs.position, rhs.position)
-    const size = WH.add(lhs.size, rhs.size)
+    const position = lhs.position.add(rhs.position)
+    const size = lhs.size.add(rhs.size)
     return {position, size}
   }
 
-  export function moveAllBy(rects: readonly Rect[], by: XY): void {
+  export function moveAllBy(rects: readonly Rect[], by: Readonly<XY>): void {
     if (!by.x && !by.y) return
     for (const rect of rects) moveBy(rect, by)
   }
 
-  export function moveBy(rect: Rect, by: XY): void {
+  export function moveBy(rect: Rect, by: Readonly<XY>): void {
     rect.position.x += by.x
     rect.position.y += by.y
   }
@@ -55,14 +55,14 @@ export namespace Rect {
               overlapping. */
   export function intersection(lhs: Rect, rhs: Rect): Rect {
     // The bottom-rightmost coordinates is the upper-left of the intersection.
-    const upperLeft = XY.max(lhs.position, rhs.position)
+    const upperLeft = lhs.position.max(rhs.position)
     const w =
       Math.min(lhs.position.x + lhs.size.w, rhs.position.x + rhs.size.w) -
       upperLeft.x
     const h =
       Math.min(lhs.position.y + lhs.size.h, rhs.position.y + rhs.size.h) -
       upperLeft.y
-    return {position: upperLeft, size: {w, h}}
+    return {position: upperLeft, size: new WH(w, h)}
   }
 
   export function unionAll(rects: readonly Rect[]): Maybe<Rect> {
@@ -76,12 +76,12 @@ export namespace Rect {
   }
 
   export function union(lhs: Rect, rhs: Rect): Rect {
-    const {x, y} = XY.min(lhs.position, rhs.position)
+    const {x, y} = lhs.position.min(rhs.position)
     const w =
       Math.max(lhs.position.x + lhs.size.w, rhs.position.x + rhs.size.w) - x
     const h =
       Math.max(lhs.position.y + lhs.size.h, rhs.position.y + rhs.size.h) - y
-    return {position: {x, y}, size: {w, h}}
+    return {position: new XY(x, y), size: new WH(w, h)}
   }
 
   export function centerOn(rect: Rect, on: Rect): XY {
@@ -93,6 +93,6 @@ export namespace Rect {
       Math.trunc(on.position.y) +
       Math.trunc(on.size.h / 2) -
       Math.trunc(rect.size.h / 2)
-    return {x, y}
+    return new XY(x, y)
   }
 }

@@ -1,18 +1,38 @@
-export interface WH {
-  w: number
-  h: number
-}
+import {Build} from '../utils/Build'
 
-export namespace WH {
-  export function trunc({w, h}: Readonly<WH>): WH {
-    return {w: Math.trunc(w), h: Math.trunc(h)}
+/** Integral wrapper for width and height (size / area). See XY. */
+export class WH {
+  constructor(private _w: number, private _h: number) {}
+
+  get w(): number {
+    return this._w
   }
 
-  export function add({w, h}: Readonly<WH>, rhs: Readonly<WH>): WH {
-    return {w: w + rhs.w, h: h + rhs.h}
+  set w(w: number) {
+    if (Build.dev && !Number.isInteger(w))
+      throw new Error(`${w} fractional w is forbidden.`)
+    this._w = w
   }
 
-  export function equal(lhs: Readonly<WH>, rhs: Readonly<WH>): boolean {
-    return lhs.w === rhs.w && lhs.h === rhs.h
+  get h(): number {
+    return this._h
+  }
+
+  set h(h: number) {
+    if (Build.dev && !Number.isInteger(h))
+      throw new Error(`${h} fractional h is forbidden.`)
+    this._h = h
+  }
+
+  copy(): WH {
+    return new WH(this.w, this.h)
+  }
+
+  add({w, h}: Readonly<WH>): WH {
+    return new WH(this.w + w, this.h + h)
+  }
+
+  equal({w, h}: Readonly<WH>): boolean {
+    return this.w === w && this.h === h
   }
 }

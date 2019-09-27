@@ -3,6 +3,8 @@ import {ImageRectParser, ImageRectConfig} from './ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
 import {Entity} from '../entity/Entity'
 import {EntityParser, EntityStateConfig} from '../entity/EntityParser'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 export type ImageStateMapConfig = Maybe<
   Readonly<Record<Exclude<EntityStateConfig, undefined>, ImageRectConfig>>
@@ -15,11 +17,11 @@ export namespace ImageStateMapParser {
   ): ImageStateMap {
     const map: Writable<ImageStateMap> = {
       [Entity.State.HIDDEN]: {
-        origin: {x: 0, y: 0},
-        bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
+        origin: new XY(0, 0),
+        bounds: {position: new XY(0, 0), size: new WH(0, 0)},
         // Always use non-zero scaling so that Entity can determine relative
         // scaling of collision bodies.
-        scale: {x: 1, y: 1},
+        scale: new XY(1, 1),
         images: []
       }
     }

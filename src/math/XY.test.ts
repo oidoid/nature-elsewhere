@@ -2,21 +2,21 @@ import {XY} from './XY'
 
 describe('max()', () => {
   test.each([
-    [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}],
+    [new XY(0, 0), new XY(0, 0), new XY(0, 0)],
 
-    [{x: 1, y: 0}, {x: 0, y: 0}, {x: 1, y: 0}],
-    [{x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 0}],
-    [{x: 0, y: 1}, {x: 0, y: 0}, {x: 0, y: 1}],
-    [{x: 0, y: 0}, {x: 0, y: 1}, {x: 0, y: 1}],
+    [new XY(1, 0), new XY(0, 0), new XY(1, 0)],
+    [new XY(0, 0), new XY(1, 0), new XY(1, 0)],
+    [new XY(0, 1), new XY(0, 0), new XY(0, 1)],
+    [new XY(0, 0), new XY(0, 1), new XY(0, 1)],
 
-    [{x: -1, y: -2}, {x: -3, y: -4}, {x: -1, y: -2}],
-    [{x: -1, y: -4}, {x: -3, y: -2}, {x: -1, y: -2}],
-    [{x: -3, y: -2}, {x: -1, y: -4}, {x: -1, y: -2}],
+    [new XY(-1, -2), new XY(-3, -4), new XY(-1, -2)],
+    [new XY(-1, -4), new XY(-3, -2), new XY(-1, -2)],
+    [new XY(-3, -2), new XY(-1, -4), new XY(-1, -2)],
 
-    [{x: 1, y: 2}, {x: 3, y: 4}, {x: 3, y: 4}],
-    [{x: 1, y: 4}, {x: 3, y: 2}, {x: 3, y: 4}],
-    [{x: 3, y: 2}, {x: 1, y: 4}, {x: 3, y: 4}]
+    [new XY(1, 2), new XY(3, 4), new XY(3, 4)],
+    [new XY(1, 4), new XY(3, 2), new XY(3, 4)],
+    [new XY(3, 2), new XY(1, 4), new XY(3, 4)]
   ])('%#) (%p, %p) => %p', (lhs, rhs, expected) =>
-    expect(XY.max(lhs, rhs)).toStrictEqual(expected)
+    expect(lhs.max(rhs)).toStrictEqual(expected)
   )
 })

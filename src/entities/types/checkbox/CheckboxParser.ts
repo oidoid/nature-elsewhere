@@ -10,6 +10,7 @@ import {AtlasID} from '../../../atlas/AtlasID'
 import {IEntityParser} from '../../RecursiveEntityParser'
 import {Layer} from '../../../image/Layer'
 import {TextConfig} from '../text/TextParser'
+import {XY} from '../../../math/XY'
 
 export namespace CheckboxParser {
   export function parse(
@@ -55,15 +56,15 @@ export namespace CheckboxParser {
 function setBackground(checkbox: Checkbox, layer: Layer, atlas: Atlas): void {
   const text = checkbox.children[0]
   for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
-    const size = {w: text.bounds.size.w, h: text.bounds.size.h}
+    const size = new WH(text.bounds.size.w, text.bounds.size.h)
     checkbox.machine.map[state].images.length = 0
     const images = newBackgroundImages(state, layer, atlas, size)
     for (const image of images)
       ImageRect.add(checkbox.machine.map[state], image)
-    ImageRect.moveTo(checkbox.machine.map[state], {
-      x: text.bounds.position.x - 1,
-      y: checkbox.bounds.position.y
-    })
+    ImageRect.moveTo(
+      checkbox.machine.map[state],
+      new XY(text.bounds.position.x - 1, checkbox.bounds.position.y)
+    )
   }
 }
 

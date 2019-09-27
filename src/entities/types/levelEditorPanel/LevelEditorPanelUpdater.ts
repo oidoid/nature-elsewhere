@@ -15,6 +15,7 @@ import {Layer} from '../../../image/Layer'
 import {Marquee} from '../marquee/Marquee'
 import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../levels/Level'
+import {XY} from '../../../math/XY'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -106,13 +107,13 @@ export namespace LevelEditorPanelUpdater {
         panel.incrementButton.clicked ||
         panel.incrementButton.longClicked
       ) {
-        const position = {
-          x: checkboxNumber(panel.xCheckbox),
-          y: checkboxNumber(panel.yCheckbox)
-        }
+        const position = new XY(
+          checkboxNumber(panel.xCheckbox),
+          checkboxNumber(panel.yCheckbox)
+        )
         Entity.moveTo(selection, position)
         Entity.invalidateBounds(sandbox)
-        Entity.moveTo(marquee, {x: position.x - 1, y: position.y - 1})
+        Entity.moveTo(marquee, new XY(position.x - 1, position.y - 1))
       } else {
         updateNumberCheckbox(
           panel.xCheckbox,

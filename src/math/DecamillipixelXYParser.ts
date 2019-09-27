@@ -5,9 +5,9 @@ export type DecamillipixelIntXYConfig = Maybe<Partial<XY>>
 
 export namespace DecamillipixelIntXYParser {
   export function parse(config: DecamillipixelIntXYConfig): XY {
-    return {
-      x: config && config.x !== undefined ? IntParser.parse(config.x) : 0,
-      y: config && config.y !== undefined ? IntParser.parse(config.y) : 0
-    }
+    return new XY(
+      config && config.x !== undefined ? IntParser.parse(config.x) : 0,
+      config && config.y !== undefined ? IntParser.parse(config.y) : 0
+    )
   }
 }

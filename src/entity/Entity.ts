@@ -12,7 +12,7 @@ import {UpdaterMap} from '../entities/updaters/UpdaterMap'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
-import {XY, DecamillipixelXY} from '../math/XY'
+import {XY, DecamillipixelXY, FloatXY} from '../math/XY'
 import {EntityCollider} from '../collision/EntityCollider'
 import {Level} from '../levels/Level'
 
@@ -32,6 +32,7 @@ export interface Entity {
       if the entity is on screen. All of these states must be kept in sync. */
   readonly bounds: Rect
   readonly velocity: DecamillipixelXY
+  readonly velocityFraction: FloatXY
   readonly machine: ImageStateMachine
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
@@ -78,7 +79,7 @@ export namespace Entity {
   }
 
   export function moveTo(entity: Entity, to: Readonly<XY>): UpdateStatus {
-    return moveBy(entity, XY.sub(to, entity.bounds.position))
+    return moveBy(entity, to.sub(entity.bounds.position))
   }
 
   /** Recursively move the entity, its images, its collision bodies, and all of
@@ -101,7 +102,7 @@ export namespace Entity {
   export function setScale(entity: Entity, scale: Readonly<XY>): UpdateStatus {
     const collisionScale =
       getScale(entity).x && getScale(entity).y
-        ? XY.div(scale, getScale(entity))
+        ? scale.div(getScale(entity))
         : undefined
     const status = ImageRect.setScale(imageRect(entity), scale)
     if (collisionScale && status & UpdateStatus.UPDATED) {
@@ -241,7 +242,7 @@ export namespace Entity {
         ? 90
         : Math.sign(90) * Math.sqrt(90 * 90 + 90 * 90)
       : 0
-    return {x, y}
+    return new XY(x, y)
   }
 
   /** Raise or lower an entity's images and its descendants' images for all
@@ -277,9 +278,29 @@ function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
   const diagonal = (left || right) && (up || down)
 
   const {x: originalX, y: originalY} = entity.bounds.position
-  let x = entity.bounds.position.x + (entity.velocity.x * state.time) / 10000
-  let y = entity.bounds.position.y + (entity.velocity.y * state.time) / 10000
-  let status = Entity.moveTo(entity, {x, y})
+  entity.velocityFraction.x += entity.velocity.x * state.time
+  entity.velocityFraction.y += entity.velocity.y * state.time
+
+  if (diagonal) {
+    const max = Math.max(
+      Math.abs(entity.velocityFraction.x),
+      Math.abs(entity.velocityFraction.y)
+    )
+    entity.velocityFraction.x = max * Math.sign(entity.velocityFraction.x)
+    entity.velocityFraction.y = max * Math.sign(entity.velocityFraction.y)
+  }
+
+  const velocity = new XY(
+    Math.trunc(entity.velocityFraction.x / 10000),
+    Math.trunc(entity.velocityFraction.y / 10000)
+  )
+  entity.velocityFraction.x -= velocity.x * 10000
+  entity.velocityFraction.y -= velocity.y * 10000
+  const to = new XY(
+    entity.bounds.position.x + velocity.x,
+    entity.bounds.position.y + velocity.y
+  )
+  let status = Entity.moveTo(entity, to)
   if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
 
   const collision = EntityCollider.collidesEntities(
@@ -289,33 +310,26 @@ function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
 
   const collisionDirection = {x: !!collision, y: !!collision}
   if (diagonal && collision) {
-    status |= Entity.moveTo(entity, {x, y: originalY})
+    status |= Entity.moveTo(entity, new XY(to.x, originalY))
     collisionDirection.x = !!EntityCollider.collidesEntities(
       entity,
       Level.activeParentsWithPlayer(state.level)
     )
-    if (!collisionDirection.x) y = originalY
+    if (!collisionDirection.x) to.y = originalY
 
     if (collisionDirection.x) {
-      status |= Entity.moveTo(entity, {x: originalX, y})
+      status |= Entity.moveTo(entity, new XY(originalX, to.y))
       collisionDirection.y = !!EntityCollider.collidesEntities(
         entity,
         Level.activeParentsWithPlayer(state.level)
       )
-      if (!collisionDirection.y) x = originalX
+      if (!collisionDirection.y) to.x = originalX
     }
   }
-  if (collisionDirection.x) x = originalX
-  if (collisionDirection.y) y = originalY
+  if (collisionDirection.x) to.x = originalX
+  if (collisionDirection.y) to.y = originalY
 
-  if (diagonal && !collisionDirection.x && !collisionDirection.y) {
-    // Synchronize x and y pixel diagonal movement.
-    if ((left && up) || (right && down)) y = Math.trunc(y) + (x % 1)
-    // One direction is negative, the other is positive. Offset by 1 - speed
-    // to synchronize.
-    if ((left && down) || (right && up)) y = Math.trunc(y) + (1 - (x % 1))
-  }
-  status |= Entity.moveTo(entity, {x, y})
+  status |= Entity.moveTo(entity, new XY(to.x, to.y))
 
   return status
 }

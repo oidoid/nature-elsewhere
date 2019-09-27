@@ -70,7 +70,9 @@ import {
 } from '../entities/updaters/updaterType/UpdaterTypeParser'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {XYParser, XYConfig} from '../math/XYParser'
-import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser.js'
+import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 
@@ -129,8 +131,9 @@ export namespace EntityParser {
       spawnID: Symbol(),
       id: parseID(config.id),
       type: type,
-      bounds: {position: {x: 0, y: 0}, size: {w: 0, h: 0}},
+      bounds: {position: new XY(0, 0), size: new WH(0, 0)},
       velocity: XYParser.parse(config.velocity),
+      velocityFraction: {x: 0, y: 0},
       machine,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
       updaters: UpdaterTypeParser.parseAll(config.updaters),

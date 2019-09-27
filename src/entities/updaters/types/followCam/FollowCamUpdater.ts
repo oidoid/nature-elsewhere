@@ -23,7 +23,7 @@ export namespace FollowCamUpdater {
       entity.positionRelativeToCam
     )
 
-    if (XY.equal(entity.bounds.position, to)) return UpdateStatus.UNCHANGED
+    if (entity.bounds.position.equal(to)) return UpdateStatus.UNCHANGED
 
     return Entity.moveTo(entity, to)
   }
@@ -36,10 +36,10 @@ function orientationToXY(
   margin: WH,
   orientation: FollowCamOrientation
 ): XY {
-  return {
-    x: orientationToX(entity, cam, margin, orientation),
-    y: orientationToY(entity, cam, margin, orientation)
-  }
+  return new XY(
+    orientationToX(entity, cam, margin, orientation),
+    orientationToY(entity, cam, margin, orientation)
+  )
 }
 
 function orientationToX(
