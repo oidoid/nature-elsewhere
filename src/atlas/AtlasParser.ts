@@ -6,12 +6,14 @@ import {WH} from '../math/WH'
 
 export namespace AtlasParser {
   export function parse({meta, frames}: Aseprite.File): Atlas {
-    return meta.frameTags.reduce(
-      (sum: Atlas, frameTag) => ({
-        ...sum,
-        [AtlasIDParser.parse(frameTag.name)]: parseAnimation(frameTag, frames)
-      }),
-      <Atlas>{}
+    return Object.freeze(
+      meta.frameTags.reduce(
+        (sum: Atlas, frameTag) => ({
+          ...sum,
+          [AtlasIDParser.parse(frameTag.name)]: parseAnimation(frameTag, frames)
+        }),
+        <Atlas>{}
+      )
     )
   }
 
@@ -30,7 +32,12 @@ export namespace AtlasParser {
 
     const {w, h} = frames[0].sourceSize
     const direction = parseAnimationDirection(frameTag)
-    return {size: new WH(w, h), cels, duration, direction}
+    return {
+      size: Object.freeze(new WH(w, h)),
+      cels: Object.freeze(cels),
+      duration,
+      direction
+    }
   }
 
   function tagFrames(
@@ -58,16 +65,21 @@ export namespace AtlasParser {
 
   export function parseCel(frame: Aseprite.Frame): Atlas.Cel {
     const position = parsePosition(frame)
-    return {position, duration: parseDuration(frame.duration)}
+    return Object.freeze({position, duration: parseDuration(frame.duration)})
   }
 
-  export function parsePosition(frame: Aseprite.Frame): XY {
+  export function parsePosition(frame: Aseprite.Frame): Readonly<XY> {
     const padding = parsePadding(frame)
-    return new XY(frame.frame.x + padding.w / 2, frame.frame.y + padding.h / 2)
+    return Object.freeze(
+      new XY(frame.frame.x + padding.w / 2, frame.frame.y + padding.h / 2)
+    )
   }
 
-  export function parsePadding({frame, sourceSize}: Aseprite.Frame): WH {
-    return new WH(frame.w - sourceSize.w, frame.h - sourceSize.h)
+  export function parsePadding({
+    frame,
+    sourceSize
+  }: Aseprite.Frame): Readonly<WH> {
+    return Object.freeze(new WH(frame.w - sourceSize.w, frame.h - sourceSize.h))
   }
 
   export function parseDuration(duration: Aseprite.Duration): number {

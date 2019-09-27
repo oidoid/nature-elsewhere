@@ -1,7 +1,19 @@
 import {CollisionPredicate} from './CollisionPredicate'
-import {EntityCollision, ParentDescendant} from './EntityCollision'
 import {Entity} from '../entity/Entity'
 import {Rect} from '../math/Rect'
+
+export interface EntityCollision {
+  readonly lhs: CollisionParty
+  readonly rhs: CollisionParty
+}
+
+export interface CollisionParty {
+  /** One of the two entities involved in the collision. */
+  readonly party: Entity
+  /** The topmost parent the collision was detected through. The parent is never
+      the party. */
+  readonly parent?: Entity
+}
 
 export namespace EntityCollider {
   export function collidesEntities(
@@ -42,10 +54,10 @@ export namespace EntityCollider {
       if (collision)
         return {
           lhs: {
-            parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
-            descendant: collision.descendant
+            parent: Entity.equal(lhs, collision.party) ? undefined : lhs,
+            party: collision.party
           },
-          rhs: {descendant: rhs}
+          rhs: {party: rhs}
         }
       // Otherwise, no collision has occurred.
       return
@@ -62,10 +74,10 @@ export namespace EntityCollider {
         if (collision)
           return {
             lhs: {
-              parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
-              descendant: collision.descendant
+              parent: Entity.equal(lhs, collision.party) ? undefined : lhs,
+              party: collision.party
             },
-            rhs: {descendant: rhs}
+            rhs: {party: rhs}
           }
       }
       return
@@ -80,10 +92,10 @@ export namespace EntityCollider {
         if (collision)
           return {
             lhs: {
-              parent: Entity.equal(lhs, collision.descendant) ? undefined : lhs,
-              descendant: collision.descendant
+              parent: Entity.equal(lhs, collision.party) ? undefined : lhs,
+              party: collision.party
             },
-            rhs: {descendant: rhs}
+            rhs: {party: rhs}
           }
       }
       return
@@ -96,10 +108,8 @@ export namespace EntityCollider {
         return {
           lhs: collision.lhs,
           rhs: {
-            parent: Entity.equal(rhs, collision.rhs.descendant)
-              ? undefined
-              : rhs,
-            descendant: collision.rhs.descendant
+            parent: Entity.equal(rhs, collision.rhs.party) ? undefined : rhs,
+            party: collision.rhs.party
           }
         }
     }
@@ -110,7 +120,7 @@ export namespace EntityCollider {
   export function collidesRect(
     entity: Readonly<Entity>,
     rect: Rect
-  ): Maybe<ParentDescendant> {
+  ): Maybe<CollisionParty> {
     if (entity.collisionPredicate === CollisionPredicate.NEVER) return
 
     if (!Rect.intersects(entity.bounds, rect))
@@ -120,12 +130,12 @@ export namespace EntityCollider {
 
     if (entity.collisionPredicate === CollisionPredicate.BOUNDS)
       // No further tests.
-      return {descendant: entity}
+      return {party: entity}
 
     if (entity.collisionPredicate === CollisionPredicate.BODIES) {
       // Test if any body collides.
       if (entity.collisionBodies.some(body => Rect.intersects(rect, body)))
-        return {descendant: entity}
+        return {party: entity}
       return
     }
 
@@ -136,14 +146,14 @@ export namespace EntityCollider {
           Rect.intersects(rect, image.bounds)
         )
       )
-        return {descendant: entity}
+        return {party: entity}
       return
     }
 
     // Collision type is CollisionPredicate.CHILDREN.
     for (const child of entity.children) {
       const collision = collidesRect(child, rect)
-      if (collision) return {parent: entity, descendant: collision.descendant}
+      if (collision) return {parent: entity, party: collision.party}
     }
     return
   }

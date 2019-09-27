@@ -1,7 +1,7 @@
 import {Atlas} from '../atlas/Atlas'
 import {NumberUtil} from '../math/NumberUtil'
 
-/** Record and update an Image's Atlas.Animation's Atlas.Cel state. */
+/** Record and update an Image's Atlas.Animation's state. */
 export interface Animator {
   /** Cel index oscillation state. This integer may fall outside of animation
       bounds depending on the animation interval selected by direction. This
@@ -22,6 +22,8 @@ export namespace Animator {
     exposure: Milliseconds,
     animation: Atlas.Animation
   ): Animator {
+    // animation.duration may be infinite but the modulo of any number and
+    // infinity is that number.
     exposure = exposure % animation.duration
     while (exposure >= animation.cels[index(period, animation.cels)].duration) {
       exposure -= animation.cels[index(period, animation.cels)].duration
@@ -35,9 +37,8 @@ export namespace Animator {
   }
 }
 
-type Period = (period: number, len: number) => number
 const Period: Readonly<
-  Record<Atlas.AnimationDirection, Period>
+  Record<Atlas.AnimationDirection, (period: number, len: number) => number>
 > = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Atlas.AnimationDirection.FORWARD](period) {

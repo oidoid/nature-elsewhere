@@ -71,8 +71,8 @@ export namespace Aseprite {
     /** The inclusive ending Frame index, possibly identical to the starting
         frame index. */
     readonly to: number
-    // Loosen typing to a string so a cast isn't needed when referencing the
-    // Aseprite JSON.
+    /** Loosened typing to a string so a cast isn't needed when parsing the
+        Aseprite JSON. */
     readonly direction: AnimationDirection | string
   }
 
@@ -80,7 +80,8 @@ export namespace Aseprite {
       that should pause use the special INFINITE value. */
   export type Duration = Milliseconds | typeof INFINITE
 
-  /** **By convention**. */
+  /** **By convention**, a reserved value to indicate a value without
+      termination. */
   export const INFINITE: 0xffff = 0xffff
 
   export enum AnimationDirection {
@@ -95,11 +96,13 @@ export namespace Aseprite {
     PING_PONG = 'pingpong'
   }
 
+  /** Width and height at position x and y. */
   export interface Rect extends WH {
     readonly x: number
     readonly y: number
   }
 
+  /** Width and height. */
   export interface WH {
     readonly w: number
     readonly h: number

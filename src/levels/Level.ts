@@ -2,8 +2,7 @@ import {Atlas} from '../atlas/Atlas'
 import {Backpacker} from '../entities/types/backpacker/Backpacker'
 import {Camera} from './Camera'
 import {Cursor} from '../entities/types/cursor/Cursor'
-import {EntityCollider} from '../collision/EntityCollider'
-import {EntityCollision} from '../collision/EntityCollision'
+import {EntityCollider, EntityCollision} from '../collision/EntityCollider'
 import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
 import {LevelAdvance} from './LevelAdvance'
@@ -67,7 +66,7 @@ export namespace Level {
         )
       : undefined
     if (!collisionWithCursor) return
-    if (Entity.equal(collisionWithCursor.rhs.descendant, entity))
+    if (Entity.equal(collisionWithCursor.rhs.party, entity))
       return collisionWithCursor
     return
   }

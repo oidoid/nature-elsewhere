@@ -7,4 +7,4 @@ TestUtil.testValuesArePositivePowerOfTwo(<number[]>ObjectUtil.values(
   CollisionType
 )
   .filter(val => typeof val === 'number')
-  .filter(val => val !== CollisionType.NONE))
+  .filter(val => val !== CollisionType.INERT))

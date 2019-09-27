@@ -39,6 +39,10 @@ import {
   CollisionPredicateConfig,
   CollisionPredicateParser
 } from '../collision/CollisionPredicateParser'
+import {
+  CollisionTypeKeyConfig,
+  CollisionTypeParser
+} from '../collision/CollisionTypeParser'
 import {DateVersionHashParser} from '../entities/types/dateVersionHash/DateVersionHashParser'
 import {Entity} from './Entity'
 import {EntityID} from './EntityID'
@@ -93,6 +97,7 @@ export interface EntityConfig {
   readonly updaters?: UpdaterTypeArrayConfig
   /** Defaults to CollisionPredicate.NEVER. */
   readonly collisionPredicate?: CollisionPredicateConfig
+  readonly collisionType?: CollisionTypeKeyConfig
   /** Defaults to []. In local coordinates (converted to level by parser). */
   readonly collisionBodies?: RectArrayConfig
   /** Defaults to []. */
@@ -137,6 +142,7 @@ export namespace EntityParser {
       machine,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
       updaters: UpdaterTypeParser.parseAll(config.updaters),
+      collisionType: CollisionTypeParser.parseKey(config.collisionType),
       collisionPredicate: CollisionPredicateParser.parse(
         config.collisionPredicate
       ),

@@ -15,6 +15,7 @@ import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
 import {DecamillipixelXY, FloatXY, XY} from '../math/XY'
 import {EntityCollider} from '../collision/EntityCollider'
 import {Level} from '../levels/Level'
+import {CollisionType} from '../collision/CollisionType'
 
 export interface Entity {
   /** A globally unique identifier for quick equality checks. It should be used
@@ -38,6 +39,7 @@ export interface Entity {
   /** See UpdatePredicate. */
   readonly updaters: readonly UpdaterType[]
   readonly collisionPredicate: CollisionPredicate
+  readonly collisionType: CollisionType
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */

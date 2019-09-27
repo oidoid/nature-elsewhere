@@ -1,5 +1,5 @@
 export enum CollisionType {
-  NONE = 0,
+  INERT = 0,
   SCENERY = 1 << 0,
   /** For example, deep water. */
   DEEP = 1 << 1,

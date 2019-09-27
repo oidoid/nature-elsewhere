@@ -16,6 +16,7 @@ import {Marquee} from '../marquee/Marquee'
 import {Entity} from '../../../entity/Entity'
 import {Level} from '../../../levels/Level'
 import {XY} from '../../../math/XY'
+import {CollisionPredicate} from '../../../collision/CollisionPredicate'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
@@ -54,7 +55,7 @@ export namespace LevelEditorPanelUpdater {
           x: checkboxNumber(panel.xCheckbox),
           y: checkboxNumber(panel.yCheckbox)
         }
-        const entity = EntityParser.parse(
+        let entity = EntityParser.parse(
           {
             type: child.type,
             machine: {state: child.machine.state},
@@ -62,6 +63,8 @@ export namespace LevelEditorPanelUpdater {
           },
           state.level.atlas
         )
+        // force collision to bounds for picking
+        entity = {...entity, collisionPredicate: CollisionPredicate.BOUNDS}
         const sandbox = Entity.findAnyByID(
           state.level.parentEntities,
           EntityID.UI_LEVEL_EDITOR_SANDBOX
