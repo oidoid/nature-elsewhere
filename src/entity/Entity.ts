@@ -229,25 +229,6 @@ export namespace Entity {
     return
   }
 
-  export function velocity(
-    _entity: Entity,
-    _time: Milliseconds,
-    horizontal: boolean,
-    vertical: boolean
-  ): XY {
-    const x = horizontal
-      ? vertical
-        ? 90
-        : Math.sign(90) * Math.sqrt(90 * 90 + 90 * 90)
-      : 0
-    const y = vertical
-      ? horizontal
-        ? 90
-        : Math.sign(90) * Math.sqrt(90 * 90 + 90 * 90)
-      : 0
-    return new XY(x, y)
-  }
-
   /** Raise or lower an entity's images and its descendants' images for all
       states. */
   export function elevate(entity: Entity, offset: Layer): void {
@@ -311,7 +292,7 @@ function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
 
   if (
     collision &&
-    !(collision.rhs.party.collisionType & CollisionType.OBSTACLE)
+    !(collision.collidesWith.party.collisionType & CollisionType.OBSTACLE)
   )
     return status
 

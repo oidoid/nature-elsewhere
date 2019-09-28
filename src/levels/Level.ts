@@ -66,7 +66,7 @@ export namespace Level {
         )
       : undefined
     if (!collisionWithCursor) return
-    if (Entity.equal(collisionWithCursor.rhs.party, entity))
+    if (Entity.equal(collisionWithCursor.collidesWith.party, entity))
       return collisionWithCursor
     return
   }

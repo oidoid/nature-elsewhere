@@ -50,7 +50,7 @@ export namespace MarqueeUpdater {
     if (!panelCollision && cursorSandboxCollision) {
       status |= Entity.setState(marquee, Marquee.State.VISIBLE)
 
-      const sandboxEntity = cursorSandboxCollision.rhs.party // this won't work correctly for sub-entities
+      const sandboxEntity = cursorSandboxCollision.collidesWith.party // this won't work correctly for sub-entities
       marquee.selection = sandboxEntity.spawnID
 
       const destination = new XY(
