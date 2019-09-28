@@ -50,6 +50,12 @@
   },
   "updatePredicate": "always",
   "updaters": ["charBackpacker"],
+  "collisionTypes": [
+    "TYPE_CHARACTER",
+    "TYPE_BACKPACKER",
+    "HARMFUL",
+    "IMPEDIMENT"
+  ],
   "collisionPredicate": "bodies",
   "collisionBodies": [{"position": {"x": 2, "y": 12}, "size": {"w": 4, "h": 3}}]
 }

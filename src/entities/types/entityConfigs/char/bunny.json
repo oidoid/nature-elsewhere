@@ -23,5 +23,6 @@
     }
   },
   "updatePredicate": "intersectsViewport",
-  "updaters": ["wraparound"]
+  "updaters": ["wraparound"],
+  "collisionTypes": ["TYPE_CHARACTER", "IMPEDIMENT"]
 }

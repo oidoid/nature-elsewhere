@@ -12,6 +12,7 @@
       }
     }
   },
+  "collisionTypes": ["TYPE_SCENERY", "OBSTACLE"],
   "collisionPredicate": "bodies",
   "collisionBodies": [
     {"position": {"y": 12}, "size": {"w": 5, "h": 8}},

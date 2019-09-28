@@ -33,6 +33,7 @@
   },
   "updatePredicate": "intersectsViewport",
   "updaters": ["wraparound"],
+  "collisionTypes": ["TYPE_CHARACTER", "HARMFUL"],
   "collisionPredicate": "bodies",
   "collisionBodies": [{"position": {"x": 1, "y": 1}, "size": {"w": 3, "h": 2}}]
 }

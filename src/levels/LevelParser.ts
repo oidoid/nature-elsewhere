@@ -12,6 +12,7 @@ import {LevelTypeParser} from './LevelTypeParser'
 import {WH} from '../math/WH'
 
 export interface LevelConfig {
+  readonly version: string
   readonly type: LevelTypeConfig
   /** The level shown when escape or back is pressed. Usually
       LevelType.PAUSE_LEVEL. For the initial level, this is undefined. */
@@ -41,7 +42,11 @@ export interface LevelConfig {
 }
 
 export namespace LevelParser {
+  export const version: string = '0.0.0'
+
   export function parse(config: LevelConfig, atlas: Atlas): Level {
+    if (config.version !== version)
+      throw new Error(`Unsupported level config version "${config.version}".`)
     return {
       type: LevelTypeParser.parse(config.type),
       prevLevel: config.prevLevel

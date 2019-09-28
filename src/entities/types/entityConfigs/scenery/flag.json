@@ -16,5 +16,6 @@
       }
     }
   },
-  "updatePredicate": "intersectsViewport"
+  "updatePredicate": "intersectsViewport",
+  "collisionTypes": ["TYPE_SCENERY"]
 }

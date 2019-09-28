@@ -17,6 +17,7 @@
       "dead": {"images": [{"id": "palette-red", "layer": "BLOOD"}]}
     }
   },
+  "collisionTypes": ["TYPE_CHARACTER"],
   "updatePredicate": "intersectsViewport",
   "updaters": ["circle"]
 }

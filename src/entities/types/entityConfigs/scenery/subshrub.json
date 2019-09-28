@@ -11,5 +11,6 @@
         ]
       }
     }
-  }
+  },
+  "collisionTypes": ["TYPE_SCENERY", "IMPEDIMENT"]
 }

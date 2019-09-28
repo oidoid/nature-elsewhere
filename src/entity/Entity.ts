@@ -38,8 +38,9 @@ export interface Entity {
   readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
   readonly updaters: readonly UpdaterType[]
-  readonly collisionPredicate: CollisionPredicate
   readonly collisionType: CollisionType
+  readonly collisionPredicate: CollisionPredicate
+  // how to handle collision mapping? by type? by mixin updater field thingy? how does this relate to existing collision checks such as those with cursor and button?
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
@@ -303,7 +304,17 @@ function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
   if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
 
   const entities = Level.activeParentsWithPlayer(state.level)
+
+  // [todo] I think this needs to check all entities in the list, not just the
+  //        first one.
   let collision = EntityCollider.collidesEntities(entity, entities)
+
+  if (
+    collision &&
+    !(collision.rhs.party.collisionType & CollisionType.OBSTACLE)
+  )
+    return status
+
   if (diagonal && collision) {
     status |= Entity.moveTo(entity, new XY(to.x, from.y))
     collision = EntityCollider.collidesEntities(entity, entities)

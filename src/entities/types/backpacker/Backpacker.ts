@@ -71,7 +71,7 @@ export namespace Backpacker {
     collision: CollisionParty,
     state: UpdateState
   ): void {
-    if (collision.party.collisionType === CollisionType.SCENERY) {
+    if (collision.party.collisionType & CollisionType.OBSTACLE) {
       const idle = calculateIdleState(backpacker)
       Entity.setState(backpacker, idle)
       if (state.level.destination)

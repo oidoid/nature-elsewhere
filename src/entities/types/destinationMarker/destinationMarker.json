@@ -11,5 +11,6 @@
     }
   },
   "updatePredicate": "always",
-  "updaters": ["uiDestinationMarker"]
+  "updaters": ["uiDestinationMarker"],
+  "collisionTypes": ["TYPE_UI"]
 }

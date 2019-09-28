@@ -19,5 +19,6 @@
         ]
       }
     }
-  }
+  },
+  "collisionTypes": ["TYPE_SCENERY"]
 }

@@ -17,6 +17,7 @@
     }
   },
   "updatePredicate": "intersectsViewport",
+  "collisionTypes": ["TYPE_CHARACTER", "OBSTACLE"],
   "collisionPredicate": "bodies",
   "collisionBodies": [{"position": {"x": 1, "y": 14}, "size": {"w": 6, "h": 2}}]
 }

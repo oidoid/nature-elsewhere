@@ -18,5 +18,6 @@
         ]
       }
     }
-  }
+  },
+  "collisionTypes": ["TYPE_SCENERY", "DEEP_WATER", "IMPEDIMENT"]
 }

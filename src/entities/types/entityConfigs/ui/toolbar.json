@@ -16,6 +16,7 @@
       }
     }
   },
+  "collisionTypes": ["TYPE_UI"],
   "updatePredicate": "always",
   "updaters": ["uiFollowCam"]
 }

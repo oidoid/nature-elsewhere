@@ -4,5 +4,6 @@
   "machine": {
     "state": "visible",
     "map": {"visible": {"images": [{"id": "sceneryCattails"}]}}
-  }
+  },
+  "collisionTypes": ["TYPE_SCENERY"]
 }

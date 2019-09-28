@@ -10,5 +10,6 @@
   },
   "updatePredicate": "always",
   "updaters": ["uiCheckbox"],
+  "collisionTypes": ["TYPE_UI"],
   "collisionPredicate": "bounds"
 }

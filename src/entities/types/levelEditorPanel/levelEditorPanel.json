@@ -5,6 +5,7 @@
   "updatePredicate": "always",
   "positionRelativeToCam": "southEast",
   "updaters": ["uiFollowCam", "uiLevelEditorPanel"],
+  "collisionTypes": ["TYPE_UI"],
   "collisionPredicate": "children",
   "children": [
     {

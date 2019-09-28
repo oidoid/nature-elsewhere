@@ -12,6 +12,7 @@
       }
     }
   },
+  "collisionTypes": ["TYPE_CHARACTER", "HARMFUL", "IMPEDIMENT"],
   "updatePredicate": "intersectsViewport",
   "updaters": ["circle"]
 }
