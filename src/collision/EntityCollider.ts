@@ -1,169 +1,135 @@
 import {CollisionPredicate} from './CollisionPredicate'
 import {Entity} from '../entity/Entity'
 import {Rect} from '../math/Rect'
-
-export interface EntityCollision {
-  readonly initiator: CollisionParty
-  readonly collidesWith: CollisionParty
-}
-
-export interface CollisionParty {
-  /** One of the two entities involved in the collision. */
-  readonly party: Entity
-  /** The topmost parent the collision was detected through. The parent is never
-      the party. */
-  readonly parent?: Entity
-}
+import {ArrayUtil} from '../utils/ArrayUtil'
 
 export namespace EntityCollider {
   export function collidesEntities(
     initiator: Readonly<Entity>,
     entities: readonly Readonly<Entity>[]
-  ): Maybe<EntityCollision> {
-    for (const entity of entities) {
-      const collision = collidesEntity(initiator, entity)
-      if (collision) return collision
-    }
-    return
+  ): readonly Entity[] {
+    const collisions: Entity[] = []
+
+    for (const entity of entities)
+      collisions.push(...collidesEntity(initiator, entity))
+
+    // Children are not shared so the collision array will not contain
+    // duplicates.
+    return collisions
   }
 
   export function collidesEntity(
     initiator: Readonly<Entity>,
     entity: Readonly<Entity>
-  ): Maybe<EntityCollision> {
+  ): readonly Entity[] {
+    const collisions: Entity[] = []
     if (
       initiator.collisionPredicate === CollisionPredicate.NEVER ||
-      entity.collisionPredicate === CollisionPredicate.NEVER ||
-      Entity.equal(initiator, entity)
+      entity.collisionPredicate === CollisionPredicate.NEVER
     )
-      // One or both of the entities have no collision or are identical.
-      return
+      // One or both of the entities have no collision.
+      return collisions
+
+    // The initiator and entity are identical.
+    if (Entity.equal(initiator, entity)) return collisions
 
     // Both of the entities have collision.
 
     if (!Rect.intersects(initiator.bounds, entity.bounds))
       // Any collision requires both entities to intersect.
-      return
+      return collisions
 
     // The entities intersect.
 
-    if (entity.collisionPredicate === CollisionPredicate.BOUNDS) {
-      // The test entity only has bounding rectangle collision. If the initiator
-      // or its children collide with the test entity's bounds, a collision has
+    if (initiator.collisionPredicate === CollisionPredicate.BOUNDS)
+      // The initiator only has bounding rectangle collision. If the test entity
+      // or its children collide with the initiator's bounds, a collision has
       // occurred.
-      const collision = collidesRect(initiator, entity.bounds)
-      if (collision)
-        return {
-          initiator: {
-            parent: Entity.equal(initiator, collision.party)
-              ? undefined
-              : initiator,
-            party: collision.party
-          },
-          collidesWith: {party: entity}
-        }
-      // Otherwise, no collision has occurred.
-      return
-    }
+      return collidesRect(entity, initiator.bounds)
 
-    // The test entity has body, image, or children collision.
+    // The initiator has body, image, or children collision.
 
-    if (entity.collisionPredicate === CollisionPredicate.BODIES) {
-      // The test entity only has collision bodies. If the initiator or its
-      // children collide with any of the test entity's bodies, a collision has
+    if (initiator.collisionPredicate === CollisionPredicate.BODIES) {
+      // The initiator only has collision bodies. If the test entity or its
+      // children collide with any of the initiator's bodies, a collision has
       // occurred. Otherwise, no collision has occurred.
-      for (const body of entity.collisionBodies) {
-        const collision = collidesRect(initiator, body)
-        if (collision)
-          return {
-            initiator: {
-              parent: Entity.equal(initiator, collision.party)
-                ? undefined
-                : initiator,
-              party: collision.party
-            },
-            collidesWith: {party: entity}
-          }
-      }
-      return
+      for (const body of initiator.collisionBodies)
+        collisions.push(...collidesRect(entity, body))
+      // Each body must be tested against the entity in case it has children so
+      // that all collisions are reported. However, each collision should only
+      // be reported once.
+      return collisions.filter(ArrayUtil.unique(Entity.equal))
     }
 
-    if (entity.collisionPredicate === CollisionPredicate.IMAGES) {
-      // The test entity only has image collision. If the initiator or its
-      // children collide with any of the test's images, a collision has
+    if (initiator.collisionPredicate === CollisionPredicate.IMAGES) {
+      // The initiator only has image collision. If the test entity or its
+      // children collide with any of the initiator's images, a collision has
       // occurred. Otherwise, no collision has occurred.
-      for (const image of Entity.imageRect(entity).images) {
-        const collision = collidesRect(initiator, image.bounds)
-        if (collision)
-          return {
-            initiator: {
-              parent: Entity.equal(initiator, collision.party)
-                ? undefined
-                : initiator,
-              party: collision.party
-            },
-            collidesWith: {party: entity}
-          }
-      }
-      return
+      if (!Rect.intersects(Entity.imageRect(initiator).bounds, entity.bounds))
+        return collisions
+      for (const image of Entity.imageRect(initiator).images)
+        collisions.push(...collidesRect(entity, image.bounds))
+
+      // Each image must be tested against the entity in case it has children so
+      // that all collisions are reported. However, each collision should only
+      // be reported once.
+      return collisions.filter(ArrayUtil.unique(Entity.equal))
     }
 
-    // The other entity has CollisionPredicate.CHILDREN.
-    for (const child of entity.children) {
-      const collision = collidesEntity(initiator, child)
-      if (collision)
-        return {
-          initiator: collision.initiator,
-          collidesWith: {
-            parent: Entity.equal(entity, collision.collidesWith.party)
-              ? undefined
-              : entity,
-            party: collision.collidesWith.party
-          }
-        }
-    }
+    // The initiator has CollisionPredicate.CHILDREN.
+    for (const child of initiator.children)
+      collisions.push(...collidesEntity(child, entity))
 
-    return
+    // Each child must be tested against the entity in case it has children so
+    // that all collisions are reported. However, each collision should only
+    // be reported once.
+    return collisions.filter(ArrayUtil.unique(Entity.equal))
   }
 
   export function collidesRect(
     entity: Readonly<Entity>,
     rect: Rect
-  ): Maybe<CollisionParty> {
-    if (entity.collisionPredicate === CollisionPredicate.NEVER) return
+  ): readonly Entity[] {
+    const collisions: Entity[] = []
+    if (entity.collisionPredicate === CollisionPredicate.NEVER)
+      return collisions
 
     if (!Rect.intersects(entity.bounds, rect))
       // Any collisions requires the rectangle intersect with the entity's
       // bounds.
-      return
+      return collisions
 
-    if (entity.collisionPredicate === CollisionPredicate.BOUNDS)
+    if (entity.collisionPredicate === CollisionPredicate.BOUNDS) {
       // No further tests.
-      return {party: entity}
+      collisions.push(entity)
+      return collisions
+    }
 
     if (entity.collisionPredicate === CollisionPredicate.BODIES) {
       // Test if any body collides.
       if (entity.collisionBodies.some(body => Rect.intersects(rect, body)))
-        return {party: entity}
-      return
+        collisions.push(entity)
+      return collisions
     }
 
     if (entity.collisionPredicate === CollisionPredicate.IMAGES) {
       // Test if any image collides.
       if (
+        Rect.intersects(Entity.imageRect(entity).bounds, rect) &&
         Entity.imageRect(entity).images.some(image =>
           Rect.intersects(rect, image.bounds)
         )
       )
-        return {party: entity}
-      return
+        collisions.push(entity)
+      return collisions
     }
 
     // Collision type is CollisionPredicate.CHILDREN.
-    for (const child of entity.children) {
-      const collision = collidesRect(child, rect)
-      if (collision) return {parent: entity, party: collision.party}
-    }
-    return
+    for (const child of entity.children)
+      collisions.push(...collidesRect(child, rect))
+
+    // Children are not shared so the collision array will not contain
+    // duplicates.
+    return collisions
   }
 }

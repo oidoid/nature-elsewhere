@@ -40,17 +40,18 @@ export namespace MarqueeUpdater {
       state.level.parentEntities,
       EntityID.UI_LEVEL_EDITOR_PANEL
     )
-    const panelCollision =
-      panel && EntityCollider.collidesEntity(state.level.cursor, panel)
+    const panelCollision = panel
+      ? EntityCollider.collidesEntity(state.level.cursor, panel)
+      : []
 
     const cursorSandboxCollision = EntityCollider.collidesEntity(
       state.level.cursor,
       sandbox
     )
-    if (!panelCollision && cursorSandboxCollision) {
+    if (!panelCollision.length && cursorSandboxCollision.length) {
       status |= Entity.setState(marquee, Marquee.State.VISIBLE)
 
-      const sandboxEntity = cursorSandboxCollision.collidesWith.party // this won't work correctly for sub-entities
+      const sandboxEntity = cursorSandboxCollision[0] // this won't work correctly for sub-entities
       marquee.selection = sandboxEntity.spawnID
 
       const destination = new XY(
@@ -59,7 +60,7 @@ export namespace MarqueeUpdater {
       )
       status |= Entity.moveTo(marquee, destination)
       doTheStuffAndThings(marquee, destination, sandboxEntity)
-    } else if (!panelCollision) {
+    } else if (!panelCollision.length) {
       status |= Entity.setState(marquee, Entity.State.HIDDEN)
       marquee.selection = undefined
     }

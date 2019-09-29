@@ -1,4 +1,3 @@
-import {CollisionParty} from '../../../collision/EntityCollider'
 import {CollisionType} from '../../../collision/CollisionType'
 import {Entity} from '../../../entity/Entity'
 import {EntityType} from '../../../entity/EntityType'
@@ -68,10 +67,10 @@ export namespace Backpacker {
 
   export function collides(
     backpacker: Entity,
-    collision: CollisionParty,
+    entity: Entity,
     state: UpdateState
   ): void {
-    if (collision.party.collisionType & CollisionType.OBSTACLE) {
+    if (entity.collisionType & CollisionType.OBSTACLE) {
       const idle = calculateIdleState(backpacker)
       Entity.setState(backpacker, idle)
       if (state.level.destination)

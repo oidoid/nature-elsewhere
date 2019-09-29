@@ -4,6 +4,7 @@ import {EntityType} from '../../../entity/EntityType'
 import {ImageConfig, ImageParser} from '../../../image/ImageParser'
 import {Atlas} from '../../../atlas/Atlas'
 import {EntityConfig} from '../../../entity/EntityParser'
+import {ImageRect} from '../../../imageStateMachine/ImageRect'
 
 export interface ImageEntityConfig extends EntityConfig {
   /** A single image to be added to the default state. */
@@ -17,7 +18,8 @@ export namespace ImageEntityParser {
     const imageConfig = (<ImageEntityConfig>(<unknown>imageEntity)).image
     if (imageConfig) {
       const image = ImageParser.parse(imageConfig, atlas)
-      Entity.imageRect(imageEntity).images.push(image)
+      ImageRect.add(Entity.imageRect(imageEntity), image)
+      Entity.invalidateBounds(imageEntity)
     }
     return imageEntity
   }

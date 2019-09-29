@@ -2,7 +2,7 @@ import {Atlas} from '../atlas/Atlas'
 import {Backpacker} from '../entities/types/backpacker/Backpacker'
 import {Camera} from './Camera'
 import {Cursor} from '../entities/types/cursor/Cursor'
-import {EntityCollider, EntityCollision} from '../collision/EntityCollider'
+import {EntityCollider} from '../collision/EntityCollider'
 import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
 import {LevelAdvance} from './LevelAdvance'
@@ -55,20 +55,14 @@ export namespace Level {
     return entities
   }
 
-  export function collisionWithCursor(
-    level: Level,
-    entity: Entity
-  ): Maybe<EntityCollision> {
-    const collisionWithCursor = level.cursor
+  export function collisionWithCursor(level: Level, entity: Entity): boolean {
+    const collidesWith = level.cursor
       ? EntityCollider.collidesEntities(
           level.cursor,
-          activeParentsNoPlayer(level)
+          activeParentsWithPlayer(level)
         )
-      : undefined
-    if (!collisionWithCursor) return
-    if (Entity.equal(collisionWithCursor.collidesWith.party, entity))
-      return collisionWithCursor
-    return
+      : []
+    return !!Entity.findAnyBySpawnID(collidesWith, entity.spawnID)
   }
 
   export function clamp(

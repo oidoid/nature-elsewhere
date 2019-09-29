@@ -286,26 +286,25 @@ function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
 
   const entities = Level.activeParentsWithPlayer(state.level)
 
-  // [todo] I think this needs to check all entities in the list, not just the
-  //        first one.
-  let collision = EntityCollider.collidesEntities(entity, entities)
-
+  let collidesWith = EntityCollider.collidesEntities(entity, entities)
   if (
-    collision &&
-    !(collision.collidesWith.party.collisionType & CollisionType.OBSTACLE)
+    !collidesWith.some(
+      collision => collision.collisionType & CollisionType.OBSTACLE
+    )
   )
     return status
 
-  if (diagonal && collision) {
+  if (diagonal && collidesWith.length) {
     status |= Entity.moveTo(entity, new XY(to.x, from.y))
-    collision = EntityCollider.collidesEntities(entity, entities)
-    if (collision) {
+    collidesWith = EntityCollider.collidesEntities(entity, entities)
+    if (collidesWith.length) {
       status |= Entity.moveTo(entity, new XY(from.x, to.y))
-      collision = EntityCollider.collidesEntities(entity, entities)
+      collidesWith = EntityCollider.collidesEntities(entity, entities)
     }
   }
 
-  if (collision) status |= Entity.moveTo(entity, new XY(from.x, from.y))
+  if (collidesWith.length)
+    status |= Entity.moveTo(entity, new XY(from.x, from.y))
 
   return status
 }
