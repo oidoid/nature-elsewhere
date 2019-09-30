@@ -37,9 +37,10 @@ export namespace Animator {
   }
 }
 
-const Period: Readonly<
-  Record<Atlas.AnimationDirection, (period: number, len: number) => number>
-> = Object.freeze({
+const Period: Readonly<Record<
+  Atlas.AnimationDirection,
+  (period: number, len: number) => number
+>> = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Atlas.AnimationDirection.FORWARD](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1

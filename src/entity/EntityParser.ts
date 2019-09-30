@@ -224,9 +224,9 @@ function withDefaults(config: EntityConfig, type: EntityType): EntityConfig {
   )
 }
 
-const TypeParserMap: Readonly<
-  Partial<Record<EntityType, RecursiveEntityParser>>
-> = Object.freeze({
+const TypeParserMap: Readonly<Partial<
+  Record<EntityType, RecursiveEntityParser>
+>> = Object.freeze({
   [EntityType.IMAGE]: ImageEntityParser.parse,
   [EntityType.UI_DATE_VERSION_HASH]: DateVersionHashParser.parse,
   [EntityType.UI_CHECKBOX]: CheckboxParser.parse,
@@ -235,9 +235,9 @@ const TypeParserMap: Readonly<
   [EntityType.UI_TEXT]: TextParser.parse
 })
 
-const UpdaterParserMap: Readonly<
-  Partial<Record<UpdaterType, UpdaterParser>>
-> = Object.freeze({
+const UpdaterParserMap: Readonly<Partial<
+  Record<UpdaterType, UpdaterParser>
+>> = Object.freeze({
   [UpdaterType.UI_LEVEL_LINK]: LevelLinkParser.parse,
   [UpdaterType.UI_FOLLOW_CAM]: FollowCamParser.parse
 })

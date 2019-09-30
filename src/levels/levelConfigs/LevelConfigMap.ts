@@ -8,9 +8,10 @@ import * as TEST_PERFORMANCE from './performanceLevel.json'
 import * as TEST_SHADER from './shaderLevel.json'
 import {LevelConfig} from '../LevelParser'
 
-export const LevelConfigMap: Readonly<
-  Record<LevelType, Maybe<LevelConfig>>
-> = Object.freeze({
+export const LevelConfigMap: Readonly<Record<
+  LevelType,
+  Maybe<LevelConfig>
+>> = Object.freeze({
   [LevelType.PLAY_FIELDS]: PLAY_FIELDS,
   [LevelType.UI_TITLE]: UI_TITLE,
   [LevelType.UI_OPTIONS]: UI_OPTIONS,
