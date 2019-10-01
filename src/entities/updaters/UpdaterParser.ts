@@ -1,5 +1,5 @@
 import {Entity} from '../../entity/Entity'
-import {Atlas} from '../../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {IEntityParser} from '../RecursiveEntityParser'
 
 export type UpdaterParser = (

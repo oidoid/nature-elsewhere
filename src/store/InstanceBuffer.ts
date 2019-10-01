@@ -1,7 +1,6 @@
-import {Atlas} from '../atlas/Atlas'
+import {Atlas, Animator} from 'aseprite-atlas'
 import {Image} from '../image/Image'
 import {ShaderLayout} from '../renderer/ShaderLayout'
-import {Animator} from '../animator/Animator'
 
 const littleEndian: boolean = !!new Int8Array(new Int16Array([1]).buffer)[0]
 
@@ -24,7 +23,7 @@ export namespace InstanceBuffer {
   ): void => {
     const i = index * layout.perInstance.stride
 
-    const animation = atlas[image.id]
+    const animation = atlas.animations[image.id]
     const celIndex = Animator.index(image.animator.period, animation.cels)
     const cel = animation.cels[celIndex]
     dat.setInt16(i + 0, cel.position.x, littleEndian)
@@ -32,7 +31,7 @@ export namespace InstanceBuffer {
     dat.setInt16(i + 4, animation.size.w, littleEndian)
     dat.setInt16(i + 6, animation.size.h, littleEndian)
 
-    const imageAnimation = atlas[image.imageID]
+    const imageAnimation = atlas.animations[image.imageID]
     const imageCelIndex = Animator.index(
       image.animator.period,
       imageAnimation.cels

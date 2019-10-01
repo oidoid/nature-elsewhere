@@ -1,4 +1,4 @@
-import {Atlas} from '../../../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {Button} from '../button/Button'
 import {Checkbox} from '../checkbox/Checkbox'
 import {CheckboxParser} from '../checkbox/CheckboxParser'

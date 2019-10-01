@@ -1,4 +1,4 @@
-import {Atlas} from '../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {ImageRectConfig, ImageRectParser} from './ImageRectParser'
 import {ImageStateMap} from './ImageStateMap'
 import {Entity} from '../entity/Entity'

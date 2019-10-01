@@ -1,10 +1,10 @@
-import {ImageRect} from './ImageRect'
-import {XYConfig, XYParser} from '../math/XYParser'
-import {Atlas} from '../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {ImageConfig, ImageParser, ImageScaleConfig} from '../image/ImageParser'
+import {ImageRect} from './ImageRect'
 import {Rect} from '../math/Rect'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {XYConfig, XYParser} from '../math/XYParser'
 
 export type ImageRectConfig = Maybe<{
   readonly origin?: XYConfig

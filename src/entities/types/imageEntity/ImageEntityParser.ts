@@ -1,9 +1,9 @@
-import {ImageEntity} from './ImageEntity'
+import {Atlas} from 'aseprite-atlas'
 import {Entity} from '../../../entity/Entity'
+import {EntityConfig} from '../../../entity/EntityParser'
 import {EntityType} from '../../../entity/EntityType'
 import {ImageConfig, ImageParser} from '../../../image/ImageParser'
-import {Atlas} from '../../../atlas/Atlas'
-import {EntityConfig} from '../../../entity/EntityParser'
+import {ImageEntity} from './ImageEntity'
 import {ImageRect} from '../../../imageStateMachine/ImageRect'
 
 export interface ImageEntityConfig extends EntityConfig {

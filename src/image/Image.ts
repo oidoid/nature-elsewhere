@@ -1,6 +1,5 @@
 import {AtlasID} from '../atlas/AtlasID'
-import {Animator} from '../animator/Animator'
-import {Atlas} from '../atlas/Atlas'
+import {Animator, Atlas} from 'aseprite-atlas'
 import {DecamillipixelIntXY, XY} from '../math/XY'
 import {Layer} from './Layer'
 import {Rect} from '../math/Rect'
@@ -80,7 +79,7 @@ export namespace Image {
     const animator = Animator.animate(
       image.animator.period,
       image.animator.exposure + time,
-      atlas[image.id]
+      atlas.animations[image.id]
     )
     image.animator.period = animator.period
     image.animator.exposure = animator.exposure

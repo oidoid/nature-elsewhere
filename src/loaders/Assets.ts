@@ -1,4 +1,4 @@
-import {Atlas} from '../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {ShaderLayout} from '../renderer/ShaderLayout'
 
 export interface Assets {

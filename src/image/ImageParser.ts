@@ -3,7 +3,7 @@ import {
   AlphaCompositionParser
 } from './AlphaCompositionParser'
 import {AnimatorConfig, AnimatorParser} from '../animator/AnimatorParser'
-import {Atlas} from '../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {
@@ -72,12 +72,12 @@ function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
     config.bounds && config.bounds.size && config.bounds.size.w !== undefined
       ? config.bounds.size.w
       : Math.abs(config.scale && config.scale.x ? config.scale.x : 1) *
-        atlas[id].size.w
+        atlas.animations[id].size.w
   const h =
     config.bounds && config.bounds.size && config.bounds.size.h !== undefined
       ? config.bounds.size.h
       : Math.abs(config.scale && config.scale.y ? config.scale.y : 1) *
-        atlas[id].size.h
+        atlas.animations[id].size.h
   const position = XYParser.parse(
     config.bounds ? config.bounds.position : undefined
   )

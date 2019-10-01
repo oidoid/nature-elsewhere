@@ -1,11 +1,11 @@
+import {Atlas} from 'aseprite-atlas'
 import {Level} from './Level'
+import {LevelAdvance} from './LevelAdvance'
+import {LevelConfigMap} from './levelConfigs/LevelConfigMap'
+import {LevelParser} from './LevelParser'
 import {ShaderLayout} from '../renderer/ShaderLayout'
 import {Store} from '../store/Store'
-import {LevelConfigMap} from './levelConfigs/LevelConfigMap'
 import {UpdateState} from '../entities/updaters/UpdateState'
-import {LevelAdvance} from './LevelAdvance'
-import {Atlas} from '../atlas/Atlas'
-import {LevelParser} from './LevelParser'
 
 export interface LevelStateMachine {
   level?: Level

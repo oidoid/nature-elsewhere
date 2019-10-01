@@ -1,5 +1,5 @@
 import {ImageStateMachine} from './ImageStateMachine'
-import {Atlas} from '../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {ImageStateMapConfig, ImageStateMapParser} from './ImageStateMapParser'
 import {Entity} from '../entity/Entity'

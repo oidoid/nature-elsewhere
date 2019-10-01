@@ -1,12 +1,11 @@
-import {ObjectUtil} from '../../utils/ObjectUtil'
-import {Atlas} from '../../atlas/Atlas'
+import {Atlas, Parser} from 'aseprite-atlas'
 import * as atlasJSON from '../../atlas/atlas.json'
-import {LevelConfigMap} from './LevelConfigMap'
-import {ValueUtil} from '../../utils/ValueUtil'
-import {AtlasParser} from '../../atlas/AtlasParser'
 import {LevelConfig, LevelParser} from '../LevelParser'
+import {LevelConfigMap} from './LevelConfigMap'
+import {ObjectUtil} from '../../utils/ObjectUtil'
+import {ValueUtil} from '../../utils/ValueUtil'
 
-const atlas: Atlas = Object.freeze(AtlasParser.parse(atlasJSON))
+const atlas: Atlas = Object.freeze(Parser.parse(atlasJSON))
 const configs: readonly LevelConfig[] = ObjectUtil.values(
   LevelConfigMap
 ).filter(ValueUtil.is)

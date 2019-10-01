@@ -1,7 +1,6 @@
-import {Atlas} from '../atlas/Atlas'
+import {Atlas, Parser} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import * as atlasJSON from '../atlas/atlas.json'
-import {AtlasParser} from '../atlas/AtlasParser'
 import {EntityCollider} from './EntityCollider'
 import {EntityParser, EntityConfig} from '../entity/EntityParser'
 import {EntityType} from '../entity/EntityType'
@@ -9,7 +8,7 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {CollisionPredicate} from './CollisionPredicate'
 
-const atlas: Atlas = AtlasParser.parse(atlasJSON)
+const atlas: Atlas = Object.freeze(Parser.parse(atlasJSON))
 
 /** Rectangle intersection scenarios are tested in Rect.test.
     EntityCollider.test exercises the different CollisionPredicate entity

@@ -1,4 +1,4 @@
-import {Atlas} from '../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/types/backpacker/Backpacker'
 import {CameraConfig} from './CameraParser'
 import {CameraParser} from './CameraParser'

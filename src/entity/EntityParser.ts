@@ -32,7 +32,7 @@ import * as UI_MARQUEE from '../entities/types/marquee/marquee.json'
 import * as UI_RADIO_BUTTON_GROUP from '../entities/types/entityConfigs/ui/radioCheckboxGroup.json'
 import * as UI_TEXT from '../entities/types/text/text.json'
 import * as UI_TOOLBAR from '../entities/types/entityConfigs/ui/toolbar.json'
-import {Atlas} from '../atlas/Atlas'
+import {Atlas} from 'aseprite-atlas'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {CheckboxParser} from '../entities/types/checkbox/CheckboxParser'
 import {

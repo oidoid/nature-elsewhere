@@ -1,4 +1,4 @@
-import {Animator} from './Animator'
+import {Animator} from 'aseprite-atlas'
 
 export type AnimatorConfig = Maybe<{
   readonly period?: number
