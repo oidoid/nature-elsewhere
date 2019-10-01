@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "resolveJsonModule": true,
-
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
