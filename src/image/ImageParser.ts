@@ -2,8 +2,7 @@ import {
   AlphaCompositionKeyConfig,
   AlphaCompositionParser
 } from './AlphaCompositionParser'
-import {AnimatorConfig, AnimatorParser} from '../animator/AnimatorParser'
-import {Atlas} from 'aseprite-atlas'
+import {Animator, Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {
@@ -32,6 +31,11 @@ export interface ImageConfig {
   readonly alphaComposition?: AlphaCompositionKeyConfig
 }
 
+export type AnimatorConfig = Maybe<{
+  readonly period?: number
+  readonly exposure?: Milliseconds
+}>
+
 /** Defaults to (1, 1). */
 export type ImageScaleConfig = Maybe<Partial<XY>>
 export type LayerKeyConfig = Maybe<Layer.Key | string>
@@ -45,7 +49,7 @@ export namespace ImageParser {
       imageID,
       bounds: parseBounds(config, id, atlas),
       layer: parseLayerKey(config.layer),
-      animator: AnimatorParser.parse(config.animator),
+      animator: parseAnimator(config.animator),
       scale: parseScale(config.scale),
       wrap: DecamillipixelIntXYParser.parse(config.wrap),
       wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity),
@@ -82,4 +86,12 @@ function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
     config.bounds ? config.bounds.position : undefined
   )
   return {position, size: new WH(w, h)}
+}
+
+function parseAnimator(config: AnimatorConfig): Animator {
+  if (!config) return {period: 0, exposure: 0}
+  return {
+    period: config.period === undefined ? 0 : config.period,
+    exposure: config.exposure === undefined ? 0 : config.exposure
+  }
 }
