@@ -64,3 +64,10 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with
     Do I need a shader for better types of water? What does it look like?
   How can I move my planning materials into the VCS?
   Review Diablo tile IDs: https://www.boristhebrave.com/2019/07/14/dungeon-generation-in-diablo-1/
+
+aseprite-atlas
+  [dev] Add demo, and better document the API and examples.
+  Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.
+mem-font
+  Push mem-font changes upstream and rework project.
+  Move mem-font to oddoid repo.
