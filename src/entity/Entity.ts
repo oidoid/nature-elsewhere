@@ -2,7 +2,7 @@ import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
-import {DecamillipixelXY, FloatXY, XY} from '../math/XY'
+import {FloatXY, XY} from '../math/XY'
 import {EntityCollider} from '../collision/EntityCollider'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
@@ -17,13 +17,37 @@ import {UpdaterMap} from '../entities/updaters/UpdaterMap'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
+import {WH} from '../math/WH'
+
+export interface Props {
+  /** Defaults to EntityID.UNDEFINED. */
+  readonly id?: EntityID
+  readonly type: EntityType
+  /** Defaults to (0, 0). */
+  readonly position?: XY
+  readonly velocity?: XY
+  readonly scale?: XY
+  /** Defaults to {}. */
+  readonly machine?: ImageStateMachine
+  /** Defaults to BehaviorPredicate.NEVER. */
+  readonly updatePredicate?: UpdatePredicate
+  /** Defaults to []. */
+  readonly updaters?: UpdaterType[]
+  /** Defaults to CollisionPredicate.NEVER. */
+  readonly collisionType?: CollisionType
+  readonly collisionPredicate?: CollisionPredicate
+  /** Defaults to []. In local coordinates (converted to level by parser). */
+  readonly collisionBodies?: Rect[]
+  /** Defaults to []. */
+  readonly children?: Entity[]
+}
 
 export class Entity {
   /** A globally unique identifier for quick equality checks. It should be used
       for no other purpose. The value is transient and should not be preserved
       on entity serialization. */
   readonly spawnID: symbol = Symbol()
-  readonly id: EntityID = EntityID.ANONYMOUS
+  readonly id: EntityID
   readonly type: EntityType
   /** The local coordinate system or minimal union of the entity and all of its
       children given in level coordinates with origin at (x, y). All images,
@@ -32,203 +56,208 @@ export class Entity {
       local coordinate system is necessary for calculating absolute translations
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
-  readonly bounds: Rect = Rect.make(0, 0, 0, 0)
-  readonly velocity: DecamillipixelXY = new XY(0, 0)
+  readonly bounds: Rect
+  readonly velocity: XY
   readonly velocityFraction: FloatXY = {x: 0, y: 0}
-  readonly machine: ImageStateMachine = ImageStateMachine.make()
-  readonly updatePredicate: UpdatePredicate = UpdatePredicate.INTERSECT_VIEWPORT
+  readonly machine: ImageStateMachine
+  readonly updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
-  readonly updaters: readonly UpdaterType[] = []
-  readonly collisionType: CollisionType = CollisionType.INERT
-  readonly collisionPredicate: CollisionPredicate = CollisionPredicate.NEVER
+  readonly updaters: readonly UpdaterType[]
+  readonly collisionType: CollisionType
+  readonly collisionPredicate: CollisionPredicate
   // how to handle collision mapping? by type? by mixin updater field thingy? how does this relate to existing collision checks such as those with cursor and button?
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
-  readonly collisionBodies: readonly Rect[] = [] // Move to CollisionBody with CollisionType prop
+  readonly collisionBodies: readonly Rect[] // Move to CollisionBody with CollisionType prop
   /** Operations are shallow by default (do not recurse children) unless
       specified otherwise. That is, only translation and animation are
       recursive. */
-  readonly children: Entity[] = []
+  readonly children: Entity[]
 
-  constructor(type: EntityType) {
+  constructor({
+    id,
+    type,
+    position,
+    velocity,
+    scale,
+    machine,
+    updatePredicate,
+    updaters,
+    collisionType,
+    collisionPredicate,
+    collisionBodies,
+    children
+  }: Props) {
+    this.id = id || EntityID.ANONYMOUS
     this.type = type
+    this.bounds = {position: position || new XY(0, 0), size: new WH(0, 0)}
+    this.velocity = velocity || new XY(0, 0)
+    this.machine = machine || ImageStateMachine.make(scale)
+    this.updatePredicate = updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
+    this.updaters = updaters || []
+    this.collisionType = collisionType || CollisionType.INERT
+    this.collisionPredicate = collisionPredicate || CollisionPredicate.NEVER
+    this.collisionBodies = collisionBodies || []
+    this.children = children || []
   }
-}
 
-export namespace Entity {
-  export enum State {
-    HIDDEN = 'hidden'
-  }
-
-  export function setImageID(entity: Entity, id: AtlasID): UpdateStatus {
-    return ImageStateMachine.setImageID(entity.machine, id)
+  setImageID(id: AtlasID): UpdateStatus {
+    return ImageStateMachine.setImageID(this.machine, id)
   }
 
   /** See Entity.spawnID. */
-  export function equal(lhs: Entity, rhs: Entity): boolean {
-    return lhs.spawnID === rhs.spawnID
+  equal(entity: Entity): boolean {
+    return this.spawnID === entity.spawnID
   }
 
   /** This is a shallow invalidation. If a child changes state, or is added, the
-          parents' bounds should be updated. */
-  export function invalidateBounds(entity: Entity): void {
+      parents' bounds should be updated. */
+  invalidateBounds(): void {
     const bounds = Rect.unionAll([
-      imageRect(entity).bounds,
-      ...entity.collisionBodies,
-      ...entity.children.map(child => child.bounds)
+      this.imageRect().bounds,
+      ...this.collisionBodies,
+      ...this.children.map(child => child.bounds)
     ])
     if (bounds) {
-      entity.bounds.position.x = bounds.position.x
-      entity.bounds.position.y = bounds.position.y
-      entity.bounds.size.w = bounds.size.w
-      entity.bounds.size.h = bounds.size.h
+      this.bounds.position.x = bounds.position.x
+      this.bounds.position.y = bounds.position.y
+      this.bounds.size.w = bounds.size.w
+      this.bounds.size.h = bounds.size.h
     }
   }
 
-  export function moveTo(entity: Entity, to: Readonly<XY>): UpdateStatus {
-    return moveBy(entity, to.sub(entity.bounds.position))
+  moveTo(to: Readonly<XY>): UpdateStatus {
+    return this.moveBy(to.sub(this.bounds.position))
   }
 
   /** Recursively move the entity, its images, its collision bodies, and all of
-          its children. */
-  export function moveBy(entity: Entity, by: Readonly<XY>): UpdateStatus {
+      its children. */
+  moveBy(by: Readonly<XY>): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
     if (!by.x && !by.y) return status
-    entity.bounds.position.x += by.x
-    entity.bounds.position.y += by.y
-    status |= ImageRect.moveBy(imageRect(entity), by)
-    Rect.moveAllBy(entity.collisionBodies, by)
-    for (const child of entity.children) moveBy(child, by)
+    this.bounds.position.x += by.x
+    this.bounds.position.y += by.y
+    status |= ImageRect.moveBy(this.imageRect(), by)
+    Rect.moveAllBy(this.collisionBodies, by)
+    for (const child of this.children) child.moveBy(by)
     return status | UpdateStatus.UPDATED
   }
 
-  export function getScale(entity: Readonly<Entity>): XY {
-    return imageRect(entity).scale
+  getScale(): XY {
+    return this.imageRect().scale
   }
 
-  export function setScale(entity: Entity, scale: Readonly<XY>): UpdateStatus {
+  setScale(scale: Readonly<XY>): UpdateStatus {
     const collisionScale =
-      getScale(entity).x && getScale(entity).y
-        ? scale.div(getScale(entity))
+      this.getScale().x && this.getScale().y
+        ? scale.div(this.getScale())
         : undefined
-    const status = ImageRect.setScale(imageRect(entity), scale)
+    const status = ImageRect.setScale(this.imageRect(), scale)
     if (collisionScale && status & UpdateStatus.UPDATED) {
-      for (const body of entity.collisionBodies) {
+      for (const body of this.collisionBodies) {
         body.size.w *= Math.abs(collisionScale.x)
         body.size.h *= Math.abs(collisionScale.y)
       }
     }
-    invalidateBounds(entity)
+    this.invalidateBounds()
     return status
   }
 
-  export function imageRect(entity: Readonly<Entity>): ImageRect {
-    return ImageStateMachine.imageRect(entity.machine)
+  imageRect(): ImageRect {
+    return ImageStateMachine.imageRect(this.machine)
   }
 
   /** Recursively animate the entity and its children. Only visible entities are
       animated so its possible for a composition entity's children to be fully,
       *partly*, or not animated together. */
-  export function animate(entity: Entity, state: UpdateState): Image[] {
-    if (!Rect.intersects(state.level.cam.bounds, entity.bounds)) return []
+  animate(state: UpdateState): Image[] {
+    if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
     const visible = ImageRect.intersects(
-      imageRect(entity),
+      this.imageRect(),
       state.level.cam.bounds
     )
     for (const image of visible)
       Image.animate(image, state.time, state.level.atlas)
     return [
       ...visible,
-      ...entity.children.reduce(
-        (images: Image[], child) => [...images, ...animate(child, state)],
+      ...this.children.reduce(
+        (images: Image[], child) => [...images, ...child.animate(state)],
         []
       )
     ]
   }
 
-  export function resetAnimation(entity: Entity): void {
-    ImageStateMachine.resetAnimation(entity.machine)
+  resetAnimation(): void {
+    ImageStateMachine.resetAnimation(this.machine)
   }
 
   /** Returns whether the current entity is in the viewport or should always be
       updated. Children are not considered. */
-  export function active(entity: Readonly<Entity>, viewport: Rect): boolean {
+  active(viewport: Rect): boolean {
     return (
-      entity.updatePredicate === UpdatePredicate.ALWAYS ||
-      Rect.intersects(entity.bounds, viewport)
+      this.updatePredicate === UpdatePredicate.ALWAYS ||
+      Rect.intersects(this.bounds, viewport)
     )
   }
 
-  export function setState(
-    entity: Entity,
-    state: State | string
-  ): UpdateStatus {
-    const status = ImageStateMachine.setState(entity.machine, state)
-    if (status & UpdateStatus.UPDATED) invalidateBounds(entity)
+  setState(state: Entity.State | string): UpdateStatus {
+    const status = ImageStateMachine.setState(this.machine, state)
+    if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
   }
 
   /** See UpdatePredicate. Actually this is going to go ahead and go into children so updte the docs */
-  export function update(entity: Entity, state: UpdateState): UpdateStatus {
-    if (!active(entity, state.level.cam.bounds)) return UpdateStatus.UNCHANGED
+  update(state: UpdateState): UpdateStatus {
+    if (!this.active(state.level.cam.bounds)) return UpdateStatus.UNCHANGED
 
     let status = UpdateStatus.UNCHANGED
-    for (const updater of entity.updaters) {
-      status |= UpdaterMap[updater](entity, state)
+    for (const updater of this.updaters) {
+      status |= UpdaterMap[updater](this, state)
       if (UpdateStatus.terminate(status)) return status
     }
 
-    status |= updatePosition(entity, state)
+    status |= updatePosition(this, state)
 
-    for (const child of entity.children) {
-      status |= update(child, state)
+    for (const child of this.children) {
+      status |= child.update(state)
       if (UpdateStatus.terminate(status)) return status
     }
 
     return status
   }
 
-  export function findAnyByID(
-    entities: readonly Entity[],
-    id: EntityID
-  ): Maybe<Entity> {
+  static findAnyByID(entities: readonly Entity[], id: EntityID): Maybe<Entity> {
     for (const entity of entities) {
-      const found = findByID(entity, id)
+      const found = entity.findByID(id)
       if (found) return found
     }
     return
   }
 
-  export function findAnyBySpawnID(
+  static findAnyBySpawnID(
     entities: readonly Entity[],
     spawnID: Symbol
   ): Maybe<Entity> {
     for (const entity of entities) {
-      const found = findBySpawnID(entity, spawnID)
+      const found = entity.findBySpawnID(spawnID)
       if (found) return found
     }
     return
   }
 
-  export function findByID(entity: Entity, id: EntityID): Maybe<Entity> {
-    return find(entity, entity => entity.id === id)
+  findByID(id: EntityID): Maybe<Entity> {
+    return this.find(entity => entity.id === id)
   }
 
-  export function findBySpawnID(
-    entity: Entity,
-    spawnID: Symbol
-  ): Maybe<Entity> {
-    return find(entity, entity => entity.spawnID === spawnID)
+  findBySpawnID(spawnID: Symbol): Maybe<Entity> {
+    return this.find(entity => entity.spawnID === spawnID)
   }
 
-  export function find(
-    entity: Entity,
-    predicate: (entity: Entity) => boolean
-  ): Maybe<Entity> {
-    if (predicate(entity)) return entity
-    for (const child of entity.children) {
-      const descendant = find(child, predicate)
+  find(predicate: (entity: Entity) => boolean): Maybe<Entity> {
+    if (predicate(this)) return this
+    for (const child of this.children) {
+      const descendant = child.find(predicate)
       if (descendant) return descendant
     }
     return
@@ -236,25 +265,25 @@ export namespace Entity {
 
   /** Raise or lower an entity's images and its descendants' images for all
       states. */
-  export function elevate(entity: Entity, offset: Layer): void {
-    ImageStateMachine.elevate(entity.machine, offset)
-    for (const child of entity.children) elevate(child, offset)
+  elevate(offset: Layer): void {
+    ImageStateMachine.elevate(this.machine, offset)
+    for (const child of this.children) child.elevate(offset)
   }
 
-  export function is<T extends Entity>(
-    entity: Entity,
-    type: T['type']
-  ): entity is T {
-    return entity.type === type
+  is<T extends Entity>(type: T['type']): this is T {
+    return this.type === type
   }
 
-  export function assert<T extends Entity>(
-    entity: Entity,
-    type: T['type']
-  ): entity is T {
-    const msg = `Unexpected entity type "${entity.type}". Expected "${type}".`
-    Assert.assert(is(entity, type), msg)
+  assert<T extends Entity>(type: T['type']): this is T {
+    const msg = `Unexpected entity type "${this.type}". Expected "${type}".`
+    Assert.assert(this.is(type), msg)
     return true
+  }
+}
+
+export namespace Entity {
+  export enum State {
+    HIDDEN = 'hidden'
   }
 }
 
@@ -286,7 +315,7 @@ function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
   entity.velocityFraction.y -= translate.y * 10_000
 
   const to: Readonly<XY> = entity.bounds.position.add(translate)
-  let status = Entity.moveTo(entity, to)
+  let status = entity.moveTo(to)
   if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
 
   const entities = Level.activeParentsWithPlayer(state.level)
@@ -300,16 +329,15 @@ function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
     return status
 
   if (diagonal && collidesWith.length) {
-    status |= Entity.moveTo(entity, new XY(to.x, from.y))
+    status |= entity.moveTo(new XY(to.x, from.y))
     collidesWith = EntityCollider.collidesEntities(entity, entities)
     if (collidesWith.length) {
-      status |= Entity.moveTo(entity, new XY(from.x, to.y))
+      status |= entity.moveTo(new XY(from.x, to.y))
       collidesWith = EntityCollider.collidesEntities(entity, entities)
     }
   }
 
-  if (collidesWith.length)
-    status |= Entity.moveTo(entity, new XY(from.x, from.y))
+  if (collidesWith.length) status |= entity.moveTo(new XY(from.x, from.y))
 
   return status
 }

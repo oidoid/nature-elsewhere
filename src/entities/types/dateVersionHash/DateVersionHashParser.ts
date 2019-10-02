@@ -14,10 +14,7 @@ export namespace DateVersionHashParser {
     parser: IEntityParser
   ): DateVersionHash {
     if (
-      !Entity.assert<DateVersionHash>(
-        dateVersionHash,
-        EntityType.UI_DATE_VERSION_HASH
-      )
+      !dateVersionHash.assert<DateVersionHash>(EntityType.UI_DATE_VERSION_HASH)
     )
       throw new Error()
 
@@ -32,7 +29,7 @@ export namespace DateVersionHashParser {
     }
     const text = parser(config, atlas)
     dateVersionHash.children.push(text)
-    Entity.invalidateBounds(dateVersionHash)
+    dateVersionHash.invalidateBounds()
 
     return dateVersionHash
   }

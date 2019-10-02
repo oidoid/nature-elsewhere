@@ -50,8 +50,8 @@ function updateAndAnimate(
 ): Image[] {
   const images: Image[] = []
   for (const entity of entities) {
-    Entity.update(entity, state)
-    images.push(...Entity.animate(entity, state))
+    entity.update(state)
+    images.push(...entity.animate(state))
   }
   return images
 }

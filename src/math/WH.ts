@@ -2,7 +2,13 @@ import {Build} from '../utils/Build'
 
 /** Integral wrapper for width and height (size / area). See XY. */
 export class WH {
-  constructor(private _w: number, private _h: number) {}
+  private _w: number
+  private _h: number
+
+  constructor(w: number, h: number) {
+    this._w = w
+    this._h = h
+  }
 
   get w(): number {
     return this._w

@@ -18,7 +18,13 @@ export class XY {
     return new XY(Math.trunc(x), Math.trunc(y))
   }
 
-  constructor(private _x: number, private _y: number) {}
+  private _x: number
+  private _y: number
+
+  constructor(x: number, y: number) {
+    this._x = x
+    this._y = y
+  }
 
   get x(): number {
     return this._x

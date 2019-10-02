@@ -14,8 +14,8 @@ export interface ImageStateMachine {
 }
 
 export namespace ImageStateMachine {
-  export function make(): ImageStateMachine {
-    return {state: Entity.State.HIDDEN, map: ImageStateMap.make()}
+  export function make(scale?: XY): ImageStateMachine {
+    return {state: Entity.State.HIDDEN, map: ImageStateMap.make(scale)}
   }
 
   export function setImageID(

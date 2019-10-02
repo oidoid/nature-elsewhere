@@ -31,7 +31,7 @@ export namespace EntityCollider {
       return collisions
 
     // The initiator and entity are identical.
-    if (Entity.equal(initiator, entity)) return collisions
+    if (initiator.equal(entity)) return collisions
 
     // Both of the entities have collision.
 
@@ -58,22 +58,22 @@ export namespace EntityCollider {
       // Each body must be tested against the entity in case it has children so
       // that all collisions are reported. However, each collision should only
       // be reported once.
-      return collisions.filter(ArrayUtil.unique(Entity.equal))
+      return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
     }
 
     if (initiator.collisionPredicate === CollisionPredicate.IMAGES) {
       // The initiator only has image collision. If the test entity or its
       // children collide with any of the initiator's images, a collision has
       // occurred. Otherwise, no collision has occurred.
-      if (!Rect.intersects(Entity.imageRect(initiator).bounds, entity.bounds))
+      if (!Rect.intersects(initiator.imageRect().bounds, entity.bounds))
         return collisions
-      for (const image of Entity.imageRect(initiator).images)
+      for (const image of initiator.imageRect().images)
         collisions.push(...collidesRect(entity, image.bounds))
 
       // Each image must be tested against the entity in case it has children so
       // that all collisions are reported. However, each collision should only
       // be reported once.
-      return collisions.filter(ArrayUtil.unique(Entity.equal))
+      return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
     }
 
     // The initiator has CollisionPredicate.CHILDREN.
@@ -83,7 +83,7 @@ export namespace EntityCollider {
     // Each child must be tested against the entity in case it has children so
     // that all collisions are reported. However, each collision should only
     // be reported once.
-    return collisions.filter(ArrayUtil.unique(Entity.equal))
+    return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
   }
 
   export function collidesRect(
@@ -115,10 +115,10 @@ export namespace EntityCollider {
     if (entity.collisionPredicate === CollisionPredicate.IMAGES) {
       // Test if any image collides.
       if (
-        Rect.intersects(Entity.imageRect(entity).bounds, rect) &&
-        Entity.imageRect(entity).images.some(image =>
-          Rect.intersects(rect, image.bounds)
-        )
+        Rect.intersects(entity.imageRect().bounds, rect) &&
+        entity
+          .imageRect()
+          .images.some(image => Rect.intersects(rect, image.bounds))
       )
         collisions.push(entity)
       return collisions

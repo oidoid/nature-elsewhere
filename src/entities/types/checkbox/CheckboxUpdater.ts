@@ -1,5 +1,4 @@
 import {Checkbox} from './Checkbox'
-import {Entity} from '../../../entity/Entity'
 import {EntityType} from '../../../entity/EntityType'
 import {Input} from '../../../inputs/Input'
 import {Level} from '../../../levels/Level'
@@ -13,8 +12,7 @@ export interface Checkbox extends Omit<Text, 'type'> {
 }
 export namespace CheckboxUpdater {
   export const update: Update = (checkbox, state) => {
-    if (!Entity.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
-      throw new Error()
+    if (!checkbox.assert<Checkbox>(EntityType.UI_CHECKBOX)) throw new Error()
     const collision = Level.collisionWithCursor(state.level, checkbox)
 
     let status = UpdateStatus.UNCHANGED
@@ -25,8 +23,7 @@ export namespace CheckboxUpdater {
 
     return (
       status |
-      Entity.setState(
-        checkbox,
+      checkbox.setState(
         checkbox.checked ? Checkbox.State.CHECKED : Checkbox.State.UNCHECKED
       )
     )

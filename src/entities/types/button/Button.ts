@@ -18,13 +18,13 @@ export namespace Button {
   }
 
   export const update: Update = (button, state) => {
-    if (!Entity.assert<Button>(button, EntityType.UI_BUTTON)) throw new Error()
+    if (!button.assert<Button>(EntityType.UI_BUTTON)) throw new Error()
 
     button.clicked = false
     const collision = Level.collisionWithCursor(state.level, button)
-    if (!collision) return Entity.setState(button, Button.State.UNCLICKED)
+    if (!collision) return button.setState(Button.State.UNCLICKED)
 
-    let status = Entity.setState(button, Button.State.CLICKED) // this is just presentation not click state
+    let status = button.setState(Button.State.CLICKED) // this is just presentation not click state
 
     const nextClicked = Input.inactiveTriggered(state.inputs.pick)
     const nextLongClicked = Input.activeLong(state.inputs.pick)

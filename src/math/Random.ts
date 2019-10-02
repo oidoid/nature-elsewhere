@@ -1,9 +1,11 @@
 // http://www.firstpr.com.au/dsp/rand31/
 // https://jsperf.com/park-miller-vs-math-random
 export class Random {
-  /** @arg _seed An integer. */
-  constructor(private _seed: number) {
-    this._seed = _seed % 0x7fff_ffff // [-0x7fff_fffe, 0x7fff_fffe]
+  private _seed: number
+
+  /** @arg seed An integer. */
+  constructor(seed: number) {
+    this._seed = seed % 0x7fff_ffff // [-0x7fff_fffe, 0x7fff_fffe]
     if (this._seed <= 0) this._seed += 0x7fff_ffff // [1, 0x7fff_ffff]
   }
 

@@ -25,7 +25,7 @@ export namespace FollowCamUpdater {
 
     if (entity.bounds.position.equal(to)) return UpdateStatus.UNCHANGED
 
-    return Entity.moveTo(entity, to)
+    return entity.moveTo(to)
   }
 }
 

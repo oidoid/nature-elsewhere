@@ -25,7 +25,7 @@ export interface TextConfig extends EntityConfig {
 
 export namespace TextParser {
   export function parse(text: Entity, atlas: Atlas): Text {
-    if (!Entity.assert<Text>(text, EntityType.UI_TEXT)) throw new Error()
+    if (!text.assert<Text>(EntityType.UI_TEXT)) throw new Error()
 
     const textImages = toImages(
       atlas,
@@ -33,7 +33,7 @@ export namespace TextParser {
       text.textLayer,
       XYParser.parse(text.textScale),
       {
-        position: Entity.imageRect(text).bounds.position,
+        position: text.imageRect().bounds.position,
         size: new WH(
           text.textMaxSize && text.textMaxSize.w
             ? text.textMaxSize.w
@@ -44,22 +44,23 @@ export namespace TextParser {
             : Limits.maxShort
         )
       },
-      Entity.imageRect(text).imageID
+      text.imageRect().imageID
     )
 
     // Images are added dynamically but ImageRect expects a static configuration
     // determined at parse time. Recalculate the bounds.
-    Entity.imageRect(text).images.push(...textImages)
+    // make function for this. try to encapsulate
+    text.imageRect().images.push(...textImages)
     const union = Rect.unionAll(
-      Entity.imageRect(text).images.map(image => image.bounds)
+      text.imageRect().images.map(image => image.bounds)
     )
     if (union) {
-      Entity.imageRect(text).bounds.position.x = union.position.x
-      Entity.imageRect(text).bounds.position.y = union.position.y
-      Entity.imageRect(text).bounds.size.w = union.size.w
-      Entity.imageRect(text).bounds.size.h = union.size.h
+      text.imageRect().bounds.position.x = union.position.x
+      text.imageRect().bounds.position.y = union.position.y
+      text.imageRect().bounds.size.w = union.size.w
+      text.imageRect().bounds.size.h = union.size.h
     }
-    Entity.invalidateBounds(text)
+    text.invalidateBounds()
     return text
   }
 

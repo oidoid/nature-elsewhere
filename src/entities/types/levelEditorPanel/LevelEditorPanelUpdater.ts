@@ -18,9 +18,7 @@ import {XY} from '../../../math/XY'
 
 export namespace LevelEditorPanelUpdater {
   export const update: Update = (panel, state) => {
-    if (
-      !Entity.assert<LevelEditorPanel>(panel, EntityType.UI_LEVEL_EDITOR_PANEL)
-    )
+    if (!panel.assert<LevelEditorPanel>(EntityType.UI_LEVEL_EDITOR_PANEL))
       throw new Error()
 
     let status = UpdateStatus.UNCHANGED
@@ -54,15 +52,15 @@ export namespace LevelEditorPanelUpdater {
           y: checkboxNumber(panel.yCheckbox)
         }
         let entity = EntityParser.parse(
-          {
-            type: child.type,
-            machine: {state: child.machine.state},
-            position
-          },
-          state.level.atlas
-        )
-        // force collision to bounds for picking
-        entity = {...entity, collisionPredicate: CollisionPredicate.BOUNDS}
+            {
+              type: child.type,
+              machine: {state: child.machine.state},
+              position
+            },
+            state.level.atlas
+          )
+          // force collision to bounds for picking
+        ;(<any>entity).collisionPredicate = CollisionPredicate.BOUNDS
         const sandbox = Entity.findAnyByID(
           state.level.parentEntities,
           EntityID.UI_LEVEL_EDITOR_SANDBOX
@@ -70,7 +68,7 @@ export namespace LevelEditorPanelUpdater {
         if (!sandbox) throw new Error('Missing sandbox.')
 
         sandbox.children.push(entity)
-        Entity.invalidateBounds(sandbox)
+        sandbox.invalidateBounds()
         // [todo] set selection here
       }
     }
@@ -98,7 +96,7 @@ export namespace LevelEditorPanelUpdater {
         marquee.selection = undefined
         marquee.machine.state = Entity.State.HIDDEN
         const index = sandbox.children.findIndex(entity =>
-          Entity.equal(entity, selection)
+          selection.equal(entity)
         )
         sandbox.children.splice(index, 1)
       }
@@ -112,9 +110,9 @@ export namespace LevelEditorPanelUpdater {
           checkboxNumber(panel.xCheckbox),
           checkboxNumber(panel.yCheckbox)
         )
-        Entity.moveTo(selection, position)
-        Entity.invalidateBounds(sandbox)
-        Entity.moveTo(marquee, new XY(position.x - 1, position.y - 1))
+        selection.moveTo(position)
+        sandbox.invalidateBounds()
+        marquee.moveTo(new XY(position.x - 1, position.y - 1))
       } else {
         updateNumberCheckbox(
           panel.xCheckbox,
@@ -186,5 +184,5 @@ function toggleGrid(state: UpdateState): void {
     grid.machine.state === Entity.State.HIDDEN
       ? PlaneState.GRID
       : Entity.State.HIDDEN
-  Entity.setState(grid, toggle)
+  grid.setState(toggle)
 }

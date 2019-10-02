@@ -37,9 +37,7 @@ export namespace Level {
   export function activeParentsNoPlayer(level: Level): readonly Entity[] {
     const entities = []
     entities.push(
-      ...level.parentEntities.filter(entity =>
-        Entity.active(entity, level.cam.bounds)
-      )
+      ...level.parentEntities.filter(entity => entity.active(level.cam.bounds))
     )
     return entities
   }
@@ -48,9 +46,7 @@ export namespace Level {
     const entities = []
     if (level.player) entities.push(level.player)
     entities.push(
-      ...level.parentEntities.filter(entity =>
-        Entity.active(entity, level.cam.bounds)
-      )
+      ...level.parentEntities.filter(entity => entity.active(level.cam.bounds))
     )
     return entities
   }
@@ -86,7 +82,7 @@ export namespace Level {
       follow = level.player
     else
       for (const parent of level.parentEntities) {
-        follow = Entity.findByID(parent, level.cam.followID)
+        follow = parent.findByID(level.cam.followID)
         if (follow) break
       }
 

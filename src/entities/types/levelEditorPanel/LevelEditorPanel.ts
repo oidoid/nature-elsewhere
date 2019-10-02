@@ -71,6 +71,6 @@ export namespace LevelEditorPanel {
       atlas,
       parser
     )
-    Entity.invalidateBounds(radioGroup)
+    radioGroup.invalidateBounds()
   }
 }

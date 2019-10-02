@@ -75,8 +75,6 @@ import {
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {XYConfig, XYParser} from '../math/XYParser'
 import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
-import {WH} from '../math/WH'
-import {XY} from '../math/XY'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 
@@ -131,14 +129,10 @@ export namespace EntityParser {
       if (imageID) ImageRect.setImageID(rect, imageID)
     }
 
-    let entity: Entity = {
-      ...specialization(config),
-      spawnID: Symbol(),
+    const props = {
       id: parseID(config.id),
       type: type,
-      bounds: {position: new XY(0, 0), size: new WH(0, 0)},
       velocity: XYParser.parse(config.velocity),
-      velocityFraction: {x: 0, y: 0},
       machine,
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
       updaters: UpdaterTypeParser.parseAll(config.updaters),
@@ -149,16 +143,18 @@ export namespace EntityParser {
       collisionBodies: RectParser.parseAll(config.collisionBodies),
       children
     }
+    let entity = new Entity(props)
+    Object.assign(entity, specialization(config))
 
     // Move the images, collision, and children.
     const position = XYParser.parse(config.position)
-    Entity.moveTo(entity, position)
+    entity.moveTo(position)
 
-    Entity.setScale(entity, scale)
+    entity.setScale(scale)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.
-    Entity.invalidateBounds(entity)
+    entity.invalidateBounds()
 
     const parser = TypeParserMap[type]
     entity = parser ? parser(entity, atlas, parse) : entity
@@ -195,16 +191,18 @@ export namespace EntityParser {
   }
 }
 
-function specialization(config: EntityConfig): Partial<EntityConfig> {
+function specialization(config: EntityConfig) {
   // Remove known parsed properties.
   const {
     id,
     type,
+    velocity,
     position,
     scale,
     machine,
     updatePredicate,
     updaters,
+    collisionTypes,
     collisionPredicate,
     collisionBodies,
     children,

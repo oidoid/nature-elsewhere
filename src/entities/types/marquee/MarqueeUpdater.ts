@@ -17,8 +17,7 @@ enum Images {
 
 export namespace MarqueeUpdater {
   export const update: Update = (marquee, state) => {
-    if (!Entity.assert<Marquee>(marquee, EntityType.UI_MARQUEE))
-      throw new Error()
+    if (!marquee.assert<Marquee>(EntityType.UI_MARQUEE)) throw new Error()
     let status = UpdateStatus.UNCHANGED
 
     const sandbox = Entity.findAnyByID(
@@ -49,7 +48,7 @@ export namespace MarqueeUpdater {
       sandbox
     )
     if (!panelCollision.length && cursorSandboxCollision.length) {
-      status |= Entity.setState(marquee, Marquee.State.VISIBLE)
+      status |= marquee.setState(Marquee.State.VISIBLE)
 
       const sandboxEntity = cursorSandboxCollision[0] // this won't work correctly for sub-entities
       marquee.selection = sandboxEntity.spawnID
@@ -58,10 +57,10 @@ export namespace MarqueeUpdater {
         sandboxEntity.bounds.position.x - 1,
         sandboxEntity.bounds.position.y - 1
       )
-      status |= Entity.moveTo(marquee, destination)
+      status |= marquee.moveTo(destination)
       doTheStuffAndThings(marquee, destination, sandboxEntity)
     } else if (!panelCollision.length) {
-      status |= Entity.setState(marquee, Entity.State.HIDDEN)
+      status |= marquee.setState(Entity.State.HIDDEN)
       marquee.selection = undefined
     }
 
@@ -74,7 +73,7 @@ function doTheStuffAndThings(
   destination: XY,
   sandboxEntity: Entity
 ): void {
-  const rect = Entity.imageRect(marquee)
+  const rect = marquee.imageRect()
   const marqueeImages = rect.images
 
   rect.bounds.position.x = destination.x

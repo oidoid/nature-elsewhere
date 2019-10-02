@@ -13,13 +13,12 @@ export interface ImageEntityConfig extends EntityConfig {
 
 export namespace ImageEntityParser {
   export function parse(imageEntity: Entity, atlas: Atlas): ImageEntity {
-    if (!Entity.assert<ImageEntity>(imageEntity, EntityType.IMAGE))
-      throw new Error()
+    if (!imageEntity.assert<ImageEntity>(EntityType.IMAGE)) throw new Error()
     const imageConfig = (<ImageEntityConfig>(<unknown>imageEntity)).image
     if (imageConfig) {
       const image = ImageParser.parse(imageConfig, atlas)
-      ImageRect.add(Entity.imageRect(imageEntity), image)
-      Entity.invalidateBounds(imageEntity)
+      ImageRect.add(imageEntity.imageRect(), image) // not great. more encapsulation pls
+      imageEntity.invalidateBounds() // this ain't goood
     }
     return imageEntity
   }

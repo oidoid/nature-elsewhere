@@ -27,6 +27,8 @@ export namespace FollowCamParser {
     const camMargin = WHParser.parse(
       'camMargin' in entity ? entity['camMargin'] : undefined
     )
-    return {...entity, orientation, camMargin}
+    ;(<any>entity).orientation = orientation
+    ;(<any>entity).camMargin = camMargin
+    return entity
   }
 }

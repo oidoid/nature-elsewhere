@@ -12,7 +12,6 @@ import {Update} from './Update'
 import {UpdaterType} from './updaterType/UpdaterType'
 import {UpdateStatus} from './updateStatus/UpdateStatus'
 import {NumberUtil} from '../../math/NumberUtil'
-import {Entity} from '../../entity/Entity'
 import {XY} from '../../math/XY'
 
 const wraparound: Update = (entity, state) => {
@@ -29,7 +28,7 @@ const wraparound: Update = (entity, state) => {
       state.level.size.h - 1
     )
   )
-  return Entity.moveTo(entity, destination)
+  return entity.moveTo(destination)
 }
 
 export const UpdaterMap: Readonly<Record<UpdaterType, Update>> = {

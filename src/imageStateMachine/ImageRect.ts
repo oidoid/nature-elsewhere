@@ -32,11 +32,11 @@ export interface ImageRect {
 }
 
 export namespace ImageRect {
-  export function make(): ImageRect {
+  export function make(scale: XY = new XY(1, 1)): ImageRect {
     return {
       origin: new XY(0, 0),
       bounds: {position: new XY(0, 0), size: new WH(0, 0)},
-      scale: new XY(1, 1),
+      scale,
       images: []
     }
   }

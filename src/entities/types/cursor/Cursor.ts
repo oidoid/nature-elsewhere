@@ -25,7 +25,7 @@ export namespace Cursor {
         state.canvasWH,
         state.level.cam.bounds
       )
-      status |= Entity.moveTo(cursor, position)
+      status |= cursor.moveTo(position)
     } else if (point && point.active) {
       nextState = Cursor.State.VISIBLE
       const position = Input.levelXY(
@@ -33,9 +33,9 @@ export namespace Cursor {
         state.canvasWH,
         state.level.cam.bounds
       )
-      status |= Entity.moveTo(cursor, position)
+      status |= cursor.moveTo(position)
     }
-    status |= Entity.setState(cursor, nextState)
+    status |= cursor.setState(nextState)
 
     return status
   }

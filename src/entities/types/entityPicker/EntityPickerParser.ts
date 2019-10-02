@@ -26,7 +26,7 @@ export namespace EntityPickerParser {
     atlas: Atlas,
     parser: IEntityParser
   ): EntityPicker {
-    if (!Entity.assert<EntityPicker>(picker, EntityType.UI_ENTITY_PICKER))
+    if (!picker.assert<EntityPicker>(EntityType.UI_ENTITY_PICKER))
       throw new Error()
     const entityWindowBounds = {
       position: new XY(
@@ -41,8 +41,8 @@ export namespace EntityPickerParser {
       const center = Rect.centerOn(entity.bounds, entityWindowBounds).max(
         entityWindowBounds.position
       )
-      Entity.moveTo(entity, center)
-      Entity.setState(entity, Entity.State.HIDDEN)
+      entity.moveTo(center)
+      entity.setState(Entity.State.HIDDEN)
       picker.children.push(entity)
     }
     picker.activeChildIndex = 0
@@ -80,23 +80,23 @@ export namespace EntityPickerParser {
       states.length
     )
     const state = states[index]
-    Entity.setState(child, state)
+    child.setState(state)
   }
 }
 
 function hideActiveChild(picker: EntityPicker): void {
   const child = EntityPickerParser.getActiveChild(picker)
   if (!child) return
-  Entity.elevate(child, -Layer.UI_PICKER_OFFSET)
-  Entity.setState(child, Entity.State.HIDDEN)
+  child.elevate(-Layer.UI_PICKER_OFFSET)
+  child.setState(Entity.State.HIDDEN)
 }
 
 function showActiveChild(picker: EntityPicker): void {
   const child = EntityPickerParser.getActiveChild(picker)
   if (!child) return
   const defaultState = child.machine.state //defaultTypeState(child.type)
-  if (defaultState) Entity.setState(child, defaultState)
-  Entity.elevate(child, Layer.UI_PICKER_OFFSET)
+  if (defaultState) child.setState(defaultState)
+  child.elevate(Layer.UI_PICKER_OFFSET)
 }
 
 function getChildStates(child: Entity): readonly (Entity.State | string)[] {

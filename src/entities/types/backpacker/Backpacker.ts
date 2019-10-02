@@ -22,7 +22,7 @@ export namespace Backpacker {
   }
 
   export const update: Update = (backpacker, state) => {
-    if (!Entity.assert<Backpacker>(backpacker, EntityType.CHAR_BACKPACKER))
+    if (!backpacker.assert<Backpacker>(EntityType.CHAR_BACKPACKER))
       throw new Error()
 
     const destination = calculateDestination(backpacker, state)
@@ -44,7 +44,7 @@ export namespace Backpacker {
     if (idle) {
       nextState = calculateIdleState(backpacker)
       if (state.level.destination)
-        Entity.setState(state.level.destination, Entity.State.HIDDEN)
+        state.level.destination.setState(Entity.State.HIDDEN)
     } else {
       const horizontalDistance = Math.abs(
         destination.x - backpacker.bounds.position.x
@@ -55,12 +55,12 @@ export namespace Backpacker {
         nextState = State.WALK_RIGHT
     }
 
-    const scale = Entity.getScale(backpacker).copy()
+    const scale = backpacker.getScale().copy()
     if (up || down || right) scale.x = Math.abs(scale.x)
     if (left) scale.x = -1 * Math.abs(scale.x)
 
-    Entity.setScale(backpacker, scale)
-    Entity.setState(backpacker, nextState)
+    backpacker.setScale(scale)
+    backpacker.setState(nextState)
 
     return status
   }
@@ -72,9 +72,9 @@ export namespace Backpacker {
   ): void {
     if (entity.collisionType & CollisionType.OBSTACLE) {
       const idle = calculateIdleState(backpacker)
-      Entity.setState(backpacker, idle)
+      backpacker.setState(idle)
       if (state.level.destination)
-        Entity.setState(state.level.destination, Entity.State.HIDDEN)
+        state.level.destination.setState(Entity.State.HIDDEN)
     }
   }
 }
@@ -103,7 +103,7 @@ function calculateDestination(
   )
     return
   const {x, y} = state.level.destination.bounds.position.add(
-    Entity.imageRect(backpacker).origin
+    backpacker.imageRect().origin
   )
   return new XY(
     NumberUtil.clamp(x, 0, state.level.size.w - backpacker.bounds.size.w),

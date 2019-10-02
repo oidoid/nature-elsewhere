@@ -18,8 +18,7 @@ export namespace CheckboxParser {
     atlas: Atlas,
     parser: IEntityParser
   ): Checkbox {
-    if (!Entity.assert<Checkbox>(checkbox, EntityType.UI_CHECKBOX))
-      throw new Error()
+    if (!checkbox.assert<Checkbox>(EntityType.UI_CHECKBOX)) throw new Error()
     setText(checkbox, 0, checkbox.text, atlas, parser)
     if (!('checked' in checkbox)) (<Checkbox>checkbox).checked = false
     return <Checkbox>checkbox
@@ -43,13 +42,13 @@ export namespace CheckboxParser {
         x: checkbox.bounds.position.x + 1,
         y: checkbox.bounds.position.y
       },
-      imageID: Entity.imageRect(checkbox).imageID
+      imageID: checkbox.imageRect().imageID
     }
     const child = parser(config, atlas)
-    Entity.elevate(child, layer)
+    child.elevate(layer)
     checkbox.children[0] = child
     setBackground(checkbox, layer, atlas)
-    Entity.invalidateBounds(checkbox)
+    checkbox.invalidateBounds()
   }
 }
 
