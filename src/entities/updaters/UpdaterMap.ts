@@ -11,9 +11,25 @@ import {MarqueeUpdater} from '../types/marquee/MarqueeUpdater'
 import {Update} from './Update'
 import {UpdaterType} from './updaterType/UpdaterType'
 import {UpdateStatus} from './updateStatus/UpdateStatus'
+import {NumberUtil} from '../../math/NumberUtil'
+import {Entity} from '../../entity/Entity'
+import {XY} from '../../math/XY'
 
-const wraparound: Update = () => {
-  return UpdateStatus.UNCHANGED
+const wraparound: Update = (entity, state) => {
+  const {bounds} = entity
+  const destination = new XY(
+    NumberUtil.wrap(
+      bounds.position.x,
+      -bounds.size.w + 1, // 8 works but not 1
+      state.level.size.w - 1
+    ),
+    NumberUtil.wrap(
+      bounds.position.y,
+      -bounds.size.h + 1,
+      state.level.size.h - 1
+    )
+  )
+  return Entity.moveTo(entity, destination)
 }
 
 export const UpdaterMap: Readonly<Record<UpdaterType, Update>> = {
@@ -33,3 +49,4 @@ export const UpdaterMap: Readonly<Record<UpdaterType, Update>> = {
   [UpdaterType.UI_MARQUEE]: MarqueeUpdater.update,
   [UpdaterType.WRAPAROUND]: wraparound
 }
+export type UpdaterMap = typeof UpdaterMap[keyof typeof UpdaterMap]
