@@ -4,6 +4,7 @@ import {XY} from '../math/XY'
 import {Layer} from '../image/Layer'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
 import {AtlasID} from '../atlas/AtlasID'
+import {WH} from '../math/WH'
 
 export interface ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
@@ -16,7 +17,10 @@ export interface ImageRect {
       ImageRect.bounds does as well. flipImages only controls whether each image
       in the ImageRect is flipped or not. The original orientation is considered
       so a flipped entity composed of a mishmash of flipped images will mirror
-      that mishmash and not lose each individual's image's relative flip. */
+      that mishmash and not lose each individual's image's relative flip.
+
+      Always use non-zero scaling so that Entity can determine relative scaling
+      of collision bodies. */
   readonly scale: XY
   /** Image coordinates are not relative the bounds origin, they're in level
       coordinates. These should usually only be passed statically by the entity
@@ -28,6 +32,15 @@ export interface ImageRect {
 }
 
 export namespace ImageRect {
+  export function make(): ImageRect {
+    return {
+      origin: new XY(0, 0),
+      bounds: {position: new XY(0, 0), size: new WH(0, 0)},
+      scale: new XY(1, 1),
+      images: []
+    }
+  }
+
   export function setImageID(rect: ImageRect, id: AtlasID): UpdateStatus {
     if (rect.imageID === id) return UpdateStatus.UNCHANGED
     rect.imageID = id

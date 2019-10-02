@@ -9,6 +9,10 @@ export interface Rect {
 }
 
 export namespace Rect {
+  export function make(x: number, y: number, w: number, h: number): Rect {
+    return {position: new XY(x, y), size: new WH(w, h)}
+  }
+
   export function trunc(rect: Rect): Rect {
     return {position: rect.position.copy(), size: rect.size.copy()}
   }

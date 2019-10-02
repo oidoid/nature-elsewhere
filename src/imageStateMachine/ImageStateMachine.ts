@@ -4,6 +4,7 @@ import {Layer} from '../image/Layer'
 import {XY} from '../math/XY'
 import {AtlasID} from '../atlas/AtlasID'
 import {Entity} from '../entity/Entity'
+import {ImageStateMap} from './ImageStateMap'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.
@@ -13,6 +14,10 @@ export interface ImageStateMachine {
 }
 
 export namespace ImageStateMachine {
+  export function make(): ImageStateMachine {
+    return {state: Entity.State.HIDDEN, map: ImageStateMap.make()}
+  }
+
   export function setImageID(
     machine: ImageStateMachine,
     id: AtlasID

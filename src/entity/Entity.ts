@@ -18,12 +18,12 @@ import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
 
-export interface Entity {
+export class Entity {
   /** A globally unique identifier for quick equality checks. It should be used
       for no other purpose. The value is transient and should not be preserved
       on entity serialization. */
-  readonly spawnID: symbol
-  readonly id: EntityID
+  readonly spawnID: symbol = Symbol()
+  readonly id: EntityID = EntityID.ANONYMOUS
   readonly type: EntityType
   /** The local coordinate system or minimal union of the entity and all of its
       children given in level coordinates with origin at (x, y). All images,
@@ -32,24 +32,28 @@ export interface Entity {
       local coordinate system is necessary for calculating absolute translations
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
-  readonly bounds: Rect
-  readonly velocity: DecamillipixelXY
-  readonly velocityFraction: FloatXY
-  readonly machine: ImageStateMachine
-  readonly updatePredicate: UpdatePredicate
+  readonly bounds: Rect = Rect.make(0, 0, 0, 0)
+  readonly velocity: DecamillipixelXY = new XY(0, 0)
+  readonly velocityFraction: FloatXY = {x: 0, y: 0}
+  readonly machine: ImageStateMachine = ImageStateMachine.make()
+  readonly updatePredicate: UpdatePredicate = UpdatePredicate.INTERSECT_VIEWPORT
   /** See UpdatePredicate. */
-  readonly updaters: readonly UpdaterType[]
-  readonly collisionType: CollisionType
-  readonly collisionPredicate: CollisionPredicate
+  readonly updaters: readonly UpdaterType[] = []
+  readonly collisionType: CollisionType = CollisionType.INERT
+  readonly collisionPredicate: CollisionPredicate = CollisionPredicate.NEVER
   // how to handle collision mapping? by type? by mixin updater field thingy? how does this relate to existing collision checks such as those with cursor and button?
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
-  readonly collisionBodies: readonly Rect[] // Move to CollisionBody with CollisionType prop
+  readonly collisionBodies: readonly Rect[] = [] // Move to CollisionBody with CollisionType prop
   /** Operations are shallow by default (do not recurse children) unless
       specified otherwise. That is, only translation and animation are
       recursive. */
-  readonly children: Entity[]
+  readonly children: Entity[] = []
+
+  constructor(type: EntityType) {
+    this.type = type
+  }
 }
 
 export namespace Entity {

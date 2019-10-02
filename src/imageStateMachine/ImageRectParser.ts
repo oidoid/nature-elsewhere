@@ -14,15 +14,7 @@ export type ImageRectConfig = Maybe<{
 
 export namespace ImageRectParser {
   export function parse(config: ImageRectConfig, atlas: Atlas): ImageRect {
-    if (!config)
-      return {
-        origin: new XY(0, 0),
-        bounds: {position: new XY(0, 0), size: new WH(0, 0)},
-        // Always use non-zero scaling so that Entity can determine
-        // relative scaling of collision bodies.
-        scale: new XY(1, 1),
-        images: []
-      }
+    if (!config) return ImageRect.make()
     const images = (config.images || []).map(image =>
       ImageParser.parse(image, atlas)
     )
