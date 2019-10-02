@@ -1,3 +1,5 @@
+import {Assert} from './Assert'
+
 export namespace ObjectUtil {
   // https://github.com/Microsoft/TypeScript/pull/12253
   export function keys<T>(obj: T & object): readonly (keyof T)[] {
@@ -40,8 +42,8 @@ export namespace ObjectUtil {
     key: keyof any,
     type: string
   ): key is keyof T {
-    if (isKeyOf(obj, key)) return !!key
-    throw new Error(`${type} missing "${key.toString()}" key.`)
+    Assert.assert(isKeyOf(obj, key), `${type} missing "${key.toString()}" key.`)
+    return true
   }
 
   export function assertValueOf<T>(
@@ -49,7 +51,7 @@ export namespace ObjectUtil {
     val: string,
     type: string
   ): val is T[keyof T] & string {
-    if (isValueOf(obj, val)) return !!val
-    throw new Error(`${type} missing "${val}" value.`)
+    Assert.assert(isValueOf(obj, val), `${type} missing "${val}" value.`)
+    return true
   }
 }

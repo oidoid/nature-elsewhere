@@ -1,21 +1,22 @@
+import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
+import {CollisionType} from '../collision/CollisionType'
+import {DecamillipixelXY, FloatXY, XY} from '../math/XY'
+import {EntityCollider} from '../collision/EntityCollider'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
 import {Layer} from '../image/Layer'
+import {Level} from '../levels/Level'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../entities/updaters/updatePredicate/UpdatePredicate'
 import {UpdaterMap} from '../entities/updaters/UpdaterMap'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
-import {DecamillipixelXY, FloatXY, XY} from '../math/XY'
-import {EntityCollider} from '../collision/EntityCollider'
-import {Level} from '../levels/Level'
-import {CollisionType} from '../collision/CollisionType'
 
 export interface Entity {
   /** A globally unique identifier for quick equality checks. It should be used
@@ -248,7 +249,7 @@ export namespace Entity {
     type: T['type']
   ): entity is T {
     const msg = `Unexpected entity type "${entity.type}". Expected "${type}".`
-    if (!is(entity, type)) throw new Error(msg)
+    Assert.assert(is(entity, type), msg)
     return true
   }
 }
