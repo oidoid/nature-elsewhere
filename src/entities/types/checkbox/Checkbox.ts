@@ -1,13 +1,20 @@
-import {EntityType} from '../../../entity/EntityType'
 import {Text} from '../text/Text'
 
-export interface Checkbox extends Omit<Text, 'type'> {
-  readonly type: EntityType.UI_CHECKBOX
+export class Checkbox extends Text {
   checked: boolean
-}
-export namespace Checkbox {
-  export enum State {
-    UNCHECKED = 'unchecked',
-    CHECKED = 'checked'
+
+  constructor({checked, ...props}: Checkbox.Props) {
+    super(props)
+    this.checked = checked || false
   }
+}
+
+export namespace Checkbox {
+  export interface Props extends Text.Props {
+    readonly checked?: boolean
+  }
+}
+export enum CheckboxState {
+  UNCHECKED = 'unchecked',
+  CHECKED = 'checked'
 }

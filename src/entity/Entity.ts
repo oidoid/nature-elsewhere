@@ -19,36 +19,13 @@ import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 
-export interface Props {
-  /** Defaults to EntityID.UNDEFINED. */
-  readonly id?: EntityID
-  readonly type: EntityType
-  /** Defaults to (0, 0). */
-  readonly position?: XY
-  readonly velocity?: XY
-  readonly scale?: XY
-  /** Defaults to {}. */
-  readonly machine?: ImageStateMachine
-  /** Defaults to BehaviorPredicate.NEVER. */
-  readonly updatePredicate?: UpdatePredicate
-  /** Defaults to []. */
-  readonly updaters?: UpdaterType[]
-  /** Defaults to CollisionPredicate.NEVER. */
-  readonly collisionType?: CollisionType
-  readonly collisionPredicate?: CollisionPredicate
-  /** Defaults to []. In local coordinates (converted to level by parser). */
-  readonly collisionBodies?: Rect[]
-  /** Defaults to []. */
-  readonly children?: Entity[]
-}
-
 export class Entity {
   /** A globally unique identifier for quick equality checks. It should be used
       for no other purpose. The value is transient and should not be preserved
       on entity serialization. */
-  readonly spawnID: symbol = Symbol()
-  readonly id: EntityID
-  readonly type: EntityType
+  private readonly _spawnID: symbol = Symbol()
+  private readonly _id: EntityID
+  private readonly _type: EntityType
   /** The local coordinate system or minimal union of the entity and all of its
       children given in level coordinates with origin at (x, y). All images,
       collisions, and children are always in bounds and are also specified in
@@ -56,24 +33,24 @@ export class Entity {
       local coordinate system is necessary for calculating absolute translations
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
-  readonly bounds: Rect
-  readonly velocity: XY
-  readonly velocityFraction: FloatXY = {x: 0, y: 0}
-  readonly machine: ImageStateMachine
-  readonly updatePredicate: UpdatePredicate
+  private readonly _bounds: Rect
+  private readonly _velocity: XY
+  private readonly _velocityFraction: FloatXY = {x: 0, y: 0}
+  private readonly _machine: ImageStateMachine
+  private readonly _updatePredicate: UpdatePredicate
   /** See UpdatePredicate. */
-  readonly updaters: readonly UpdaterType[]
-  readonly collisionType: CollisionType
-  readonly collisionPredicate: CollisionPredicate
+  private readonly _updaters: readonly UpdaterType[]
+  private readonly _collisionType: CollisionType
+  private _collisionPredicate: CollisionPredicate
   // how to handle collision mapping? by type? by mixin updater field thingy? how does this relate to existing collision checks such as those with cursor and button?
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
-  readonly collisionBodies: readonly Rect[] // Move to CollisionBody with CollisionType prop
+  private readonly _collisionBodies: readonly Rect[] // Move to CollisionBody with CollisionType prop
   /** Operations are shallow by default (do not recurse children) unless
       specified otherwise. That is, only translation and animation are
       recursive. */
-  readonly children: Entity[]
+  private readonly _children: Entity[]
 
   constructor({
     id,
@@ -88,18 +65,59 @@ export class Entity {
     collisionPredicate,
     collisionBodies,
     children
-  }: Props) {
-    this.id = id || EntityID.ANONYMOUS
-    this.type = type
-    this.bounds = {position: position || new XY(0, 0), size: new WH(0, 0)}
-    this.velocity = velocity || new XY(0, 0)
-    this.machine = machine || ImageStateMachine.make(scale)
-    this.updatePredicate = updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
-    this.updaters = updaters || []
-    this.collisionType = collisionType || CollisionType.INERT
-    this.collisionPredicate = collisionPredicate || CollisionPredicate.NEVER
-    this.collisionBodies = collisionBodies || []
-    this.children = children || []
+  }: Entity.Props) {
+    this._id = id || EntityID.ANONYMOUS
+    this._type = type
+    this._bounds = {position: position || new XY(0, 0), size: new WH(0, 0)}
+    this._velocity = velocity || new XY(0, 0)
+    this._machine = machine || ImageStateMachine.make(scale)
+    this._updatePredicate =
+      updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
+    this._updaters = updaters || []
+    this._collisionType = collisionType || CollisionType.INERT
+    this._collisionPredicate = collisionPredicate || CollisionPredicate.NEVER
+    this._collisionBodies = collisionBodies || []
+    this._children = children || []
+  }
+
+  get spawnID(): symbol {
+    return this._spawnID
+  }
+  get id(): EntityID {
+    return this._id
+  }
+  get type(): EntityType {
+    return this._type
+  }
+  get bounds(): Rect {
+    return this._bounds
+  }
+  get velocity(): XY {
+    return this._velocity
+  }
+  get machine(): ImageStateMachine {
+    return this._machine
+  }
+  get updatePredicate(): UpdatePredicate {
+    return this._updatePredicate
+  }
+  get updaters(): readonly UpdaterType[] {
+    return this._updaters
+  }
+  get collisionType(): CollisionType {
+    return this._collisionType
+  }
+  get collisionPredicate(): CollisionPredicate {
+    return this._collisionPredicate
+  }
+  set collisionPredicate(predicate: CollisionPredicate) {
+    this._collisionPredicate = predicate
+  }
+  get collisionBodies(): readonly Rect[] {
+    return this._collisionBodies
+  }
+  get children(): Entity[] {
+    return this._children
   }
 
   setImageID(id: AtlasID): UpdateStatus {
@@ -217,7 +235,7 @@ export class Entity {
       if (UpdateStatus.terminate(status)) return status
     }
 
-    status |= updatePosition(this, state)
+    status |= this._updatePosition(state)
 
     for (const child of this.children) {
       status |= child.update(state)
@@ -279,65 +297,88 @@ export class Entity {
     Assert.assert(this.is(type), msg)
     return true
   }
+
+  private _updatePosition(state: UpdateState): UpdateStatus {
+    // [todo] level bounds checking
+    const from: Readonly<XY> = this.bounds.position.copy()
+
+    const diagonal = this.velocity.x && this.velocity.y
+
+    this._velocityFraction.x += this.velocity.x * state.time
+    this._velocityFraction.y += this.velocity.y * state.time
+
+    if (diagonal) {
+      // When moving diagonally, synchronize / group integer boundary changes
+      // across directions to minimize pixel changes per frame and avoid jarring.
+      const max = Math.max(
+        Math.abs(this._velocityFraction.x),
+        Math.abs(this._velocityFraction.y)
+      )
+      this._velocityFraction.x = max * Math.sign(this.velocity.x)
+      this._velocityFraction.y = max * Math.sign(this.velocity.y)
+    }
+
+    const translate: Readonly<XY> = XY.trunc(
+      this._velocityFraction.x / 10_000,
+      this._velocityFraction.y / 10_000
+    )
+    this._velocityFraction.x -= translate.x * 10_000
+    this._velocityFraction.y -= translate.y * 10_000
+
+    const to: Readonly<XY> = this.bounds.position.add(translate)
+    let status = this.moveTo(to)
+    if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
+
+    const entities = Level.activeParentsWithPlayer(state.level)
+
+    let collidesWith = EntityCollider.collidesEntities(this, entities)
+    if (
+      !collidesWith.some(
+        collision => collision.collisionType & CollisionType.OBSTACLE
+      )
+    )
+      return status
+
+    if (diagonal && collidesWith.length) {
+      status |= this.moveTo(new XY(to.x, from.y))
+      collidesWith = EntityCollider.collidesEntities(this, entities)
+      if (collidesWith.length) {
+        status |= this.moveTo(new XY(from.x, to.y))
+        collidesWith = EntityCollider.collidesEntities(this, entities)
+      }
+    }
+
+    if (collidesWith.length) status |= this.moveTo(new XY(from.x, from.y))
+
+    return status
+  }
 }
 
 export namespace Entity {
+  export interface Props {
+    /** Defaults to EntityID.UNDEFINED. */
+    readonly id?: EntityID
+    readonly type: EntityType
+    /** Defaults to (0, 0). */
+    readonly position?: XY
+    readonly velocity?: XY
+    readonly scale?: XY
+    /** Defaults to {}. */
+    readonly machine?: ImageStateMachine
+    /** Defaults to BehaviorPredicate.NEVER. */
+    readonly updatePredicate?: UpdatePredicate
+    /** Defaults to []. */
+    readonly updaters?: UpdaterType[]
+    /** Defaults to CollisionPredicate.NEVER. */
+    readonly collisionType?: CollisionType
+    readonly collisionPredicate?: CollisionPredicate
+    /** Defaults to []. In local coordinates (converted to level by parser). */
+    readonly collisionBodies?: Rect[]
+    /** Defaults to []. */
+    readonly children?: Entity[]
+  }
+
   export enum State {
     HIDDEN = 'hidden'
   }
-}
-
-function updatePosition(entity: Entity, state: UpdateState): UpdateStatus {
-  // [todo] level bounds checking
-  const from: Readonly<XY> = entity.bounds.position.copy()
-
-  const diagonal = entity.velocity.x && entity.velocity.y
-
-  entity.velocityFraction.x += entity.velocity.x * state.time
-  entity.velocityFraction.y += entity.velocity.y * state.time
-
-  if (diagonal) {
-    // When moving diagonally, synchronize / group integer boundary changes
-    // across directions to minimize pixel changes per frame and avoid jarring.
-    const max = Math.max(
-      Math.abs(entity.velocityFraction.x),
-      Math.abs(entity.velocityFraction.y)
-    )
-    entity.velocityFraction.x = max * Math.sign(entity.velocity.x)
-    entity.velocityFraction.y = max * Math.sign(entity.velocity.y)
-  }
-
-  const translate: Readonly<XY> = XY.trunc(
-    entity.velocityFraction.x / 10_000,
-    entity.velocityFraction.y / 10_000
-  )
-  entity.velocityFraction.x -= translate.x * 10_000
-  entity.velocityFraction.y -= translate.y * 10_000
-
-  const to: Readonly<XY> = entity.bounds.position.add(translate)
-  let status = entity.moveTo(to)
-  if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
-
-  const entities = Level.activeParentsWithPlayer(state.level)
-
-  let collidesWith = EntityCollider.collidesEntities(entity, entities)
-  if (
-    !collidesWith.some(
-      collision => collision.collisionType & CollisionType.OBSTACLE
-    )
-  )
-    return status
-
-  if (diagonal && collidesWith.length) {
-    status |= entity.moveTo(new XY(to.x, from.y))
-    collidesWith = EntityCollider.collidesEntities(entity, entities)
-    if (collidesWith.length) {
-      status |= entity.moveTo(new XY(from.x, to.y))
-      collidesWith = EntityCollider.collidesEntities(entity, entities)
-    }
-  }
-
-  if (collidesWith.length) status |= entity.moveTo(new XY(from.x, from.y))
-
-  return status
 }

@@ -1,6 +1,6 @@
 import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../../../atlas/AtlasID'
-import {Checkbox} from './Checkbox'
+import {Checkbox, CheckboxState} from './Checkbox'
 import {Entity} from '../../../entity/Entity'
 import {EntityType} from '../../../entity/EntityType'
 import {IEntityParser} from '../../RecursiveEntityParser'
@@ -54,7 +54,7 @@ export namespace CheckboxParser {
 
 function setBackground(checkbox: Checkbox, layer: Layer, atlas: Atlas): void {
   const text = checkbox.children[0]
-  for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
+  for (const state of [CheckboxState.UNCHECKED, CheckboxState.CHECKED]) {
     const size = new WH(text.bounds.size.w, text.bounds.size.h)
     checkbox.machine.map[state].images.length = 0
     const images = newBackgroundImages(state, layer, atlas, size)
@@ -68,7 +68,7 @@ function setBackground(checkbox: Checkbox, layer: Layer, atlas: Atlas): void {
 }
 
 function newBackgroundImages(
-  state: Checkbox.State,
+  state: CheckboxState,
   layerOffset: Layer,
   atlas: Atlas,
   {w, h}: WH
@@ -91,7 +91,7 @@ function newBackgroundImages(
   Image.elevate(borderImage, layerOffset)
   return [backgroundImage, borderImage]
 }
-const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({
-  [Checkbox.State.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,
-  [Checkbox.State.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
+const backgroundID: Readonly<Record<CheckboxState, AtlasID>> = Object.freeze({
+  [CheckboxState.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,
+  [CheckboxState.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
 })

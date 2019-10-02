@@ -5,8 +5,8 @@ import {ArrayUtil} from '../utils/ArrayUtil'
 
 export namespace EntityCollider {
   export function collidesEntities(
-    initiator: Readonly<Entity>,
-    entities: readonly Readonly<Entity>[]
+    initiator: Entity,
+    entities: readonly Entity[]
   ): readonly Entity[] {
     const collisions: Entity[] = []
 
@@ -19,8 +19,8 @@ export namespace EntityCollider {
   }
 
   export function collidesEntity(
-    initiator: Readonly<Entity>,
-    entity: Readonly<Entity>
+    initiator: Entity,
+    entity: Entity
   ): readonly Entity[] {
     const collisions: Entity[] = []
     if (
@@ -86,10 +86,7 @@ export namespace EntityCollider {
     return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
   }
 
-  export function collidesRect(
-    entity: Readonly<Entity>,
-    rect: Rect
-  ): readonly Entity[] {
+  export function collidesRect(entity: Entity, rect: Rect): readonly Entity[] {
     const collisions: Entity[] = []
     if (entity.collisionPredicate === CollisionPredicate.NEVER)
       return collisions
