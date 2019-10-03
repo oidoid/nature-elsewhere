@@ -57,7 +57,6 @@ export class Entity {
     type,
     position,
     velocity,
-    scale,
     machine,
     updatePredicate,
     updaters,
@@ -70,7 +69,7 @@ export class Entity {
     this._type = type
     this._bounds = {position: position || new XY(0, 0), size: new WH(0, 0)}
     this._velocity = velocity || new XY(0, 0)
-    this._machine = machine || ImageStateMachine.make(scale)
+    this._machine = machine || ImageStateMachine.make()
     this._updatePredicate =
       updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
     this._updaters = updaters || []
@@ -362,7 +361,6 @@ export namespace Entity {
     /** Defaults to (0, 0). */
     readonly position?: XY
     readonly velocity?: XY
-    readonly scale?: XY
     /** Defaults to {}. */
     readonly machine?: ImageStateMachine
     /** Defaults to BehaviorPredicate.NEVER. */

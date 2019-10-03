@@ -48,13 +48,12 @@ describe('collidesRect()', () => {
           position: {x: 10, y: 10},
           image: {
             id: AtlasID.PALETTE_BLACK,
-            bounds: {size: {w: 99, h: 99}}
+            bounds: {size: {w: 9, h: 9}}
           },
           collisionPredicate: CollisionPredicate.IMAGES
         },
         atlas
       )
-      console.log(entity.machine.state, entity.machine.map['visible'])
       expect(EntityCollider.collidesRect(entity, rect)).toStrictEqual([])
     })
     test('CHILDREN short-circuited by failed entity bounds test.', () => {

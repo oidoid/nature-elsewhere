@@ -49,7 +49,6 @@ import {EntityID} from './EntityID'
 import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerParser'
 import {EntityType} from './EntityType'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
-import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
 import {
   ImageStateMachineConfig,
@@ -119,38 +118,20 @@ export namespace EntityParser {
 
     config = withDefaults(config, type)
 
+    const props = parseProps(config, type, atlas)
+    let entity = EntityFactory.produce(config, type, props, atlas)
+    Object.assign(entity, specialization(config))
+
     const imageID = config.imageID
       ? AtlasIDParser.parse(config.imageID)
       : undefined
-    const machine = ImageStateMachineParser.parse(config.machine, atlas)
-    const children = parseAll(config.children, atlas)
-    const scale = ImageParser.parseScale(config.scale)
-    for (const rect of Object.values(machine.map)) {
-      if (imageID) ImageRect.setImageID(rect, imageID)
-    }
-
-    const props = {
-      id: parseID(config.id),
-      type: type,
-      velocity: XYParser.parse(config.velocity),
-      machine,
-      updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
-      updaters: UpdaterTypeParser.parseAll(config.updaters),
-      collisionType: CollisionTypeParser.parseKeys(config.collisionTypes),
-      collisionPredicate: CollisionPredicateParser.parse(
-        config.collisionPredicate
-      ),
-      collisionBodies: RectParser.parseAll(config.collisionBodies),
-      children
-    }
-    let entity: Entity = EntityFactory.produce(config, type, props, atlas)
-    Object.assign(entity, specialization(config))
+    if (imageID) entity.setImageID(imageID)
 
     // Move the images, collision, and children.
     const position = XYParser.parse(config.position)
     entity.moveTo(position)
-
-    entity.setScale(scale)
+    const scale = ImageParser.parseScale(config.scale)
+    if (scale) entity.setScale(scale)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.
@@ -188,6 +169,27 @@ export namespace EntityParser {
     return EntityParser.parseState(
       config.machine ? config.machine.state : undefined
     )
+  }
+}
+
+function parseProps(
+  config: EntityConfig,
+  type: EntityType,
+  atlas: Atlas
+): Entity.Props {
+  return {
+    id: EntityParser.parseID(config.id),
+    type: type,
+    velocity: XYParser.parse(config.velocity),
+    machine: ImageStateMachineParser.parse(config.machine, atlas),
+    updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
+    updaters: UpdaterTypeParser.parseAll(config.updaters),
+    collisionType: CollisionTypeParser.parseKeys(config.collisionTypes),
+    collisionPredicate: CollisionPredicateParser.parse(
+      config.collisionPredicate
+    ),
+    collisionBodies: RectParser.parseAll(config.collisionBodies),
+    children: EntityParser.parseAll(config.children, atlas)
   }
 }
 

@@ -22,7 +22,10 @@ export namespace ImageStateMachine {
     machine: ImageStateMachine,
     id: AtlasID
   ): UpdateStatus {
-    return ImageRect.setImageID(imageRect(machine), id)
+    let status = UpdateStatus.UNCHANGED
+    for (const rect of Object.values(machine.map))
+      status |= ImageRect.setImageID(rect, id)
+    return status
   }
 
   export function imageRect(machine: ImageStateMachine): ImageRect {
