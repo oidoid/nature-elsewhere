@@ -75,6 +75,7 @@ import {
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {XYConfig, XYParser} from '../math/XYParser'
 import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
+import {EntityFactory} from './EntityFactory'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 
@@ -143,7 +144,7 @@ export namespace EntityParser {
       collisionBodies: RectParser.parseAll(config.collisionBodies),
       children
     }
-    let entity = new Entity(props)
+    let entity: Entity = EntityFactory.produce(type, props)
     Object.assign(entity, specialization(config))
 
     // Move the images, collision, and children.

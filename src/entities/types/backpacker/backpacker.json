@@ -49,7 +49,6 @@
     }
   },
   "updatePredicate": "always",
-  "updaters": ["charBackpacker"],
   "collisionTypes": [
     "TYPE_CHARACTER",
     "TYPE_BACKPACKER",

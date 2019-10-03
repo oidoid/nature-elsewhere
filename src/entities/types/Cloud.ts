@@ -1,15 +1,10 @@
 import {Entity} from '../../entity/Entity'
-import {EntityType} from '../../entity/EntityType'
 
-export interface Cloud extends Entity {
-  readonly type: EntityType.SCENERY_CLOUD
-}
+export class Cloud extends Entity {}
 
-export namespace Cloud {
-  export enum State {
-    NONE = 'none',
-    DRIZZLE = 'drizzle',
-    SHOWER = 'shower',
-    DOWNPOUR = 'downpour'
-  }
+export enum CloudState {
+  NONE = 'none',
+  DRIZZLE = 'drizzle',
+  SHOWER = 'shower',
+  DOWNPOUR = 'downpour'
 }

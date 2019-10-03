@@ -1,7 +1,9 @@
 import {Entity} from '../../../entity/Entity'
-import {EntityType} from '../../../entity/EntityType'
 
-export interface EntityPicker extends Entity {
-  readonly type: EntityType.UI_ENTITY_PICKER
+export class EntityPicker extends Entity {
   activeChildIndex: number
+  constructor(props: Entity.Props) {
+    super(props)
+    this.activeChildIndex = 0
+  }
 }

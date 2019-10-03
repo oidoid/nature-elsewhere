@@ -1,70 +1,61 @@
 import {CollisionType} from '../../../collision/CollisionType'
 import {Entity} from '../../../entity/Entity'
-import {EntityType} from '../../../entity/EntityType'
 import {NumberUtil} from '../../../math/NumberUtil'
-import {Update} from '../../updaters/Update'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../../math/XY'
 
-export interface Backpacker extends Entity {
-  readonly type: EntityType.CHAR_BACKPACKER
-}
+export class Backpacker extends Entity {
+  update(state: UpdateState): UpdateStatus {
+    let status = super.update(state)
 
-export namespace Backpacker {
-  export enum State {
-    IDLE_UP = 'idleUp',
-    IDLE_RIGHT = 'idleRight',
-    IDLE_DOWN = 'idleDown',
-    WALK_UP = 'walkUp',
-    WALK_RIGHT = 'walkRight',
-    WALK_DOWN = 'walkDown'
-  }
-
-  export const update: Update = (backpacker, state) => {
-    if (!backpacker.assert<Backpacker>(EntityType.CHAR_BACKPACKER))
-      throw new Error()
-
-    const destination = calculateDestination(backpacker, state)
+    const destination = calculateDestination(this, state)
     if (!destination) return UpdateStatus.UNCHANGED
 
-    let status = UpdateStatus.UNCHANGED
-
-    const {x, y} = backpacker.bounds.position
+    const {x, y} = this.bounds.position
     const left = destination.x < x
     const right = destination.x > x
     const up = destination.y < y
     const down = destination.y > y
-    backpacker.velocity.x = (left ? -1 : right ? 1 : 0) * 80
-    backpacker.velocity.y = (up ? -1 : down ? 1 : 0) * 80
+    this.velocity.x = (left ? -1 : right ? 1 : 0) * 80
+    this.velocity.y = (up ? -1 : down ? 1 : 0) * 80
 
-    const idle = !backpacker.velocity.x && !backpacker.velocity.y
+    const idle = !this.velocity.x && !this.velocity.y
 
-    let nextState = backpacker.machine.state
+    let nextState = this.machine.state
     if (idle) {
-      nextState = calculateIdleState(backpacker)
+      nextState = calculateIdleState(this)
       if (state.level.destination)
         state.level.destination.setState(Entity.State.HIDDEN)
     } else {
       const horizontalDistance = Math.abs(
-        destination.x - backpacker.bounds.position.x
+        destination.x - this.bounds.position.x
       )
-      if (up) nextState = State.WALK_UP
-      if (down) nextState = State.WALK_DOWN
+      if (up) nextState = BackpackerState.WALK_UP
+      if (down) nextState = BackpackerState.WALK_DOWN
       if ((left || right) && ((!up && !down) || horizontalDistance > 5))
-        nextState = State.WALK_RIGHT
+        nextState = BackpackerState.WALK_RIGHT
     }
 
-    const scale = backpacker.getScale().copy()
+    const scale = this.getScale().copy()
     if (up || down || right) scale.x = Math.abs(scale.x)
     if (left) scale.x = -1 * Math.abs(scale.x)
 
-    backpacker.setScale(scale)
-    backpacker.setState(nextState)
+    this.setScale(scale)
+    this.setState(nextState)
 
     return status
   }
-
+}
+export enum BackpackerState {
+  IDLE_UP = 'idleUp',
+  IDLE_RIGHT = 'idleRight',
+  IDLE_DOWN = 'idleDown',
+  WALK_UP = 'walkUp',
+  WALK_RIGHT = 'walkRight',
+  WALK_DOWN = 'walkDown'
+}
+export namespace Backpacker {
   export function collides(
     backpacker: Entity,
     entity: Entity,
@@ -81,16 +72,16 @@ export namespace Backpacker {
 
 function calculateIdleState(
   backpacker: Entity
-): Entity.State | Backpacker.State {
+): Entity.State | BackpackerState {
   switch (backpacker.machine.state) {
-    case Backpacker.State.WALK_UP:
-    case Backpacker.State.IDLE_UP:
-      return Backpacker.State.IDLE_UP
-    case Backpacker.State.IDLE_RIGHT:
-    case Backpacker.State.WALK_RIGHT:
-      return Backpacker.State.IDLE_RIGHT
+    case BackpackerState.WALK_UP:
+    case BackpackerState.IDLE_UP:
+      return BackpackerState.IDLE_UP
+    case BackpackerState.IDLE_RIGHT:
+    case BackpackerState.WALK_RIGHT:
+      return BackpackerState.IDLE_RIGHT
   }
-  return Backpacker.State.IDLE_DOWN
+  return BackpackerState.IDLE_DOWN
 }
 
 function calculateDestination(

@@ -8,7 +8,6 @@
     }
   },
   "updatePredicate": "always",
-  "updaters": ["uiCursor"],
   "//": "Use bodies so that collision remains the same regardless of whether hidden or not.",
   "collisionPredicate": "bodies",
   "collisionBodies": [{"size": {"w": 1, "h": 1}}]

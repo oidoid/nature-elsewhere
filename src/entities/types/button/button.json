@@ -18,7 +18,6 @@
     }
   },
   "updatePredicate": "always",
-  "updaters": ["uiButton"],
   "collisionTypes": ["TYPE_UI"],
   "collisionPredicate": "bounds"
 }

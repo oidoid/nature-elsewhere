@@ -30,6 +30,5 @@
       }
     }
   },
-  "updatePredicate": "always",
-  "updaters": ["uiMarquee"]
+  "updatePredicate": "always"
 }

@@ -1,38 +1,39 @@
 import {Entity} from '../../../entity/Entity'
-import {EntityType} from '../../../entity/EntityType'
 import {Input} from '../../../inputs/Input'
 import {Level} from '../../../levels/Level'
-import {Update} from '../../updaters/Update'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
+import {UpdateState} from '../../updaters/UpdateState'
 
-export interface Button extends Entity {
-  readonly type: EntityType.UI_BUTTON
+export class Button extends Entity {
   clicked: boolean
   longClicked: boolean
-}
-
-export namespace Button {
-  export enum State {
-    UNCLICKED = 'unclicked',
-    CLICKED = 'clicked'
+  constructor(props: Entity.Props) {
+    super(props)
+    this.clicked = false
+    this.longClicked = false
   }
 
-  export const update: Update = (button, state) => {
-    if (!button.assert<Button>(EntityType.UI_BUTTON)) throw new Error()
+  update(state: UpdateState): UpdateStatus {
+    let status = super.update(state)
 
-    button.clicked = false
-    const collision = Level.collisionWithCursor(state.level, button)
-    if (!collision) return button.setState(Button.State.UNCLICKED)
+    this.clicked = false
+    const collision = Level.collisionWithCursor(state.level, this)
+    if (!collision) return this.setState(ButtonState.UNCLICKED)
 
-    let status = button.setState(Button.State.CLICKED) // this is just presentation not click state
+    status |= this.setState(ButtonState.CLICKED) // this is just presentation not click state
 
     const nextClicked = Input.inactiveTriggered(state.inputs.pick)
     const nextLongClicked = Input.activeLong(state.inputs.pick)
-    if (button.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
-    if (button.longClicked !== nextLongClicked) status |= UpdateStatus.TERMINATE
-    button.clicked = nextClicked
-    button.longClicked = nextLongClicked
+    if (this.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
+    if (this.longClicked !== nextLongClicked) status |= UpdateStatus.TERMINATE
+    this.clicked = nextClicked
+    this.longClicked = nextLongClicked
 
     return status
   }
+}
+
+export enum ButtonState {
+  UNCLICKED = 'unclicked',
+  CLICKED = 'clicked'
 }
