@@ -8,16 +8,21 @@ export interface Rect {
   readonly size: WH
 }
 
+export type ReadonlyRect = {
+  readonly position: Readonly<XY>
+  readonly size: Readonly<WH>
+}
+
 export namespace Rect {
   export function make(x: number, y: number, w: number, h: number): Rect {
     return {position: new XY(x, y), size: new WH(w, h)}
   }
 
-  export function trunc(rect: Rect): Rect {
+  export function trunc(rect: ReadonlyRect): Rect {
     return {position: rect.position.copy(), size: rect.size.copy()}
   }
 
-  export function add(lhs: Rect, rhs: Rect): Rect {
+  export function add(lhs: ReadonlyRect, rhs: ReadonlyRect): Rect {
     const position = lhs.position.add(rhs.position)
     const size = lhs.size.add(rhs.size)
     return {position, size}
@@ -36,7 +41,7 @@ export namespace Rect {
   // less-than-or-equal?
   /** @return True if lhs and rhs are overlapping, false if touching or
       independent. */
-  export function intersects(lhs: Rect, rhs: Rect): boolean {
+  export function intersects(lhs: ReadonlyRect, rhs: ReadonlyRect): boolean {
     return (
       lhs.position.x + lhs.size.w > rhs.position.x &&
       lhs.position.x < rhs.position.x + rhs.size.w &&
@@ -45,7 +50,10 @@ export namespace Rect {
     )
   }
 
-  export function within({position, size}: Rect, rhs: Rect): boolean {
+  export function within(
+    {position, size}: ReadonlyRect,
+    rhs: ReadonlyRect
+  ): boolean {
     return (
       position.x >= rhs.position.x &&
       position.x + size.w <= rhs.position.x + rhs.size.w &&
@@ -57,7 +65,7 @@ export namespace Rect {
   /** @return Width and / or height is less than zero if no intersection, equal
               to zero if touching but not overlapping, or greater than zero if
               overlapping. */
-  export function intersection(lhs: Rect, rhs: Rect): Rect {
+  export function intersection(lhs: ReadonlyRect, rhs: ReadonlyRect): Rect {
     // The bottom-rightmost coordinates is the upper-left of the intersection.
     const upperLeft = lhs.position.max(rhs.position)
     const w =
@@ -69,22 +77,19 @@ export namespace Rect {
     return {position: upperLeft, size: new WH(w, h)}
   }
 
-  export function unionAll(rects: readonly Rect[]): Maybe<Rect> {
+  export function unionAll(rects: readonly ReadonlyRect[]): Maybe<Rect> {
+    if (!rects.length) return
     // Make a copy of the first element, rects[0], in case it's modified. When
     // rects has a length of one, union is not called and rects[0] would be
     // returned directly. This behavior differs from all other nonzero cases in
     // that no element of the array is ever returned (union() returns a new Rect
     // instance). If that first element is modified by the caller, it changes
     // the unionAll() result implicitly which is probably unexpected.
-    return rects.length
-      ? rects.reduce(union, {
-          position: rects[0].position.copy(),
-          size: rects[0].size.copy()
-        })
-      : undefined
+    const {position, size} = rects.reduce(union)
+    return Rect.make(position.x, position.y, size.w, size.h)
   }
 
-  export function union(lhs: Rect, rhs: Rect): Rect {
+  export function union(lhs: ReadonlyRect, rhs: ReadonlyRect): Rect {
     const {x, y} = lhs.position.min(rhs.position)
     const w =
       Math.max(lhs.position.x + lhs.size.w, rhs.position.x + rhs.size.w) - x
@@ -93,7 +98,7 @@ export namespace Rect {
     return {position: new XY(x, y), size: new WH(w, h)}
   }
 
-  export function centerOn(rect: Rect, on: Rect): XY {
+  export function centerOn(rect: ReadonlyRect, on: ReadonlyRect): XY {
     const x =
       Math.trunc(on.position.x) +
       Math.trunc(on.size.w / 2) -

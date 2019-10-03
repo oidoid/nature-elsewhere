@@ -1,5 +1,5 @@
 import {Image} from '../image/Image'
-import {Rect} from '../math/Rect'
+import {Rect, ReadonlyRect} from '../math/Rect'
 import {XY} from '../math/XY'
 import {Layer} from '../image/Layer'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
@@ -99,7 +99,7 @@ export namespace ImageRect {
 
   export function intersects(
     rect: Readonly<ImageRect>,
-    bounds: Rect
+    bounds: ReadonlyRect
   ): readonly Image[] {
     return rect.images.filter(image => Rect.intersects(bounds, image.bounds))
   }

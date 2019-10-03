@@ -2,8 +2,9 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Animator, Atlas} from 'aseprite-atlas'
 import {DecamillipixelIntXY, XY} from '../math/XY'
 import {Layer} from './Layer'
-import {Rect} from '../math/Rect'
+import {Rect, ReadonlyRect} from '../math/Rect'
 import {AlphaComposition} from './AlphaComposition'
+import {WH} from '../math/WH'
 
 /** A mapping from a source atlas subtexture to a target. The target region
     is used for rendering. The image may be animated. Each Cel has the same
@@ -60,52 +61,78 @@ export class Image {
   get id(): AtlasID {
     return this._id
   }
+
   get imageID(): AtlasID {
     return this._imageID
   }
+
   set imageID(id: AtlasID) {
     this._imageID = id
   }
-  get bounds(): Rect {
+
+  get bounds(): ReadonlyRect {
     return this._bounds
   }
+
   get layer(): Layer {
     return this._layer
   }
-  get animator(): Animator {
+
+  get animator(): Readonly<Animator> {
     return this._animator
   }
-  get scale(): XY {
+
+  get scale(): Readonly<XY> {
     return this._scale
   }
-  get wrap(): DecamillipixelIntXY {
+
+  get wrap(): Readonly<DecamillipixelIntXY> {
     return this._wrap
   }
-  get wrapVelocity(): DecamillipixelIntXY {
+
+  get wrapVelocity(): Readonly<DecamillipixelIntXY> {
     return this._wrapVelocity
   }
+
   get alphaComposition(): AlphaComposition {
     return this._alphaComposition
   }
 
   /** Translate by. */
   moveBy(by: Readonly<XY>): void {
-    this.bounds.position.x += by.x
-    this.bounds.position.y += by.y
+    this._bounds.position.x += by.x
+    this._bounds.position.y += by.y
+  }
+
+  moveTo(to: Readonly<XY>): void {
+    this._bounds.position.x = to.x
+    this._bounds.position.y = to.y
+  }
+
+  sizeTo(to: Readonly<WH>): void {
+    this._bounds.size.w = to.w * Math.abs(this.scale.x)
+    this._bounds.size.h = to.h * Math.abs(this.scale.y)
   }
 
   /** Set absolute scale. */
   scaleTo(to: Readonly<XY>): void {
-    this.bounds.size.w *= Math.abs(to.x / this.scale.x)
-    this.bounds.size.h *= Math.abs(to.y / this.scale.y)
-    this.scale.x = to.x
-    this.scale.y = to.y
+    this._bounds.size.w *= Math.abs(to.x / this.scale.x)
+    this._bounds.size.h *= Math.abs(to.y / this.scale.y)
+    this._scale.x = to.x
+    this._scale.y = to.y
   }
 
   /** Multiply by scale. */
   scaleBy(by: Readonly<XY>): void {
-    by = new XY(by.x * this.scale.x, by.y * this.scale.y)
-    this.scaleTo(by)
+    this._bounds.size.w *= Math.abs(by.x)
+    this._bounds.size.h *= Math.abs(by.y)
+    this._scale.x *= by.x
+    this._scale.y *= by.y
+  }
+
+  wrapTo(to: Readonly<XY>): void {
+    this._wrap.x = to.x
+    this._wrap.y = to.y
   }
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. See
@@ -125,8 +152,13 @@ export class Image {
       this.animator.exposure + time,
       atlas.animations[this.id]
     )
-    this.animator.period = animator.period
-    this.animator.exposure = animator.exposure
+    this._animator.period = animator.period
+    this._animator.exposure = animator.exposure
+  }
+
+  resetAnimation(): void {
+    this._animator.period = 0
+    this._animator.exposure = 0
   }
 
   /** Raise or lower by offset. */

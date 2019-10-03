@@ -5,6 +5,7 @@ import {Input} from '../../../inputs/Input'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../../math/XY'
 import {UpdateState} from '../../updaters/UpdateState'
+import {WH} from '../../../math/WH'
 
 export class Marquee extends Entity {
   selection?: Symbol
@@ -85,29 +86,27 @@ function doTheStuffAndThings(
   rect.bounds.size.w = sandboxEntity.bounds.size.w + 2
   rect.bounds.size.h = sandboxEntity.bounds.size.h + 2
 
-  marqueeImages[Images.TOP].bounds.position.x = destination.x
-  marqueeImages[Images.TOP].bounds.position.y = destination.y
-  marqueeImages[Images.TOP].bounds.size.w = sandboxEntity.bounds.size.w + 2
-  marqueeImages[Images.TOP].bounds.size.h = 1
+  marqueeImages[Images.TOP].moveTo(destination)
+  marqueeImages[Images.TOP].sizeTo(new WH(sandboxEntity.bounds.size.w + 2, 1))
 
-  marqueeImages[Images.LEFT].bounds.position.x = destination.x
-  marqueeImages[Images.LEFT].bounds.position.y = destination.y
-  marqueeImages[Images.LEFT].bounds.size.w = 1
-  marqueeImages[Images.LEFT].bounds.size.h = sandboxEntity.bounds.size.h + 2
+  marqueeImages[Images.LEFT].moveTo(destination)
+  marqueeImages[Images.LEFT].sizeTo(new WH(1, sandboxEntity.bounds.size.h + 2))
 
-  marqueeImages[Images.RIGHT].bounds.position.x =
-    destination.x + sandboxEntity.bounds.size.w + 1
-  marqueeImages[Images.RIGHT].bounds.position.y = destination.y
-  marqueeImages[Images.RIGHT].bounds.size.w = 1
-  marqueeImages[Images.RIGHT].bounds.size.h = sandboxEntity.bounds.size.h + 2
-  marqueeImages[Images.RIGHT].wrap.x =
-    (sandboxEntity.bounds.size.w + 1) & 1 ? 1 : 0
+  marqueeImages[Images.RIGHT].moveTo(
+    new XY(destination.x + sandboxEntity.bounds.size.w + 1, destination.y)
+  )
+  marqueeImages[Images.RIGHT].sizeTo(new WH(1, sandboxEntity.bounds.size.h + 2))
+  marqueeImages[Images.RIGHT].wrapTo(
+    new XY((sandboxEntity.bounds.size.w + 1) & 1 ? 1 : 0, 0)
+  )
 
-  marqueeImages[Images.BOTTOM].bounds.position.x = destination.x
-  marqueeImages[Images.BOTTOM].bounds.position.y =
-    destination.y + sandboxEntity.bounds.size.h + 1
-  marqueeImages[Images.BOTTOM].bounds.size.w = sandboxEntity.bounds.size.w + 2
-  marqueeImages[Images.BOTTOM].bounds.size.h = 1
-  marqueeImages[Images.BOTTOM].wrap.x =
-    (sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0
+  marqueeImages[Images.BOTTOM].moveTo(
+    new XY(destination.x, destination.y + sandboxEntity.bounds.size.h + 1)
+  )
+  marqueeImages[Images.BOTTOM].sizeTo(
+    new WH(sandboxEntity.bounds.size.w + 2, 1)
+  )
+  marqueeImages[Images.BOTTOM].wrapTo(
+    new XY((sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0, 0)
+  )
 }

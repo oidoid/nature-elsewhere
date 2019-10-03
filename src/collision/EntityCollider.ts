@@ -1,6 +1,6 @@
 import {CollisionPredicate} from './CollisionPredicate'
 import {Entity} from '../entity/Entity'
-import {Rect} from '../math/Rect'
+import {Rect, ReadonlyRect} from '../math/Rect'
 import {ArrayUtil} from '../utils/ArrayUtil'
 
 export namespace EntityCollider {
@@ -86,7 +86,10 @@ export namespace EntityCollider {
     return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
   }
 
-  export function collidesRect(entity: Entity, rect: Rect): readonly Entity[] {
+  export function collidesRect(
+    entity: Entity,
+    rect: ReadonlyRect
+  ): readonly Entity[] {
     const collisions: Entity[] = []
     if (entity.collisionPredicate === CollisionPredicate.NEVER)
       return collisions

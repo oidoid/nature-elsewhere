@@ -56,9 +56,7 @@ export namespace ImageStateMachine {
   }
 
   export function resetAnimation(machine: ImageStateMachine): void {
-    for (const {animator} of machine.map[machine.state].images) {
-      animator.period = 0
-      animator.exposure = 0
-    }
+    for (const image of machine.map[machine.state].images)
+      image.resetAnimation()
   }
 }
