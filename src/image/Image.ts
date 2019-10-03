@@ -11,10 +11,10 @@ import {AlphaComposition} from './AlphaComposition'
     truncates or repeats the scaled rendered source. Images do not affect
     collision tests but their bounds may be used. */
 export class Image {
-  readonly id: AtlasID
+  private readonly _id: AtlasID
   /** If different than id, use id for masking and imageID for coloring. See
       AlphaComposition. */
-  imageID: AtlasID
+  private _imageID: AtlasID
   /** Specified in fractional pixel level coordinates. Includes scaling.
 
       Images.bounds are used to determine when the image is on screen and
@@ -23,17 +23,17 @@ export class Image {
       Images.bounds are used for some collision tests (see CollisionPredicate)
       as entity bounds are calculated in part by Image.bounds, ImageRect.bounds,
       and Entity.bounds. */
-  readonly bounds: Rect
-  layer: Layer
-  readonly animator: Animator
+  private readonly _bounds: Rect
+  private _layer: Layer
+  private readonly _animator: Animator
   /** See bounds. */
-  readonly scale: XY
+  private readonly _scale: XY
   /** Specifies the initial marquee offset. */
-  readonly wrap: DecamillipixelIntXY
+  private readonly _wrap: DecamillipixelIntXY
   /** Specifies the additional marquee offset added by the shader according to
       the game clock. */
-  readonly wrapVelocity: DecamillipixelIntXY
-  readonly alphaComposition: AlphaComposition
+  private readonly _wrapVelocity: DecamillipixelIntXY
+  private readonly _alphaComposition: AlphaComposition
 
   constructor({
     id,
@@ -46,15 +46,46 @@ export class Image {
     wrapVelocity = new XY(0, 0),
     alphaComposition = AlphaComposition.IMAGE
   }: Image.Props) {
-    this.id = id
-    this.imageID = imageID
-    this.bounds = bounds
-    this.layer = layer
-    this.animator = animator
-    this.scale = scale
-    this.wrap = wrap
-    this.wrapVelocity = wrapVelocity
-    this.alphaComposition = alphaComposition
+    this._id = id
+    this._imageID = imageID
+    this._bounds = bounds
+    this._layer = layer
+    this._animator = animator
+    this._scale = scale
+    this._wrap = wrap
+    this._wrapVelocity = wrapVelocity
+    this._alphaComposition = alphaComposition
+  }
+
+  get id(): AtlasID {
+    return this._id
+  }
+  get imageID(): AtlasID {
+    return this._imageID
+  }
+  set imageID(id: AtlasID) {
+    this._imageID = id
+  }
+  get bounds(): Rect {
+    return this._bounds
+  }
+  get layer(): Layer {
+    return this._layer
+  }
+  get animator(): Animator {
+    return this._animator
+  }
+  get scale(): XY {
+    return this._scale
+  }
+  get wrap(): DecamillipixelIntXY {
+    return this._wrap
+  }
+  get wrapVelocity(): DecamillipixelIntXY {
+    return this._wrapVelocity
+  }
+  get alphaComposition(): AlphaComposition {
+    return this._alphaComposition
   }
 
   /** Translate by. */
@@ -100,7 +131,7 @@ export class Image {
 
   /** Raise or lower by offset. */
   elevate(offset: Layer): void {
-    this.layer += offset
+    this._layer += offset
   }
 }
 
