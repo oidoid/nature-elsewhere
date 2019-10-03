@@ -5,7 +5,7 @@ import {EntityID} from '../../../entity/EntityID'
 import {Layer} from '../../../image/Layer'
 
 export namespace LevelEditorPanelParser {
-  export const parse: UpdaterParser = (panel, atlas, parser) => {
+  export const parse: UpdaterParser = (panel, atlas) => {
     if (!panel.assert<LevelEditorPanel>(EntityType.UI_LEVEL_EDITOR_PANEL))
       throw new Error()
     const radioGroup = panel.findByID(EntityID.UI_LEVEL_EDITOR_RADIO_GROUP)
@@ -39,7 +39,7 @@ export namespace LevelEditorPanelParser {
     ;(<any>panel).createButton = createButton
     ;(<any>panel).toggleGridButton = toggleGridButton
 
-    LevelEditorPanel.setEntityFields(<LevelEditorPanel>panel, 0, atlas, parser)
+    LevelEditorPanel.setEntityFields(<LevelEditorPanel>panel, 0, atlas)
     panel.elevate(Layer.UI_PICKER_OFFSET)
 
     return panel

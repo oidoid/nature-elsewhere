@@ -1,7 +1,6 @@
 import {Atlas} from 'aseprite-atlas'
 import {Button} from '../button/Button'
 import {Checkbox} from '../checkbox/Checkbox'
-import {CheckboxParser} from '../checkbox/CheckboxParser'
 import {CollisionPredicate} from '../../../collision/CollisionPredicate'
 import {Entity} from '../../../entity/Entity'
 import {EntityID} from '../../../entity/EntityID'
@@ -13,7 +12,6 @@ import {
   SCENERY_VALUE_PREFIX,
   CHAR_VALUE_PREFIX
 } from '../../../entity/EntityType'
-import {IEntityParser} from '../../RecursiveEntityParser'
 import {Layer} from '../../../image/Layer'
 import {Level} from '../../../levels/Level'
 import {Marquee} from '../marquee/Marquee'
@@ -180,17 +178,19 @@ function updateNumberCheckbox(
   offset: number
 ): void {
   const num = checkboxNumber(checkbox) + offset
-  CheckboxParser.setText(
-    checkbox,
+  checkbox.setText(
+    {
+      type: EntityType.UI_TEXT,
+      textLayer: Layer.UI_PICKER_OFFSET,
+      text: num.toString()
+    },
     Layer.UI_PICKER_OFFSET,
-    num.toString(),
-    state.level.atlas,
-    EntityParser.parse
+    state.level.atlas
   )
 }
 
 function checkboxNumber(checkbox: Checkbox) {
-  const text = checkbox.text
+  const text = checkbox.getText()
   return Number.parseInt(text)
 }
 
@@ -199,12 +199,7 @@ function updateEntity(
   state: UpdateState,
   offset: number
 ): void {
-  LevelEditorPanel.setEntityFields(
-    panel,
-    offset,
-    state.level.atlas,
-    EntityParser.parse
-  )
+  LevelEditorPanel.setEntityFields(panel, offset, state.level.atlas)
 }
 
 function updateEntityState(
@@ -212,12 +207,7 @@ function updateEntityState(
   state: UpdateState,
   offset: number
 ): void {
-  LevelEditorPanel.setEntityStateFields(
-    panel,
-    offset,
-    state.level.atlas,
-    EntityParser.parse
-  )
+  LevelEditorPanel.setEntityStateFields(panel, offset, state.level.atlas)
 }
 
 function toggleGrid(state: UpdateState): void {
@@ -249,8 +239,7 @@ export namespace LevelEditorPanel {
   export function setEntityFields(
     panel: LevelEditorPanel,
     offset: number,
-    atlas: Atlas,
-    parser: IEntityParser
+    atlas: Atlas
   ): void {
     EntityPickerParser.setActiveChild(
       panel.entityPicker,
@@ -262,31 +251,34 @@ export namespace LevelEditorPanel {
       new RegExp(`^(${SCENERY_VALUE_PREFIX}|${CHAR_VALUE_PREFIX})`),
       ''
     )
-    CheckboxParser.setText(
-      panel.entityCheckbox,
+    panel.entityCheckbox.setText(
+      {
+        type: EntityType.UI_TEXT,
+        textLayer: Layer.UI_PICKER_OFFSET,
+        text: entityLabel
+      },
       Layer.UI_PICKER_OFFSET,
-      entityLabel,
-      atlas,
-      parser
+      atlas
     )
-    setEntityStateFields(panel, 0, atlas, parser)
+    setEntityStateFields(panel, 0, atlas)
   }
 
   export function setEntityStateFields(
     {entityPicker, radioGroup, stateCheckbox}: LevelEditorPanel,
     offset: number,
-    atlas: Atlas,
-    parser: IEntityParser
+    atlas: Atlas
   ): void {
     const child = EntityPickerParser.getActiveChild(entityPicker)
     if (!child) return
     EntityPickerParser.offsetActiveChildStateIndex(entityPicker, offset)
-    CheckboxParser.setText(
-      stateCheckbox,
+    stateCheckbox.setText(
+      {
+        type: EntityType.UI_TEXT,
+        textLayer: Layer.UI_PICKER_OFFSET,
+        text: child.machine.state
+      },
       Layer.UI_PICKER_OFFSET,
-      child.machine.state,
-      atlas,
-      parser
+      atlas
     )
     radioGroup.invalidateBounds()
   }

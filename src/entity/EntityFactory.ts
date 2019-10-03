@@ -1,19 +1,19 @@
 import {Backpacker} from '../entities/types/backpacker/Backpacker'
 import {Button} from '../entities/types/button/Button'
-import {Checkbox} from '../entities/types/checkbox/Checkbox'
 import {Cloud} from '../entities/types/Cloud'
 import {Cursor} from '../entities/types/cursor/Cursor'
-import {DateVersionHash} from '../entities/types/dateVersionHash/DateVersionHash'
 import {DestinationMarker} from '../entities/types/destinationMarker/DestinationMarker'
 import {Entity} from './Entity'
 import {EntityPicker} from '../entities/types/entityPicker/EntityPicker'
 import {EntityType} from './EntityType'
 import {LevelEditorPanel} from '../entities/types/levelEditorPanel/LevelEditorPanel'
 import {Marquee} from '../entities/types/marquee/Marquee'
-import {Text} from '../entities/types/text/Text'
 import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
 import {EntityConfig} from './EntityParser'
 import {Atlas} from 'aseprite-atlas'
+import {TextParser, TextConfig} from '../entities/types/text/TextParser'
+import {DateVersionHashParser} from '../entities/types/dateVersionHash/DateVersionHashParser'
+import {CheckboxParser} from '../entities/types/checkbox/CheckboxParser'
 
 export namespace EntityFactory {
   export function produce(
@@ -32,11 +32,11 @@ export namespace EntityFactory {
       case EntityType.UI_BUTTON:
         return new Button(props)
       case EntityType.UI_CHECKBOX:
-        return new Checkbox(props)
+        return CheckboxParser.parse(<TextConfig>config, props, atlas)
       case EntityType.UI_CURSOR:
         return new Cursor(props)
       case EntityType.UI_DATE_VERSION_HASH:
-        return new DateVersionHash(props)
+        return DateVersionHashParser.parse(<TextConfig>config, props, atlas)
       case EntityType.UI_DESTINATION_MARKER:
         return new DestinationMarker(props)
       case EntityType.UI_ENTITY_PICKER:
@@ -46,7 +46,7 @@ export namespace EntityFactory {
       case EntityType.UI_MARQUEE:
         return new Marquee(props)
       case EntityType.UI_TEXT:
-        return new Text(<Text.Props>props)
+        return TextParser.parse(<TextConfig>config, props, atlas)
       default:
         return new Entity(props)
     }

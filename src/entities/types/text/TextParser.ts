@@ -1,22 +1,12 @@
 import {Atlas} from 'aseprite-atlas'
-import {AtlasID, MEM_FONT_PREFIX} from '../../../atlas/AtlasID'
 import {Entity} from '../../../entity/Entity'
 import {EntityConfig} from '../../../entity/EntityParser'
-import {EntityType} from '../../../entity/EntityType'
-import {Image} from '../../../image/Image'
 import {ImageParser, LayerKeyConfig} from '../../../image/ImageParser'
-import {Layer} from '../../../image/Layer'
-import {Limits} from '../../../math/Limits'
-import {Rect} from '../../../math/Rect'
 import {Text} from './Text'
-import {TextLayout} from '../../../text/TextLayout'
-import {WH} from '../../../math/WH'
-import {WHConfig} from '../../../math/WHParser'
-import {XYConfig, XYParser} from '../../../math/XYParser'
-import {XY} from '../../../math/XY'
+import {WHConfig, WHParser} from '../../../math/WHParser'
+import {XYConfig} from '../../../math/XYParser'
 
 export interface TextConfig extends EntityConfig {
-  readonly type: EntityType.UI_TEXT
   readonly text?: string
   readonly textLayer: LayerKeyConfig
   readonly textScale?: XYConfig
@@ -24,99 +14,20 @@ export interface TextConfig extends EntityConfig {
 }
 
 export namespace TextParser {
-  export function parse(text: Entity, atlas: Atlas): Text {
-    if (!text.assert<Text>(EntityType.UI_TEXT)) throw new Error()
-
-    const textImages = toImages(
-      atlas,
-      text.text,
-      text.textLayer,
-      XYParser.parse(text.textScale),
+  export function parse(
+    config: TextConfig,
+    props: Entity.Props,
+    atlas: Atlas
+  ): Text {
+    return new Text(
       {
-        position: text.imageRect().bounds.position,
-        size: new WH(
-          text.textMaxSize && text.textMaxSize.w
-            ? text.textMaxSize.w
-            : Limits.maxShort,
-
-          text.textMaxSize && text.textMaxSize.h
-            ? text.textMaxSize.h
-            : Limits.maxShort
-        )
+        ...props,
+        text: config.text,
+        textLayer: ImageParser.parseLayerKey(config.textLayer),
+        textScale: ImageParser.parseScale(config.textScale),
+        textMaxSize: WHParser.parse(config.textMaxSize)
       },
-      text.imageRect().imageID
+      atlas
     )
-
-    // Images are added dynamically but ImageRect expects a static configuration
-    // determined at parse time. Recalculate the bounds.
-    // make function for this. try to encapsulate
-    text.imageRect().images.push(...textImages)
-    const union = Rect.unionAll(
-      text.imageRect().images.map(image => image.bounds)
-    )
-    if (union) {
-      text.imageRect().bounds.position.x = union.position.x
-      text.imageRect().bounds.position.y = union.position.y
-      text.imageRect().bounds.size.w = union.size.w
-      text.imageRect().bounds.size.h = union.size.h
-    }
-    text.invalidateBounds()
-    return text
   }
-
-  /** @arg y The vertical scroll offset in pixels. */
-  function toImages(
-    atlas: Atlas,
-    string: string,
-    layer: Layer.Key,
-    scale: XY,
-    bounds: Rect,
-    imageID?: AtlasID,
-    y: number = 0
-  ): readonly Image[] {
-    const images = []
-    const {positions} = TextLayout.layout(string, bounds.size.w, scale)
-    for (let i = 0; i < positions.length; ++i) {
-      const position = positions[i]
-      if (!position) continue
-      if (TextLayout.nextLine(position.y, scale).y < y) continue
-      if (position.y > y + bounds.size.h) break
-
-      const char = newCharacterImage(
-        string.charCodeAt(i),
-        new XY(
-          bounds.position.x + position.x,
-          bounds.position.y + position.y - y
-        ),
-        layer,
-        scale,
-        imageID,
-        atlas
-      )
-      images.push(char)
-    }
-    return images
-  }
-}
-
-function newCharacterImage(
-  char: number,
-  position: XY,
-  layer: Layer.Key,
-  scale: XY,
-  imageID: Maybe<AtlasID>,
-  atlas: Atlas
-): Image {
-  const id = MEM_FONT_PREFIX + char.toString().padStart(3, '0')
-  return ImageParser.parse(
-    {
-      id,
-      bounds: {position},
-      layer,
-      scale,
-      imageID,
-      alphaComposition: 'SOURCE_MASK'
-    },
-    atlas
-  )
 }

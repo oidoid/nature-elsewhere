@@ -56,6 +56,8 @@ export class Entity {
     id,
     type,
     position,
+    scale,
+    imageID,
     velocity,
     machine,
     updatePredicate,
@@ -67,7 +69,7 @@ export class Entity {
   }: Entity.Props) {
     this._id = id || EntityID.ANONYMOUS
     this._type = type
-    this._bounds = {position: position || new XY(0, 0), size: new WH(0, 0)}
+    this._bounds = {position: new XY(0, 0), size: new WH(0, 0)}
     this._velocity = velocity || new XY(0, 0)
     this._machine = machine || ImageStateMachine.make()
     this._updatePredicate =
@@ -77,6 +79,13 @@ export class Entity {
     this._collisionPredicate = collisionPredicate || CollisionPredicate.NEVER
     this._collisionBodies = collisionBodies || []
     this._children = children || []
+    if (position) this.moveTo(position)
+    if (scale) this.setScale(scale)
+    if (imageID) this.setImageID(imageID)
+
+    // Calculate the bounds of the entity's images, collision bodies, and all
+    // children.
+    this.invalidateBounds()
   }
 
   get spawnID(): symbol {
@@ -360,6 +369,8 @@ export namespace Entity {
     readonly type: EntityType
     /** Defaults to (0, 0). */
     readonly position?: XY
+    readonly scale?: XY
+    readonly imageID?: AtlasID
     readonly velocity?: XY
     /** Defaults to {}. */
     readonly machine?: ImageStateMachine

@@ -34,7 +34,6 @@ import * as UI_TEXT from '../entities/types/text/text.json'
 import * as UI_TOOLBAR from '../entities/types/entityConfigs/ui/toolbar.json'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
-import {CheckboxParser} from '../entities/types/checkbox/CheckboxParser'
 import {
   CollisionPredicateConfig,
   CollisionPredicateParser
@@ -43,7 +42,6 @@ import {
   CollisionTypeKeyArrayConfig,
   CollisionTypeParser
 } from '../collision/CollisionTypeParser'
-import {DateVersionHashParser} from '../entities/types/dateVersionHash/DateVersionHashParser'
 import {Entity} from './Entity'
 import {EntityID} from './EntityID'
 import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerParser'
@@ -60,7 +58,6 @@ import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkPar
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
 import {RecursiveEntityParser} from '../entities/RecursiveEntityParser'
-import {TextParser} from '../entities/types/text/TextParser'
 import {
   UpdatePredicateConfig,
   UpdatePredicateParser
@@ -122,21 +119,6 @@ export namespace EntityParser {
     let entity = EntityFactory.produce(config, type, props, atlas)
     Object.assign(entity, specialization(config))
 
-    const imageID = config.imageID
-      ? AtlasIDParser.parse(config.imageID)
-      : undefined
-    if (imageID) entity.setImageID(imageID)
-
-    // Move the images, collision, and children.
-    const position = XYParser.parse(config.position)
-    entity.moveTo(position)
-    const scale = ImageParser.parseScale(config.scale)
-    if (scale) entity.setScale(scale)
-
-    // Calculate the bounds of the entity's images, collision bodies, and all
-    // children.
-    entity.invalidateBounds()
-
     const parser = TypeParserMap[type]
     entity = parser ? parser(entity, atlas, parse) : entity
 
@@ -180,7 +162,10 @@ function parseProps(
   return {
     id: EntityParser.parseID(config.id),
     type: type,
+    position: XYParser.parse(config.position),
+    scale: ImageParser.parseScale(config.scale),
     velocity: XYParser.parse(config.velocity),
+    imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : undefined,
     machine: ImageStateMachineParser.parse(config.machine, atlas),
     updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
     updaters: UpdaterTypeParser.parseAll(config.updaters),
@@ -201,6 +186,7 @@ function specialization(config: EntityConfig) {
     velocity,
     position,
     scale,
+    imageID,
     machine,
     updatePredicate,
     updaters,
@@ -227,11 +213,8 @@ function withDefaults(config: EntityConfig, type: EntityType): EntityConfig {
 const TypeParserMap: Readonly<Partial<
   Record<EntityType, RecursiveEntityParser>
 >> = Object.freeze({
-  [EntityType.UI_DATE_VERSION_HASH]: DateVersionHashParser.parse,
-  [EntityType.UI_CHECKBOX]: CheckboxParser.parse,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelParser.parse,
-  [EntityType.UI_ENTITY_PICKER]: EntityPickerParser.parse,
-  [EntityType.UI_TEXT]: TextParser.parse
+  [EntityType.UI_ENTITY_PICKER]: EntityPickerParser.parse
 })
 
 const UpdaterParserMap: Readonly<Partial<
