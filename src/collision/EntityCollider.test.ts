@@ -45,14 +45,16 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         <EntityConfig>{
           type: EntityType.IMAGE,
+          position: {x: 10, y: 10},
           image: {
             id: AtlasID.PALETTE_BLACK,
-            bounds: {position: {x: 10, y: 10}, size: {w: 9, h: 9}}
+            bounds: {size: {w: 99, h: 99}}
           },
           collisionPredicate: CollisionPredicate.IMAGES
         },
         atlas
       )
+      console.log(entity.machine.state, entity.machine.map['visible'])
       expect(EntityCollider.collidesRect(entity, rect)).toStrictEqual([])
     })
     test('CHILDREN short-circuited by failed entity bounds test.', () => {
@@ -64,9 +66,10 @@ describe('collidesRect()', () => {
           children: [
             <EntityConfig>{
               type: EntityType.IMAGE,
+              position: {x: 10, y: 10},
               image: {
                 id: AtlasID.PALETTE_BLACK,
-                bounds: {position: {x: 10, y: 10}, size: {w: 9, h: 9}}
+                bounds: {size: {w: 9, h: 9}}
               },
               collisionPredicate: CollisionPredicate.IMAGES
             }

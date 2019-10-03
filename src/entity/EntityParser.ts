@@ -49,7 +49,6 @@ import {EntityID} from './EntityID'
 import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerParser'
 import {EntityType} from './EntityType'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
-import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
 import {
@@ -144,7 +143,7 @@ export namespace EntityParser {
       collisionBodies: RectParser.parseAll(config.collisionBodies),
       children
     }
-    let entity: Entity = EntityFactory.produce(type, props)
+    let entity: Entity = EntityFactory.produce(config, type, props, atlas)
     Object.assign(entity, specialization(config))
 
     // Move the images, collision, and children.
@@ -226,7 +225,6 @@ function withDefaults(config: EntityConfig, type: EntityType): EntityConfig {
 const TypeParserMap: Readonly<Partial<
   Record<EntityType, RecursiveEntityParser>
 >> = Object.freeze({
-  [EntityType.IMAGE]: ImageEntityParser.parse,
   [EntityType.UI_DATE_VERSION_HASH]: DateVersionHashParser.parse,
   [EntityType.UI_CHECKBOX]: CheckboxParser.parse,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelParser.parse,

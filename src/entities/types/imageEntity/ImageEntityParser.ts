@@ -1,9 +1,7 @@
 import {Atlas} from 'aseprite-atlas'
 import {Entity} from '../../../entity/Entity'
 import {EntityConfig} from '../../../entity/EntityParser'
-import {EntityType} from '../../../entity/EntityType'
 import {ImageConfig, ImageParser} from '../../../image/ImageParser'
-import {ImageEntity} from './ImageEntity'
 import {ImageRect} from '../../../imageStateMachine/ImageRect'
 
 export interface ImageEntityConfig extends EntityConfig {
@@ -12,14 +10,17 @@ export interface ImageEntityConfig extends EntityConfig {
 }
 
 export namespace ImageEntityParser {
-  export function parse(imageEntity: Entity, atlas: Atlas): ImageEntity {
-    if (!imageEntity.assert<ImageEntity>(EntityType.IMAGE)) throw new Error()
-    const imageConfig = (<ImageEntityConfig>(<unknown>imageEntity)).image
-    if (imageConfig) {
-      const image = ImageParser.parse(imageConfig, atlas)
-      ImageRect.add(imageEntity.imageRect(), image) // not great. more encapsulation pls
-      imageEntity.invalidateBounds() // this ain't goood
+  export function parse(
+    config: ImageEntityConfig,
+    props: Entity.Props,
+    atlas: Atlas
+  ): Entity {
+    const entity = new Entity(props)
+    if (config.image) {
+      const image = ImageParser.parse(config.image, atlas)
+      ImageRect.add(entity.imageRect(), image) // not great. more encapsulation pls
+      entity.invalidateBounds() // this ain't goood}
     }
-    return imageEntity
+    return entity
   }
 }

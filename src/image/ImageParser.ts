@@ -43,10 +43,9 @@ export type LayerKeyConfig = Maybe<Layer.Key | string>
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
     const id = AtlasIDParser.parse(config.id)
-    const imageID = AtlasIDParser.parse(config.imageID || config.id)
     return {
       id,
-      imageID,
+      imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : id,
       bounds: parseBounds(config, id, atlas),
       layer: parseLayerKey(config.layer),
       animator: parseAnimator(config.animator),

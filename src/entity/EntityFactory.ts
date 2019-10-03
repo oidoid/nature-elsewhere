@@ -8,18 +8,25 @@ import {DestinationMarker} from '../entities/types/destinationMarker/Destination
 import {Entity} from './Entity'
 import {EntityPicker} from '../entities/types/entityPicker/EntityPicker'
 import {EntityType} from './EntityType'
-import {ImageEntity} from '../entities/types/imageEntity/ImageEntity'
 import {LevelEditorPanel} from '../entities/types/levelEditorPanel/LevelEditorPanel'
 import {Marquee} from '../entities/types/marquee/Marquee'
 import {Text} from '../entities/types/text/Text'
+import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
+import {EntityConfig} from './EntityParser'
+import {Atlas} from 'aseprite-atlas'
 
 export namespace EntityFactory {
-  export function produce(type: EntityType, props: Entity.Props): Entity {
+  export function produce(
+    config: EntityConfig,
+    type: EntityType,
+    props: Entity.Props,
+    atlas: Atlas
+  ): Entity {
     switch (type) {
       case EntityType.CHAR_BACKPACKER:
         return new Backpacker(props)
       case EntityType.IMAGE:
-        return new ImageEntity(props)
+        return ImageEntityParser.parse(config, props, atlas)
       case EntityType.SCENERY_CLOUD:
         return new Cloud(props)
       case EntityType.UI_BUTTON:
