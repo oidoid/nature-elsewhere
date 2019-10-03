@@ -66,13 +66,13 @@ export namespace ImageRect {
     if (!by.x && !by.y) return UpdateStatus.UNCHANGED
     rect.bounds.position.x += by.x
     rect.bounds.position.y += by.y
-    for (const image of rect.images) Image.moveBy(image, by)
+    for (const image of rect.images) image.moveBy(by)
     return UpdateStatus.UPDATED
   }
 
-  export function setScale(rect: ImageRect, scale: Readonly<XY>): UpdateStatus {
+  export function scaleTo(rect: ImageRect, scale: Readonly<XY>): UpdateStatus {
     if (rect.scale.equal(scale)) return UpdateStatus.UNCHANGED
-    for (const image of rect.images) Image.scale(image, scale.div(rect.scale))
+    for (const image of rect.images) image.scaleBy(scale.div(rect.scale))
     rect.scale.x = scale.x
     rect.scale.y = scale.y
     const union = Rect.unionAll(rect.images.map(image => image.bounds))
@@ -85,8 +85,8 @@ export namespace ImageRect {
     return UpdateStatus.UPDATED
   }
 
-  export function scale(rect: ImageRect, scale: Readonly<XY>): void {
-    ImageRect.setScale(rect, scale.mul(rect.scale))
+  export function scaleBy(rect: ImageRect, scale: Readonly<XY>): void {
+    scaleTo(rect, scale.mul(rect.scale))
   }
 
   export function elevate(
@@ -94,7 +94,7 @@ export namespace ImageRect {
     offset: Layer
   ): void {
     const images = 'images' in rect ? rect.images : rect
-    for (const image of images) Image.elevate(image, offset)
+    for (const image of images) image.elevate(offset)
   }
 
   export function intersects(

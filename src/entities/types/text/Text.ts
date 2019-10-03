@@ -52,7 +52,7 @@ export class Text extends Entity {
       this.imageRect().imageID
     )
     if (this.textLayer)
-      for (const image of textImages) Image.elevate(image, this.textLayer)
+      for (const image of textImages) image.elevate(this.textLayer)
 
     // Images are added dynamically but ImageRect expects a static configuration
     // determined at parse time. Recalculate the bounds.

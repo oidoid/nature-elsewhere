@@ -22,7 +22,7 @@ export namespace ImageRectParser {
     const origin = XYParser.parse(config.origin)
     const bounds = union || {position: new XY(0, 0), size: new WH(0, 0)}
     const rect = {origin, bounds, scale: new XY(1, 1), images}
-    ImageRect.scale(rect, ImageParser.parseScale(config.scale))
+    ImageRect.scaleBy(rect, ImageParser.parseScale(config.scale))
     return rect
   }
 }

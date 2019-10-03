@@ -32,7 +32,7 @@ export namespace Store {
     images.push(
       ...updateAndAnimate(Level.activeParentsNoPlayer(state.level), state)
     )
-    images = images.sort(Image.compareElevation)
+    images = images.sort((lhs, rhs) => lhs.compareElevation(rhs))
 
     const size = InstanceBuffer.size(store.layout, images.length)
     if (store.dat.byteLength < size) store.dat = InstanceBuffer.make(size * 2)

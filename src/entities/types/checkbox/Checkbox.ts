@@ -117,7 +117,7 @@ function newBackgroundImages(
   }
   const backgroundImage = ImageParser.parse(background, atlas)
   const borderImage = ImageParser.parse(border, atlas)
-  Image.elevate(backgroundImage, layerOffset)
-  Image.elevate(borderImage, layerOffset)
+  backgroundImage.elevate(layerOffset)
+  borderImage.elevate(layerOffset)
   return [backgroundImage, borderImage]
 }

@@ -43,7 +43,7 @@ export type LayerKeyConfig = Maybe<Layer.Key | string>
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
     const id = AtlasIDParser.parse(config.id)
-    return {
+    return new Image({
       id,
       imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : id,
       bounds: parseBounds(config, id, atlas),
@@ -53,7 +53,7 @@ export namespace ImageParser {
       wrap: DecamillipixelIntXYParser.parse(config.wrap),
       wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity),
       alphaComposition: AlphaCompositionParser.parseKey(config.alphaComposition)
-    }
+    })
   }
 
   export function parseScale(config: ImageScaleConfig): XY {

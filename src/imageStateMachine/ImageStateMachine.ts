@@ -46,7 +46,7 @@ export namespace ImageStateMachine {
   }
 
   export function setScale(machine: ImageStateMachine, scale: XY): void {
-    ImageRect.setScale(machine.map[machine.state], scale)
+    ImageRect.scaleTo(machine.map[machine.state], scale)
   }
 
   /** Raise or lower all images for all states. */

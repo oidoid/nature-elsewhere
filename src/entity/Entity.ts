@@ -179,7 +179,7 @@ export class Entity {
       this.getScale().x && this.getScale().y
         ? scale.div(this.getScale())
         : undefined
-    const status = ImageRect.setScale(this.imageRect(), scale)
+    const status = ImageRect.scaleTo(this.imageRect(), scale)
     if (collisionScale && status & UpdateStatus.UPDATED) {
       for (const body of this.collisionBodies) {
         body.size.w *= Math.abs(collisionScale.x)
@@ -203,8 +203,7 @@ export class Entity {
       this.imageRect(),
       state.level.cam.bounds
     )
-    for (const image of visible)
-      Image.animate(image, state.time, state.level.atlas)
+    for (const image of visible) image.animate(state.time, state.level.atlas)
     return [
       ...visible,
       ...this.children.reduce(

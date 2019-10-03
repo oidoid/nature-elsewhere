@@ -10,7 +10,7 @@ import {AlphaComposition} from './AlphaComposition'
     size. Specifying a different target width or height than the source
     truncates or repeats the scaled rendered source. Images do not affect
     collision tests but their bounds may be used. */
-export interface Image {
+export class Image {
   readonly id: AtlasID
   /** If different than id, use id for masking and imageID for coloring. See
       AlphaComposition. */
@@ -34,59 +34,86 @@ export interface Image {
       the game clock. */
   readonly wrapVelocity: DecamillipixelIntXY
   readonly alphaComposition: AlphaComposition
-}
 
-export namespace Image {
+  constructor({
+    id,
+    imageID = id,
+    bounds = Rect.make(0, 0, 0, 0),
+    layer = Layer.DEFAULT,
+    animator = {period: 0, exposure: 0},
+    scale = new XY(1, 1),
+    wrap = new XY(0, 0),
+    wrapVelocity = new XY(0, 0),
+    alphaComposition = AlphaComposition.IMAGE
+  }: Image.Props) {
+    this.id = id
+    this.imageID = imageID
+    this.bounds = bounds
+    this.layer = layer
+    this.animator = animator
+    this.scale = scale
+    this.wrap = wrap
+    this.wrapVelocity = wrapVelocity
+    this.alphaComposition = alphaComposition
+  }
+
   /** Translate by. */
-  export function moveBy(image: Image, by: Readonly<XY>): void {
-    image.bounds.position.x += by.x
-    image.bounds.position.y += by.y
+  moveBy(by: Readonly<XY>): void {
+    this.bounds.position.x += by.x
+    this.bounds.position.y += by.y
   }
 
   /** Set absolute scale. */
-  export function setScale(image: Image, to: Readonly<XY>): void {
-    image.bounds.size.w *= Math.abs(to.x / image.scale.x)
-    image.bounds.size.h *= Math.abs(to.y / image.scale.y)
-    image.scale.x = to.x
-    image.scale.y = to.y
+  scaleTo(to: Readonly<XY>): void {
+    this.bounds.size.w *= Math.abs(to.x / this.scale.x)
+    this.bounds.size.h *= Math.abs(to.y / this.scale.y)
+    this.scale.x = to.x
+    this.scale.y = to.y
   }
 
   /** Multiply by scale. */
-  export function scale(image: Image, by: Readonly<XY>): void {
-    by = new XY(by.x * image.scale.x, by.y * image.scale.y)
-    Image.setScale(image, by)
+  scaleBy(by: Readonly<XY>): void {
+    by = new XY(by.x * this.scale.x, by.y * this.scale.y)
+    this.scaleTo(by)
   }
 
   /** For sorting by draw order. E.g., `images.sort(Image.compare)`. See
       Layer. */
-  export function compareElevation(
-    lhs: Readonly<Image>,
-    rhs: Readonly<Image>
-  ): number {
+  compareElevation(image: Readonly<Image>): number {
     return (
-      lhs.layer - rhs.layer ||
-      lhs.bounds.position.y +
-        lhs.bounds.size.h -
-        (rhs.bounds.position.y + rhs.bounds.size.h)
+      this.layer - image.layer ||
+      this.bounds.position.y +
+        this.bounds.size.h -
+        (image.bounds.position.y + image.bounds.size.h)
     )
   }
 
-  export function animate(
-    image: Image,
-    time: Milliseconds,
-    atlas: Atlas
-  ): void {
+  animate(time: Milliseconds, atlas: Atlas): void {
     const animator = Animator.animate(
-      image.animator.period,
-      image.animator.exposure + time,
-      atlas.animations[image.id]
+      this.animator.period,
+      this.animator.exposure + time,
+      atlas.animations[this.id]
     )
-    image.animator.period = animator.period
-    image.animator.exposure = animator.exposure
+    this.animator.period = animator.period
+    this.animator.exposure = animator.exposure
   }
 
   /** Raise or lower by offset. */
-  export function elevate(image: Image, offset: Layer): void {
-    image.layer += offset
+  elevate(offset: Layer): void {
+    this.layer += offset
+  }
+}
+
+export namespace Image {
+  export interface Props {
+    readonly id: AtlasID
+    readonly imageID?: AtlasID
+    readonly bounds?: Rect
+    readonly layer?: Layer
+    readonly animator?: Animator
+    readonly scale?: XY
+    readonly wrap?: DecamillipixelIntXY
+    readonly wrapVelocity?: DecamillipixelIntXY
+    readonly alphaComposition?: AlphaComposition
   }
 }
