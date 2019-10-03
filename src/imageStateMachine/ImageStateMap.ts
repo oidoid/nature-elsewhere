@@ -7,6 +7,6 @@ export interface ImageStateMap
 
 export namespace ImageStateMap {
   export function make(scale?: XY): ImageStateMap {
-    return {[Entity.State.HIDDEN]: ImageRect.make(scale)}
+    return {[Entity.State.HIDDEN]: new ImageRect({scale})}
   }
 }

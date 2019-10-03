@@ -31,9 +31,9 @@ export interface ImageConfig {
   readonly alphaComposition?: AlphaCompositionKeyConfig
 }
 
-export type AnimatorConfig = Maybe<{
-  readonly period?: number
-  readonly exposure?: Milliseconds
+export type AnimatorConfig = Readonly<{
+  period?: number
+  exposure?: Milliseconds
 }>
 
 /** Defaults to (1, 1). */
@@ -45,10 +45,10 @@ export namespace ImageParser {
     const id = AtlasIDParser.parse(config.id)
     return new Image({
       id,
-      imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : id,
+      imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : undefined,
       bounds: parseBounds(config, id, atlas),
       layer: parseLayerKey(config.layer),
-      animator: parseAnimator(config.animator),
+      animator: config.animator ? parseAnimator(config.animator) : undefined,
       scale: parseScale(config.scale),
       wrap: DecamillipixelIntXYParser.parse(config.wrap),
       wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity),
@@ -88,8 +88,5 @@ function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
 }
 
 function parseAnimator(config: AnimatorConfig): Animator {
-  return {
-    period: config && config.period ? config.period : 0,
-    exposure: config && config.exposure ? config.exposure : 0
-  }
+  return {period: config.period || 0, exposure: config.exposure || 0}
 }

@@ -30,7 +30,7 @@ export class Text extends Entity {
     this.textScale = textScale || new XY(1, 1)
     this.textMaxSize = textMaxSize || new WH(Limits.maxShort, Limits.maxShort)
     if (!('visible' in this.machine.map)) {
-      ;(<any>this.machine.map)['visible'] = ImageRect.make()
+      ;(<any>this.machine.map)['visible'] = new ImageRect()
       this.setState('visible')
     }
     const textImages = toImages(
@@ -54,20 +54,8 @@ export class Text extends Entity {
     if (this.textLayer)
       for (const image of textImages) image.elevate(this.textLayer)
 
-    // Images are added dynamically but ImageRect expects a static configuration
-    // determined at parse time. Recalculate the bounds.
-    // make function for this. try to encapsulate
-    this.imageRect().images.push(...textImages)
-    const union = Rect.unionAll(
-      this.imageRect().images.map(image => image.bounds)
-    )
-    if (union) {
-      this.imageRect().bounds.position.x = union.position.x
-      this.imageRect().bounds.position.y = union.position.y
-      this.imageRect().bounds.size.w = union.size.w
-      this.imageRect().bounds.size.h = union.size.h
-    }
-    this.invalidateBounds()
+    this.imageRect().add(...textImages)
+    this.invalidateBounds() //not good
   }
 }
 

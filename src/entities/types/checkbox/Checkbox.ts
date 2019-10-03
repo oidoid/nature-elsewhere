@@ -5,7 +5,6 @@ import {Level} from '../../../levels/Level'
 import {Input} from '../../../inputs/Input'
 import {Atlas} from 'aseprite-atlas'
 import {WH} from '../../../math/WH'
-import {ImageRect} from '../../../imageStateMachine/ImageRect'
 import {XY} from '../../../math/XY'
 import {Entity} from '../../../entity/Entity'
 import {Image} from '../../../image/Image'
@@ -70,11 +69,9 @@ export class Checkbox extends Entity {
     const text = this.children[0]
     for (const state of [CheckboxState.UNCHECKED, CheckboxState.CHECKED]) {
       const size = new WH(text.bounds.size.w, text.bounds.size.h)
-      this.machine.map[state].images.length = 0
       const images = newBackgroundImages(state, layerOffset, atlas, size)
-      for (const image of images) ImageRect.add(this.machine.map[state], image)
-      ImageRect.moveTo(
-        this.machine.map[state],
+      this.machine.map[state].replace(...images)
+      this.machine.map[state].moveTo(
         new XY(text.bounds.position.x - 1, this.bounds.position.y)
       )
     }

@@ -164,7 +164,7 @@ export class Entity {
     if (!by.x && !by.y) return status
     this.bounds.position.x += by.x
     this.bounds.position.y += by.y
-    status |= ImageRect.moveBy(this.imageRect(), by)
+    status |= this.imageRect().moveBy(by)
     Rect.moveAllBy(this.collisionBodies, by)
     for (const child of this.children) child.moveBy(by)
     return status | UpdateStatus.UPDATED
@@ -179,7 +179,7 @@ export class Entity {
       this.getScale().x && this.getScale().y
         ? scale.div(this.getScale())
         : undefined
-    const status = ImageRect.scaleTo(this.imageRect(), scale)
+    const status = this.imageRect().scaleTo(scale)
     if (collisionScale && status & UpdateStatus.UPDATED) {
       for (const body of this.collisionBodies) {
         body.size.w *= Math.abs(collisionScale.x)
@@ -199,10 +199,7 @@ export class Entity {
       *partly*, or not animated together. */
   animate(state: UpdateState): Image[] {
     if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
-    const visible = ImageRect.intersects(
-      this.imageRect(),
-      state.level.cam.bounds
-    )
+    const visible = this.imageRect().intersects(state.level.cam.bounds)
     for (const image of visible) image.animate(state.time, state.level.atlas)
     return [
       ...visible,

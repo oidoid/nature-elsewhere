@@ -2,7 +2,6 @@ import {Atlas} from 'aseprite-atlas'
 import {Entity} from '../../../entity/Entity'
 import {EntityConfig} from '../../../entity/EntityParser'
 import {ImageConfig, ImageParser} from '../../../image/ImageParser'
-import {ImageRect} from '../../../imageStateMachine/ImageRect'
 
 export interface ImageEntityConfig extends EntityConfig {
   /** A single image to be added to the default state. */
@@ -19,7 +18,7 @@ export namespace ImageEntityParser {
     if (config.image) {
       const image = ImageParser.parse(config.image, atlas)
       image.moveBy(entity.bounds.position)
-      ImageRect.add(entity.imageRect(), image) // not great. more encapsulation pls
+      entity.imageRect().add(image)
       entity.invalidateBounds() // this ain't goood}
     }
     return entity

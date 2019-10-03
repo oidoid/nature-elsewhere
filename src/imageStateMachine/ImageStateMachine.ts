@@ -23,8 +23,7 @@ export namespace ImageStateMachine {
     id: AtlasID
   ): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
-    for (const rect of Object.values(machine.map))
-      status |= ImageRect.setImageID(rect, id)
+    for (const rect of Object.values(machine.map)) status |= rect.setImageID(id)
     return status
   }
 
@@ -39,20 +38,19 @@ export namespace ImageStateMachine {
     if (machine.state === state) return UpdateStatus.UNCHANGED
     const {bounds, scale} = machine.map[machine.state]
     machine.state = state
-    ImageRect.moveTo(machine.map[machine.state], bounds.position)
+    machine.map[machine.state].moveTo(bounds.position)
     resetAnimation(machine)
     setScale(machine, scale)
     return UpdateStatus.UPDATED
   }
 
   export function setScale(machine: ImageStateMachine, scale: XY): void {
-    ImageRect.scaleTo(machine.map[machine.state], scale)
+    machine.map[machine.state].scaleTo(scale)
   }
 
   /** Raise or lower all images for all states. */
   export function elevate(machine: ImageStateMachine, offset: Layer): void {
-    for (const state in machine.map)
-      ImageRect.elevate(machine.map[state], offset)
+    for (const state in machine.map) machine.map[state].elevate(offset)
   }
 
   export function resetAnimation(machine: ImageStateMachine): void {
