@@ -15,6 +15,7 @@ import {DateVersionHashParser} from '../entities/types/dateVersionHash/DateVersi
 import {CheckboxParser} from '../entities/types/checkbox/CheckboxParser'
 import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerParser'
 import {IEntityParser} from '../entities/RecursiveEntityParser'
+import {LevelEditorPanelBackground} from '../entities/types/levelEditorPanel/LevelEditorPanelBackground'
 
 export namespace EntityFactory {
   export function produce(
@@ -44,7 +45,9 @@ export namespace EntityFactory {
       case EntityType.UI_ENTITY_PICKER:
         return EntityPickerParser.parse(props, atlas, parser)
       case EntityType.UI_LEVEL_EDITOR_PANEL:
-        return new LevelEditorPanel(<LevelEditorPanel.Props>props)
+        return new LevelEditorPanel(<LevelEditorPanel.Props>props, atlas)
+      case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:
+        return new LevelEditorPanelBackground(props)
       case EntityType.UI_MARQUEE:
         return new Marquee(props)
       case EntityType.UI_TEXT:

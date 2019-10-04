@@ -52,11 +52,9 @@ import {
   ImageStateMachineParser
 } from '../imageStateMachine/ImageStateMachineParser'
 import {JSONObject, JSONUtil} from '../utils/JSONUtil'
-import {LevelEditorPanelParser} from '../entities/types/levelEditorPanel/LevelEditorPanelParser'
 import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
-import {RecursiveEntityParser} from '../entities/RecursiveEntityParser'
 import {
   UpdatePredicateConfig,
   UpdatePredicateParser
@@ -118,9 +116,6 @@ export namespace EntityParser {
     let entity = EntityFactory.produce(config, type, props, atlas, parse)
     Object.assign(entity, specialization(config))
 
-    const parser = TypeParserMap[type]
-    entity = parser ? parser(entity, atlas, parse) : entity
-
     for (const updater of entity.updaters) {
       const parser = UpdaterParserMap[updater]
       entity = parser ? parser(entity, atlas, parse) : entity
@@ -154,19 +149,31 @@ function parseProps(
   return {
     id: EntityParser.parseID(config.id),
     type: type,
-    position: XYParser.parse(config.position),
-    scale: ImageParser.parseScale(config.scale),
-    velocity: XYParser.parse(config.velocity),
+    position: config.position ? XYParser.parse(config.position) : undefined,
+    scale: config.scale ? ImageParser.parseScale(config.scale) : undefined,
+    velocity: config.velocity ? XYParser.parse(config.velocity) : undefined,
     imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : undefined,
-    machine: ImageStateMachineParser.parse(config.machine, atlas),
-    updatePredicate: UpdatePredicateParser.parse(config.updatePredicate),
-    updaters: UpdaterTypeParser.parseAll(config.updaters),
-    collisionType: CollisionTypeParser.parseKeys(config.collisionTypes),
-    collisionPredicate: CollisionPredicateParser.parse(
-      config.collisionPredicate
-    ),
-    collisionBodies: RectParser.parseAll(config.collisionBodies),
-    children: EntityParser.parseAll(config.children, atlas)
+    machine: config.machine
+      ? ImageStateMachineParser.parse(config.machine, atlas)
+      : undefined,
+    updatePredicate: config.updatePredicate
+      ? UpdatePredicateParser.parse(config.updatePredicate)
+      : undefined,
+    updaters: config.updaters
+      ? UpdaterTypeParser.parseAll(config.updaters)
+      : undefined,
+    collisionType: config.collisionTypes
+      ? CollisionTypeParser.parseKeys(config.collisionTypes)
+      : undefined,
+    collisionPredicate: config.collisionPredicate
+      ? CollisionPredicateParser.parse(config.collisionPredicate)
+      : undefined,
+    collisionBodies: config.collisionBodies
+      ? RectParser.parseAll(config.collisionBodies)
+      : undefined,
+    children: config.children
+      ? EntityParser.parseAll(config.children, atlas)
+      : undefined
   }
 }
 
@@ -201,12 +208,6 @@ function withDefaults(config: EntityConfig, type: EntityType): EntityConfig {
     ))
   )
 }
-
-const TypeParserMap: Readonly<Partial<
-  Record<EntityType, RecursiveEntityParser>
->> = Object.freeze({
-  [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelParser.parse
-})
 
 const UpdaterParserMap: Readonly<Partial<
   Record<UpdaterType, UpdaterParser>
@@ -247,6 +248,9 @@ const TypeConfigMap: Readonly<Record<EntityType, EntityConfig>> = Object.freeze(
     [EntityType.UI_DESTINATION_MARKER]: UI_DESTINATION_MARKER,
     [EntityType.UI_ENTITY_PICKER]: UI_ENTITY_PICKER,
     [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
+    [EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND]: {
+      type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND
+    },
     [EntityType.UI_MARQUEE]: UI_MARQUEE,
     [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
     [EntityType.UI_TEXT]: UI_TEXT,
