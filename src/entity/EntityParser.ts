@@ -1,4 +1,3 @@
-import * as CHAR_BACKPACKER from '../entities/types/backpacker/backpacker.json'
 import * as CHAR_BEE from '../entities/types/entityConfigs/char/bee.json'
 import * as CHAR_BUNNY from '../entities/types/entityConfigs/char/bunny.json'
 import * as CHAR_FLY from '../entities/types/entityConfigs/char/fly.json'
@@ -217,7 +216,6 @@ const UpdaterParserMap: Readonly<Partial<
 const TypeConfigMap: Readonly<Partial<
   Record<EntityType, EntityConfig>
 >> = Object.freeze({
-  [EntityType.CHAR_BACKPACKER]: CHAR_BACKPACKER,
   [EntityType.CHAR_BEE]: CHAR_BEE,
   [EntityType.CHAR_BUNNY]: CHAR_BUNNY,
   [EntityType.CHAR_FLY]: CHAR_FLY,

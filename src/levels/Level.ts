@@ -1,5 +1,5 @@
 import {Atlas} from 'aseprite-atlas'
-import {Backpacker} from '../entities/types/backpacker/Backpacker'
+import {Backpacker} from '../entities/types/Backpacker'
 import {Camera} from './Camera'
 import {Cursor} from '../entities/types/cursor/Cursor'
 import {EntityCollider} from '../collision/EntityCollider'

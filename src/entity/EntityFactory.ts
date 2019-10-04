@@ -1,4 +1,4 @@
-import {Backpacker} from '../entities/types/backpacker/Backpacker'
+import {Backpacker} from '../entities/types/Backpacker'
 import {Button} from '../entities/types/Button'
 import {Cloud} from '../entities/types/Cloud'
 import {Cursor} from '../entities/types/cursor/Cursor'
@@ -27,7 +27,7 @@ export namespace EntityFactory {
   ): Entity {
     switch (type) {
       case EntityType.CHAR_BACKPACKER:
-        return new Backpacker(props)
+        return new Backpacker(atlas, props)
       case EntityType.IMAGE:
         return ImageEntityParser.parse(config, props, atlas)
       case EntityType.SCENERY_CLOUD:
