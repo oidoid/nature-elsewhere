@@ -100,7 +100,7 @@ function showActiveChild(picker: EntityPicker): void {
 }
 
 function getChildStates(child: Entity): readonly (Entity.State | string)[] {
-  return Object.keys(child.machine.map).filter(
-    state => state !== Entity.State.HIDDEN
-  )
+  return child.machine
+    .getStates()
+    .filter(state => state !== Entity.State.HIDDEN)
 }

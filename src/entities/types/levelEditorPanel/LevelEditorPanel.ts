@@ -135,7 +135,7 @@ export class LevelEditorPanel extends Entity {
       if (!sandbox) throw new Error('Missing sandbox.')
       if (this.destroyButton.clicked) {
         marquee.selection = undefined
-        marquee.machine.state = Entity.State.HIDDEN
+        marquee.machine.setState(Entity.State.HIDDEN)
         const index = sandbox.children.findIndex(entity =>
           selection.equal(entity)
         )

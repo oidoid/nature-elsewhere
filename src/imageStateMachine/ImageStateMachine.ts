@@ -4,57 +4,83 @@ import {Layer} from '../image/Layer'
 import {XY} from '../math/XY'
 import {AtlasID} from '../atlas/AtlasID'
 import {Entity} from '../entity/Entity'
-import {ImageStateMap} from './ImageStateMap'
+import {Image} from '../image/Image'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.
-export interface ImageStateMachine {
-  state: Entity.State | string
-  map: Readonly<Record<Entity.State | string, ImageRect>>
-}
+export class ImageStateMachine {
+  private _state: Entity.State | string
+  private readonly _map: Readonly<Record<Entity.State | string, ImageRect>>
 
-export namespace ImageStateMachine {
-  export function make(scale?: XY): ImageStateMachine {
-    return {state: Entity.State.HIDDEN, map: ImageStateMap.make(scale)}
+  constructor({
+    state = Entity.State.HIDDEN,
+    map = {[Entity.State.HIDDEN]: new ImageRect()}
+  }: ImageStateMachine.Props = {}) {
+    this._state = state
+    this._map = map
   }
 
-  export function setImageID(
-    machine: ImageStateMachine,
-    id: AtlasID
-  ): UpdateStatus {
+  get state(): Entity.State | string {
+    return this._state
+  }
+
+  getStates(): (Entity.State | string)[] {
+    return Object.keys(this._map)
+  }
+
+  imageRect(): ImageRect {
+    return this._map[this.state]
+  }
+
+  images(): readonly Image[] {
+    return this.imageRect().images
+  }
+
+  setImageID(id: AtlasID): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
-    for (const rect of Object.values(machine.map)) status |= rect.setImageID(id)
+    for (const state in this._map) status |= this._map[state].setImageID(id)
     return status
   }
 
-  export function imageRect(machine: ImageStateMachine): ImageRect {
-    return machine.map[machine.state]
-  }
-
-  export function setState(
-    machine: ImageStateMachine,
-    state: Entity.State | string
-  ): UpdateStatus {
-    if (machine.state === state) return UpdateStatus.UNCHANGED
-    const {bounds, scale} = machine.map[machine.state]
-    machine.state = state
-    machine.map[machine.state].moveTo(bounds.position)
-    resetAnimation(machine)
-    setScale(machine, scale)
+  setState(state: Entity.State | string): UpdateStatus {
+    if (this.state === state) return UpdateStatus.UNCHANGED
+    const {bounds, scale} = this.imageRect()
+    this._state = state
+    this.imageRect().moveTo(bounds.position)
+    this.resetAnimation()
+    this.scaleTo(scale)
     return UpdateStatus.UPDATED
   }
 
-  export function setScale(machine: ImageStateMachine, scale: XY): void {
-    machine.map[machine.state].scaleTo(scale)
+  replaceImages(
+    state: Entity.State | string,
+    ...images: readonly Image[]
+  ): UpdateStatus {
+    this._map[state].replace(...images)
+    return UpdateStatus.UPDATED
+  }
+
+  moveTo(to: XY): UpdateStatus {
+    return this.imageRect().moveTo(to)
+  }
+  scaleTo(scale: XY): UpdateStatus {
+    return this.imageRect().scaleTo(scale)
   }
 
   /** Raise or lower all images for all states. */
-  export function elevate(machine: ImageStateMachine, offset: Layer): void {
-    for (const state in machine.map) machine.map[state].elevate(offset)
+  elevate(offset: Layer): void {
+    for (const state in this._map) this._map[state].elevate(offset)
   }
 
-  export function resetAnimation(machine: ImageStateMachine): void {
-    for (const image of machine.map[machine.state].images)
-      image.resetAnimation()
+  /** Reset the animations of all images in the current state. */
+  resetAnimation(): void {
+    for (const image of this.images()) image.resetAnimation()
+  }
+}
+
+export namespace ImageStateMachine {
+  export interface Props {
+    state?: Entity.State | string
+    map?: Record<Entity.State | string, ImageRect>
   }
 }

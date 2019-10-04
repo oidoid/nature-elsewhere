@@ -27,6 +27,7 @@ export class ImageRect {
       add a child Entity instead. */
   private readonly _images: Image[]
 
+  /** If set, the imageID for all images. See Image._imageID. */
   private _imageID?: AtlasID
 
   constructor({

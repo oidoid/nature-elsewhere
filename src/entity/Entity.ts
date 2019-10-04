@@ -71,7 +71,7 @@ export class Entity {
     this._type = type
     this._bounds = {position: new XY(0, 0), size: new WH(0, 0)}
     this._velocity = velocity || new XY(0, 0)
-    this._machine = machine || ImageStateMachine.make()
+    this._machine = machine || new ImageStateMachine()
     this._updatePredicate =
       updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
     this._updaters = updaters || []
@@ -129,7 +129,7 @@ export class Entity {
   }
 
   setImageID(id: AtlasID): UpdateStatus {
-    return ImageStateMachine.setImageID(this.machine, id)
+    return this.machine.setImageID(id)
   }
 
   /** See Entity.spawnID. */
@@ -191,7 +191,7 @@ export class Entity {
   }
 
   imageRect(): ImageRect {
-    return ImageStateMachine.imageRect(this.machine)
+    return this.machine.imageRect()
   }
 
   /** Recursively animate the entity and its children. Only visible entities are
@@ -211,7 +211,7 @@ export class Entity {
   }
 
   resetAnimation(): void {
-    ImageStateMachine.resetAnimation(this.machine)
+    this.machine.resetAnimation()
   }
 
   /** Returns whether the current entity is in the viewport or should always be
@@ -224,7 +224,7 @@ export class Entity {
   }
 
   setState(state: Entity.State | string): UpdateStatus {
-    const status = ImageStateMachine.setState(this.machine, state)
+    const status = this.machine.setState(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
   }
@@ -288,7 +288,7 @@ export class Entity {
   /** Raise or lower an entity's images and its descendants' images for all
       states. */
   elevate(offset: Layer): void {
-    ImageStateMachine.elevate(this.machine, offset)
+    this.machine.elevate(offset)
     for (const child of this.children) child.elevate(offset)
   }
 

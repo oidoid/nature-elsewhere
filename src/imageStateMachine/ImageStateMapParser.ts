@@ -1,7 +1,8 @@
 import {Atlas} from 'aseprite-atlas'
 import {EntityParser, EntityStateConfig} from '../entity/EntityParser'
 import {ImageRectConfig, ImageRectParser} from './ImageRectParser'
-import {ImageStateMap} from './ImageStateMap'
+import {ImageRect} from './ImageRect'
+import {Entity} from '../entity/Entity'
 
 export type ImageStateMapConfig = Maybe<
   Readonly<Record<Exclude<EntityStateConfig, undefined>, ImageRectConfig>>
@@ -11,8 +12,10 @@ export namespace ImageStateMapParser {
   export function parse(
     config: ImageStateMapConfig,
     atlas: Atlas
-  ): ImageStateMap {
-    const map: Writable<ImageStateMap> = ImageStateMap.make()
+  ): Readonly<Record<Entity.State | string, ImageRect>> {
+    const map: Record<Entity.State | string, ImageRect> = {
+      [Entity.State.HIDDEN]: new ImageRect()
+    }
     if (!config) return map
     for (const stateConfig in config) {
       const state = EntityParser.parseState(stateConfig)

@@ -9,7 +9,6 @@ import {TextLayout} from '../../../text/TextLayout'
 import {Image} from '../../../image/Image'
 import {AtlasID, MEM_FONT_PREFIX} from '../../../atlas/AtlasID'
 import {ImageParser} from '../../../image/ImageParser'
-import {ImageRect} from '../../../imageStateMachine/ImageRect'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 
 export class Text extends Entity {
@@ -29,10 +28,10 @@ export class Text extends Entity {
     this.textLayer = textLayer || Layer.UI_LO
     this.textScale = textScale || new XY(1, 1)
     this.textMaxSize = textMaxSize || new WH(Limits.maxShort, Limits.maxShort)
-    if (!('visible' in this.machine.map)) {
-      ;(<any>this.machine.map)['visible'] = new ImageRect()
-      this.setState('visible')
-    }
+    // if (!('visible' in this.machine.map)) {
+    //   ;(<any>this.machine.map)['visible'] = new ImageRect()
+    //   this.setState('visible')
+    // }
     const textImages = toImages(
       atlas,
       this.text,

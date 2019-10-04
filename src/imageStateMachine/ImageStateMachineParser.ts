@@ -13,10 +13,10 @@ export namespace ImageStateMachineParser {
     config: ImageStateMachineConfig,
     atlas: Atlas
   ): ImageStateMachine {
-    if (!config) return ImageStateMachine.make()
+    if (!config) return new ImageStateMachine()
     const state = EntityParser.parseState(config.state)
     const map = ImageStateMapParser.parse(config.map, atlas)
     ObjectUtil.assertKeyOf(map, state, 'ImageStateMachine')
-    return {state, map}
+    return new ImageStateMachine({state, map})
   }
 }
