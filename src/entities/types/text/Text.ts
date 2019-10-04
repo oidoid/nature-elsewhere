@@ -53,8 +53,7 @@ export class Text extends Entity {
     if (this.textLayer)
       for (const image of textImages) image.elevate(this.textLayer)
 
-    this.imageRect().add(...textImages)
-    this.invalidateBounds() //not good
+    this.addImages(...textImages)
   }
 }
 

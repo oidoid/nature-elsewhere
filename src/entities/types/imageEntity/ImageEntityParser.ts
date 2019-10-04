@@ -18,8 +18,7 @@ export namespace ImageEntityParser {
     if (config.image) {
       const image = ImageParser.parse(config.image, atlas)
       image.moveBy(entity.bounds.position)
-      entity.imageRect().add(image)
-      entity.invalidateBounds() // this ain't goood}
+      entity.addImages(image)
     }
     return entity
   }

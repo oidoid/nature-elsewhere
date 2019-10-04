@@ -137,6 +137,11 @@ export class Entity {
     return this.spawnID === entity.spawnID
   }
 
+  addImages(...images: readonly Image[]): void {
+    this.imageRect().add(...images)
+    this.invalidateBounds()
+  }
+
   /** This is a shallow invalidation. If a child changes state, or is added, the
       parents' bounds should be updated. */
   invalidateBounds(): void {

@@ -9,9 +9,11 @@ export class ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
       moved relative this position. */
   private readonly _bounds: Rect
+
   /** For images that require a center offset, an origin may be specified and
       referenced manually in translation calculations. */
   private readonly _origin: XY
+
   /** Collision bodies are not scaled. Image.bounds includes scaling so
       ImageRect.bounds does as well. flipImages only controls whether each image
       in the ImageRect is flipped or not. The original orientation is considered
@@ -21,6 +23,7 @@ export class ImageRect {
       Always use non-zero scaling so that Entity can determine relative scaling
       of collision bodies. */
   private readonly _scale: XY
+
   /** Image coordinates are not relative the bounds origin, they're in level
       coordinates. These should usually only be passed statically by the entity
       configuration JSON. If additional imagery is needed, it is often best to
