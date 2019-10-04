@@ -6,7 +6,6 @@ import {Entity} from '../../../entity/Entity'
 import {EntityID} from '../../../entity/EntityID'
 import {EntityParser} from '../../../entity/EntityParser'
 import {EntityPicker} from '../entityPicker/EntityPicker'
-import {EntityPickerParser} from '../entityPicker/EntityPickerParser'
 import {
   EntityType,
   SCENERY_VALUE_PREFIX,
@@ -86,7 +85,7 @@ export class LevelEditorPanel extends Entity {
     }
 
     if (this.createButton.clicked) {
-      const child = EntityPickerParser.getActiveChild(this.entityPicker)
+      const child = this.entityPicker.getActiveChild()
       if (child) {
         const position = {
           x: checkboxNumber(this.xCheckbox),
@@ -241,11 +240,10 @@ export namespace LevelEditorPanel {
     offset: number,
     atlas: Atlas
   ): void {
-    EntityPickerParser.setActiveChild(
-      panel.entityPicker,
+    panel.entityPicker.setActiveChild(
       panel.entityPicker.activeChildIndex + offset
     )
-    const child = EntityPickerParser.getActiveChild(panel.entityPicker)
+    const child = panel.entityPicker.getActiveChild()
     if (!child) return
     const entityLabel = child.type.replace(
       new RegExp(`^(${SCENERY_VALUE_PREFIX}|${CHAR_VALUE_PREFIX})`),
@@ -268,9 +266,9 @@ export namespace LevelEditorPanel {
     offset: number,
     atlas: Atlas
   ): void {
-    const child = EntityPickerParser.getActiveChild(entityPicker)
+    const child = entityPicker.getActiveChild()
     if (!child) return
-    EntityPickerParser.offsetActiveChildStateIndex(entityPicker, offset)
+    entityPicker.offsetActiveChildStateIndex(offset)
     stateCheckbox.setText(
       {
         type: EntityType.UI_TEXT,

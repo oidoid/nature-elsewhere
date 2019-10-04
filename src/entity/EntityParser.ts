@@ -44,7 +44,6 @@ import {
 } from '../collision/CollisionTypeParser'
 import {Entity} from './Entity'
 import {EntityID} from './EntityID'
-import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerParser'
 import {EntityType} from './EntityType'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
@@ -116,7 +115,7 @@ export namespace EntityParser {
     config = withDefaults(config, type)
 
     const props = parseProps(config, type, atlas)
-    let entity = EntityFactory.produce(config, type, props, atlas)
+    let entity = EntityFactory.produce(config, type, props, atlas, parse)
     Object.assign(entity, specialization(config))
 
     const parser = TypeParserMap[type]
@@ -206,8 +205,7 @@ function withDefaults(config: EntityConfig, type: EntityType): EntityConfig {
 const TypeParserMap: Readonly<Partial<
   Record<EntityType, RecursiveEntityParser>
 >> = Object.freeze({
-  [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelParser.parse,
-  [EntityType.UI_ENTITY_PICKER]: EntityPickerParser.parse
+  [EntityType.UI_LEVEL_EDITOR_PANEL]: LevelEditorPanelParser.parse
 })
 
 const UpdaterParserMap: Readonly<Partial<
