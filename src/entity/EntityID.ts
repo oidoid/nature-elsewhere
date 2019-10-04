@@ -14,7 +14,6 @@ export enum EntityID {
   UI_LEVEL_EDITOR_RADIO_GROUP = 'uiLevelEditorRadioGroup',
   UI_LEVEL_EDITOR_PANEL_X = 'uiLevelEditorPanelX',
   UI_LEVEL_EDITOR_PANEL_Y = 'uiLevelEditorPanelY',
-  UI_LEVEL_EDITOR_PANEL_ENTITY = 'uiLevelEditorPanelEntity',
   UI_LEVEL_EDITOR_PANEL_STATE = 'uiLevelEditorPanelState',
   UI_LEVEL_EDITOR_PANEL_ENTITY_PICKER = 'uiLevelEditorPanelEntityPicker',
   UI_LEVEL_EDITOR_PANEL_DECREMENT = 'uiLevelEditorPanelDecrement',

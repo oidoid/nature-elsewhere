@@ -45,7 +45,7 @@ export namespace EntityFactory {
       case EntityType.UI_ENTITY_PICKER:
         return EntityPickerParser.parse(props, atlas, parser)
       case EntityType.UI_LEVEL_EDITOR_PANEL:
-        return new LevelEditorPanel(<LevelEditorPanel.Props>props, atlas)
+        return new LevelEditorPanel(atlas, <LevelEditorPanel.Props>props)
       case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:
         return new LevelEditorPanelBackground(props)
       case EntityType.UI_MARQUEE:

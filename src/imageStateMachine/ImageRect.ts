@@ -45,6 +45,7 @@ export class ImageRect {
     this._scale = scale
     this._images = images
     this._imageID = imageID
+    this._invalidate()
   }
 
   get bounds(): Rect {
@@ -77,13 +78,7 @@ export class ImageRect {
 
   add(...images: readonly Image[]): void {
     this._images.push(...images)
-    const union = Rect.unionAll(this.images.map(image => image.bounds))
-    if (union) {
-      this.bounds.position.x = union.position.x
-      this.bounds.position.y = union.position.y
-      this.bounds.size.w = union.size.w
-      this.bounds.size.h = union.size.h
-    }
+    this._invalidate()
   }
 
   replace(...images: readonly Image[]): void {
@@ -128,6 +123,16 @@ export class ImageRect {
 
   intersects(bounds: ReadonlyRect): Image[] {
     return this.images.filter(image => Rect.intersects(bounds, image.bounds))
+  }
+
+  private _invalidate() {
+    const union = Rect.unionAll(this.images.map(image => image.bounds))
+    if (union) {
+      this.bounds.position.x = union.position.x
+      this.bounds.position.y = union.position.y
+      this.bounds.size.w = union.size.w
+      this.bounds.size.h = union.size.h
+    }
   }
 }
 

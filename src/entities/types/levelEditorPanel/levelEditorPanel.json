@@ -110,17 +110,8 @@
           "position": {"x": 68, "y": 26},
           "layer": "UI_HI",
           "imageID": "palette-black"
-        },
-        {
-          "id": "uiLevelEditorPanelEntity",
-          "type": "uiCheckbox",
-          "textMaxSize": {"w": 32, "h": 5},
-          "position": {"x": 88, "y": 2},
-          "layer": "UI_HI",
-          "imageID": "palette-black"
         }
       ]
-    },
-    {"type": "uiLevelEditorPanelBackground"}
+    }
   ]
 }

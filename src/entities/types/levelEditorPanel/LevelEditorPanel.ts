@@ -12,7 +12,6 @@ import {
   CHAR_VALUE_PREFIX
 } from '../../../entity/EntityType'
 import {Layer} from '../../../image/Layer'
-import {Level} from '../../../levels/Level'
 import {Marquee} from '../marquee/Marquee'
 import {PlaneState} from '../PlaneState'
 import {UpdateState} from '../../updaters/UpdateState'
@@ -20,6 +19,9 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../../math/XY'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../../../collision/CollisionType'
+import {WH} from '../../../math/WH'
+import {AtlasID} from '../../../atlas/AtlasID'
+import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
 
 export class LevelEditorPanel extends Entity {
   readonly radioGroup: Entity
@@ -35,6 +37,7 @@ export class LevelEditorPanel extends Entity {
   readonly toggleGridButton: Button
 
   constructor(
+    atlas: Atlas,
     {
       type = EntityType.UI_LEVEL_EDITOR_PANEL,
       updatePredicate = UpdatePredicate.ALWAYS,
@@ -44,7 +47,15 @@ export class LevelEditorPanel extends Entity {
       xCheckbox,
       yCheckbox,
       stateCheckbox,
-      entityCheckbox,
+      entityCheckbox = new Checkbox(
+        {
+          type: EntityType.UI_CHECKBOX,
+          textMaxSize: new WH(32, 5),
+          position: new XY(88, 2),
+          imageID: AtlasID.PALETTE_BLACK
+        },
+        atlas
+      ),
       entityPicker,
       decrementButton,
       incrementButton,
@@ -52,8 +63,7 @@ export class LevelEditorPanel extends Entity {
       createButton,
       toggleGridButton,
       ...props
-    }: LevelEditorPanel.Props,
-    atlas: Atlas
+    }: LevelEditorPanel.Props
   ) {
     super({...props, type, updatePredicate, collisionType, collisionPredicate})
 
@@ -65,9 +75,14 @@ export class LevelEditorPanel extends Entity {
     this.stateCheckbox = <Checkbox>(
       this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_STATE)
     )
-    this.entityCheckbox = <Checkbox>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY)
+    this.entityCheckbox = entityCheckbox
+    this.children.push(
+      this.entityCheckbox,
+      new LevelEditorPanelBackground({
+        type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND
+      })
     )
+    this.invalidateBounds()
     this.entityPicker = <EntityPicker>(
       this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY_PICKER)
     )
@@ -89,13 +104,10 @@ export class LevelEditorPanel extends Entity {
 
     this.setEntityFields(0, atlas)
     this.elevate(Layer.UI_PICKER_OFFSET)
-
-    console.log(this)
   }
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
-    if (Level.collisionWithCursor(state.level, this)) console.log('cursor')
     if (
       this.decrementButton.clicked ||
       this.decrementButton.longClicked ||

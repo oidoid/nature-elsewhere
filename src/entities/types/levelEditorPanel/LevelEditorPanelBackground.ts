@@ -9,12 +9,14 @@ import {Image} from '../../../image/Image'
 import {ImageStateMachine} from '../../../imageStateMachine/ImageStateMachine'
 import {ImageRect} from '../../../imageStateMachine/ImageRect'
 import {CollisionType} from '../../../collision/CollisionType'
+import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 
 export class LevelEditorPanelBackground extends Entity {
   constructor({
     type = EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
     collisionType = CollisionType.TYPE_UI,
     collisionPredicate = CollisionPredicate.IMAGES,
+    updatePredicate = UpdatePredicate.ALWAYS,
     machine = new ImageStateMachine({
       state: LevelEditorPanelBackgroundState.VISIBLE,
       map: {
@@ -26,7 +28,14 @@ export class LevelEditorPanelBackground extends Entity {
     }),
     ...props
   }: Entity.Props) {
-    super({...props, type, collisionType, collisionPredicate, machine})
+    super({
+      ...props,
+      type,
+      collisionType,
+      collisionPredicate,
+      updatePredicate,
+      machine
+    })
   }
 }
 
