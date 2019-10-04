@@ -22,11 +22,8 @@ import * as SCENERY_PYRAMID from '../entities/types/entityConfigs/scenery/pyrami
 import * as SCENERY_SUBSHRUB from '../entities/types/entityConfigs/scenery/subshrub.json'
 import * as SCENERY_TREE from '../entities/types/entityConfigs/scenery/tree.json'
 import * as UI_BUTTON from '../entities/types/button/button.json'
-import * as UI_CHECKBOX from '../entities/types/checkbox/checkbox.json'
 import * as UI_CURSOR from '../entities/types/cursor/cursor.json'
-import * as UI_DATE_VERSION_HASH from '../entities/types/dateVersionHash/dateVersionHash.json'
 import * as UI_DESTINATION_MARKER from '../entities/types/destinationMarker/destinationMarker.json'
-import * as UI_ENTITY_PICKER from '../entities/types/entityPicker/entityPicker.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
 import * as UI_MARQUEE from '../entities/types/marquee/marquee.json'
 import * as UI_RADIO_BUTTON_GROUP from '../entities/types/entityConfigs/ui/radioCheckboxGroup.json'
@@ -216,44 +213,38 @@ const UpdaterParserMap: Readonly<Partial<
   [UpdaterType.UI_FOLLOW_CAM]: FollowCamParser.parse
 })
 
-const TypeConfigMap: Readonly<Record<EntityType, EntityConfig>> = Object.freeze(
-  {
-    [EntityType.CHAR_BACKPACKER]: CHAR_BACKPACKER,
-    [EntityType.CHAR_BEE]: CHAR_BEE,
-    [EntityType.CHAR_BUNNY]: CHAR_BUNNY,
-    [EntityType.CHAR_FLY]: CHAR_FLY,
-    [EntityType.CHAR_FROG]: CHAR_FROG,
-    [EntityType.CHAR_SNAKE]: CHAR_SNAKE,
-    [EntityType.GROUP]: GROUP,
-    [EntityType.IMAGE]: IMAGE_ENTITY,
-    [EntityType.SCENERY_BUSH]: SCENERY_BUSH,
-    [EntityType.SCENERY_CATTAILS]: SCENERY_CATTAILS,
-    [EntityType.SCENERY_CLOUD]: SCENERY_CLOUD,
-    [EntityType.SCENERY_CLOVER]: SCENERY_CLOVER,
-    [EntityType.SCENERY_CONIFER]: SCENERY_CONIFER,
-    [EntityType.SCENERY_FLAG]: SCENERY_FLAG,
-    [EntityType.SCENERY_GRASS]: SCENERY_GRASS,
-    [EntityType.SCENERY_ISO_GRASS]: SCENERY_ISO_GRASS,
-    [EntityType.SCENERY_MOUNTAIN]: SCENERY_MOUNTAIN,
-    [EntityType.SCENERY_PATH]: SCENERY_PATH,
-    [EntityType.SCENERY_PLANE]: SCENERY_PLANE,
-    [EntityType.SCENERY_POND]: SCENERY_POND,
-    [EntityType.SCENERY_PYRAMID]: SCENERY_PYRAMID,
-    [EntityType.SCENERY_SUBSHRUB]: SCENERY_SUBSHRUB,
-    [EntityType.SCENERY_TREE]: SCENERY_TREE,
-    [EntityType.UI_BUTTON]: UI_BUTTON,
-    [EntityType.UI_CHECKBOX]: UI_CHECKBOX,
-    [EntityType.UI_CURSOR]: UI_CURSOR,
-    [EntityType.UI_DATE_VERSION_HASH]: UI_DATE_VERSION_HASH,
-    [EntityType.UI_DESTINATION_MARKER]: UI_DESTINATION_MARKER,
-    [EntityType.UI_ENTITY_PICKER]: UI_ENTITY_PICKER,
-    [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
-    [EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND]: {
-      type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND
-    },
-    [EntityType.UI_MARQUEE]: UI_MARQUEE,
-    [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
-    [EntityType.UI_TEXT]: UI_TEXT,
-    [EntityType.UI_TOOLBAR]: UI_TOOLBAR
-  }
-)
+const TypeConfigMap: Readonly<Partial<
+  Record<EntityType, EntityConfig>
+>> = Object.freeze({
+  [EntityType.CHAR_BACKPACKER]: CHAR_BACKPACKER,
+  [EntityType.CHAR_BEE]: CHAR_BEE,
+  [EntityType.CHAR_BUNNY]: CHAR_BUNNY,
+  [EntityType.CHAR_FLY]: CHAR_FLY,
+  [EntityType.CHAR_FROG]: CHAR_FROG,
+  [EntityType.CHAR_SNAKE]: CHAR_SNAKE,
+  [EntityType.GROUP]: GROUP,
+  [EntityType.IMAGE]: IMAGE_ENTITY,
+  [EntityType.SCENERY_BUSH]: SCENERY_BUSH,
+  [EntityType.SCENERY_CATTAILS]: SCENERY_CATTAILS,
+  [EntityType.SCENERY_CLOUD]: SCENERY_CLOUD,
+  [EntityType.SCENERY_CLOVER]: SCENERY_CLOVER,
+  [EntityType.SCENERY_CONIFER]: SCENERY_CONIFER,
+  [EntityType.SCENERY_FLAG]: SCENERY_FLAG,
+  [EntityType.SCENERY_GRASS]: SCENERY_GRASS,
+  [EntityType.SCENERY_ISO_GRASS]: SCENERY_ISO_GRASS,
+  [EntityType.SCENERY_MOUNTAIN]: SCENERY_MOUNTAIN,
+  [EntityType.SCENERY_PATH]: SCENERY_PATH,
+  [EntityType.SCENERY_PLANE]: SCENERY_PLANE,
+  [EntityType.SCENERY_POND]: SCENERY_POND,
+  [EntityType.SCENERY_PYRAMID]: SCENERY_PYRAMID,
+  [EntityType.SCENERY_SUBSHRUB]: SCENERY_SUBSHRUB,
+  [EntityType.SCENERY_TREE]: SCENERY_TREE,
+  [EntityType.UI_BUTTON]: UI_BUTTON,
+  [EntityType.UI_CURSOR]: UI_CURSOR,
+  [EntityType.UI_DESTINATION_MARKER]: UI_DESTINATION_MARKER,
+  [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
+  [EntityType.UI_MARQUEE]: UI_MARQUEE,
+  [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
+  [EntityType.UI_TEXT]: UI_TEXT,
+  [EntityType.UI_TOOLBAR]: UI_TOOLBAR
+})

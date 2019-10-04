@@ -27,8 +27,8 @@ export namespace Viewport {
       @return The fractional position in level coordinates. */
   export function toLevelXY({x, y}: FloatXY | XY, {w, h}: WH, cam: Rect): XY {
     return new XY(
-      Math.trunc(cam.position.x + (x / w) * cam.size.w),
-      Math.trunc(cam.position.y + (y / h) * cam.size.h)
+      cam.position.x + Math.trunc((x / w) * cam.size.w),
+      cam.position.y + Math.trunc((y / h) * cam.size.h)
     )
   }
 }

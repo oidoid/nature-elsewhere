@@ -11,11 +11,11 @@ import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser
 import {EntityConfig} from './EntityParser'
 import {Atlas} from 'aseprite-atlas'
 import {TextParser, TextConfig} from '../entities/types/text/TextParser'
-import {DateVersionHashParser} from '../entities/types/dateVersionHash/DateVersionHashParser'
 import {CheckboxParser} from '../entities/types/checkbox/CheckboxParser'
 import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerParser'
 import {IEntityParser} from '../entities/RecursiveEntityParser'
 import {LevelEditorPanelBackground} from '../entities/types/levelEditorPanel/LevelEditorPanelBackground'
+import {DateVersionHash} from '../entities/types/DateVersionHash'
 
 export namespace EntityFactory {
   export function produce(
@@ -39,7 +39,7 @@ export namespace EntityFactory {
       case EntityType.UI_CURSOR:
         return new Cursor(props)
       case EntityType.UI_DATE_VERSION_HASH:
-        return DateVersionHashParser.parse(<TextConfig>config, props, atlas)
+        return new DateVersionHash(atlas, props)
       case EntityType.UI_DESTINATION_MARKER:
         return new DestinationMarker(props)
       case EntityType.UI_ENTITY_PICKER:

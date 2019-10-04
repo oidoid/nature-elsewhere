@@ -11,15 +11,12 @@ export namespace CheckboxParser {
     props: Entity.Props,
     atlas: Atlas
   ): Checkbox {
-    return new Checkbox(
-      {
-        ...props,
-        text: config.text,
-        textLayer: ImageParser.parseLayerKey(config.textLayer),
-        textScale: ImageParser.parseScale(config.textScale),
-        textMaxSize: WHParser.parse(config.textMaxSize)
-      },
-      atlas
-    )
+    return new Checkbox(atlas, {
+      ...props,
+      text: config.text,
+      textLayer: ImageParser.parseLayerKey(config.textLayer),
+      textScale: ImageParser.parseScale(config.textScale),
+      textMaxSize: WHParser.parse(config.textMaxSize)
+    })
   }
 }

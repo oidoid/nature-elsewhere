@@ -100,13 +100,9 @@ export namespace Rect {
 
   export function centerOn(rect: ReadonlyRect, on: ReadonlyRect): XY {
     const x =
-      Math.trunc(on.position.x) +
-      Math.trunc(on.size.w / 2) -
-      Math.trunc(rect.size.w / 2)
+      on.position.x + Math.trunc(on.size.w / 2) - Math.trunc(rect.size.w / 2)
     const y =
-      Math.trunc(on.position.y) +
-      Math.trunc(on.size.h / 2) -
-      Math.trunc(rect.size.h / 2)
+      on.position.y + Math.trunc(on.size.h / 2) - Math.trunc(rect.size.h / 2)
     return new XY(x, y)
   }
 }

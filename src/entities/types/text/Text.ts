@@ -19,25 +19,19 @@ export class Text extends Entity {
   readonly textScale: XY
   readonly textMaxSize: WH
 
-  constructor(
-    {
-      type = EntityType.UI_TEXT,
-      text = '',
-      textLayer = Layer.UI_LO,
-      textScale = new XY(1, 1),
-      textMaxSize = new WH(Limits.maxShort, Limits.maxShort),
-      machine = new ImageStateMachine({state: TextState.VISIBLE}),
-      updatePredicate = UpdatePredicate.ALWAYS,
+  constructor(atlas: Atlas, props?: Text.Props) {
+    super({
+      type: EntityType.UI_TEXT,
+      machine: new ImageStateMachine({state: TextState.VISIBLE}),
+      updatePredicate: UpdatePredicate.ALWAYS,
       ...props
-    }: Text.Props = {type: EntityType.UI_TEXT},
-    atlas: Atlas
-  ) {
-    super({...props, type, machine, updatePredicate})
+    })
 
-    this.text = text
-    this.textLayer = textLayer
-    this.textScale = textScale
-    this.textMaxSize = textMaxSize
+    this.text = (props && props.text) || ''
+    this.textLayer = (props && props.textLayer) || Layer.UI_LO
+    this.textScale = (props && props.textScale) || new XY(1, 1)
+    this.textMaxSize =
+      (props && props.textMaxSize) || new WH(Limits.maxShort, Limits.maxShort)
 
     const textImages = toImages(
       atlas,

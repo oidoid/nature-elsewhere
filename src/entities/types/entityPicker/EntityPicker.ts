@@ -2,7 +2,7 @@ import * as memFont from '../../../text/memFont.json'
 import {Entity} from '../../../entity/Entity'
 import {Layer} from '../../../image/Layer'
 import {NumberUtil} from '../../../math/NumberUtil'
-import {Rect} from '../../../math/Rect'
+import {Rect, ReadonlyRect} from '../../../math/Rect'
 import {WH} from '../../../math/WH'
 import {XY} from '../../../math/XY'
 import {EntityType} from '../../../entity/EntityType'
@@ -13,21 +13,21 @@ const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
 export class EntityPicker extends Entity {
   private _activeChildIndex: number
-  constructor({
-    type = EntityType.UI_ENTITY_PICKER,
-    updatePredicate = UpdatePredicate.ALWAYS,
-    collisionType = CollisionType.TYPE_UI,
-    ...props
-  }: Entity.Props) {
-    super({...props, type, updatePredicate, collisionType})
+  constructor(props?: Entity.Props) {
+    super({
+      type: EntityType.UI_ENTITY_PICKER,
+      updatePredicate: UpdatePredicate.ALWAYS,
+      collisionType: CollisionType.TYPE_UI,
+      ...props
+    })
     this._activeChildIndex = 0
 
-    const entityWindowBounds = {
+    const entityWindowBounds: ReadonlyRect = {
       position: new XY(
-        Math.trunc(this.bounds.position.x),
-        Math.trunc(this.bounds.position.y) + memFont.lineHeight
+        this.bounds.position.x + 1,
+        this.bounds.position.y + 4 + memFont.lineHeight
       ),
-      size: entityWindowSize.copy()
+      size: entityWindowSize
     }
     for (const child of this.children) {
       const center = Rect.centerOn(child.bounds, entityWindowBounds).max(

@@ -63,7 +63,7 @@
     {
       "id": "uiLevelEditorPanelEntityPicker",
       "type": "uiEntityPicker",
-      "position": {"x": 88}
+      "position": {"x": 89}
     },
     {
       "id": "uiLevelEditorRadioGroup",

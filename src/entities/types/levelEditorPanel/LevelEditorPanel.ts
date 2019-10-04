@@ -47,15 +47,12 @@ export class LevelEditorPanel extends Entity {
       xCheckbox,
       yCheckbox,
       stateCheckbox,
-      entityCheckbox = new Checkbox(
-        {
-          type: EntityType.UI_CHECKBOX,
-          textMaxSize: new WH(32, 5),
-          position: new XY(88, 2),
-          imageID: AtlasID.PALETTE_BLACK
-        },
-        atlas
-      ),
+      entityCheckbox = new Checkbox(atlas, {
+        type: EntityType.UI_CHECKBOX,
+        textMaxSize: new WH(32, 5),
+        position: new XY(88, 2),
+        imageID: AtlasID.PALETTE_BLACK
+      }),
       entityPicker,
       decrementButton,
       incrementButton,

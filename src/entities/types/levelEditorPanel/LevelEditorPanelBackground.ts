@@ -12,29 +12,22 @@ import {CollisionType} from '../../../collision/CollisionType'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 
 export class LevelEditorPanelBackground extends Entity {
-  constructor({
-    type = EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
-    collisionType = CollisionType.TYPE_UI,
-    collisionPredicate = CollisionPredicate.IMAGES,
-    updatePredicate = UpdatePredicate.ALWAYS,
-    machine = new ImageStateMachine({
-      state: LevelEditorPanelBackgroundState.VISIBLE,
-      map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [LevelEditorPanelBackgroundState.VISIBLE]: new ImageRect({
-          images: newBackgroundImages()
-        })
-      }
-    }),
-    ...props
-  }: Entity.Props) {
+  constructor(props?: Entity.Props) {
     super({
-      ...props,
-      type,
-      collisionType,
-      collisionPredicate,
-      updatePredicate,
-      machine
+      type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
+      collisionType: CollisionType.TYPE_UI,
+      collisionPredicate: CollisionPredicate.IMAGES,
+      updatePredicate: UpdatePredicate.ALWAYS,
+      machine: new ImageStateMachine({
+        state: LevelEditorPanelBackgroundState.VISIBLE,
+        map: {
+          [Entity.State.HIDDEN]: new ImageRect(),
+          [LevelEditorPanelBackgroundState.VISIBLE]: new ImageRect({
+            images: newBackgroundImages()
+          })
+        }
+      }),
+      ...props
     })
   }
 }

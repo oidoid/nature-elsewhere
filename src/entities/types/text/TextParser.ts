@@ -19,15 +19,12 @@ export namespace TextParser {
     props: Entity.Props,
     atlas: Atlas
   ): Text {
-    return new Text(
-      {
-        ...props,
-        text: config.text,
-        textLayer: ImageParser.parseLayerKey(config.textLayer),
-        textScale: ImageParser.parseScale(config.textScale),
-        textMaxSize: WHParser.parse(config.textMaxSize)
-      },
-      atlas
-    )
+    return new Text(atlas, {
+      ...props,
+      text: config.text,
+      textLayer: ImageParser.parseLayerKey(config.textLayer),
+      textScale: ImageParser.parseScale(config.textScale),
+      textMaxSize: WHParser.parse(config.textMaxSize)
+    })
   }
 }

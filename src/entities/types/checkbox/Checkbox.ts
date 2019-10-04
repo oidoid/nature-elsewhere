@@ -21,12 +21,11 @@ import {Layer} from '../../../image/Layer'
 export class Checkbox extends Entity {
   checked: boolean
 
-  constructor(
-    {
-      type = EntityType.UI_CHECKBOX,
-      checked,
-      textLayer = Layer.UI_HI,
-      machine = new ImageStateMachine({
+  constructor(atlas: Atlas, props?: Checkbox.Props) {
+    super({
+      ...props,
+      type: EntityType.UI_CHECKBOX,
+      machine: new ImageStateMachine({
         state: CheckboxState.UNCHECKED,
         map: {
           [Entity.State.HIDDEN]: new ImageRect(),
@@ -34,30 +33,19 @@ export class Checkbox extends Entity {
           [CheckboxState.CHECKED]: new ImageRect()
         }
       }),
-      updatePredicate = UpdatePredicate.ALWAYS,
-      collisionType = CollisionType.TYPE_UI,
-      collisionPredicate = CollisionPredicate.BOUNDS,
-      ...props
-    }: Checkbox.Props = {type: EntityType.UI_CHECKBOX},
-    atlas: Atlas
-  ) {
-    super({
-      ...props,
-      type,
-      machine,
-      updatePredicate,
-      collisionType,
-      collisionPredicate
+      updatePredicate: UpdatePredicate.ALWAYS,
+      collisionType: CollisionType.TYPE_UI,
+      collisionPredicate: CollisionPredicate.BOUNDS
     })
 
-    this.checked = checked || false
+    this.checked = (props && props.checked) || false
     this.setText(
       {
         type: EntityType.UI_TEXT,
-        text: props.text,
-        textLayer: textLayer,
-        textScale: props.textScale,
-        textMaxSize: props.textMaxSize
+        text: props && props.text,
+        textLayer: (props && props.textLayer) || Layer.UI_HI,
+        textScale: props && props.textScale,
+        textMaxSize: props && props.textMaxSize
       },
       0,
       atlas
@@ -83,7 +71,7 @@ export class Checkbox extends Entity {
 
   setText(props: Text.Props, layerOffset: number, atlas: Atlas): void {
     const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
-    const child = new Text({...props, position}, atlas)
+    const child = new Text(atlas, {...props, position})
     child.elevate(layerOffset)
     const imageID = this.children[0]
       ? this.children[0].imageRect().imageID
