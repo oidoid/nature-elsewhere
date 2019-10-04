@@ -36,7 +36,7 @@ export class ImageStateMachine {
     return this.imageRect().images
   }
 
-  setImageID(id: AtlasID): UpdateStatus {
+  setImageID(id?: AtlasID): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
     for (const state in this._map) status |= this._map[state].setImageID(id)
     return status

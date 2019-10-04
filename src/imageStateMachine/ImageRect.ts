@@ -67,10 +67,11 @@ export class ImageRect {
     return this._imageID
   }
 
-  setImageID(id: AtlasID): UpdateStatus {
+  setImageID(id?: AtlasID): UpdateStatus {
     if (this.imageID === id) return UpdateStatus.UNCHANGED
     this._imageID = id
-    for (const image of this.images) image.imageID = id
+    for (const image of this.images)
+      image.imageID = id === undefined ? image.id : id
     return UpdateStatus.UPDATED
   }
 
@@ -125,7 +126,7 @@ export class ImageRect {
     for (const image of this.images) image.elevate(offset)
   }
 
-  intersects(bounds: ReadonlyRect): readonly Image[] {
+  intersects(bounds: ReadonlyRect): Image[] {
     return this.images.filter(image => Rect.intersects(bounds, image.bounds))
   }
 }

@@ -17,15 +17,17 @@ import {UpdaterMap} from '../entities/updaters/UpdaterMap'
 import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {UpdateState} from '../entities/updaters/UpdateState'
 import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
-import {WH} from '../math/WH'
 
 export class Entity {
   /** A globally unique identifier for quick equality checks. It should be used
       for no other purpose. The value is transient and should not be preserved
       on entity serialization. */
   private readonly _spawnID: symbol = Symbol()
+
   private readonly _id: EntityID
+
   private readonly _type: EntityType
+
   /** The local coordinate system or minimal union of the entity and all of its
       children given in level coordinates with origin at (x, y). All images,
       collisions, and children are always in bounds and are also specified in
@@ -33,55 +35,62 @@ export class Entity {
       local coordinate system is necessary for calculating absolute translations
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
-  private readonly _bounds: Rect
+  private readonly _bounds: Rect = Rect.make(0, 0, 0, 0)
+
   private readonly _velocity: XY
+
   private readonly _velocityFraction: FloatXY = {x: 0, y: 0}
+
   private readonly _machine: ImageStateMachine
+
   private readonly _updatePredicate: UpdatePredicate
+
   /** See UpdatePredicate. */
   private readonly _updaters: readonly UpdaterType[]
+
   private readonly _collisionType: CollisionType
+
   private _collisionPredicate: CollisionPredicate
+
   // how to handle collision mapping? by type? by mixin updater field thingy? how does this relate to existing collision checks such as those with cursor and button?
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
   private readonly _collisionBodies: readonly Rect[] // Move to CollisionBody with CollisionType prop
+
   /** Operations are shallow by default (do not recurse children) unless
       specified otherwise. That is, only translation and animation are
       recursive. */
   private readonly _children: Entity[]
 
   constructor({
-    id,
+    id = EntityID.ANONYMOUS,
     type,
-    position,
-    scale,
+    position = new XY(0, 0),
+    scale = new XY(1, 1),
     imageID,
-    velocity,
-    machine,
-    updatePredicate,
-    updaters,
-    collisionType,
-    collisionPredicate,
-    collisionBodies,
-    children
+    velocity = new XY(0, 0),
+    machine = new ImageStateMachine(),
+    updatePredicate = UpdatePredicate.INTERSECT_VIEWPORT,
+    updaters = [],
+    collisionType = CollisionType.INERT,
+    collisionPredicate = CollisionPredicate.NEVER,
+    collisionBodies = [],
+    children = []
   }: Entity.Props) {
-    this._id = id || EntityID.ANONYMOUS
+    this._id = id
     this._type = type
-    this._bounds = {position: new XY(0, 0), size: new WH(0, 0)}
-    this._velocity = velocity || new XY(0, 0)
-    this._machine = machine || new ImageStateMachine()
-    this._updatePredicate =
-      updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
-    this._updaters = updaters || []
-    this._collisionType = collisionType || CollisionType.INERT
-    this._collisionPredicate = collisionPredicate || CollisionPredicate.NEVER
-    this._collisionBodies = collisionBodies || []
-    this._children = children || []
-    if (position) this.moveTo(position)
-    if (scale) this.setScale(scale)
-    if (imageID) this.setImageID(imageID)
+    this._velocity = velocity
+    this._machine = machine
+    this._updatePredicate = updatePredicate
+    this._updaters = updaters
+    this._collisionType = collisionType
+    this._collisionPredicate = collisionPredicate
+    this._collisionBodies = collisionBodies
+    this._children = children
+    this.moveTo(position)
+    this.setScale(scale)
+    this.setImageID(imageID)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.
@@ -91,44 +100,55 @@ export class Entity {
   get spawnID(): symbol {
     return this._spawnID
   }
+
   get id(): EntityID {
     return this._id
   }
+
   get type(): EntityType {
     return this._type
   }
   get bounds(): Rect {
     return this._bounds
   }
+
   get velocity(): XY {
     return this._velocity
   }
+
   get machine(): ImageStateMachine {
     return this._machine
   }
+
   get updatePredicate(): UpdatePredicate {
     return this._updatePredicate
   }
+
   get updaters(): readonly UpdaterType[] {
     return this._updaters
   }
+
   get collisionType(): CollisionType {
     return this._collisionType
   }
+
   get collisionPredicate(): CollisionPredicate {
     return this._collisionPredicate
   }
+
   set collisionPredicate(predicate: CollisionPredicate) {
     this._collisionPredicate = predicate
   }
+
   get collisionBodies(): readonly Rect[] {
     return this._collisionBodies
   }
+
   get children(): Entity[] {
     return this._children
   }
 
-  setImageID(id: AtlasID): UpdateStatus {
+  setImageID(id?: AtlasID): UpdateStatus {
     return this.machine.setImageID(id)
   }
 
@@ -206,13 +226,8 @@ export class Entity {
     if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
     const visible = this.imageRect().intersects(state.level.cam.bounds)
     for (const image of visible) image.animate(state.time, state.level.atlas)
-    return [
-      ...visible,
-      ...this.children.reduce(
-        (images: Image[], child) => [...images, ...child.animate(state)],
-        []
-      )
-    ]
+    for (const child of this.children) visible.push(...child.animate(state))
+    return visible
   }
 
   resetAnimation(): void {

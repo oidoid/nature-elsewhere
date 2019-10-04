@@ -16,6 +16,7 @@ export class Image {
   /** If different than id, use id for masking and imageID for coloring. See
       AlphaComposition. */
   private _imageID: AtlasID
+
   /** Specified in fractional pixel level coordinates. Includes scaling.
 
       Images.bounds are used to determine when the image is on screen and
@@ -25,15 +26,21 @@ export class Image {
       as entity bounds are calculated in part by Image.bounds, ImageRect.bounds,
       and Entity.bounds. */
   private readonly _bounds: Rect
+
   private _layer: Layer
+
   private readonly _animator: Animator
+
   /** See bounds. */
   private readonly _scale: XY
+
   /** Specifies the initial marquee offset. */
   private readonly _wrap: DecamillipixelIntXY
+
   /** Specifies the additional marquee offset added by the shader according to
       the game clock. */
   private readonly _wrapVelocity: DecamillipixelIntXY
+
   private readonly _alphaComposition: AlphaComposition
 
   constructor({
