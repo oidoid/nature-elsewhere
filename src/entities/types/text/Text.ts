@@ -10,6 +10,8 @@ import {Image} from '../../../image/Image'
 import {AtlasID, MEM_FONT_PREFIX} from '../../../atlas/AtlasID'
 import {ImageParser} from '../../../image/ImageParser'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
+import {EntityType} from '../../../entity/EntityType'
+import {ImageStateMachine} from '../../../imageStateMachine/ImageStateMachine'
 
 export class Text extends Entity {
   text: string
@@ -18,20 +20,25 @@ export class Text extends Entity {
   readonly textMaxSize: WH
 
   constructor(
-    {text, textLayer, textScale, textMaxSize, ...props}: Text.Props,
+    {
+      type = EntityType.UI_TEXT,
+      text = '',
+      textLayer = Layer.UI_LO,
+      textScale = new XY(1, 1),
+      textMaxSize = new WH(Limits.maxShort, Limits.maxShort),
+      machine = new ImageStateMachine({state: TextState.VISIBLE}),
+      updatePredicate = UpdatePredicate.ALWAYS,
+      ...props
+    }: Text.Props = {type: EntityType.UI_TEXT},
     atlas: Atlas
   ) {
-    super({...props, updatePredicate: UpdatePredicate.ALWAYS})
-    // this doesn't work well because now state only gets used from the parsing path. same thing with all the other props. none of the defaults get injected. those need to be in the constructor, not the json.
-    // how can i move JSON defaults into constructor without having to do all the parsing for images and children?
-    this.text = text || ''
-    this.textLayer = textLayer || Layer.UI_LO
-    this.textScale = textScale || new XY(1, 1)
-    this.textMaxSize = textMaxSize || new WH(Limits.maxShort, Limits.maxShort)
-    // if (!('visible' in this.machine.map)) {
-    //   ;(<any>this.machine.map)['visible'] = new ImageRect()
-    //   this.setState('visible')
-    // }
+    super({...props, type, machine, updatePredicate})
+
+    this.text = text
+    this.textLayer = textLayer
+    this.textScale = textScale
+    this.textMaxSize = textMaxSize
+
     const textImages = toImages(
       atlas,
       this.text,
@@ -64,6 +71,10 @@ export namespace Text {
     readonly textScale?: XY
     readonly textMaxSize?: WH
   }
+}
+
+export enum TextState {
+  VISIBLE = 'visible'
 }
 
 /** @arg y The vertical scroll offset in pixels. */

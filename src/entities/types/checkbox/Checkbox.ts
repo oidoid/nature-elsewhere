@@ -11,18 +11,51 @@ import {Image} from '../../../image/Image'
 import {ImageConfig, ImageParser} from '../../../image/ImageParser'
 import {AtlasID} from '../../../atlas/AtlasID'
 import {EntityType} from '../../../entity/EntityType'
+import {ImageStateMachine} from '../../../imageStateMachine/ImageStateMachine'
+import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
+import {CollisionType} from '../../../collision/CollisionType'
+import {CollisionPredicate} from '../../../collision/CollisionPredicate'
+import {ImageRect} from '../../../imageStateMachine/ImageRect'
+import {Layer} from '../../../image/Layer'
 
 export class Checkbox extends Entity {
   checked: boolean
 
-  constructor({checked, ...props}: Checkbox.Props, atlas: Atlas) {
-    super(props)
+  constructor(
+    {
+      type = EntityType.UI_CHECKBOX,
+      checked,
+      textLayer = Layer.UI_HI,
+      machine = new ImageStateMachine({
+        state: CheckboxState.UNCHECKED,
+        map: {
+          [Entity.State.HIDDEN]: new ImageRect(),
+          [CheckboxState.UNCHECKED]: new ImageRect(),
+          [CheckboxState.CHECKED]: new ImageRect()
+        }
+      }),
+      updatePredicate = UpdatePredicate.ALWAYS,
+      collisionType = CollisionType.TYPE_UI,
+      collisionPredicate = CollisionPredicate.BOUNDS,
+      ...props
+    }: Checkbox.Props = {type: EntityType.UI_CHECKBOX},
+    atlas: Atlas
+  ) {
+    super({
+      ...props,
+      type,
+      machine,
+      updatePredicate,
+      collisionType,
+      collisionPredicate
+    })
+
     this.checked = checked || false
     this.setText(
       {
         type: EntityType.UI_TEXT,
         text: props.text,
-        textLayer: props.textLayer,
+        textLayer: textLayer,
         textScale: props.textScale,
         textMaxSize: props.textMaxSize
       },

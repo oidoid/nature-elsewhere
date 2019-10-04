@@ -145,13 +145,6 @@ export namespace EntityParser {
   export function parseState(config: EntityStateConfig): Entity.State | string {
     return config || Entity.State.HIDDEN
   }
-
-  export function defaultTypeState(type: EntityType): Entity.State | string {
-    const config = TypeConfigMap[type]
-    return EntityParser.parseState(
-      config.machine ? config.machine.state : undefined
-    )
-  }
 }
 
 function parseProps(

@@ -14,7 +14,7 @@ export class ImageStateMachine {
 
   constructor({
     state = Entity.State.HIDDEN,
-    map = {[Entity.State.HIDDEN]: new ImageRect()}
+    map = {[Entity.State.HIDDEN]: new ImageRect(), [state]: new ImageRect()}
   }: ImageStateMachine.Props = {}) {
     this._state = state
     this._map = map
@@ -63,6 +63,7 @@ export class ImageStateMachine {
   moveTo(to: XY): UpdateStatus {
     return this.imageRect().moveTo(to)
   }
+
   scaleTo(scale: XY): UpdateStatus {
     return this.imageRect().scaleTo(scale)
   }

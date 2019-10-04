@@ -13,6 +13,7 @@ import {WH} from '../math/WH'
     collision tests but their bounds may be used. */
 export class Image {
   private readonly _id: AtlasID
+
   /** If different than id, use id for masking and imageID for coloring. See
       AlphaComposition. */
   private _imageID: AtlasID
