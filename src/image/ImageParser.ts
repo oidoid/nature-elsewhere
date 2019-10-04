@@ -11,7 +11,6 @@ import {
 } from '../math/DecamillipixelXYParser'
 import {Image} from './Image'
 import {RectConfig} from '../math/RectParser'
-import {Rect} from '../math/Rect'
 import {XYConfig} from '../math/XYParser'
 import {XYParser} from '../math/XYParser'
 import {XY} from '../math/XY'
@@ -43,10 +42,13 @@ export type LayerKeyConfig = Maybe<Layer.Key | string>
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
     const id = AtlasIDParser.parse(config.id)
-    return new Image({
+    return new Image(atlas, {
       id,
       imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : undefined,
-      bounds: parseBounds(config, id, atlas),
+      position: XYParser.parse(
+        config.bounds ? config.bounds.position : undefined
+      ),
+      size: parseSize(config, id, atlas),
       layer: parseLayerKey(config.layer),
       animator: config.animator ? parseAnimator(config.animator) : undefined,
       scale: parseScale(config.scale),
@@ -70,7 +72,7 @@ export namespace ImageParser {
   }
 }
 
-function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
+function parseSize(config: ImageConfig, id: AtlasID, atlas: Atlas): WH {
   const w =
     config.bounds && config.bounds.size && config.bounds.size.w !== undefined
       ? config.bounds.size.w
@@ -81,10 +83,7 @@ function parseBounds(config: ImageConfig, id: AtlasID, atlas: Atlas): Rect {
       ? config.bounds.size.h
       : Math.abs(config.scale && config.scale.y ? config.scale.y : 1) *
         atlas.animations[id].size.h
-  const position = XYParser.parse(
-    config.bounds ? config.bounds.position : undefined
-  )
-  return {position, size: new WH(w, h)}
+  return new WH(w, h)
 }
 
 function parseAnimator(config: AnimatorConfig): Animator {

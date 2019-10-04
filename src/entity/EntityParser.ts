@@ -21,7 +21,6 @@ import * as SCENERY_POND from '../entities/types/entityConfigs/scenery/pond.json
 import * as SCENERY_PYRAMID from '../entities/types/entityConfigs/scenery/pyramid.json'
 import * as SCENERY_SUBSHRUB from '../entities/types/entityConfigs/scenery/subshrub.json'
 import * as SCENERY_TREE from '../entities/types/entityConfigs/scenery/tree.json'
-import * as UI_BUTTON from '../entities/types/button/button.json'
 import * as UI_CURSOR from '../entities/types/cursor/cursor.json'
 import * as UI_DESTINATION_MARKER from '../entities/types/destinationMarker/destinationMarker.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
@@ -145,32 +144,34 @@ function parseProps(
 ): Entity.Props {
   return {
     id: EntityParser.parseID(config.id),
-    type: type,
-    position: config.position ? XYParser.parse(config.position) : undefined,
-    scale: config.scale ? ImageParser.parseScale(config.scale) : undefined,
-    velocity: config.velocity ? XYParser.parse(config.velocity) : undefined,
-    imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : undefined,
-    machine: config.machine
-      ? ImageStateMachineParser.parse(config.machine, atlas)
-      : undefined,
-    updatePredicate: config.updatePredicate
-      ? UpdatePredicateParser.parse(config.updatePredicate)
-      : undefined,
-    updaters: config.updaters
-      ? UpdaterTypeParser.parseAll(config.updaters)
-      : undefined,
-    collisionType: config.collisionTypes
-      ? CollisionTypeParser.parseKeys(config.collisionTypes)
-      : undefined,
-    collisionPredicate: config.collisionPredicate
-      ? CollisionPredicateParser.parse(config.collisionPredicate)
-      : undefined,
-    collisionBodies: config.collisionBodies
-      ? RectParser.parseAll(config.collisionBodies)
-      : undefined,
-    children: config.children
-      ? EntityParser.parseAll(config.children, atlas)
-      : undefined
+    type,
+    ...(config.position && {position: XYParser.parse(config.position)}),
+    ...(config.scale && {scale: ImageParser.parseScale(config.scale)}),
+    ...(config.velocity && {velocity: XYParser.parse(config.velocity)}),
+    ...(config.imageID && {imageID: AtlasIDParser.parse(config.imageID)}),
+    ...(config.machine && {
+      machine: ImageStateMachineParser.parse(config.machine, atlas)
+    }),
+    ...(config.updatePredicate && {
+      updatePredicate: UpdatePredicateParser.parse(config.updatePredicate)
+    }),
+    ...(config.updaters && {
+      updaters: UpdaterTypeParser.parseAll(config.updaters)
+    }),
+    ...(config.collisionTypes && {
+      collisionType: CollisionTypeParser.parseKeys(config.collisionTypes)
+    }),
+    ...(config.collisionPredicate && {
+      collisionPredicate: CollisionPredicateParser.parse(
+        config.collisionPredicate
+      )
+    }),
+    ...(config.collisionBodies && {
+      collisionBodies: RectParser.parseAll(config.collisionBodies)
+    }),
+    ...(config.children && {
+      children: EntityParser.parseAll(config.children, atlas)
+    })
   }
 }
 
@@ -239,7 +240,6 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.SCENERY_PYRAMID]: SCENERY_PYRAMID,
   [EntityType.SCENERY_SUBSHRUB]: SCENERY_SUBSHRUB,
   [EntityType.SCENERY_TREE]: SCENERY_TREE,
-  [EntityType.UI_BUTTON]: UI_BUTTON,
   [EntityType.UI_CURSOR]: UI_CURSOR,
   [EntityType.UI_DESTINATION_MARKER]: UI_DESTINATION_MARKER,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,

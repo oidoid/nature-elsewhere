@@ -44,26 +44,20 @@ export class Image {
 
   private readonly _alphaComposition: AlphaComposition
 
-  constructor({
-    id,
-    imageID = id,
-    bounds = Rect.make(0, 0, 0, 0),
-    layer = Layer.DEFAULT,
-    animator = {period: 0, exposure: 0},
-    scale = new XY(1, 1),
-    wrap = new XY(0, 0),
-    wrapVelocity = new XY(0, 0),
-    alphaComposition = AlphaComposition.IMAGE
-  }: Image.Props) {
-    this._id = id
-    this._imageID = imageID
-    this._bounds = bounds
-    this._layer = layer
-    this._animator = animator
-    this._scale = scale
-    this._wrap = wrap
-    this._wrapVelocity = wrapVelocity
-    this._alphaComposition = alphaComposition
+  constructor(atlas: Atlas, props: Image.Props) {
+    const position = props.position || new XY(0, 0)
+    const size = props.size
+      ? props.size
+      : defaultSize(props.size, props.scale, props.id, atlas)
+    this._id = props.id
+    this._imageID = props.imageID || props.id
+    this._bounds = {position, size}
+    this._layer = props.layer === undefined ? Layer.DEFAULT : props.layer
+    this._animator = props.animator || {period: 0, exposure: 0}
+    this._scale = props.scale || new XY(1, 1)
+    this._wrap = props.wrap || new XY(0, 0)
+    this._wrapVelocity = props.wrapVelocity || new XY(0, 0)
+    this._alphaComposition = props.alphaComposition || AlphaComposition.IMAGE
   }
 
   get id(): AtlasID {
@@ -179,7 +173,8 @@ export namespace Image {
   export interface Props {
     readonly id: AtlasID
     readonly imageID?: AtlasID
-    readonly bounds?: Rect
+    readonly position?: XY
+    readonly size?: WH
     readonly layer?: Layer
     readonly animator?: Animator
     readonly scale?: XY
@@ -187,4 +182,21 @@ export namespace Image {
     readonly wrapVelocity?: DecamillipixelIntXY
     readonly alphaComposition?: AlphaComposition
   }
+}
+
+function defaultSize(
+  size: Maybe<Readonly<WH>>,
+  scale: Maybe<Readonly<XY>>,
+  id: AtlasID,
+  atlas: Atlas
+): WH {
+  const w = size
+    ? size.w
+    : Math.abs(scale && scale.x !== undefined ? scale.x : 1) *
+      atlas.animations[id].size.w
+  const h = size
+    ? size.h
+    : Math.abs(scale && scale.y !== undefined ? scale.y : 1) *
+      atlas.animations[id].size.h
+  return new WH(w, h)
 }

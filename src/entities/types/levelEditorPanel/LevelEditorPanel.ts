@@ -1,5 +1,5 @@
 import {Atlas} from 'aseprite-atlas'
-import {Button} from '../button/Button'
+import {Button} from '../Button'
 import {Checkbox} from '../checkbox/Checkbox'
 import {CollisionPredicate} from '../../../collision/CollisionPredicate'
 import {Entity} from '../../../entity/Entity'
@@ -75,9 +75,7 @@ export class LevelEditorPanel extends Entity {
     this.entityCheckbox = entityCheckbox
     this.children.push(
       this.entityCheckbox,
-      new LevelEditorPanelBackground({
-        type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND
-      })
+      new LevelEditorPanelBackground(atlas)
     )
     this.invalidateBounds()
     this.entityPicker = <EntityPicker>(

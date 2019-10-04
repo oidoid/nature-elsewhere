@@ -11,37 +11,32 @@ import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {Image} from '../../../image/Image'
 import {AtlasID} from '../../../atlas/AtlasID'
 import {Layer} from '../../../image/Layer'
+import {Atlas} from 'aseprite-atlas'
 
 export class Cursor extends Entity {
-  constructor(
-    {
-      type = EntityType.UI_CURSOR,
-      machine = new ImageStateMachine({
+  constructor(atlas: Atlas, props?: Entity.Props) {
+    super({
+      type: EntityType.UI_CURSOR,
+      machine: new ImageStateMachine({
         state: Entity.State.HIDDEN,
         map: {
           [Entity.State.HIDDEN]: new ImageRect(),
           [CursorState.VISIBLE]: new ImageRect({
             images: [
-              new Image({id: AtlasID.PALETTE_BLACK, layer: Layer.UI_CURSOR})
+              new Image(atlas, {
+                id: AtlasID.PALETTE_BLACK,
+                layer: Layer.UI_CURSOR
+              })
             ]
           })
         }
       }),
-      updatePredicate = UpdatePredicate.ALWAYS,
+      updatePredicate: UpdatePredicate.ALWAYS,
       // Use bodies so that collision remains the same regardless of whether
       // hidden or not.
-      collisionPredicate = CollisionPredicate.BODIES,
-      collisionBodies = [Rect.make(0, 0, 1, 1)],
+      collisionPredicate: CollisionPredicate.BODIES,
+      collisionBodies: [Rect.make(0, 0, 1, 1)],
       ...props
-    }: Entity.Props = {type: EntityType.UI_CURSOR}
-  ) {
-    super({
-      ...props,
-      type,
-      machine,
-      updatePredicate,
-      collisionPredicate,
-      collisionBodies
     })
   }
 

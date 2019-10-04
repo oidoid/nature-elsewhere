@@ -1,5 +1,5 @@
 import {Backpacker} from '../entities/types/backpacker/Backpacker'
-import {Button} from '../entities/types/button/Button'
+import {Button} from '../entities/types/Button'
 import {Cloud} from '../entities/types/Cloud'
 import {Cursor} from '../entities/types/cursor/Cursor'
 import {DestinationMarker} from '../entities/types/destinationMarker/DestinationMarker'
@@ -33,11 +33,11 @@ export namespace EntityFactory {
       case EntityType.SCENERY_CLOUD:
         return new Cloud(props)
       case EntityType.UI_BUTTON:
-        return new Button(props)
+        return new Button(atlas, props)
       case EntityType.UI_CHECKBOX:
         return CheckboxParser.parse(<TextConfig>config, props, atlas)
       case EntityType.UI_CURSOR:
-        return new Cursor(props)
+        return new Cursor(atlas, props)
       case EntityType.UI_DATE_VERSION_HASH:
         return new DateVersionHash(atlas, props)
       case EntityType.UI_DESTINATION_MARKER:
@@ -47,7 +47,7 @@ export namespace EntityFactory {
       case EntityType.UI_LEVEL_EDITOR_PANEL:
         return new LevelEditorPanel(atlas, <LevelEditorPanel.Props>props)
       case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:
-        return new LevelEditorPanelBackground(props)
+        return new LevelEditorPanelBackground(atlas, props)
       case EntityType.UI_MARQUEE:
         return new Marquee(props)
       case EntityType.UI_TEXT:
