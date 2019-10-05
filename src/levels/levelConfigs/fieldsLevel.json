@@ -88,7 +88,7 @@
     {"type": "sceneryClover", "position": {"x": 54, "y": 12}},
     {
       "type": "sceneryClover",
-      "state": "1",
+      "state": "medium",
       "position": {"x": 66, "y": 24}
     },
     {"type": "sceneryGrass", "position": {"x": 45, "y": 117}},

@@ -25,6 +25,7 @@ import {Pond} from '../entities/types/Pond'
 import {Grass} from '../entities/types/Grass'
 import {Path} from '../entities/types/Path'
 import {Cattails} from '../entities/types/Cattails'
+import {Clover} from '../entities/types/Clover'
 
 export namespace EntityFactory {
   export function produce(
@@ -45,6 +46,8 @@ export namespace EntityFactory {
         return new Bush(atlas, props)
       case EntityType.SCENERY_CATTAILS:
         return new Cattails(atlas, props)
+      case EntityType.SCENERY_CLOVER:
+        return new Clover(atlas, props)
       case EntityType.SCENERY_CLOUD:
         return new Cloud(atlas, props)
       case EntityType.SCENERY_CONIFER:
