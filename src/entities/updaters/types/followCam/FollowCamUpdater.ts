@@ -1,5 +1,5 @@
 import {Entity} from '../../../../entity/Entity'
-import {FollowCam} from './FollowCam'
+import {FollowCam, FollowCamOrientation} from './FollowCam'
 import {UpdaterType} from '../../updaterType/UpdaterType'
 import {Update} from '../../Update'
 
@@ -7,7 +7,6 @@ import {UpdateStatus} from '../../updateStatus/UpdateStatus'
 import {XY} from '../../../../math/XY'
 import {Rect} from '../../../../math/Rect'
 import {WH} from '../../../../math/WH'
-import {FollowCamOrientation} from './FollowCamOrientation'
 
 export namespace FollowCamUpdater {
   export function is(entity: Entity): entity is FollowCam & Entity {

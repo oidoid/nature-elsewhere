@@ -3,7 +3,6 @@ import * as IMAGE_ENTITY from '../entities/types/imageEntity/imageEntity.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
 import * as UI_MARQUEE from '../entities/types/marquee/marquee.json'
 import * as UI_RADIO_BUTTON_GROUP from '../entities/types/entityConfigs/ui/radioCheckboxGroup.json'
-import * as UI_TOOLBAR from '../entities/types/entityConfigs/ui/toolbar.json'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {
@@ -198,6 +197,5 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.IMAGE]: IMAGE_ENTITY,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
   [EntityType.UI_MARQUEE]: UI_MARQUEE,
-  [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
-  [EntityType.UI_TOOLBAR]: UI_TOOLBAR
+  [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP
 })

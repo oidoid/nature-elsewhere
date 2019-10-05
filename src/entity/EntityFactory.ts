@@ -35,6 +35,7 @@ import {Bunny} from '../entities/types/Bunny'
 import {Frog} from '../entities/types/Frog'
 import {Fly} from '../entities/types/Fly'
 import {Snake} from '../entities/types/Snake'
+import {Toolbar} from '../entities/types/Toolbar'
 
 export namespace EntityFactory {
   export function produce(
@@ -109,6 +110,8 @@ export namespace EntityFactory {
         return new Marquee(props)
       case EntityType.UI_TEXT:
         return TextParser.parse(<TextConfig>config, props, atlas)
+      case EntityType.UI_TOOLBAR:
+        return new Toolbar(atlas, props)
       default:
         return new Entity(props)
     }
