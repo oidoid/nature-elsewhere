@@ -1,7 +1,0 @@
-{
-  "version": "0.0.0",
-  "type": "sceneryCattails",
-  "state": "visible",
-  "map": {"visible": {"images": [{"id": "sceneryCattails"}]}},
-  "collisionTypes": ["TYPE_SCENERY"]
-}
