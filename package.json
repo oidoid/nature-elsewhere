@@ -29,7 +29,7 @@
     "@types/jest": "24.0.18",
     "@types/webgl2": "0.0.5",
     "@types/webpack-dev-server": "3.1.7",
-    "aseprite-atlas": "2.0.2",
+    "aseprite-atlas": "2.0.3",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.0.4",
     "jest": "24.9.0",
