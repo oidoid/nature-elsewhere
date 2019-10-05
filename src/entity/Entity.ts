@@ -69,7 +69,7 @@ export class Entity {
     this._velocity = props.velocity || new XY(0, 0)
     this._machine = new ImageStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
-      props.updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
+      props.updatePredicate || UpdatePredicate.INTERSECTS_VIEWPORT
     this._updaters = props.updaters || []
     this._collisionType =
       props.collisionType === undefined

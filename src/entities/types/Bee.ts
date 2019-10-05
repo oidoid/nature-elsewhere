@@ -31,7 +31,7 @@ export class Bee extends Entity {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.INTERSECT_VIEWPORT,
+      updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
       updaters: [UpdaterType.WRAPAROUND],
       collisionType: CollisionType.TYPE_CHARACTER | CollisionType.HARMFUL,
       collisionPredicate: CollisionPredicate.BODIES,

@@ -7,6 +7,6 @@ export enum UpdatePredicate {
   /** If entity bounds intersects the camera bounds. Does not consider
       EntityState.HIDDEN or images. Do not use this predicate for entities that
       follow the camera or otherwise enter from outside the viewport. */
-  INTERSECT_VIEWPORT = 'intersectsViewport',
+  INTERSECTS_VIEWPORT = 'intersectsViewport',
   ALWAYS = 'always'
 }

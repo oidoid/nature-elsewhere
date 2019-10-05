@@ -20,6 +20,7 @@ import {Bee} from '../entities/types/Bee'
 import {Flag} from '../entities/types/Flag'
 import {Conifer} from '../entities/types/Conifer'
 import {Subshrub} from '../entities/types/Subshrub'
+import {Bush} from '../entities/types/Bush'
 
 export namespace EntityFactory {
   export function produce(
@@ -36,8 +37,10 @@ export namespace EntityFactory {
         return new Bee(atlas, props)
       case EntityType.IMAGE:
         return ImageEntityParser.parse(config, props, atlas)
+      case EntityType.SCENERY_BUSH:
+        return new Bush(atlas, props)
       case EntityType.SCENERY_CLOUD:
-        return new Cloud(props)
+        return new Cloud(atlas, props)
       case EntityType.SCENERY_CONIFER:
         return new Conifer(atlas, props)
       case EntityType.SCENERY_FLAG:

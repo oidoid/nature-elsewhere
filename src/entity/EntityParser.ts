@@ -4,9 +4,7 @@ import * as CHAR_FROG from '../entities/types/entityConfigs/char/frog.json'
 import * as CHAR_SNAKE from '../entities/types/entityConfigs/char/snake.json'
 import * as GROUP from '../entities/types/entityConfigs/group.json'
 import * as IMAGE_ENTITY from '../entities/types/imageEntity/imageEntity.json'
-import * as SCENERY_BUSH from '../entities/types/entityConfigs/scenery/bush.json'
 import * as SCENERY_CATTAILS from '../entities/types/entityConfigs/scenery/cattails.json'
-import * as SCENERY_CLOUD from '../entities/types/entityConfigs/scenery/cloud.json'
 import * as SCENERY_CLOVER from '../entities/types/entityConfigs/scenery/clover.json'
 import * as SCENERY_GRASS from '../entities/types/entityConfigs/scenery/grass.json'
 import * as SCENERY_ISO_GRASS from '../entities/types/entityConfigs/scenery/isoGrass.json'
@@ -216,9 +214,7 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.CHAR_SNAKE]: CHAR_SNAKE,
   [EntityType.GROUP]: GROUP,
   [EntityType.IMAGE]: IMAGE_ENTITY,
-  [EntityType.SCENERY_BUSH]: SCENERY_BUSH,
   [EntityType.SCENERY_CATTAILS]: SCENERY_CATTAILS,
-  [EntityType.SCENERY_CLOUD]: SCENERY_CLOUD,
   [EntityType.SCENERY_CLOVER]: SCENERY_CLOVER,
   [EntityType.SCENERY_GRASS]: SCENERY_GRASS,
   [EntityType.SCENERY_ISO_GRASS]: SCENERY_ISO_GRASS,

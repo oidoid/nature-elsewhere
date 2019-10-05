@@ -177,7 +177,7 @@ export enum AtlasID {
   SCENERY_BUSH = 'sceneryBush',
   SCENERY_BUSH_SHADOW = 'sceneryBush-shadow',
   SCENERY_CATTAILS = 'sceneryCattails',
-  SCENERY_CLOUD_CLOUD = 'sceneryCloud',
+  SCENERY_CLOUD = 'sceneryCloud',
   SCENERY_CLOUD_RAIN_PUDDLE = 'sceneryCloudRain-puddle',
   SCENERY_CLOUD_RAIN = 'sceneryCloudRain',
   SCENERY_CLOUD_RAIN_SPLASH = 'sceneryCloudRainSplash',
