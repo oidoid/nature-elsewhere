@@ -70,20 +70,11 @@ export namespace EntityParser {
     return (config || []).map(entityConfig => parse(entityConfig, atlas))
   }
 
-  /** A recursive parser. Beware that invoking this function directly from
-      within an EntityTypeParser will create an import loop. Use the function
-      passed as the RecursiveEntityParser parameter. */
   export function parse(config: EntityConfig, atlas: Atlas): Entity {
     let props = parseProps(config, parseType(config.type), atlas)
     props = parseTypeProps(config, props)
-    let entity = EntityFactory.produce(atlas, props)
-    Object.assign(entity, specialization(config))
-
-    for (const updater of entity.updaters) {
-      const parser = UpdaterParserMap[updater]
-      entity = parser ? parser(entity, atlas) : entity
-    }
-
+    const entity = EntityFactory.produce(atlas, props)
+    parseUpdaterProps(config, entity)
     return entity
   }
 
@@ -153,31 +144,15 @@ function parseTypeProps(
   return props
 }
 
-function specialization(config: EntityConfig) {
-  // Remove known parsed properties.
-  const {
-    id,
-    type,
-    velocity,
-    position,
-    scale,
-    imageID,
-    state,
-    map,
-    updatePredicate,
-    updaters,
-    collisionTypes,
-    collisionPredicate,
-    collisionBodies,
-    children,
-    ...specialization
-  } = config
-  return specialization
+function parseUpdaterProps(config: EntityConfig, entity: Entity): void {
+  for (const updater of config.updaters || []) {
+    switch (updater) {
+      case UpdaterType.UI_LEVEL_LINK:
+        Object.assign(entity, LevelLinkParser.parse(config))
+        break
+      case UpdaterType.UI_FOLLOW_CAM:
+        Object.assign(entity, FollowCamParser.parse(config))
+        break
+    }
+  }
 }
-
-const UpdaterParserMap: Readonly<Partial<
-  Record<UpdaterType, (entity: Entity, atlas: Atlas) => Entity>
->> = Object.freeze({
-  [UpdaterType.UI_LEVEL_LINK]: LevelLinkParser.parse,
-  [UpdaterType.UI_FOLLOW_CAM]: FollowCamParser.parse
-})

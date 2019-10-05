@@ -105,7 +105,7 @@ export class Backpacker extends Entity {
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
 
-    const destination = calculateDestination(this, state)
+    const destination = computeDestination(this, state)
     if (!destination) return UpdateStatus.UNCHANGED
 
     const {x, y} = this.bounds.position
@@ -120,7 +120,7 @@ export class Backpacker extends Entity {
 
     let nextState = this.machine.state
     if (idle) {
-      nextState = calculateIdleState(this)
+      nextState = computeIdleState(this)
       if (state.level.destination)
         state.level.destination.setState(Entity.State.HIDDEN)
     } else {
@@ -158,7 +158,7 @@ export namespace Backpacker {
     state: UpdateState
   ): void {
     if (entity.collisionType & CollisionType.OBSTACLE) {
-      const idle = calculateIdleState(backpacker)
+      const idle = computeIdleState(backpacker)
       backpacker.setState(idle)
       if (state.level.destination)
         state.level.destination.setState(Entity.State.HIDDEN)
@@ -166,9 +166,7 @@ export namespace Backpacker {
   }
 }
 
-function calculateIdleState(
-  backpacker: Entity
-): Entity.State | BackpackerState {
+function computeIdleState(backpacker: Entity): Entity.State | BackpackerState {
   switch (backpacker.machine.state) {
     case BackpackerState.WALK_UP:
     case BackpackerState.IDLE_UP:
@@ -180,7 +178,7 @@ function calculateIdleState(
   return BackpackerState.IDLE_DOWN
 }
 
-function calculateDestination(
+function computeDestination(
   backpacker: Backpacker,
   state: UpdateState
 ): Maybe<XY> {

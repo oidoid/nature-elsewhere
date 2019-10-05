@@ -1,8 +1,8 @@
 import {WHParser} from '../../math/WHParser'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {WH} from '../../math/WH'
-import {FollowCamOrientation} from './FollowCam'
-import {Entity} from '../../entity/Entity'
+import {FollowCamOrientation, FollowCam} from './FollowCam'
+import {EntityConfig} from '../../entity/EntityParser'
 
 export interface FollowCamConfig {
   readonly positionRelativeToCam: FollowCamOrientation
@@ -10,13 +10,15 @@ export interface FollowCamConfig {
 }
 
 export namespace FollowCamParser {
-  export function parse(entity: Entity): Entity {
+  export function parse(config: EntityConfig): FollowCam {
+    console.log(config)
     const orientation =
-      'positionRelativeToCam' in entity
-        ? entity['positionRelativeToCam']
+      'positionRelativeToCam' in config
+        ? config['positionRelativeToCam']
         : undefined
+    if (!orientation)
+      throw new Error('Missing positionRelativeToCam in FollowCamConfig.')
     if (
-      !orientation ||
       !ObjectUtil.assertValueOf(
         FollowCamOrientation,
         orientation,
@@ -25,10 +27,8 @@ export namespace FollowCamParser {
     )
       throw new Error()
     const camMargin = WHParser.parse(
-      'camMargin' in entity ? entity['camMargin'] : undefined
+      'camMargin' in config ? config['camMargin'] : undefined
     )
-    ;(<any>entity).orientation = orientation
-    ;(<any>entity).camMargin = camMargin
-    return entity
+    return {positionRelativeToCam: orientation, camMargin}
   }
 }
