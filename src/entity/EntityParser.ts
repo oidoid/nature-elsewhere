@@ -8,8 +8,6 @@ import * as SCENERY_BUSH from '../entities/types/entityConfigs/scenery/bush.json
 import * as SCENERY_CATTAILS from '../entities/types/entityConfigs/scenery/cattails.json'
 import * as SCENERY_CLOUD from '../entities/types/entityConfigs/scenery/cloud.json'
 import * as SCENERY_CLOVER from '../entities/types/entityConfigs/scenery/clover.json'
-import * as SCENERY_CONIFER from '../entities/types/entityConfigs/scenery/conifer.json'
-import * as SCENERY_FLAG from '../entities/types/entityConfigs/scenery/flag.json'
 import * as SCENERY_GRASS from '../entities/types/entityConfigs/scenery/grass.json'
 import * as SCENERY_ISO_GRASS from '../entities/types/entityConfigs/scenery/isoGrass.json'
 import * as SCENERY_MOUNTAIN from '../entities/types/entityConfigs/scenery/mountain.json'
@@ -17,7 +15,6 @@ import * as SCENERY_PATH from '../entities/types/entityConfigs/scenery/path.json
 import * as SCENERY_PLANE from '../entities/types/entityConfigs/scenery/plane.json'
 import * as SCENERY_POND from '../entities/types/entityConfigs/scenery/pond.json'
 import * as SCENERY_PYRAMID from '../entities/types/entityConfigs/scenery/pyramid.json'
-import * as SCENERY_SUBSHRUB from '../entities/types/entityConfigs/scenery/subshrub.json'
 import * as SCENERY_TREE from '../entities/types/entityConfigs/scenery/tree.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
 import * as UI_MARQUEE from '../entities/types/marquee/marquee.json'
@@ -223,8 +220,6 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.SCENERY_CATTAILS]: SCENERY_CATTAILS,
   [EntityType.SCENERY_CLOUD]: SCENERY_CLOUD,
   [EntityType.SCENERY_CLOVER]: SCENERY_CLOVER,
-  [EntityType.SCENERY_CONIFER]: SCENERY_CONIFER,
-  [EntityType.SCENERY_FLAG]: SCENERY_FLAG,
   [EntityType.SCENERY_GRASS]: SCENERY_GRASS,
   [EntityType.SCENERY_ISO_GRASS]: SCENERY_ISO_GRASS,
   [EntityType.SCENERY_MOUNTAIN]: SCENERY_MOUNTAIN,
@@ -232,7 +227,6 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.SCENERY_PLANE]: SCENERY_PLANE,
   [EntityType.SCENERY_POND]: SCENERY_POND,
   [EntityType.SCENERY_PYRAMID]: SCENERY_PYRAMID,
-  [EntityType.SCENERY_SUBSHRUB]: SCENERY_SUBSHRUB,
   [EntityType.SCENERY_TREE]: SCENERY_TREE,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
   [EntityType.UI_MARQUEE]: UI_MARQUEE,

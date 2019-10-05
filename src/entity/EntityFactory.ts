@@ -17,6 +17,9 @@ import {IEntityParser} from '../entities/RecursiveEntityParser'
 import {LevelEditorPanelBackground} from '../entities/types/levelEditorPanel/LevelEditorPanelBackground'
 import {DateVersionHash} from '../entities/types/DateVersionHash'
 import {Bee} from '../entities/types/Bee'
+import {Flag} from '../entities/types/Flag'
+import {Conifer} from '../entities/types/Conifer'
+import {Subshrub} from '../entities/types/Subshrub'
 
 export namespace EntityFactory {
   export function produce(
@@ -35,6 +38,12 @@ export namespace EntityFactory {
         return ImageEntityParser.parse(config, props, atlas)
       case EntityType.SCENERY_CLOUD:
         return new Cloud(props)
+      case EntityType.SCENERY_CONIFER:
+        return new Conifer(atlas, props)
+      case EntityType.SCENERY_FLAG:
+        return new Flag(atlas, props)
+      case EntityType.SCENERY_SUBSHRUB:
+        return new Subshrub(atlas, props)
       case EntityType.UI_BUTTON:
         return new Button(atlas, props)
       case EntityType.UI_CHECKBOX:
