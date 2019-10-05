@@ -11,7 +11,7 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 
 export class Snake extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.CHAR_SNAKE,
       state: SnakeState.IDLE,

@@ -78,7 +78,7 @@ export enum ButtonState {
 }
 
 export namespace Button {
-  export interface Props extends Entity.Props {
+  export interface Props extends Optional<Entity.Props, 'type'> {
     clicked?: boolean
     longClicked?: boolean
   }

@@ -19,7 +19,7 @@ export class Toolbar extends Entity implements FollowCam {
   readonly positionRelativeToCam: FollowCamOrientation
   readonly camMargin: WH
 
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_TOOLBAR,
       state: ToolbarState.VISIBLE,

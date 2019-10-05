@@ -11,7 +11,7 @@ import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
 
 export class Conifer extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.SCENERY_CONIFER,
       state: ConiferState.VISIBLE,

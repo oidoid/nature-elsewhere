@@ -20,7 +20,7 @@ import {Layer} from '../../image/Layer'
 export class Checkbox extends Entity {
   checked: boolean
 
-  constructor(atlas: Atlas, props?: Checkbox.Props) {
+  constructor(atlas: Atlas, props?: Optional<Checkbox.Props, 'type'>) {
     super({
       ...props,
       type: EntityType.UI_CHECKBOX,

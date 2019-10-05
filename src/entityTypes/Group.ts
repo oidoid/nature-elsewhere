@@ -3,7 +3,7 @@ import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 
 export class Group extends Entity {
-  constructor(props?: Omit<Entity.Props, 'type'>) {
+  constructor(props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.GROUP,
       state: GroupState.VISIBLE,

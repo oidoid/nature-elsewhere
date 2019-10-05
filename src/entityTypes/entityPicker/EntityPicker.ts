@@ -13,7 +13,7 @@ const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
 export class EntityPicker extends Entity {
   private _activeChildIndex: number
-  constructor(props?: Entity.Props) {
+  constructor(props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_ENTITY_PICKER,
       updatePredicate: UpdatePredicate.ALWAYS,
@@ -25,7 +25,7 @@ export class EntityPicker extends Entity {
     const entityWindowBounds: ReadonlyRect = {
       position: new XY(
         this.bounds.position.x + 1,
-        this.bounds.position.y + 1 + memFont.lineHeight
+        this.bounds.position.y + 4 + memFont.lineHeight
       ),
       size: entityWindowSize
     }
@@ -53,12 +53,6 @@ export class EntityPicker extends Entity {
     this.hideActiveChild()
     this._activeChildIndex = NumberUtil.wrap(index, 0, this.children.length)
     this.showActiveChild()
-  }
-
-  getActiveChildStateIndex(): number {
-    const child = this.getActiveChild()
-    if (!child) return 0
-    return getChildStates(child).indexOf(child.machine.state)
   }
 
   offsetActiveChildStateIndex(offset: number): void {

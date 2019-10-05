@@ -12,7 +12,7 @@ import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {WH} from '../math/WH'
 
 export class Cloud extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.SCENERY_CLOUD,
       state: CloudState.NONE,

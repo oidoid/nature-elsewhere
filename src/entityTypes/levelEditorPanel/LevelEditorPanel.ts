@@ -36,33 +36,14 @@ export class LevelEditorPanel extends Entity {
   readonly createButton: Button
   readonly toggleGridButton: Button
 
-  constructor(
-    atlas: Atlas,
-    {
-      type = EntityType.UI_LEVEL_EDITOR_PANEL,
-      updatePredicate = UpdatePredicate.ALWAYS,
-      collisionType = CollisionType.TYPE_UI,
-      collisionPredicate = CollisionPredicate.CHILDREN,
-      radioGroup,
-      xCheckbox,
-      yCheckbox,
-      stateCheckbox,
-      entityCheckbox = new Checkbox(atlas, {
-        type: EntityType.UI_CHECKBOX,
-        textMaxSize: new WH(32, 5),
-        position: new XY(88, 2),
-        imageID: AtlasID.PALETTE_BLACK
-      }),
-      entityPicker,
-      decrementButton,
-      incrementButton,
-      destroyButton,
-      createButton,
-      toggleGridButton,
+  constructor(atlas: Atlas, props?: LevelEditorPanel.Props) {
+    super({
+      type: EntityType.UI_LEVEL_EDITOR_PANEL,
+      updatePredicate: UpdatePredicate.ALWAYS,
+      collisionType: CollisionType.TYPE_UI,
+      collisionPredicate: CollisionPredicate.CHILDREN,
       ...props
-    }: LevelEditorPanel.Props
-  ) {
-    super({...props, type, updatePredicate, collisionType, collisionPredicate})
+    })
 
     this.radioGroup = <Entity>(
       this.findByID(EntityID.UI_LEVEL_EDITOR_RADIO_GROUP)
@@ -72,7 +53,11 @@ export class LevelEditorPanel extends Entity {
     this.stateCheckbox = <Checkbox>(
       this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_STATE)
     )
-    this.entityCheckbox = entityCheckbox
+    this.entityCheckbox = new Checkbox(atlas, {
+      textMaxSize: new WH(32, 5),
+      position: new XY(88, 2),
+      imageID: AtlasID.PALETTE_BLACK
+    })
     this.children.push(
       this.entityCheckbox,
       new LevelEditorPanelBackground(atlas)
@@ -130,6 +115,7 @@ export class LevelEditorPanel extends Entity {
           x: checkboxNumber(this.xCheckbox),
           y: checkboxNumber(this.yCheckbox)
         }
+        console.log(child.machine.state)
         let entity = EntityParser.parse(
             {
               type: child.type,
@@ -293,8 +279,7 @@ export enum LevelEditorPanelState {
 }
 
 export namespace LevelEditorPanel {
-  export interface Props extends Entity.Props {
-    readonly type: EntityType.UI_LEVEL_EDITOR_PANEL
+  export interface Props extends Optional<Entity.Props, 'type'> {
     readonly radioGroup: Entity
     readonly xCheckbox: Checkbox
     readonly yCheckbox: Checkbox

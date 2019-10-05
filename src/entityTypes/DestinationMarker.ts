@@ -12,7 +12,7 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 
 export class DestinationMarker extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_DESTINATION_MARKER,
       state: Entity.State.HIDDEN,

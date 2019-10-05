@@ -10,7 +10,7 @@ import {XY} from '../math/XY'
 import {Rect} from '../math/Rect'
 
 export class Bush extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.SCENERY_BUSH,
       state: BushState.VISIBLE,

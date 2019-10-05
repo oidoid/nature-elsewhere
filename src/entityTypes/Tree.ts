@@ -11,7 +11,7 @@ import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
 
 export class Tree extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.SCENERY_TREE,
       state: TreeState.VISIBLE,

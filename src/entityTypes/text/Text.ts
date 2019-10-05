@@ -19,7 +19,7 @@ export class Text extends Entity {
   readonly textScale: XY
   readonly textMaxSize: WH
 
-  constructor(atlas: Atlas, props?: Text.Props) {
+  constructor(atlas: Atlas, props?: Optional<Text.Props, 'type'>) {
     super({
       type: EntityType.UI_TEXT,
       state: TextState.VISIBLE,

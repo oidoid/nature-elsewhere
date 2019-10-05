@@ -13,7 +13,7 @@ import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 
 export class Cursor extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_CURSOR,
       state: Entity.State.HIDDEN,

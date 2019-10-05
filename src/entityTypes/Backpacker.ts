@@ -15,10 +15,9 @@ import {Atlas} from 'aseprite-atlas'
 import {Layer} from '../image/Layer'
 
 export class Backpacker extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.CHAR_BACKPACKER,
-      ...props,
       state: BackpackerState.IDLE_DOWN,
       map: {
         [Entity.State.HIDDEN]: new ImageRect({
@@ -99,7 +98,8 @@ export class Backpacker extends Entity {
         CollisionType.HARMFUL |
         CollisionType.IMPEDIMENT,
       collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(2, 12, 4, 3)]
+      collisionBodies: [Rect.make(2, 12, 4, 3)],
+      ...props
     })
   }
   update(state: UpdateState): UpdateStatus {

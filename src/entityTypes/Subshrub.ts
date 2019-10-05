@@ -8,7 +8,7 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 
 export class Subshrub extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.SCENERY_SUBSHRUB,
       state: SubshrubState.VISIBLE,

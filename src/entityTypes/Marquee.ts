@@ -17,7 +17,7 @@ import {UpdatePredicate} from '../entities/updaters/updatePredicate/UpdatePredic
 export class Marquee extends Entity {
   selection?: Symbol
 
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_MARQUEE,
       state: Entity.State.HIDDEN,

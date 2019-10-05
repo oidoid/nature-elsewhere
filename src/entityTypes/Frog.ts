@@ -12,7 +12,7 @@ import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
 
 export class Frog extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.CHAR_FROG,
       state: FrogState.IDLE,

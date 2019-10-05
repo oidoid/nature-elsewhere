@@ -5,7 +5,7 @@ import {UpdatePredicate} from '../entities/updaters/updatePredicate/UpdatePredic
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 
 export class RadioCheckboxGroup extends Entity {
-  constructor(props?: Entity.Props) {
+  constructor(props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_RADIO_CHECKBOX_GROUP,
       updatePredicate: UpdatePredicate.ALWAYS,

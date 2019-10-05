@@ -10,7 +10,7 @@ import {Limits} from '../math/Limits'
 import {WH} from '../math/WH'
 
 export class Plane extends Entity {
-  constructor(atlas: Atlas, props?: Omit<Entity.Props, 'type'>) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.SCENERY_SUBSHRUB,
       state: PlaneState.TRANSPARENT,

@@ -9,7 +9,7 @@ import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 
 export class Pond extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.SCENERY_POND,
       state: PondState.VISIBLE,
