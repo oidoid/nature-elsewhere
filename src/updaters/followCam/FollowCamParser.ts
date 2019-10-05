@@ -11,7 +11,6 @@ export interface FollowCamConfig {
 
 export namespace FollowCamParser {
   export function parse(config: EntityConfig): FollowCam {
-    console.log(config)
     const orientation =
       'positionRelativeToCam' in config
         ? config['positionRelativeToCam']

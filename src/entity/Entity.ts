@@ -241,7 +241,7 @@ export class Entity {
   }
 
   /** See UpdatePredicate. Actually this is going to go ahead and go into children so updte the docs */
-  update(state: UpdateState): UpdateStatus {
+  update(state: UpdateState, skipChildren = false): UpdateStatus {
     if (!this.active(state.level.cam.bounds)) return UpdateStatus.UNCHANGED
 
     let status = UpdateStatus.UNCHANGED
@@ -251,6 +251,8 @@ export class Entity {
     }
 
     status |= this._updatePosition(state)
+
+    if (skipChildren) return status
 
     for (const child of this.children) {
       status |= child.update(state)

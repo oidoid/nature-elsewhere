@@ -76,6 +76,7 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       imageID: AtlasID.PALETTE_BLACK
     })
     this.entityCheckbox = new Checkbox(atlas, {
+      checked: true,
       textMaxSize: new WH(32, 5),
       position: new XY(88, 2),
       imageID: AtlasID.PALETTE_BLACK
