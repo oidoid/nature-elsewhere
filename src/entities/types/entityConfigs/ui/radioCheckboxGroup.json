@@ -1,7 +1,0 @@
-{
-  "version": "0.0.0",
-  "type": "uiRadioCheckboxGroup",
-  "collisionTypes": ["TYPE_UI"],
-  "updatePredicate": "always",
-  "collisionPredicate": "children"
-}

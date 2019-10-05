@@ -36,6 +36,7 @@ import {Frog} from '../entities/types/Frog'
 import {Fly} from '../entities/types/Fly'
 import {Snake} from '../entities/types/Snake'
 import {Toolbar} from '../entities/types/Toolbar'
+import {RadioCheckboxGroup} from '../entities/types/RadioCheckboxGroup'
 
 export namespace EntityFactory {
   export function produce(
@@ -108,6 +109,8 @@ export namespace EntityFactory {
         return new LevelEditorPanelBackground(atlas, props)
       case EntityType.UI_MARQUEE:
         return new Marquee(props)
+      case EntityType.UI_RADIO_CHECKBOX_GROUP:
+        return new RadioCheckboxGroup(props)
       case EntityType.UI_TEXT:
         return TextParser.parse(<TextConfig>config, props, atlas)
       case EntityType.UI_TOOLBAR:
