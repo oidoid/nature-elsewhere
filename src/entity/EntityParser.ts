@@ -1,4 +1,4 @@
-import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
+import * as UI_LEVEL_EDITOR_PANEL from '../entityTypes/levelEditorPanel/levelEditorPanel.json'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {
