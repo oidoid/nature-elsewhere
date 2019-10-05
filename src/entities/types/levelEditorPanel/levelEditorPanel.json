@@ -11,8 +11,12 @@
       "position": {"x": 2, "y": 22},
       "children": [
         {
-          "type": "image",
-          "image": {"id": "uiButton-decrement", "layer": "UI_HIHI"}
+          "type": "group",
+          "map": {
+            "visible": {
+              "images": [{"id": "uiButton-decrement", "layer": "UI_HIHI"}]
+            }
+          }
         }
       ]
     },
@@ -22,8 +26,12 @@
       "position": {"x": 10, "y": 22},
       "children": [
         {
-          "type": "image",
-          "image": {"id": "uiButton-increment", "layer": "UI_HIHI"}
+          "type": "group",
+          "map": {
+            "visible": {
+              "images": [{"id": "uiButton-increment", "layer": "UI_HIHI"}]
+            }
+          }
         }
       ]
     },
@@ -33,8 +41,12 @@
       "position": {"x": 18, "y": 22},
       "children": [
         {
-          "type": "image",
-          "image": {"id": "uiButton-destroy", "layer": "UI_HIHI"}
+          "type": "group",
+          "map": {
+            "visible": {
+              "images": [{"id": "uiButton-destroy", "layer": "UI_HIHI"}]
+            }
+          }
         }
       ]
     },
@@ -44,8 +56,12 @@
       "position": {"x": 26, "y": 22},
       "children": [
         {
-          "type": "image",
-          "image": {"id": "uiButton-create", "layer": "UI_HIHI"}
+          "type": "group",
+          "map": {
+            "visible": {
+              "images": [{"id": "uiButton-create", "layer": "UI_HIHI"}]
+            }
+          }
         }
       ]
     },
@@ -55,8 +71,12 @@
       "position": {"x": 34, "y": 22},
       "children": [
         {
-          "type": "image",
-          "image": {"id": "uiButton-toggleGrid", "layer": "UI_HIHI"}
+          "type": "group",
+          "map": {
+            "visible": {
+              "images": [{"id": "uiButton-toggleGrid", "layer": "UI_HIHI"}]
+            }
+          }
         }
       ]
     },

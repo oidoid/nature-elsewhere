@@ -7,7 +7,6 @@ import {Entity} from './Entity'
 import {EntityType} from './EntityType'
 import {LevelEditorPanel} from '../entities/types/levelEditorPanel/LevelEditorPanel'
 import {Marquee} from '../entities/types/Marquee'
-import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
 import {EntityConfig} from './EntityParser'
 import {Atlas} from 'aseprite-atlas'
 import {TextParser, TextConfig} from '../entities/types/text/TextParser'
@@ -62,8 +61,6 @@ export namespace EntityFactory {
         return new Snake(atlas, props)
       case EntityType.GROUP:
         return new Group(props)
-      case EntityType.IMAGE:
-        return ImageEntityParser.parse(config, props, atlas)
       case EntityType.SCENERY_BUSH:
         return new Bush(atlas, props)
       case EntityType.SCENERY_CATTAILS:
