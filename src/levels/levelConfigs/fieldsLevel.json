@@ -94,17 +94,17 @@
     {"type": "sceneryGrass", "position": {"x": 45, "y": 117}},
     {
       "type": "sceneryGrass",
-      "state": "1",
+      "state": "medium",
       "position": {"x": 101, "y": 17}
     },
     {
       "type": "sceneryGrass",
-      "state": "1",
+      "state": "medium",
       "position": {"x": 111, "y": 57}
     },
     {
       "type": "sceneryGrass",
-      "state": "2",
+      "state": "large",
       "position": {"x": 141, "y": 77}
     },
     {"type": "sceneryBush", "position": {"x": 151, "y": 30}},
