@@ -44,7 +44,7 @@ export namespace EntityFactory {
       case EntityType.UI_DATE_VERSION_HASH:
         return new DateVersionHash(atlas, props)
       case EntityType.UI_DESTINATION_MARKER:
-        return new DestinationMarker(props)
+        return new DestinationMarker(atlas, props)
       case EntityType.UI_ENTITY_PICKER:
         return EntityPickerParser.parse(props, atlas, parser)
       case EntityType.UI_LEVEL_EDITOR_PANEL:
