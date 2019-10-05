@@ -19,7 +19,6 @@ import * as SCENERY_POND from '../entities/types/entityConfigs/scenery/pond.json
 import * as SCENERY_PYRAMID from '../entities/types/entityConfigs/scenery/pyramid.json'
 import * as SCENERY_SUBSHRUB from '../entities/types/entityConfigs/scenery/subshrub.json'
 import * as SCENERY_TREE from '../entities/types/entityConfigs/scenery/tree.json'
-import * as UI_CURSOR from '../entities/types/cursor/cursor.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
 import * as UI_MARQUEE from '../entities/types/marquee/marquee.json'
 import * as UI_RADIO_BUTTON_GROUP from '../entities/types/entityConfigs/ui/radioCheckboxGroup.json'
@@ -235,7 +234,6 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.SCENERY_PYRAMID]: SCENERY_PYRAMID,
   [EntityType.SCENERY_SUBSHRUB]: SCENERY_SUBSHRUB,
   [EntityType.SCENERY_TREE]: SCENERY_TREE,
-  [EntityType.UI_CURSOR]: UI_CURSOR,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
   [EntityType.UI_MARQUEE]: UI_MARQUEE,
   [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
