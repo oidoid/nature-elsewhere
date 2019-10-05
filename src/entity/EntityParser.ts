@@ -11,7 +11,6 @@ import * as SCENERY_ISO_GRASS from '../entities/types/entityConfigs/scenery/isoG
 import * as SCENERY_MOUNTAIN from '../entities/types/entityConfigs/scenery/mountain.json'
 import * as SCENERY_PATH from '../entities/types/entityConfigs/scenery/path.json'
 import * as SCENERY_PLANE from '../entities/types/entityConfigs/scenery/plane.json'
-import * as SCENERY_POND from '../entities/types/entityConfigs/scenery/pond.json'
 import * as SCENERY_PYRAMID from '../entities/types/entityConfigs/scenery/pyramid.json'
 import * as SCENERY_TREE from '../entities/types/entityConfigs/scenery/tree.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
@@ -221,7 +220,6 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.SCENERY_MOUNTAIN]: SCENERY_MOUNTAIN,
   [EntityType.SCENERY_PATH]: SCENERY_PATH,
   [EntityType.SCENERY_PLANE]: SCENERY_PLANE,
-  [EntityType.SCENERY_POND]: SCENERY_POND,
   [EntityType.SCENERY_PYRAMID]: SCENERY_PYRAMID,
   [EntityType.SCENERY_TREE]: SCENERY_TREE,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,

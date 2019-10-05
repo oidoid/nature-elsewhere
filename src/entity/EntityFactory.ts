@@ -21,6 +21,7 @@ import {Flag} from '../entities/types/Flag'
 import {Conifer} from '../entities/types/Conifer'
 import {Subshrub} from '../entities/types/Subshrub'
 import {Bush} from '../entities/types/Bush'
+import {Pond} from '../entities/types/Pond'
 
 export namespace EntityFactory {
   export function produce(
@@ -45,6 +46,8 @@ export namespace EntityFactory {
         return new Conifer(atlas, props)
       case EntityType.SCENERY_FLAG:
         return new Flag(atlas, props)
+      case EntityType.SCENERY_POND:
+        return new Pond(atlas, props)
       case EntityType.SCENERY_SUBSHRUB:
         return new Subshrub(atlas, props)
       case EntityType.UI_BUTTON:
