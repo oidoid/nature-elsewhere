@@ -5,7 +5,7 @@ import {LevelConfigMap} from './levelConfigs/LevelConfigMap'
 import {LevelParser} from './LevelParser'
 import {ShaderLayout} from '../renderer/ShaderLayout'
 import {Store} from '../store/Store'
-import {UpdateState} from '../entities/updaters/UpdateState'
+import {UpdateState} from '../updaters/UpdateState'
 
 export interface LevelStateMachine {
   level?: Level

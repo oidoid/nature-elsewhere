@@ -6,7 +6,7 @@ import {EntityType} from '../entity/EntityType'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {CollisionPredicate} from './CollisionPredicate'
-import {Plane, PlaneState} from '../entityTypes/Plane'
+import {Plane, PlaneState} from '../entities/Plane'
 import {Rect} from '../math/Rect'
 
 const atlas: Atlas = Object.freeze(Parser.parse(atlasJSON))

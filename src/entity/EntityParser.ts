@@ -13,26 +13,25 @@ import {Entity} from './Entity'
 import {EntityID} from './EntityID'
 import {EntityFactory} from './EntityFactory'
 import {EntityType} from './EntityType'
-import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
+import {FollowCamParser} from '../updaters/followCam/FollowCamParser'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
 import {
   ImageStateMapConfig,
   ImageStateMapParser
 } from '../imageStateMachine/ImageStateMapParser'
-import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
+import {LevelLinkParser} from '../updaters/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
-import {TextPropsParser} from '../entityTypes/text/TextParser'
+import {TextPropsParser} from '../entities/text/TextParser'
 import {
   UpdatePredicateConfig,
   UpdatePredicateParser
-} from '../entities/updaters/updatePredicate/UpdatePredicateParser'
-import {UpdaterParser} from '../entities/updaters/UpdaterParser'
-import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
+} from '../updaters/updatePredicate/UpdatePredicateParser'
+import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {
   UpdaterTypeArrayConfig,
   UpdaterTypeParser
-} from '../entities/updaters/updaterType/UpdaterTypeParser'
+} from '../updaters/updaterType/UpdaterTypeParser'
 import {XYConfig, XYParser} from '../math/XYParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
@@ -82,7 +81,7 @@ export namespace EntityParser {
 
     for (const updater of entity.updaters) {
       const parser = UpdaterParserMap[updater]
-      entity = parser ? parser(entity, atlas, parse) : entity
+      entity = parser ? parser(entity, atlas) : entity
     }
 
     return entity
@@ -177,7 +176,7 @@ function specialization(config: EntityConfig) {
 }
 
 const UpdaterParserMap: Readonly<Partial<
-  Record<UpdaterType, UpdaterParser>
+  Record<UpdaterType, (entity: Entity, atlas: Atlas) => Entity>
 >> = Object.freeze({
   [UpdaterType.UI_LEVEL_LINK]: LevelLinkParser.parse,
   [UpdaterType.UI_FOLLOW_CAM]: FollowCamParser.parse

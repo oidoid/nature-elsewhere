@@ -6,10 +6,6 @@ export enum EntityID {
   UI_GRID = 'uiGrid',
   UI_MARQUEE = 'uiMarquee',
   UI_PLAYER = 'uiPlayer',
-  UI_LINK_START = 'uiLinkStart',
-  UI_LINK_OPTIONS = 'uiLinkOptions',
-  UI_LINK_LEVEL_EDITOR = 'uiLinkLevelEditor',
-  UI_LINK_EXIT = 'uiLinkExit',
   UI_LEVEL_EDITOR_PANEL = 'uiLevelEditorPanel',
   UI_LEVEL_EDITOR_SANDBOX = 'uiLevelEditorSandbox'
 }

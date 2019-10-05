@@ -7,7 +7,7 @@ import {Renderer} from './renderer/Renderer'
 import {RendererStateMachine} from './renderer/RendererStateMachine'
 import {Settings} from './settings/Settings'
 import {Synth} from './audio/Synth'
-import {UpdateState} from './entities/updaters/UpdateState'
+import {UpdateState} from './updaters/UpdateState'
 import {Viewport} from './renderer/Viewport'
 import {WindowModeSetting} from './settings/WindowModeSettings'
 

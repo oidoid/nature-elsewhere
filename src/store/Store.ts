@@ -1,7 +1,7 @@
 import {Image} from '../image/Image'
 import {InstanceBuffer} from './InstanceBuffer'
 import {ShaderLayout} from '../renderer/ShaderLayout'
-import {UpdateState} from '../entities/updaters/UpdateState'
+import {UpdateState} from '../updaters/UpdateState'
 import {Entity} from '../entity/Entity'
 import {Level} from '../levels/Level'
 

@@ -38,7 +38,6 @@
           "collisionPredicate": "children",
           "children": [
             {
-              "id": "uiLinkStart",
               "type": "uiText",
               "//": "[strings]",
               "text": "play",
@@ -48,7 +47,6 @@
               "collisionPredicate": "bounds"
             },
             {
-              "id": "uiLinkOptions",
               "type": "uiText",
               "position": {"y": 12},
               "//": "[strings]",
@@ -59,7 +57,6 @@
               "collisionPredicate": "bounds"
             },
             {
-              "id": "uiLinkLevelEditor",
               "type": "uiText",
               "position": {"y": 24},
               "//": "[strings]",
@@ -70,7 +67,6 @@
               "collisionPredicate": "bounds"
             },
             {
-              "id": "uiLinkExit",
               "type": "uiText",
               "position": {"y": 36},
               "//": "[strings]",

@@ -8,7 +8,7 @@
     {"type": "sceneryPlane", "state": "paleGreen"},
     {"id": "uiGrid", "type": "sceneryPlane", "state": "hidden"},
     {"id": "uiMarquee", "type": "uiMarquee"},
-    {"type": "uiLevelEditorPanel"},
+    {"id": "uiLevelEditorPanel", "type": "uiLevelEditorPanel"},
     {
       "id": "uiLevelEditorSandbox",
       "type": "group",

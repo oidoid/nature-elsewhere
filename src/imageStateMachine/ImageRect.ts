@@ -1,9 +1,9 @@
-import {Image} from '../image/Image'
-import {Rect, ReadonlyRect} from '../math/Rect'
-import {XY} from '../math/XY'
-import {Layer} from '../image/Layer'
-import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
 import {AtlasID} from '../atlas/AtlasID'
+import {Image} from '../image/Image'
+import {Layer} from '../image/Layer'
+import {Rect, ReadonlyRect} from '../math/Rect'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {XY} from '../math/XY'
 
 export class ImageRect {
   /** The upper-left and size of the local coordinate system. The images are

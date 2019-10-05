@@ -1,11 +1,11 @@
-import {ImageRect} from './ImageRect'
-import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
-import {Layer} from '../image/Layer'
-import {XY} from '../math/XY'
 import {AtlasID} from '../atlas/AtlasID'
 import {Entity} from '../entity/Entity'
 import {Image} from '../image/Image'
+import {ImageRect} from './ImageRect'
+import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {XY} from '../math/XY'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.

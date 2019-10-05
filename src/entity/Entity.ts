@@ -12,11 +12,11 @@ import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
 import {Rect} from '../math/Rect'
-import {UpdatePredicate} from '../entities/updaters/updatePredicate/UpdatePredicate'
-import {UpdaterMap} from '../entities/updaters/UpdaterMap'
-import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
-import {UpdateState} from '../entities/updaters/UpdateState'
-import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdaterMap} from '../updaters/UpdaterMap'
+import {UpdaterType} from '../updaters/updaterType/UpdaterType'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 export class Entity {
   /** A globally unique identifier for quick equality checks. It should be used
