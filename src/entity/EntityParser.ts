@@ -4,7 +4,6 @@ import * as CHAR_FROG from '../entities/types/entityConfigs/char/frog.json'
 import * as CHAR_SNAKE from '../entities/types/entityConfigs/char/snake.json'
 import * as GROUP from '../entities/types/entityConfigs/group.json'
 import * as IMAGE_ENTITY from '../entities/types/imageEntity/imageEntity.json'
-import * as SCENERY_MOUNTAIN from '../entities/types/entityConfigs/scenery/mountain.json'
 import * as SCENERY_PLANE from '../entities/types/entityConfigs/scenery/plane.json'
 import * as SCENERY_PYRAMID from '../entities/types/entityConfigs/scenery/pyramid.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
@@ -207,7 +206,6 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.CHAR_SNAKE]: CHAR_SNAKE,
   [EntityType.GROUP]: GROUP,
   [EntityType.IMAGE]: IMAGE_ENTITY,
-  [EntityType.SCENERY_MOUNTAIN]: SCENERY_MOUNTAIN,
   [EntityType.SCENERY_PLANE]: SCENERY_PLANE,
   [EntityType.SCENERY_PYRAMID]: SCENERY_PYRAMID,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
