@@ -57,12 +57,12 @@ export class Button extends Entity {
 
     this.clicked = false
     const collision = Level.collisionWithCursor(state.level, this)
-    if (!collision) return this.setState(ButtonState.UNCLICKED)
+    status |= this.setState(
+      collision ? ButtonState.CLICKED : ButtonState.UNCLICKED
+    ) // this is just presentation not click state
 
-    status |= this.setState(ButtonState.CLICKED) // this is just presentation not click state
-
-    const nextClicked = Input.inactiveTriggered(state.inputs.pick)
-    const nextLongClicked = Input.activeLong(state.inputs.pick)
+    const nextClicked = collision && Input.inactiveTriggered(state.inputs.pick)
+    const nextLongClicked = collision && Input.activeLong(state.inputs.pick)
     if (this.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
     if (this.longClicked !== nextLongClicked) status |= UpdateStatus.TERMINATE
     this.clicked = nextClicked
