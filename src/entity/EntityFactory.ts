@@ -30,6 +30,7 @@ import {Tree} from '../entities/types/Tree'
 import {IsoGrass} from '../entities/types/IsoGrass'
 import {Mountain} from '../entities/types/Mountain'
 import {Pyramid} from '../entities/types/Pyramid'
+import {Plane} from '../entities/types/Plane'
 
 export namespace EntityFactory {
   export function produce(
@@ -66,6 +67,8 @@ export namespace EntityFactory {
         return new Mountain(atlas, props)
       case EntityType.SCENERY_PATH:
         return new Path(atlas, props)
+      case EntityType.SCENERY_PLANE:
+        return new Plane(atlas, props)
       case EntityType.SCENERY_POND:
         return new Pond(atlas, props)
       case EntityType.SCENERY_PYRAMID:

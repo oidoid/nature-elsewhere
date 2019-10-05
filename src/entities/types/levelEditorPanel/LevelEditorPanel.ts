@@ -13,7 +13,6 @@ import {
 } from '../../../entity/EntityType'
 import {Layer} from '../../../image/Layer'
 import {Marquee} from '../marquee/Marquee'
-import {PlaneState} from '../PlaneState'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../../math/XY'
@@ -22,6 +21,7 @@ import {CollisionType} from '../../../collision/CollisionType'
 import {WH} from '../../../math/WH'
 import {AtlasID} from '../../../atlas/AtlasID'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
+import {PlaneState} from '../Plane'
 
 export class LevelEditorPanel extends Entity {
   readonly radioGroup: Entity
