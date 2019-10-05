@@ -33,6 +33,7 @@ import {Pyramid} from '../entities/types/Pyramid'
 import {Plane} from '../entities/types/Plane'
 import {Bunny} from '../entities/types/Bunny'
 import {Frog} from '../entities/types/Frog'
+import {Fly} from '../entities/types/Fly'
 
 export namespace EntityFactory {
   export function produce(
@@ -49,6 +50,8 @@ export namespace EntityFactory {
         return new Bee(atlas, props)
       case EntityType.CHAR_BUNNY:
         return new Bunny(atlas, props)
+      case EntityType.CHAR_FLY:
+        return new Fly(atlas, props)
       case EntityType.CHAR_FROG:
         return new Frog(atlas, props)
       case EntityType.IMAGE:
