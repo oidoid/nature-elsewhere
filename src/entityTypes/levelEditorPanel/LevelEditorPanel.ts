@@ -50,6 +50,7 @@ export class LevelEditorPanel extends Entity implements FollowCam {
 
   constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
+      id: EntityID.UI_LEVEL_EDITOR_PANEL,
       type: EntityType.UI_LEVEL_EDITOR_PANEL,
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,

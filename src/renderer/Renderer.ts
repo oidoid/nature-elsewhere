@@ -1,5 +1,4 @@
 import fragmentGLSL from './fragment.glsl'
-import * as glConfig from './glConfig.json'
 import {GLUtil} from './GLUtil'
 import {Rect} from '../math/Rect'
 import {ShaderLayout} from './ShaderLayout'
@@ -27,7 +26,13 @@ export namespace Renderer {
     atlas: HTMLImageElement,
     layout: ShaderLayout
   ): Renderer {
-    const gl = canvas.getContext('webgl2', glConfig)
+    const gl = canvas.getContext('webgl2', {
+      alpha: false,
+      depth: false,
+      antialias: false,
+      // https://www.chromestatus.com/feature/6360971442388992
+      lowLatency: true
+    })
     if (!(gl instanceof GL)) throw new Error('WebGL 2 unsupported.')
 
     // Avoid initial color flash by matching the background. [palette]

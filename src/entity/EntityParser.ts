@@ -8,32 +8,32 @@ import {
   CollisionTypeKeyArrayConfig,
   CollisionTypeParser
 } from '../collision/CollisionTypeParser'
+import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
 import {Entity} from './Entity'
 import {EntityID} from './EntityID'
+import {EntityFactory} from './EntityFactory'
 import {EntityType} from './EntityType'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
+import {
+  ImageStateMapConfig,
+  ImageStateMapParser
+} from '../imageStateMachine/ImageStateMapParser'
 import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
+import {TextPropsParser} from '../entityTypes/text/TextParser'
 import {
   UpdatePredicateConfig,
   UpdatePredicateParser
 } from '../entities/updaters/updatePredicate/UpdatePredicateParser'
 import {UpdaterParser} from '../entities/updaters/UpdaterParser'
+import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {
   UpdaterTypeArrayConfig,
   UpdaterTypeParser
 } from '../entities/updaters/updaterType/UpdaterTypeParser'
-import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {XYConfig, XYParser} from '../math/XYParser'
-import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
-import {EntityFactory} from './EntityFactory'
-import {
-  ImageStateMapConfig,
-  ImageStateMapParser
-} from '../imageStateMachine/ImageStateMapParser'
-import {TextPropsParser} from '../entityTypes/text/TextParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 
@@ -111,7 +111,7 @@ function parseProps(
   atlas: Atlas
 ): Entity.Props {
   return {
-    id: EntityParser.parseID(config.id),
+    ...(config.id && {id: EntityParser.parseID(config.id)}),
     type,
     ...(config.position && {position: XYParser.parse(config.position)}),
     ...(config.scale && {scale: ImageParser.parseScale(config.scale)}),
