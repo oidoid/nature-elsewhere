@@ -1,4 +1,3 @@
-import * as CHAR_SNAKE from '../entities/types/entityConfigs/char/snake.json'
 import * as GROUP from '../entities/types/entityConfigs/group.json'
 import * as IMAGE_ENTITY from '../entities/types/imageEntity/imageEntity.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
@@ -195,7 +194,6 @@ const UpdaterParserMap: Readonly<Partial<
 const TypeConfigMap: Readonly<Partial<
   Record<EntityType, EntityConfig>
 >> = Object.freeze({
-  [EntityType.CHAR_SNAKE]: CHAR_SNAKE,
   [EntityType.GROUP]: GROUP,
   [EntityType.IMAGE]: IMAGE_ENTITY,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
