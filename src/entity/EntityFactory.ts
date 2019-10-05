@@ -23,6 +23,7 @@ import {Subshrub} from '../entities/types/Subshrub'
 import {Bush} from '../entities/types/Bush'
 import {Pond} from '../entities/types/Pond'
 import {Grass} from '../entities/types/Grass'
+import {Path} from '../entities/types/Path'
 
 export namespace EntityFactory {
   export function produce(
@@ -49,6 +50,8 @@ export namespace EntityFactory {
         return new Flag(atlas, props)
       case EntityType.SCENERY_GRASS:
         return new Grass(atlas, props)
+      case EntityType.SCENERY_PATH:
+        return new Path(atlas, props)
       case EntityType.SCENERY_POND:
         return new Pond(atlas, props)
       case EntityType.SCENERY_SUBSHRUB:
