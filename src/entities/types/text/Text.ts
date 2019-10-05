@@ -11,7 +11,7 @@ import {AtlasID, MEM_FONT_PREFIX} from '../../../atlas/AtlasID'
 import {ImageParser} from '../../../image/ImageParser'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {EntityType} from '../../../entity/EntityType'
-import {ImageStateMachine} from '../../../imageStateMachine/ImageStateMachine'
+import {ImageRect} from '../../../imageStateMachine/ImageRect'
 
 export class Text extends Entity {
   text: string
@@ -22,7 +22,11 @@ export class Text extends Entity {
   constructor(atlas: Atlas, props?: Text.Props) {
     super({
       type: EntityType.UI_TEXT,
-      machine: new ImageStateMachine({state: TextState.VISIBLE}),
+      state: TextState.VISIBLE,
+      map: {
+        [Entity.State.HIDDEN]: new ImageRect(),
+        [TextState.VISIBLE]: new ImageRect()
+      },
       updatePredicate: UpdatePredicate.ALWAYS,
       ...props
     })

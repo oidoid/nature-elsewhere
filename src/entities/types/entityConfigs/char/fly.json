@@ -1,21 +1,19 @@
 {
   "version": "0.0.0",
   "type": "charFly",
-  "machine": {
-    "state": "idle",
-    "map": {
-      "idle": {
-        "images": [
-          {"id": "palette-grey"},
-          {
-            "id": "palette-lightGrey",
-            "bounds": {"position": {"y": 2}},
-            "layer": "SHADOW"
-          }
-        ]
-      },
-      "dead": {"images": [{"id": "palette-red", "layer": "BLOOD"}]}
-    }
+  "state": "idle",
+  "map": {
+    "idle": {
+      "images": [
+        {"id": "palette-grey"},
+        {
+          "id": "palette-lightGrey",
+          "bounds": {"position": {"y": 2}},
+          "layer": "SHADOW"
+        }
+      ]
+    },
+    "dead": {"images": [{"id": "palette-red", "layer": "BLOOD"}]}
   },
   "collisionTypes": ["TYPE_CHARACTER"],
   "updatePredicate": "intersectsViewport",

@@ -1,33 +1,31 @@
 {
   "version": "0.0.0",
   "type": "uiMarquee",
-  "machine": {
-    "state": "hidden",
-    "map": {
-      "visible": {
-        "images": [
-          {
-            "id": "uiCheckerboard-blackWhite",
-            "layer": "UI_HIHI",
-            "wrapVelocity": {"x": 20}
-          },
-          {
-            "id": "uiCheckerboard-blackWhite",
-            "layer": "UI_HIHI",
-            "wrapVelocity": {"x": 20}
-          },
-          {
-            "id": "uiCheckerboard-blackWhite",
-            "layer": "UI_HIHI",
-            "wrapVelocity": {"x": 20}
-          },
-          {
-            "id": "uiCheckerboard-blackWhite",
-            "layer": "UI_HIHI",
-            "wrapVelocity": {"x": 20}
-          }
-        ]
-      }
+  "state": "hidden",
+  "map": {
+    "visible": {
+      "images": [
+        {
+          "id": "uiCheckerboard-blackWhite",
+          "layer": "UI_HIHI",
+          "wrapVelocity": {"x": 20}
+        },
+        {
+          "id": "uiCheckerboard-blackWhite",
+          "layer": "UI_HIHI",
+          "wrapVelocity": {"x": 20}
+        },
+        {
+          "id": "uiCheckerboard-blackWhite",
+          "layer": "UI_HIHI",
+          "wrapVelocity": {"x": 20}
+        },
+        {
+          "id": "uiCheckerboard-blackWhite",
+          "layer": "UI_HIHI",
+          "wrapVelocity": {"x": 20}
+        }
+      ]
     }
   },
   "updatePredicate": "always"

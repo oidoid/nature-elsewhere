@@ -11,7 +11,6 @@ import {Image} from '../../../image/Image'
 import {ImageConfig, ImageParser} from '../../../image/ImageParser'
 import {AtlasID} from '../../../atlas/AtlasID'
 import {EntityType} from '../../../entity/EntityType'
-import {ImageStateMachine} from '../../../imageStateMachine/ImageStateMachine'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../../../collision/CollisionType'
 import {CollisionPredicate} from '../../../collision/CollisionPredicate'
@@ -25,14 +24,12 @@ export class Checkbox extends Entity {
     super({
       ...props,
       type: EntityType.UI_CHECKBOX,
-      machine: new ImageStateMachine({
-        state: CheckboxState.UNCHECKED,
-        map: {
-          [Entity.State.HIDDEN]: new ImageRect(),
-          [CheckboxState.UNCHECKED]: new ImageRect(),
-          [CheckboxState.CHECKED]: new ImageRect()
-        }
-      }),
+      state: CheckboxState.UNCHECKED,
+      map: {
+        [Entity.State.HIDDEN]: new ImageRect(),
+        [CheckboxState.UNCHECKED]: new ImageRect(),
+        [CheckboxState.CHECKED]: new ImageRect()
+      },
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
       collisionPredicate: CollisionPredicate.BOUNDS

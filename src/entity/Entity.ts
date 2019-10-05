@@ -63,34 +63,25 @@ export class Entity {
       recursive. */
   private readonly _children: Entity[]
 
-  constructor({
-    id = EntityID.ANONYMOUS,
-    type,
-    position = new XY(0, 0),
-    scale = new XY(1, 1),
-    imageID,
-    velocity = new XY(0, 0),
-    machine = new ImageStateMachine(),
-    updatePredicate = UpdatePredicate.INTERSECT_VIEWPORT,
-    updaters = [],
-    collisionType = CollisionType.INERT,
-    collisionPredicate = CollisionPredicate.NEVER,
-    collisionBodies = [],
-    children = []
-  }: Entity.Props) {
-    this._id = id
-    this._type = type
-    this._velocity = velocity
-    this._machine = machine
-    this._updatePredicate = updatePredicate
-    this._updaters = updaters
-    this._collisionType = collisionType
-    this._collisionPredicate = collisionPredicate
-    this._collisionBodies = collisionBodies
-    this._children = children
-    this.moveTo(position)
-    this.setScale(scale)
-    this.setImageID(imageID)
+  constructor(props: Entity.Props) {
+    this._id = props.id || EntityID.ANONYMOUS
+    this._type = props.type
+    this._velocity = props.velocity || new XY(0, 0)
+    this._machine = new ImageStateMachine({state: props.state, map: props.map})
+    this._updatePredicate =
+      props.updatePredicate || UpdatePredicate.INTERSECT_VIEWPORT
+    this._updaters = props.updaters || []
+    this._collisionType =
+      props.collisionType === undefined
+        ? CollisionType.INERT
+        : props.collisionType
+    this._collisionPredicate =
+      props.collisionPredicate || CollisionPredicate.NEVER
+    this._collisionBodies = props.collisionBodies || []
+    this._children = props.children || []
+    if (props.position) this.moveTo(props.position)
+    if (props.scale) this.setScale(props.scale)
+    this.setImageID(props.imageID)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children.
@@ -389,7 +380,8 @@ export namespace Entity {
     readonly imageID?: AtlasID
     readonly velocity?: XY
     /** Defaults to {}. */
-    readonly machine?: ImageStateMachine
+    readonly state?: Entity.State | string
+    readonly map?: Record<Entity.State | string, ImageRect>
     /** Defaults to BehaviorPredicate.NEVER. */
     readonly updatePredicate?: UpdatePredicate
     /** Defaults to []. */

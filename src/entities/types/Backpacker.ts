@@ -8,7 +8,6 @@ import {EntityType} from '../../entity/EntityType'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {Rect} from '../../math/Rect'
-import {ImageStateMachine} from '../../imageStateMachine/ImageStateMachine'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {Image} from '../../image/Image'
 import {AtlasID} from '../../atlas/AtlasID'
@@ -20,81 +19,79 @@ export class Backpacker extends Entity {
     super({
       type: EntityType.CHAR_BACKPACKER,
       ...props,
-      machine: new ImageStateMachine({
-        state: BackpackerState.IDLE_DOWN,
-        map: {
-          [Entity.State.HIDDEN]: new ImageRect({
-            origin: new XY(-2, -13),
-            images: [
-              new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_UP}),
-              new Image(atlas, {
-                id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-                layer: Layer.SHADOW
-              })
-            ]
-          }),
-          [BackpackerState.IDLE_UP]: new ImageRect({
-            origin: new XY(-2, -13),
-            images: [
-              new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_UP}),
-              new Image(atlas, {
-                id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-                layer: Layer.SHADOW
-              })
-            ]
-          }),
-          [BackpackerState.IDLE_RIGHT]: new ImageRect({
-            origin: new XY(-2, -13),
-            images: [
-              new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_RIGHT}),
-              new Image(atlas, {
-                id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-                layer: Layer.SHADOW
-              })
-            ]
-          }),
-          [BackpackerState.IDLE_DOWN]: new ImageRect({
-            origin: new XY(-2, -13),
-            images: [
-              new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_DOWN}),
-              new Image(atlas, {
-                id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-                layer: Layer.SHADOW
-              })
-            ]
-          }),
-          [BackpackerState.WALK_UP]: new ImageRect({
-            origin: new XY(-2, -13),
-            images: [
-              new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_UP}),
-              new Image(atlas, {
-                id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-                layer: Layer.SHADOW
-              })
-            ]
-          }),
-          [BackpackerState.WALK_RIGHT]: new ImageRect({
-            origin: new XY(-2, -13),
-            images: [
-              new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_RIGHT}),
-              new Image(atlas, {
-                id: AtlasID.CHAR_BACKPACKER_WALK_RIGHT_SHADOW,
-                layer: Layer.SHADOW
-              })
-            ]
-          }),
-          [BackpackerState.WALK_DOWN]: new ImageRect({
-            origin: new XY(-2, -13),
-            images: [
-              new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_DOWN}),
-              new Image(atlas, {
-                id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-                layer: Layer.SHADOW
-              })
-            ]
-          })
-        }
-      }),
+      state: BackpackerState.IDLE_DOWN,
+      map: {
+        [Entity.State.HIDDEN]: new ImageRect({
+          origin: new XY(-2, -13),
+          images: [
+            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_UP}),
+            new Image(atlas, {
+              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
+              layer: Layer.SHADOW
+            })
+          ]
+        }),
+        [BackpackerState.IDLE_UP]: new ImageRect({
+          origin: new XY(-2, -13),
+          images: [
+            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_UP}),
+            new Image(atlas, {
+              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
+              layer: Layer.SHADOW
+            })
+          ]
+        }),
+        [BackpackerState.IDLE_RIGHT]: new ImageRect({
+          origin: new XY(-2, -13),
+          images: [
+            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_RIGHT}),
+            new Image(atlas, {
+              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
+              layer: Layer.SHADOW
+            })
+          ]
+        }),
+        [BackpackerState.IDLE_DOWN]: new ImageRect({
+          origin: new XY(-2, -13),
+          images: [
+            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_DOWN}),
+            new Image(atlas, {
+              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
+              layer: Layer.SHADOW
+            })
+          ]
+        }),
+        [BackpackerState.WALK_UP]: new ImageRect({
+          origin: new XY(-2, -13),
+          images: [
+            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_UP}),
+            new Image(atlas, {
+              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
+              layer: Layer.SHADOW
+            })
+          ]
+        }),
+        [BackpackerState.WALK_RIGHT]: new ImageRect({
+          origin: new XY(-2, -13),
+          images: [
+            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_RIGHT}),
+            new Image(atlas, {
+              id: AtlasID.CHAR_BACKPACKER_WALK_RIGHT_SHADOW,
+              layer: Layer.SHADOW
+            })
+          ]
+        }),
+        [BackpackerState.WALK_DOWN]: new ImageRect({
+          origin: new XY(-2, -13),
+          images: [
+            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_DOWN}),
+            new Image(atlas, {
+              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
+              layer: Layer.SHADOW
+            })
+          ]
+        })
+      },
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType:
         CollisionType.TYPE_CHARACTER |

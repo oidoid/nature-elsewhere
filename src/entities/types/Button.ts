@@ -7,7 +7,6 @@ import {EntityType} from '../../entity/EntityType'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../../collision/CollisionType'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
-import {ImageStateMachine} from '../../imageStateMachine/ImageStateMachine'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {Image} from '../../image/Image'
 import {AtlasID} from '../../atlas/AtlasID'
@@ -20,32 +19,30 @@ export class Button extends Entity {
   constructor(atlas: Atlas, props?: Button.Props) {
     super({
       type: EntityType.UI_BUTTON,
-      machine: new ImageStateMachine({
-        state: ButtonState.UNCLICKED,
-        map: {
-          [Entity.State.HIDDEN]: new ImageRect(),
-          [ButtonState.UNCLICKED]: new ImageRect({
-            images: [
-              new Image(atlas, {
-                id: AtlasID.UI_BUTTON_BASE,
-                layer: Layer.UI_MID
-              })
-            ]
-          }),
-          [ButtonState.CLICKED]: new ImageRect({
-            images: [
-              new Image(atlas, {
-                id: AtlasID.UI_BUTTON_BASE,
-                layer: Layer.UI_MID
-              }),
-              new Image(atlas, {
-                id: AtlasID.UI_BUTTON_PRESSED,
-                layer: Layer.UI_HI
-              })
-            ]
-          })
-        }
-      }),
+      state: ButtonState.UNCLICKED,
+      map: {
+        [Entity.State.HIDDEN]: new ImageRect(),
+        [ButtonState.UNCLICKED]: new ImageRect({
+          images: [
+            new Image(atlas, {
+              id: AtlasID.UI_BUTTON_BASE,
+              layer: Layer.UI_MID
+            })
+          ]
+        }),
+        [ButtonState.CLICKED]: new ImageRect({
+          images: [
+            new Image(atlas, {
+              id: AtlasID.UI_BUTTON_BASE,
+              layer: Layer.UI_MID
+            }),
+            new Image(atlas, {
+              id: AtlasID.UI_BUTTON_PRESSED,
+              layer: Layer.UI_HI
+            })
+          ]
+        })
+      },
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
       collisionPredicate: CollisionPredicate.BOUNDS,

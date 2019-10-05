@@ -1,15 +1,13 @@
 {
   "version": "0.0.0",
   "type": "scenerySubshrub",
-  "machine": {
-    "state": "visible",
-    "map": {
-      "visible": {
-        "images": [
-          {"id": "scenerySubshrub"},
-          {"id": "scenerySubshrub-shadow", "layer": "SHADOW"}
-        ]
-      }
+  "state": "visible",
+  "map": {
+    "visible": {
+      "images": [
+        {"id": "scenerySubshrub"},
+        {"id": "scenerySubshrub-shadow", "layer": "SHADOW"}
+      ]
     }
   },
   "collisionTypes": ["TYPE_SCENERY", "IMPEDIMENT"]

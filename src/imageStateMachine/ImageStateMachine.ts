@@ -5,6 +5,7 @@ import {XY} from '../math/XY'
 import {AtlasID} from '../atlas/AtlasID'
 import {Entity} from '../entity/Entity'
 import {Image} from '../image/Image'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.
@@ -18,6 +19,7 @@ export class ImageStateMachine {
   }: ImageStateMachine.Props = {}) {
     this._state = state
     this._map = map
+    ObjectUtil.assertKeyOf(this._map, this._state, 'ImageStateMachine')
   }
 
   get state(): Entity.State | string {

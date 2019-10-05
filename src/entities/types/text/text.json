@@ -1,9 +1,0 @@
-{
-  "version": "0.0.0",
-  "type": "uiText",
-  "text": "",
-  "textScale": {"x": 1, "y": 1},
-  "textLayer": "UI_LO",
-  "machine": {"state": "visible", "map": {"visible": {"images": []}}},
-  "updatePredicate": "always"
-}

@@ -3,17 +3,15 @@
   "type": "uiToolbar",
   "positionRelativeToCam": "southWest",
   "camMargin": {"w": 1, "h": 1},
-  "machine": {
-    "state": "visible",
-    "map": {
-      "visible": {
-        "images": [
-          {"id": "sceneryFlag"},
-          {"id": "sceneryFlag", "bounds": {"position": {"x": 4}}},
-          {"id": "sceneryFlag", "bounds": {"position": {"x": 8}}},
-          {"id": "charArrow-upRight", "bounds": {"position": {"x": 12}}}
-        ]
-      }
+  "state": "visible",
+  "map": {
+    "visible": {
+      "images": [
+        {"id": "sceneryFlag"},
+        {"id": "sceneryFlag", "bounds": {"position": {"x": 4}}},
+        {"id": "sceneryFlag", "bounds": {"position": {"x": 8}}},
+        {"id": "charArrow-upRight", "bounds": {"position": {"x": 12}}}
+      ]
     }
   },
   "collisionTypes": ["TYPE_UI"],

@@ -5,7 +5,6 @@ import {Layer} from '../../../image/Layer'
 import {XY} from '../../../math/XY'
 import {AtlasID} from '../../../atlas/AtlasID'
 import {Image} from '../../../image/Image'
-import {ImageStateMachine} from '../../../imageStateMachine/ImageStateMachine'
 import {ImageRect} from '../../../imageStateMachine/ImageRect'
 import {CollisionType} from '../../../collision/CollisionType'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
@@ -19,15 +18,13 @@ export class LevelEditorPanelBackground extends Entity {
       collisionType: CollisionType.TYPE_UI,
       collisionPredicate: CollisionPredicate.IMAGES,
       updatePredicate: UpdatePredicate.ALWAYS,
-      machine: new ImageStateMachine({
-        state: LevelEditorPanelBackgroundState.VISIBLE,
-        map: {
-          [Entity.State.HIDDEN]: new ImageRect(),
-          [LevelEditorPanelBackgroundState.VISIBLE]: new ImageRect({
-            images: newBackgroundImages(atlas)
-          })
-        }
-      }),
+      state: LevelEditorPanelBackgroundState.VISIBLE,
+      map: {
+        [Entity.State.HIDDEN]: new ImageRect(),
+        [LevelEditorPanelBackgroundState.VISIBLE]: new ImageRect({
+          images: newBackgroundImages(atlas)
+        })
+      },
       ...props
     })
   }

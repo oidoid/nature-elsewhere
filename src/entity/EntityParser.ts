@@ -1,4 +1,3 @@
-import * as CHAR_BEE from '../entities/types/entityConfigs/char/bee.json'
 import * as CHAR_BUNNY from '../entities/types/entityConfigs/char/bunny.json'
 import * as CHAR_FLY from '../entities/types/entityConfigs/char/fly.json'
 import * as CHAR_FROG from '../entities/types/entityConfigs/char/frog.json'
@@ -25,7 +24,6 @@ import * as UI_DESTINATION_MARKER from '../entities/types/destinationMarker/dest
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
 import * as UI_MARQUEE from '../entities/types/marquee/marquee.json'
 import * as UI_RADIO_BUTTON_GROUP from '../entities/types/entityConfigs/ui/radioCheckboxGroup.json'
-import * as UI_TEXT from '../entities/types/text/text.json'
 import * as UI_TOOLBAR from '../entities/types/entityConfigs/ui/toolbar.json'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
@@ -42,10 +40,6 @@ import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
-import {
-  ImageStateMachineConfig,
-  ImageStateMachineParser
-} from '../imageStateMachine/ImageStateMachineParser'
 import {JSONObject, JSONUtil} from '../utils/JSONUtil'
 import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
@@ -63,6 +57,10 @@ import {UpdaterType} from '../entities/updaters/updaterType/UpdaterType'
 import {XYConfig, XYParser} from '../math/XYParser'
 import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
 import {EntityFactory} from './EntityFactory'
+import {
+  ImageStateMapConfig,
+  ImageStateMapParser
+} from '../imageStateMachine/ImageStateMapParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 
@@ -76,7 +74,8 @@ export interface EntityConfig {
   readonly imageID?: AtlasIDConfig
   readonly scale?: ImageScaleConfig
   /** Defaults to {}. */
-  readonly machine?: ImageStateMachineConfig
+  readonly state?: EntityStateConfig
+  readonly map?: ImageStateMapConfig
   /** Defaults to BehaviorPredicate.NEVER. */
   readonly updatePredicate?: UpdatePredicateConfig
   /** Defaults to []. */
@@ -148,9 +147,8 @@ function parseProps(
     ...(config.scale && {scale: ImageParser.parseScale(config.scale)}),
     ...(config.velocity && {velocity: XYParser.parse(config.velocity)}),
     ...(config.imageID && {imageID: AtlasIDParser.parse(config.imageID)}),
-    ...(config.machine && {
-      machine: ImageStateMachineParser.parse(config.machine, atlas)
-    }),
+    ...(config.state && {state: EntityParser.parseState(config.state)}),
+    ...(config.map && {map: ImageStateMapParser.parse(config.map, atlas)}),
     ...(config.updatePredicate && {
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate)
     }),
@@ -183,7 +181,8 @@ function specialization(config: EntityConfig) {
     position,
     scale,
     imageID,
-    machine,
+    state,
+    map,
     updatePredicate,
     updaters,
     collisionTypes,
@@ -216,7 +215,6 @@ const UpdaterParserMap: Readonly<Partial<
 const TypeConfigMap: Readonly<Partial<
   Record<EntityType, EntityConfig>
 >> = Object.freeze({
-  [EntityType.CHAR_BEE]: CHAR_BEE,
   [EntityType.CHAR_BUNNY]: CHAR_BUNNY,
   [EntityType.CHAR_FLY]: CHAR_FLY,
   [EntityType.CHAR_FROG]: CHAR_FROG,
@@ -243,6 +241,5 @@ const TypeConfigMap: Readonly<Partial<
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL,
   [EntityType.UI_MARQUEE]: UI_MARQUEE,
   [EntityType.UI_RADIO_CHECKBOX_GROUP]: UI_RADIO_BUTTON_GROUP,
-  [EntityType.UI_TEXT]: UI_TEXT,
   [EntityType.UI_TOOLBAR]: UI_TOOLBAR
 })

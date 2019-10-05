@@ -1,15 +1,13 @@
 {
   "version": "0.0.0",
   "type": "sceneryPyramid",
-  "machine": {
-    "state": "visible",
-    "map": {
-      "visible": {
-        "images": [
-          {"id": "sceneryPyramid"},
-          {"id": "sceneryPyramid-shadow", "layer": "SHADOW"}
-        ]
-      }
+  "state": "visible",
+  "map": {
+    "visible": {
+      "images": [
+        {"id": "sceneryPyramid"},
+        {"id": "sceneryPyramid-shadow", "layer": "SHADOW"}
+      ]
     }
   },
   "collisionTypes": ["TYPE_SCENERY", "OBSTACLE"],

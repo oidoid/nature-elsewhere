@@ -1,23 +1,21 @@
 {
   "version": "0.0.0",
   "type": "sceneryGrass",
-  "machine": {
-    "state": "0",
-    "map": {
-      "0": {"images": [{"id": "sceneryGrass-0"}]},
-      "1": {
-        "images": [
-          {"id": "sceneryGrass-1"},
-          {"id": "sceneryGrass-3", "bounds": {"position": {"x": 4, "y": 1}}}
-        ]
-      },
-      "2": {
-        "images": [
-          {"id": "sceneryGrass-2"},
-          {"id": "sceneryGrass-0", "bounds": {"position": {"x": 6, "y": 2}}},
-          {"id": "sceneryGrass-1", "bounds": {"position": {"x": 3, "y": 3}}}
-        ]
-      }
+  "state": "0",
+  "map": {
+    "0": {"images": [{"id": "sceneryGrass-0"}]},
+    "1": {
+      "images": [
+        {"id": "sceneryGrass-1"},
+        {"id": "sceneryGrass-3", "bounds": {"position": {"x": 4, "y": 1}}}
+      ]
+    },
+    "2": {
+      "images": [
+        {"id": "sceneryGrass-2"},
+        {"id": "sceneryGrass-0", "bounds": {"position": {"x": 6, "y": 2}}},
+        {"id": "sceneryGrass-1", "bounds": {"position": {"x": 3, "y": 3}}}
+      ]
     }
   },
   "collisionTypes": ["TYPE_SCENERY"]

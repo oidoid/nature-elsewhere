@@ -1,27 +1,25 @@
 {
   "version": "0.0.0",
   "type": "sceneryPath",
-  "machine": {
-    "state": "/",
-    "map": {
-      "/": {"images": [{"id": "sceneryPath-/", "layer": "ABOVE_PLANE"}]},
-      "\\": {
-        "images": [
-          {"id": "sceneryPath-/", "layer": "ABOVE_PLANE", "scale": {"x": -1}}
-        ]
-      },
-      ">": {"images": [{"id": "sceneryPath->", "layer": "ABOVE_PLANE"}]},
-      "<": {
-        "images": [
-          {"id": "sceneryPath->", "layer": "ABOVE_PLANE", "scale": {"x": -1}}
-        ]
-      },
-      "^": {"images": [{"id": "sceneryPath-^", "layer": "ABOVE_PLANE"}]},
-      "v": {
-        "images": [
-          {"id": "sceneryPath-^", "layer": "ABOVE_PLANE", "scale": {"y": -1}}
-        ]
-      }
+  "state": "/",
+  "map": {
+    "/": {"images": [{"id": "sceneryPath-/", "layer": "ABOVE_PLANE"}]},
+    "\\": {
+      "images": [
+        {"id": "sceneryPath-/", "layer": "ABOVE_PLANE", "scale": {"x": -1}}
+      ]
+    },
+    ">": {"images": [{"id": "sceneryPath->", "layer": "ABOVE_PLANE"}]},
+    "<": {
+      "images": [
+        {"id": "sceneryPath->", "layer": "ABOVE_PLANE", "scale": {"x": -1}}
+      ]
+    },
+    "^": {"images": [{"id": "sceneryPath-^", "layer": "ABOVE_PLANE"}]},
+    "v": {
+      "images": [
+        {"id": "sceneryPath-^", "layer": "ABOVE_PLANE", "scale": {"y": -1}}
+      ]
     }
   },
   "collisionTypes": ["TYPE_SCENERY"]

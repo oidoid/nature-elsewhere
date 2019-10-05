@@ -1,25 +1,23 @@
 {
   "version": "0.0.0",
   "type": "charBunny",
-  "machine": {
-    "state": "idle",
-    "map": {
-      "idle": {
-        "images": [
-          {"id": "charBunny"},
-          {
-            "id": "charBunny-shadow",
-            "bounds": {"position": {"y": 1}},
-            "layer": "SHADOW"
-          }
-        ]
-      },
-      "dead": {
-        "images": [
-          {"id": "charBunny-dead"},
-          {"id": "charBunny-blood", "layer": "BLOOD"}
-        ]
-      }
+  "state": "idle",
+  "map": {
+    "idle": {
+      "images": [
+        {"id": "charBunny"},
+        {
+          "id": "charBunny-shadow",
+          "bounds": {"position": {"y": 1}},
+          "layer": "SHADOW"
+        }
+      ]
+    },
+    "dead": {
+      "images": [
+        {"id": "charBunny-dead"},
+        {"id": "charBunny-blood", "layer": "BLOOD"}
+      ]
     }
   },
   "updatePredicate": "intersectsViewport",

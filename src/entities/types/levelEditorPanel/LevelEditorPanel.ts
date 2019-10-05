@@ -133,7 +133,7 @@ export class LevelEditorPanel extends Entity {
         let entity = EntityParser.parse(
             {
               type: child.type,
-              machine: {state: child.machine.state},
+              state: child.machine.state,
               position
             },
             state.level.atlas

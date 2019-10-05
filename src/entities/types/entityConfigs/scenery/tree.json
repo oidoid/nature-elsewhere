@@ -1,19 +1,17 @@
 {
   "version": "0.0.0",
   "type": "sceneryTree",
-  "machine": {
-    "state": "visible",
-    "map": {
-      "visible": {
-        "images": [
-          {"id": "sceneryTree"},
-          {
-            "id": "sceneryTree-shadow",
-            "bounds": {"position": {"y": 1}},
-            "layer": "SHADOW"
-          }
-        ]
-      }
+  "state": "visible",
+  "map": {
+    "visible": {
+      "images": [
+        {"id": "sceneryTree"},
+        {
+          "id": "sceneryTree-shadow",
+          "bounds": {"position": {"y": 1}},
+          "layer": "SHADOW"
+        }
+      ]
     }
   },
   "collisionTypes": ["TYPE_SCENERY", "OBSTACLE"],

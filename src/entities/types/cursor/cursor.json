@@ -1,11 +1,10 @@
 {
   "version": "0.0.0",
   "type": "uiCursor",
-  "machine": {
-    "state": "hidden",
-    "map": {
-      "visible": {"images": [{"id": "palette-black", "layer": "UI_CURSOR"}]}
-    }
+  "state": "hidden",
+  "map": {
+    "hidden": {"images": []},
+    "visible": {"images": [{"id": "palette-black", "layer": "UI_CURSOR"}]}
   },
   "updatePredicate": "always",
   "//": "Use bodies so that collision remains the same regardless of whether hidden or not.",

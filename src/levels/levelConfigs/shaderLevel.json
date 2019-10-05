@@ -7,110 +7,108 @@
   "minViewport": {"w": 48, "h": 48},
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
-    {"type": "sceneryPlane", "machine": {"state": "white"}},
+    {"type": "sceneryPlane", "state": "white"},
     {
       "type": "group",
-      "machine": {
-        "state": "visible",
-        "map": {
-          "visible": {
-            "images": [
-              {"id": "memFont-090", "bounds": {"position": {"x": 1, "y": 1}}},
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 1, "y": 6}},
-                "scale": {"x": 2}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 1, "y": 12}, "size": {"w": 6}}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 1, "y": 18}},
-                "wrap": {"x": 1}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 1, "y": 24}},
-                "scale": {"x": 2},
-                "wrap": {"x": 1}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 1, "y": 30}},
-                "scale": {"x": 2},
-                "wrapVelocity": {"x": -10}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 1, "y": 36}, "size": {"w": 6}},
-                "wrapVelocity": {"x": -10}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 1, "y": 42}},
-                "wrap": {"x": 1},
-                "wrapVelocity": {"x": -10}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 15, "y": 1}},
-                "scale": {"x": 4, "y": 4}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 1}},
-                "scale": {"x": -1}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 6}},
-                "scale": {"x": -2}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 12}, "size": {"w": 6}},
-                "scale": {"x": -1}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 18}},
-                "scale": {"x": -1},
-                "wrap": {"x": 1}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 24}},
-                "scale": {"x": -2},
-                "wrap": {"x": 1}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 30}},
-                "scale": {"x": -2},
-                "wrapVelocity": {"x": -10}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 36}, "size": {"w": 6}},
-                "scale": {"x": -1},
-                "wrapVelocity": {"x": -10}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 8, "y": 42}},
-                "scale": {"x": -1},
-                "wrap": {"x": 1},
-                "wrapVelocity": {"x": -10}
-              },
-              {
-                "id": "memFont-090",
-                "bounds": {"position": {"x": 15, "y": 24}},
-                "scale": {"x": 4, "y": -4}
-              }
-            ]
-          }
+      "state": "visible",
+      "map": {
+        "visible": {
+          "images": [
+            {"id": "memFont-090", "bounds": {"position": {"x": 1, "y": 1}}},
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 1, "y": 6}},
+              "scale": {"x": 2}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 1, "y": 12}, "size": {"w": 6}}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 1, "y": 18}},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 1, "y": 24}},
+              "scale": {"x": 2},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 1, "y": 30}},
+              "scale": {"x": 2},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 1, "y": 36}, "size": {"w": 6}},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 1, "y": 42}},
+              "wrap": {"x": 1},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 15, "y": 1}},
+              "scale": {"x": 4, "y": 4}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 1}},
+              "scale": {"x": -1}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 6}},
+              "scale": {"x": -2}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 12}, "size": {"w": 6}},
+              "scale": {"x": -1}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 18}},
+              "scale": {"x": -1},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 24}},
+              "scale": {"x": -2},
+              "wrap": {"x": 1}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 30}},
+              "scale": {"x": -2},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 36}, "size": {"w": 6}},
+              "scale": {"x": -1},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 8, "y": 42}},
+              "scale": {"x": -1},
+              "wrap": {"x": 1},
+              "wrapVelocity": {"x": -10}
+            },
+            {
+              "id": "memFont-090",
+              "bounds": {"position": {"x": 15, "y": 24}},
+              "scale": {"x": 4, "y": -4}
+            }
+          ]
         }
       }
     }

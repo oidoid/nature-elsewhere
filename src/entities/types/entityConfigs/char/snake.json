@@ -1,15 +1,13 @@
 {
   "version": "0.0.0",
   "type": "charSnake",
-  "machine": {
-    "state": "idle",
-    "map": {
-      "idle": {
-        "images": [
-          {"id": "charSnake"},
-          {"id": "charSnake-shadow", "layer": "SHADOW"}
-        ]
-      }
+  "state": "idle",
+  "map": {
+    "idle": {
+      "images": [
+        {"id": "charSnake"},
+        {"id": "charSnake-shadow", "layer": "SHADOW"}
+      ]
     }
   },
   "collisionTypes": ["TYPE_CHARACTER", "HARMFUL", "IMPEDIMENT"],

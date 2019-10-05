@@ -5,21 +5,19 @@
   "minViewport": {"w": 132, "h": 128},
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
-    {"type": "sceneryPlane", "machine": {"state": "white"}},
+    {"type": "sceneryPlane", "state": "white"},
     {
       "type": "group",
       "positionRelativeToCam": "center",
-      "machine": {
-        "state": "visible",
-        "map": {
-          "visible": {
-            "images": [
-              {
-                "id": "palette-paleGreen",
-                "bounds": {"position": {"y": 44}, "size": {"w": 128, "h": 2}}
-              }
-            ]
-          }
+      "state": "visible",
+      "map": {
+        "visible": {
+          "images": [
+            {
+              "id": "palette-paleGreen",
+              "bounds": {"position": {"y": 44}, "size": {"w": 128, "h": 2}}
+            }
+          ]
         }
       },
       "updatePredicate": "always",

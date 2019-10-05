@@ -1,9 +1,7 @@
 {
   "version": "0.0.0",
   "type": "sceneryIsoGrass",
-  "machine": {
-    "state": "/0",
-    "map": {"/0": {"images": [{"id": "sceneryIsoGrass-/0"}]}}
-  },
+  "state": "/0",
+  "map": {"/0": {"images": [{"id": "sceneryIsoGrass-/0"}]}},
   "collisionTypes": ["TYPE_SCENERY"]
 }

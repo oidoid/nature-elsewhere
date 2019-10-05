@@ -4,7 +4,6 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {UpdateState} from '../../updaters/UpdateState'
 import {EntityType} from '../../../entity/EntityType'
 import {ImageRect} from '../../../imageStateMachine/ImageRect'
-import {ImageStateMachine} from '../../../imageStateMachine/ImageStateMachine'
 import {CollisionPredicate} from '../../../collision/CollisionPredicate'
 import {Rect} from '../../../math/Rect'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
@@ -17,20 +16,18 @@ export class Cursor extends Entity {
   constructor(atlas: Atlas, props?: Entity.Props) {
     super({
       type: EntityType.UI_CURSOR,
-      machine: new ImageStateMachine({
-        state: Entity.State.HIDDEN,
-        map: {
-          [Entity.State.HIDDEN]: new ImageRect(),
-          [CursorState.VISIBLE]: new ImageRect({
-            images: [
-              new Image(atlas, {
-                id: AtlasID.PALETTE_BLACK,
-                layer: Layer.UI_CURSOR
-              })
-            ]
-          })
-        }
-      }),
+      state: Entity.State.HIDDEN,
+      map: {
+        [Entity.State.HIDDEN]: new ImageRect(),
+        [CursorState.VISIBLE]: new ImageRect({
+          images: [
+            new Image(atlas, {
+              id: AtlasID.PALETTE_BLACK,
+              layer: Layer.UI_CURSOR
+            })
+          ]
+        })
+      },
       updatePredicate: UpdatePredicate.ALWAYS,
       // Use bodies so that collision remains the same regardless of whether
       // hidden or not.

@@ -16,6 +16,7 @@ import {EntityPickerParser} from '../entities/types/entityPicker/EntityPickerPar
 import {IEntityParser} from '../entities/RecursiveEntityParser'
 import {LevelEditorPanelBackground} from '../entities/types/levelEditorPanel/LevelEditorPanelBackground'
 import {DateVersionHash} from '../entities/types/DateVersionHash'
+import {Bee} from '../entities/types/Bee'
 
 export namespace EntityFactory {
   export function produce(
@@ -28,6 +29,8 @@ export namespace EntityFactory {
     switch (type) {
       case EntityType.CHAR_BACKPACKER:
         return new Backpacker(atlas, props)
+      case EntityType.CHAR_BEE:
+        return new Bee(atlas, props)
       case EntityType.IMAGE:
         return ImageEntityParser.parse(config, props, atlas)
       case EntityType.SCENERY_CLOUD:
