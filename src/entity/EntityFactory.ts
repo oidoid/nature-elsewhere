@@ -37,6 +37,7 @@ import {Fly} from '../entities/types/Fly'
 import {Snake} from '../entities/types/Snake'
 import {Toolbar} from '../entities/types/Toolbar'
 import {RadioCheckboxGroup} from '../entities/types/RadioCheckboxGroup'
+import {Group} from '../entities/types/Group'
 
 export namespace EntityFactory {
   export function produce(
@@ -59,6 +60,8 @@ export namespace EntityFactory {
         return new Frog(atlas, props)
       case EntityType.CHAR_SNAKE:
         return new Snake(atlas, props)
+      case EntityType.GROUP:
+        return new Group(props)
       case EntityType.IMAGE:
         return ImageEntityParser.parse(config, props, atlas)
       case EntityType.SCENERY_BUSH:

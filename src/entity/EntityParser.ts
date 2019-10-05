@@ -1,4 +1,3 @@
-import * as GROUP from '../entities/types/entityConfigs/group.json'
 import * as IMAGE_ENTITY from '../entities/types/imageEntity/imageEntity.json'
 import * as UI_LEVEL_EDITOR_PANEL from '../entities/types/levelEditorPanel/levelEditorPanel.json'
 import {Atlas} from 'aseprite-atlas'
@@ -191,7 +190,6 @@ const UpdaterParserMap: Readonly<Partial<
 const TypeConfigMap: Readonly<Partial<
   Record<EntityType, EntityConfig>
 >> = Object.freeze({
-  [EntityType.GROUP]: GROUP,
   [EntityType.IMAGE]: IMAGE_ENTITY,
   [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL
 })
