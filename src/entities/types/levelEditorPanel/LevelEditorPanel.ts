@@ -12,7 +12,7 @@ import {
   CHAR_VALUE_PREFIX
 } from '../../../entity/EntityType'
 import {Layer} from '../../../image/Layer'
-import {Marquee} from '../marquee/Marquee'
+import {Marquee} from '../Marquee'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {XY} from '../../../math/XY'

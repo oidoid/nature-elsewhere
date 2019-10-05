@@ -6,7 +6,7 @@ import {DestinationMarker} from '../entities/types/DestinationMarker'
 import {Entity} from './Entity'
 import {EntityType} from './EntityType'
 import {LevelEditorPanel} from '../entities/types/levelEditorPanel/LevelEditorPanel'
-import {Marquee} from '../entities/types/marquee/Marquee'
+import {Marquee} from '../entities/types/Marquee'
 import {ImageEntityParser} from '../entities/types/imageEntity/ImageEntityParser'
 import {EntityConfig} from './EntityParser'
 import {Atlas} from 'aseprite-atlas'
@@ -108,7 +108,7 @@ export namespace EntityFactory {
       case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:
         return new LevelEditorPanelBackground(atlas, props)
       case EntityType.UI_MARQUEE:
-        return new Marquee(props)
+        return new Marquee(atlas, props)
       case EntityType.UI_RADIO_CHECKBOX_GROUP:
         return new RadioCheckboxGroup(props)
       case EntityType.UI_TEXT:

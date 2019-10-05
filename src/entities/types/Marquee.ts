@@ -1,14 +1,59 @@
-import {EntityCollider} from '../../../collision/EntityCollider'
-import {Entity} from '../../../entity/Entity'
-import {EntityID} from '../../../entity/EntityID'
-import {Input} from '../../../inputs/Input'
-import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
-import {XY} from '../../../math/XY'
-import {UpdateState} from '../../updaters/UpdateState'
-import {WH} from '../../../math/WH'
+import {EntityCollider} from '../../collision/EntityCollider'
+import {Entity} from '../../entity/Entity'
+import {EntityID} from '../../entity/EntityID'
+import {Input} from '../../inputs/Input'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {XY} from '../../math/XY'
+import {UpdateState} from '../updaters/UpdateState'
+import {WH} from '../../math/WH'
+import {EntityType} from '../../entity/EntityType'
+import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {Image} from '../../image/Image'
+import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../../atlas/AtlasID'
+import {Layer} from '../../image/Layer'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 
 export class Marquee extends Entity {
   selection?: Symbol
+
+  constructor(atlas: Atlas, props?: Entity.Props) {
+    super({
+      type: EntityType.UI_MARQUEE,
+      state: Entity.State.HIDDEN,
+      map: {
+        [Entity.State.HIDDEN]: new ImageRect(),
+        [MarqueeState.VISIBLE]: new ImageRect({
+          images: [
+            new Image(atlas, {
+              id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
+              layer: Layer.UI_HIHI,
+              wrapVelocity: new XY(20, 0)
+            }),
+            new Image(atlas, {
+              id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
+              layer: Layer.UI_HIHI,
+              wrapVelocity: new XY(20, 0)
+            }),
+            new Image(atlas, {
+              id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
+              layer: Layer.UI_HIHI,
+              wrapVelocity: new XY(20, 0)
+            }),
+            new Image(atlas, {
+              id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
+              layer: Layer.UI_HIHI,
+              wrapVelocity: new XY(20, 0)
+            })
+          ]
+        })
+      },
+      updatePredicate: UpdatePredicate.ALWAYS,
+      ...props
+    })
+    this.selection = undefined
+  }
+
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
 
