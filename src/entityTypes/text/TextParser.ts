@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {Entity} from '../../entity/Entity'
 import {EntityConfig} from '../../entity/EntityParser'
 import {ImageParser, LayerKeyConfig} from '../../image/ImageParser'
@@ -6,25 +5,30 @@ import {Text} from './Text'
 import {WHConfig, WHParser} from '../../math/WHParser'
 import {XYConfig} from '../../math/XYParser'
 
-export interface TextConfig extends EntityConfig {
+export interface TextPropsConfig extends EntityConfig {
   readonly text?: string
-  readonly textLayer: LayerKeyConfig
+  readonly textLayer?: LayerKeyConfig
   readonly textScale?: XYConfig
   readonly textMaxSize?: WHConfig
 }
 
-export namespace TextParser {
+export namespace TextPropsParser {
   export function parse(
-    config: TextConfig,
     props: Entity.Props,
-    atlas: Atlas
-  ): Text {
-    return new Text(atlas, {
+    config: TextPropsConfig
+  ): NonOptional<Text.Props, 'type'> {
+    return {
       ...props,
-      text: config.text,
-      textLayer: ImageParser.parseLayerKey(config.textLayer),
-      textScale: ImageParser.parseScale(config.textScale),
-      textMaxSize: WHParser.parse(config.textMaxSize)
-    })
+      ...(config.text && {text: config.text}),
+      ...(config.textLayer !== undefined && {
+        textLayer: ImageParser.parseLayerKey(config.textLayer)
+      }),
+      ...(config.textScale && {
+        textScale: ImageParser.parseScale(config.textScale)
+      }),
+      ...(config.textMaxSize && {
+        textMaxSize: WHParser.parse(config.textMaxSize)
+      })
+    }
   }
 }

@@ -1,6 +1,6 @@
 import {Atlas} from 'aseprite-atlas'
 import {Button} from '../Button'
-import {Checkbox} from '../checkbox/Checkbox'
+import {Checkbox} from '../Checkbox'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
@@ -22,8 +22,18 @@ import {WH} from '../../math/WH'
 import {AtlasID} from '../../atlas/AtlasID'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
 import {PlaneState} from '../Plane'
+import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
+import {Text} from '../text/Text'
+import {Group, GroupState} from '../Group'
+import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {Image} from '../../image/Image'
+import {
+  FollowCam,
+  FollowCamOrientation
+} from '../../entities/updaters/types/followCam/FollowCam'
+import {UpdaterType} from '../../entities/updaters/updaterType/UpdaterType'
 
-export class LevelEditorPanel extends Entity {
+export class LevelEditorPanel extends Entity implements FollowCam {
   readonly radioGroup: Entity
   readonly xCheckbox: Checkbox
   readonly yCheckbox: Checkbox
@@ -35,55 +45,172 @@ export class LevelEditorPanel extends Entity {
   readonly destroyButton: Button
   readonly createButton: Button
   readonly toggleGridButton: Button
+  readonly positionRelativeToCam: FollowCamOrientation
+  readonly camMargin: WH
 
-  constructor(atlas: Atlas, props?: LevelEditorPanel.Props) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_LEVEL_EDITOR_PANEL,
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
       collisionPredicate: CollisionPredicate.CHILDREN,
+      updaters: [UpdaterType.UI_FOLLOW_CAM],
       ...props
     })
 
-    this.radioGroup = <Entity>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_RADIO_GROUP)
-    )
-    this.xCheckbox = <Checkbox>this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_X)
-    this.yCheckbox = <Checkbox>this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_Y)
-    this.stateCheckbox = <Checkbox>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_STATE)
-    )
+    this.stateCheckbox = new Checkbox(atlas, {
+      textMaxSize: new WH(34, 5),
+      position: new XY(52, 20),
+      imageID: AtlasID.PALETTE_BLACK
+    })
+    this.xCheckbox = new Checkbox(atlas, {
+      text: '0',
+      textLayer: Layer.UI_HI,
+      position: new XY(46, 26),
+      imageID: AtlasID.PALETTE_BLACK
+    })
+    this.yCheckbox = new Checkbox(atlas, {
+      text: '0',
+      textLayer: Layer.UI_HI,
+      position: new XY(68, 26),
+      imageID: AtlasID.PALETTE_BLACK
+    })
     this.entityCheckbox = new Checkbox(atlas, {
       textMaxSize: new WH(32, 5),
       position: new XY(88, 2),
       imageID: AtlasID.PALETTE_BLACK
     })
+    this.radioGroup = new RadioCheckboxGroup({
+      children: [
+        new Text(atlas, {
+          text: 'st',
+          textLayer: Layer.UI_HI,
+          position: new XY(44, 20)
+        }),
+        this.stateCheckbox,
+        new Text(atlas, {
+          text: 'x',
+          textLayer: Layer.UI_HI,
+          position: new XY(42, 26)
+        }),
+        this.xCheckbox,
+        new Text(atlas, {
+          text: 'y',
+          textLayer: Layer.UI_HI,
+          position: new XY(64, 26)
+        }),
+        this.yCheckbox,
+        this.entityCheckbox
+      ]
+    })
+    this.decrementButton = new Button(atlas, {
+      position: new XY(2, 22),
+      children: [
+        new Group({
+          map: {
+            [Entity.State.HIDDEN]: new ImageRect(),
+            [GroupState.VISIBLE]: new ImageRect({
+              images: [
+                new Image(atlas, {
+                  id: AtlasID.UI_BUTTON_DECREMENT,
+                  layer: Layer.UI_HIHI
+                })
+              ]
+            })
+          }
+        })
+      ]
+    })
+    this.incrementButton = new Button(atlas, {
+      position: new XY(10, 22),
+      children: [
+        new Group({
+          map: {
+            [Entity.State.HIDDEN]: new ImageRect(),
+            [GroupState.VISIBLE]: new ImageRect({
+              images: [
+                new Image(atlas, {
+                  id: AtlasID.UI_BUTTON_INCREMENT,
+                  layer: Layer.UI_HIHI
+                })
+              ]
+            })
+          }
+        })
+      ]
+    })
+    this.destroyButton = new Button(atlas, {
+      position: new XY(18, 22),
+      children: [
+        new Group({
+          map: {
+            [Entity.State.HIDDEN]: new ImageRect(),
+            [GroupState.VISIBLE]: new ImageRect({
+              images: [
+                new Image(atlas, {
+                  id: AtlasID.UI_BUTTON_DESTROY,
+                  layer: Layer.UI_HIHI
+                })
+              ]
+            })
+          }
+        })
+      ]
+    })
+    this.createButton = new Button(atlas, {
+      position: new XY(26, 22),
+      children: [
+        new Group({
+          map: {
+            [Entity.State.HIDDEN]: new ImageRect(),
+            [GroupState.VISIBLE]: new ImageRect({
+              images: [
+                new Image(atlas, {
+                  id: AtlasID.UI_BUTTON_CREATE,
+                  layer: Layer.UI_HIHI
+                })
+              ]
+            })
+          }
+        })
+      ]
+    })
+    this.toggleGridButton = new Button(atlas, {
+      position: new XY(34, 22),
+      children: [
+        new Group({
+          map: {
+            [Entity.State.HIDDEN]: new ImageRect(),
+            [GroupState.VISIBLE]: new ImageRect({
+              images: [
+                new Image(atlas, {
+                  id: AtlasID.UI_BUTTON_TOGGLE_GRID,
+                  layer: Layer.UI_HIHI
+                })
+              ]
+            })
+          }
+        })
+      ]
+    })
+    this.entityPicker = new EntityPicker(atlas, {position: new XY(89, 0)})
     this.children.push(
-      this.entityCheckbox,
+      this.decrementButton,
+      this.incrementButton,
+      this.destroyButton,
+      this.createButton,
+      this.toggleGridButton,
+      this.entityPicker,
+      this.radioGroup,
       new LevelEditorPanelBackground(atlas)
     )
     this.invalidateBounds()
-    this.entityPicker = <EntityPicker>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_ENTITY_PICKER)
-    )
-    this.decrementButton = <Button>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_DECREMENT)
-    )
-    this.incrementButton = <Button>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_INCREMENT)
-    )
-    this.destroyButton = <Button>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_REMOVE)
-    )
-    this.createButton = <Button>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_ADD)
-    )
-    this.toggleGridButton = <Button>(
-      this.findByID(EntityID.UI_LEVEL_EDITOR_PANEL_TOGGLE_GRID)
-    )
 
     this.setEntityFields(0, atlas)
     this.elevate(Layer.UI_PICKER_OFFSET)
+
+    this.positionRelativeToCam = FollowCamOrientation.SOUTH_EAST
+    this.camMargin = new WH(0, 0)
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -115,7 +242,6 @@ export class LevelEditorPanel extends Entity {
           x: checkboxNumber(this.xCheckbox),
           y: checkboxNumber(this.yCheckbox)
         }
-        console.log(child.machine.state)
         let entity = EntityParser.parse(
             {
               type: child.type,
@@ -207,7 +333,6 @@ export class LevelEditorPanel extends Entity {
     )
     this.entityCheckbox.setText(
       {
-        type: EntityType.UI_TEXT,
         textLayer: Layer.UI_PICKER_OFFSET,
         text: entityLabel
       },
@@ -223,7 +348,6 @@ export class LevelEditorPanel extends Entity {
     this.entityPicker.offsetActiveChildStateIndex(offset)
     this.stateCheckbox.setText(
       {
-        type: EntityType.UI_TEXT,
         textLayer: Layer.UI_PICKER_OFFSET,
         text: child.machine.state
       },
@@ -276,20 +400,4 @@ function toggleGrid(state: UpdateState): void {
 
 export enum LevelEditorPanelState {
   VISIBLE = 'visible'
-}
-
-export namespace LevelEditorPanel {
-  export interface Props extends Optional<Entity.Props, 'type'> {
-    readonly radioGroup: Entity
-    readonly xCheckbox: Checkbox
-    readonly yCheckbox: Checkbox
-    readonly stateCheckbox: Checkbox
-    readonly entityCheckbox: Checkbox
-    readonly entityPicker: EntityPicker
-    readonly decrementButton: Button
-    readonly incrementButton: Button
-    readonly destroyButton: Button
-    readonly createButton: Button
-    readonly toggleGridButton: Button
-  }
 }

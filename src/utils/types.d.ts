@@ -7,3 +7,4 @@ type Int = number
 type DecamillipixelInt = Int
 type ValueOf<T> = T[keyof T]
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+type NonOptional<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>

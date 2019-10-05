@@ -1,26 +1,26 @@
-import {Text} from '../text/Text'
-import {UpdateStatus} from '../../entities/updaters/updateStatus/UpdateStatus'
-import {UpdateState} from '../../entities/updaters/UpdateState'
-import {Level} from '../../levels/Level'
-import {Input} from '../../inputs/Input'
+import {Text} from './text/Text'
+import {UpdateStatus} from '../entities/updaters/updateStatus/UpdateStatus'
+import {UpdateState} from '../entities/updaters/UpdateState'
+import {Level} from '../levels/Level'
+import {Input} from '../inputs/Input'
 import {Atlas} from 'aseprite-atlas'
-import {WH} from '../../math/WH'
-import {XY} from '../../math/XY'
-import {Entity} from '../../entity/Entity'
-import {Image} from '../../image/Image'
-import {ImageConfig, ImageParser} from '../../image/ImageParser'
-import {AtlasID} from '../../atlas/AtlasID'
-import {EntityType} from '../../entity/EntityType'
-import {UpdatePredicate} from '../../entities/updaters/updatePredicate/UpdatePredicate'
-import {CollisionType} from '../../collision/CollisionType'
-import {CollisionPredicate} from '../../collision/CollisionPredicate'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
-import {Layer} from '../../image/Layer'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
+import {Entity} from '../entity/Entity'
+import {Image} from '../image/Image'
+import {ImageConfig, ImageParser} from '../image/ImageParser'
+import {AtlasID} from '../atlas/AtlasID'
+import {EntityType} from '../entity/EntityType'
+import {UpdatePredicate} from '../entities/updaters/updatePredicate/UpdatePredicate'
+import {CollisionType} from '../collision/CollisionType'
+import {CollisionPredicate} from '../collision/CollisionPredicate'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Layer} from '../image/Layer'
 
 export class Checkbox extends Entity {
   checked: boolean
 
-  constructor(atlas: Atlas, props?: Optional<Checkbox.Props, 'type'>) {
+  constructor(atlas: Atlas, props?: Checkbox.Props) {
     super({
       ...props,
       type: EntityType.UI_CHECKBOX,

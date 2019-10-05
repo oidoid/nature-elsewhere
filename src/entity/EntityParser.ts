@@ -1,4 +1,3 @@
-import * as UI_LEVEL_EDITOR_PANEL from '../entityTypes/levelEditorPanel/levelEditorPanel.json'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
 import {
@@ -14,7 +13,6 @@ import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {FollowCamParser} from '../entities/updaters/types/followCam/FollowCamParser'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
-import {JSONObject, JSONUtil} from '../utils/JSONUtil'
 import {LevelLinkParser} from '../entities/updaters/types/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
@@ -35,6 +33,7 @@ import {
   ImageStateMapConfig,
   ImageStateMapParser
 } from '../imageStateMachine/ImageStateMapParser'
+import {TextPropsParser} from '../entityTypes/text/TextParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
 
@@ -76,12 +75,9 @@ export namespace EntityParser {
       within an EntityTypeParser will create an import loop. Use the function
       passed as the RecursiveEntityParser parameter. */
   export function parse(config: EntityConfig, atlas: Atlas): Entity {
-    const type = parseType(config.type)
-
-    config = withDefaults(config, type)
-
-    const props = parseProps(config, type, atlas)
-    let entity = EntityFactory.produce(config, type, props, atlas, parse)
+    let props = parseProps(config, parseType(config.type), atlas)
+    props = parseTypeProps(config, props)
+    let entity = EntityFactory.produce(atlas, props)
     Object.assign(entity, specialization(config))
 
     for (const updater of entity.updaters) {
@@ -146,6 +142,18 @@ function parseProps(
   }
 }
 
+function parseTypeProps(
+  config: EntityConfig,
+  props: Entity.Props
+): Entity.Props {
+  switch (props.type) {
+    case EntityType.UI_TEXT:
+    case EntityType.UI_CHECKBOX:
+      return TextPropsParser.parse(props, config)
+  }
+  return props
+}
+
 function specialization(config: EntityConfig) {
   // Remove known parsed properties.
   const {
@@ -168,26 +176,9 @@ function specialization(config: EntityConfig) {
   return specialization
 }
 
-function withDefaults(config: EntityConfig, type: EntityType): EntityConfig {
-  return <EntityConfig>(
-    (<unknown>(
-      JSONUtil.merge(
-        <JSONObject>(<unknown>TypeConfigMap[type]),
-        <JSONObject>(<unknown>config)
-      )
-    ))
-  )
-}
-
 const UpdaterParserMap: Readonly<Partial<
   Record<UpdaterType, UpdaterParser>
 >> = Object.freeze({
   [UpdaterType.UI_LEVEL_LINK]: LevelLinkParser.parse,
   [UpdaterType.UI_FOLLOW_CAM]: FollowCamParser.parse
-})
-
-const TypeConfigMap: Readonly<Partial<
-  Record<EntityType, EntityConfig>
->> = Object.freeze({
-  [EntityType.UI_LEVEL_EDITOR_PANEL]: UI_LEVEL_EDITOR_PANEL
 })

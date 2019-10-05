@@ -5,19 +5,23 @@ import {NumberUtil} from '../../math/NumberUtil'
 import {Rect, ReadonlyRect} from '../../math/Rect'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
-import {EntityType} from '../../entity/EntityType'
+import {EntityType, UI_KEY_PREFIX} from '../../entity/EntityType'
 import {UpdatePredicate} from '../../entities/updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../../collision/CollisionType'
+import {EntityFactory} from '../../entity/EntityFactory'
+import {ObjectUtil} from '../../utils/ObjectUtil'
+import {Atlas} from 'aseprite-atlas'
 
 const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
 export class EntityPicker extends Entity {
   private _activeChildIndex: number
-  constructor(props?: Optional<Entity.Props, 'type'>) {
+  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
       type: EntityType.UI_ENTITY_PICKER,
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
+      children: makeChildren(atlas),
       ...props
     })
     this._activeChildIndex = 0
@@ -88,4 +92,21 @@ function getChildStates(child: Entity): readonly (Entity.State | string)[] {
   return child.machine
     .getStates()
     .filter(state => state !== Entity.State.HIDDEN)
+}
+
+const typeBlacklist: readonly string[] = Object.freeze([
+  EntityType.GROUP,
+  ...ObjectUtil.keys(EntityType)
+    .filter(type => type.startsWith(UI_KEY_PREFIX))
+    .map(key => EntityType[key])
+])
+
+export function makeChildren(atlas: Atlas): Entity[] {
+  const children = []
+  for (const type of Object.values(EntityType)) {
+    if (typeBlacklist.includes(type)) continue
+    const entity = EntityFactory.produce(atlas, {type})
+    children.push(entity)
+  }
+  return children
 }

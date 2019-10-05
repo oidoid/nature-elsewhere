@@ -7,12 +7,7 @@ import {Entity} from './Entity'
 import {EntityType} from './EntityType'
 import {LevelEditorPanel} from '../entityTypes/levelEditorPanel/LevelEditorPanel'
 import {Marquee} from '../entityTypes/Marquee'
-import {EntityConfig} from './EntityParser'
 import {Atlas} from 'aseprite-atlas'
-import {TextParser, TextConfig} from '../entityTypes/text/TextParser'
-import {CheckboxParser} from '../entityTypes/checkbox/CheckboxParser'
-import {EntityPickerParser} from '../entityTypes/entityPicker/EntityPickerParser'
-import {IEntityParser} from '../entities/RecursiveEntityParser'
 import {LevelEditorPanelBackground} from '../entityTypes/levelEditorPanel/LevelEditorPanelBackground'
 import {DateVersionHash} from '../entityTypes/DateVersionHash'
 import {Bee} from '../entityTypes/Bee'
@@ -37,16 +32,13 @@ import {Snake} from '../entityTypes/Snake'
 import {Toolbar} from '../entityTypes/Toolbar'
 import {RadioCheckboxGroup} from '../entityTypes/RadioCheckboxGroup'
 import {Group} from '../entityTypes/Group'
+import {EntityPicker} from '../entityTypes/entityPicker/EntityPicker'
+import {Checkbox} from '../entityTypes/Checkbox'
+import {Text} from '../entityTypes/text/Text'
 
 export namespace EntityFactory {
-  export function produce(
-    config: EntityConfig,
-    type: EntityType,
-    props: Entity.Props,
-    atlas: Atlas,
-    parser: IEntityParser
-  ): Entity {
-    switch (type) {
+  export function produce(atlas: Atlas, props: Entity.Props): Entity {
+    switch (props.type) {
       case EntityType.CHAR_BACKPACKER:
         return new Backpacker(atlas, props)
       case EntityType.CHAR_BEE:
@@ -94,7 +86,7 @@ export namespace EntityFactory {
       case EntityType.UI_BUTTON:
         return new Button(atlas, props)
       case EntityType.UI_CHECKBOX:
-        return CheckboxParser.parse(<TextConfig>config, props, atlas)
+        return new Checkbox(atlas, props)
       case EntityType.UI_CURSOR:
         return new Cursor(atlas, props)
       case EntityType.UI_DATE_VERSION_HASH:
@@ -102,9 +94,9 @@ export namespace EntityFactory {
       case EntityType.UI_DESTINATION_MARKER:
         return new DestinationMarker(atlas, props)
       case EntityType.UI_ENTITY_PICKER:
-        return EntityPickerParser.parse(props, atlas, parser)
+        return new EntityPicker(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_PANEL:
-        return new LevelEditorPanel(atlas, <LevelEditorPanel.Props>props)
+        return new LevelEditorPanel(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:
         return new LevelEditorPanelBackground(atlas, props)
       case EntityType.UI_MARQUEE:
@@ -112,11 +104,9 @@ export namespace EntityFactory {
       case EntityType.UI_RADIO_CHECKBOX_GROUP:
         return new RadioCheckboxGroup(props)
       case EntityType.UI_TEXT:
-        return TextParser.parse(<TextConfig>config, props, atlas)
+        return new Text(atlas, props)
       case EntityType.UI_TOOLBAR:
         return new Toolbar(atlas, props)
-      default:
-        return new Entity(props)
     }
   }
 }
