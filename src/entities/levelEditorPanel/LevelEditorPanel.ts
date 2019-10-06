@@ -274,11 +274,7 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       marquee.selection &&
       marquee.machine.state !== Entity.State.HIDDEN
     ) {
-      const selection = Entity.findAnyBySpawnID(
-        state.level.parentEntities,
-        marquee.selection
-      )
-      if (!selection) throw new Error('Missing selection.')
+      const {selection} = marquee
       const sandbox = Entity.findAnyByID(
         state.level.parentEntities,
         EntityID.UI_LEVEL_EDITOR_SANDBOX

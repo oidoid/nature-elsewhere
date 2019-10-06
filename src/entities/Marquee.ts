@@ -15,7 +15,8 @@ import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 
 export class Marquee extends Entity {
-  selection?: Symbol
+  selection?: Entity
+  private _dragOffset?: Readonly<XY>
 
   constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
     super({
@@ -52,6 +53,7 @@ export class Marquee extends Entity {
       ...props
     })
     this.selection = undefined
+    this._dragOffset = undefined
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -63,14 +65,11 @@ export class Marquee extends Entity {
     )
     if (!sandbox) return status
 
-    // const collision = Level.collisionWithCursor(state.level, marquee)
-
-    // const toggle = collision && Input.inactiveTriggered(state.inputs.pick)
-    // console.log(toggle)
-
     const {pick} = state.inputs
-
-    if (!pick || !Input.inactiveTriggered(state.inputs.pick)) return status
+    if (!pick || !pick.active) {
+      this._dragOffset = undefined
+      return status
+    }
 
     const panel = Entity.findAnyByID(
       state.level.parentEntities,
@@ -84,21 +83,36 @@ export class Marquee extends Entity {
       state.level.cursor,
       sandbox
     )
-    if (!panelCollision.length && cursorSandboxCollision.length) {
+    const triggered = Input.activeTriggered(state.inputs.pick)
+    if (!triggered && this.selection && this._dragOffset) {
+      const destination = Input.levelXY(
+        pick,
+        state.canvasWH,
+        state.level.cam.bounds
+      ).add(this._dragOffset)
+      status |= this.moveTo(destination.sub(new XY(1, 1)))
+      status |= this.selection.moveTo(destination)
+      sandbox.invalidateBounds()
+    } else if (
+      triggered &&
+      !panelCollision.length &&
+      cursorSandboxCollision.length
+    ) {
       status |= this.setState(MarqueeState.VISIBLE)
 
       const sandboxEntity = cursorSandboxCollision[0] // this won't work correctly for sub-entities
-      this.selection = sandboxEntity.spawnID
+      this.selection = sandboxEntity
 
-      const destination = new XY(
-        sandboxEntity.bounds.position.x - 1,
-        sandboxEntity.bounds.position.y - 1
-      )
+      const destination = sandboxEntity.bounds.position.sub(new XY(1, 1))
       status |= this.moveTo(destination)
       resize(this, destination, sandboxEntity)
-    } else if (!panelCollision.length) {
+      this._dragOffset = sandboxEntity.bounds.position.sub(
+        Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
+      )
+    } else if (triggered && !panelCollision.length) {
       status |= this.setState(Entity.State.HIDDEN)
       this.selection = undefined
+      this._dragOffset = undefined
     }
 
     return status
@@ -115,8 +129,6 @@ enum Images {
   BOTTOM = 2,
   LEFT = 3
 }
-
-export namespace MarqueeUpdater {}
 
 function resize(
   marquee: Marquee,
