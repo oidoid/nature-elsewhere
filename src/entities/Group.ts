@@ -2,20 +2,22 @@ import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 
-export class Group extends Entity {
-  constructor(props?: Optional<Entity.Props, 'type'>) {
+export class Group extends Entity<Group.State> {
+  constructor(props?: Entity.SubProps<Group.State>) {
     super({
       type: EntityType.GROUP,
-      state: GroupState.VISIBLE,
+      state: Group.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [GroupState.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Group.State.VISIBLE]: new ImageRect()
       },
       ...props
     })
   }
 }
 
-export enum GroupState {
-  VISIBLE = 'visible'
+export namespace Group {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

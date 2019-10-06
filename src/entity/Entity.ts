@@ -18,7 +18,7 @@ import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
-export class Entity {
+export class Entity<State extends string = string> {
   /** A globally unique identifier for quick equality checks. It should be used
       for no other purpose. The value is transient and should not be preserved
       on entity serialization. */
@@ -41,7 +41,7 @@ export class Entity {
 
   private readonly _velocityFraction: FloatXY = {x: 0, y: 0}
 
-  private readonly _machine: ImageStateMachine
+  private readonly _machine: ImageStateMachine<State | Entity.BaseState>
 
   private readonly _updatePredicate: UpdatePredicate
 
@@ -63,7 +63,7 @@ export class Entity {
       recursive. */
   private readonly _children: Entity[]
 
-  constructor(props: Entity.Props) {
+  constructor(props: Entity.Props<State>) {
     this._id = props.id || EntityID.ANONYMOUS
     this._type = props.type
     this._velocity = props.velocity || new XY(0, 0)
@@ -107,7 +107,7 @@ export class Entity {
     return this._velocity
   }
 
-  get machine(): ImageStateMachine {
+  get machine(): ImageStateMachine<State | Entity.BaseState> {
     return this._machine
   }
 
@@ -234,7 +234,7 @@ export class Entity {
     )
   }
 
-  setState(state: Entity.State | string): UpdateStatus {
+  setState(state: State | Entity.BaseState): UpdateStatus {
     const status = this.machine.setState(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
@@ -372,7 +372,11 @@ export class Entity {
 }
 
 export namespace Entity {
-  export interface Props {
+  export enum BaseState {
+    HIDDEN = 'hidden'
+  }
+
+  export interface Props<State extends string = string> {
     /** Defaults to EntityID.UNDEFINED. */
     readonly id?: EntityID
     readonly type: EntityType
@@ -382,8 +386,8 @@ export namespace Entity {
     readonly imageID?: AtlasID
     readonly velocity?: XY
     /** Defaults to {}. */
-    readonly state?: Entity.State | string
-    readonly map?: Record<Entity.State | string, ImageRect>
+    readonly state: State | BaseState
+    readonly map: Record<State | BaseState, ImageRect>
     /** Defaults to BehaviorPredicate.NEVER. */
     readonly updatePredicate?: UpdatePredicate
     /** Defaults to []. */
@@ -396,8 +400,16 @@ export namespace Entity {
     /** Defaults to []. */
     readonly children?: Entity[]
   }
-
-  export enum State {
-    HIDDEN = 'hidden'
-  }
+  export interface SubProps<State extends string = string>
+    extends Optional<
+      Entity.Props<State>,
+      | 'type'
+      | 'state'
+      | 'map'
+      | 'updatePredicate'
+      | 'updaters'
+      | 'collisionType'
+      | 'collisionPredicate'
+      | 'collisionBodies'
+    > {}
 }

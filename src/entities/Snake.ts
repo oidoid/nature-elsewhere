@@ -10,14 +10,14 @@ import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 
-export class Snake extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Snake extends Entity<Snake.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Snake.State>) {
     super({
       type: EntityType.CHAR_SNAKE,
-      state: SnakeState.IDLE,
+      state: Snake.State.IDLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [SnakeState.IDLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Snake.State.IDLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.CHAR_SNAKE}),
             new Image(atlas, {
@@ -39,6 +39,8 @@ export class Snake extends Entity {
   }
 }
 
-export enum SnakeState {
-  IDLE = 'idle'
+export namespace Snake {
+  export enum State {
+    IDLE = 'idle'
+  }
 }

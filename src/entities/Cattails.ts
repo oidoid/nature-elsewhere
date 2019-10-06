@@ -6,14 +6,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 
-export class Cattails extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Cattails extends Entity<Cattails.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Cattails.State>) {
     super({
       type: EntityType.SCENERY_CATTAILS,
-      state: CattailsState.VISIBLE,
+      state: Cattails.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [CattailsState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Cattails.State.VISIBLE]: new ImageRect({
           images: [new Image(atlas, {id: AtlasID.SCENERY_CATTAILS})]
         })
       },
@@ -23,6 +23,8 @@ export class Cattails extends Entity {
   }
 }
 
-export enum CattailsState {
-  VISIBLE = 'visible'
+export namespace Cattails {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

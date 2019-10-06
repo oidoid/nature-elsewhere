@@ -37,7 +37,7 @@ import {Toolbar} from '../entities/Toolbar'
 import {Tree} from '../entities/Tree'
 
 export namespace EntityFactory {
-  export function produce(atlas: Atlas, props: Entity.Props): Entity {
+  export function produce(atlas: Atlas, props: Entity.SubProps<any>): Entity {
     switch (props.type) {
       case EntityType.CHAR_BACKPACKER:
         return new Backpacker(atlas, props)
@@ -108,5 +108,6 @@ export namespace EntityFactory {
       case EntityType.UI_TOOLBAR:
         return new Toolbar(atlas, props)
     }
+    throw new Error(`Unknown type "${props.type}."`)
   }
 }

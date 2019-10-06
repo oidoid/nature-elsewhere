@@ -17,18 +17,18 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Layer} from '../image/Layer'
 
-export class Checkbox extends Entity {
+export class Checkbox extends Entity<Checkbox.State> {
   checked: boolean
 
   constructor(atlas: Atlas, props?: Checkbox.Props) {
     super({
       ...props,
       type: EntityType.UI_CHECKBOX,
-      state: CheckboxState.UNCHECKED,
+      state: Checkbox.State.UNCHECKED,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [CheckboxState.UNCHECKED]: new ImageRect(),
-        [CheckboxState.CHECKED]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Checkbox.State.UNCHECKED]: new ImageRect(),
+        [Checkbox.State.CHECKED]: new ImageRect()
       },
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
@@ -61,7 +61,7 @@ export class Checkbox extends Entity {
     return (
       status |
       this.setState(
-        this.checked ? CheckboxState.CHECKED : CheckboxState.UNCHECKED
+        this.checked ? Checkbox.State.CHECKED : Checkbox.State.UNCHECKED
       )
     )
   }
@@ -85,7 +85,7 @@ export class Checkbox extends Entity {
 
   private setBackground(layerOffset: number, atlas: Atlas): void {
     const text = this.children[0]
-    for (const state of [CheckboxState.UNCHECKED, CheckboxState.CHECKED]) {
+    for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
       const size = new WH(text.bounds.size.w, text.bounds.size.h)
       const images = newBackgroundImages(state, layerOffset, atlas, size)
       this.machine.replaceImages(state, ...images)
@@ -97,23 +97,23 @@ export class Checkbox extends Entity {
 }
 
 export namespace Checkbox {
+  export enum State {
+    UNCHECKED = 'unchecked',
+    CHECKED = 'checked'
+  }
+
   export interface Props extends Text.Props {
     readonly checked?: boolean
   }
 }
 
-export enum CheckboxState {
-  UNCHECKED = 'unchecked',
-  CHECKED = 'checked'
-}
-
-const backgroundID: Readonly<Record<CheckboxState, AtlasID>> = Object.freeze({
-  [CheckboxState.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,
-  [CheckboxState.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
+const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({
+  [Checkbox.State.UNCHECKED]: AtlasID.PALETTE_PALE_GREEN,
+  [Checkbox.State.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
 })
 
 function newBackgroundImages(
-  state: CheckboxState,
+  state: Checkbox.State,
   layerOffset: number,
   atlas: Atlas,
   {w, h}: WH

@@ -8,14 +8,14 @@ import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {Layer} from '../image/Layer'
 
-export class Path extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Path extends Entity<Path.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Path.State>) {
     super({
       type: EntityType.SCENERY_PATH,
-      state: PathState.STRAIGHT_NE,
+      state: Path.State.STRAIGHT_NE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [PathState.STRAIGHT_NE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Path.State.STRAIGHT_NE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_PATH_NE,
@@ -23,7 +23,7 @@ export class Path extends Entity {
             })
           ]
         }),
-        [PathState.STRAIGHT_NW]: new ImageRect({
+        [Path.State.STRAIGHT_NW]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_PATH_NE,
@@ -32,7 +32,7 @@ export class Path extends Entity {
             })
           ]
         }),
-        [PathState.CORNER_E]: new ImageRect({
+        [Path.State.CORNER_E]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_PATH_CORNER_E,
@@ -40,7 +40,7 @@ export class Path extends Entity {
             })
           ]
         }),
-        [PathState.CORNER_W]: new ImageRect({
+        [Path.State.CORNER_W]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_PATH_CORNER_E,
@@ -49,7 +49,7 @@ export class Path extends Entity {
             })
           ]
         }),
-        [PathState.CORNER_N]: new ImageRect({
+        [Path.State.CORNER_N]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_PATH_CORNER_N,
@@ -57,7 +57,7 @@ export class Path extends Entity {
             })
           ]
         }),
-        [PathState.CORNER_S]: new ImageRect({
+        [Path.State.CORNER_S]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_PATH_CORNER_N,
@@ -73,11 +73,13 @@ export class Path extends Entity {
   }
 }
 
-export enum PathState {
-  STRAIGHT_NE = '/',
-  STRAIGHT_NW = '\\',
-  CORNER_N = '^',
-  CORNER_E = '>',
-  CORNER_S = 'v',
-  CORNER_W = '<'
+export namespace Path {
+  export enum State {
+    STRAIGHT_NE = '/',
+    STRAIGHT_NW = '\\',
+    CORNER_N = '^',
+    CORNER_E = '>',
+    CORNER_S = 'v',
+    CORNER_W = '<'
+  }
 }

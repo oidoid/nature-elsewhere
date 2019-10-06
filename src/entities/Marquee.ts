@@ -14,17 +14,17 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 
-export class Marquee extends Entity {
+export class Marquee extends Entity<Marquee.State> {
   selection?: Entity
   private _dragOffset?: Readonly<XY>
 
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Marquee.State>) {
     super({
       type: EntityType.UI_MARQUEE,
-      state: Entity.State.HIDDEN,
+      state: Entity.BaseState.HIDDEN,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [MarqueeState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Marquee.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
@@ -96,7 +96,7 @@ export class Marquee extends Entity {
       !panelCollision.length &&
       cursorSandboxCollision.length
     ) {
-      status |= this.setState(MarqueeState.VISIBLE)
+      status |= this.setState(Marquee.State.VISIBLE)
 
       const sandboxEntity = cursorSandboxCollision[0] // this won't work correctly for sub-entities
       this.selection = sandboxEntity
@@ -108,7 +108,7 @@ export class Marquee extends Entity {
         state.level.cursor.bounds.position
       )
     } else if (triggered && !panelCollision.length) {
-      status |= this.setState(Entity.State.HIDDEN)
+      status |= this.setState(Entity.BaseState.HIDDEN)
       this.selection = undefined
       this._dragOffset = undefined
     }
@@ -117,8 +117,10 @@ export class Marquee extends Entity {
   }
 }
 
-export enum MarqueeState {
-  VISIBLE = 'visible'
+export namespace Marquee {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }
 
 enum Images {

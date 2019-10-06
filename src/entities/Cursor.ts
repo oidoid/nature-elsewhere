@@ -12,14 +12,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 
-export class Cursor extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Cursor extends Entity<Cursor.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Cursor.State>) {
     super({
       type: EntityType.UI_CURSOR,
-      state: Entity.State.HIDDEN,
+      state: Entity.BaseState.HIDDEN,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [CursorState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Cursor.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_BLACK,
@@ -39,11 +39,11 @@ export class Cursor extends Entity {
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
-    let nextState: CursorState | Entity.State = Entity.State.HIDDEN
+    let nextState: Entity.BaseState | Cursor.State = Entity.BaseState.HIDDEN
     const {point, pick} = state.inputs
     if (pick && pick.active) {
       // it would be good to throttle this so precise picking is easier
-      nextState = CursorState.VISIBLE
+      nextState = Cursor.State.VISIBLE
       const position = Input.levelXY(
         pick,
         state.canvasSize,
@@ -51,7 +51,7 @@ export class Cursor extends Entity {
       )
       status |= this.moveTo(position)
     } else if (point && point.active) {
-      nextState = CursorState.VISIBLE
+      nextState = Cursor.State.VISIBLE
       const position = Input.levelXY(
         point,
         state.canvasSize,
@@ -64,6 +64,9 @@ export class Cursor extends Entity {
     return status
   }
 }
-export enum CursorState {
-  VISIBLE = 'visible'
+
+export namespace Cursor {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

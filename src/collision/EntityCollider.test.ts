@@ -6,7 +6,7 @@ import {EntityType} from '../entity/EntityType'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {CollisionPredicate} from './CollisionPredicate'
-import {Plane, PlaneState} from '../entities/Plane'
+import {Plane} from '../entities/Plane'
 import {Rect} from '../math/Rect'
 
 const atlas: Atlas = Object.freeze(Parser.parse(atlasJSON))
@@ -44,7 +44,7 @@ describe('collidesRect()', () => {
     test('IMAGES but no image intersection.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: PlaneState.RED,
+        state: Plane.State.RED,
         collisionPredicate: CollisionPredicate.IMAGES,
         position: new XY(10, 10)
       })
@@ -53,12 +53,12 @@ describe('collidesRect()', () => {
     test('CHILDREN short-circuited by failed entity bounds test.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: PlaneState.RED,
+        state: Plane.State.RED,
         collisionPredicate: CollisionPredicate.CHILDREN,
         position: new XY(10, 10),
         children: [
           new Plane(atlas, {
-            state: PlaneState.BLUE,
+            state: Plane.State.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]
@@ -71,11 +71,11 @@ describe('collidesRect()', () => {
     test('BOUNDS.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: PlaneState.RED,
+        state: Plane.State.RED,
         collisionPredicate: CollisionPredicate.BOUNDS,
         children: [
           new Plane(atlas, {
-            state: PlaneState.BLUE,
+            state: Plane.State.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]
@@ -85,12 +85,12 @@ describe('collidesRect()', () => {
     test('BODIES.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: PlaneState.RED,
+        state: Plane.State.RED,
         collisionPredicate: CollisionPredicate.BODIES,
         collisionBodies: [Rect.make(0, 0, 9, 9)],
         children: [
           new Plane(atlas, {
-            state: PlaneState.BLUE,
+            state: Plane.State.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]
@@ -100,11 +100,11 @@ describe('collidesRect()', () => {
     test('IMAGES.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: PlaneState.RED,
+        state: Plane.State.RED,
         collisionPredicate: CollisionPredicate.IMAGES,
         children: [
           new Plane(atlas, {
-            state: PlaneState.BLUE,
+            state: Plane.State.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]

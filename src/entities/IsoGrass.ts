@@ -6,14 +6,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 
-export class IsoGrass extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class IsoGrass extends Entity<IsoGrass.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<IsoGrass.State>) {
     super({
       type: EntityType.SCENERY_ISO_GRASS,
-      state: IsoGrassState.NE,
+      state: IsoGrass.State.NE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [IsoGrassState.NE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [IsoGrass.State.NE]: new ImageRect({
           images: [new Image(atlas, {id: AtlasID.SCENERY_ISO_GRASS})]
         })
       },
@@ -23,6 +23,8 @@ export class IsoGrass extends Entity {
   }
 }
 
-export enum IsoGrassState {
-  NE = 'ne'
+export namespace IsoGrass {
+  export enum State {
+    NE = 'ne'
+  }
 }

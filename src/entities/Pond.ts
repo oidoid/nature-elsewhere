@@ -8,14 +8,14 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 
-export class Pond extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Pond extends Entity<Pond.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Pond.State>) {
     super({
       type: EntityType.SCENERY_POND,
-      state: PondState.VISIBLE,
+      state: Pond.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [PondState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Pond.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_POND,
@@ -65,6 +65,8 @@ export class Pond extends Entity {
   }
 }
 
-export enum PondState {
-  VISIBLE = 'visible'
+export namespace Pond {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

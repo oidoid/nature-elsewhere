@@ -11,20 +11,20 @@ import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 
-export class Bee extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Bee extends Entity<Bee.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Bee.State>) {
     super({
       type: EntityType.CHAR_BEE,
-      state: BeeState.IDLE,
+      state: Bee.State.IDLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [BeeState.IDLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Bee.State.IDLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BEE}),
             new Image(atlas, {id: AtlasID.CHAR_BEE_SHADOW, layer: Layer.SHADOW})
           ]
         }),
-        [BeeState.DEAD]: new ImageRect({
+        [Bee.State.DEAD]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BEE_DEAD}),
             new Image(atlas, {id: AtlasID.CHAR_BEE_BLOOD, layer: Layer.BLOOD})
@@ -41,7 +41,9 @@ export class Bee extends Entity {
   }
 }
 
-export enum BeeState {
-  IDLE = 'idle',
-  DEAD = 'dead'
+export namespace Bee {
+  export enum State {
+    IDLE = 'idle',
+    DEAD = 'dead'
+  }
 }

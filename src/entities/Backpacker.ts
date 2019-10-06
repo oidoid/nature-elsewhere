@@ -14,13 +14,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {Layer} from '../image/Layer'
 
-export class Backpacker extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Backpacker extends Entity<Backpacker.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Backpacker.State>) {
     super({
       type: EntityType.CHAR_BACKPACKER,
-      state: BackpackerState.IDLE_DOWN,
+      state: Backpacker.State.IDLE_DOWN,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Backpacker.State.IDLE_UP]: new ImageRect({
           origin: new XY(-2, -13),
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_UP}),
@@ -30,17 +31,7 @@ export class Backpacker extends Entity {
             })
           ]
         }),
-        [BackpackerState.IDLE_UP]: new ImageRect({
-          origin: new XY(-2, -13),
-          images: [
-            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_UP}),
-            new Image(atlas, {
-              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-              layer: Layer.SHADOW
-            })
-          ]
-        }),
-        [BackpackerState.IDLE_RIGHT]: new ImageRect({
+        [Backpacker.State.IDLE_RIGHT]: new ImageRect({
           origin: new XY(-2, -13),
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_RIGHT}),
@@ -50,7 +41,7 @@ export class Backpacker extends Entity {
             })
           ]
         }),
-        [BackpackerState.IDLE_DOWN]: new ImageRect({
+        [Backpacker.State.IDLE_DOWN]: new ImageRect({
           origin: new XY(-2, -13),
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_DOWN}),
@@ -60,7 +51,7 @@ export class Backpacker extends Entity {
             })
           ]
         }),
-        [BackpackerState.WALK_UP]: new ImageRect({
+        [Backpacker.State.WALK_UP]: new ImageRect({
           origin: new XY(-2, -13),
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_UP}),
@@ -70,7 +61,7 @@ export class Backpacker extends Entity {
             })
           ]
         }),
-        [BackpackerState.WALK_RIGHT]: new ImageRect({
+        [Backpacker.State.WALK_RIGHT]: new ImageRect({
           origin: new XY(-2, -13),
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_RIGHT}),
@@ -80,7 +71,7 @@ export class Backpacker extends Entity {
             })
           ]
         }),
-        [BackpackerState.WALK_DOWN]: new ImageRect({
+        [Backpacker.State.WALK_DOWN]: new ImageRect({
           origin: new XY(-2, -13),
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_DOWN}),
@@ -117,25 +108,23 @@ export class Backpacker extends Entity {
     this.velocity.y = (up ? -1 : down ? 1 : 0) * 80
 
     const idle = !this.velocity.x && !this.velocity.y
+    const horizontal = !!Math.abs(destination.x - this.bounds.position.x)
 
     let nextState = this.machine.state
     if (idle) {
       nextState = computeIdleState(this)
       if (state.level.destination)
-        state.level.destination.setState(Entity.State.HIDDEN)
+        state.level.destination.setState(Entity.BaseState.HIDDEN)
     } else {
-      const horizontalDistance = Math.abs(
-        destination.x - this.bounds.position.x
-      )
-      if (up) nextState = BackpackerState.WALK_UP
-      if (down) nextState = BackpackerState.WALK_DOWN
-      if ((left || right) && ((!up && !down) || horizontalDistance > 5))
-        nextState = BackpackerState.WALK_RIGHT
+      if (up) nextState = Backpacker.State.WALK_UP
+      if (down) nextState = Backpacker.State.WALK_DOWN
+      if ((left || right) && ((!up && !down) || horizontal))
+        nextState = Backpacker.State.WALK_RIGHT
     }
 
     const scale = this.getScale().copy()
     if (up || down || right) scale.x = Math.abs(scale.x)
-    if (left) scale.x = -1 * Math.abs(scale.x)
+    if (left && horizontal) scale.x = -1 * Math.abs(scale.x)
 
     this.setScale(scale)
     this.setState(nextState)
@@ -143,15 +132,15 @@ export class Backpacker extends Entity {
     return status
   }
 }
-export enum BackpackerState {
-  IDLE_UP = 'idleUp',
-  IDLE_RIGHT = 'idleRight',
-  IDLE_DOWN = 'idleDown',
-  WALK_UP = 'walkUp',
-  WALK_RIGHT = 'walkRight',
-  WALK_DOWN = 'walkDown'
-}
 export namespace Backpacker {
+  export enum State {
+    IDLE_UP = 'idleUp',
+    IDLE_RIGHT = 'idleRight',
+    IDLE_DOWN = 'idleDown',
+    WALK_UP = 'walkUp',
+    WALK_RIGHT = 'walkRight',
+    WALK_DOWN = 'walkDown'
+  }
   export function collides(
     backpacker: Entity,
     entity: Entity,
@@ -161,21 +150,21 @@ export namespace Backpacker {
       const idle = computeIdleState(backpacker)
       backpacker.setState(idle)
       if (state.level.destination)
-        state.level.destination.setState(Entity.State.HIDDEN)
+        state.level.destination.setState(Entity.BaseState.HIDDEN)
     }
   }
 }
 
-function computeIdleState(backpacker: Entity): Entity.State | BackpackerState {
+function computeIdleState(backpacker: Entity): Backpacker.State {
   switch (backpacker.machine.state) {
-    case BackpackerState.WALK_UP:
-    case BackpackerState.IDLE_UP:
-      return BackpackerState.IDLE_UP
-    case BackpackerState.IDLE_RIGHT:
-    case BackpackerState.WALK_RIGHT:
-      return BackpackerState.IDLE_RIGHT
+    case Backpacker.State.WALK_UP:
+    case Backpacker.State.IDLE_UP:
+      return Backpacker.State.IDLE_UP
+    case Backpacker.State.IDLE_RIGHT:
+    case Backpacker.State.WALK_RIGHT:
+      return Backpacker.State.IDLE_RIGHT
   }
-  return BackpackerState.IDLE_DOWN
+  return Backpacker.State.IDLE_DOWN
 }
 
 function computeDestination(
@@ -184,7 +173,7 @@ function computeDestination(
 ): Maybe<XY> {
   if (
     !state.level.destination ||
-    state.level.destination.machine.state === Entity.State.HIDDEN
+    state.level.destination.machine.state === Entity.BaseState.HIDDEN
   )
     return
   const {x, y} = state.level.destination.bounds.position.add(

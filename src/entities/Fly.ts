@@ -10,14 +10,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
 
-export class Fly extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Fly extends Entity<Fly.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Fly.State>) {
     super({
       type: EntityType.CHAR_FLY,
-      state: FlyState.IDLE,
+      state: Fly.State.IDLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [FlyState.IDLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Fly.State.IDLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.PALETTE_GREY}),
             new Image(atlas, {
@@ -27,7 +27,7 @@ export class Fly extends Entity {
             })
           ]
         }),
-        [FlyState.DEAD]: new ImageRect({
+        [Fly.State.DEAD]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.PALETTE_RED, layer: Layer.BLOOD})
           ]
@@ -41,7 +41,9 @@ export class Fly extends Entity {
   }
 }
 
-export enum FlyState {
-  IDLE = 'idle',
-  DEAD = 'dead'
+export namespace Fly {
+  export enum State {
+    IDLE = 'idle',
+    DEAD = 'dead'
+  }
 }

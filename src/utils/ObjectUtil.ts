@@ -2,23 +2,21 @@ import {Assert} from './Assert'
 
 export namespace ObjectUtil {
   // https://github.com/Microsoft/TypeScript/pull/12253
-  export function keys<T>(obj: T & object): readonly (keyof T)[] {
+  export function keys<T>(obj: T & object): (keyof T)[] {
     const keys = []
     for (const key in obj) if (obj.hasOwnProperty(key)) keys.push(key)
     return keys
   }
 
   // https://github.com/Microsoft/TypeScript/pull/12253
-  export function values<T>(obj: T & object): readonly ValueOf<T>[] {
+  export function values<T>(obj: T & object): ValueOf<T>[] {
     const vals = []
     for (const key in obj) if (obj.hasOwnProperty(key)) vals.push(obj[key])
     return vals
   }
 
   // https://github.com/Microsoft/TypeScript/pull/12253
-  export function entries<T>(
-    obj: T & object
-  ): readonly [keyof T, ValueOf<T>][] {
+  export function entries<T>(obj: T & object): [keyof T, ValueOf<T>][] {
     return keys(obj).map(key => [key, obj[key]])
   }
 

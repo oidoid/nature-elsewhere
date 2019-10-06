@@ -9,14 +9,14 @@ import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {Rect} from '../math/Rect'
 
-export class Bush extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Bush extends Entity<Bush.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Bush.State>) {
     super({
       type: EntityType.SCENERY_BUSH,
-      state: BushState.VISIBLE,
+      state: Bush.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [BushState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Bush.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_BUSH}),
             new Image(atlas, {
@@ -34,6 +34,8 @@ export class Bush extends Entity {
   }
 }
 
-export enum BushState {
-  VISIBLE = 'visible'
+export namespace Bush {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

@@ -8,14 +8,14 @@ import {CollisionType} from '../collision/CollisionType'
 import {Layer} from '../image/Layer'
 import {XY} from '../math/XY'
 
-export class Clover extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Clover extends Entity<Clover.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Clover.State>) {
     super({
       type: EntityType.SCENERY_CLOVER,
-      state: CloverState.SMALL,
+      state: Clover.State.SMALL,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [CloverState.SMALL]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Clover.State.SMALL]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOVER_0x0,
@@ -33,7 +33,7 @@ export class Clover extends Entity {
             })
           ]
         }),
-        [CloverState.MEDIUM]: new ImageRect({
+        [Clover.State.MEDIUM]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOVER_1x0,
@@ -58,7 +58,9 @@ export class Clover extends Entity {
   }
 }
 
-export enum CloverState {
-  SMALL = 'small',
-  MEDIUM = 'medium'
+export namespace Clover {
+  export enum State {
+    SMALL = 'small',
+    MEDIUM = 'medium'
+  }
 }

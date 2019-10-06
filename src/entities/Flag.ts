@@ -9,14 +9,14 @@ import {Atlas} from 'aseprite-atlas'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../collision/CollisionType'
 
-export class Flag extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Flag extends Entity<Flag.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Flag.State>) {
     super({
       type: EntityType.SCENERY_FLAG,
-      state: FlagState.VISIBLE,
+      state: Flag.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [FlagState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Flag.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_FLAG}),
             new Image(atlas, {
@@ -34,6 +34,8 @@ export class Flag extends Entity {
   }
 }
 
-export enum FlagState {
-  VISIBLE = 'visible'
+export namespace Flag {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

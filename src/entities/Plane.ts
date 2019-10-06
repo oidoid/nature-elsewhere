@@ -9,14 +9,14 @@ import {CollisionType} from '../collision/CollisionType'
 import {Limits} from '../math/Limits'
 import {WH} from '../math/WH'
 
-export class Plane extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Plane extends Entity<Plane.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Plane.State>) {
     super({
       type: EntityType.SCENERY_SUBSHRUB,
-      state: PlaneState.TRANSPARENT,
+      state: Entity.BaseState.HIDDEN,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [PlaneState.GRID]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Plane.State.GRID]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.UI_GRID,
@@ -25,7 +25,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.TRANSPARENT]: new ImageRect({
+        [Plane.State.TRANSPARENT]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_TRANSPARENT,
@@ -34,7 +34,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.WHITE]: new ImageRect({
+        [Plane.State.WHITE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_WHITE,
@@ -43,7 +43,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.PALE_GREEN]: new ImageRect({
+        [Plane.State.PALE_GREEN]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_PALE_GREEN,
@@ -52,7 +52,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.LIGHT_GREEN]: new ImageRect({
+        [Plane.State.LIGHT_GREEN]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_LIGHT_GREEN,
@@ -61,7 +61,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.GREEN]: new ImageRect({
+        [Plane.State.GREEN]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_GREEN,
@@ -70,7 +70,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.DARK_GREEN]: new ImageRect({
+        [Plane.State.DARK_GREEN]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_DARK_GREEN,
@@ -79,7 +79,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.BLACK]: new ImageRect({
+        [Plane.State.BLACK]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_BLACK,
@@ -88,7 +88,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.GREY]: new ImageRect({
+        [Plane.State.GREY]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_GREY,
@@ -97,7 +97,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.BLUE]: new ImageRect({
+        [Plane.State.BLUE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_BLUE,
@@ -106,7 +106,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.LIGHT_BLUE]: new ImageRect({
+        [Plane.State.LIGHT_BLUE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_LIGHT_BLUE,
@@ -115,7 +115,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.RED]: new ImageRect({
+        [Plane.State.RED]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_RED,
@@ -124,7 +124,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.ORANGE]: new ImageRect({
+        [Plane.State.ORANGE]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_ORANGE,
@@ -133,7 +133,7 @@ export class Plane extends Entity {
             })
           ]
         }),
-        [PlaneState.LIGHT_GREY]: new ImageRect({
+        [Plane.State.LIGHT_GREY]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.PALETTE_LIGHT_GREY,
@@ -149,20 +149,22 @@ export class Plane extends Entity {
   }
 }
 
-// [palette]
-export enum PlaneState {
-  GRID = 'grid',
-  TRANSPARENT = 'transparent',
-  WHITE = 'white',
-  PALE_GREEN = 'paleGreen',
-  LIGHT_GREEN = 'lightGreen',
-  GREEN = 'green',
-  DARK_GREEN = 'darkGreen',
-  BLACK = 'black',
-  GREY = 'grey',
-  BLUE = 'blue',
-  LIGHT_BLUE = 'lightBlue',
-  RED = 'red',
-  ORANGE = 'orange',
-  LIGHT_GREY = 'lightGrey'
+export namespace Plane {
+  // [palette]
+  export enum State {
+    GRID = 'grid',
+    TRANSPARENT = 'transparent',
+    WHITE = 'white',
+    PALE_GREEN = 'paleGreen',
+    LIGHT_GREEN = 'lightGreen',
+    GREEN = 'green',
+    DARK_GREEN = 'darkGreen',
+    BLACK = 'black',
+    GREY = 'grey',
+    BLUE = 'blue',
+    LIGHT_BLUE = 'lightBlue',
+    RED = 'red',
+    ORANGE = 'orange',
+    LIGHT_GREY = 'lightGrey'
+  }
 }

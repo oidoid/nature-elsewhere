@@ -7,17 +7,17 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 
-export class Grass extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Grass extends Entity<Grass.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Grass.State>) {
     super({
       type: EntityType.SCENERY_GRASS,
-      state: GrassState.SMALL,
+      state: Grass.State.SMALL,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [GrassState.SMALL]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Grass.State.SMALL]: new ImageRect({
           images: [new Image(atlas, {id: AtlasID.SCENERY_GRASS_0})]
         }),
-        [GrassState.MEDIUM]: new ImageRect({
+        [Grass.State.MEDIUM]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_GRASS_1}),
             new Image(atlas, {
@@ -26,7 +26,7 @@ export class Grass extends Entity {
             })
           ]
         }),
-        [GrassState.LARGE]: new ImageRect({
+        [Grass.State.LARGE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_GRASS_2}),
             new Image(atlas, {
@@ -46,8 +46,10 @@ export class Grass extends Entity {
   }
 }
 
-export enum GrassState {
-  SMALL = 'small',
-  MEDIUM = 'medium',
-  LARGE = 'large'
+export namespace Grass {
+  export enum State {
+    SMALL = 'small',
+    MEDIUM = 'medium',
+    LARGE = 'large'
+  }
 }

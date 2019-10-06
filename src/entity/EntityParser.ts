@@ -63,7 +63,7 @@ export interface EntityConfig {
 
 export type EntityIDConfig = Maybe<EntityID | string>
 export type EntityTypeConfig = EntityType | string
-export type EntityStateConfig = Maybe<Entity.State | string>
+export type EntityStateConfig = Maybe<Entity.BaseState | string>
 
 export namespace EntityParser {
   export function parseAll(config: EntityArrayConfig, atlas: Atlas): Entity[] {
@@ -90,8 +90,10 @@ export namespace EntityParser {
     throw new Error()
   }
 
-  export function parseState(config: EntityStateConfig): Entity.State | string {
-    return config || Entity.State.HIDDEN
+  export function parseState(
+    config: EntityStateConfig
+  ): Entity.BaseState | string {
+    return config || Entity.BaseState.HIDDEN
   }
 }
 
@@ -99,7 +101,9 @@ function parseProps(
   config: EntityConfig,
   type: EntityType,
   atlas: Atlas
-): Entity.Props {
+):
+  | Entity.Props<Entity.BaseState | string>
+  | Entity.SubProps<Entity.BaseState | string> {
   return {
     ...(config.id && {id: EntityParser.parseID(config.id)}),
     type,
@@ -134,14 +138,20 @@ function parseProps(
 
 function parseTypeProps(
   config: EntityConfig,
-  props: Entity.Props
-): Entity.Props {
+  props:
+    | Entity.Props<Entity.BaseState | string>
+    | Entity.SubProps<Entity.BaseState | string>
+):
+  | Entity.Props<Entity.BaseState | string>
+  | Entity.SubProps<Entity.BaseState | string> {
+  let typeProps: Maybe<| Entity.Props<Entity.BaseState | string>
+  | Entity.SubProps<Entity.BaseState | string>> = undefined
   switch (props.type) {
     case EntityType.UI_TEXT:
     case EntityType.UI_CHECKBOX:
-      return TextPropsParser.parse(props, config)
+      typeProps = TextPropsParser.parse(config)
   }
-  return props
+  return {...props, ...typeProps}
 }
 
 function parseUpdaterProps(config: EntityConfig, entity: Entity): void {

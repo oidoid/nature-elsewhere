@@ -112,9 +112,8 @@ export namespace Level {
         state.level.parentEntities,
         EntityID.UI_LEVEL_EDITOR_PANEL
       )
-      const marquee: Maybe<Marquee> = Entity.findAnyByID(
-        state.level.parentEntities,
-        EntityID.UI_MARQUEE
+      const marquee = <Maybe<Marquee>>(
+        Entity.findAnyByID(state.level.parentEntities, EntityID.UI_MARQUEE)
       )
       const panelCollision =
         panel && EntityCollider.collidesEntity(state.level.cursor, panel).length //collisionWithCursor(state.level, panel)

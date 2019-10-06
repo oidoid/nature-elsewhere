@@ -11,14 +11,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
 
-export class Bunny extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Bunny extends Entity<Bunny.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Bunny.State>) {
     super({
       type: EntityType.CHAR_BUNNY,
-      state: BunnyState.IDLE,
+      state: Bunny.State.IDLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [BunnyState.IDLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Bunny.State.IDLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BUNNY}),
             new Image(atlas, {
@@ -28,7 +28,7 @@ export class Bunny extends Entity {
             })
           ]
         }),
-        [BunnyState.DEAD]: new ImageRect({
+        [Bunny.State.DEAD]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.CHAR_BUNNY_DEAD}),
             new Image(atlas, {id: AtlasID.CHAR_BUNNY_BLOOD, layer: Layer.BLOOD})
@@ -44,7 +44,9 @@ export class Bunny extends Entity {
   }
 }
 
-export enum BunnyState {
-  IDLE = 'idle',
-  DEAD = 'dead'
+export namespace Bunny {
+  export enum State {
+    IDLE = 'idle',
+    DEAD = 'dead'
+  }
 }

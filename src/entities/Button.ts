@@ -13,17 +13,17 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 
-export class Button extends Entity {
+export class Button extends Entity<Button.State> {
   clicked: boolean
   longClicked: boolean
   private _engaged: boolean
   constructor(atlas: Atlas, props?: Button.Props) {
     super({
       type: EntityType.UI_BUTTON,
-      state: ButtonState.UNCLICKED,
+      state: Button.State.UNCLICKED,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [ButtonState.UNCLICKED]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Button.State.UNCLICKED]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.UI_BUTTON_BASE,
@@ -31,7 +31,7 @@ export class Button extends Entity {
             })
           ]
         }),
-        [ButtonState.CLICKED]: new ImageRect({
+        [Button.State.CLICKED]: new ImageRect({
           images: [
             new Image(atlas, {
               id: AtlasID.UI_BUTTON_BASE,
@@ -66,7 +66,7 @@ export class Button extends Entity {
         !!state.inputs.pick &&
         state.inputs.pick.active)
     status |= this.setState(
-      this._engaged ? ButtonState.CLICKED : ButtonState.UNCLICKED
+      this._engaged ? Button.State.CLICKED : Button.State.UNCLICKED
     ) // this is just presentation not click state
 
     const nextClicked =
@@ -81,13 +81,13 @@ export class Button extends Entity {
   }
 }
 
-export enum ButtonState {
-  UNCLICKED = 'unclicked',
-  CLICKED = 'clicked'
-}
-
 export namespace Button {
-  export interface Props extends Optional<Entity.Props, 'type'> {
+  export enum State {
+    UNCLICKED = 'unclicked',
+    CLICKED = 'clicked'
+  }
+
+  export interface Props extends Entity.SubProps<Button.State> {
     clicked?: boolean
     longClicked?: boolean
   }

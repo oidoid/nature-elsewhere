@@ -21,10 +21,10 @@ import {CollisionType} from '../../collision/CollisionType'
 import {WH} from '../../math/WH'
 import {AtlasID} from '../../atlas/AtlasID'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
-import {PlaneState} from '../Plane'
+import {Plane} from '../Plane'
 import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
 import {Text} from '../text/Text'
-import {Group, GroupState} from '../Group'
+import {Group} from '../Group'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {Image} from '../../image/Image'
 import {
@@ -33,7 +33,8 @@ import {
 } from '../../updaters/followCam/FollowCam'
 import {UpdaterType} from '../../updaters/updaterType/UpdaterType'
 
-export class LevelEditorPanel extends Entity implements FollowCam {
+export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
+  implements FollowCam {
   readonly radioGroup: Entity
   readonly xCheckbox: Checkbox
   readonly yCheckbox: Checkbox
@@ -48,13 +49,18 @@ export class LevelEditorPanel extends Entity implements FollowCam {
   readonly positionRelativeToCam: FollowCamOrientation
   readonly camMargin: WH
 
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+  constructor(atlas: Atlas, props?: Entity.SubProps<LevelEditorPanel.State>) {
     super({
       type: EntityType.UI_LEVEL_EDITOR_PANEL,
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
       collisionPredicate: CollisionPredicate.CHILDREN,
       updaters: [UpdaterType.UI_FOLLOW_CAM],
+      state: LevelEditorPanel.State.VISIBLE,
+      map: {
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [LevelEditorPanel.State.VISIBLE]: new ImageRect()
+      },
       ...props
     })
 
@@ -109,8 +115,8 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       children: [
         new Group({
           map: {
-            [Entity.State.HIDDEN]: new ImageRect(),
-            [GroupState.VISIBLE]: new ImageRect({
+            [Entity.BaseState.HIDDEN]: new ImageRect(),
+            [Group.State.VISIBLE]: new ImageRect({
               images: [
                 new Image(atlas, {
                   id: AtlasID.UI_BUTTON_DECREMENT,
@@ -127,8 +133,8 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       children: [
         new Group({
           map: {
-            [Entity.State.HIDDEN]: new ImageRect(),
-            [GroupState.VISIBLE]: new ImageRect({
+            [Entity.BaseState.HIDDEN]: new ImageRect(),
+            [Group.State.VISIBLE]: new ImageRect({
               images: [
                 new Image(atlas, {
                   id: AtlasID.UI_BUTTON_INCREMENT,
@@ -145,8 +151,8 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       children: [
         new Group({
           map: {
-            [Entity.State.HIDDEN]: new ImageRect(),
-            [GroupState.VISIBLE]: new ImageRect({
+            [Entity.BaseState.HIDDEN]: new ImageRect(),
+            [Group.State.VISIBLE]: new ImageRect({
               images: [
                 new Image(atlas, {
                   id: AtlasID.UI_BUTTON_DESTROY,
@@ -163,8 +169,8 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       children: [
         new Group({
           map: {
-            [Entity.State.HIDDEN]: new ImageRect(),
-            [GroupState.VISIBLE]: new ImageRect({
+            [Entity.BaseState.HIDDEN]: new ImageRect(),
+            [Group.State.VISIBLE]: new ImageRect({
               images: [
                 new Image(atlas, {
                   id: AtlasID.UI_BUTTON_CREATE,
@@ -181,8 +187,8 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       children: [
         new Group({
           map: {
-            [Entity.State.HIDDEN]: new ImageRect(),
-            [GroupState.VISIBLE]: new ImageRect({
+            [Entity.BaseState.HIDDEN]: new ImageRect(),
+            [Group.State.VISIBLE]: new ImageRect({
               images: [
                 new Image(atlas, {
                   id: AtlasID.UI_BUTTON_TOGGLE_GRID,
@@ -273,7 +279,7 @@ export class LevelEditorPanel extends Entity implements FollowCam {
     if (
       marquee &&
       marquee.selection &&
-      marquee.machine.state !== Entity.State.HIDDEN
+      marquee.machine.state !== Entity.BaseState.HIDDEN
     ) {
       const {selection} = marquee
       const sandbox = Entity.findAnyByID(
@@ -283,7 +289,7 @@ export class LevelEditorPanel extends Entity implements FollowCam {
       if (!sandbox) throw new Error('Missing sandbox.')
       if (this.destroyButton.clicked) {
         marquee.selection = undefined
-        marquee.machine.setState(Entity.State.HIDDEN)
+        marquee.machine.setState(Entity.BaseState.HIDDEN)
         const index = sandbox.children.findIndex(entity =>
           selection.equal(entity)
         )
@@ -390,12 +396,14 @@ function toggleGrid(state: UpdateState): void {
   const grid = Entity.findAnyByID(state.level.parentEntities, EntityID.UI_GRID)
   if (!grid) throw new Error('Missing grid.')
   const toggle =
-    grid.machine.state === Entity.State.HIDDEN
-      ? PlaneState.GRID
-      : Entity.State.HIDDEN
+    grid.machine.state === Entity.BaseState.HIDDEN
+      ? Plane.State.GRID
+      : Entity.BaseState.HIDDEN
   grid.setState(toggle)
 }
 
-export enum LevelEditorPanelState {
-  VISIBLE = 'visible'
+export namespace LevelEditorPanel {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

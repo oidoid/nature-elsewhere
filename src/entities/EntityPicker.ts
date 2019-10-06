@@ -11,15 +11,21 @@ import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {ImageRect} from '../imageStateMachine/ImageRect'
 
 const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
-export class EntityPicker extends Entity {
+export class EntityPicker extends Entity<EntityPicker.State> {
   private _activeChildIndex: number
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+  constructor(atlas: Atlas, props?: Entity.SubProps<EntityPicker.State>) {
     super({
       type: EntityType.UI_ENTITY_PICKER,
       updatePredicate: UpdatePredicate.ALWAYS,
+      state: EntityPicker.State.VISIBLE,
+      map: {
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [EntityPicker.State.VISIBLE]: new ImageRect()
+      },
       collisionType: CollisionType.TYPE_UI,
       children: makeChildren(atlas),
       ...props
@@ -38,7 +44,7 @@ export class EntityPicker extends Entity {
         entityWindowBounds.position
       )
       child.moveTo(center)
-      child.setState(Entity.State.HIDDEN)
+      child.setState(Entity.BaseState.HIDDEN)
     }
     this.showActiveChild()
     this.invalidateBounds()
@@ -76,7 +82,7 @@ export class EntityPicker extends Entity {
     const child = this.getActiveChild()
     if (!child) return
     child.elevate(-Layer.UI_PICKER_OFFSET)
-    child.setState(Entity.State.HIDDEN)
+    child.setState(Entity.BaseState.HIDDEN)
   }
 
   private showActiveChild(): void {
@@ -88,10 +94,16 @@ export class EntityPicker extends Entity {
   }
 }
 
-function getChildStates(child: Entity): readonly (Entity.State | string)[] {
+export namespace EntityPicker {
+  export enum State {
+    VISIBLE = 'visible'
+  }
+}
+
+function getChildStates(child: Entity): readonly (string)[] {
   return child.machine
     .getStates()
-    .filter(state => state !== Entity.State.HIDDEN)
+    .filter(state => state !== Entity.BaseState.HIDDEN)
 }
 
 const typeBlacklist: readonly string[] = Object.freeze([
@@ -101,7 +113,7 @@ const typeBlacklist: readonly string[] = Object.freeze([
     .map(key => EntityType[key])
 ])
 
-export function makeChildren(atlas: Atlas): Entity[] {
+function makeChildren(atlas: Atlas): Entity[] {
   const children = []
   for (const type of Object.values(EntityType)) {
     if (typeBlacklist.includes(type)) continue

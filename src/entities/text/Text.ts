@@ -22,10 +22,10 @@ export class Text extends Entity {
   constructor(atlas: Atlas, props?: Text.Props) {
     super({
       type: EntityType.UI_TEXT,
-      state: TextState.VISIBLE,
+      state: Text.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [TextState.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Text.State.VISIBLE]: new ImageRect()
       },
       updatePredicate: UpdatePredicate.ALWAYS,
       ...props
@@ -63,16 +63,16 @@ export class Text extends Entity {
 }
 
 export namespace Text {
-  export interface Props extends Optional<Entity.Props, 'type'> {
+  export enum State {
+    VISIBLE = 'visible'
+  }
+
+  export interface Props extends Entity.SubProps<State> {
     readonly text?: string
     readonly textLayer?: Layer
     readonly textScale?: XY
     readonly textMaxSize?: WH
   }
-}
-
-export enum TextState {
-  VISIBLE = 'visible'
 }
 
 /** @arg y The vertical scroll offset in pixels. */

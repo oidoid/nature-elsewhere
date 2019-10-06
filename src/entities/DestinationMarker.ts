@@ -11,14 +11,14 @@ import {Atlas} from 'aseprite-atlas'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 
-export class DestinationMarker extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class DestinationMarker extends Entity<DestinationMarker.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<DestinationMarker.State>) {
     super({
       type: EntityType.UI_DESTINATION_MARKER,
-      state: Entity.State.HIDDEN,
+      state: Entity.BaseState.HIDDEN,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [DestinationMarkerState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [DestinationMarker.State.VISIBLE]: new ImageRect({
           origin: new XY(-2, -1),
           images: [new Image(atlas, {id: AtlasID.UI_DESTINATION_MARKER})]
         })
@@ -39,7 +39,7 @@ export class DestinationMarker extends Entity {
       state.canvasSize,
       state.level.cam.bounds
     )
-    status |= this.setState(DestinationMarkerState.VISIBLE)
+    status |= this.setState(DestinationMarker.State.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
     const destination = position.add(this.imageRect().origin)
     status |= this.moveTo(destination)
@@ -48,6 +48,8 @@ export class DestinationMarker extends Entity {
   }
 }
 
-export enum DestinationMarkerState {
-  VISIBLE = 'visible'
+export namespace DestinationMarker {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

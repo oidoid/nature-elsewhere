@@ -10,14 +10,14 @@ import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
 
-export class Mountain extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Mountain extends Entity<Mountain.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Mountain.State>) {
     super({
       type: EntityType.SCENERY_MOUNTAIN,
-      state: MountainState.VISIBLE,
+      state: Mountain.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [MountainState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Mountain.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_MOUNTAIN}),
             new Image(atlas, {
@@ -36,6 +36,8 @@ export class Mountain extends Entity {
   }
 }
 
-export enum MountainState {
-  VISIBLE = 'visible'
+export namespace Mountain {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

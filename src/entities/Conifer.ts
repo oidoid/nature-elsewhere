@@ -10,14 +10,14 @@ import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
 
-export class Conifer extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Conifer extends Entity<Conifer.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Conifer.State>) {
     super({
       type: EntityType.SCENERY_CONIFER,
-      state: ConiferState.VISIBLE,
+      state: Conifer.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [ConiferState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Conifer.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_CONIFER}),
             new Image(atlas, {
@@ -36,6 +36,8 @@ export class Conifer extends Entity {
   }
 }
 
-export enum ConiferState {
-  VISIBLE = 'visible'
+export namespace Conifer {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

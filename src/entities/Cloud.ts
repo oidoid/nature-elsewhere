@@ -11,14 +11,14 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {WH} from '../math/WH'
 
-export class Cloud extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Cloud extends Entity<Cloud.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Cloud.State>) {
     super({
       type: EntityType.SCENERY_CLOUD,
-      state: CloudState.NONE,
+      state: Cloud.State.NONE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [CloudState.NONE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Cloud.State.NONE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
@@ -28,7 +28,7 @@ export class Cloud extends Entity {
             })
           ]
         }),
-        [CloudState.DRIZZLE]: new ImageRect({
+        [Cloud.State.DRIZZLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
@@ -55,7 +55,7 @@ export class Cloud extends Entity {
             })
           ]
         }),
-        [CloudState.SHOWER]: new ImageRect({
+        [Cloud.State.SHOWER]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
@@ -100,7 +100,7 @@ export class Cloud extends Entity {
             })
           ]
         }),
-        [CloudState.DOWNPOUR]: new ImageRect({
+        [Cloud.State.DOWNPOUR]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
@@ -152,9 +152,11 @@ export class Cloud extends Entity {
   }
 }
 
-export enum CloudState {
-  NONE = 'none',
-  DRIZZLE = 'drizzle',
-  SHOWER = 'shower',
-  DOWNPOUR = 'downpour'
+export namespace Cloud {
+  export enum State {
+    NONE = 'none',
+    DRIZZLE = 'drizzle',
+    SHOWER = 'shower',
+    DOWNPOUR = 'downpour'
+  }
 }

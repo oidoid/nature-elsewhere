@@ -1,5 +1,4 @@
 import {AtlasID} from '../atlas/AtlasID'
-import {Entity} from '../entity/Entity'
 import {Image} from '../image/Image'
 import {ImageRect} from './ImageRect'
 import {Layer} from '../image/Layer'
@@ -9,25 +8,22 @@ import {XY} from '../math/XY'
 
 // origin in level XY
 // would be nice to make all changes at once instead of walking th eimages multiple itmes.
-export class ImageStateMachine {
-  private _state: Entity.State | string
-  private readonly _map: Readonly<Record<Entity.State | string, ImageRect>>
+export class ImageStateMachine<State extends string = string> {
+  private _state: State
+  private readonly _map: Readonly<Record<State, ImageRect>>
 
-  constructor({
-    state = Entity.State.HIDDEN,
-    map = {[Entity.State.HIDDEN]: new ImageRect(), [state]: new ImageRect()}
-  }: ImageStateMachine.Props = {}) {
-    this._state = state
-    this._map = map
+  constructor(props: ImageStateMachine.Props<State>) {
+    this._state = props.state
+    this._map = props.map
     ObjectUtil.assertKeyOf(this._map, this._state, 'ImageStateMachine')
   }
 
-  get state(): Entity.State | string {
+  get state(): State {
     return this._state
   }
 
-  getStates(): (Entity.State | string)[] {
-    return Object.keys(this._map)
+  getStates(): State[] {
+    return ObjectUtil.keys(this._map)
   }
 
   imageRect(): ImageRect {
@@ -44,7 +40,7 @@ export class ImageStateMachine {
     return status
   }
 
-  setState(state: Entity.State | string): UpdateStatus {
+  setState(state: State): UpdateStatus {
     if (this.state === state) return UpdateStatus.UNCHANGED
     const {bounds, scale} = this.imageRect()
     this._state = state
@@ -54,10 +50,7 @@ export class ImageStateMachine {
     return UpdateStatus.UPDATED
   }
 
-  replaceImages(
-    state: Entity.State | string,
-    ...images: readonly Image[]
-  ): UpdateStatus {
+  replaceImages(state: State, ...images: readonly Image[]): UpdateStatus {
     this._map[state].replace(...images)
     return UpdateStatus.UPDATED
   }
@@ -82,8 +75,8 @@ export class ImageStateMachine {
 }
 
 export namespace ImageStateMachine {
-  export interface Props {
-    state?: Entity.State | string
-    map?: Record<Entity.State | string, ImageRect>
+  export interface Props<State extends string> {
+    state: State
+    map: Record<State, ImageRect>
   }
 }

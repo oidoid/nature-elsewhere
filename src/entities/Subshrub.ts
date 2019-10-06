@@ -7,14 +7,14 @@ import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 
-export class Subshrub extends Entity {
-  constructor(atlas: Atlas, props?: Optional<Entity.Props, 'type'>) {
+export class Subshrub extends Entity<Subshrub.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Subshrub.State>) {
     super({
       type: EntityType.SCENERY_SUBSHRUB,
-      state: SubshrubState.VISIBLE,
+      state: Subshrub.State.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
-        [SubshrubState.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Subshrub.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.SCENERY_SUBSHRUB}),
             new Image(atlas, {
@@ -30,6 +30,8 @@ export class Subshrub extends Entity {
   }
 }
 
-export enum SubshrubState {
-  VISIBLE = 'visible'
+export namespace Subshrub {
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }

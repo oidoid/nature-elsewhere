@@ -11,8 +11,13 @@ import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {Atlas} from 'aseprite-atlas'
 import {WH} from '../../math/WH'
 
-export class LevelEditorPanelBackground extends Entity {
-  constructor(atlas: Atlas, props?: Entity.Props) {
+export class LevelEditorPanelBackground extends Entity<
+  LevelEditorPanelBackgroundState
+> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<LevelEditorPanelBackgroundState>
+  ) {
     super({
       type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
       collisionType: CollisionType.TYPE_UI,
@@ -20,7 +25,7 @@ export class LevelEditorPanelBackground extends Entity {
       updatePredicate: UpdatePredicate.ALWAYS,
       state: LevelEditorPanelBackgroundState.VISIBLE,
       map: {
-        [Entity.State.HIDDEN]: new ImageRect(),
+        [Entity.BaseState.HIDDEN]: new ImageRect(),
         [LevelEditorPanelBackgroundState.VISIBLE]: new ImageRect({
           images: newBackgroundImages(atlas)
         })

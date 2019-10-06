@@ -1,4 +1,3 @@
-import {Entity} from '../../entity/Entity'
 import {EntityConfig} from '../../entity/EntityParser'
 import {ImageParser, LayerKeyConfig} from '../../image/ImageParser'
 import {Text} from './Text'
@@ -13,12 +12,8 @@ export interface TextPropsConfig extends EntityConfig {
 }
 
 export namespace TextPropsParser {
-  export function parse(
-    props: Entity.Props,
-    config: TextPropsConfig
-  ): NonOptional<Text.Props, 'type'> {
+  export function parse(config: TextPropsConfig): Text.Props {
     return {
-      ...props,
       ...(config.text && {text: config.text}),
       ...(config.textLayer !== undefined && {
         textLayer: ImageParser.parseLayerKey(config.textLayer)
