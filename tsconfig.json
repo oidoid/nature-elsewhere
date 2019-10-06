@@ -6,7 +6,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
-
+    "incremental": true,
     "target": "es5"
   }
 }
