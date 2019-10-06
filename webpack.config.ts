@@ -18,15 +18,7 @@ export default (): webpack.Configuration => {
 
     module: {
       rules: [
-        {
-          test: /\.ts$/,
-          loader: 'ts-loader',
-          options: {
-            // Enable incremental compilation.
-            // https://github.com/TypeStrong/ts-loader/issues/913#issuecomment-537644628
-            experimentalWatchApi: true
-          }
-        },
+        {test: /\.ts$/, use: 'ts-loader'},
         {test: /\.glsl$/, use: 'raw-loader'}
       ]
     },
