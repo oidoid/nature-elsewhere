@@ -23,8 +23,8 @@ export interface Level {
   readonly minViewport: WH
   readonly cam: Camera
   readonly cursor: Cursor
-  readonly player: Maybe<Backpacker>
-  readonly destination: Maybe<Entity>
+  readonly player?: Backpacker
+  readonly destination?: Entity
   /** Cursor and player are not included in parentEntities. */
   readonly parentEntities: Entity[]
   readonly atlas: Atlas

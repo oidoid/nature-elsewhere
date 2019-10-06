@@ -1,6 +1,8 @@
+import {Assert} from '../utils/Assert'
+
 export namespace IntParser {
   export function parse(config: number): number {
-    if (Number.isInteger(config)) return config
-    throw new Error(`Expected integer not "${config}".`)
+    Assert.assert(Number.isInteger(config), `Expected integer not "${config}".`)
+    return config
   }
 }

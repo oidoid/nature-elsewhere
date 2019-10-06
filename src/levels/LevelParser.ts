@@ -49,23 +49,23 @@ export namespace LevelParser {
       throw new Error(`Unsupported level config version "${config.version}".`)
     return {
       type: LevelTypeParser.parse(config.type),
-      prevLevel: config.prevLevel
-        ? LevelTypeParser.parse(config.prevLevel)
-        : undefined,
-      nextLevel: config.nextLevel
-        ? LevelTypeParser.parse(config.nextLevel)
-        : undefined,
+      ...(config.prevLevel && {
+        prevLevel: LevelTypeParser.parse(config.prevLevel)
+      }),
+      ...(config.nextLevel && {
+        nextLevel: LevelTypeParser.parse(config.nextLevel)
+      }),
       advance: LevelAdvance.UNCHANGED,
       size: new WH(config.size.w, config.size.h),
       minViewport: new WH(config.minViewport.w, config.minViewport.h),
       cam: CameraParser.parse(config.cam),
       cursor: <Cursor>EntityParser.parse(config.cursor, atlas),
-      destination: config.destination
-        ? EntityParser.parse(config.destination, atlas)
-        : undefined,
-      player: config.player
-        ? <Backpacker>EntityParser.parse(config.player, atlas)
-        : undefined,
+      ...(config.destination && {
+        destination: EntityParser.parse(config.destination, atlas)
+      }),
+      ...(config.player && {
+        player: <Backpacker>EntityParser.parse(config.player, atlas)
+      }),
       parentEntities: EntityParser.parseAll(config.parentEntities, atlas),
       atlas
     }
