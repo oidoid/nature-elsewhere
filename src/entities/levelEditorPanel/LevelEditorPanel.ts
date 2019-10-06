@@ -201,7 +201,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
       ]
     })
     this.entityPicker = new EntityPicker(atlas, {position: new XY(89, 0)})
-    this.children.push(
+    this.addChildren(
       this.decrementButton,
       this.incrementButton,
       this.destroyButton,
@@ -266,7 +266,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
         if (!sandbox) throw new Error('Missing sandbox.')
 
         // marquee.setSelection(entity)
-        sandbox.children.push(entity)
+        sandbox.addChildren(entity)
         sandbox.invalidateBounds()
         // [todo] set selection here
       }
@@ -290,10 +290,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
       if (this.destroyButton.clicked) {
         marquee.selection = undefined
         marquee.machine.setState(Entity.BaseState.HIDDEN)
-        const index = sandbox.children.findIndex(entity =>
-          selection.equal(entity)
-        )
-        sandbox.children.splice(index, 1)
+        sandbox.removeChild(selection)
       }
       if (
         this.decrementButton.clicked ||

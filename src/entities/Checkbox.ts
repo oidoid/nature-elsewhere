@@ -74,7 +74,8 @@ export class Checkbox extends Entity<Checkbox.State> {
       ? this.children[0].imageRect().imageID
       : undefined
     if (imageID) child.setImageID(imageID)
-    this.children[0] = child
+    this.removeChild(this.children[0])
+    this.addChildren(child)
     this.setBackground(layerOffset, atlas)
     this.invalidateBounds()
   }

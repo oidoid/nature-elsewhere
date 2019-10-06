@@ -7,7 +7,7 @@ import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
 import {LevelAdvance} from './LevelAdvance'
 import {LevelType} from './LevelType'
-import {Rect} from '../math/Rect'
+import {Rect, ReadonlyRect} from '../math/Rect'
 import {WH} from '../math/WH'
 import {XY, FloatXY} from '../math/XY'
 import {UpdateState} from '../updaters/UpdateState'
@@ -156,7 +156,7 @@ export namespace Level {
   }
 }
 
-function centerCameraOn(level: Level, on: Rect): void {
+function centerCameraOn(level: Level, on: ReadonlyRect): void {
   const destination = Level.clamp(
     level,
     Rect.centerOn(level.cam.bounds, on),

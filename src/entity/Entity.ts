@@ -99,7 +99,7 @@ export class Entity<State extends string = string> {
   get type(): EntityType {
     return this._type
   }
-  get bounds(): Rect {
+  get bounds(): ReadonlyRect {
     return this._bounds
   }
 
@@ -131,11 +131,11 @@ export class Entity<State extends string = string> {
     this._collisionPredicate = predicate
   }
 
-  get collisionBodies(): readonly Rect[] {
+  get collisionBodies(): readonly ReadonlyRect[] {
     return this._collisionBodies
   }
 
-  get children(): Entity[] {
+  get children(): readonly Entity[] {
     return this._children
   }
 
@@ -162,10 +162,10 @@ export class Entity<State extends string = string> {
       ...this.children.map(child => child.bounds)
     ])
     if (bounds) {
-      this.bounds.position.x = bounds.position.x
-      this.bounds.position.y = bounds.position.y
-      this.bounds.size.w = bounds.size.w
-      this.bounds.size.h = bounds.size.h
+      this._bounds.position.x = bounds.position.x
+      this._bounds.position.y = bounds.position.y
+      this._bounds.size.w = bounds.size.w
+      this._bounds.size.h = bounds.size.h
     }
   }
 
@@ -178,15 +178,15 @@ export class Entity<State extends string = string> {
   moveBy(by: Readonly<XY>): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
     if (!by.x && !by.y) return status
-    this.bounds.position.x += by.x
-    this.bounds.position.y += by.y
+    this._bounds.position.x += by.x
+    this._bounds.position.y += by.y
     status |= this.imageRect().moveBy(by)
-    Rect.moveAllBy(this.collisionBodies, by)
+    Rect.moveAllBy(this._collisionBodies, by)
     for (const child of this.children) child.moveBy(by)
     return status | UpdateStatus.UPDATED
   }
 
-  getScale(): XY {
+  getScale(): Readonly<XY> {
     return this.imageRect().scale
   }
 
@@ -197,13 +197,25 @@ export class Entity<State extends string = string> {
         : undefined
     const status = this.imageRect().scaleTo(scale)
     if (collisionScale && status & UpdateStatus.UPDATED) {
-      for (const body of this.collisionBodies) {
+      for (const body of this._collisionBodies) {
         body.size.w *= Math.abs(collisionScale.x)
         body.size.h *= Math.abs(collisionScale.y)
       }
     }
     this.invalidateBounds()
     return status
+  }
+
+  addChildren(...children: readonly Entity[]): void {
+    this._children.push(...children)
+    this.invalidateBounds()
+  }
+
+  removeChild(child: Readonly<Entity>): void {
+    const index = this.children.findIndex(entity => child.equal(entity))
+    if (index === -1) return
+    this._children.splice(index, 1)
+    this.invalidateBounds()
   }
 
   imageRect(): ImageRect {
