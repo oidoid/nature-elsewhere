@@ -95,7 +95,7 @@ export class Marquee extends Entity {
         sandboxEntity.bounds.position.y - 1
       )
       status |= this.moveTo(destination)
-      doTheStuffAndThings(this, destination, sandboxEntity)
+      resize(this, destination, sandboxEntity)
     } else if (!panelCollision.length) {
       status |= this.setState(Entity.State.HIDDEN)
       this.selection = undefined
@@ -118,7 +118,7 @@ enum Images {
 
 export namespace MarqueeUpdater {}
 
-function doTheStuffAndThings(
+function resize(
   marquee: Marquee,
   destination: XY,
   sandboxEntity: Entity
@@ -154,4 +154,5 @@ function doTheStuffAndThings(
   marqueeImages[Images.BOTTOM].wrapTo(
     new XY((sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0, 0)
   )
+  marquee.invalidateBounds()
 }
