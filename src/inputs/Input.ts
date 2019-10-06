@@ -1,7 +1,7 @@
 import {FloatXY, XY} from '../math/XY'
 import {Viewport} from '../renderer/Viewport'
 import {WH} from '../math/WH'
-import {Rect} from '../math/Rect'
+import {ReadonlyRect} from '../math/Rect'
 
 export interface Input {
   /** True if input is on. */
@@ -28,7 +28,7 @@ export namespace Input {
     return (input && !input.active && !input.timer) || false
   }
 
-  export function levelXY(input: Input, canvasWH: WH, cam: Rect): XY {
+  export function levelXY(input: Input, canvasWH: WH, cam: ReadonlyRect): XY {
     return Viewport.toLevelXY(input.windowPosition, canvasWH, cam)
   }
 

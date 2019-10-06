@@ -9,7 +9,9 @@ import {LevelAdvance} from './LevelAdvance'
 import {LevelType} from './LevelType'
 import {Rect} from '../math/Rect'
 import {WH} from '../math/WH'
-import {XY} from '../math/XY'
+import {XY, FloatXY} from '../math/XY'
+import {UpdateState} from '../updaters/UpdateState'
+import {Marquee} from '../entities/Marquee'
 
 export interface Level {
   readonly type: LevelType
@@ -71,31 +73,95 @@ export namespace Level {
       Math.max(0, level.size.w - size.w),
       Math.max(0, level.size.h - size.h)
     )
-    return position.clamp(min, max)
+    const {x, y} = FloatXY.clamp(position, min, max)
+    return new XY(x, y)
   }
 
-  export function updateCamera(level: Level): void {
-    if (level.cam.followID === EntityID.ANONYMOUS) return
+  export function fclamp(
+    level: Level,
+    position: Readonly<XY | FloatXY>,
+    size: Readonly<WH>
+  ): FloatXY {
+    const min = new XY(0, 0)
+    const max = new XY(
+      Math.max(0, level.size.w - size.w),
+      Math.max(0, level.size.h - size.h)
+    )
+    return FloatXY.clamp(position, min, max)
+  }
+
+  export function updateCamera(state: UpdateState): void {
+    if (state.level.cam.followID === EntityID.ANONYMOUS) {
+      const {pick} = state.inputs
+      if (!pick || !pick.active) return
+      const ratio = 0.7
+      const cameraDeadZone = {
+        position: XY.trunc(
+          state.level.cam.bounds.position.x +
+            (state.level.cam.bounds.size.w * (1 - ratio)) / 2,
+          state.level.cam.bounds.position.y +
+            Math.trunc((state.level.cam.bounds.size.h * (1 - ratio)) / 2)
+        ),
+        size: new WH(
+          Math.trunc(state.level.cam.bounds.size.w * ratio),
+          Math.trunc(state.level.cam.bounds.size.h * ratio)
+        )
+      }
+      if (Rect.intersects(cameraDeadZone, state.level.cursor.bounds)) return
+      const panel = Entity.findAnyByID(
+        state.level.parentEntities,
+        EntityID.UI_LEVEL_EDITOR_PANEL
+      )
+      const marquee: Maybe<Marquee> = Entity.findAnyByID(
+        state.level.parentEntities,
+        EntityID.UI_MARQUEE
+      )
+      const panelCollision =
+        panel && EntityCollider.collidesEntity(state.level.cursor, panel).length //collisionWithCursor(state.level, panel)
+      const marqueeCollision =
+        marquee &&
+        marquee.selection &&
+        EntityCollider.collidesRect(state.level.cursor, marquee.bounds).length // collisionWithCursor(state.level, marquee)
+      if (panelCollision && !marqueeCollision) return
+      const destination = Level.fclamp(
+        state.level,
+        FloatXY.lerp(
+          state.level.cam.fposition,
+          state.level.cursor.bounds.position.sub(
+            XY.trunc(
+              state.level.cam.bounds.size.w / 2,
+              state.level.cam.bounds.size.h / 2
+            )
+          ),
+          0.01
+        ),
+        state.level.cam.bounds.size
+      )
+      state.level.cam.moveTo(destination)
+      return
+    }
 
     let follow
-    if (level.player && level.player.id === level.cam.followID)
-      follow = level.player
+    if (
+      state.level.player &&
+      state.level.player.id === state.level.cam.followID
+    )
+      follow = state.level.player
     else
-      for (const parent of level.parentEntities) {
-        follow = parent.findByID(level.cam.followID)
+      for (const parent of state.level.parentEntities) {
+        follow = parent.findByID(state.level.cam.followID)
         if (follow) break
       }
 
-    if (follow) centerCameraOn(level, follow.bounds)
+    if (follow) centerCameraOn(state.level, follow.bounds)
   }
 }
 
 function centerCameraOn(level: Level, on: Rect): void {
-  const {x, y} = Level.clamp(
+  const destination = Level.clamp(
     level,
     Rect.centerOn(level.cam.bounds, on),
     level.cam.bounds.size
   )
-  level.cam.bounds.position.x = x
-  level.cam.bounds.position.y = y
+  level.cam.moveTo(destination)
 }

@@ -24,7 +24,7 @@ export namespace Store {
     if (state.level.player)
       images.push(...updateAndAnimate([state.level.player], state))
 
-    Level.updateCamera(state.level)
+    Level.updateCamera(state)
 
     images.push(...updateAndAnimate([state.level.cursor], state))
     if (state.level.destination)

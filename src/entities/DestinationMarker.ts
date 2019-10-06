@@ -34,7 +34,11 @@ export class DestinationMarker extends Entity {
 
     const {pick} = state.inputs
     if (!pick || !pick.active) return status
-    const position = Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
+    const position = Input.levelXY(
+      pick,
+      state.canvasSize,
+      state.level.cam.bounds
+    )
     status |= this.setState(DestinationMarkerState.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
     const destination = position.add(this.imageRect().origin)

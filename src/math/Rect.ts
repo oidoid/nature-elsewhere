@@ -50,6 +50,18 @@ export namespace Rect {
     )
   }
 
+  export function intersectsPoint(
+    rect: ReadonlyRect,
+    point: Readonly<XY>
+  ): boolean {
+    return (
+      rect.position.x + rect.size.w > point.x &&
+      rect.position.x < point.x &&
+      rect.position.y + rect.size.h > point.y &&
+      rect.position.y < point.y
+    )
+  }
+
   export function within(
     {position, size}: ReadonlyRect,
     rhs: ReadonlyRect

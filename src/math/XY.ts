@@ -79,21 +79,31 @@ export class XY {
     return new XY(Math.max(this.x, x), Math.max(this.y, y))
   }
 
-  clamp(min: Readonly<XY>, max: Readonly<XY>): XY {
-    const x = NumberUtil.clamp(this.x, min.x, max.x)
-    const y = NumberUtil.clamp(this.y, min.y, max.y)
-    return new XY(x, y)
-  }
-
   magnitude(xy: Readonly<XY>): number {
     const {x, y} = this.sub(xy)
     return Math.sqrt(x * x + y * y)
   }
+}
 
-  lerp(to: Readonly<XY>, ratio: number): XY {
-    const x = this.x * (1 - ratio) + to.x * ratio
-    const y = this.y * (1 - ratio) + to.y * ratio
-    return XY.trunc(x, y)
+export namespace FloatXY {
+  export function lerp(
+    from: Readonly<XY | FloatXY>,
+    to: Readonly<XY | FloatXY>,
+    ratio: number
+  ): FloatXY {
+    const x = from.x * (1 - ratio) + to.x * ratio
+    const y = from.y * (1 - ratio) + to.y * ratio
+    return {x, y}
+  }
+
+  export function clamp(
+    val: Readonly<XY | FloatXY>,
+    min: Readonly<XY>,
+    max: Readonly<XY>
+  ): FloatXY {
+    const x = NumberUtil.clamp(val.x, min.x, max.x)
+    const y = NumberUtil.clamp(val.y, min.y, max.y)
+    return {x, y}
   }
 }
 

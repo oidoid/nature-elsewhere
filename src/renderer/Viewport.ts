@@ -1,4 +1,4 @@
-import {Rect} from '../math/Rect'
+import {ReadonlyRect} from '../math/Rect'
 import {WH} from '../math/WH'
 import {FloatXY, XY} from '../math/XY'
 
@@ -25,7 +25,11 @@ export namespace Viewport {
       @arg cam The coordinates and dimensions of the camera the input was made
                through in level pixels.
       @return The fractional position in level coordinates. */
-  export function toLevelXY({x, y}: FloatXY | XY, {w, h}: WH, cam: Rect): XY {
+  export function toLevelXY(
+    {x, y}: FloatXY | XY,
+    {w, h}: WH,
+    cam: ReadonlyRect
+  ): XY {
     return new XY(
       cam.position.x + Math.trunc((x / w) * cam.size.w),
       cam.position.y + Math.trunc((y / h) * cam.size.h)

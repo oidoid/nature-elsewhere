@@ -259,6 +259,7 @@ export class LevelEditorPanel extends Entity implements FollowCam {
         )
         if (!sandbox) throw new Error('Missing sandbox.')
 
+        // marquee.setSelection(entity)
         sandbox.children.push(entity)
         sandbox.invalidateBounds()
         // [todo] set selection here

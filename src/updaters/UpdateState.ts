@@ -8,7 +8,7 @@ export interface UpdateState {
   /** The duration of time to update state for. */
   readonly time: Milliseconds
   readonly level: Level
-  readonly canvasWH: WH
+  readonly canvasSize: WH
   readonly inputs: Readonly<InputState>
 }
 
@@ -16,9 +16,9 @@ export namespace UpdateState {
   export function make(
     time: Milliseconds,
     level: Level,
-    canvasWH: WH,
+    canvasSize: WH,
     inputs: InputState
   ): UpdateState {
-    return {time, canvasWH, level, inputs}
+    return {time, canvasSize, level, inputs}
   }
 }

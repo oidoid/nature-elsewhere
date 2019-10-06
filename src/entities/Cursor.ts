@@ -46,7 +46,7 @@ export class Cursor extends Entity {
       nextState = CursorState.VISIBLE
       const position = Input.levelXY(
         pick,
-        state.canvasWH,
+        state.canvasSize,
         state.level.cam.bounds
       )
       status |= this.moveTo(position)
@@ -54,7 +54,7 @@ export class Cursor extends Entity {
       nextState = CursorState.VISIBLE
       const position = Input.levelXY(
         point,
-        state.canvasWH,
+        state.canvasSize,
         state.level.cam.bounds
       )
       status |= this.moveTo(position)

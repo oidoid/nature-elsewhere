@@ -1,6 +1,6 @@
 import fragmentGLSL from './fragment.glsl'
 import {GLUtil} from './GLUtil'
-import {Rect} from '../math/Rect'
+import {ReadonlyRect} from '../math/Rect'
 import {ShaderLayout} from './ShaderLayout'
 import {Store} from '../store/Store'
 import vertexGLSL from './vertex.glsl'
@@ -110,7 +110,7 @@ export namespace Renderer {
     time: Milliseconds,
     canvasWH: WH,
     scale: number,
-    cam: Rect,
+    cam: ReadonlyRect,
     {dat, len}: Store
   ): void {
     resize(renderer, canvasWH, scale, cam)
@@ -126,12 +126,12 @@ export namespace Renderer {
   /** @arg canvasWH The desired resolution of the canvas in CSS pixels. E.g.,
                     {w: window.innerWidth, h: window.innerHeight}.
       @arg scale Positive integer zoom. */
-  export const resize = (
+  export function resize(
     {gl, layout, uniforms, projection}: Renderer,
-    canvasWH: WH,
+    canvasWH: Readonly<WH>,
     scale: number,
-    cam: Rect
-  ): void => {
+    cam: ReadonlyRect
+  ): void {
     ;({w: gl.canvas.width, h: gl.canvas.height} = canvasWH)
 
     projection.set(project(cam))
@@ -145,7 +145,7 @@ export namespace Renderer {
     gl.viewport(0, 0, scale * cam.size.w, scale * cam.size.h)
   }
 
-  function project(cam: Rect): readonly number[] {
+  function project(cam: ReadonlyRect): readonly number[] {
     // Convert the pixels to clipspace by taking them as a fraction of the cam
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
     // is downward, and translating to -1 to 1 and again by the camera position.

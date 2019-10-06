@@ -85,11 +85,9 @@ export class Marquee extends Entity {
     )
     const triggered = Input.activeTriggered(state.inputs.pick)
     if (!triggered && this.selection && this._dragOffset) {
-      const destination = Input.levelXY(
-        pick,
-        state.canvasWH,
-        state.level.cam.bounds
-      ).add(this._dragOffset)
+      const destination = state.level.cursor.bounds.position.add(
+        this._dragOffset
+      )
       status |= this.moveTo(destination.sub(new XY(1, 1)))
       status |= this.selection.moveTo(destination)
       sandbox.invalidateBounds()
@@ -107,7 +105,7 @@ export class Marquee extends Entity {
       status |= this.moveTo(destination)
       resize(this, destination, sandboxEntity)
       this._dragOffset = sandboxEntity.bounds.position.sub(
-        Input.levelXY(pick, state.canvasWH, state.level.cam.bounds)
+        state.level.cursor.bounds.position
       )
     } else if (triggered && !panelCollision.length) {
       status |= this.setState(Entity.State.HIDDEN)

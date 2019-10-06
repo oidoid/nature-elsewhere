@@ -2,11 +2,11 @@
   "version": "0.0.0",
   "type": "uiLevelEditor",
   "size": {"w": 32767, "h": 32767},
-  "minViewport": {"w": 128, "h": 64},
+  "minViewport": {"w": 128, "h": 96},
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
     {"type": "sceneryPlane", "state": "paleGreen"},
-    {"id": "uiGrid", "type": "sceneryPlane", "state": "hidden"},
+    {"id": "uiGrid", "type": "sceneryPlane", "state": "grid"},
     {"id": "uiMarquee", "type": "uiMarquee"},
     {"id": "uiLevelEditorPanel", "type": "uiLevelEditorPanel"},
     {

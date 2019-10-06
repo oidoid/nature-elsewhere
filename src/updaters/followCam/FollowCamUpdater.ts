@@ -1,6 +1,6 @@
 import {Entity} from '../../entity/Entity'
 import {FollowCam, FollowCamOrientation} from './FollowCam'
-import {Rect} from '../../math/Rect'
+import {ReadonlyRect} from '../../math/Rect'
 import {Update} from '../Update'
 import {UpdateStatus} from '../updateStatus/UpdateStatus'
 import {UpdaterType} from '../updaterType/UpdaterType'
@@ -29,8 +29,8 @@ export namespace FollowCamUpdater {
 
 /** In fractional pixel level coordinates. */
 function orientationToXY(
-  entity: Rect,
-  cam: Rect,
+  entity: ReadonlyRect,
+  cam: ReadonlyRect,
   margin: WH,
   orientation: FollowCamOrientation
 ): XY {
@@ -41,8 +41,8 @@ function orientationToXY(
 }
 
 function orientationToX(
-  entity: Rect,
-  cam: Rect,
+  entity: ReadonlyRect,
+  cam: ReadonlyRect,
   margin: WH,
   orientation: FollowCamOrientation
 ): number {
@@ -69,8 +69,8 @@ function orientationToX(
 }
 
 function orientationToY(
-  entity: Rect,
-  cam: Rect,
+  entity: ReadonlyRect,
+  cam: ReadonlyRect,
   margin: WH,
   orientation: FollowCamOrientation
 ): number {

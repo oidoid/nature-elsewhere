@@ -11,7 +11,7 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
-import {Rect} from '../math/Rect'
+import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterMap} from '../updaters/UpdaterMap'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
@@ -227,7 +227,7 @@ export class Entity {
 
   /** Returns whether the current entity is in the viewport or should always be
       updated. Children are not considered. */
-  active(viewport: Rect): boolean {
+  active(viewport: ReadonlyRect): boolean {
     return (
       this.updatePredicate === UpdatePredicate.ALWAYS ||
       Rect.intersects(this.bounds, viewport)

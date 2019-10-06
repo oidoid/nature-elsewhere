@@ -16,6 +16,7 @@ import {Atlas} from 'aseprite-atlas'
 export class Button extends Entity {
   clicked: boolean
   longClicked: boolean
+  private _engaged: boolean
   constructor(atlas: Atlas, props?: Button.Props) {
     super({
       type: EntityType.UI_BUTTON,
@@ -50,6 +51,7 @@ export class Button extends Entity {
     })
     this.clicked = (props && props.clicked) || false
     this.longClicked = (props && props.longClicked) || false
+    this._engaged = false
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -57,12 +59,19 @@ export class Button extends Entity {
 
     this.clicked = false
     const collision = Level.collisionWithCursor(state.level, this)
+    this._engaged =
+      (collision && (!state.inputs.pick || !state.inputs.pick.active)) ||
+      (this._engaged &&
+        collision &&
+        !!state.inputs.pick &&
+        state.inputs.pick.active)
     status |= this.setState(
-      collision ? ButtonState.CLICKED : ButtonState.UNCLICKED
+      this._engaged ? ButtonState.CLICKED : ButtonState.UNCLICKED
     ) // this is just presentation not click state
 
-    const nextClicked = collision && Input.inactiveTriggered(state.inputs.pick)
-    const nextLongClicked = collision && Input.activeLong(state.inputs.pick)
+    const nextClicked =
+      this._engaged && Input.inactiveTriggered(state.inputs.pick)
+    const nextLongClicked = this._engaged && Input.activeLong(state.inputs.pick)
     if (this.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
     if (this.longClicked !== nextLongClicked) status |= UpdateStatus.TERMINATE
     this.clicked = nextClicked
