@@ -6,9 +6,13 @@ import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
 
+export type ImageStateMap<State extends string = string> = Readonly<
+  Record<State, ImageRect>
+>
+
 export class ImageStateMachine<State extends string = string> {
   private _state: State
-  private readonly _map: Readonly<Record<State, ImageRect>>
+  private readonly _map: ImageStateMap<State>
 
   constructor(props: ImageStateMachine.Props<State>) {
     this._state = props.state

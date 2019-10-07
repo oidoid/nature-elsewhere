@@ -17,8 +17,8 @@ import {FollowCamParser} from '../updaters/followCam/FollowCamParser'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
 import {
   ImageStateMapConfig,
-  ImageStateMapParser
-} from '../imageStateMachine/ImageStateMapParser'
+  ImageStateMachineParser
+} from '../imageStateMachine/ImageStateMachineParser'
 import {LevelLinkParser} from '../updaters/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
@@ -112,7 +112,9 @@ function parseProps(
     ...(config.velocity && {velocity: XYParser.parse(config.velocity)}),
     ...(config.imageID && {imageID: AtlasIDParser.parse(config.imageID)}),
     ...(config.state && {state: EntityParser.parseState(config.state)}),
-    ...(config.map && {map: ImageStateMapParser.parse(config.map, atlas)}),
+    ...(config.map && {
+      map: ImageStateMachineParser.parseMap(config.map, atlas)
+    }),
     ...(config.updatePredicate && {
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate)
     }),

@@ -3,16 +3,17 @@ import {EntityParser, EntityStateConfig} from '../entity/EntityParser'
 import {ImageRectConfig, ImageRectParser} from './ImageRectParser'
 import {ImageRect} from './ImageRect'
 import {Entity} from '../entity/Entity'
+import {ImageStateMap} from './ImageStateMachine'
 
 export type ImageStateMapConfig = Maybe<
   Readonly<Record<Exclude<EntityStateConfig, undefined>, ImageRectConfig>>
 >
 
-export namespace ImageStateMapParser {
-  export function parse(
+export namespace ImageStateMachineParser {
+  export function parseMap(
     config: ImageStateMapConfig,
     atlas: Atlas
-  ): Readonly<Record<Entity.BaseState | string, ImageRect>> {
+  ): ImageStateMap {
     const map: Record<Entity.BaseState | string, ImageRect> = {
       [Entity.BaseState.HIDDEN]: new ImageRect()
     }
