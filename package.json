@@ -20,12 +20,11 @@
     "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit",
     "build": "webpack -p",
     "format": "npm -s run formatter -- --write",
-    "formatter": "prettier './**/*.{css,json,html,md,ts}'",
+    "formatter": "prettier './**/*.{css,js,json,html,md,ts}'",
     "build:atlas": "aseprite-atlas-pack --sheet src/atlas/atlas.png --data src/atlas/atlas.json assets/atlas/*.aseprite",
     "palettize": "cd assets/atlas && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {
-    "@types/copy-webpack-plugin": "5.0.0",
     "@types/jest": "24.0.18",
     "@types/webgl2": "0.0.5",
     "@types/webpack-dev-server": "3.1.7",
@@ -38,7 +37,6 @@
     "raw-loader": "3.1.0",
     "ts-jest": "24.1.0",
     "ts-loader": "6.2.0",
-    "ts-node": "8.4.1",
     "typescript": "3.6.3",
     "webpack": "4.41.0",
     "webpack-cli": "3.3.9",

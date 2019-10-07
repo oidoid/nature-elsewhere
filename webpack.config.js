@@ -1,10 +1,11 @@
-import * as childProcess from 'child_process'
-import {CleanWebpackPlugin} from 'clean-webpack-plugin'
-import * as CopyPlugin from 'copy-webpack-plugin'
-import {version} from './package.json'
-import * as webpack from 'webpack'
+const childProcess = require('child_process')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const {version} = require('./package.json')
+const webpack = require('webpack')
 
-export default (): webpack.Configuration => {
+/** @return {webpack.Configuration} */
+module.exports = () => {
   const [date, hash] = childProcess
     .execSync('git -P log -1 --date=format:%F --format=%ad,%h')
     .toString()
