@@ -24,7 +24,7 @@ export class RadioCheckboxGroup extends Entity<RadioCheckboxGroup.State> {
       ...props
     })
     for (const child of this.children) {
-      if (child instanceof Checkbox && child.checked) {
+      if (child instanceof Checkbox && child.checked()) {
         this._checked = child
         break
       }
@@ -37,16 +37,17 @@ export class RadioCheckboxGroup extends Entity<RadioCheckboxGroup.State> {
     let checked: Maybe<Checkbox> = undefined
     for (const child of this.children) {
       status |= child.update(state)
-      if (child instanceof Checkbox && child !== this._checked && child.checked)
+      if (
+        child instanceof Checkbox &&
+        child !== this._checked &&
+        child.checked()
+      )
         checked = child
       if (UpdateStatus.terminate(status)) return status
     }
 
     if (checked) {
-      if (this._checked) {
-        this._checked.checked = false
-        this._checked.setState(Checkbox.State.UNCHECKED)
-      }
+      if (this._checked) this._checked.setState(Checkbox.State.UNCHECKED)
       this._checked = checked
     }
 

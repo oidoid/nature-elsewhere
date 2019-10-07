@@ -17,8 +17,6 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Layer} from '../image/Layer'
 
 export class Checkbox extends Entity<Checkbox.State> {
-  checked: boolean
-
   constructor(atlas: Atlas, props?: Checkbox.Props) {
     super({
       ...props,
@@ -34,7 +32,6 @@ export class Checkbox extends Entity<Checkbox.State> {
       collisionPredicate: CollisionPredicate.BOUNDS
     })
 
-    this.checked = (props && props.checked) || false
     this.setText(
       {
         type: EntityType.UI_TEXT,
@@ -53,14 +50,13 @@ export class Checkbox extends Entity<Checkbox.State> {
     const collision = Level.collisionWithCursor(state.level, this)
 
     const toggle = collision && Input.inactiveTriggered(state.inputs.pick)
-    const nextChecked = toggle ? !this.checked : this.checked
-    if (this.checked !== nextChecked) status |= UpdateStatus.TERMINATE
-    this.checked = nextChecked
+    const nextChecked = toggle ? !this.checked() : this.checked()
+    if (this.checked() !== nextChecked) status |= UpdateStatus.TERMINATE
 
     return (
       status |
       this.setState(
-        this.checked ? Checkbox.State.CHECKED : Checkbox.State.UNCHECKED
+        nextChecked ? Checkbox.State.CHECKED : Checkbox.State.UNCHECKED
       )
     )
   }
@@ -77,6 +73,10 @@ export class Checkbox extends Entity<Checkbox.State> {
     this.addChildren(child)
     this.setBackground(layerOffset, atlas)
     this.invalidateBounds()
+  }
+
+  checked(): boolean {
+    return this.getState() === Checkbox.State.CHECKED
   }
 
   getText(): string {
@@ -102,9 +102,7 @@ export namespace Checkbox {
     CHECKED = 'checked'
   }
 
-  export interface Props extends Text.Props {
-    readonly checked?: boolean
-  }
+  export interface Props extends Text.Props<State> {}
 }
 
 const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({

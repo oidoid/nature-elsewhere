@@ -82,7 +82,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
       imageID: AtlasID.PALETTE_BLACK
     })
     this.entityCheckbox = new Checkbox(atlas, {
-      checked: true,
+      state: Checkbox.State.CHECKED,
       textMaxSize: new WH(32, 5),
       position: new XY(88, 2),
       imageID: AtlasID.PALETTE_BLACK
@@ -234,12 +234,13 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
           : this.incrementButton.clicked || this.incrementButton.longClicked
           ? 1
           : 0
-      if (this.xCheckbox.checked)
+      if (this.xCheckbox.checked())
         updateNumberCheckbox(this.xCheckbox, state, offset)
-      else if (this.yCheckbox.checked)
+      else if (this.yCheckbox.checked())
         updateNumberCheckbox(this.yCheckbox, state, offset)
-      else if (this.entityCheckbox.checked) this.updateEntity(state, offset)
-      else if (this.stateCheckbox.checked) this.updateEntityState(state, offset)
+      else if (this.entityCheckbox.checked()) this.updateEntity(state, offset)
+      else if (this.stateCheckbox.checked())
+        this.updateEntityState(state, offset)
     }
 
     if (this.createButton.clicked) {

@@ -67,7 +67,8 @@ export namespace Text {
     VISIBLE = 'visible'
   }
 
-  export interface Props extends Entity.SubProps<State> {
+  export interface Props<State extends string = Text.State>
+    extends Entity.SubProps<State> {
     readonly text?: string
     readonly textLayer?: Layer
     readonly textScale?: XY

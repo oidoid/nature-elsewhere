@@ -250,6 +250,10 @@ export class Entity<State extends string = string> {
     )
   }
 
+  getState(): State | Entity.BaseState {
+    return this.machine.state
+  }
+
   setState(state: State | Entity.BaseState): UpdateStatus {
     const status = this.machine.setState(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
