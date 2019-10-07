@@ -33,19 +33,15 @@ export class ImageRect {
   /** If set, the imageID for all images. See Image._imageID. */
   private _imageID?: AtlasID
 
-  constructor({
-    origin = new XY(0, 0),
-    bounds = Rect.make(0, 0, 0, 0),
-    scale = new XY(1, 1),
-    images = [],
-    imageID
-  }: ImageRect.Props = {}) {
-    this._origin = origin
-    this._bounds = bounds
-    this._scale = scale
-    this._images = images
-    this._imageID = imageID
+  constructor(props?: ImageRect.Props) {
+    this._origin = (props && props.origin) || new XY(0, 0)
+    this._bounds = Rect.make(0, 0, 0, 0)
+    this._scale = new XY(1, 1)
+    this._images = (props && props.images) || []
+    this._imageID = props && props.imageID
     this._invalidate()
+    if (props && props.position) this.moveBy(props.position)
+    if (props && props.scale) this.scaleBy(props.scale)
   }
 
   get bounds(): Rect {
@@ -103,13 +99,7 @@ export class ImageRect {
     for (const image of this.images) image.scaleBy(scale.div(this.scale))
     this.scale.x = scale.x
     this.scale.y = scale.y
-    const union = Rect.unionAll(this.images.map(image => image.bounds))
-    if (union) {
-      this.bounds.position.x = union.position.x
-      this.bounds.position.y = union.position.y
-      this.bounds.size.w = union.size.w
-      this.bounds.size.h = union.size.h
-    }
+    this._invalidate()
     return UpdateStatus.UPDATED
   }
 
@@ -125,7 +115,7 @@ export class ImageRect {
     return this.images.filter(image => Rect.intersects(bounds, image.bounds))
   }
 
-  private _invalidate() {
+  private _invalidate(): void {
     const union = Rect.unionAll(this.images.map(image => image.bounds))
     if (union) {
       this.bounds.position.x = union.position.x
@@ -139,7 +129,7 @@ export class ImageRect {
 export namespace ImageRect {
   export interface Props {
     readonly origin?: XY
-    readonly bounds?: Rect
+    readonly position?: XY
     readonly scale?: XY
     readonly images?: Image[]
     readonly imageID?: AtlasID
