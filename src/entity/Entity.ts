@@ -1,4 +1,3 @@
-import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
@@ -35,11 +34,11 @@ export class Entity<State extends string = string> {
       local coordinate system is necessary for calculating absolute translations
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
-  private readonly _bounds: Rect = Rect.make(0, 0, 0, 0)
+  private readonly _bounds: Rect
 
   private readonly _velocity: XY
 
-  private readonly _velocityFraction: FloatXY = {x: 0, y: 0}
+  private readonly _velocityFraction: FloatXY
 
   private readonly _machine: ImageStateMachine<State | Entity.BaseState>
 
@@ -52,11 +51,10 @@ export class Entity<State extends string = string> {
 
   private _collisionPredicate: CollisionPredicate
 
-  // how to handle collision mapping? by type? by mixin updater field thingy? how does this relate to existing collision checks such as those with cursor and button?
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Images should not be considered directly for
       collision tests. */
-  private readonly _collisionBodies: readonly Rect[] // Move to CollisionBody with CollisionType prop
+  private readonly _collisionBodies: readonly Rect[]
 
   /** Operations are shallow by default (do not recurse children) unless
       specified otherwise. That is, only translation and animation are
@@ -66,7 +64,9 @@ export class Entity<State extends string = string> {
   constructor(props: Entity.Props<State>) {
     this._id = props.id || EntityID.ANONYMOUS
     this._type = props.type
+    this._bounds = Rect.make(0, 0, 0, 0)
     this._velocity = props.velocity || new XY(0, 0)
+    this._velocityFraction = {x: 0, y: 0}
     this._machine = new ImageStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
       props.updatePredicate || UpdatePredicate.INTERSECTS_VIEWPORT
@@ -84,12 +84,17 @@ export class Entity<State extends string = string> {
     this.setImageID(props.imageID)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
-    // children.
+    // children. Children themselves are not invalidated by this call.
     this.invalidateBounds()
   }
 
   get spawnID(): symbol {
     return this._spawnID
+  }
+
+  /** See Entity.spawnID. */
+  equal(entity: Readonly<Entity>): boolean {
+    return this.spawnID === entity.spawnID
   }
 
   get id(): EntityID {
@@ -99,8 +104,25 @@ export class Entity<State extends string = string> {
   get type(): EntityType {
     return this._type
   }
+
   get bounds(): ReadonlyRect {
     return this._bounds
+  }
+
+  /** This is a shallow invalidation. If a child changes state, or is added, the
+      parents' bounds should be updated. */
+  invalidateBounds(): void {
+    const bounds = Rect.unionAll([
+      this.imageBounds(),
+      ...this.collisionBodies,
+      ...this.children.map(child => child.bounds)
+    ])
+    if (bounds) {
+      this._bounds.position.x = bounds.position.x
+      this._bounds.position.y = bounds.position.y
+      this._bounds.size.w = bounds.size.w
+      this._bounds.size.h = bounds.size.h
+    }
   }
 
   get velocity(): XY {
@@ -135,13 +157,16 @@ export class Entity<State extends string = string> {
     return this._children
   }
 
-  setImageID(id?: AtlasID): UpdateStatus {
-    return this._machine.setImageID(id)
+  addChildren(...entities: readonly Entity[]): void {
+    this._children.push(...entities)
+    this.invalidateBounds()
   }
 
-  /** See Entity.spawnID. */
-  equal(entity: Entity): boolean {
-    return this.spawnID === entity.spawnID
+  removeChild(child: Readonly<Entity>): void {
+    const index = this.children.findIndex(entity => child.equal(entity))
+    if (index === -1) return
+    this._children.splice(index, 1)
+    this.invalidateBounds()
   }
 
   addImages(...images: readonly Image[]): void {
@@ -149,24 +174,10 @@ export class Entity<State extends string = string> {
     this.invalidateBounds()
   }
 
-  getImageBounds(): ReadonlyRect {
+  /** The image bounds for the current entity (children and collision rectangles
+      are not considered). */
+  imageBounds(): ReadonlyRect {
     return this._machine.bounds()
-  }
-
-  /** This is a shallow invalidation. If a child changes state, or is added, the
-      parents' bounds should be updated. */
-  invalidateBounds(): void {
-    const bounds = Rect.unionAll([
-      this._machine.bounds(),
-      ...this.collisionBodies,
-      ...this.children.map(child => child.bounds)
-    ])
-    if (bounds) {
-      this._bounds.position.x = bounds.position.x
-      this._bounds.position.y = bounds.position.y
-      this._bounds.size.w = bounds.size.w
-      this._bounds.size.h = bounds.size.h
-    }
   }
 
   moveTo(to: Readonly<XY>): UpdateStatus {
@@ -206,23 +217,15 @@ export class Entity<State extends string = string> {
     return status
   }
 
-  addChildren(...children: readonly Entity[]): void {
-    this._children.push(...children)
-    this.invalidateBounds()
-  }
-
-  removeChild(child: Readonly<Entity>): void {
-    const index = this.children.findIndex(entity => child.equal(entity))
-    if (index === -1) return
-    this._children.splice(index, 1)
-    this.invalidateBounds()
-  }
-
-  getImageID(): Maybe<AtlasID> {
+  imageID(): Maybe<AtlasID> {
     return this._machine.getImageID()
   }
 
-  getImages(): readonly Readonly<Image>[] {
+  setImageID(id?: AtlasID): UpdateStatus {
+    return this._machine.setImageID(id)
+  }
+
+  images(): readonly Readonly<Image>[] {
     return this._machine.images()
   }
 
@@ -230,11 +233,19 @@ export class Entity<State extends string = string> {
     return this._machine.replaceImages(state, ...images)
   }
 
-  moveImagesTo(to: Readonly<XY>): UpdateStatus {
-    return this._machine.moveTo(to)
+  moveImagesBy(by: Readonly<XY>): UpdateStatus {
+    const status = this._machine.moveBy(by)
+    if (status & UpdateStatus.UPDATED) this.invalidateBounds()
+    return status
   }
 
-  getOrigin(): Readonly<XY> {
+  moveImagesTo(to: Readonly<XY>): UpdateStatus {
+    const status = this._machine.moveTo(to)
+    if (status & UpdateStatus.UPDATED) this.invalidateBounds()
+    return status
+  }
+
+  origin(): Readonly<XY> {
     return this._machine.origin()
   }
 
@@ -262,15 +273,15 @@ export class Entity<State extends string = string> {
     )
   }
 
-  getState(): State | Entity.BaseState {
+  state(): State | Entity.BaseState {
     return this._machine.state
   }
 
-  getStates(): (State | Entity.BaseState)[] {
+  states(): (State | Entity.BaseState)[] {
     return this._machine.getStates()
   }
 
-  setState(state: State | Entity.BaseState): UpdateStatus {
+  transition(state: State | Entity.BaseState): UpdateStatus {
     const status = this._machine.setState(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
@@ -298,25 +309,6 @@ export class Entity<State extends string = string> {
     return status
   }
 
-  static findAnyByID(entities: readonly Entity[], id: EntityID): Maybe<Entity> {
-    for (const entity of entities) {
-      const found = entity.findByID(id)
-      if (found) return found
-    }
-    return
-  }
-
-  static findAnyBySpawnID(
-    entities: readonly Entity[],
-    spawnID: Symbol
-  ): Maybe<Entity> {
-    for (const entity of entities) {
-      const found = entity.findBySpawnID(spawnID)
-      if (found) return found
-    }
-    return
-  }
-
   findByID(id: EntityID): Maybe<Entity> {
     return this.find(entity => entity.id === id)
   }
@@ -339,16 +331,6 @@ export class Entity<State extends string = string> {
   elevate(offset: Layer): void {
     this._machine.elevate(offset)
     for (const child of this.children) child.elevate(offset)
-  }
-
-  is<T extends Entity>(type: T['type']): this is T {
-    return this.type === type
-  }
-
-  assert<T extends Entity>(type: T['type']): this is T {
-    const msg = `Unexpected entity type "${this.type}". Expected "${type}".`
-    Assert.assert(this.is(type), msg)
-    return true
   }
 
   private _updatePosition(state: UpdateState): UpdateStatus {
@@ -395,13 +377,22 @@ export class Entity<State extends string = string> {
     if (diagonal && collidesWith.length) {
       status |= this.moveTo(new XY(to.x, from.y))
       collidesWith = EntityCollider.collidesEntities(this, entities)
-      if (collidesWith.length) {
+      if (
+        collidesWith.some(
+          collision => collision.collisionType & CollisionType.OBSTACLE
+        )
+      ) {
         status |= this.moveTo(new XY(from.x, to.y))
         collidesWith = EntityCollider.collidesEntities(this, entities)
       }
     }
 
-    if (collidesWith.length) status |= this.moveTo(new XY(from.x, from.y))
+    if (
+      collidesWith.some(
+        collision => collision.collisionType & CollisionType.OBSTACLE
+      )
+    )
+      status |= this.moveTo(new XY(from.x, from.y))
 
     return status
   }
@@ -436,6 +427,7 @@ export namespace Entity {
     /** Defaults to []. */
     readonly children?: Entity[]
   }
+
   export interface SubProps<State extends string = string>
     extends Optional<
       Entity.Props<State>,
@@ -448,4 +440,26 @@ export namespace Entity {
       | 'collisionPredicate'
       | 'collisionBodies'
     > {}
+
+  export function findAnyBySpawnID(
+    entities: readonly Entity[],
+    spawnID: Symbol
+  ): Maybe<Entity> {
+    for (const entity of entities) {
+      const found = entity.findBySpawnID(spawnID)
+      if (found) return found
+    }
+    return
+  }
+
+  export function findAnyByID(
+    entities: readonly Entity[],
+    id: EntityID
+  ): Maybe<Entity> {
+    for (const entity of entities) {
+      const found = entity.findByID(id)
+      if (found) return found
+    }
+    return
+  }
 }

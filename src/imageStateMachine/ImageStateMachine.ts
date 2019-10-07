@@ -18,7 +18,6 @@ export class ImageStateMachine<State extends string = string> {
   constructor(props: ImageStateMachine.Props<State>) {
     this._state = props.state
     this._map = props.map
-    ObjectUtil.assertKeyOf(this._map, this._state, 'ImageStateMachine')
   }
 
   get state(): State {

@@ -42,7 +42,7 @@ export class Text extends Entity {
       this.text,
       this.textScale,
       {
-        position: this.getImageBounds().position.copy(),
+        position: this.imageBounds().position.copy(),
         size: new WH(
           this.textMaxSize && this.textMaxSize.w
             ? this.textMaxSize.w
@@ -53,7 +53,7 @@ export class Text extends Entity {
             : Limits.maxShort
         )
       },
-      this.getImageID()
+      this.imageID()
     )
     if (this.textLayer)
       for (const image of textImages) image.elevate(this.textLayer)

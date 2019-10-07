@@ -47,7 +47,7 @@ export class RadioCheckboxGroup extends Entity<RadioCheckboxGroup.State> {
     }
 
     if (checked) {
-      if (this._checked) this._checked.setState(Checkbox.State.UNCHECKED)
+      if (this._checked) this._checked.transition(Checkbox.State.UNCHECKED)
       this._checked = checked
     }
 

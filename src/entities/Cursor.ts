@@ -59,7 +59,7 @@ export class Cursor extends Entity<Cursor.State> {
       )
       status |= this.moveTo(position)
     }
-    status |= this.setState(nextState)
+    status |= this.transition(nextState)
 
     return status
   }

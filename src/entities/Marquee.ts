@@ -96,7 +96,7 @@ export class Marquee extends Entity<Marquee.State> {
       !panelCollision.length &&
       cursorSandboxCollision.length
     ) {
-      status |= this.setState(Marquee.State.VISIBLE)
+      status |= this.transition(Marquee.State.VISIBLE)
 
       const sandboxEntity = cursorSandboxCollision[0] // this won't work correctly for sub-entities
       this.selection = sandboxEntity
@@ -108,7 +108,7 @@ export class Marquee extends Entity<Marquee.State> {
         state.level.cursor.bounds.position
       )
     } else if (triggered && !panelCollision.length) {
-      status |= this.setState(Entity.BaseState.HIDDEN)
+      status |= this.transition(Entity.BaseState.HIDDEN)
       this.selection = undefined
       this._dragOffset = undefined
     }
@@ -135,7 +135,7 @@ function resize(
   destination: XY,
   sandboxEntity: Entity
 ): void {
-  const marqueeImages = marquee.getImages()
+  const marqueeImages = marquee.images()
 
   marqueeImages[Images.TOP].moveTo(destination)
   marqueeImages[Images.TOP].sizeTo(new WH(sandboxEntity.bounds.size.w + 2, 1))

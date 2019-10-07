@@ -87,13 +87,13 @@ export class Backpacker extends Entity<Backpacker.State> {
     const distance = objective.sub(this.bounds.position).abs()
     const horizontal =
       distance.x &&
-      (this.getState() === Backpacker.State.WALK_RIGHT || distance.x > 3)
+      (this.state() === Backpacker.State.WALK_RIGHT || distance.x > 3)
 
-    let nextState = this.getState()
+    let nextState = this.state()
     if (idle) {
-      nextState = idleStateFor[this.getState()]
+      nextState = idleStateFor[this.state()]
       if (state.level.destination)
-        state.level.destination.setState(Entity.BaseState.HIDDEN)
+        state.level.destination.transition(Entity.BaseState.HIDDEN)
     } else {
       if (up) nextState = Backpacker.State.WALK_UP
       if (down) nextState = Backpacker.State.WALK_DOWN
@@ -106,16 +106,15 @@ export class Backpacker extends Entity<Backpacker.State> {
     if (left && horizontal) scale.x = -1 * Math.abs(scale.x)
 
     this.setScale(scale)
-    this.setState(nextState)
+    this.transition(nextState)
 
     return status
   }
 
   private _computeObjective(state: UpdateState): Maybe<XY> {
     const {destination} = state.level
-    if (!destination || destination.getState() === Entity.BaseState.HIDDEN)
-      return
-    const {x, y} = destination.bounds.position.add(this.getOrigin())
+    if (!destination || destination.state() === Entity.BaseState.HIDDEN) return
+    const {x, y} = destination.bounds.position.add(this.origin())
     return new XY(
       NumberUtil.clamp(x, 0, state.level.size.w - this.bounds.size.w),
       NumberUtil.clamp(y, 0, state.level.size.h - this.bounds.size.h)
@@ -139,10 +138,10 @@ export namespace Backpacker {
     state: UpdateState
   ): void {
     if (entity.collisionType & CollisionType.OBSTACLE) {
-      const idle = idleStateFor[backpacker.getState()]
-      backpacker.setState(idle)
+      const idle = idleStateFor[backpacker.state()]
+      backpacker.transition(idle)
       if (state.level.destination)
-        state.level.destination.setState(Entity.BaseState.HIDDEN)
+        state.level.destination.transition(Entity.BaseState.HIDDEN)
     }
   }
 }

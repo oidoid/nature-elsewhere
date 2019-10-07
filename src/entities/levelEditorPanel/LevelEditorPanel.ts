@@ -251,7 +251,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
         )
         let entity = EntityFactory.produce(state.level.atlas, {
             type: child.type,
-            state: child.getState(),
+            state: child.state(),
             position
           })
           // force collision to bounds for picking
@@ -275,7 +275,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
     if (
       marquee &&
       marquee.selection &&
-      marquee.getState() !== Entity.BaseState.HIDDEN
+      marquee.state() !== Entity.BaseState.HIDDEN
     ) {
       const {selection} = marquee
       const sandbox = Entity.findAnyByID(
@@ -285,7 +285,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
       if (!sandbox) throw new Error('Missing sandbox.')
       if (this.destroyButton.clicked) {
         marquee.selection = undefined
-        marquee.setState(Entity.BaseState.HIDDEN)
+        marquee.transition(Entity.BaseState.HIDDEN)
         sandbox.removeChild(selection)
       }
       if (
@@ -346,7 +346,7 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
     this.stateCheckbox.setText(
       {
         textLayer: Layer.UI_PICKER_OFFSET,
-        text: child.getState()
+        text: child.state()
       },
       Layer.UI_PICKER_OFFSET,
       atlas
@@ -390,10 +390,10 @@ function toggleGrid(state: UpdateState): void {
   const grid = Entity.findAnyByID(state.level.parentEntities, EntityID.UI_GRID)
   if (!grid) throw new Error('Missing grid.')
   const toggle =
-    grid.getState() === Entity.BaseState.HIDDEN
+    grid.state() === Entity.BaseState.HIDDEN
       ? Plane.State.GRID
       : Entity.BaseState.HIDDEN
-  grid.setState(toggle)
+  grid.transition(toggle)
 }
 
 export namespace LevelEditorPanel {

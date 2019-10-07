@@ -39,9 +39,9 @@ export class DestinationMarker extends Entity<DestinationMarker.State> {
       state.canvasSize,
       state.level.cam.bounds
     )
-    status |= this.setState(DestinationMarker.State.VISIBLE)
+    status |= this.transition(DestinationMarker.State.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
-    const destination = position.add(this.getOrigin())
+    const destination = position.add(this.origin())
     status |= this.moveTo(destination)
 
     return status

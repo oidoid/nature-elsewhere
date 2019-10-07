@@ -55,7 +55,7 @@ export class Checkbox extends Entity<Checkbox.State> {
 
     return (
       status |
-      this.setState(
+      this.transition(
         nextChecked ? Checkbox.State.CHECKED : Checkbox.State.UNCHECKED
       )
     )
@@ -65,7 +65,7 @@ export class Checkbox extends Entity<Checkbox.State> {
     const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
     const child = new Text(atlas, {...props, position})
     child.elevate(layerOffset)
-    const imageID = this.children[0] ? this.children[0].getImageID() : undefined
+    const imageID = this.children[0] ? this.children[0].imageID() : undefined
     if (imageID) child.setImageID(imageID)
     this.removeChild(this.children[0])
     this.addChildren(child)
@@ -73,7 +73,7 @@ export class Checkbox extends Entity<Checkbox.State> {
   }
 
   checked(): boolean {
-    return this.getState() === Checkbox.State.CHECKED
+    return this.state() === Checkbox.State.CHECKED
   }
 
   getText(): string {

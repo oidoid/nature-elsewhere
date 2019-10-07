@@ -65,9 +65,9 @@ export namespace EntityCollider {
       // The initiator only has image collision. If the test entity or its
       // children collide with any of the initiator's images, a collision has
       // occurred. Otherwise, no collision has occurred.
-      if (!Rect.intersects(initiator.getImageBounds(), entity.bounds))
+      if (!Rect.intersects(initiator.imageBounds(), entity.bounds))
         return collisions
-      for (const image of initiator.getImages())
+      for (const image of initiator.images())
         collisions.push(...collidesRect(entity, image.bounds))
 
       // Each image must be tested against the entity in case it has children so
@@ -115,8 +115,8 @@ export namespace EntityCollider {
     if (entity.collisionPredicate === CollisionPredicate.IMAGES) {
       // Test if any image collides.
       if (
-        Rect.intersects(entity.getImageBounds(), rect) &&
-        entity.getImages().some(image => Rect.intersects(rect, image.bounds))
+        Rect.intersects(entity.imageBounds(), rect) &&
+        entity.images().some(image => Rect.intersects(rect, image.bounds))
       )
         collisions.push(entity)
       return collisions

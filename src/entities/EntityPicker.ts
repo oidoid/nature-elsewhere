@@ -44,7 +44,7 @@ export class EntityPicker extends Entity<EntityPicker.State> {
         entityWindowBounds.position
       )
       child.moveTo(center)
-      child.setState(Entity.BaseState.HIDDEN)
+      child.transition(Entity.BaseState.HIDDEN)
     }
     this.showActiveChild()
     this.invalidateBounds()
@@ -70,26 +70,26 @@ export class EntityPicker extends Entity<EntityPicker.State> {
     if (!child) return
     const states = getChildStates(child)
     const index = NumberUtil.wrap(
-      states.indexOf(child.getState()) + offset,
+      states.indexOf(child.state()) + offset,
       0,
       states.length
     )
     const state = states[index]
-    child.setState(state)
+    child.transition(state)
   }
 
   private hideActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
     child.elevate(-Layer.UI_PICKER_OFFSET)
-    child.setState(Entity.BaseState.HIDDEN)
+    child.transition(Entity.BaseState.HIDDEN)
   }
 
   private showActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
     const defaultState = getChildStates(child)[0]
-    if (defaultState) child.setState(defaultState)
+    if (defaultState) child.transition(defaultState)
     child.elevate(Layer.UI_PICKER_OFFSET)
   }
 }
@@ -101,7 +101,7 @@ export namespace EntityPicker {
 }
 
 function getChildStates(child: Entity): readonly (string)[] {
-  return child.getStates().filter(state => state !== Entity.BaseState.HIDDEN)
+  return child.states().filter(state => state !== Entity.BaseState.HIDDEN)
 }
 
 const typeBlacklist: readonly string[] = Object.freeze([

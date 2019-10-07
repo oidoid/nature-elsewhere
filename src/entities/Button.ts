@@ -65,7 +65,7 @@ export class Button extends Entity<Button.State> {
         collision &&
         !!state.inputs.pick &&
         state.inputs.pick.active)
-    status |= this.setState(
+    status |= this.transition(
       this._engaged ? Button.State.CLICKED : Button.State.UNCLICKED
     ) // this is just presentation not click state
 
