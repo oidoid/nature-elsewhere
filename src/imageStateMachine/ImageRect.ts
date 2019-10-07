@@ -4,6 +4,7 @@ import {Layer} from '../image/Layer'
 import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
+import {Assert} from '../utils/Assert'
 
 export class ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
@@ -48,6 +49,7 @@ export class ImageRect {
     return this._bounds
   }
 
+  /** See ImageRect._origin. */
   get origin(): Readonly<XY> {
     return this._origin
   }
@@ -94,11 +96,12 @@ export class ImageRect {
     return UpdateStatus.UPDATED
   }
 
-  scaleTo(scale: Readonly<XY>): UpdateStatus {
-    if (this.scale.equal(scale)) return UpdateStatus.UNCHANGED
-    for (const image of this.images) image.scaleBy(scale.div(this.scale))
-    this._scale.x = scale.x
-    this._scale.y = scale.y
+  scaleTo(to: Readonly<XY>): UpdateStatus {
+    Assert.assert(to.x && to.y, `Scale must be nonzero (x=${to.x}, y=${to.y}).`)
+    if (this.scale.equal(to)) return UpdateStatus.UNCHANGED
+    for (const image of this.images) image.scaleBy(to.div(this.scale))
+    this._scale.x = to.x
+    this._scale.y = to.y
     this._invalidate()
     return UpdateStatus.UPDATED
   }

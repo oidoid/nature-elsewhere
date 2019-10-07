@@ -16,6 +16,7 @@ import {UpdaterMap} from '../updaters/UpdaterMap'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {Assert} from '../utils/Assert'
 
 export class Entity<State extends string = string> {
   /** A globally unique identifier for quick equality checks. It should be used
@@ -80,7 +81,7 @@ export class Entity<State extends string = string> {
     this._collisionBodies = props.collisionBodies || []
     this._children = props.children || []
     if (props.position) this.moveTo(props.position)
-    if (props.scale) this.setScale(props.scale)
+    if (props.scale) this.scaleTo(props.scale)
     this.setImageID(props.imageID)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
@@ -197,17 +198,15 @@ export class Entity<State extends string = string> {
     return status | UpdateStatus.UPDATED
   }
 
-  getScale(): Readonly<XY> {
+  scale(): Readonly<XY> {
     return this._machine.getScale()
   }
 
-  setScale(scale: Readonly<XY>): UpdateStatus {
-    const collisionScale =
-      this.getScale().x && this.getScale().y
-        ? scale.div(this.getScale())
-        : undefined
-    const status = this._machine.scaleTo(scale)
-    if (collisionScale && status & UpdateStatus.UPDATED) {
+  scaleTo(to: Readonly<XY>): UpdateStatus {
+    Assert.assert(to.x && to.y, `Scale must be nonzero (x=${to.x}, y=${to.y}).`)
+    const collisionScale = to.div(this.scale())
+    const status = this._machine.scaleTo(to)
+    if (status & UpdateStatus.UPDATED) {
       for (const body of this._collisionBodies) {
         body.size.w *= Math.abs(collisionScale.x)
         body.size.h *= Math.abs(collisionScale.y)
@@ -245,6 +244,7 @@ export class Entity<State extends string = string> {
     return status
   }
 
+  /** See ImageRect._origin. */
   origin(): Readonly<XY> {
     return this._machine.origin()
   }

@@ -101,11 +101,11 @@ export class Backpacker extends Entity<Backpacker.State> {
         nextState = Backpacker.State.WALK_RIGHT
     }
 
-    const scale = this.getScale().copy()
+    const scale = this.scale().copy()
     if (up || down || right) scale.x = Math.abs(scale.x)
     if (left && horizontal) scale.x = -1 * Math.abs(scale.x)
 
-    this.setScale(scale)
+    this.scaleTo(scale)
     this.transition(nextState)
 
     return status

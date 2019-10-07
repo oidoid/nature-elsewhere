@@ -6,6 +6,7 @@ import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
 import {ReadonlyRect} from '../math/Rect'
+import {Assert} from '../utils/Assert'
 
 export type ImageStateMap<State extends string = string> = Readonly<
   Record<State, ImageRect>
@@ -36,6 +37,7 @@ export class ImageStateMachine<State extends string = string> {
     return this._imageRect().bounds
   }
 
+  /** See ImageRect._origin. */
   origin(): Readonly<XY> {
     return this._imageRect().origin
   }
@@ -85,8 +87,9 @@ export class ImageStateMachine<State extends string = string> {
     return this._imageRect().intersects(bounds)
   }
 
-  scaleTo(scale: Readonly<XY>): UpdateStatus {
-    return this._imageRect().scaleTo(scale)
+  scaleTo(to: Readonly<XY>): UpdateStatus {
+    Assert.assert(to.x && to.y, `Scale must be nonzero (x=${to.x}, y=${to.y}).`)
+    return this._imageRect().scaleTo(to)
   }
 
   /** Raise or lower all images for all states. */
