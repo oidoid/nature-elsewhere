@@ -51,7 +51,7 @@ export class Checkbox extends Entity<Checkbox.State> {
 
     const toggle = collision && Input.inactiveTriggered(state.inputs.pick)
     const nextChecked = toggle ? !this.checked() : this.checked()
-    if (this.checked() !== nextChecked) status |= UpdateStatus.TERMINATE
+    if (toggle) status |= UpdateStatus.TERMINATE
 
     return (
       status |
@@ -72,7 +72,6 @@ export class Checkbox extends Entity<Checkbox.State> {
     this.removeChild(this.children[0])
     this.addChildren(child)
     this.setBackground(layerOffset, atlas)
-    this.invalidateBounds()
   }
 
   checked(): boolean {

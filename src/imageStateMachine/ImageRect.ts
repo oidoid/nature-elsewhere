@@ -25,9 +25,9 @@ export class ImageRect {
   private readonly _scale: XY
 
   /** Image coordinates are not relative the bounds origin, they're in level
-      coordinates. These should usually only be passed statically by the entity
-      configuration JSON. If additional imagery is needed, it is often best to
-      add a child Entity instead. */
+      coordinates. These should usually only be passed statically by the entity.
+      If additional imagery is needed, it is often best to add a child Entity
+      instead. */
   private readonly _images: Image[]
 
   /** If set, the imageID for all images. See Image._imageID. */
