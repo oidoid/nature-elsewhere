@@ -19,11 +19,7 @@ module.exports = () => {
 
     module: {
       rules: [
-        {
-          test: /\.ts$/,
-          loader: 'ts-loader',
-          options: {experimentalWatchApi: true}
-        },
+        {test: /\.ts$/, use: 'ts-loader'},
         {test: /\.glsl$/, use: 'raw-loader'}
       ]
     },
