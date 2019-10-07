@@ -85,9 +85,9 @@ export class Checkbox extends Entity<Checkbox.State> {
     for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
       const size = new WH(text.bounds.size.w, text.bounds.size.h)
       const images = newBackgroundImages(state, layerOffset, atlas, size)
-      this.machine.replaceImages(state, ...images)
+      this.replaceImages(state, ...images)
     }
-    this.machine.moveTo(
+    this.moveImagesTo(
       new XY(text.bounds.position.x - 1, this.bounds.position.y)
     )
   }

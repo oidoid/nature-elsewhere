@@ -70,7 +70,7 @@ export class EntityPicker extends Entity<EntityPicker.State> {
     if (!child) return
     const states = getChildStates(child)
     const index = NumberUtil.wrap(
-      states.indexOf(child.machine.state) + offset,
+      states.indexOf(child.getState()) + offset,
       0,
       states.length
     )
@@ -101,9 +101,7 @@ export namespace EntityPicker {
 }
 
 function getChildStates(child: Entity): readonly (string)[] {
-  return child.machine
-    .getStates()
-    .filter(state => state !== Entity.BaseState.HIDDEN)
+  return child.getStates().filter(state => state !== Entity.BaseState.HIDDEN)
 }
 
 const typeBlacklist: readonly string[] = Object.freeze([

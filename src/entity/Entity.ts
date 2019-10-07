@@ -107,10 +107,6 @@ export class Entity<State extends string = string> {
     return this._velocity
   }
 
-  get machine(): ImageStateMachine<State | Entity.BaseState> {
-    return this._machine
-  }
-
   get updatePredicate(): UpdatePredicate {
     return this._updatePredicate
   }
@@ -140,7 +136,7 @@ export class Entity<State extends string = string> {
   }
 
   setImageID(id?: AtlasID): UpdateStatus {
-    return this.machine.setImageID(id)
+    return this._machine.setImageID(id)
   }
 
   /** See Entity.spawnID. */
@@ -149,19 +145,19 @@ export class Entity<State extends string = string> {
   }
 
   addImages(...images: readonly Image[]): void {
-    this.machine.addImages(...images)
+    this._machine.addImages(...images)
     this.invalidateBounds()
   }
 
   getImageBounds(): ReadonlyRect {
-    return this.machine.bounds()
+    return this._machine.bounds()
   }
 
   /** This is a shallow invalidation. If a child changes state, or is added, the
       parents' bounds should be updated. */
   invalidateBounds(): void {
     const bounds = Rect.unionAll([
-      this.machine.bounds(),
+      this._machine.bounds(),
       ...this.collisionBodies,
       ...this.children.map(child => child.bounds)
     ])
@@ -184,14 +180,14 @@ export class Entity<State extends string = string> {
     if (!by.x && !by.y) return status
     this._bounds.position.x += by.x
     this._bounds.position.y += by.y
-    status |= this.machine.moveBy(by)
+    status |= this._machine.moveBy(by)
     Rect.moveAllBy(this._collisionBodies, by)
     for (const child of this.children) child.moveBy(by)
     return status | UpdateStatus.UPDATED
   }
 
   getScale(): Readonly<XY> {
-    return this.machine.getScale()
+    return this._machine.getScale()
   }
 
   setScale(scale: Readonly<XY>): UpdateStatus {
@@ -199,7 +195,7 @@ export class Entity<State extends string = string> {
       this.getScale().x && this.getScale().y
         ? scale.div(this.getScale())
         : undefined
-    const status = this.machine.scaleTo(scale)
+    const status = this._machine.scaleTo(scale)
     if (collisionScale && status & UpdateStatus.UPDATED) {
       for (const body of this._collisionBodies) {
         body.size.w *= Math.abs(collisionScale.x)
@@ -223,15 +219,23 @@ export class Entity<State extends string = string> {
   }
 
   getImageID(): Maybe<AtlasID> {
-    return this.machine.getImageID()
+    return this._machine.getImageID()
   }
 
   getImages(): readonly Readonly<Image>[] {
-    return this.machine.images()
+    return this._machine.images()
+  }
+
+  replaceImages(state: State, ...images: readonly Image[]): UpdateStatus {
+    return this._machine.replaceImages(state, ...images)
+  }
+
+  moveImagesTo(to: Readonly<XY>): UpdateStatus {
+    return this._machine.moveTo(to)
   }
 
   getOrigin(): Readonly<XY> {
-    return this.machine.origin()
+    return this._machine.origin()
   }
 
   /** Recursively animate the entity and its children. Only visible entities are
@@ -239,14 +243,14 @@ export class Entity<State extends string = string> {
       *partly*, or not animated together. */
   animate(state: UpdateState): Readonly<Image>[] {
     if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
-    const visible = this.machine.intersects(state.level.cam.bounds)
+    const visible = this._machine.intersects(state.level.cam.bounds)
     for (const image of visible) image.animate(state.time, state.level.atlas)
     for (const child of this.children) visible.push(...child.animate(state))
     return visible
   }
 
   resetAnimation(): void {
-    this.machine.resetAnimation()
+    this._machine.resetAnimation()
   }
 
   /** Returns whether the current entity is in the viewport or should always be
@@ -259,11 +263,15 @@ export class Entity<State extends string = string> {
   }
 
   getState(): State | Entity.BaseState {
-    return this.machine.state
+    return this._machine.state
+  }
+
+  getStates(): (State | Entity.BaseState)[] {
+    return this._machine.getStates()
   }
 
   setState(state: State | Entity.BaseState): UpdateStatus {
-    const status = this.machine.setState(state)
+    const status = this._machine.setState(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
   }
@@ -329,7 +337,7 @@ export class Entity<State extends string = string> {
   /** Raise or lower an entity's images and its descendants' images for all
       states. */
   elevate(offset: Layer): void {
-    this.machine.elevate(offset)
+    this._machine.elevate(offset)
     for (const child of this.children) child.elevate(offset)
   }
 

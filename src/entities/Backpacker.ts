@@ -87,11 +87,11 @@ export class Backpacker extends Entity<Backpacker.State> {
     const distance = objective.sub(this.bounds.position).abs()
     const horizontal =
       distance.x &&
-      (this.machine.state === Backpacker.State.WALK_RIGHT || distance.x > 3)
+      (this.getState() === Backpacker.State.WALK_RIGHT || distance.x > 3)
 
-    let nextState = this.machine.state
+    let nextState = this.getState()
     if (idle) {
-      nextState = idleStateFor[this.machine.state]
+      nextState = idleStateFor[this.getState()]
       if (state.level.destination)
         state.level.destination.setState(Entity.BaseState.HIDDEN)
     } else {
@@ -113,7 +113,7 @@ export class Backpacker extends Entity<Backpacker.State> {
 
   private _computeObjective(state: UpdateState): Maybe<XY> {
     const {destination} = state.level
-    if (!destination || destination.machine.state === Entity.BaseState.HIDDEN)
+    if (!destination || destination.getState() === Entity.BaseState.HIDDEN)
       return
     const {x, y} = destination.bounds.position.add(this.getOrigin())
     return new XY(
@@ -139,7 +139,7 @@ export namespace Backpacker {
     state: UpdateState
   ): void {
     if (entity.collisionType & CollisionType.OBSTACLE) {
-      const idle = idleStateFor[backpacker.machine.state]
+      const idle = idleStateFor[backpacker.getState()]
       backpacker.setState(idle)
       if (state.level.destination)
         state.level.destination.setState(Entity.BaseState.HIDDEN)
