@@ -19,7 +19,6 @@ import {XY} from '../math/XY'
 export class Checkbox extends Entity<Checkbox.State> {
   constructor(atlas: Atlas, props?: Checkbox.Props) {
     super({
-      ...props,
       type: EntityType.UI_CHECKBOX,
       state: Checkbox.State.UNCHECKED,
       map: {
@@ -29,7 +28,8 @@ export class Checkbox extends Entity<Checkbox.State> {
       },
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
-      collisionPredicate: CollisionPredicate.BOUNDS
+      collisionPredicate: CollisionPredicate.BOUNDS,
+      ...props
     })
 
     this.setText(

@@ -42,7 +42,7 @@ export class Text extends Entity {
       this.text,
       this.textScale,
       {
-        position: this.imageRect().bounds.position,
+        position: this.imageRect().bounds.position.copy(),
         size: new WH(
           this.textMaxSize && this.textMaxSize.w
             ? this.textMaxSize.w

@@ -19,7 +19,7 @@ export namespace InstanceBuffer {
     atlas: Atlas,
     dat: DataView,
     index: number,
-    image: Image
+    image: Readonly<Image>
   ): void => {
     const i = index * layout.perInstance.stride
 

@@ -135,13 +135,7 @@ function resize(
   destination: XY,
   sandboxEntity: Entity
 ): void {
-  const rect = marquee.imageRect()
-  const marqueeImages = rect.images
-
-  rect.bounds.position.x = destination.x
-  rect.bounds.position.y = destination.y
-  rect.bounds.size.w = sandboxEntity.bounds.size.w + 2
-  rect.bounds.size.h = sandboxEntity.bounds.size.h + 2
+  const marqueeImages = marquee.imageRect().images
 
   marqueeImages[Images.TOP].moveTo(destination)
   marqueeImages[Images.TOP].sizeTo(new WH(sandboxEntity.bounds.size.w + 2, 1))

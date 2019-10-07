@@ -19,7 +19,7 @@ export namespace Store {
   }
 
   export function update(store: Store, state: UpdateState): void {
-    let images: Image[] = []
+    let images = []
 
     if (state.level.player)
       images.push(...updateAndAnimate([state.level.player], state))
@@ -47,8 +47,8 @@ export namespace Store {
 function updateAndAnimate(
   entities: readonly Entity[],
   state: UpdateState
-): Image[] {
-  const images: Image[] = []
+): Readonly<Image>[] {
+  const images = []
   for (const entity of entities) {
     entity.update(state)
     images.push(...entity.animate(state))

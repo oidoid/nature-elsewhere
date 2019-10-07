@@ -28,7 +28,7 @@ export class ImageStateMachine<State extends string = string> {
     return this._map[this.state]
   }
 
-  images(): readonly Image[] {
+  images(): readonly Readonly<Image>[] {
     return this.imageRect().images
   }
 
@@ -57,7 +57,7 @@ export class ImageStateMachine<State extends string = string> {
     return this.imageRect().moveTo(to)
   }
 
-  scaleTo(scale: XY): UpdateStatus {
+  scaleTo(scale: Readonly<XY>): UpdateStatus {
     return this.imageRect().scaleTo(scale)
   }
 

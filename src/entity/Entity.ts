@@ -229,7 +229,7 @@ export class Entity<State extends string = string> {
   /** Recursively animate the entity and its children. Only visible entities are
       animated so its possible for a composition entity's children to be fully,
       *partly*, or not animated together. */
-  animate(state: UpdateState): Image[] {
+  animate(state: UpdateState): Readonly<Image>[] {
     if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
     const visible = this.imageRect().intersects(state.level.cam.bounds)
     for (const image of visible) image.animate(state.time, state.level.atlas)

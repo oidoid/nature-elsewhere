@@ -4,7 +4,6 @@ import {Checkbox} from '../Checkbox'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
-import {EntityParser} from '../../entity/EntityParser'
 import {EntityPicker} from '../EntityPicker'
 import {
   EntityType,
@@ -32,6 +31,7 @@ import {
   FollowCamOrientation
 } from '../../updaters/followCam/FollowCam'
 import {UpdaterType} from '../../updaters/updaterType/UpdaterType'
+import {EntityFactory} from '../../entity/EntityFactory'
 
 export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
   implements FollowCam {
@@ -211,7 +211,6 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
       this.radioGroup,
       new LevelEditorPanelBackground(atlas)
     )
-    this.invalidateBounds()
 
     this.setEntityFields(0, atlas)
     this.elevate(Layer.UI_PICKER_OFFSET)
@@ -246,18 +245,15 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
     if (this.createButton.clicked) {
       const child = this.entityPicker.getActiveChild()
       if (child) {
-        const position = {
-          x: checkboxNumber(this.xCheckbox),
-          y: checkboxNumber(this.yCheckbox)
-        }
-        let entity = EntityParser.parse(
-            {
-              type: child.type,
-              state: child.machine.state,
-              position
-            },
-            state.level.atlas
-          )
+        const position = new XY(
+          checkboxNumber(this.xCheckbox),
+          checkboxNumber(this.yCheckbox)
+        )
+        let entity = EntityFactory.produce(state.level.atlas, {
+            type: child.type,
+            state: child.machine.state,
+            position
+          })
           // force collision to bounds for picking
         ;(<any>entity).collisionPredicate = CollisionPredicate.BOUNDS
         const sandbox = Entity.findAnyByID(
@@ -268,7 +264,6 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
 
         // marquee.setSelection(entity)
         sandbox.addChildren(entity)
-        sandbox.invalidateBounds()
         // [todo] set selection here
       }
     }
@@ -383,6 +378,7 @@ function updateNumberCheckbox(
     Layer.UI_PICKER_OFFSET,
     state.level.atlas
   )
+  // this.radioGroup.invalidateBounds()
 }
 
 function checkboxNumber(checkbox: Checkbox) {

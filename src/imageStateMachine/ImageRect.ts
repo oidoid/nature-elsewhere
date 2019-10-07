@@ -44,19 +44,19 @@ export class ImageRect {
     if (props && props.scale) this.scaleBy(props.scale)
   }
 
-  get bounds(): Rect {
+  get bounds(): ReadonlyRect {
     return this._bounds
   }
 
-  get origin(): XY {
+  get origin(): Readonly<XY> {
     return this._origin
   }
 
-  get scale(): XY {
+  get scale(): Readonly<XY> {
     return this._scale
   }
 
-  get images(): readonly Image[] {
+  get images(): readonly Readonly<Image>[] {
     return this._images
   }
 
@@ -67,7 +67,7 @@ export class ImageRect {
   setImageID(id?: AtlasID): UpdateStatus {
     if (this.imageID === id) return UpdateStatus.UNCHANGED
     this._imageID = id
-    for (const image of this.images)
+    for (const image of this._images)
       image.imageID = id === undefined ? image.id : id
     return UpdateStatus.UPDATED
   }
@@ -88,8 +88,8 @@ export class ImageRect {
 
   moveBy(by: Readonly<XY>): UpdateStatus {
     if (!by.x && !by.y) return UpdateStatus.UNCHANGED
-    this.bounds.position.x += by.x
-    this.bounds.position.y += by.y
+    this._bounds.position.x += by.x
+    this._bounds.position.y += by.y
     for (const image of this.images) image.moveBy(by)
     return UpdateStatus.UPDATED
   }
@@ -97,8 +97,8 @@ export class ImageRect {
   scaleTo(scale: Readonly<XY>): UpdateStatus {
     if (this.scale.equal(scale)) return UpdateStatus.UNCHANGED
     for (const image of this.images) image.scaleBy(scale.div(this.scale))
-    this.scale.x = scale.x
-    this.scale.y = scale.y
+    this._scale.x = scale.x
+    this._scale.y = scale.y
     this._invalidate()
     return UpdateStatus.UPDATED
   }
@@ -111,17 +111,17 @@ export class ImageRect {
     for (const image of this.images) image.elevate(offset)
   }
 
-  intersects(bounds: ReadonlyRect): Image[] {
+  intersects(bounds: ReadonlyRect): Readonly<Image>[] {
     return this.images.filter(image => Rect.intersects(bounds, image.bounds))
   }
 
   private _invalidate(): void {
     const union = Rect.unionAll(this.images.map(image => image.bounds))
     if (union) {
-      this.bounds.position.x = union.position.x
-      this.bounds.position.y = union.position.y
-      this.bounds.size.w = union.size.w
-      this.bounds.size.h = union.size.h
+      this._bounds.position.x = union.position.x
+      this._bounds.position.y = union.position.y
+      this._bounds.size.w = union.size.w
+      this._bounds.size.h = union.size.h
     }
   }
 }
