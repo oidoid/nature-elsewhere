@@ -41,7 +41,7 @@ export class DestinationMarker extends Entity<DestinationMarker.State> {
     )
     status |= this.setState(DestinationMarker.State.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
-    const destination = position.add(this.imageRect().origin)
+    const destination = position.add(this.getOrigin())
     status |= this.moveTo(destination)
 
     return status

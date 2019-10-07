@@ -5,6 +5,7 @@ import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
+import {ReadonlyRect} from '../math/Rect'
 
 export type ImageStateMap<State extends string = string> = Readonly<
   Record<State, ImageRect>
@@ -28,12 +29,28 @@ export class ImageStateMachine<State extends string = string> {
     return ObjectUtil.keys(this._map)
   }
 
-  imageRect(): ImageRect {
-    return this._map[this.state]
+  images(): readonly Readonly<Image>[] {
+    return this._imageRect().images
   }
 
-  images(): readonly Readonly<Image>[] {
-    return this.imageRect().images
+  bounds(): ReadonlyRect {
+    return this._imageRect().bounds
+  }
+
+  origin(): Readonly<XY> {
+    return this._imageRect().origin
+  }
+
+  moveBy(by: Readonly<XY>): UpdateStatus {
+    return this._imageRect().moveBy(by)
+  }
+
+  moveTo(to: Readonly<XY>): UpdateStatus {
+    return this._imageRect().moveTo(to)
+  }
+
+  addImages(...images: readonly Image[]): void {
+    this._imageRect().add(...images)
   }
 
   setImageID(id?: AtlasID): UpdateStatus {
@@ -44,9 +61,9 @@ export class ImageStateMachine<State extends string = string> {
 
   setState(state: State): UpdateStatus {
     if (this.state === state) return UpdateStatus.UNCHANGED
-    const {bounds, scale} = this.imageRect()
+    const {bounds, scale} = this._imageRect()
     this._state = state
-    this.imageRect().moveTo(bounds.position)
+    this._imageRect().moveTo(bounds.position)
     this.resetAnimation()
     this.scaleTo(scale)
     return UpdateStatus.UPDATED
@@ -57,12 +74,20 @@ export class ImageStateMachine<State extends string = string> {
     return UpdateStatus.UPDATED
   }
 
-  moveTo(to: XY): UpdateStatus {
-    return this.imageRect().moveTo(to)
+  getScale(): Readonly<XY> {
+    return this._imageRect().scale
+  }
+
+  getImageID(): Maybe<AtlasID> {
+    return this._imageRect().imageID
+  }
+
+  intersects(bounds: ReadonlyRect): Readonly<Image>[] {
+    return this._imageRect().intersects(bounds)
   }
 
   scaleTo(scale: Readonly<XY>): UpdateStatus {
-    return this.imageRect().scaleTo(scale)
+    return this._imageRect().scaleTo(scale)
   }
 
   /** Raise or lower all images for all states. */
@@ -73,6 +98,10 @@ export class ImageStateMachine<State extends string = string> {
   /** Reset the animations of all images in the current state. */
   resetAnimation(): void {
     for (const image of this.images()) image.resetAnimation()
+  }
+
+  private _imageRect(): ImageRect {
+    return this._map[this.state]
   }
 }
 

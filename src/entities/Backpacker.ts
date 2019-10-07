@@ -115,7 +115,7 @@ export class Backpacker extends Entity<Backpacker.State> {
     const {destination} = state.level
     if (!destination || destination.machine.state === Entity.BaseState.HIDDEN)
       return
-    const {x, y} = destination.bounds.position.add(this.imageRect().origin)
+    const {x, y} = destination.bounds.position.add(this.getOrigin())
     return new XY(
       NumberUtil.clamp(x, 0, state.level.size.w - this.bounds.size.w),
       NumberUtil.clamp(y, 0, state.level.size.h - this.bounds.size.h)

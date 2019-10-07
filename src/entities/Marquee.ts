@@ -135,7 +135,7 @@ function resize(
   destination: XY,
   sandboxEntity: Entity
 ): void {
-  const marqueeImages = marquee.imageRect().images
+  const marqueeImages = marquee.getImages()
 
   marqueeImages[Images.TOP].moveTo(destination)
   marqueeImages[Images.TOP].sizeTo(new WH(sandboxEntity.bounds.size.w + 2, 1))

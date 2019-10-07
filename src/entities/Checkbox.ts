@@ -65,9 +65,7 @@ export class Checkbox extends Entity<Checkbox.State> {
     const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
     const child = new Text(atlas, {...props, position})
     child.elevate(layerOffset)
-    const imageID = this.children[0]
-      ? this.children[0].imageRect().imageID
-      : undefined
+    const imageID = this.children[0] ? this.children[0].getImageID() : undefined
     if (imageID) child.setImageID(imageID)
     this.removeChild(this.children[0])
     this.addChildren(child)

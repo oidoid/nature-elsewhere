@@ -149,15 +149,19 @@ export class Entity<State extends string = string> {
   }
 
   addImages(...images: readonly Image[]): void {
-    this.imageRect().add(...images)
+    this.machine.addImages(...images)
     this.invalidateBounds()
+  }
+
+  getImageBounds(): ReadonlyRect {
+    return this.machine.bounds()
   }
 
   /** This is a shallow invalidation. If a child changes state, or is added, the
       parents' bounds should be updated. */
   invalidateBounds(): void {
     const bounds = Rect.unionAll([
-      this.imageRect().bounds,
+      this.machine.bounds(),
       ...this.collisionBodies,
       ...this.children.map(child => child.bounds)
     ])
@@ -180,14 +184,14 @@ export class Entity<State extends string = string> {
     if (!by.x && !by.y) return status
     this._bounds.position.x += by.x
     this._bounds.position.y += by.y
-    status |= this.imageRect().moveBy(by)
+    status |= this.machine.moveBy(by)
     Rect.moveAllBy(this._collisionBodies, by)
     for (const child of this.children) child.moveBy(by)
     return status | UpdateStatus.UPDATED
   }
 
   getScale(): Readonly<XY> {
-    return this.imageRect().scale
+    return this.machine.getScale()
   }
 
   setScale(scale: Readonly<XY>): UpdateStatus {
@@ -195,7 +199,7 @@ export class Entity<State extends string = string> {
       this.getScale().x && this.getScale().y
         ? scale.div(this.getScale())
         : undefined
-    const status = this.imageRect().scaleTo(scale)
+    const status = this.machine.scaleTo(scale)
     if (collisionScale && status & UpdateStatus.UPDATED) {
       for (const body of this._collisionBodies) {
         body.size.w *= Math.abs(collisionScale.x)
@@ -218,12 +222,16 @@ export class Entity<State extends string = string> {
     this.invalidateBounds()
   }
 
-  imageRect(): ImageRect {
-    return this.machine.imageRect()
+  getImageID(): Maybe<AtlasID> {
+    return this.machine.getImageID()
   }
 
-  getImageID(): Maybe<AtlasID> {
-    return this.imageRect().imageID
+  getImages(): readonly Readonly<Image>[] {
+    return this.machine.images()
+  }
+
+  getOrigin(): Readonly<XY> {
+    return this.machine.origin()
   }
 
   /** Recursively animate the entity and its children. Only visible entities are
@@ -231,7 +239,7 @@ export class Entity<State extends string = string> {
       *partly*, or not animated together. */
   animate(state: UpdateState): Readonly<Image>[] {
     if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
-    const visible = this.imageRect().intersects(state.level.cam.bounds)
+    const visible = this.machine.intersects(state.level.cam.bounds)
     for (const image of visible) image.animate(state.time, state.level.atlas)
     for (const child of this.children) visible.push(...child.animate(state))
     return visible
