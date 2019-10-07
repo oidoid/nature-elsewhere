@@ -70,6 +70,11 @@ export class Backpacker extends Entity<Backpacker.State> {
     const objective = this._computeObjective(state)
     if (!objective) return UpdateStatus.UNCHANGED
 
+    /** If not moving, don't pursue objectives practically underfoot. */
+    const stopped = !this.velocity.x && !this.velocity.y
+    if (stopped && objective.magnitude(this.bounds.position) < 4)
+      return UpdateStatus.UNCHANGED
+
     const {x, y} = this.bounds.position
     const left = objective.x < x
     const right = objective.x > x
@@ -79,10 +84,10 @@ export class Backpacker extends Entity<Backpacker.State> {
     this.velocity.y = (up ? -1 : down ? 1 : 0) * 80
 
     const idle = !this.velocity.x && !this.velocity.y
-    const distanceX = Math.abs(objective.x - this.bounds.position.x)
+    const distance = objective.sub(this.bounds.position).abs()
     const horizontal =
-      distanceX &&
-      (this.machine.state === Backpacker.State.WALK_RIGHT || distanceX > 3)
+      distance.x &&
+      (this.machine.state === Backpacker.State.WALK_RIGHT || distance.x > 3)
 
     let nextState = this.machine.state
     if (idle) {

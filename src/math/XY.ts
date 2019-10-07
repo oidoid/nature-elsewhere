@@ -59,6 +59,10 @@ export class XY {
     return new XY(this.x - x, this.y - y)
   }
 
+  abs(): XY {
+    return new XY(Math.abs(this.x), Math.abs(this.y))
+  }
+
   mul({x, y}: Readonly<XY>): XY {
     return new XY(this.x * x, this.y * y)
   }
