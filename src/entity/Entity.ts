@@ -222,6 +222,10 @@ export class Entity<State extends string = string> {
     return this.machine.imageRect()
   }
 
+  getImageID(): Maybe<AtlasID> {
+    return this.imageRect().imageID
+  }
+
   /** Recursively animate the entity and its children. Only visible entities are
       animated so its possible for a composition entity's children to be fully,
       *partly*, or not animated together. */

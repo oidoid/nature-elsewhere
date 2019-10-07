@@ -6,8 +6,6 @@ import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
 
-// origin in level XY
-// would be nice to make all changes at once instead of walking th eimages multiple itmes.
 export class ImageStateMachine<State extends string = string> {
   private _state: State
   private readonly _map: Readonly<Record<State, ImageRect>>

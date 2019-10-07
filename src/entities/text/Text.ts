@@ -53,7 +53,7 @@ export class Text extends Entity {
             : Limits.maxShort
         )
       },
-      this.imageRect().imageID
+      this.getImageID()
     )
     if (this.textLayer)
       for (const image of textImages) image.elevate(this.textLayer)

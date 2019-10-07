@@ -20,9 +20,12 @@ export class Cloud extends Entity<Cloud.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cloud.State.NONE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_SHADOW,
+              id: AtlasID.SCENERY_CLOUD_MEDIUM,
+              layer: Layer.FLOATS
+            }),
+            new Image(atlas, {
+              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
               position: new XY(0, 32),
               layer: Layer.SHADOW
             })
@@ -30,9 +33,12 @@ export class Cloud extends Entity<Cloud.State> {
         }),
         [Cloud.State.DRIZZLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_SHADOW,
+              id: AtlasID.SCENERY_CLOUD_MEDIUM,
+              layer: Layer.FLOATS
+            }),
+            new Image(atlas, {
+              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
               position: new XY(0, 32),
               layer: Layer.SHADOW
             }),
@@ -57,9 +63,12 @@ export class Cloud extends Entity<Cloud.State> {
         }),
         [Cloud.State.SHOWER]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_SHADOW,
+              id: AtlasID.SCENERY_CLOUD_MEDIUM,
+              layer: Layer.FLOATS
+            }),
+            new Image(atlas, {
+              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
               position: new XY(0, 32),
               layer: Layer.SHADOW
             }),
@@ -102,9 +111,12 @@ export class Cloud extends Entity<Cloud.State> {
         }),
         [Cloud.State.DOWNPOUR]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_CLOUD, layer: Layer.FLOATS}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_SHADOW,
+              id: AtlasID.SCENERY_CLOUD_MEDIUM,
+              layer: Layer.FLOATS
+            }),
+            new Image(atlas, {
+              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
               position: new XY(0, 32),
               layer: Layer.SHADOW
             }),

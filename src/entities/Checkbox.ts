@@ -8,7 +8,6 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {Entity} from '../entity/Entity'
 import {Image} from '../image/Image'
-import {ImageConfig, ImageParser} from '../image/ImageParser'
 import {AtlasID} from '../atlas/AtlasID'
 import {EntityType} from '../entity/EntityType'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
@@ -120,20 +119,18 @@ function newBackgroundImages(
   {w, h}: WH
 ): Image[] {
   const id = backgroundID[state]
-  const layer = 'UI_MID'
-  const background: ImageConfig = {
+  const layer = Layer.UI_MID + layerOffset
+  const backgroundImage = new Image(atlas, {
     id,
-    bounds: {position: {x: 1}, size: {w, h}},
+    position: new XY(1, 0),
+    size: new WH(w, h),
     layer
-  }
-  const border: ImageConfig = {
+  })
+  const borderImage = new Image(atlas, {
     id,
-    bounds: {position: {y: 1}, size: {w: w + 2, h: h - 2}},
+    position: new XY(0, 1),
+    size: new WH(w + 2, h - 2),
     layer
-  }
-  const backgroundImage = ImageParser.parse(background, atlas)
-  const borderImage = ImageParser.parse(border, atlas)
-  backgroundImage.elevate(layerOffset)
-  borderImage.elevate(layerOffset)
+  })
   return [backgroundImage, borderImage]
 }
