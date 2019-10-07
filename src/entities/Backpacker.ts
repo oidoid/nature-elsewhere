@@ -21,66 +21,36 @@ export class Backpacker extends Entity<Backpacker.State> {
       state: Backpacker.State.IDLE_DOWN,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Backpacker.State.IDLE_UP]: new ImageRect({
-          origin: new XY(-2, -13),
-          images: [
-            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_UP}),
-            new Image(atlas, {
-              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-              layer: Layer.SHADOW
-            })
-          ]
-        }),
-        [Backpacker.State.IDLE_RIGHT]: new ImageRect({
-          origin: new XY(-2, -13),
-          images: [
-            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_RIGHT}),
-            new Image(atlas, {
-              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-              layer: Layer.SHADOW
-            })
-          ]
-        }),
-        [Backpacker.State.IDLE_DOWN]: new ImageRect({
-          origin: new XY(-2, -13),
-          images: [
-            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_IDLE_DOWN}),
-            new Image(atlas, {
-              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-              layer: Layer.SHADOW
-            })
-          ]
-        }),
-        [Backpacker.State.WALK_UP]: new ImageRect({
-          origin: new XY(-2, -13),
-          images: [
-            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_UP}),
-            new Image(atlas, {
-              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-              layer: Layer.SHADOW
-            })
-          ]
-        }),
-        [Backpacker.State.WALK_RIGHT]: new ImageRect({
-          origin: new XY(-2, -13),
-          images: [
-            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_RIGHT}),
-            new Image(atlas, {
-              id: AtlasID.CHAR_BACKPACKER_WALK_RIGHT_SHADOW,
-              layer: Layer.SHADOW
-            })
-          ]
-        }),
-        [Backpacker.State.WALK_DOWN]: new ImageRect({
-          origin: new XY(-2, -13),
-          images: [
-            new Image(atlas, {id: AtlasID.CHAR_BACKPACKER_WALK_DOWN}),
-            new Image(atlas, {
-              id: AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW,
-              layer: Layer.SHADOW
-            })
-          ]
-        })
+        [Backpacker.State.IDLE_UP]: newImageRect(
+          atlas,
+          AtlasID.CHAR_BACKPACKER_IDLE_UP,
+          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+        ),
+        [Backpacker.State.IDLE_RIGHT]: newImageRect(
+          atlas,
+          AtlasID.CHAR_BACKPACKER_IDLE_RIGHT,
+          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+        ),
+        [Backpacker.State.IDLE_DOWN]: newImageRect(
+          atlas,
+          AtlasID.CHAR_BACKPACKER_IDLE_DOWN,
+          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+        ),
+        [Backpacker.State.WALK_UP]: newImageRect(
+          atlas,
+          AtlasID.CHAR_BACKPACKER_WALK_UP,
+          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+        ),
+        [Backpacker.State.WALK_RIGHT]: newImageRect(
+          atlas,
+          AtlasID.CHAR_BACKPACKER_WALK_RIGHT,
+          AtlasID.CHAR_BACKPACKER_WALK_RIGHT_SHADOW
+        ),
+        [Backpacker.State.WALK_DOWN]: newImageRect(
+          atlas,
+          AtlasID.CHAR_BACKPACKER_WALK_DOWN,
+          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+        )
       },
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType:
@@ -93,26 +63,30 @@ export class Backpacker extends Entity<Backpacker.State> {
       ...props
     })
   }
+
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
 
-    const destination = computeDestination(this, state)
-    if (!destination) return UpdateStatus.UNCHANGED
+    const objective = this._computeObjective(state)
+    if (!objective) return UpdateStatus.UNCHANGED
 
     const {x, y} = this.bounds.position
-    const left = destination.x < x
-    const right = destination.x > x
-    const up = destination.y < y
-    const down = destination.y > y
+    const left = objective.x < x
+    const right = objective.x > x
+    const up = objective.y < y
+    const down = objective.y > y
     this.velocity.x = (left ? -1 : right ? 1 : 0) * 80
     this.velocity.y = (up ? -1 : down ? 1 : 0) * 80
 
     const idle = !this.velocity.x && !this.velocity.y
-    const horizontal = !!Math.abs(destination.x - this.bounds.position.x)
+    const distanceX = Math.abs(objective.x - this.bounds.position.x)
+    const horizontal =
+      distanceX &&
+      (this.machine.state === Backpacker.State.WALK_RIGHT || distanceX > 3)
 
     let nextState = this.machine.state
     if (idle) {
-      nextState = computeIdleState(this)
+      nextState = idleStateFor[this.machine.state]
       if (state.level.destination)
         state.level.destination.setState(Entity.BaseState.HIDDEN)
     } else {
@@ -131,7 +105,19 @@ export class Backpacker extends Entity<Backpacker.State> {
 
     return status
   }
+
+  private _computeObjective(state: UpdateState): Maybe<XY> {
+    const {destination} = state.level
+    if (!destination || destination.machine.state === Entity.BaseState.HIDDEN)
+      return
+    const {x, y} = destination.bounds.position.add(this.imageRect().origin)
+    return new XY(
+      NumberUtil.clamp(x, 0, state.level.size.w - this.bounds.size.w),
+      NumberUtil.clamp(y, 0, state.level.size.h - this.bounds.size.h)
+    )
+  }
 }
+
 export namespace Backpacker {
   export enum State {
     IDLE_UP = 'idleUp',
@@ -141,13 +127,14 @@ export namespace Backpacker {
     WALK_RIGHT = 'walkRight',
     WALK_DOWN = 'walkDown'
   }
+
   export function collides(
-    backpacker: Entity,
+    backpacker: Backpacker,
     entity: Entity,
     state: UpdateState
   ): void {
     if (entity.collisionType & CollisionType.OBSTACLE) {
-      const idle = computeIdleState(backpacker)
+      const idle = idleStateFor[backpacker.machine.state]
       backpacker.setState(idle)
       if (state.level.destination)
         state.level.destination.setState(Entity.BaseState.HIDDEN)
@@ -155,32 +142,33 @@ export namespace Backpacker {
   }
 }
 
-function computeIdleState(backpacker: Entity): Backpacker.State {
-  switch (backpacker.machine.state) {
-    case Backpacker.State.WALK_UP:
-    case Backpacker.State.IDLE_UP:
-      return Backpacker.State.IDLE_UP
-    case Backpacker.State.IDLE_RIGHT:
-    case Backpacker.State.WALK_RIGHT:
-      return Backpacker.State.IDLE_RIGHT
-  }
-  return Backpacker.State.IDLE_DOWN
+function newImageRect(
+  atlas: Atlas,
+  movement: AtlasID,
+  silhouette: AtlasID
+): ImageRect {
+  return new ImageRect({
+    origin: new XY(-2, -13),
+    images: [
+      new Image(atlas, {id: movement}),
+      new Image(atlas, {id: silhouette, layer: Layer.SHADOW})
+    ]
+  })
 }
 
-function computeDestination(
-  backpacker: Backpacker,
-  state: UpdateState
-): Maybe<XY> {
-  if (
-    !state.level.destination ||
-    state.level.destination.machine.state === Entity.BaseState.HIDDEN
-  )
-    return
-  const {x, y} = state.level.destination.bounds.position.add(
-    backpacker.imageRect().origin
-  )
-  return new XY(
-    NumberUtil.clamp(x, 0, state.level.size.w - backpacker.bounds.size.w),
-    NumberUtil.clamp(y, 0, state.level.size.h - backpacker.bounds.size.h)
-  )
-}
+/** A mapping of the current state to the appropriate idle state. For example,
+    if the backpacker is walking right then stops, the idle right animation is
+    mapped. If the backpacker is walking down then stops, the idle down
+    animation is mapped. */
+const idleStateFor: Readonly<Record<
+  Backpacker.State | Entity.BaseState,
+  Backpacker.State | Entity.BaseState
+>> = Object.freeze({
+  [Entity.BaseState.HIDDEN]: Entity.BaseState.HIDDEN,
+  [Backpacker.State.IDLE_UP]: Backpacker.State.IDLE_UP,
+  [Backpacker.State.IDLE_RIGHT]: Backpacker.State.IDLE_RIGHT,
+  [Backpacker.State.IDLE_DOWN]: Backpacker.State.IDLE_DOWN,
+  [Backpacker.State.WALK_UP]: Backpacker.State.IDLE_UP,
+  [Backpacker.State.WALK_RIGHT]: Backpacker.State.IDLE_RIGHT,
+  [Backpacker.State.WALK_DOWN]: Backpacker.State.IDLE_DOWN
+})
