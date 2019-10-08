@@ -6,10 +6,11 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 
-export class IsoGrass extends Entity<IsoGrass.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<IsoGrass.State>) {
+export class IsoGrass extends Entity<'none', IsoGrass.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', IsoGrass.State>) {
     super({
       type: EntityType.SCENERY_ISO_GRASS,
+      variant: 'none',
       state: IsoGrass.State.NE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

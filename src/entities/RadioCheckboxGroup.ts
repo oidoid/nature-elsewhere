@@ -8,11 +8,15 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 
-export class RadioCheckboxGroup extends Entity<RadioCheckboxGroup.State> {
+export class RadioCheckboxGroup extends Entity<
+  'none',
+  RadioCheckboxGroup.State
+> {
   private _checked?: Checkbox
-  constructor(props?: Entity.SubProps<RadioCheckboxGroup.State>) {
+  constructor(props?: Entity.SubProps<'none', RadioCheckboxGroup.State>) {
     super({
       type: EntityType.UI_RADIO_CHECKBOX_GROUP,
+      variant: 'none',
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionPredicate: CollisionPredicate.CHILDREN,
       collisionType: CollisionType.TYPE_UI,

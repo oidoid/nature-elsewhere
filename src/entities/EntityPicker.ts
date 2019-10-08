@@ -15,11 +15,15 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 
 const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
-export class EntityPicker extends Entity<EntityPicker.State> {
+export class EntityPicker extends Entity<'none', EntityPicker.State> {
   private _activeChildIndex: number
-  constructor(atlas: Atlas, props?: Entity.SubProps<EntityPicker.State>) {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<'none', EntityPicker.State>
+  ) {
     super({
       type: EntityType.UI_ENTITY_PICKER,
+      variant: 'none',
       updatePredicate: UpdatePredicate.ALWAYS,
       state: EntityPicker.State.VISIBLE,
       map: {

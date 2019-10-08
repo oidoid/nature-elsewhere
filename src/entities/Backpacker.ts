@@ -14,11 +14,12 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {Layer} from '../image/Layer'
 
-export class Backpacker extends Entity<Backpacker.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Backpacker.State>) {
+export class Backpacker extends Entity<'none', Backpacker.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Backpacker.State>) {
     super({
       type: EntityType.CHAR_BACKPACKER,
       state: Backpacker.State.IDLE_DOWN,
+      variant: 'none',
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Backpacker.State.IDLE_UP]: newImageRect(

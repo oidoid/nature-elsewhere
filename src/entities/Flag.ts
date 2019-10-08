@@ -9,10 +9,11 @@ import {Atlas} from 'aseprite-atlas'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../collision/CollisionType'
 
-export class Flag extends Entity<Flag.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Flag.State>) {
+export class Flag extends Entity<'none', Flag.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Flag.State>) {
     super({
       type: EntityType.SCENERY_FLAG,
+      variant: 'none',
       state: Flag.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

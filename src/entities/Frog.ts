@@ -11,11 +11,12 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
 
-export class Frog extends Entity<Frog.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Frog.State>) {
+export class Frog extends Entity<'none', Frog.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Frog.State>) {
     super({
       type: EntityType.CHAR_FROG,
       state: Frog.State.IDLE,
+      variant: 'none',
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Frog.State.IDLE]: new ImageRect({

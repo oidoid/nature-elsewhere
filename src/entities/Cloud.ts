@@ -11,37 +11,29 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {WH} from '../math/WH'
 
-export class Cloud extends Entity<Cloud.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Cloud.State>) {
+export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Cloud.Variant, Cloud.State>
+  ) {
     super({
       type: EntityType.SCENERY_CLOUD,
+      variant: Cloud.Variant.MEDIUM,
       state: Cloud.State.NONE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cloud.State.NONE]: new ImageRect({
-          images: [
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM,
-              layer: Layer.FLOATS
-            }),
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
-              position: new XY(0, 32),
-              layer: Layer.SHADOW
-            })
-          ]
+          images: variantImages(
+            atlas,
+            (props && props.variant) || Cloud.Variant.MEDIUM
+          )
         }),
         [Cloud.State.DRIZZLE]: new ImageRect({
           images: [
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM,
-              layer: Layer.FLOATS
-            }),
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
-              position: new XY(0, 32),
-              layer: Layer.SHADOW
-            }),
+            ...variantImages(
+              atlas,
+              (props && props.variant) || Cloud.Variant.MEDIUM
+            ),
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 2),
@@ -63,15 +55,10 @@ export class Cloud extends Entity<Cloud.State> {
         }),
         [Cloud.State.SHOWER]: new ImageRect({
           images: [
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM,
-              layer: Layer.FLOATS
-            }),
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
-              position: new XY(0, 32),
-              layer: Layer.SHADOW
-            }),
+            ...variantImages(
+              atlas,
+              (props && props.variant) || Cloud.Variant.MEDIUM
+            ),
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 6),
@@ -111,15 +98,10 @@ export class Cloud extends Entity<Cloud.State> {
         }),
         [Cloud.State.DOWNPOUR]: new ImageRect({
           images: [
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM,
-              layer: Layer.FLOATS
-            }),
-            new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
-              position: new XY(0, 32),
-              layer: Layer.SHADOW
-            }),
+            ...variantImages(
+              atlas,
+              (props && props.variant) || Cloud.Variant.MEDIUM
+            ),
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
               position: new XY(1, 6),
@@ -165,10 +147,42 @@ export class Cloud extends Entity<Cloud.State> {
 }
 
 export namespace Cloud {
+  export enum Variant {
+    MEDIUM = 'medium',
+    LARGE = 'large'
+  }
+
   export enum State {
     NONE = 'none',
     DRIZZLE = 'drizzle',
     SHOWER = 'shower',
     DOWNPOUR = 'downpour'
   }
+}
+
+function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
+  if (variant === Cloud.Variant.MEDIUM)
+    return [
+      new Image(atlas, {
+        id: AtlasID.SCENERY_CLOUD_MEDIUM,
+        layer: Layer.FLOATS
+      }),
+      new Image(atlas, {
+        id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
+        position: new XY(0, 32),
+        layer: Layer.SHADOW
+      })
+    ]
+
+  return [
+    new Image(atlas, {
+      id: AtlasID.SCENERY_CLOUD_LARGE,
+      layer: Layer.FLOATS
+    }),
+    new Image(atlas, {
+      id: AtlasID.SCENERY_CLOUD_LARGE_SHADOW,
+      position: new XY(0, 32),
+      layer: Layer.SHADOW
+    })
+  ]
 }

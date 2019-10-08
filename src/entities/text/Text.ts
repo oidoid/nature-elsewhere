@@ -13,15 +13,16 @@ import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {EntityType} from '../../entity/EntityType'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 
-export class Text extends Entity {
+export class Text extends Entity<'none', Text.State> {
   text: string
   readonly textLayer: Layer
   readonly textScale: XY
   readonly textMaxSize: WH
 
-  constructor(atlas: Atlas, props?: Text.Props) {
+  constructor(atlas: Atlas, props?: Text.Props<'none', Text.State>) {
     super({
       type: EntityType.UI_TEXT,
+      variant: 'none',
       state: Text.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
@@ -67,8 +68,10 @@ export namespace Text {
     VISIBLE = 'visible'
   }
 
-  export interface Props<State extends string = Text.State>
-    extends Entity.SubProps<State> {
+  export interface Props<
+    Variant extends string = string,
+    State extends string = Text.State
+  > extends Entity.SubProps<Variant, State> {
     readonly text?: string
     readonly textLayer?: Layer
     readonly textScale?: XY

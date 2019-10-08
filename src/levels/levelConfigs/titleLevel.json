@@ -5,11 +5,10 @@
   "minViewport": {"w": 132, "h": 128},
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
-    {"type": "sceneryPlane", "state": "white"},
+    {"type": "sceneryPlane", "variant": "white"},
     {
       "type": "group",
       "positionRelativeToCam": "center",
-      "state": "visible",
       "map": {
         "visible": {
           "images": [

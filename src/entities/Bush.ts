@@ -9,10 +9,11 @@ import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {Rect} from '../math/Rect'
 
-export class Bush extends Entity<Bush.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Bush.State>) {
+export class Bush extends Entity<'none', Bush.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Bush.State>) {
     super({
       type: EntityType.SCENERY_BUSH,
+      variant: 'none',
       state: Bush.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

@@ -22,6 +22,7 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
+          variant: 'none',
           collisionPredicate: CollisionPredicate.NEVER,
           collisionBodies: [{size: {w: 9, h: 9}}]
         },
@@ -34,6 +35,7 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
+          variant: 'none',
           collisionPredicate: CollisionPredicate.BODIES,
           collisionBodies: [{position: {x: 10, y: 10}, size: {w: 9, h: 9}}]
         },
@@ -44,7 +46,7 @@ describe('collidesRect()', () => {
     test('IMAGES but no image intersection.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: Plane.State.RED,
+        variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.IMAGES,
         position: new XY(10, 10)
       })
@@ -53,12 +55,12 @@ describe('collidesRect()', () => {
     test('CHILDREN short-circuited by failed entity bounds test.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: Plane.State.RED,
+        variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.CHILDREN,
         position: new XY(10, 10),
         children: [
           new Plane(atlas, {
-            state: Plane.State.BLUE,
+            variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]
@@ -71,11 +73,11 @@ describe('collidesRect()', () => {
     test('BOUNDS.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: Plane.State.RED,
+        variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.BOUNDS,
         children: [
           new Plane(atlas, {
-            state: Plane.State.BLUE,
+            variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]
@@ -85,12 +87,12 @@ describe('collidesRect()', () => {
     test('BODIES.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: Plane.State.RED,
+        variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.BODIES,
         collisionBodies: [Rect.make(0, 0, 9, 9)],
         children: [
           new Plane(atlas, {
-            state: Plane.State.BLUE,
+            variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]
@@ -100,11 +102,11 @@ describe('collidesRect()', () => {
     test('IMAGES.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane(atlas, {
-        state: Plane.State.RED,
+        variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.IMAGES,
         children: [
           new Plane(atlas, {
-            state: Plane.State.BLUE,
+            variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
         ]
@@ -119,10 +121,12 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
+          variant: 'none',
           collisionPredicate: CollisionPredicate.CHILDREN,
           children: [
             {
               type: EntityType.GROUP,
+              variant: 'none',
               collisionPredicate: CollisionPredicate.BODIES,
               collisionBodies: [{size: {w: 9, h: 9}}]
             }
@@ -139,14 +143,17 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
+          variant: 'none',
           collisionPredicate: CollisionPredicate.CHILDREN,
           children: [
             {
               type: EntityType.GROUP,
+              variant: 'none',
               collisionPredicate: CollisionPredicate.CHILDREN,
               children: [
                 {
                   type: EntityType.GROUP,
+                  variant: 'none',
                   collisionPredicate: CollisionPredicate.BODIES,
                   collisionBodies: [{size: {w: 9, h: 9}}]
                 }
@@ -165,15 +172,18 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
+          variant: 'none',
           collisionPredicate: CollisionPredicate.CHILDREN,
           children: [
             {
               type: EntityType.GROUP,
+              variant: 'none',
               collisionPredicate: CollisionPredicate.BODIES,
               collisionBodies: [{size: {w: 9, h: 9}}]
             },
             {
               type: EntityType.GROUP,
+              variant: 'none',
               collisionPredicate: CollisionPredicate.BODIES,
               collisionBodies: [{size: {w: 9, h: 9}}]
             }

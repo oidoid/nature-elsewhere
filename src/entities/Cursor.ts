@@ -12,10 +12,11 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 
-export class Cursor extends Entity<Cursor.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Cursor.State>) {
+export class Cursor extends Entity<'none', Cursor.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Cursor.State>) {
     super({
       type: EntityType.UI_CURSOR,
+      variant: 'none',
       state: Entity.BaseState.HIDDEN,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

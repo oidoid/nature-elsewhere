@@ -11,10 +11,14 @@ import {Atlas} from 'aseprite-atlas'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 
-export class DestinationMarker extends Entity<DestinationMarker.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<DestinationMarker.State>) {
+export class DestinationMarker extends Entity<'none', DestinationMarker.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<'none', DestinationMarker.State>
+  ) {
     super({
       type: EntityType.UI_DESTINATION_MARKER,
+      variant: 'none',
       state: Entity.BaseState.HIDDEN,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

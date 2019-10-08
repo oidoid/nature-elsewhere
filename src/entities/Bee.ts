@@ -11,10 +11,11 @@ import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 
-export class Bee extends Entity<Bee.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Bee.State>) {
+export class Bee extends Entity<'none', Bee.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Bee.State>) {
     super({
       type: EntityType.CHAR_BEE,
+      variant: 'none',
       state: Bee.State.IDLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

@@ -13,13 +13,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 
-export class Button extends Entity<Button.State> {
+export class Button extends Entity<'none', Button.State> {
   clicked: boolean
   longClicked: boolean
   private _engaged: boolean
   constructor(atlas: Atlas, props?: Button.Props) {
     super({
       type: EntityType.UI_BUTTON,
+      variant: 'none',
       state: Button.State.UNCLICKED,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
@@ -87,7 +88,7 @@ export namespace Button {
     CLICKED = 'clicked'
   }
 
-  export interface Props extends Entity.SubProps<Button.State> {
+  export interface Props extends Entity.SubProps<'none', Button.State> {
     clicked?: boolean
     longClicked?: boolean
   }

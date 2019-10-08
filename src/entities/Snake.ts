@@ -10,10 +10,11 @@ import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 
-export class Snake extends Entity<Snake.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Snake.State>) {
+export class Snake extends Entity<'none', Snake.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Snake.State>) {
     super({
       type: EntityType.CHAR_SNAKE,
+      variant: 'none',
       state: Snake.State.IDLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

@@ -12,14 +12,16 @@ import {Atlas} from 'aseprite-atlas'
 import {WH} from '../../math/WH'
 
 export class LevelEditorPanelBackground extends Entity<
+  'none',
   LevelEditorPanelBackgroundState
 > {
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<LevelEditorPanelBackgroundState>
+    props?: Entity.SubProps<'none', LevelEditorPanelBackgroundState>
   ) {
     super({
       type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
+      variant: 'none',
       collisionType: CollisionType.TYPE_UI,
       collisionPredicate: CollisionPredicate.IMAGES,
       updatePredicate: UpdatePredicate.ALWAYS,

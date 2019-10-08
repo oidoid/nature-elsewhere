@@ -40,6 +40,7 @@ export interface EntityConfig {
   /** Defaults to EntityID.UNDEFINED. */
   readonly id?: EntityIDConfig
   readonly type: EntityTypeConfig
+  readonly variant?: VariantConfig
   /** Defaults to (0, 0). */
   readonly position?: XYConfig
   readonly velocity?: DecamillipixelIntXYConfig
@@ -63,6 +64,7 @@ export interface EntityConfig {
 
 export type EntityIDConfig = Maybe<EntityID | string>
 export type EntityTypeConfig = EntityType | string
+export type VariantConfig = Maybe<string>
 export type EntityStateConfig = Maybe<Entity.BaseState | string>
 
 export namespace EntityParser {
@@ -90,6 +92,10 @@ export namespace EntityParser {
     throw new Error()
   }
 
+  export function parseVariant(config: VariantConfig): Maybe<string> {
+    return config
+  }
+
   export function parseState(
     config: EntityStateConfig
   ): Entity.BaseState | string {
@@ -101,12 +107,11 @@ function parseProps(
   config: EntityConfig,
   type: EntityType,
   atlas: Atlas
-):
-  | Entity.Props<Entity.BaseState | string>
-  | Entity.SubProps<Entity.BaseState | string> {
+): Entity.Props | Entity.SubProps {
   return {
     ...(config.id && {id: EntityParser.parseID(config.id)}),
     type,
+    ...(config.variant && {variant: EntityParser.parseVariant(config.variant)}),
     ...(config.position && {position: XYParser.parse(config.position)}),
     ...(config.scale && {scale: ImageParser.parseScale(config.scale)}),
     ...(config.velocity && {velocity: XYParser.parse(config.velocity)}),
@@ -140,14 +145,9 @@ function parseProps(
 
 function parseTypeProps(
   config: EntityConfig,
-  props:
-    | Entity.Props<Entity.BaseState | string>
-    | Entity.SubProps<Entity.BaseState | string>
-):
-  | Entity.Props<Entity.BaseState | string>
-  | Entity.SubProps<Entity.BaseState | string> {
-  let typeProps: Maybe<| Entity.Props<Entity.BaseState | string>
-  | Entity.SubProps<Entity.BaseState | string>> = undefined
+  props: Entity.Props | Entity.SubProps
+): Entity.Props | Entity.SubProps {
+  let typeProps: Maybe<Entity.Props | Entity.SubProps> = undefined
   switch (props.type) {
     case EntityType.UI_TEXT:
     case EntityType.UI_CHECKBOX:

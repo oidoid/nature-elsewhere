@@ -5,10 +5,11 @@ import {EntityType} from '../entity/EntityType'
 import {Entity} from '../entity/Entity'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 
-export class DateVersionHash extends Entity<DateVersionHash.State> {
-  constructor(atlas: Atlas, props?: Text.Props) {
+export class DateVersionHash extends Entity<'none', DateVersionHash.State> {
+  constructor(atlas: Atlas, props?: Text.Props<'none', Text.State>) {
     super({
       type: EntityType.UI_DATE_VERSION_HASH,
+      variant: 'none',
       state: DateVersionHash.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

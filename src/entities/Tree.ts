@@ -10,10 +10,11 @@ import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
 
-export class Tree extends Entity<Tree.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Tree.State>) {
+export class Tree extends Entity<'none', Tree.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Tree.State>) {
     super({
       type: EntityType.SCENERY_TREE,
+      variant: 'none',
       state: Tree.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

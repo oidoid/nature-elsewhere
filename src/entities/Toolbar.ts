@@ -12,13 +12,15 @@ import {WH} from '../math/WH'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 
-export class Toolbar extends Entity<Toolbar.State> implements FollowCam {
+export class Toolbar extends Entity<'none', Toolbar.State>
+  implements FollowCam {
   readonly positionRelativeToCam: FollowCamOrientation
   readonly camMargin: WH
 
-  constructor(atlas: Atlas, props?: Entity.SubProps<Toolbar.State>) {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Toolbar.State>) {
     super({
       type: EntityType.UI_TOOLBAR,
+      variant: 'none',
       state: Toolbar.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

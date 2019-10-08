@@ -10,11 +10,12 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
 
-export class Fly extends Entity<Fly.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Fly.State>) {
+export class Fly extends Entity<'none', Fly.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Fly.State>) {
     super({
       type: EntityType.CHAR_FLY,
       state: Fly.State.IDLE,
+      variant: 'none',
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Fly.State.IDLE]: new ImageRect({

@@ -16,10 +16,11 @@ import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 
-export class Checkbox extends Entity<Checkbox.State> {
+export class Checkbox extends Entity<'none', Checkbox.State> {
   constructor(atlas: Atlas, props?: Checkbox.Props) {
     super({
       type: EntityType.UI_CHECKBOX,
+      variant: 'none',
       state: Checkbox.State.UNCHECKED,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
@@ -61,7 +62,11 @@ export class Checkbox extends Entity<Checkbox.State> {
     )
   }
 
-  setText(props: Text.Props, layerOffset: number, atlas: Atlas): void {
+  setText(
+    props: Text.Props<'none', Text.State>,
+    layerOffset: number,
+    atlas: Atlas
+  ): void {
     const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
     const child = new Text(atlas, {...props, position})
     child.elevate(layerOffset)
@@ -99,7 +104,7 @@ export namespace Checkbox {
     CHECKED = 'checked'
   }
 
-  export interface Props extends Text.Props<State> {}
+  export interface Props extends Text.Props<'none', State> {}
 }
 
 const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({

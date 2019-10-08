@@ -4,5 +4,5 @@
   "size": {"w": 128, "h": 96},
   "minViewport": {"w": 128, "h": 96},
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
-  "parentEntities": [{"type": "sceneryPlane", "state": "white"}]
+  "parentEntities": [{"type": "sceneryPlane", "variant": "white"}]
 }

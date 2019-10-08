@@ -7,10 +7,9 @@
   "minViewport": {"w": 48, "h": 48},
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
-    {"type": "sceneryPlane", "state": "white"},
+    {"type": "sceneryPlane", "variant": "white"},
     {
       "type": "group",
-      "state": "visible",
       "map": {
         "visible": {
           "images": [

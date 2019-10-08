@@ -9,10 +9,11 @@ import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
 
-export class Pyramid extends Entity<Pyramid.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Pyramid.State>) {
+export class Pyramid extends Entity<'none', Pyramid.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Pyramid.State>) {
     super({
       type: EntityType.SCENERY_PYRAMID,
+      variant: 'none',
       state: Pyramid.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

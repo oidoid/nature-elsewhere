@@ -15,7 +15,7 @@
   },
   "parentEntities": [
     {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"},
-    {"type": "sceneryPlane", "state": "paleGreen"},
+    {"type": "sceneryPlane", "variant": "paleGreen"},
     {
       "type": "sceneryCloud",
       "position": {"x": 20, "y": 20},
@@ -84,21 +84,25 @@
     {"type": "sceneryClover", "position": {"x": 54, "y": 12}},
     {
       "type": "sceneryClover",
-      "state": "medium",
+      "variant": "medium",
       "position": {"x": 66, "y": 24}
     },
     {"type": "sceneryGrass", "position": {"x": 45, "y": 117}},
     {
       "type": "sceneryGrass",
-      "state": "medium",
+      "variant": "medium",
       "position": {"x": 101, "y": 17}
     },
     {
       "type": "sceneryGrass",
-      "state": "medium",
+      "variant": "medium",
       "position": {"x": 111, "y": 57}
     },
-    {"type": "sceneryGrass", "state": "large", "position": {"x": 141, "y": 77}},
+    {
+      "type": "sceneryGrass",
+      "variant": "large",
+      "position": {"x": 141, "y": 77}
+    },
     {"type": "sceneryBush", "position": {"x": 151, "y": 30}},
     {"type": "scenerySubshrub", "position": {"x": 159, "y": 32}},
     {"type": "scenerySubshrub", "position": {"x": 163, "y": 36}},
@@ -123,19 +127,19 @@
       "velocity": {"x": -12}
     },
     {"type": "sceneryIsoGrass", "position": {"x": 160, "y": 96}},
-    {"type": "sceneryPath", "state": "/", "position": {"x": 160, "y": 96}},
-    {"type": "sceneryPath", "state": "/", "position": {"x": 176, "y": 88}},
-    {"type": "sceneryPath", "state": "/", "position": {"x": 192, "y": 80}},
-    {"type": "sceneryPath", "state": ">", "position": {"x": 208, "y": 72}},
-    {"type": "sceneryPath", "state": "\\", "position": {"x": 192, "y": 64}},
-    {"type": "sceneryPath", "state": "^", "position": {"x": 176, "y": 56}},
-    {"type": "sceneryPath", "state": "v", "position": {"x": 160, "y": 64}},
-    {"type": "sceneryPath", "state": "\\", "position": {"x": 144, "y": 56}},
-    {"type": "sceneryPath", "state": "<", "position": {"x": 128, "y": 48}},
-    {"type": "sceneryPath", "state": "/", "position": {"x": 144, "y": 40}},
-    {"type": "sceneryPath", "state": "/", "position": {"x": 160, "y": 32}},
-    {"type": "sceneryPath", "state": "/", "position": {"x": 176, "y": 24}},
-    {"type": "sceneryPath", "state": "^", "position": {"x": 192, "y": 16}},
+    {"type": "sceneryPath", "variant": "/", "position": {"x": 160, "y": 96}},
+    {"type": "sceneryPath", "variant": "/", "position": {"x": 176, "y": 88}},
+    {"type": "sceneryPath", "variant": "/", "position": {"x": 192, "y": 80}},
+    {"type": "sceneryPath", "variant": ">", "position": {"x": 208, "y": 72}},
+    {"type": "sceneryPath", "variant": "\\", "position": {"x": 192, "y": 64}},
+    {"type": "sceneryPath", "variant": "^", "position": {"x": 176, "y": 56}},
+    {"type": "sceneryPath", "variant": "v", "position": {"x": 160, "y": 64}},
+    {"type": "sceneryPath", "variant": "\\", "position": {"x": 144, "y": 56}},
+    {"type": "sceneryPath", "variant": "<", "position": {"x": 128, "y": 48}},
+    {"type": "sceneryPath", "variant": "/", "position": {"x": 144, "y": 40}},
+    {"type": "sceneryPath", "variant": "/", "position": {"x": 160, "y": 32}},
+    {"type": "sceneryPath", "variant": "/", "position": {"x": 176, "y": 24}},
+    {"type": "sceneryPath", "variant": "^", "position": {"x": 192, "y": 16}},
     {"type": "sceneryConifer", "position": {"x": 188, "y": 27}},
     {"type": "sceneryPond", "position": {"x": 160, "y": 48}},
     {"type": "sceneryPond", "position": {"y": 64}}

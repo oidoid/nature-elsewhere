@@ -33,7 +33,7 @@ import {
 import {UpdaterType} from '../../updaters/updaterType/UpdaterType'
 import {EntityFactory} from '../../entity/EntityFactory'
 
-export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
+export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
   implements FollowCam {
   readonly radioGroup: Entity
   readonly xCheckbox: Checkbox
@@ -49,9 +49,13 @@ export class LevelEditorPanel extends Entity<LevelEditorPanel.State>
   readonly positionRelativeToCam: FollowCamOrientation
   readonly camMargin: WH
 
-  constructor(atlas: Atlas, props?: Entity.SubProps<LevelEditorPanel.State>) {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<'none', LevelEditorPanel.State>
+  ) {
     super({
       type: EntityType.UI_LEVEL_EDITOR_PANEL,
+      variant: 'none',
       updatePredicate: UpdatePredicate.ALWAYS,
       collisionType: CollisionType.TYPE_UI,
       collisionPredicate: CollisionPredicate.CHILDREN,
@@ -391,7 +395,7 @@ function toggleGrid(state: UpdateState): void {
   if (!grid) throw new Error('Missing grid.')
   const toggle =
     grid.state() === Entity.BaseState.HIDDEN
-      ? Plane.State.GRID
+      ? Plane.State.VISIBLE
       : Entity.BaseState.HIDDEN
   grid.transition(toggle)
 }

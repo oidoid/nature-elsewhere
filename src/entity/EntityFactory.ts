@@ -37,7 +37,10 @@ import {Toolbar} from '../entities/Toolbar'
 import {Tree} from '../entities/Tree'
 
 export namespace EntityFactory {
-  export function produce(atlas: Atlas, props: Entity.SubProps<any>): Entity {
+  export function produce(
+    atlas: Atlas,
+    props: Entity.SubProps<any, any>
+  ): Entity {
     switch (props.type) {
       case EntityType.CHAR_BACKPACKER:
         return new Backpacker(atlas, props)
@@ -57,10 +60,10 @@ export namespace EntityFactory {
         return new Bush(atlas, props)
       case EntityType.SCENERY_CATTAILS:
         return new Cattails(atlas, props)
-      case EntityType.SCENERY_CLOVER:
-        return new Clover(atlas, props)
       case EntityType.SCENERY_CLOUD:
         return new Cloud(atlas, props)
+      case EntityType.SCENERY_CLOVER:
+        return new Clover(atlas, props)
       case EntityType.SCENERY_CONIFER:
         return new Conifer(atlas, props)
       case EntityType.SCENERY_FLAG:

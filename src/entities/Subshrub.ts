@@ -7,10 +7,11 @@ import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 
-export class Subshrub extends Entity<Subshrub.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<Subshrub.State>) {
+export class Subshrub extends Entity<'none', Subshrub.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Subshrub.State>) {
     super({
       type: EntityType.SCENERY_SUBSHRUB,
+      variant: 'none',
       state: Subshrub.State.VISIBLE,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

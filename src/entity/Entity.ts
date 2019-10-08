@@ -18,7 +18,10 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {Assert} from '../utils/Assert'
 
-export class Entity<State extends string = string> {
+export class Entity<
+  Variant extends string = string,
+  State extends string = string
+> {
   /** A globally unique identifier for quick equality checks. It should be used
       for no other purpose. The value is transient and should not be preserved
       on entity serialization. */
@@ -27,6 +30,11 @@ export class Entity<State extends string = string> {
   private readonly _id: EntityID
 
   private readonly _type: EntityType
+  /** Variants allow multiple forms of the same type. For example, two different
+      representations of an apple tree. All variants must support all states.
+      States are expected to change during execution but variants generally do
+      not. */
+  private readonly _variant: Variant
 
   /** The local coordinate system or minimal union of the entity and all of its
       children given in level coordinates with origin at (x, y). All images,
@@ -62,9 +70,10 @@ export class Entity<State extends string = string> {
       recursive. */
   private readonly _children: Entity[]
 
-  constructor(props: Entity.Props<State>) {
+  constructor(props: Entity.Props<Variant, State>) {
     this._id = props.id || EntityID.ANONYMOUS
     this._type = props.type
+    this._variant = props.variant
     this._bounds = Rect.make(0, 0, 0, 0)
     this._velocity = props.velocity || new XY(0, 0)
     this._velocityFraction = {x: 0, y: 0}
@@ -104,6 +113,10 @@ export class Entity<State extends string = string> {
 
   get type(): EntityType {
     return this._type
+  }
+
+  get variant(): Variant {
+    return this._variant
   }
 
   get bounds(): ReadonlyRect {
@@ -403,10 +416,14 @@ export namespace Entity {
     HIDDEN = 'hidden'
   }
 
-  export interface Props<State extends string = string> {
+  export interface Props<
+    Variant extends string = string,
+    State extends string = string
+  > {
     /** Defaults to EntityID.UNDEFINED. */
     readonly id?: EntityID
     readonly type: EntityType
+    readonly variant: Variant
     /** Defaults to (0, 0). */
     readonly position?: XY
     readonly scale?: XY
@@ -428,10 +445,14 @@ export namespace Entity {
     readonly children?: Entity[]
   }
 
-  export interface SubProps<State extends string = string>
+  export interface SubProps<
+    Variant extends string = string,
+    State extends string = string
+  >
     extends Optional<
-      Entity.Props<State>,
+      Entity.Props<Variant, State>,
       | 'type'
+      | 'variant'
       | 'state'
       | 'map'
       | 'updatePredicate'

@@ -14,13 +14,14 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 
-export class Marquee extends Entity<Marquee.State> {
+export class Marquee extends Entity<'none', Marquee.State> {
   selection?: Entity
   private _dragOffset?: Readonly<XY>
 
-  constructor(atlas: Atlas, props?: Entity.SubProps<Marquee.State>) {
+  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Marquee.State>) {
     super({
       type: EntityType.UI_MARQUEE,
+      variant: 'none',
       state: Entity.BaseState.HIDDEN,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
