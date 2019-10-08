@@ -73,7 +73,7 @@ export class Backpacker extends Entity<'none', Backpacker.State> {
 
     /** If not moving, don't pursue objectives practically underfoot. */
     const stopped = !this.velocity.x && !this.velocity.y
-    if (stopped && objective.magnitude(this.bounds.position) < 4)
+    if (stopped && objective.sub(this.bounds.position).magnitude() < 4)
       return UpdateStatus.UNCHANGED
 
     const {x, y} = this.bounds.position

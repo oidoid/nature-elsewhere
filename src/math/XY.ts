@@ -83,9 +83,8 @@ export class XY {
     return new XY(Math.max(this.x, x), Math.max(this.y, y))
   }
 
-  magnitude(xy: Readonly<XY>): number {
-    const {x, y} = this.sub(xy)
-    return Math.sqrt(x * x + y * y)
+  magnitude(): number {
+    return Math.sqrt(this.x * this.x + this.y * this.y)
   }
 }
 
