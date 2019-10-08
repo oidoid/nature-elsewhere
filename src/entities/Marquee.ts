@@ -13,6 +13,7 @@ import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {NumberUtil} from '../math/NumberUtil'
 
 export class Marquee extends Entity<'none', Marquee.State> {
   selection?: Entity
@@ -99,7 +100,16 @@ export class Marquee extends Entity<'none', Marquee.State> {
     ) {
       status |= this.transition(Marquee.State.VISIBLE)
 
-      const sandboxEntity = cursorSandboxCollision[0] // this won't work correctly for sub-entities
+      const {selection} = this
+      const currentIndex = selection
+        ? cursorSandboxCollision.findIndex(entity => entity.equal(selection))
+        : -1
+      const nextIndex = NumberUtil.wrap(
+        currentIndex + 1,
+        0,
+        cursorSandboxCollision.length
+      )
+      const sandboxEntity = cursorSandboxCollision[nextIndex] // this won't work correctly for sub-entities
       this.selection = sandboxEntity
 
       const destination = sandboxEntity.bounds.position.sub(new XY(1, 1))
