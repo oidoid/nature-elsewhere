@@ -36,13 +36,7 @@ export class EntityPicker extends Entity<'none', EntityPicker.State> {
     })
     this._activeChildIndex = 0
 
-    const entityWindowBounds: ReadonlyRect = {
-      position: new XY(
-        this.bounds.position.x + 1,
-        this.bounds.position.y + 4 + memFont.lineHeight
-      ),
-      size: entityWindowSize
-    }
+    const entityWindowBounds = this._entityWindowBounds()
     for (const child of this.children) {
       const center = Rect.centerOn(child.bounds, entityWindowBounds).max(
         entityWindowBounds.position
@@ -95,11 +89,20 @@ export class EntityPicker extends Entity<'none', EntityPicker.State> {
     const newChild = EntityFactory.produce(atlas, {
       type: oldChild.type,
       variant,
-      position: oldChild.bounds.position.copy(),
       state: oldChild.state()
     })
+    newChild.moveTo(oldChild.bounds.position)
     newChild.elevate(Layer.UI_PICKER_OFFSET)
     this.replaceChild(oldChild, newChild)
+  }
+  private _entityWindowBounds(): ReadonlyRect {
+    return {
+      position: new XY(
+        this.bounds.position.x + 1,
+        this.bounds.position.y + 4 + memFont.lineHeight
+      ),
+      size: entityWindowSize
+    }
   }
   private hideActiveChild(): void {
     const child = this.getActiveChild()

@@ -89,13 +89,14 @@ export class Entity<
       props.collisionPredicate || CollisionPredicate.NEVER
     this._collisionBodies = props.collisionBodies || []
     this._children = props.children || []
-    if (props.position) this.moveTo(props.position)
-    if (props.scale) this.scaleTo(props.scale)
     this.setImageID(props.imageID)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children. Children themselves are not invalidated by this call.
     this.invalidateBounds()
+
+    if (props.position) this.moveBy(props.position)
+    if (props.scale) this.scaleTo(props.scale)
   }
 
   get spawnID(): symbol {
@@ -228,6 +229,7 @@ export class Entity<
 
   scaleTo(to: Readonly<XY>): UpdateStatus {
     Assert.assert(to.x && to.y, `Scale must be nonzero (x=${to.x}, y=${to.y}).`)
+    if (this.scale().equal(to)) return UpdateStatus.UNCHANGED
     const collisionScale = to.div(this.scale())
     const status = this._machine.scaleTo(to)
     if (status & UpdateStatus.UPDATED) {
