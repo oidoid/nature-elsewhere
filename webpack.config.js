@@ -1,6 +1,7 @@
 const childProcess = require('child_process')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const {version} = require('./package.json')
 const webpack = require('webpack')
 
@@ -19,7 +20,14 @@ module.exports = () => {
 
     module: {
       rules: [
-        {test: /\.ts$/, use: 'ts-loader'},
+        {
+          test: /\.ts$/,
+          loader: 'ts-loader',
+          options: {
+            // Type checking is performed by ForkTsCheckerWebpackPlugin.
+            transpileOnly: true
+          }
+        },
         {test: /\.glsl$/, use: 'raw-loader'}
       ]
     },
@@ -35,7 +43,8 @@ module.exports = () => {
           version: JSON.stringify(version),
           hash: JSON.stringify(hash)
         }
-      })
+      }),
+      new ForkTsCheckerWebpackPlugin()
     ],
 
     devServer: {
