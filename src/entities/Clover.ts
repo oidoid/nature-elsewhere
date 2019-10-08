@@ -30,10 +30,6 @@ export class Clover extends Entity<Clover.Variant, Clover.State> {
       ...props
     })
   }
-
-  variants(): Clover.Variant[] {
-    return Object.values(Clover.Variant)
-  }
 }
 
 export namespace Clover {

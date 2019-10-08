@@ -1,10 +1,11 @@
+import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
-import {FloatXY, XY} from '../math/XY'
 import {EntityCollider} from '../collision/EntityCollider'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
+import {FloatXY, XY} from '../math/XY'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
@@ -16,7 +17,6 @@ import {UpdaterMap} from '../updaters/UpdaterMap'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {Assert} from '../utils/Assert'
 
 export class Entity<
   Variant extends string = string,
@@ -95,8 +95,13 @@ export class Entity<
     // children. Children themselves are not invalidated by this call.
     this.invalidateBounds()
 
-    if (props.position) this.moveBy(props.position)
+    if (props.position) this.moveTo(props.position)
     if (props.scale) this.scaleTo(props.scale)
+
+    Assert.assert(
+      this.variants().includes(props.variant),
+      `Unknown variant "${props.variant}".`
+    )
   }
 
   get spawnID(): symbol {
@@ -120,7 +125,9 @@ export class Entity<
     return this._variant
   }
 
-  variants(): Variant[] {
+  variants(): readonly Variant[] {
+    if ('Variant' in this.constructor)
+      return <Variant[]>Object.values(this.constructor['Variant'])
     return [this.variant]
   }
 

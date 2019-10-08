@@ -98,8 +98,8 @@ export class EntityPicker extends Entity<'none', EntityPicker.State> {
   private _entityWindowBounds(): ReadonlyRect {
     return {
       position: new XY(
-        this.bounds.position.x + 1,
-        this.bounds.position.y + 4 + memFont.lineHeight
+        this.bounds.position.x - 1,
+        this.bounds.position.y + 1 + memFont.lineHeight
       ),
       size: entityWindowSize
     }

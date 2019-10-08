@@ -30,10 +30,6 @@ export class Plane extends Entity<Plane.Variant, Plane.State> {
       ...props
     })
   }
-
-  variants(): Plane.Variant[] {
-    return Object.values(Plane.Variant)
-  }
 }
 
 export namespace Plane {
