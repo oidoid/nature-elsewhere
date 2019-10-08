@@ -29,6 +29,10 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
       ...props
     })
   }
+
+  variants(): Grass.Variant[] {
+    return Object.values(Grass.Variant)
+  }
 }
 
 export namespace Grass {

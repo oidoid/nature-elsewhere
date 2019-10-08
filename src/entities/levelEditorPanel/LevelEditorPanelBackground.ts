@@ -63,19 +63,19 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     },
     {
       id: AtlasID.PALETTE_WHITE,
-      position: new XY(43, 19),
-      size: new WH(45, 13),
+      position: new XY(43, 13),
+      size: new WH(45, 19),
       layer: Layer.UI_LO
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      position: new XY(42, 19),
-      size: new WH(1, 1),
+      position: new XY(42, 13),
+      size: new WH(1, 7),
       layer: Layer.UI_MID
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      position: new XY(43, 18),
+      position: new XY(43, 12),
       size: new WH(44, 1),
       layer: Layer.UI_MID
     },
@@ -88,7 +88,7 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       position: new XY(87, 1),
-      size: new WH(1, 17),
+      size: new WH(1, 11),
       wrap: new XY(0, 1),
       layer: Layer.UI_MID
     },

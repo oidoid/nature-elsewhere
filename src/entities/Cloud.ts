@@ -144,6 +144,10 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
       ...props
     })
   }
+
+  variants(): Cloud.Variant[] {
+    return Object.values(Cloud.Variant)
+  }
 }
 
 export namespace Cloud {

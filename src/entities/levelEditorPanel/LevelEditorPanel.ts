@@ -38,6 +38,7 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
   readonly radioGroup: Entity
   readonly xCheckbox: Checkbox
   readonly yCheckbox: Checkbox
+  readonly variantCheckbox: Checkbox
   readonly stateCheckbox: Checkbox
   readonly entityCheckbox: Checkbox
   readonly entityPicker: EntityPicker
@@ -68,6 +69,11 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
       ...props
     })
 
+    this.variantCheckbox = new Checkbox(atlas, {
+      textMaxSize: new WH(31, 5),
+      position: new XY(55, 14),
+      imageID: AtlasID.PALETTE_BLACK
+    })
     this.stateCheckbox = new Checkbox(atlas, {
       textMaxSize: new WH(34, 5),
       position: new XY(52, 20),
@@ -93,6 +99,12 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
     })
     this.radioGroup = new RadioCheckboxGroup({
       children: [
+        new Text(atlas, {
+          text: 'var',
+          textLayer: Layer.UI_HI,
+          position: new XY(44, 14)
+        }),
+        this.variantCheckbox,
         new Text(atlas, {
           text: 'st',
           textLayer: Layer.UI_HI,
@@ -217,7 +229,6 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
     )
 
     this.setEntityFields(0, atlas)
-    this.elevate(Layer.UI_PICKER_OFFSET)
 
     this.positionRelativeToCam = FollowCamOrientation.SOUTH_EAST
     this.camMargin = new WH(0, 0)
@@ -238,12 +249,14 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
           ? 1
           : 0
       if (this.xCheckbox.checked())
-        updateNumberCheckbox(this.xCheckbox, state, offset)
+        this._updateNumberCheckbox(this.xCheckbox, state, offset)
       else if (this.yCheckbox.checked())
-        updateNumberCheckbox(this.yCheckbox, state, offset)
+        this._updateNumberCheckbox(this.yCheckbox, state, offset)
       else if (this.entityCheckbox.checked()) this.updateEntity(state, offset)
       else if (this.stateCheckbox.checked())
         this.updateEntityState(state, offset)
+      else if (this.variantCheckbox.checked())
+        this.updateEntityVariant(state, offset)
     }
 
     if (this.createButton.clicked) {
@@ -256,6 +269,7 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
         let entity = EntityFactory.produce(state.level.atlas, {
             type: child.type,
             state: child.state(),
+            variant: child.variant,
             position
           })
           // force collision to bounds for picking
@@ -306,12 +320,12 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
         sandbox.invalidateBounds()
         marquee.moveTo(new XY(position.x - 1, position.y - 1))
       } else {
-        updateNumberCheckbox(
+        this._updateNumberCheckbox(
           this.xCheckbox,
           state,
           selection.bounds.position.x - checkboxNumber(this.xCheckbox)
         )
-        updateNumberCheckbox(
+        this._updateNumberCheckbox(
           this.yCheckbox,
           state,
           selection.bounds.position.y - checkboxNumber(this.yCheckbox)
@@ -341,17 +355,27 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
       atlas
     )
     this.setEntityStateFields(0, atlas)
+    this.setEntityVariantFields(0, atlas)
   }
 
   setEntityStateFields(offset: number, atlas: Atlas): void {
+    this.entityPicker.offsetActiveChildStateIndex(offset)
     const child = this.entityPicker.getActiveChild()
     if (!child) return
-    this.entityPicker.offsetActiveChildStateIndex(offset)
     this.stateCheckbox.setText(
-      {
-        textLayer: Layer.UI_PICKER_OFFSET,
-        text: child.state()
-      },
+      {textLayer: Layer.UI_PICKER_OFFSET, text: child.state()},
+      Layer.UI_PICKER_OFFSET,
+      atlas
+    )
+    this.radioGroup.invalidateBounds()
+  }
+
+  setEntityVariantFields(offset: number, atlas: Atlas): void {
+    this.entityPicker.offsetActiveChildVariantIndex(atlas, offset)
+    const child = this.entityPicker.getActiveChild()
+    if (!child) return
+    this.variantCheckbox.setText(
+      {textLayer: Layer.UI_PICKER_OFFSET, text: child.variant},
       Layer.UI_PICKER_OFFSET,
       atlas
     )
@@ -365,24 +389,28 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
   updateEntityState(state: UpdateState, offset: number): void {
     this.setEntityStateFields(offset, state.level.atlas)
   }
-}
 
-function updateNumberCheckbox(
-  checkbox: Checkbox,
-  state: UpdateState,
-  offset: number
-): void {
-  const num = checkboxNumber(checkbox) + offset
-  checkbox.setText(
-    {
-      type: EntityType.UI_TEXT,
-      textLayer: Layer.UI_PICKER_OFFSET,
-      text: num.toString()
-    },
-    Layer.UI_PICKER_OFFSET,
-    state.level.atlas
-  )
-  // this.radioGroup.invalidateBounds()
+  updateEntityVariant(state: UpdateState, offset: number): void {
+    this.setEntityVariantFields(offset, state.level.atlas)
+  }
+
+  private _updateNumberCheckbox(
+    checkbox: Checkbox,
+    state: UpdateState,
+    offset: number
+  ): void {
+    const num = checkboxNumber(checkbox) + offset
+    checkbox.setText(
+      {
+        type: EntityType.UI_TEXT,
+        textLayer: Layer.UI_PICKER_OFFSET,
+        text: num.toString()
+      },
+      Layer.UI_PICKER_OFFSET,
+      state.level.atlas
+    )
+    this.radioGroup.invalidateBounds()
+  }
 }
 
 function checkboxNumber(checkbox: Checkbox) {

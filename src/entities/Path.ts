@@ -27,6 +27,10 @@ export class Path extends Entity<Path.Variant, Path.State> {
       ...props
     })
   }
+
+  variants(): Path.Variant[] {
+    return Object.values(Path.Variant)
+  }
 }
 
 export namespace Path {

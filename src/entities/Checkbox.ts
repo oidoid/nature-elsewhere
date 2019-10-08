@@ -17,6 +17,10 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 
 export class Checkbox extends Entity<'none', Checkbox.State> {
+  private _textLayer: Layer
+  private _textScale: Maybe<XY>
+  private _textMaxSize: Maybe<WH>
+  private _textImageID: Maybe<AtlasID>
   constructor(atlas: Atlas, props?: Checkbox.Props) {
     super({
       type: EntityType.UI_CHECKBOX,
@@ -33,14 +37,12 @@ export class Checkbox extends Entity<'none', Checkbox.State> {
       ...props
     })
 
+    this._textLayer = (props && props.textLayer) || Layer.UI_HI
+    this._textScale = props && props.textScale
+    this._textMaxSize = props && props.textMaxSize
+    this._textImageID = props && props.imageID
     this.setText(
-      {
-        type: EntityType.UI_TEXT,
-        text: props && props.text,
-        textLayer: (props && props.textLayer) || Layer.UI_HI,
-        textScale: props && props.textScale,
-        textMaxSize: props && props.textMaxSize
-      },
+      {type: EntityType.UI_TEXT, text: props && props.text},
       0,
       atlas
     )
@@ -68,7 +70,14 @@ export class Checkbox extends Entity<'none', Checkbox.State> {
     atlas: Atlas
   ): void {
     const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
-    const child = new Text(atlas, {...props, position})
+    const child = new Text(atlas, {
+      textLayer: this._textLayer,
+      textScale: this._textScale,
+      textMaxSize: this._textMaxSize,
+      imageID: this._textImageID,
+      ...props,
+      position
+    })
     child.elevate(layerOffset)
     const imageID = this.children[0] ? this.children[0].imageID() : undefined
     if (imageID) child.setImageID(imageID)

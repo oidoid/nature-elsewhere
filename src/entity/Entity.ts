@@ -119,6 +119,10 @@ export class Entity<
     return this._variant
   }
 
+  variants(): Variant[] {
+    return [this.variant]
+  }
+
   get bounds(): ReadonlyRect {
     return this._bounds
   }
@@ -180,6 +184,13 @@ export class Entity<
     const index = this.children.findIndex(entity => child.equal(entity))
     if (index === -1) return
     this._children.splice(index, 1)
+    this.invalidateBounds()
+  }
+
+  replaceChild(child: Readonly<Entity>, entity: Entity): void {
+    const index = this.children.findIndex(entity => child.equal(entity))
+    if (index === -1) return
+    this._children[index] = entity
     this.invalidateBounds()
   }
 

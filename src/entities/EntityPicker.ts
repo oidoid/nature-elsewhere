@@ -82,18 +82,38 @@ export class EntityPicker extends Entity<'none', EntityPicker.State> {
     child.transition(state)
   }
 
+  offsetActiveChildVariantIndex(atlas: Atlas, offset: number): void {
+    const oldChild = this.getActiveChild()
+    if (!oldChild) return
+    const variants = oldChild.variants()
+    const index = NumberUtil.wrap(
+      variants.indexOf(oldChild.variant) + offset,
+      0,
+      variants.length
+    )
+    const variant = variants[index]
+    const newChild = EntityFactory.produce(atlas, {
+      type: oldChild.type,
+      variant,
+      position: oldChild.bounds.position.copy(),
+      state: oldChild.state()
+    })
+    newChild.elevate(Layer.UI_PICKER_OFFSET)
+    this.replaceChild(oldChild, newChild)
+  }
   private hideActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
     child.elevate(-Layer.UI_PICKER_OFFSET)
-    child.transition(Entity.BaseState.HIDDEN)
+    // child.transition(Entity.BaseState.HIDDEN)
   }
 
   private showActiveChild(): void {
+    this.hideActiveChild()
     const child = this.getActiveChild()
     if (!child) return
-    const defaultState = getChildStates(child)[0]
-    if (defaultState) child.transition(defaultState)
+    // const defaultState = getChildStates(child)[0]
+    // if (defaultState) child.transition(defaultState)
     child.elevate(Layer.UI_PICKER_OFFSET)
   }
 }
