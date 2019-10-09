@@ -10,42 +10,31 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-enum Variant {
-  MEDIUM = 'medium',
-  LARGE = 'large'
-}
-
-enum State {
-  NONE = 'none',
-  DRIZZLE = 'drizzle',
-  SHOWER = 'shower',
-  DOWNPOUR = 'downpour'
-}
-
-export class Cloud extends Entity<Variant, State> {
-  static Variant = Variant
-  static State = State
-  protected static _variants: readonly Variant[] = Object.freeze(
-    Object.values(Variant)
-  )
-
-  constructor(atlas: Atlas, props?: Entity.SubProps<Variant, State>) {
+export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Cloud.Variant, Cloud.State>
+  ) {
     super({
-      type: EntityType.SCENERY_CLOUD,
-      variant: Variant.MEDIUM,
-      state: State.NONE,
+      ...defaults,
+      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [State.NONE]: new ImageRect({
+        [Cloud.State.NONE]: new ImageRect({
           images: variantImages(
             atlas,
-            (props && props.variant) || Variant.MEDIUM
+            (props && props.variant) || Cloud.Variant.MEDIUM
           )
         }),
-        [State.DRIZZLE]: new ImageRect({
+        [Cloud.State.DRIZZLE]: new ImageRect({
           images: [
-            ...variantImages(atlas, (props && props.variant) || Variant.MEDIUM),
+            ...variantImages(
+              atlas,
+              (props && props.variant) || Cloud.Variant.MEDIUM
+            ),
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 2),
@@ -65,9 +54,12 @@ export class Cloud extends Entity<Variant, State> {
             })
           ]
         }),
-        [State.SHOWER]: new ImageRect({
+        [Cloud.State.SHOWER]: new ImageRect({
           images: [
-            ...variantImages(atlas, (props && props.variant) || Variant.MEDIUM),
+            ...variantImages(
+              atlas,
+              (props && props.variant) || Cloud.Variant.MEDIUM
+            ),
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 6),
@@ -105,9 +97,12 @@ export class Cloud extends Entity<Variant, State> {
             })
           ]
         }),
-        [State.DOWNPOUR]: new ImageRect({
+        [Cloud.State.DOWNPOUR]: new ImageRect({
           images: [
-            ...variantImages(atlas, (props && props.variant) || Variant.MEDIUM),
+            ...variantImages(
+              atlas,
+              (props && props.variant) || Cloud.Variant.MEDIUM
+            ),
             new Image(atlas, {
               id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
               position: new XY(1, 6),
@@ -144,16 +139,30 @@ export class Cloud extends Entity<Variant, State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-      updaters: [UpdaterType.WRAPAROUND],
-      collisionType: CollisionType.TYPE_SCENERY,
       ...props
     })
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
+}
+export namespace Cloud {
+  export enum Variant {
+    MEDIUM = 'medium',
+    LARGE = 'large'
+  }
+
+  export enum State {
+    NONE = 'none',
+    DRIZZLE = 'drizzle',
+    SHOWER = 'shower',
+    DOWNPOUR = 'downpour'
+  }
 }
 
-function variantImages(atlas: Atlas, variant: Variant): Image[] {
-  if (variant === Variant.MEDIUM)
+function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
+  if (variant === Cloud.Variant.MEDIUM)
     return [
       new Image(atlas, {
         id: AtlasID.SCENERY_CLOUD_MEDIUM,
@@ -178,3 +187,12 @@ function variantImages(atlas: Atlas, variant: Variant): Image[] {
     })
   ]
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_CLOUD,
+  variant: Cloud.Variant.MEDIUM,
+  state: Cloud.State.NONE,
+  updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
+  updaters: [UpdaterType.WRAPAROUND],
+  collisionType: CollisionType.TYPE_SCENERY
+})

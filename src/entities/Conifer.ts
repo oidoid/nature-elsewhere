@@ -9,13 +9,17 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Conifer extends Entity<'none', Conifer.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Conifer.State>) {
+export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Conifer.Variant, Conifer.State>
+  ) {
     super({
-      type: EntityType.SCENERY_CONIFER,
-      variant: 'none',
-      state: Conifer.State.VISIBLE,
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Conifer.State.VISIBLE]: new ImageRect({
@@ -29,16 +33,30 @@ export class Conifer extends Entity<'none', Conifer.State> {
           ]
         })
       },
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(2, 9, 3, 3)],
-      collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Conifer {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_CONIFER,
+  variant: Conifer.Variant.NONE,
+  state: Conifer.State.VISIBLE,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(2, 9, 3, 3)],
+  collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
+})

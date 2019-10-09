@@ -12,25 +12,25 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {ImageRect} from '../imageStateMachine/ImageRect'
+import {JSON} from '../utils/JSON'
 
 const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
-export class EntityPicker extends Entity<'none', EntityPicker.State> {
+export class EntityPicker extends Entity<
+  EntityPicker.Variant,
+  EntityPicker.State
+> {
   private _activeChildIndex: number
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<'none', EntityPicker.State>
+    props?: Entity.SubProps<EntityPicker.Variant, EntityPicker.State>
   ) {
     super({
-      type: EntityType.UI_ENTITY_PICKER,
-      variant: 'none',
-      updatePredicate: UpdatePredicate.ALWAYS,
-      state: EntityPicker.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [EntityPicker.State.VISIBLE]: new ImageRect()
       },
-      collisionType: CollisionType.TYPE_UI,
       children: makeChildren(atlas),
       ...props
     })
@@ -104,6 +104,11 @@ export class EntityPicker extends Entity<'none', EntityPicker.State> {
       size: entityWindowSize
     }
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
+
   private hideActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
@@ -122,6 +127,10 @@ export class EntityPicker extends Entity<'none', EntityPicker.State> {
 }
 
 export namespace EntityPicker {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
@@ -147,3 +156,11 @@ function makeChildren(atlas: Atlas): Entity[] {
   }
   return children
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_ENTITY_PICKER,
+  variant: EntityPicker.Variant.NONE,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  state: EntityPicker.State.VISIBLE,
+  collisionType: CollisionType.TYPE_UI
+})

@@ -7,13 +7,13 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {Layer} from '../image/Layer'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Path extends Entity<Path.Variant, Path.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Path.Variant, Path.State>) {
     super({
-      type: EntityType.SCENERY_PATH,
-      variant: Path.Variant.STRAIGHT_NE,
-      state: Path.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Path.State.VISIBLE]: new ImageRect({
@@ -23,9 +23,12 @@ export class Path extends Entity<Path.Variant, Path.State> {
           )
         })
       },
-      collisionType: CollisionType.TYPE_SCENERY,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
@@ -92,3 +95,10 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
       ]
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_PATH,
+  variant: Path.Variant.STRAIGHT_NE,
+  state: Path.State.VISIBLE,
+  collisionType: CollisionType.TYPE_SCENERY
+})

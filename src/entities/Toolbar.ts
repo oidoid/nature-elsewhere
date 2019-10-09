@@ -11,17 +11,21 @@ import {FollowCamOrientation, FollowCam} from '../updaters/followCam/FollowCam'
 import {WH} from '../math/WH'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Toolbar extends Entity<'none', Toolbar.State>
+export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
   implements FollowCam {
   readonly positionRelativeToCam: FollowCamOrientation
   readonly camMargin: WH
 
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Toolbar.State>) {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Toolbar.Variant, Toolbar.State>
+  ) {
     super({
-      type: EntityType.UI_TOOLBAR,
-      variant: 'none',
-      state: Toolbar.State.VISIBLE,
+      ...defaults,
+      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Toolbar.State.VISIBLE]: new ImageRect({
@@ -45,18 +49,32 @@ export class Toolbar extends Entity<'none', Toolbar.State>
           ]
         })
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
-      updaters: [UpdaterType.UI_FOLLOW_CAM],
-      collisionType: CollisionType.TYPE_UI,
       ...props
     })
     this.positionRelativeToCam = FollowCamOrientation.SOUTH_WEST
     this.camMargin = new WH(1, 1)
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
 }
 
 export namespace Toolbar {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_TOOLBAR,
+  variant: Toolbar.Variant.NONE,
+  state: Toolbar.State.VISIBLE,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  updaters: [UpdaterType.UI_FOLLOW_CAM],
+  collisionType: CollisionType.TYPE_UI
+})

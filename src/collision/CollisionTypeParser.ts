@@ -1,25 +1,19 @@
 import {CollisionType} from './CollisionType'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
-export type CollisionTypeKeyArrayConfig = Maybe<
-  readonly CollisionTypeKeyConfig[]
->
-export type CollisionTypeKeyConfig = Maybe<CollisionType.Key | string>
+export type CollisionTypeConfig = Maybe<CollisionType>
 
 export namespace CollisionTypeParser {
-  export function parseKeys(
-    config: CollisionTypeKeyArrayConfig
-  ): CollisionType {
+  export function parse(config: CollisionTypeConfig): CollisionType {
     if (!config) return CollisionType.INERT
-    return config.reduce(
-      (type, keyConfig) => type | parseKey(keyConfig),
-      CollisionType.INERT
-    )
+    assertType(config)
+    return config || CollisionType.INERT
   }
-  export function parseKey(config: CollisionTypeKeyConfig): CollisionType {
-    const type = config || 'INERT'
-    if (ObjectUtil.assertKeyOf(CollisionType, type, 'CollisionType.Key'))
-      return CollisionType[type]
-    throw new Error()
-  }
+}
+
+function assertType(type: CollisionType): string[] {
+  const keys: string[] = []
+  for (let bit = 1; bit < type; bit <<= 1)
+    if (bit & type) ObjectUtil.assertKeyOf(CollisionType, bit, 'CollisionType')
+  return keys
 }

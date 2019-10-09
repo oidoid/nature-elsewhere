@@ -9,13 +9,14 @@ import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Fly extends Entity<'none', Fly.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Fly.State>) {
+export class Fly extends Entity<Fly.Variant, Fly.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Fly.Variant, Fly.State>) {
     super({
-      type: EntityType.CHAR_FLY,
-      state: Fly.State.IDLE,
-      variant: 'none',
+      ...defaults,
+      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Fly.State.IDLE]: new ImageRect({
@@ -34,17 +35,31 @@ export class Fly extends Entity<'none', Fly.State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-      updaters: [UpdaterType.CIRCLE],
-      collisionType: CollisionType.TYPE_CHARACTER,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Fly {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     IDLE = 'idle',
     DEAD = 'dead'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.CHAR_FLY,
+  state: Fly.State.IDLE,
+  variant: Fly.Variant.NONE,
+  updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
+  updaters: [UpdaterType.CIRCLE],
+  collisionType: CollisionType.TYPE_CHARACTER
+})

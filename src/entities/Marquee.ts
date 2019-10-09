@@ -14,16 +14,19 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {NumberUtil} from '../math/NumberUtil'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Marquee extends Entity<'none', Marquee.State> {
+export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
   selection?: Entity
   private _dragOffset?: Readonly<XY>
 
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Marquee.State>) {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Marquee.Variant, Marquee.State>
+  ) {
     super({
-      type: EntityType.UI_MARQUEE,
-      variant: 'none',
-      state: Entity.BaseState.HIDDEN,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Marquee.State.VISIBLE]: new ImageRect({
@@ -51,7 +54,6 @@ export class Marquee extends Entity<'none', Marquee.State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
       ...props
     })
     this.selection = undefined
@@ -126,9 +128,17 @@ export class Marquee extends Entity<'none', Marquee.State> {
 
     return status
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
 }
 
 export namespace Marquee {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
@@ -173,3 +183,10 @@ function resize(
   )
   marquee.invalidateBounds()
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_MARQUEE,
+  variant: Marquee.Variant.NONE,
+  state: Entity.BaseState.HIDDEN,
+  updatePredicate: UpdatePredicate.ALWAYS
+})

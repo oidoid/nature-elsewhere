@@ -22,7 +22,6 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
-          variant: 'none',
           collisionPredicate: CollisionPredicate.NEVER,
           collisionBodies: [{size: {w: 9, h: 9}}]
         },
@@ -35,7 +34,6 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
-          variant: 'none',
           collisionPredicate: CollisionPredicate.BODIES,
           collisionBodies: [{position: {x: 10, y: 10}, size: {w: 9, h: 9}}]
         },
@@ -121,12 +119,10 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
-          variant: 'none',
           collisionPredicate: CollisionPredicate.CHILDREN,
           children: [
             {
               type: EntityType.GROUP,
-              variant: 'none',
               collisionPredicate: CollisionPredicate.BODIES,
               collisionBodies: [{size: {w: 9, h: 9}}]
             }
@@ -143,17 +139,14 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
-          variant: 'none',
           collisionPredicate: CollisionPredicate.CHILDREN,
           children: [
             {
               type: EntityType.GROUP,
-              variant: 'none',
               collisionPredicate: CollisionPredicate.CHILDREN,
               children: [
                 {
                   type: EntityType.GROUP,
-                  variant: 'none',
                   collisionPredicate: CollisionPredicate.BODIES,
                   collisionBodies: [{size: {w: 9, h: 9}}]
                 }
@@ -172,18 +165,15 @@ describe('collidesRect()', () => {
       const entity = EntityParser.parse(
         {
           type: EntityType.GROUP,
-          variant: 'none',
           collisionPredicate: CollisionPredicate.CHILDREN,
           children: [
             {
               type: EntityType.GROUP,
-              variant: 'none',
               collisionPredicate: CollisionPredicate.BODIES,
               collisionBodies: [{size: {w: 9, h: 9}}]
             },
             {
               type: EntityType.GROUP,
-              variant: 'none',
               collisionPredicate: CollisionPredicate.BODIES,
               collisionBodies: [{size: {w: 9, h: 9}}]
             }

@@ -5,7 +5,7 @@ import {
   CollisionPredicateParser
 } from '../collision/CollisionPredicateParser'
 import {
-  CollisionTypeKeyArrayConfig,
+  CollisionTypeConfig,
   CollisionTypeParser
 } from '../collision/CollisionTypeParser'
 import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
@@ -54,7 +54,7 @@ export interface EntityConfig {
   /** Defaults to []. */
   readonly updaters?: UpdaterTypeArrayConfig
   /** Defaults to CollisionPredicate.NEVER. */
-  readonly collisionTypes?: CollisionTypeKeyArrayConfig
+  readonly collisionType?: CollisionTypeConfig
   readonly collisionPredicate?: CollisionPredicateConfig
   /** Defaults to []. In local coordinates (converted to level by parser). */
   readonly collisionBodies?: RectArrayConfig
@@ -126,8 +126,8 @@ function parseProps(
     ...(config.updaters && {
       updaters: UpdaterTypeParser.parseAll(config.updaters)
     }),
-    ...(config.collisionTypes && {
-      collisionType: CollisionTypeParser.parseKeys(config.collisionTypes)
+    ...(config.collisionType && {
+      collisionType: CollisionTypeParser.parse(config.collisionType)
     }),
     ...(config.collisionPredicate && {
       collisionPredicate: CollisionPredicateParser.parse(

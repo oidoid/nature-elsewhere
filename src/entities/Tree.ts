@@ -9,13 +9,14 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Tree extends Entity<'none', Tree.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Tree.State>) {
+export class Tree extends Entity<Tree.Variant, Tree.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Tree.Variant, Tree.State>) {
     super({
-      type: EntityType.SCENERY_TREE,
-      variant: 'none',
-      state: Tree.State.VISIBLE,
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Tree.State.VISIBLE]: new ImageRect({
@@ -29,16 +30,30 @@ export class Tree extends Entity<'none', Tree.State> {
           ]
         })
       },
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(3, 8, 4, 3)],
-      collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Tree {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_TREE,
+  variant: Tree.Variant.NONE,
+  state: Tree.State.VISIBLE,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(3, 8, 4, 3)],
+  collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
+})

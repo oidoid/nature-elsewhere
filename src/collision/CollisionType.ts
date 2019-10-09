@@ -61,7 +61,3 @@ export enum CollisionType {
   /** The collision owner is near a fatal owner. */
   NEAR_FATAL = 1 << 15
 }
-
-export namespace CollisionType {
-  export type Key = keyof typeof CollisionType
-}

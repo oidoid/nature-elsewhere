@@ -10,13 +10,15 @@ import {Image} from '../image/Image'
 import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Bee extends Entity<'none', Bee.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Bee.State>) {
+export class Bee extends Entity<Bee.Variant, Bee.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Bee.Variant, Bee.State>) {
     super({
-      type: EntityType.CHAR_BEE,
-      variant: 'none',
-      state: Bee.State.IDLE,
+      ...defaults,
+      updaters: [...defaults.updaters],
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bee.State.IDLE]: new ImageRect({
@@ -32,19 +34,33 @@ export class Bee extends Entity<'none', Bee.State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-      updaters: [UpdaterType.WRAPAROUND],
-      collisionType: CollisionType.TYPE_CHARACTER | CollisionType.HARMFUL,
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(1, 1, 3, 2)],
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Bee {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     IDLE = 'idle',
     DEAD = 'dead'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.CHAR_BEE,
+  variant: Bee.Variant.NONE,
+  state: Bee.State.IDLE,
+  updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
+  updaters: [UpdaterType.WRAPAROUND],
+  collisionType: CollisionType.TYPE_CHARACTER | CollisionType.HARMFUL,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(1, 1, 3, 2)]
+})

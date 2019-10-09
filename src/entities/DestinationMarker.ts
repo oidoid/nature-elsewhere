@@ -10,16 +10,19 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class DestinationMarker extends Entity<'none', DestinationMarker.State> {
+export class DestinationMarker extends Entity<
+  DestinationMarker.Variant,
+  DestinationMarker.State
+> {
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<'none', DestinationMarker.State>
+    props?: Entity.SubProps<DestinationMarker.Variant, DestinationMarker.State>
   ) {
     super({
-      type: EntityType.UI_DESTINATION_MARKER,
-      variant: 'none',
-      state: Entity.BaseState.HIDDEN,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [DestinationMarker.State.VISIBLE]: new ImageRect({
@@ -27,8 +30,6 @@ export class DestinationMarker extends Entity<'none', DestinationMarker.State> {
           images: [new Image(atlas, {id: AtlasID.UI_DESTINATION_MARKER})]
         })
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
-      collisionType: CollisionType.TYPE_UI,
       ...props
     })
   }
@@ -50,10 +51,26 @@ export class DestinationMarker extends Entity<'none', DestinationMarker.State> {
 
     return status
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
 }
 
 export namespace DestinationMarker {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_DESTINATION_MARKER,
+  variant: DestinationMarker.Variant.NONE,
+  state: Entity.BaseState.HIDDEN,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  collisionType: CollisionType.TYPE_UI
+})

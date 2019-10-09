@@ -8,13 +8,13 @@ import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../collision/CollisionType'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Flag extends Entity<'none', Flag.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Flag.State>) {
+export class Flag extends Entity<Flag.Variant, Flag.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Flag.Variant, Flag.State>) {
     super({
-      type: EntityType.SCENERY_FLAG,
-      variant: 'none',
-      state: Flag.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Flag.State.VISIBLE]: new ImageRect({
@@ -28,15 +28,29 @@ export class Flag extends Entity<'none', Flag.State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-      collisionType: CollisionType.TYPE_SCENERY,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Flag {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_FLAG,
+  variant: Flag.Variant.NONE,
+  state: Flag.State.VISIBLE,
+  updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
+  collisionType: CollisionType.TYPE_SCENERY
+})

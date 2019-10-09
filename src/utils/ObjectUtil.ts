@@ -52,4 +52,21 @@ export namespace ObjectUtil {
     Assert.assert(isValueOf(obj, val), `${type} missing "${val}" value.`)
     return true
   }
+
+  export function definedEntry<T, K extends keyof T = keyof T>(
+    record: Readonly<T>,
+    key: K
+  ): {} | Record<K, Required<T>[K]> {
+    return record[key] === undefined ? {} : {[key]: record[key]}
+  }
+
+  /** Recursively freeze obj. */
+  export function freeze<T extends object>(obj: T): DeepImmutable<T> {
+    keys(obj)
+      .filter(key => typeof obj[key] === 'object')
+      .forEach(key => {
+        obj[key] = <T[keyof T] & object>freeze(<T[keyof T] & object>obj[key])
+      })
+    return <DeepImmutable<T>>Object.freeze(obj)
+  }
 }

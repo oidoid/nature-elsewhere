@@ -1,5 +1,5 @@
 import {
-  AlphaCompositionKeyConfig,
+  AlphaCompositionConfig,
   AlphaCompositionParser
 } from './AlphaCompositionParser'
 import {Animator, Atlas} from 'aseprite-atlas'
@@ -22,12 +22,12 @@ export interface ImageConfig {
   readonly id: AtlasIDConfig
   readonly imageID?: AtlasIDConfig
   readonly bounds?: RectConfig
-  readonly layer?: LayerKeyConfig
+  readonly layer?: LayerConfig
   readonly animator?: AnimatorConfig
   readonly scale?: XYConfig
   readonly wrap?: DecamillipixelIntXYConfig
   readonly wrapVelocity?: DecamillipixelIntXYConfig
-  readonly alphaComposition?: AlphaCompositionKeyConfig
+  readonly alphaComposition?: AlphaCompositionConfig
 }
 
 export type AnimatorConfig = Readonly<{
@@ -37,7 +37,7 @@ export type AnimatorConfig = Readonly<{
 
 /** Defaults to (1, 1). */
 export type ImageScaleConfig = Maybe<Partial<XY>>
-export type LayerKeyConfig = Maybe<Layer.Key | string>
+export type LayerConfig = Maybe<Layer>
 
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
@@ -49,12 +49,12 @@ export namespace ImageParser {
         config.bounds ? config.bounds.position : undefined
       ),
       size: parseSize(config, id, atlas),
-      layer: parseLayerKey(config.layer),
+      layer: parseLayer(config.layer),
       animator: config.animator ? parseAnimator(config.animator) : undefined,
       scale: parseScale(config.scale),
       wrap: DecamillipixelIntXYParser.parse(config.wrap),
       wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity),
-      alphaComposition: AlphaCompositionParser.parseKey(config.alphaComposition)
+      alphaComposition: AlphaCompositionParser.parse(config.alphaComposition)
     })
   }
 
@@ -65,10 +65,10 @@ export namespace ImageParser {
     )
   }
 
-  export function parseLayerKey(config: LayerKeyConfig): Layer {
-    const key = config || 'DEFAULT'
-    if (ObjectUtil.assertKeyOf(Layer, key, 'Layer.Key')) return Layer[key]
-    throw new Error()
+  export function parseLayer(config: LayerConfig): Layer {
+    const layer = config === undefined ? Layer.DEFAULT : config
+    ObjectUtil.assertKeyOf(Layer, layer, 'Layer')
+    return layer
   }
 }
 

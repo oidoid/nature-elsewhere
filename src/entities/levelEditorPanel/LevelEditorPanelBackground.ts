@@ -10,35 +10,44 @@ import {CollisionType} from '../../collision/CollisionType'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {Atlas} from 'aseprite-atlas'
 import {WH} from '../../math/WH'
+import {JSON} from '../../utils/JSON'
+import {ObjectUtil} from '../../utils/ObjectUtil'
 
 export class LevelEditorPanelBackground extends Entity<
-  'none',
-  LevelEditorPanelBackgroundState
+  LevelEditorPanelBackground.Variant,
+  LevelEditorPanelBackground.State
 > {
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<'none', LevelEditorPanelBackgroundState>
+    props?: Entity.SubProps<
+      LevelEditorPanelBackground.Variant,
+      LevelEditorPanelBackground.State
+    >
   ) {
     super({
-      type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
-      variant: 'none',
-      collisionType: CollisionType.TYPE_UI,
-      collisionPredicate: CollisionPredicate.IMAGES,
-      updatePredicate: UpdatePredicate.ALWAYS,
-      state: LevelEditorPanelBackgroundState.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [LevelEditorPanelBackgroundState.VISIBLE]: new ImageRect({
+        [LevelEditorPanelBackground.State.VISIBLE]: new ImageRect({
           images: newBackgroundImages(atlas)
         })
       },
       ...props
     })
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
 }
 
-export enum LevelEditorPanelBackgroundState {
-  VISIBLE = 'visible'
+export namespace LevelEditorPanelBackground {
+  export enum Variant {
+    NONE = 'none'
+  }
+  export enum State {
+    VISIBLE = 'visible'
+  }
 }
 
 function newBackgroundImages(atlas: Atlas): Image[] {
@@ -107,3 +116,12 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     }
   ].map((props: Image.Props) => new Image(atlas, props))
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
+  variant: LevelEditorPanelBackground.Variant.NONE,
+  collisionType: CollisionType.TYPE_UI,
+  collisionPredicate: CollisionPredicate.IMAGES,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  state: LevelEditorPanelBackground.State.VISIBLE
+})

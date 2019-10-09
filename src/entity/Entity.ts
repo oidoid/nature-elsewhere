@@ -3,22 +3,25 @@ import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {EntityCollider} from '../collision/EntityCollider'
+import {EntityConfig} from './EntityParser'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {FloatXY, XY} from '../math/XY'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
+import {JSON} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
-import {Rect, ReadonlyRect} from '../math/Rect'
+import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterMap} from '../updaters/UpdaterMap'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Entity<
+export abstract class Entity<
   Variant extends string = string,
   State extends string = string
 > {
@@ -71,23 +74,27 @@ export class Entity<
   private readonly _children: Entity[]
 
   constructor(props: Entity.Props<Variant, State>) {
-    this._id = props.id || EntityID.ANONYMOUS
+    this._id = props.id || entityDefaults.id
     this._type = props.type
     this._variant = props.variant
     this._bounds = Rect.make(0, 0, 0, 0)
-    this._velocity = props.velocity || new XY(0, 0)
+    this._velocity = props.velocity || entityDefaults.velocity.copy()
     this._velocityFraction = {x: 0, y: 0}
     this._machine = new ImageStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
-      props.updatePredicate || UpdatePredicate.INTERSECTS_VIEWPORT
-    this._updaters = props.updaters || []
+      props.updatePredicate || entityDefaults.updatePredicate
+    this._updaters = props.updaters || entityDefaults.updaters
     this._collisionType =
       props.collisionType === undefined
-        ? CollisionType.INERT
+        ? entityDefaults.collisionType
         : props.collisionType
     this._collisionPredicate =
-      props.collisionPredicate || CollisionPredicate.NEVER
-    this._collisionBodies = props.collisionBodies || []
+      props.collisionPredicate || entityDefaults.collisionPredicate
+    this._collisionBodies = props.collisionBodies || [
+      ...entityDefaults.collisionBodies.map(rect =>
+        Rect.make(rect.position.x, rect.position.y, rect.size.w, rect.size.h)
+      )
+    ]
     this._children = props.children || []
     this.setImageID(props.imageID)
 
@@ -366,6 +373,59 @@ export class Entity<
     for (const child of this.children) child.elevate(offset)
   }
 
+  abstract toJSON(): JSON
+
+  protected _toJSON(
+    subDefaults: Omit<
+      DeepImmutable<Entity.SubProps<Variant, State | Entity.BaseState>>,
+      'children' | 'map'
+    >
+  ): JSON {
+    const defaults: typeof entityDefaults & typeof subDefaults = {
+      ...entityDefaults,
+      state: Entity.BaseState.HIDDEN,
+      ...ObjectUtil.definedEntry(subDefaults, 'id'),
+      ...ObjectUtil.definedEntry(subDefaults, 'type'),
+      ...(<Variant>ObjectUtil.definedEntry(subDefaults, 'variant')),
+      ...ObjectUtil.definedEntry(subDefaults, 'position'),
+      ...ObjectUtil.definedEntry(subDefaults, 'velocity'),
+      ...ObjectUtil.definedEntry(subDefaults, 'imageID'),
+      ...ObjectUtil.definedEntry(subDefaults, 'scale'),
+      ...ObjectUtil.definedEntry(subDefaults, 'state'),
+      ...ObjectUtil.definedEntry(subDefaults, 'updatePredicate'),
+      ...ObjectUtil.definedEntry(subDefaults, 'updaters'),
+      ...ObjectUtil.definedEntry(subDefaults, 'collisionType'),
+      ...ObjectUtil.definedEntry(subDefaults, 'collisionPredicate'),
+      ...ObjectUtil.definedEntry(subDefaults, 'collisionBodies')
+    }
+    const diff: Writable<EntityConfig> = {type: this.type}
+    if (this.id !== defaults.id) diff.id = this.id
+    if (this.variant !== defaults.variant) diff.variant = this.variant
+    if (!this.bounds.position.equal(defaults.position))
+      diff.position = {x: this.bounds.position.x, y: this.bounds.position.y}
+    if (!this.velocity.equal(defaults.velocity))
+      diff.velocity = {x: this.velocity.x, y: this.velocity.y}
+    if (this.imageID() && this.imageID() !== defaults.imageID)
+      diff.imageID = this.imageID()
+    if (!this.scale().equal(defaults.scale)) diff.scale = this.scale()
+    if (this.state() !== defaults.state) diff.state = this.state()
+    if (this.updatePredicate !== defaults.updatePredicate)
+      diff.updatePredicate = this.updatePredicate
+    if (this.updaters.some((updater, i) => updater !== defaults.updaters[i]))
+      diff.updaters = this.updaters
+    if (this.collisionType !== defaults.collisionType)
+      diff.collisionType = this.collisionType
+    if (this.collisionPredicate !== defaults.collisionPredicate)
+      diff.collisionPredicate = this.collisionPredicate
+    if (
+      this.collisionBodies.some(
+        (body, i) => !Rect.equal(body, defaults.collisionBodies[i])
+      )
+    )
+      diff.collisionBodies = this.collisionBodies
+    return <JSON>(<unknown>diff)
+  }
+
   private _updatePosition(state: UpdateState): UpdateStatus {
     // [todo] level bounds checking
     const from: Readonly<XY> = this.bounds.position.copy()
@@ -445,7 +505,7 @@ export namespace Entity {
     readonly type: EntityType
     readonly variant: Variant
     /** Defaults to (0, 0). */
-    readonly position?: XY
+    readonly position?: Readonly<XY>
     readonly scale?: XY
     readonly imageID?: AtlasID
     readonly velocity?: XY
@@ -504,3 +564,20 @@ export namespace Entity {
     return
   }
 }
+
+const entityDefaults: DeepImmutable<Omit<
+  Required<Entity.Props>,
+  'type' | 'variant' | 'map' | 'imageID' | 'children'
+>> = Object.freeze({
+  id: EntityID.ANONYMOUS,
+  state: Entity.BaseState.HIDDEN,
+  position: Object.freeze(new XY(0, 0)),
+  velocity: Object.freeze(new XY(0, 0)),
+  updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
+  updaters: Object.freeze([]),
+  collisionType: CollisionType.INERT,
+  collisionPredicate: CollisionPredicate.NEVER,
+  collisionBodies: Object.freeze([]),
+  imageID: undefined,
+  scale: Object.freeze(new XY(1, 1))
+})

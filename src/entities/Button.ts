@@ -12,16 +12,16 @@ import {Image} from '../image/Image'
 import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Button extends Entity<'none', Button.State> {
+export class Button extends Entity<Button.Variant, Button.State> {
   clicked: boolean
   longClicked: boolean
   private _engaged: boolean
   constructor(atlas: Atlas, props?: Button.Props) {
     super({
-      type: EntityType.UI_BUTTON,
-      variant: 'none',
-      state: Button.State.UNCLICKED,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Button.State.UNCLICKED]: new ImageRect({
@@ -45,9 +45,6 @@ export class Button extends Entity<'none', Button.State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
-      collisionType: CollisionType.TYPE_UI,
-      collisionPredicate: CollisionPredicate.BOUNDS,
       ...props
     })
     this.clicked = (props && props.clicked) || false
@@ -80,16 +77,33 @@ export class Button extends Entity<'none', Button.State> {
 
     return status
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
 }
 
 export namespace Button {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     UNCLICKED = 'unclicked',
     CLICKED = 'clicked'
   }
 
-  export interface Props extends Entity.SubProps<'none', Button.State> {
+  export interface Props extends Entity.SubProps<Button.Variant, Button.State> {
     clicked?: boolean
     longClicked?: boolean
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_BUTTON,
+  variant: Button.Variant.NONE,
+  state: Button.State.UNCLICKED,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  collisionType: CollisionType.TYPE_UI,
+  collisionPredicate: CollisionPredicate.BOUNDS
+})

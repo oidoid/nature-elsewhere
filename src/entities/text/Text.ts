@@ -12,31 +12,31 @@ import {ImageParser} from '../../image/ImageParser'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {EntityType} from '../../entity/EntityType'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {JSON, JSONObject} from '../../utils/JSON'
+import {AlphaComposition} from '../../image/AlphaComposition'
+import {ObjectUtil} from '../../utils/ObjectUtil'
 
-export class Text extends Entity<'none', Text.State> {
+export class Text extends Entity<Text.Variant, Text.State> {
   text: string
   readonly textLayer: Layer
   readonly textScale: XY
   readonly textMaxSize: WH
 
-  constructor(atlas: Atlas, props?: Text.Props<'none', Text.State>) {
+  constructor(atlas: Atlas, props?: Text.Props<Text.Variant, Text.State>) {
     super({
-      type: EntityType.UI_TEXT,
-      variant: 'none',
-      state: Text.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Text.State.VISIBLE]: new ImageRect()
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
       ...props
     })
 
-    this.text = (props && props.text) || ''
-    this.textLayer = (props && props.textLayer) || Layer.UI_LO
-    this.textScale = (props && props.textScale) || new XY(1, 1)
+    this.text = (props && props.text) || defaults.text
+    this.textLayer = (props && props.textLayer) || defaults.textLayer
+    this.textScale = (props && props.textScale) || defaults.textScale.copy()
     this.textMaxSize =
-      (props && props.textMaxSize) || new WH(Limits.maxShort, Limits.maxShort)
+      (props && props.textMaxSize) || defaults.textMaxSize.copy()
 
     const textImages = toImages(
       atlas,
@@ -61,9 +61,23 @@ export class Text extends Entity<'none', Text.State> {
 
     this.addImages(...textImages)
   }
+
+  toJSON(): JSON {
+    const diff = <JSONObject>this._toJSON(defaults)
+    if (this.text !== defaults.text) diff.text = this.text
+    if (this.textLayer !== defaults.textLayer) diff.textLayer = this.textLayer
+    if (!this.textScale.equal(defaults.textScale))
+      diff.textScale = {x: this.textScale.x, y: this.textScale.y}
+    if (!this.textMaxSize.equal(defaults.textMaxSize))
+      diff.textMaxSize = {w: this.textMaxSize.w, h: this.textMaxSize.h}
+    return diff
+  }
 }
 
 export namespace Text {
+  export enum Variant {
+    NONE = 'none'
+  }
   export enum State {
     VISIBLE = 'visible'
   }
@@ -120,7 +134,24 @@ function newCharacterImage(
 ): Image {
   const id = MEM_FONT_PREFIX + char.toString().padStart(3, '0')
   return ImageParser.parse(
-    {id, bounds: {position}, scale, imageID, alphaComposition: 'SOURCE_MASK'},
+    {
+      id,
+      bounds: {position},
+      scale,
+      imageID,
+      alphaComposition: AlphaComposition.SOURCE_MASK
+    },
     atlas
   )
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_TEXT,
+  variant: Text.Variant.NONE,
+  state: Text.State.VISIBLE,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  text: '',
+  textLayer: Layer.UI_LO,
+  textScale: new XY(1, 1),
+  textMaxSize: new WH(Limits.maxShort, Limits.maxShort)
+})

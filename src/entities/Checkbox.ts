@@ -15,32 +15,31 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {JSON, JSONObject} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
+import {Limits} from '../math/Limits'
 
-export class Checkbox extends Entity<'none', Checkbox.State> {
+export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
   private _textLayer: Layer
-  private _textScale: Maybe<XY>
-  private _textMaxSize: Maybe<WH>
+  private _textScale: XY
+  private _textMaxSize: WH
   private _textImageID: Maybe<AtlasID>
   constructor(atlas: Atlas, props?: Checkbox.Props) {
     super({
-      type: EntityType.UI_CHECKBOX,
-      variant: 'none',
-      state: Checkbox.State.UNCHECKED,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Checkbox.State.UNCHECKED]: new ImageRect(),
         [Checkbox.State.CHECKED]: new ImageRect()
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
-      collisionType: CollisionType.TYPE_UI,
-      collisionPredicate: CollisionPredicate.BOUNDS,
       ...props
     })
 
-    this._textLayer = (props && props.textLayer) || Layer.UI_HI
-    this._textScale = props && props.textScale
-    this._textMaxSize = props && props.textMaxSize
-    this._textImageID = props && props.imageID
+    this._textLayer = (props && props.textLayer) || defaults.textLayer
+    this._textScale = (props && props.textScale) || defaults.textScale.copy()
+    this._textMaxSize =
+      (props && props.textMaxSize) || defaults.textMaxSize.copy()
+    this._textImageID = (props && props.imageID) || defaults.textImageID
     this.setText(
       {type: EntityType.UI_TEXT, text: props && props.text},
       0,
@@ -65,7 +64,7 @@ export class Checkbox extends Entity<'none', Checkbox.State> {
   }
 
   setText(
-    props: Text.Props<'none', Text.State>,
+    props: Text.Props<Text.Variant, Text.State>,
     layerOffset: number,
     atlas: Atlas
   ): void {
@@ -94,6 +93,18 @@ export class Checkbox extends Entity<'none', Checkbox.State> {
     return (<Text>this.children[0]).text
   }
 
+  toJSON(): JSON {
+    const diff = <JSONObject>this._toJSON(defaults)
+    if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
+    if (!this._textScale.equal(defaults.textScale))
+      diff.textScale = {x: this._textScale.x, y: this._textScale.y}
+    if (!this._textMaxSize.equal(defaults.textMaxSize))
+      diff.textMaxSize = {w: this._textMaxSize.w, h: this._textMaxSize.h}
+    if (this._textImageID !== defaults.textImageID)
+      diff.textImageID = this._textImageID
+    return diff
+  }
+
   private setBackground(layerOffset: number, atlas: Atlas): void {
     const text = this.children[0]
     for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
@@ -108,12 +119,16 @@ export class Checkbox extends Entity<'none', Checkbox.State> {
 }
 
 export namespace Checkbox {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     UNCHECKED = 'unchecked',
     CHECKED = 'checked'
   }
 
-  export interface Props extends Text.Props<'none', State> {}
+  export interface Props extends Text.Props<Checkbox.Variant, State> {}
 }
 
 const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({
@@ -143,3 +158,16 @@ function newBackgroundImages(
   })
   return [backgroundImage, borderImage]
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_CHECKBOX,
+  variant: Checkbox.Variant.NONE,
+  state: Checkbox.State.UNCHECKED,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  collisionType: CollisionType.TYPE_UI,
+  collisionPredicate: CollisionPredicate.BOUNDS,
+  textLayer: Layer.UI_HI,
+  textScale: new XY(1, 1),
+  textMaxSize: new WH(Limits.maxShort, Limits.maxShort),
+  textImageID: undefined
+})

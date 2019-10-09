@@ -9,13 +9,17 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Mountain extends Entity<'none', Mountain.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Mountain.State>) {
+export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Mountain.Variant, Mountain.State>
+  ) {
     super({
-      type: EntityType.SCENERY_MOUNTAIN,
-      variant: 'none',
-      state: Mountain.State.VISIBLE,
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Mountain.State.VISIBLE]: new ImageRect({
@@ -29,16 +33,30 @@ export class Mountain extends Entity<'none', Mountain.State> {
           ]
         })
       },
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(0, 5, 13, 4)],
-      collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Mountain {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_MOUNTAIN,
+  variant: Mountain.Variant.NONE,
+  state: Mountain.State.VISIBLE,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(0, 5, 13, 4)],
+  collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
+})

@@ -1,7 +1,10 @@
 import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../../atlas/AtlasID'
 import {Button} from '../Button'
 import {Checkbox} from '../Checkbox'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
+import {CollisionType} from '../../collision/CollisionType'
+import {EntityFactory} from '../../entity/EntityFactory'
 import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
 import {EntityPicker} from '../EntityPicker'
@@ -10,30 +13,30 @@ import {
   SCENERY_VALUE_PREFIX,
   CHAR_VALUE_PREFIX
 } from '../../entity/EntityType'
-import {Layer} from '../../image/Layer'
-import {Marquee} from '../Marquee'
-import {UpdateState} from '../../updaters/UpdateState'
-import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
-import {XY} from '../../math/XY'
-import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
-import {CollisionType} from '../../collision/CollisionType'
-import {WH} from '../../math/WH'
-import {AtlasID} from '../../atlas/AtlasID'
-import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
-import {Plane} from '../Plane'
-import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
-import {Text} from '../text/Text'
-import {Group} from '../Group'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
-import {Image} from '../../image/Image'
 import {
   FollowCam,
   FollowCamOrientation
 } from '../../updaters/followCam/FollowCam'
+import {Group} from '../Group'
+import {Image} from '../../image/Image'
+import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {JSON} from '../../utils/JSON'
+import {Layer} from '../../image/Layer'
+import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
+import {Marquee} from '../Marquee'
+import {Plane} from '../Plane'
+import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
+import {Text} from '../text/Text'
+import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../../updaters/updaterType/UpdaterType'
-import {EntityFactory} from '../../entity/EntityFactory'
+import {UpdateState} from '../../updaters/UpdateState'
+import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
+import {WH} from '../../math/WH'
+import {XY} from '../../math/XY'
+import {ObjectUtil} from '../../utils/ObjectUtil'
 
-export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
+export class LevelEditorPanel
+  extends Entity<LevelEditorPanel.Variant, LevelEditorPanel.State>
   implements FollowCam {
   readonly radioGroup: Entity
   readonly xCheckbox: Checkbox
@@ -52,16 +55,11 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
 
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<'none', LevelEditorPanel.State>
+    props?: Entity.SubProps<LevelEditorPanel.Variant, LevelEditorPanel.State>
   ) {
     super({
-      type: EntityType.UI_LEVEL_EDITOR_PANEL,
-      variant: 'none',
-      updatePredicate: UpdatePredicate.ALWAYS,
-      collisionType: CollisionType.TYPE_UI,
-      collisionPredicate: CollisionPredicate.CHILDREN,
-      updaters: [UpdaterType.UI_FOLLOW_CAM],
-      state: LevelEditorPanel.State.VISIBLE,
+      ...defaults,
+      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [LevelEditorPanel.State.VISIBLE]: new ImageRect()
@@ -394,6 +392,10 @@ export class LevelEditorPanel extends Entity<'none', LevelEditorPanel.State>
     this.setEntityVariantFields(offset, state.level.atlas)
   }
 
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
+
   private _updateNumberCheckbox(
     checkbox: Checkbox,
     state: UpdateState,
@@ -429,7 +431,21 @@ function toggleGrid(state: UpdateState): void {
 }
 
 export namespace LevelEditorPanel {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_LEVEL_EDITOR_PANEL,
+  variant: LevelEditorPanel.Variant.NONE,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  collisionType: CollisionType.TYPE_UI,
+  collisionPredicate: CollisionPredicate.CHILDREN,
+  updaters: [UpdaterType.UI_FOLLOW_CAM],
+  state: LevelEditorPanel.State.VISIBLE
+})

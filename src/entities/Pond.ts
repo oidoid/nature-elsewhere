@@ -7,13 +7,13 @@ import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Pond extends Entity<'none', Pond.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Pond.State>) {
+export class Pond extends Entity<Pond.Variant, Pond.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Pond.Variant, Pond.State>) {
     super({
-      type: EntityType.SCENERY_POND,
-      variant: 'none',
-      state: Pond.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pond.State.VISIBLE]: new ImageRect({
@@ -57,17 +57,31 @@ export class Pond extends Entity<'none', Pond.State> {
           ]
         })
       },
-      collisionType:
-        CollisionType.TYPE_SCENERY |
-        CollisionType.DEEP_WATER |
-        CollisionType.IMPEDIMENT,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Pond {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_POND,
+  variant: Pond.Variant.NONE,
+  state: Pond.State.VISIBLE,
+  collisionType:
+    CollisionType.TYPE_SCENERY |
+    CollisionType.DEEP_WATER |
+    CollisionType.IMPEDIMENT
+})

@@ -7,20 +7,22 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {ImageRect} from '../imageStateMachine/ImageRect'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class RadioCheckboxGroup extends Entity<
-  'none',
+  RadioCheckboxGroup.Variant,
   RadioCheckboxGroup.State
 > {
   private _checked?: Checkbox
-  constructor(props?: Entity.SubProps<'none', RadioCheckboxGroup.State>) {
+  constructor(
+    props?: Entity.SubProps<
+      RadioCheckboxGroup.Variant,
+      RadioCheckboxGroup.State
+    >
+  ) {
     super({
-      type: EntityType.UI_RADIO_CHECKBOX_GROUP,
-      variant: 'none',
-      updatePredicate: UpdatePredicate.ALWAYS,
-      collisionPredicate: CollisionPredicate.CHILDREN,
-      collisionType: CollisionType.TYPE_UI,
-      state: RadioCheckboxGroup.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [RadioCheckboxGroup.State.VISIBLE]: new ImageRect()
@@ -57,10 +59,27 @@ export class RadioCheckboxGroup extends Entity<
 
     return status
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
 }
 
 export namespace RadioCheckboxGroup {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_RADIO_CHECKBOX_GROUP,
+  variant: RadioCheckboxGroup.Variant.NONE,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  collisionPredicate: CollisionPredicate.CHILDREN,
+  collisionType: CollisionType.TYPE_UI,
+  state: RadioCheckboxGroup.State.VISIBLE
+})

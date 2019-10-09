@@ -8,14 +8,19 @@ export interface Rect {
   readonly size: WH
 }
 
-export type ReadonlyRect = {
-  readonly position: Readonly<XY>
-  readonly size: Readonly<WH>
-}
+export type ReadonlyRect = DeepImmutable<Rect>
 
 export namespace Rect {
   export function make(x: number, y: number, w: number, h: number): Rect {
     return {position: new XY(x, y), size: new WH(w, h)}
+  }
+
+  export function copy({position, size}: ReadonlyRect): Rect {
+    return {position: position.copy(), size: size.copy()}
+  }
+
+  export function equal(lhs: ReadonlyRect, rhs: ReadonlyRect): boolean {
+    return lhs.position.equal(rhs.position) && lhs.size.equal(rhs.size)
   }
 
   export function trunc(rect: ReadonlyRect): Rect {

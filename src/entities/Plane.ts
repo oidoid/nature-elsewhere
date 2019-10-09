@@ -8,6 +8,8 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {Limits} from '../math/Limits'
 import {WH} from '../math/WH'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Plane extends Entity<Plane.Variant, Plane.State> {
   constructor(
@@ -15,9 +17,7 @@ export class Plane extends Entity<Plane.Variant, Plane.State> {
     props?: Entity.SubProps<Plane.Variant, Plane.State>
   ) {
     super({
-      type: EntityType.SCENERY_SUBSHRUB,
-      variant: Plane.Variant.BLACK,
-      state: Plane.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Plane.State.VISIBLE]: new ImageRect({
@@ -26,9 +26,12 @@ export class Plane extends Entity<Plane.Variant, Plane.State> {
           ]
         })
       },
-      collisionType: CollisionType.TYPE_SCENERY,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
@@ -144,3 +147,10 @@ function variantImage(atlas: Atlas, variant: Plane.Variant): Image {
       })
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_SUBSHRUB,
+  variant: Plane.Variant.BLACK,
+  state: Plane.State.VISIBLE,
+  collisionType: CollisionType.TYPE_SCENERY
+})

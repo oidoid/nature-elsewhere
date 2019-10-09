@@ -6,6 +6,8 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Grass extends Entity<Grass.Variant, Grass.State> {
   constructor(
@@ -13,9 +15,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
     props?: Entity.SubProps<Grass.Variant, Grass.State>
   ) {
     super({
-      type: EntityType.SCENERY_GRASS,
-      variant: Grass.Variant.SMALL,
-      state: Grass.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Grass.State.VISIBLE]: new ImageRect({
@@ -25,9 +25,12 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
           )
         })
       },
-      collisionType: CollisionType.TYPE_SCENERY,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
@@ -68,3 +71,10 @@ function variantImages(atlas: Atlas, variant: Grass.Variant): Image[] {
     })
   ]
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_GRASS,
+  variant: Grass.Variant.SMALL,
+  state: Grass.State.VISIBLE,
+  collisionType: CollisionType.TYPE_SCENERY
+})

@@ -27,9 +27,5 @@ export enum Layer {
   UI_HIHI,
   /** Special entity offset hack. */
   UI_PICKER_OFFSET,
-  UI_CURSOR = 0xff
-}
-
-export namespace Layer {
-  export type Key = keyof typeof Layer
+  UI_CURSOR
 }

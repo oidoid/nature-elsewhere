@@ -6,7 +6,3 @@ export enum AlphaComposition {
   /** The image is rendered where the image AND source alpha are nonzero. */
   AND
 }
-
-export namespace AlphaComposition {
-  export type Key = keyof typeof AlphaComposition
-}

@@ -1,25 +1,29 @@
+import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
+import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityType} from '../entity/EntityType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {JSON} from '../utils/JSON'
+import {Layer} from '../image/Layer'
 import {NumberUtil} from '../math/NumberUtil'
+import {Rect} from '../math/Rect'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
-import {EntityType} from '../entity/EntityType'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {CollisionPredicate} from '../collision/CollisionPredicate'
-import {Rect} from '../math/Rect'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
-import {AtlasID} from '../atlas/AtlasID'
-import {Atlas} from 'aseprite-atlas'
-import {Layer} from '../image/Layer'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Backpacker extends Entity<'none', Backpacker.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Backpacker.State>) {
+export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Backpacker.Variant.NONE, Backpacker.State>
+  ) {
     super({
-      type: EntityType.CHAR_BACKPACKER,
-      state: Backpacker.State.IDLE_DOWN,
-      variant: 'none',
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Backpacker.State.IDLE_UP]: newImageRect(
@@ -53,14 +57,6 @@ export class Backpacker extends Entity<'none', Backpacker.State> {
           AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
         )
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
-      collisionType:
-        CollisionType.TYPE_CHARACTER |
-        CollisionType.TYPE_BACKPACKER |
-        CollisionType.HARMFUL |
-        CollisionType.IMPEDIMENT,
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(2, 12, 4, 3)],
       ...props
     })
   }
@@ -112,6 +108,10 @@ export class Backpacker extends Entity<'none', Backpacker.State> {
     return status
   }
 
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
+
   private _computeObjective(state: UpdateState): Maybe<XY> {
     const {destination} = state.level
     if (!destination || destination.state() === Entity.BaseState.HIDDEN) return
@@ -124,6 +124,10 @@ export class Backpacker extends Entity<'none', Backpacker.State> {
 }
 
 export namespace Backpacker {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     IDLE_UP = 'idleUp',
     IDLE_RIGHT = 'idleRight',
@@ -176,4 +180,18 @@ const idleStateFor: Readonly<Record<
   [Backpacker.State.WALK_UP]: Backpacker.State.IDLE_UP,
   [Backpacker.State.WALK_RIGHT]: Backpacker.State.IDLE_RIGHT,
   [Backpacker.State.WALK_DOWN]: Backpacker.State.IDLE_DOWN
+})
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.CHAR_BACKPACKER,
+  state: Backpacker.State.IDLE_DOWN,
+  variant: Backpacker.Variant.NONE,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  collisionType:
+    CollisionType.TYPE_CHARACTER |
+    CollisionType.TYPE_BACKPACKER |
+    CollisionType.HARMFUL |
+    CollisionType.IMPEDIMENT,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(2, 12, 4, 3)]
 })

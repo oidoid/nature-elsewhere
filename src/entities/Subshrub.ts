@@ -6,13 +6,16 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Subshrub extends Entity<'none', Subshrub.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Subshrub.State>) {
+export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Subshrub.Variant, Subshrub.State>
+  ) {
     super({
-      type: EntityType.SCENERY_SUBSHRUB,
-      variant: 'none',
-      state: Subshrub.State.VISIBLE,
+      ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Subshrub.State.VISIBLE]: new ImageRect({
@@ -25,14 +28,28 @@ export class Subshrub extends Entity<'none', Subshrub.State> {
           ]
         })
       },
-      collisionType: CollisionType.TYPE_SCENERY | CollisionType.IMPEDIMENT,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Subshrub {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_SUBSHRUB,
+  variant: Subshrub.Variant.NONE,
+  state: Subshrub.State.VISIBLE,
+  collisionType: CollisionType.TYPE_SCENERY | CollisionType.IMPEDIMENT
+})

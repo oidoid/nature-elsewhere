@@ -11,13 +11,17 @@ import {Image} from '../image/Image'
 import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Cursor extends Entity<'none', Cursor.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Cursor.State>) {
+export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Cursor.Variant, Cursor.State>
+  ) {
     super({
-      type: EntityType.UI_CURSOR,
-      variant: 'none',
-      state: Entity.BaseState.HIDDEN,
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cursor.State.VISIBLE]: new ImageRect({
@@ -29,11 +33,6 @@ export class Cursor extends Entity<'none', Cursor.State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.ALWAYS,
-      // Use bodies so that collision remains the same regardless of whether
-      // hidden or not.
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(0, 0, 1, 1)],
       ...props
     })
   }
@@ -64,10 +63,29 @@ export class Cursor extends Entity<'none', Cursor.State> {
 
     return status
   }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
+  }
 }
 
 export namespace Cursor {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.UI_CURSOR,
+  variant: Cursor.Variant.NONE,
+  state: Entity.BaseState.HIDDEN,
+  updatePredicate: UpdatePredicate.ALWAYS,
+  // Use bodies so that collision remains the same regardless of whether
+  // hidden or not.
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(0, 0, 1, 1)]
+})

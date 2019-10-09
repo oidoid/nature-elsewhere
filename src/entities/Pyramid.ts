@@ -8,13 +8,17 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Pyramid extends Entity<'none', Pyramid.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Pyramid.State>) {
+export class Pyramid extends Entity<Pyramid.Variant, Pyramid.State> {
+  constructor(
+    atlas: Atlas,
+    props?: Entity.SubProps<Pyramid.Variant, Pyramid.State>
+  ) {
     super({
-      type: EntityType.SCENERY_PYRAMID,
-      variant: 'none',
-      state: Pyramid.State.VISIBLE,
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pyramid.State.VISIBLE]: new ImageRect({
@@ -27,21 +31,35 @@ export class Pyramid extends Entity<'none', Pyramid.State> {
           ]
         })
       },
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [
-        Rect.make(0, 12, 5, 8),
-        Rect.make(5, 9, 20, 14),
-        Rect.make(7, 17, 15, 6),
-        Rect.make(25, 12, 5, 8)
-      ],
-      collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Pyramid {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_PYRAMID,
+  variant: Pyramid.Variant.NONE,
+  state: Pyramid.State.VISIBLE,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [
+    Rect.make(0, 12, 5, 8),
+    Rect.make(5, 9, 20, 14),
+    Rect.make(7, 17, 15, 6),
+    Rect.make(25, 12, 5, 8)
+  ],
+  collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
+})

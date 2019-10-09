@@ -10,13 +10,14 @@ import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Frog extends Entity<'none', Frog.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Frog.State>) {
+export class Frog extends Entity<Frog.Variant, Frog.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Frog.Variant, Frog.State>) {
     super({
-      type: EntityType.CHAR_FROG,
-      state: Frog.State.IDLE,
-      variant: 'none',
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Frog.State.IDLE]: new ImageRect({
@@ -30,17 +31,31 @@ export class Frog extends Entity<'none', Frog.State> {
           ]
         })
       },
-      updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-      collisionType: CollisionType.TYPE_CHARACTER | CollisionType.OBSTACLE,
-      collisionPredicate: CollisionPredicate.BODIES,
-      collisionBodies: [Rect.make(1, 14, 6, 2)],
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Frog {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     IDLE = 'idle'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.CHAR_FROG,
+  state: Frog.State.IDLE,
+  variant: Frog.Variant.NONE,
+  updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
+  collisionType: CollisionType.TYPE_CHARACTER | CollisionType.OBSTACLE,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(1, 14, 6, 2)]
+})

@@ -8,13 +8,14 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {Rect} from '../math/Rect'
+import {JSON} from '../utils/JSON'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
-export class Bush extends Entity<'none', Bush.State> {
-  constructor(atlas: Atlas, props?: Entity.SubProps<'none', Bush.State>) {
+export class Bush extends Entity<Bush.Variant, Bush.State> {
+  constructor(atlas: Atlas, props?: Entity.SubProps<Bush.Variant, Bush.State>) {
     super({
-      type: EntityType.SCENERY_BUSH,
-      variant: 'none',
-      state: Bush.State.VISIBLE,
+      ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bush.State.VISIBLE]: new ImageRect({
@@ -28,15 +29,29 @@ export class Bush extends Entity<'none', Bush.State> {
           ]
         })
       },
-      collisionBodies: [Rect.make(2, 5, 3, 2)],
-      collisionType: CollisionType.TYPE_SCENERY | CollisionType.IMPEDIMENT,
       ...props
     })
+  }
+
+  toJSON(): JSON {
+    return this._toJSON(defaults)
   }
 }
 
 export namespace Bush {
+  export enum Variant {
+    NONE = 'none'
+  }
+
   export enum State {
     VISIBLE = 'visible'
   }
 }
+
+const defaults = ObjectUtil.freeze({
+  type: EntityType.SCENERY_BUSH,
+  variant: Bush.Variant.NONE,
+  state: Bush.State.VISIBLE,
+  collisionBodies: [Rect.make(2, 5, 3, 2)],
+  collisionType: CollisionType.TYPE_SCENERY | CollisionType.IMPEDIMENT
+})
