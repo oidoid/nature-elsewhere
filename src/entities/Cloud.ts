@@ -10,7 +10,7 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
@@ -143,7 +143,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

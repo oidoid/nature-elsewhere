@@ -8,7 +8,7 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {Limits} from '../math/Limits'
 import {WH} from '../math/WH'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Plane extends Entity<Plane.Variant, Plane.State> {
@@ -30,7 +30,7 @@ export class Plane extends Entity<Plane.Variant, Plane.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

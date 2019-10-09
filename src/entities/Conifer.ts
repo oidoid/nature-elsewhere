@@ -9,7 +9,7 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Rect} from '../math/Rect'
 import {CollisionType} from '../collision/CollisionType'
 import {Atlas} from 'aseprite-atlas'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
@@ -37,7 +37,7 @@ export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

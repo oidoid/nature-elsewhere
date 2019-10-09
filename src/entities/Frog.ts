@@ -10,7 +10,7 @@ import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {XY} from '../math/XY'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Frog extends Entity<Frog.Variant, Frog.State> {
@@ -35,7 +35,7 @@ export class Frog extends Entity<Frog.Variant, Frog.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

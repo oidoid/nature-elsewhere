@@ -27,5 +27,5 @@ export enum Layer {
   UI_HIHI,
   /** Special entity offset hack. */
   UI_PICKER_OFFSET,
-  UI_CURSOR
+  UI_CURSOR = 0xff
 }

@@ -20,7 +20,7 @@ import {
 import {Group} from '../Group'
 import {Image} from '../../image/Image'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
-import {JSON} from '../../utils/JSON'
+import {JSONValue} from '../../utils/JSON'
 import {Layer} from '../../image/Layer'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
 import {Marquee} from '../Marquee'
@@ -34,6 +34,10 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
 import {ObjectUtil} from '../../utils/ObjectUtil'
+import {LevelType} from '../../levels/LevelType'
+import {Level} from '../../levels/Level'
+import {LocalStorage} from '../../storage/LocalStorage'
+import {EntityParser} from '../../entity/EntityParser'
 
 export class LevelEditorPanel
   extends Entity<LevelEditorPanel.Variant, LevelEditorPanel.State>
@@ -53,6 +57,8 @@ export class LevelEditorPanel
   readonly toggleGridButton: Button
   readonly positionRelativeToCam: FollowCamOrientation
   readonly camMargin: WH
+
+  private _load: boolean
 
   constructor(
     atlas: Atlas,
@@ -251,16 +257,43 @@ export class LevelEditorPanel
 
     this.positionRelativeToCam = FollowCamOrientation.SOUTH_EAST
     this.camMargin = new WH(0, 0)
+
+    this._load = true
+
+    // the panel background needs to be higher so raise everything.
+    this.elevate(Layer.UI_PICKER_OFFSET)
   }
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
+
+    if (this._load) {
+      this._load = false
+      const data = LocalStorage.get('levelEditorSandbox')
+      if (data !== undefined) {
+        const config = JSON.parse(data)
+        const sandboxChildren = EntityParser.parseAll(config, state.level.atlas)
+        const sandbox = Entity.findAnyByID(
+          state.level.parentEntities,
+          EntityID.UI_LEVEL_EDITOR_SANDBOX
+        )
+        if (!sandbox) throw new Error('Missing sandbox.')
+        sandbox.addChildren(...sandboxChildren)
+      }
+    }
+
+    if (this.menuButton.clicked) {
+      Level.advance(state.level, LevelType.UI_LEVEL_EDITOR_MENU)
+      status |= UpdateStatus.UPDATED | UpdateStatus.TERMINATE
+    }
+
     if (
       this.decrementButton.clicked ||
       this.decrementButton.longClicked ||
       this.incrementButton.clicked ||
       this.incrementButton.longClicked
     ) {
+      status |= UpdateStatus.UPDATED
       const offset =
         this.decrementButton.clicked || this.decrementButton.longClicked
           ? -1
@@ -279,6 +312,7 @@ export class LevelEditorPanel
     }
 
     if (this.createButton.clicked) {
+      status |= UpdateStatus.UPDATED
       const child = this.entityPicker.getActiveChild()
       if (child) {
         const position = new XY(
@@ -321,6 +355,7 @@ export class LevelEditorPanel
       )
       if (!sandbox) throw new Error('Missing sandbox.')
       if (this.destroyButton.clicked) {
+        status |= UpdateStatus.UPDATED
         marquee.selection = undefined
         marquee.transition(Entity.BaseState.HIDDEN)
         sandbox.removeChild(selection)
@@ -331,6 +366,7 @@ export class LevelEditorPanel
         this.incrementButton.clicked ||
         this.incrementButton.longClicked
       ) {
+        status |= UpdateStatus.UPDATED
         const position = new XY(
           checkboxNumber(this.xCheckbox),
           checkboxNumber(this.yCheckbox)
@@ -339,20 +375,29 @@ export class LevelEditorPanel
         sandbox.invalidateBounds()
         marquee.moveTo(new XY(position.x - 1, position.y - 1))
       } else {
-        this._updateNumberCheckbox(
-          this.xCheckbox,
-          state,
+        const xOffset =
           selection.bounds.position.x - checkboxNumber(this.xCheckbox)
-        )
-        this._updateNumberCheckbox(
-          this.yCheckbox,
-          state,
+        this._updateNumberCheckbox(this.xCheckbox, state, xOffset)
+        const yOffset =
           selection.bounds.position.y - checkboxNumber(this.yCheckbox)
-        )
+        this._updateNumberCheckbox(this.yCheckbox, state, yOffset)
+        if (xOffset || yOffset) status |= UpdateStatus.UPDATED
       }
     }
 
-    return status | UpdateStatus.UPDATED
+    if (status & UpdateStatus.UPDATED) {
+      const sandbox = Entity.findAnyByID(
+        state.level.parentEntities,
+        EntityID.UI_LEVEL_EDITOR_SANDBOX
+      )
+      if (sandbox) {
+        console.log('save')
+        const data = JSON.stringify(sandbox.toJSON(), null, 2)
+        LocalStorage.put('levelEditorSandbox', data)
+      }
+    }
+
+    return status
   }
 
   setEntityFields(offset: number, atlas: Atlas): void {
@@ -413,7 +458,7 @@ export class LevelEditorPanel
     this.setEntityVariantFields(offset, state.level.atlas)
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 

@@ -8,7 +8,7 @@ import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../collision/CollisionType'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Flag extends Entity<Flag.Variant, Flag.State> {
@@ -32,7 +32,7 @@ export class Flag extends Entity<Flag.Variant, Flag.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

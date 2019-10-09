@@ -12,7 +12,7 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {ImageRect} from '../imageStateMachine/ImageRect'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 
 const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
@@ -92,7 +92,7 @@ export class EntityPicker extends Entity<
       state: oldChild.state()
     })
     newChild.moveTo(oldChild.bounds.position)
-    newChild.elevate(Layer.UI_PICKER_OFFSET)
+    newChild.elevate(2 * Layer.UI_PICKER_OFFSET)
     this.replaceChild(oldChild, newChild)
   }
   private _entityWindowBounds(): ReadonlyRect {
@@ -105,15 +105,14 @@ export class EntityPicker extends Entity<
     }
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 
   private hideActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
-    child.elevate(-Layer.UI_PICKER_OFFSET)
-    // child.transition(Entity.BaseState.HIDDEN)
+    child.elevate(-2 * Layer.UI_PICKER_OFFSET)
   }
 
   private showActiveChild(): void {
@@ -121,8 +120,7 @@ export class EntityPicker extends Entity<
     const child = this.getActiveChild()
     if (!child) return
     // const defaultState = getChildStates(child)[0]
-    // if (defaultState) child.transition(defaultState)
-    child.elevate(Layer.UI_PICKER_OFFSET)
+    child.elevate(2 * Layer.UI_PICKER_OFFSET)
   }
 }
 
@@ -142,6 +140,7 @@ function getChildStates(child: Entity): readonly (string)[] {
 
 const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
+  EntityType.LEVEL_EDITOR_SANDBOX,
   ...ObjectUtil.keys(EntityType)
     .filter(type => type.startsWith(UI_KEY_PREFIX))
     .map(key => EntityType[key])

@@ -5,7 +5,7 @@ import {EntityType} from '../entity/EntityType'
 import {Entity} from '../entity/Entity'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class DateVersionHash extends Entity<
@@ -32,7 +32,7 @@ export class DateVersionHash extends Entity<
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

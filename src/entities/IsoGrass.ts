@@ -5,7 +5,7 @@ import {Image} from '../image/Image'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class IsoGrass extends Entity<IsoGrass.Variant, IsoGrass.State> {
@@ -25,7 +25,7 @@ export class IsoGrass extends Entity<IsoGrass.Variant, IsoGrass.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

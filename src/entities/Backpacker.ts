@@ -6,7 +6,7 @@ import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {Rect} from '../math/Rect'
@@ -108,7 +108,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     return status
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 

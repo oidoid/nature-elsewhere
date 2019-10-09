@@ -10,7 +10,7 @@ import {CollisionType} from '../../collision/CollisionType'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {Atlas} from 'aseprite-atlas'
 import {WH} from '../../math/WH'
-import {JSON} from '../../utils/JSON'
+import {JSONValue} from '../../utils/JSON'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 
 export class LevelEditorPanelBackground extends Entity<
@@ -36,7 +36,7 @@ export class LevelEditorPanelBackground extends Entity<
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

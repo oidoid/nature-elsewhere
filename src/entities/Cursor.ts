@@ -11,7 +11,7 @@ import {Image} from '../image/Image'
 import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
@@ -64,7 +64,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
     return status
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

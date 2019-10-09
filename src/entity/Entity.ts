@@ -10,7 +10,7 @@ import {FloatXY, XY} from '../math/XY'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
 import {ReadonlyRect, Rect} from '../math/Rect'
@@ -373,14 +373,14 @@ export abstract class Entity<
     for (const child of this.children) child.elevate(offset)
   }
 
-  abstract toJSON(): JSON
+  abstract toJSON(): JSONValue
 
   protected _toJSON(
     subDefaults: Omit<
       DeepImmutable<Entity.SubProps<Variant, State | Entity.BaseState>>,
       'children' | 'map'
     >
-  ): JSON {
+  ): JSONValue {
     const defaults: typeof entityDefaults & typeof subDefaults = {
       ...entityDefaults,
       state: Entity.BaseState.HIDDEN,
@@ -423,7 +423,7 @@ export abstract class Entity<
       )
     )
       diff.collisionBodies = this.collisionBodies
-    return <JSON>(<unknown>diff)
+    return <JSONValue>(<unknown>diff)
   }
 
   private _updatePosition(state: UpdateState): UpdateStatus {

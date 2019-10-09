@@ -1,7 +1,7 @@
 import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
@@ -26,7 +26,7 @@ export class LevelEditorSandbox extends Entity<
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this.children.map(child => child.toJSON())
   }
 }

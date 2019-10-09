@@ -14,7 +14,7 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {NumberUtil} from '../math/NumberUtil'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
@@ -129,7 +129,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     return status
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

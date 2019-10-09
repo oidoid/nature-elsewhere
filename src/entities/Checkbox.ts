@@ -15,7 +15,7 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
-import {JSON, JSONObject} from '../utils/JSON'
+import {JSONValue, JSONObject} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Limits} from '../math/Limits'
 
@@ -93,7 +93,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     return (<Text>this.children[0]).text
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     const diff = <JSONObject>this._toJSON(defaults)
     if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
     if (!this._textScale.equal(defaults.textScale))

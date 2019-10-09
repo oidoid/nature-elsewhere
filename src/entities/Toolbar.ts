@@ -11,7 +11,7 @@ import {FollowCamOrientation, FollowCam} from '../updaters/followCam/FollowCam'
 import {WH} from '../math/WH'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdaterType} from '../updaters/updaterType/UpdaterType'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
@@ -55,7 +55,7 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
     this.camMargin = new WH(1, 1)
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

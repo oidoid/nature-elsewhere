@@ -7,7 +7,7 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {Layer} from '../image/Layer'
 import {XY} from '../math/XY'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Clover extends Entity<Clover.Variant, Clover.State> {
@@ -30,7 +30,7 @@ export class Clover extends Entity<Clover.Variant, Clover.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

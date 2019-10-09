@@ -1,0 +1,68 @@
+{
+  "version": "0.0.0",
+  "type": "uiLevelEditorMenu",
+  "size": {"w": 160, "h": 96},
+  "minViewport": {"w": 160, "h": 96},
+  "cursor": {"type": "uiCursor"},
+  "parentEntities": [
+    {"type": "sceneryPlane", "variant": "white"},
+    {
+      "type": "group",
+      "positionRelativeToCam": "center",
+      "updatePredicate": "always",
+      "updaters": ["uiFollowCam"],
+      "collisionPredicate": "children",
+      "children": [
+        {
+          "type": "uiText",
+          "//": "[strings]",
+          "text": "export level",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiBack",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        },
+        {
+          "type": "uiText",
+          "position": {"y": 12},
+          "//": "[strings]",
+          "text": "import level",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiBack",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        },
+        {
+          "type": "uiText",
+          "position": {"y": 24},
+          "//": "[strings]",
+          "text": "reset level",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiBack",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        },
+        {
+          "type": "uiText",
+          "position": {"y": 36},
+          "//": "[strings]",
+          "text": "back to title",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiTitle",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        },
+        {
+          "type": "uiText",
+          "position": {"y": 48},
+          "//": "[strings]",
+          "text": "back to level editor",
+          "textScale": {"x": 2, "y": 2},
+          "link": "uiBack",
+          "updaters": ["uiLink", "uiLevelLink"],
+          "collisionPredicate": "bounds"
+        }
+      ]
+    }
+  ]
+}

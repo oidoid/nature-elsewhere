@@ -7,7 +7,7 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {Layer} from '../image/Layer'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Path extends Entity<Path.Variant, Path.State> {
@@ -27,7 +27,7 @@ export class Path extends Entity<Path.Variant, Path.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

@@ -8,7 +8,7 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {Rect} from '../math/Rect'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Bush extends Entity<Bush.Variant, Bush.State> {
@@ -33,7 +33,7 @@ export class Bush extends Entity<Bush.Variant, Bush.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }

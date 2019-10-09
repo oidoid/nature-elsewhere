@@ -10,7 +10,7 @@ import {Image} from '../image/Image'
 import {Layer} from '../image/Layer'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
-import {JSON} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Bee extends Entity<Bee.Variant, Bee.State> {
@@ -38,7 +38,7 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
     })
   }
 
-  toJSON(): JSON {
+  toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
 }
