@@ -51,6 +51,11 @@ module.exports = () => {
       clientLogLevel: 'warning',
       overlay: {warnings: true, errors: true},
       stats: 'errors-warnings'
+    },
+
+    performance: {
+      maxAssetSize: 512 * 1024,
+      maxEntrypointSize: 512 * 1024
     }
   }
 }
