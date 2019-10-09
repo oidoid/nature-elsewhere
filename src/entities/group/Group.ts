@@ -1,9 +1,6 @@
 import {Entity} from '../../entity/Entity'
 import {EntityType} from '../../entity/EntityType'
-import {
-  FollowCam,
-  FollowCamOrientation
-} from '../../updaters/followCam/FollowCam'
+import {FollowCam} from '../../updaters/followCam/FollowCam'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
 import {ObjectUtil} from '../../utils/ObjectUtil'
@@ -13,8 +10,7 @@ import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 
 export class Group extends Entity<Group.Variant, Group.State> {
-  positionRelativeToCam?: FollowCamOrientation
-  readonly camMargin: WH
+  private readonly _followCam: FollowCam
 
   constructor(props?: Group.Props) {
     super({
@@ -25,13 +21,18 @@ export class Group extends Entity<Group.Variant, Group.State> {
       },
       ...props
     })
-    this.positionRelativeToCam =
-      (props && props.positionRelativeToCam) || defaults.positionRelativeToCam
-    this.camMargin = (props && props.camMargin) || defaults.camMargin.copy()
+    this._followCam = {
+      positionRelativeToCam:
+        (props && props.positionRelativeToCam) ||
+        defaults.positionRelativeToCam,
+      camMargin: (props && props.camMargin) || defaults.camMargin.copy()
+    }
   }
 
   update(state: UpdateState): UpdateStatus {
-    let status = super.update(state) | FollowCamUpdater.update(this, state)
+    let status =
+      super.update(state) |
+      FollowCamUpdater.update(this._followCam, this, state)
     return status
   }
 

@@ -16,10 +16,8 @@ import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {UpdateState} from '../updaters/UpdateState'
 
-export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
-  implements FollowCam {
-  readonly positionRelativeToCam: FollowCamOrientation
-  readonly camMargin: WH
+export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
+  private readonly _followCam: DeepImmutable<FollowCam>
 
   constructor(
     atlas: Atlas,
@@ -52,12 +50,17 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
       },
       ...props
     })
-    this.positionRelativeToCam = FollowCamOrientation.SOUTH_WEST
-    this.camMargin = new WH(1, 1)
+    this._followCam = ObjectUtil.freeze({
+      positionRelativeToCam: FollowCamOrientation.SOUTH_WEST,
+      camMargin: new WH(1, 1)
+    })
   }
 
   update(state: UpdateState): UpdateStatus {
-    return super.update(state) | FollowCamUpdater.update(this, state)
+    return (
+      super.update(state) |
+      FollowCamUpdater.update(this._followCam, this, state)
+    )
   }
 
   toJSON(): JSONValue {

@@ -8,16 +8,17 @@ import {Entity} from '../../entity/Entity'
 
 export namespace FollowCamUpdater {
   export function update(
-    entity: Entity & FollowCam,
+    {positionRelativeToCam, camMargin}: DeepImmutable<FollowCam>,
+    entity: Entity,
     state: UpdateState
   ): UpdateStatus {
-    if (!entity.positionRelativeToCam) return UpdateStatus.UNCHANGED
+    if (!positionRelativeToCam) return UpdateStatus.UNCHANGED
 
     const to = orientationToXY(
       entity.bounds,
       state.level.cam.bounds,
-      entity.camMargin,
-      entity.positionRelativeToCam
+      camMargin,
+      positionRelativeToCam
     )
 
     if (entity.bounds.position.equal(to)) return UpdateStatus.UNCHANGED

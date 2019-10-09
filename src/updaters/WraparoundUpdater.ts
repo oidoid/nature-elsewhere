@@ -6,18 +6,10 @@ import {XY} from '../math/XY'
 
 export namespace WraparoundUpdater {
   export function update(entity: Entity, state: UpdateState): UpdateStatus {
-    const {bounds} = entity
+    const {position, size} = entity.bounds
     const destination = new XY(
-      NumberUtil.wrap(
-        bounds.position.x,
-        -bounds.size.w + 1, // 8 works but not 1
-        state.level.size.w - 1
-      ),
-      NumberUtil.wrap(
-        bounds.position.y,
-        -bounds.size.h + 1,
-        state.level.size.h - 1
-      )
+      NumberUtil.wrap(position.x, -size.w + 1, state.level.size.w - 1),
+      NumberUtil.wrap(position.y, -size.h + 1, state.level.size.h - 1)
     )
     return entity.moveTo(destination)
   }

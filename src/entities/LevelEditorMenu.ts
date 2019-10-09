@@ -18,13 +18,11 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
 
-export class LevelEditorMenu
-  extends Entity<LevelEditorMenu.Variant, LevelEditorMenu.State>
-  implements FollowCam {
-  readonly positionRelativeToCam: FollowCamOrientation =
-    FollowCamOrientation.CENTER
-  readonly camMargin: WH = new WH(0, 0)
-
+export class LevelEditorMenu extends Entity<
+  LevelEditorMenu.Variant,
+  LevelEditorMenu.State
+> {
+  private readonly _followCam: DeepImmutable<FollowCam>
   private readonly _export: LevelLink
   private readonly _import: LevelLink
   private readonly _reset: LevelLink
@@ -44,6 +42,10 @@ export class LevelEditorMenu
       ...props
     })
 
+    this._followCam = ObjectUtil.freeze({
+      positionRelativeToCam: FollowCamOrientation.CENTER,
+      camMargin: new WH(0, 0)
+    })
     this._export = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_EXPORT,
@@ -90,7 +92,9 @@ export class LevelEditorMenu
   }
 
   update(state: UpdateState): UpdateStatus {
-    let status = super.update(state) | FollowCamUpdater.update(this, state)
+    let status =
+      super.update(state) |
+      FollowCamUpdater.update(this._followCam, this, state)
 
     for (const child of this.children) {
       const childStatus = child.update(state)
