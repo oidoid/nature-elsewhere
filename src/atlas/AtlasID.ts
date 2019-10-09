@@ -228,6 +228,7 @@ export enum AtlasID {
   UI_BUTTON_DECREMENT = 'uiButton-decrement',
   UI_BUTTON_DESTROY = 'uiButton-destroy',
   UI_BUTTON_INCREMENT = 'uiButton-increment',
+  UI_BUTTON_MENU = 'uiButton-menu',
   UI_BUTTON_PRESSED = 'uiButton-pressed',
   UI_BUTTON_TOGGLE_GRID = 'uiButton-toggleGrid',
   UI_CHECKERBOARD_BLACK_TRANSPARENT = 'uiCheckerboard-blackTransparent',

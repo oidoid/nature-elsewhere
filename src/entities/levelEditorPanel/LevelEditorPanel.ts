@@ -45,6 +45,7 @@ export class LevelEditorPanel
   readonly stateCheckbox: Checkbox
   readonly entityCheckbox: Checkbox
   readonly entityPicker: EntityPicker
+  readonly menuButton: Button
   readonly decrementButton: Button
   readonly incrementButton: Button
   readonly destroyButton: Button
@@ -69,63 +70,82 @@ export class LevelEditorPanel
 
     this.variantCheckbox = new Checkbox(atlas, {
       textMaxSize: new WH(31, 5),
-      position: new XY(55, 14),
+      position: new XY(13, 12),
       imageID: AtlasID.PALETTE_BLACK
     })
     this.stateCheckbox = new Checkbox(atlas, {
       textMaxSize: new WH(34, 5),
-      position: new XY(52, 20),
+      position: new XY(10, 18),
       imageID: AtlasID.PALETTE_BLACK
     })
     this.xCheckbox = new Checkbox(atlas, {
       text: '0',
       textLayer: Layer.UI_HI,
-      position: new XY(46, 26),
+      position: new XY(4, 24),
       imageID: AtlasID.PALETTE_BLACK
     })
     this.yCheckbox = new Checkbox(atlas, {
       text: '0',
       textLayer: Layer.UI_HI,
-      position: new XY(68, 26),
+      position: new XY(26, 24),
       imageID: AtlasID.PALETTE_BLACK
     })
     this.entityCheckbox = new Checkbox(atlas, {
       state: Checkbox.State.CHECKED,
       textMaxSize: new WH(32, 5),
-      position: new XY(88, 2),
+      position: new XY(46, 0),
       imageID: AtlasID.PALETTE_BLACK
     })
     this.radioGroup = new RadioCheckboxGroup({
+      position: new XY(50, 2),
       children: [
         new Text(atlas, {
           text: 'var',
           textLayer: Layer.UI_HI,
-          position: new XY(44, 14)
+          position: new XY(2, 12)
         }),
         this.variantCheckbox,
         new Text(atlas, {
           text: 'st',
           textLayer: Layer.UI_HI,
-          position: new XY(44, 20)
+          position: new XY(2, 18)
         }),
         this.stateCheckbox,
         new Text(atlas, {
           text: 'x',
           textLayer: Layer.UI_HI,
-          position: new XY(42, 26)
+          position: new XY(0, 24)
         }),
         this.xCheckbox,
         new Text(atlas, {
           text: 'y',
           textLayer: Layer.UI_HI,
-          position: new XY(64, 26)
+          position: new XY(22, 24)
         }),
         this.yCheckbox,
         this.entityCheckbox
       ]
     })
-    this.decrementButton = new Button(atlas, {
+    this.menuButton = new Button(atlas, {
       position: new XY(2, 22),
+      children: [
+        new Group({
+          map: {
+            [Entity.BaseState.HIDDEN]: new ImageRect(),
+            [Group.State.VISIBLE]: new ImageRect({
+              images: [
+                new Image(atlas, {
+                  id: AtlasID.UI_BUTTON_MENU,
+                  layer: Layer.UI_HIHI
+                })
+              ]
+            })
+          }
+        })
+      ]
+    })
+    this.decrementButton = new Button(atlas, {
+      position: new XY(10, 22),
       children: [
         new Group({
           map: {
@@ -143,7 +163,7 @@ export class LevelEditorPanel
       ]
     })
     this.incrementButton = new Button(atlas, {
-      position: new XY(10, 22),
+      position: new XY(18, 22),
       children: [
         new Group({
           map: {
@@ -161,7 +181,7 @@ export class LevelEditorPanel
       ]
     })
     this.destroyButton = new Button(atlas, {
-      position: new XY(18, 22),
+      position: new XY(26, 22),
       children: [
         new Group({
           map: {
@@ -179,7 +199,7 @@ export class LevelEditorPanel
       ]
     })
     this.createButton = new Button(atlas, {
-      position: new XY(26, 22),
+      position: new XY(34, 22),
       children: [
         new Group({
           map: {
@@ -197,7 +217,7 @@ export class LevelEditorPanel
       ]
     })
     this.toggleGridButton = new Button(atlas, {
-      position: new XY(34, 22),
+      position: new XY(42, 22),
       children: [
         new Group({
           map: {
@@ -214,8 +234,9 @@ export class LevelEditorPanel
         })
       ]
     })
-    this.entityPicker = new EntityPicker(atlas, {position: new XY(89, 0)})
+    this.entityPicker = new EntityPicker(atlas, {position: new XY(97, 0)})
     this.addChildren(
+      this.menuButton,
       this.decrementButton,
       this.incrementButton,
       this.destroyButton,

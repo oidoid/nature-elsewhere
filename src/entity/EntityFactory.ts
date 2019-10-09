@@ -23,6 +23,7 @@ import {Group} from '../entities/Group'
 import {IsoGrass} from '../entities/IsoGrass'
 import {LevelEditorPanelBackground} from '../entities/levelEditorPanel/LevelEditorPanelBackground'
 import {LevelEditorPanel} from '../entities/levelEditorPanel/LevelEditorPanel'
+import {LevelEditorSandbox} from '../entities/LevelEditorSandbox'
 import {Marquee} from '../entities/Marquee'
 import {Mountain} from '../entities/Mountain'
 import {Path} from '../entities/Path'
@@ -56,6 +57,8 @@ export namespace EntityFactory {
         return new Snake(atlas, props)
       case EntityType.GROUP:
         return new Group(props)
+      case EntityType.LEVEL_EDITOR_SANDBOX:
+        return new LevelEditorSandbox(props)
       case EntityType.SCENERY_BUSH:
         return new Bush(atlas, props)
       case EntityType.SCENERY_CATTAILS:
