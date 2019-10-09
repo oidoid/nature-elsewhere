@@ -16,6 +16,7 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {NumberUtil} from '../math/NumberUtil'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {Rect} from '../math/Rect'
 
 export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
   selection?: Entity
@@ -83,9 +84,19 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       ? EntityCollider.collidesEntity(state.level.cursor, panel)
       : []
 
+    const pickCenter = Rect.centerOf(state.level.cursor.bounds)
     const cursorSandboxCollision = EntityCollider.collidesEntity(
       state.level.cursor,
       sandbox
+    ).sort(
+      // Sort by centroid.
+      (lhs, rhs) =>
+        Rect.centerOf(lhs.bounds)
+          .sub(pickCenter)
+          .magnitude() -
+        Rect.centerOf(rhs.bounds)
+          .sub(pickCenter)
+          .magnitude()
     )
     const triggered = Input.activeTriggered(state.inputs.pick)
     if (!triggered && this.selection && this._dragOffset) {

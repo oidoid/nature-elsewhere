@@ -7,7 +7,7 @@ export namespace EntityCollider {
   export function collidesEntities(
     initiator: Entity,
     entities: readonly Entity[]
-  ): readonly Entity[] {
+  ): Entity[] {
     const collisions: Entity[] = []
 
     for (const entity of entities)
@@ -18,10 +18,7 @@ export namespace EntityCollider {
     return collisions
   }
 
-  export function collidesEntity(
-    initiator: Entity,
-    entity: Entity
-  ): readonly Entity[] {
+  export function collidesEntity(initiator: Entity, entity: Entity): Entity[] {
     const collisions: Entity[] = []
     if (
       initiator.collisionPredicate === CollisionPredicate.NEVER ||
@@ -86,10 +83,7 @@ export namespace EntityCollider {
     return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
   }
 
-  export function collidesRect(
-    entity: Entity,
-    rect: ReadonlyRect
-  ): readonly Entity[] {
+  export function collidesRect(entity: Entity, rect: ReadonlyRect): Entity[] {
     const collisions: Entity[] = []
     if (entity.collisionPredicate === CollisionPredicate.NEVER)
       return collisions

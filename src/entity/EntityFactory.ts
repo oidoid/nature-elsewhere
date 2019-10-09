@@ -59,8 +59,6 @@ export namespace EntityFactory {
         return new Snake(atlas, props)
       case EntityType.GROUP:
         return new Group(props)
-      case EntityType.LEVEL_EDITOR_MENU:
-        return new LevelEditorMenu(atlas, props)
       case EntityType.LEVEL_EDITOR_SANDBOX:
         return new LevelEditorSandbox(props)
       case EntityType.BUSH:
@@ -105,6 +103,8 @@ export namespace EntityFactory {
         return new DestinationMarker(atlas, props)
       case EntityType.UI_ENTITY_PICKER:
         return new EntityPicker(atlas, props)
+      case EntityType.UI_LEVEL_EDITOR_MENU:
+        return new LevelEditorMenu(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_PANEL:
         return new LevelEditorPanel(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:

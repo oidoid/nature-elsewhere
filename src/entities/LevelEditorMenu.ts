@@ -136,7 +136,7 @@ export namespace LevelEditorMenu {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.LEVEL_EDITOR_MENU,
+  type: EntityType.UI_LEVEL_EDITOR_MENU,
   variant: LevelEditorMenu.Variant.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.CHILDREN,

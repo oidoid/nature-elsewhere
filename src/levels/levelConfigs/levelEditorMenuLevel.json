@@ -6,6 +6,6 @@
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
     {"type": "plane", "variant": "white"},
-    {"type": "levelEditorMenu"}
+    {"type": "uiLevelEditorMenu"}
   ]
 }

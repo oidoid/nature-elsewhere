@@ -122,4 +122,8 @@ export namespace Rect {
       on.position.y + Math.trunc(on.size.h / 2) - Math.trunc(rect.size.h / 2)
     return new XY(x, y)
   }
+
+  export function centerOf({position, size}: ReadonlyRect): XY {
+    return XY.trunc(position.x + size.w / 2, position.y + size.h / 2)
+  }
 }
