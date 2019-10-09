@@ -22,9 +22,9 @@ export class Frog extends Entity<Frog.Variant, Frog.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Frog.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.CHAR_FROG_IDLE}),
+            new Image(atlas, {id: AtlasID.FROG_IDLE}),
             new Image(atlas, {
-              id: AtlasID.CHAR_FROG_IDLE_SHADOW,
+              id: AtlasID.FROG_IDLE_SHADOW,
               position: new XY(-1, 1),
               layer: Layer.SHADOW
             })
@@ -51,7 +51,7 @@ export namespace Frog {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.CHAR_FROG,
+  type: EntityType.FROG,
   state: Frog.State.IDLE,
   variant: Frog.Variant.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

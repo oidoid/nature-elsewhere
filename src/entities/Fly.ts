@@ -54,7 +54,7 @@ export namespace Fly {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.CHAR_FLY,
+  type: EntityType.FLY,
   state: Fly.State.IDLE,
   variant: Fly.Variant.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

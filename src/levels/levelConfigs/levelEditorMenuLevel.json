@@ -5,7 +5,7 @@
   "minViewport": {"w": 96, "h": 96},
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
-    {"type": "sceneryPlane", "variant": "white"},
+    {"type": "plane", "variant": "white"},
     {"type": "levelEditorMenu"}
   ]
 }

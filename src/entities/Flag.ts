@@ -19,9 +19,9 @@ export class Flag extends Entity<Flag.Variant, Flag.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Flag.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_FLAG}),
+            new Image(atlas, {id: AtlasID.FLAG}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_FLAG_SHADOW,
+              id: AtlasID.FLAG_SHADOW,
               position: new XY(-1, 1),
               layer: Layer.SHADOW
             })
@@ -48,7 +48,7 @@ export namespace Flag {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_FLAG,
+  type: EntityType.FLAG,
   variant: Flag.Variant.NONE,
   state: Flag.State.VISIBLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

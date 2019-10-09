@@ -48,32 +48,32 @@ export namespace Grass {
 
 function variantImages(atlas: Atlas, variant: Grass.Variant): Image[] {
   if (variant === Grass.Variant.SMALL)
-    return [new Image(atlas, {id: AtlasID.SCENERY_GRASS_0})]
+    return [new Image(atlas, {id: AtlasID.GRASS_0})]
 
   if (variant === Grass.Variant.MEDIUM)
     return [
-      new Image(atlas, {id: AtlasID.SCENERY_GRASS_1}),
+      new Image(atlas, {id: AtlasID.GRASS_1}),
       new Image(atlas, {
-        id: AtlasID.SCENERY_GRASS_3,
+        id: AtlasID.GRASS_3,
         position: new XY(4, 1)
       })
     ]
 
   return [
-    new Image(atlas, {id: AtlasID.SCENERY_GRASS_2}),
+    new Image(atlas, {id: AtlasID.GRASS_2}),
     new Image(atlas, {
-      id: AtlasID.SCENERY_GRASS_0,
+      id: AtlasID.GRASS_0,
       position: new XY(6, 2)
     }),
     new Image(atlas, {
-      id: AtlasID.SCENERY_GRASS_1,
+      id: AtlasID.GRASS_1,
       position: new XY(3, 3)
     })
   ]
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_GRASS,
+  type: EntityType.GRASS,
   variant: Grass.Variant.SMALL,
   state: Grass.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY

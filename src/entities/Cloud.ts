@@ -37,20 +37,20 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               (props && props.variant) || Cloud.Variant.MEDIUM
             ),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
+              id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 2),
               size: new WH(5, 32), // todo: no way to specify just width
               wrapVelocity: new XY(0, 225)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN,
+              id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 6),
               size: new WH(7, 32),
               wrap: new XY(0, 8),
               wrapVelocity: new XY(0, 340)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_SPLASH,
+              id: AtlasID.CLOUD_RAIN_SPLASH,
               position: new XY(0, 35)
             })
           ]
@@ -62,29 +62,29 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               (props && props.variant) || Cloud.Variant.MEDIUM
             ),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
+              id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 6),
               size: new WH(7, 32), // todo: no way to specify just width
               wrapVelocity: new XY(0, 300)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN,
+              id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 2),
               size: new WH(7, 32),
               wrapVelocity: new XY(0, 337)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_SPLASH,
+              id: AtlasID.CLOUD_RAIN_SPLASH,
               position: new XY(0, 35)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN,
+              id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 2),
               size: new WH(7, 32),
               wrapVelocity: new XY(0, 225)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_PUDDLE,
+              id: AtlasID.CLOUD_RAIN_PUDDLE,
               position: new XY(2, 36),
               layer: Layer.DECAL,
               size: new WH(5, 3),
@@ -105,34 +105,34 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               (props && props.variant) || Cloud.Variant.MEDIUM
             ),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
+              id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(1, 6),
               size: new WH(9, 32), // todo: no way to specify just width
               wrapVelocity: new XY(0, 323)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN,
+              id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 6),
               size: new WH(8, 32),
               wrap: new XY(0, 12),
               wrapVelocity: new XY(0, 398)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_PUDDLE,
+              id: AtlasID.CLOUD_RAIN_PUDDLE,
               position: new XY(2, 35),
               layer: Layer.DECAL,
               size: new WH(7, 5),
               wrapVelocity: new XY(8, 215)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_PUDDLE,
+              id: AtlasID.CLOUD_RAIN_PUDDLE,
               position: new XY(0, 37),
               layer: Layer.DECAL,
               size: new WH(11, 1),
               wrapVelocity: new XY(-90, 0)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CLOUD_RAIN_SPRINKLE,
+              id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 6),
               size: new WH(8, 32), // todo: no way to specify just width
               wrapVelocity: new XY(0, 368)
@@ -170,11 +170,11 @@ function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
   if (variant === Cloud.Variant.MEDIUM)
     return [
       new Image(atlas, {
-        id: AtlasID.SCENERY_CLOUD_MEDIUM,
+        id: AtlasID.CLOUD_MEDIUM,
         layer: Layer.FLOATS
       }),
       new Image(atlas, {
-        id: AtlasID.SCENERY_CLOUD_MEDIUM_SHADOW,
+        id: AtlasID.CLOUD_MEDIUM_SHADOW,
         position: new XY(0, 32),
         layer: Layer.SHADOW
       })
@@ -182,11 +182,11 @@ function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
 
   return [
     new Image(atlas, {
-      id: AtlasID.SCENERY_CLOUD_LARGE,
+      id: AtlasID.CLOUD_LARGE,
       layer: Layer.FLOATS
     }),
     new Image(atlas, {
-      id: AtlasID.SCENERY_CLOUD_LARGE_SHADOW,
+      id: AtlasID.CLOUD_LARGE_SHADOW,
       position: new XY(0, 32),
       layer: Layer.SHADOW
     })
@@ -194,7 +194,7 @@ function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_CLOUD,
+  type: EntityType.CLOUD,
   variant: Cloud.Variant.MEDIUM,
   state: Cloud.State.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

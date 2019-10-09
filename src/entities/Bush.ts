@@ -20,9 +20,9 @@ export class Bush extends Entity<Bush.Variant, Bush.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bush.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_BUSH}),
+            new Image(atlas, {id: AtlasID.BUSH}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_BUSH_SHADOW,
+              id: AtlasID.BUSH_SHADOW,
               position: new XY(0, 1),
               layer: Layer.SHADOW
             })
@@ -49,7 +49,7 @@ export namespace Bush {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_BUSH,
+  type: EntityType.BUSH,
   variant: Bush.Variant.NONE,
   state: Bush.State.VISIBLE,
   collisionBodies: [Rect.make(2, 5, 3, 2)],

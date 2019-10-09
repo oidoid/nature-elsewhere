@@ -24,9 +24,9 @@ export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Conifer.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_CONIFER}),
+            new Image(atlas, {id: AtlasID.CONIFER}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CONIFER_SHADOW,
+              id: AtlasID.CONIFER_SHADOW,
               position: new XY(0, 1),
               layer: Layer.SHADOW
             })
@@ -53,7 +53,7 @@ export namespace Conifer {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_CONIFER,
+  type: EntityType.CONIFER,
   variant: Conifer.Variant.NONE,
   state: Conifer.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,

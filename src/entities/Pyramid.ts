@@ -23,9 +23,9 @@ export class Pyramid extends Entity<Pyramid.Variant, Pyramid.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pyramid.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_PYRAMID}),
+            new Image(atlas, {id: AtlasID.PYRAMID}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_PYRAMID_SHADOW,
+              id: AtlasID.PYRAMID_SHADOW,
               layer: Layer.SHADOW
             })
           ]
@@ -51,7 +51,7 @@ export namespace Pyramid {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_PYRAMID,
+  type: EntityType.PYRAMID,
   variant: Pyramid.Variant.NONE,
   state: Pyramid.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,

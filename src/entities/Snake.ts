@@ -22,9 +22,9 @@ export class Snake extends Entity<Snake.Variant, Snake.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Snake.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.CHAR_SNAKE}),
+            new Image(atlas, {id: AtlasID.SNAKE}),
             new Image(atlas, {
-              id: AtlasID.CHAR_SNAKE_SHADOW,
+              id: AtlasID.SNAKE_SHADOW,
               layer: Layer.SHADOW
             })
           ]
@@ -50,7 +50,7 @@ export namespace Snake {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.CHAR_SNAKE,
+  type: EntityType.SNAKE,
   variant: Snake.Variant.NONE,
   state: Snake.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

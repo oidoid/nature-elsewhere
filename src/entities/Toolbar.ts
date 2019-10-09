@@ -29,19 +29,19 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Toolbar.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_FLAG, layer: Layer.UI_HI}),
+            new Image(atlas, {id: AtlasID.FLAG, layer: Layer.UI_HI}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_FLAG,
+              id: AtlasID.FLAG,
               position: new XY(4, 0),
               layer: Layer.UI_HI
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_FLAG,
+              id: AtlasID.FLAG,
               position: new XY(8, 0),
               layer: Layer.UI_HI
             }),
             new Image(atlas, {
-              id: AtlasID.CHAR_ARROW_DIAGONAL,
+              id: AtlasID.ARROW_DIAGONAL,
               position: new XY(12, 0),
               layer: Layer.UI_HI
             })

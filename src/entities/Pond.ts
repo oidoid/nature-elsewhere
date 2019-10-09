@@ -19,39 +19,39 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
         [Pond.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {
-              id: AtlasID.SCENERY_POND,
+              id: AtlasID.POND,
               layer: Layer.ABOVE_PLANE
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_CATTAILS,
+              id: AtlasID.CATTAILS,
               position: new XY(15, -3)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_GRASS_1,
+              id: AtlasID.GRASS_1,
               position: new XY(1, 4)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_GRASS_2,
+              id: AtlasID.GRASS_2,
               position: new XY(12, 11)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_GRASS_6,
+              id: AtlasID.GRASS_6,
               position: new XY(24, 4)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_GRASS_8,
+              id: AtlasID.GRASS_8,
               position: new XY(26, 6)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_GRASS_9,
+              id: AtlasID.GRASS_9,
               position: new XY(11, -1)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_GRASS_10,
+              id: AtlasID.GRASS_10,
               position: new XY(6, 10)
             }),
             new Image(atlas, {
-              id: AtlasID.SCENERY_GRASS_5,
+              id: AtlasID.GRASS_5,
               position: new XY(21, 10)
             })
           ]
@@ -77,7 +77,7 @@ export namespace Pond {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_POND,
+  type: EntityType.POND,
   variant: Pond.Variant.NONE,
   state: Pond.State.VISIBLE,
   collisionType:

@@ -18,7 +18,7 @@ export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cattails.State.VISIBLE]: new ImageRect({
-          images: [new Image(atlas, {id: AtlasID.SCENERY_CATTAILS})]
+          images: [new Image(atlas, {id: AtlasID.CATTAILS})]
         })
       },
       ...props
@@ -41,7 +41,7 @@ export namespace Cattails {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_CATTAILS,
+  type: EntityType.CATTAILS,
   variant: Cattails.Variant.NONE,
   state: Cattails.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY

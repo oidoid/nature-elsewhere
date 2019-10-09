@@ -5,8 +5,8 @@
   "minViewport": {"w": 160, "h": 96},
   "cursor": {"type": "uiCursor"},
   "parentEntities": [
-    {"type": "sceneryPlane", "variant": "paleGreen"},
-    {"id": "uiGrid", "type": "sceneryPlane", "variant": "grid"},
+    {"type": "plane", "variant": "paleGreen"},
+    {"id": "uiGrid", "type": "plane", "variant": "grid"},
     {"id": "uiMarquee", "type": "uiMarquee"},
     {"id": "uiLevelEditorPanel", "type": "uiLevelEditorPanel"},
     {"id": "uiLevelEditorSandbox", "type": "levelEditorSandbox"}

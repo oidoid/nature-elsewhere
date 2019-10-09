@@ -24,9 +24,9 @@ export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Mountain.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_MOUNTAIN}),
+            new Image(atlas, {id: AtlasID.MOUNTAIN}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_MOUNTAIN_SHADOW,
+              id: AtlasID.MOUNTAIN_SHADOW,
               position: new XY(-2, 1),
               layer: Layer.SHADOW
             })
@@ -53,7 +53,7 @@ export namespace Mountain {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_MOUNTAIN,
+  type: EntityType.MOUNTAIN,
   variant: Mountain.Variant.NONE,
   state: Mountain.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,

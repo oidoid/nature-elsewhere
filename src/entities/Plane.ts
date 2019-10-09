@@ -149,7 +149,7 @@ function variantImage(atlas: Atlas, variant: Plane.Variant): Image {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_SUBSHRUB,
+  type: EntityType.SUBSHRUB,
   variant: Plane.Variant.BLACK,
   state: Plane.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY

@@ -21,14 +21,14 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bee.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.CHAR_BEE}),
-            new Image(atlas, {id: AtlasID.CHAR_BEE_SHADOW, layer: Layer.SHADOW})
+            new Image(atlas, {id: AtlasID.BEE}),
+            new Image(atlas, {id: AtlasID.BEE_SHADOW, layer: Layer.SHADOW})
           ]
         }),
         [Bee.State.DEAD]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.CHAR_BEE_DEAD}),
-            new Image(atlas, {id: AtlasID.CHAR_BEE_BLOOD, layer: Layer.BLOOD})
+            new Image(atlas, {id: AtlasID.BEE_DEAD}),
+            new Image(atlas, {id: AtlasID.BEE_BLOOD, layer: Layer.BLOOD})
           ]
         })
       },
@@ -53,7 +53,7 @@ export namespace Bee {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.CHAR_BEE,
+  type: EntityType.BEE,
   variant: Bee.Variant.NONE,
   state: Bee.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

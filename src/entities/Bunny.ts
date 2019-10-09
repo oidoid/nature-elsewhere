@@ -23,9 +23,9 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bunny.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.CHAR_BUNNY}),
+            new Image(atlas, {id: AtlasID.BUNNY}),
             new Image(atlas, {
-              id: AtlasID.CHAR_BUNNY_SHADOW,
+              id: AtlasID.BUNNY_SHADOW,
               layer: Layer.SHADOW,
               position: new XY(0, 1)
             })
@@ -33,8 +33,8 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
         }),
         [Bunny.State.DEAD]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.CHAR_BUNNY_DEAD}),
-            new Image(atlas, {id: AtlasID.CHAR_BUNNY_BLOOD, layer: Layer.BLOOD})
+            new Image(atlas, {id: AtlasID.BUNNY_DEAD}),
+            new Image(atlas, {id: AtlasID.BUNNY_BLOOD, layer: Layer.BLOOD})
           ]
         })
       },
@@ -59,7 +59,7 @@ export namespace Bunny {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.CHAR_BUNNY,
+  type: EntityType.BUNNY,
   variant: Bunny.Variant.NONE,
   state: Bunny.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

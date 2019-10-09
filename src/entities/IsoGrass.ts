@@ -18,7 +18,7 @@ export class IsoGrass extends Entity<IsoGrass.Variant, IsoGrass.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [IsoGrass.State.NE]: new ImageRect({
-          images: [new Image(atlas, {id: AtlasID.SCENERY_ISO_GRASS})]
+          images: [new Image(atlas, {id: AtlasID.ISO_GRASS})]
         })
       },
       ...props
@@ -41,7 +41,7 @@ export namespace IsoGrass {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_ISO_GRASS,
+  type: EntityType.ISO_GRASS,
   variant: IsoGrass.Variant.NONE,
   state: IsoGrass.State.NE,
   collisionType: CollisionType.TYPE_SCENERY

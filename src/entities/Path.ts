@@ -51,14 +51,14 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
     case Path.Variant.STRAIGHT_NE:
       return [
         new Image(atlas, {
-          id: AtlasID.SCENERY_PATH_NE,
+          id: AtlasID.PATH_NE,
           layer: Layer.ABOVE_PLANE
         })
       ]
     case Path.Variant.STRAIGHT_NW:
       return [
         new Image(atlas, {
-          id: AtlasID.SCENERY_PATH_NE,
+          id: AtlasID.PATH_NE,
           layer: Layer.ABOVE_PLANE,
           scale: new XY(-1, 1)
         })
@@ -66,14 +66,14 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
     case Path.Variant.CORNER_E:
       return [
         new Image(atlas, {
-          id: AtlasID.SCENERY_PATH_CORNER_E,
+          id: AtlasID.PATH_CORNER_E,
           layer: Layer.ABOVE_PLANE
         })
       ]
     case Path.Variant.CORNER_W:
       return [
         new Image(atlas, {
-          id: AtlasID.SCENERY_PATH_CORNER_E,
+          id: AtlasID.PATH_CORNER_E,
           layer: Layer.ABOVE_PLANE,
           scale: new XY(-1, 1)
         })
@@ -81,14 +81,14 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
     case Path.Variant.CORNER_N:
       return [
         new Image(atlas, {
-          id: AtlasID.SCENERY_PATH_CORNER_N,
+          id: AtlasID.PATH_CORNER_N,
           layer: Layer.ABOVE_PLANE
         })
       ]
     case Path.Variant.CORNER_S:
       return [
         new Image(atlas, {
-          id: AtlasID.SCENERY_PATH_CORNER_N,
+          id: AtlasID.PATH_CORNER_N,
           layer: Layer.ABOVE_PLANE,
           scale: new XY(1, -1)
         })
@@ -97,7 +97,7 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_PATH,
+  type: EntityType.PATH,
   variant: Path.Variant.STRAIGHT_NE,
   state: Path.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY

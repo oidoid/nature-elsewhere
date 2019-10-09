@@ -21,9 +21,9 @@ export class Tree extends Entity<Tree.Variant, Tree.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Tree.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_TREE}),
+            new Image(atlas, {id: AtlasID.TREE}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_TREE_SHADOW,
+              id: AtlasID.TREE_SHADOW,
               position: new XY(0, 1),
               layer: Layer.SHADOW
             })
@@ -50,7 +50,7 @@ export namespace Tree {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_TREE,
+  type: EntityType.TREE,
   variant: Tree.Variant.NONE,
   state: Tree.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,

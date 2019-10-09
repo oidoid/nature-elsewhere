@@ -20,9 +20,9 @@ export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Subshrub.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SCENERY_SUBSHRUB}),
+            new Image(atlas, {id: AtlasID.SUBSHRUB}),
             new Image(atlas, {
-              id: AtlasID.SCENERY_SUBSHRUB_SHADOW,
+              id: AtlasID.SUBSHRUB_SHADOW,
               layer: Layer.SHADOW
             })
           ]
@@ -48,7 +48,7 @@ export namespace Subshrub {
 }
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.SCENERY_SUBSHRUB,
+  type: EntityType.SUBSHRUB,
   variant: Subshrub.Variant.NONE,
   state: Subshrub.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.IMPEDIMENT

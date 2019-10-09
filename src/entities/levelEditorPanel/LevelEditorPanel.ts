@@ -9,11 +9,7 @@ import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
 import {EntityParser} from '../../entity/EntityParser'
 import {EntityPicker} from '../EntityPicker'
-import {
-  EntityType,
-  SCENERY_VALUE_PREFIX,
-  CHAR_VALUE_PREFIX
-} from '../../entity/EntityType'
+import {EntityType} from '../../entity/EntityType'
 import {
   FollowCam,
   FollowCamOrientation
@@ -275,13 +271,20 @@ export class LevelEditorPanel extends Entity<
       )
       if (data !== undefined) {
         const config = JSON.parse(data)
-        const sandboxChildren = EntityParser.parseAll(config, state.level.atlas)
-        const sandbox = Entity.findAnyByID(
-          state.level.parentEntities,
-          EntityID.UI_LEVEL_EDITOR_SANDBOX
-        )
-        if (!sandbox) throw new Error('Missing sandbox.')
-        sandbox.addChildren(...sandboxChildren)
+        let sandboxChildren: Maybe<Entity[]>
+        try {
+          sandboxChildren = EntityParser.parseAll(config, state.level.atlas)
+        } catch (e) {
+          console.error(e, data, config)
+        }
+        if (sandboxChildren) {
+          const sandbox = Entity.findAnyByID(
+            state.level.parentEntities,
+            EntityID.UI_LEVEL_EDITOR_SANDBOX
+          )
+          if (!sandbox) throw new Error('Missing sandbox.')
+          sandbox.addChildren(...sandboxChildren)
+        }
       }
     }
 
@@ -408,15 +411,9 @@ export class LevelEditorPanel extends Entity<
     )
     const child = this._entityPicker.getActiveChild()
     if (!child) return
-    const entityLabel = child.type.replace(
-      new RegExp(`^(${SCENERY_VALUE_PREFIX}|${CHAR_VALUE_PREFIX})`),
-      ''
-    )
+    const entityLabel = child.type
     this._entityCheckbox.setText(
-      {
-        textLayer: Layer.UI_PICKER_OFFSET,
-        text: entityLabel
-      },
+      {textLayer: Layer.UI_PICKER_OFFSET, text: entityLabel},
       Layer.UI_PICKER_OFFSET,
       atlas
     )

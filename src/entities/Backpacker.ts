@@ -28,33 +28,33 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Backpacker.State.IDLE_UP]: newImageRect(
           atlas,
-          AtlasID.CHAR_BACKPACKER_IDLE_UP,
-          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_IDLE_UP,
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
         ),
         [Backpacker.State.IDLE_RIGHT]: newImageRect(
           atlas,
-          AtlasID.CHAR_BACKPACKER_IDLE_RIGHT,
-          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_IDLE_RIGHT,
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
         ),
         [Backpacker.State.IDLE_DOWN]: newImageRect(
           atlas,
-          AtlasID.CHAR_BACKPACKER_IDLE_DOWN,
-          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_IDLE_DOWN,
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
         ),
         [Backpacker.State.WALK_UP]: newImageRect(
           atlas,
-          AtlasID.CHAR_BACKPACKER_WALK_UP,
-          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_WALK_UP,
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
         ),
         [Backpacker.State.WALK_RIGHT]: newImageRect(
           atlas,
-          AtlasID.CHAR_BACKPACKER_WALK_RIGHT,
-          AtlasID.CHAR_BACKPACKER_WALK_RIGHT_SHADOW
+          AtlasID.BACKPACKER_WALK_RIGHT,
+          AtlasID.BACKPACKER_WALK_RIGHT_SHADOW
         ),
         [Backpacker.State.WALK_DOWN]: newImageRect(
           atlas,
-          AtlasID.CHAR_BACKPACKER_WALK_DOWN,
-          AtlasID.CHAR_BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_WALK_DOWN,
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
         )
       },
       ...props
@@ -183,7 +183,7 @@ const idleStateFor: Readonly<Record<
 })
 
 const defaults = ObjectUtil.freeze({
-  type: EntityType.CHAR_BACKPACKER,
+  type: EntityType.BACKPACKER,
   state: Backpacker.State.IDLE_DOWN,
   variant: Backpacker.Variant.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,

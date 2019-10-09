@@ -45,17 +45,17 @@ export namespace EntityFactory {
     props: Entity.SubProps<any, any>
   ): Entity {
     switch (props.type) {
-      case EntityType.CHAR_BACKPACKER:
+      case EntityType.BACKPACKER:
         return new Backpacker(atlas, props)
-      case EntityType.CHAR_BEE:
+      case EntityType.BEE:
         return new Bee(atlas, props)
-      case EntityType.CHAR_BUNNY:
+      case EntityType.BUNNY:
         return new Bunny(atlas, props)
-      case EntityType.CHAR_FLY:
+      case EntityType.FLY:
         return new Fly(atlas, props)
-      case EntityType.CHAR_FROG:
+      case EntityType.FROG:
         return new Frog(atlas, props)
-      case EntityType.CHAR_SNAKE:
+      case EntityType.SNAKE:
         return new Snake(atlas, props)
       case EntityType.GROUP:
         return new Group(props)
@@ -63,35 +63,35 @@ export namespace EntityFactory {
         return new LevelEditorMenu(atlas, props)
       case EntityType.LEVEL_EDITOR_SANDBOX:
         return new LevelEditorSandbox(props)
-      case EntityType.SCENERY_BUSH:
+      case EntityType.BUSH:
         return new Bush(atlas, props)
-      case EntityType.SCENERY_CATTAILS:
+      case EntityType.CATTAILS:
         return new Cattails(atlas, props)
-      case EntityType.SCENERY_CLOUD:
+      case EntityType.CLOUD:
         return new Cloud(atlas, props)
-      case EntityType.SCENERY_CLOVER:
+      case EntityType.CLOVER:
         return new Clover(atlas, props)
-      case EntityType.SCENERY_CONIFER:
+      case EntityType.CONIFER:
         return new Conifer(atlas, props)
-      case EntityType.SCENERY_FLAG:
+      case EntityType.FLAG:
         return new Flag(atlas, props)
-      case EntityType.SCENERY_GRASS:
+      case EntityType.GRASS:
         return new Grass(atlas, props)
-      case EntityType.SCENERY_ISO_GRASS:
+      case EntityType.ISO_GRASS:
         return new IsoGrass(atlas, props)
-      case EntityType.SCENERY_MOUNTAIN:
+      case EntityType.MOUNTAIN:
         return new Mountain(atlas, props)
-      case EntityType.SCENERY_PATH:
+      case EntityType.PATH:
         return new Path(atlas, props)
-      case EntityType.SCENERY_PLANE:
+      case EntityType.PLANE:
         return new Plane(atlas, props)
-      case EntityType.SCENERY_POND:
+      case EntityType.POND:
         return new Pond(atlas, props)
-      case EntityType.SCENERY_PYRAMID:
+      case EntityType.PYRAMID:
         return new Pyramid(atlas, props)
-      case EntityType.SCENERY_SUBSHRUB:
+      case EntityType.SUBSHRUB:
         return new Subshrub(atlas, props)
-      case EntityType.SCENERY_TREE:
+      case EntityType.TREE:
         return new Tree(atlas, props)
       case EntityType.UI_BUTTON:
         return new Button(atlas, props)
