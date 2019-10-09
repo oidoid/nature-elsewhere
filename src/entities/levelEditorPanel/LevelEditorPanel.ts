@@ -7,6 +7,7 @@ import {CollisionType} from '../../collision/CollisionType'
 import {EntityFactory} from '../../entity/EntityFactory'
 import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
+import {EntityParser} from '../../entity/EntityParser'
 import {EntityPicker} from '../EntityPicker'
 import {
   EntityType,
@@ -17,27 +18,26 @@ import {
   FollowCam,
   FollowCamOrientation
 } from '../../updaters/followCam/FollowCam'
-import {Group} from '../Group'
+import {Group} from '../group/Group'
 import {Image} from '../../image/Image'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
 import {Layer} from '../../image/Layer'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
+import {Level} from '../../levels/Level'
+import {LevelType} from '../../levels/LevelType'
+import {LocalStorage} from '../../storage/LocalStorage'
 import {Marquee} from '../Marquee'
+import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Plane} from '../Plane'
 import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
 import {Text} from '../text/Text'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterType} from '../../updaters/updaterType/UpdaterType'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
-import {ObjectUtil} from '../../utils/ObjectUtil'
-import {LevelType} from '../../levels/LevelType'
-import {Level} from '../../levels/Level'
-import {LocalStorage} from '../../storage/LocalStorage'
-import {EntityParser} from '../../entity/EntityParser'
+import {FollowCamUpdater} from '../../updaters/followCam/FollowCamUpdater'
 
 export class LevelEditorPanel
   extends Entity<LevelEditorPanel.Variant, LevelEditorPanel.State>
@@ -66,7 +66,6 @@ export class LevelEditorPanel
   ) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [LevelEditorPanel.State.VISIBLE]: new ImageRect()
@@ -266,6 +265,8 @@ export class LevelEditorPanel
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
+
+    status |= FollowCamUpdater.update(this, state)
 
     if (this._load) {
       this._load = false
@@ -513,6 +514,5 @@ const defaults = ObjectUtil.freeze({
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionType: CollisionType.TYPE_UI,
   collisionPredicate: CollisionPredicate.CHILDREN,
-  updaters: [UpdaterType.UI_FOLLOW_CAM],
   state: LevelEditorPanel.State.VISIBLE
 })

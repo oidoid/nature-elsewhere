@@ -15,8 +15,6 @@ import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
 import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterMap} from '../updaters/UpdaterMap'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {ObjectUtil} from '../utils/ObjectUtil'
@@ -55,10 +53,6 @@ export abstract class Entity<
   private readonly _machine: ImageStateMachine<State | Entity.BaseState>
 
   private readonly _updatePredicate: UpdatePredicate
-
-  /** See UpdatePredicate. */
-  private readonly _updaters: readonly UpdaterType[]
-
   private readonly _collisionType: CollisionType
 
   private _collisionPredicate: CollisionPredicate
@@ -83,7 +77,6 @@ export abstract class Entity<
     this._machine = new ImageStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
       props.updatePredicate || entityDefaults.updatePredicate
-    this._updaters = props.updaters || entityDefaults.updaters
     this._collisionType =
       props.collisionType === undefined
         ? entityDefaults.collisionType
@@ -164,10 +157,6 @@ export abstract class Entity<
 
   get updatePredicate(): UpdatePredicate {
     return this._updatePredicate
-  }
-
-  get updaters(): readonly UpdaterType[] {
-    return this._updaters
   }
 
   get collisionType(): CollisionType {
@@ -331,13 +320,7 @@ export abstract class Entity<
   update(state: UpdateState, skipChildren = false): UpdateStatus {
     if (!this.active(state.level.cam.bounds)) return UpdateStatus.UNCHANGED
 
-    let status = UpdateStatus.UNCHANGED
-    for (const updater of this.updaters) {
-      status |= UpdaterMap[updater](this, state)
-      if (UpdateStatus.terminate(status)) return status
-    }
-
-    status |= this._updatePosition(state)
+    let status = this._updatePosition(state)
 
     if (skipChildren) return status
 
@@ -393,7 +376,6 @@ export abstract class Entity<
       ...ObjectUtil.definedEntry(subDefaults, 'scale'),
       ...ObjectUtil.definedEntry(subDefaults, 'state'),
       ...ObjectUtil.definedEntry(subDefaults, 'updatePredicate'),
-      ...ObjectUtil.definedEntry(subDefaults, 'updaters'),
       ...ObjectUtil.definedEntry(subDefaults, 'collisionType'),
       ...ObjectUtil.definedEntry(subDefaults, 'collisionPredicate'),
       ...ObjectUtil.definedEntry(subDefaults, 'collisionBodies')
@@ -411,8 +393,6 @@ export abstract class Entity<
     if (this.state() !== defaults.state) diff.state = this.state()
     if (this.updatePredicate !== defaults.updatePredicate)
       diff.updatePredicate = this.updatePredicate
-    if (this.updaters.some((updater, i) => updater !== defaults.updaters[i]))
-      diff.updaters = this.updaters
     if (this.collisionType !== defaults.collisionType)
       diff.collisionType = this.collisionType
     if (this.collisionPredicate !== defaults.collisionPredicate)
@@ -514,8 +494,6 @@ export namespace Entity {
     readonly map: Record<State | BaseState, ImageRect>
     /** Defaults to BehaviorPredicate.NEVER. */
     readonly updatePredicate?: UpdatePredicate
-    /** Defaults to []. */
-    readonly updaters?: UpdaterType[]
     /** Defaults to CollisionPredicate.NEVER. */
     readonly collisionType?: CollisionType
     readonly collisionPredicate?: CollisionPredicate
@@ -536,7 +514,6 @@ export namespace Entity {
       | 'state'
       | 'map'
       | 'updatePredicate'
-      | 'updaters'
       | 'collisionType'
       | 'collisionPredicate'
       | 'collisionBodies'
@@ -574,7 +551,6 @@ const entityDefaults: DeepImmutable<Omit<
   position: Object.freeze(new XY(0, 0)),
   velocity: Object.freeze(new XY(0, 0)),
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  updaters: Object.freeze([]),
   collisionType: CollisionType.INERT,
   collisionPredicate: CollisionPredicate.NEVER,
   collisionBodies: Object.freeze([]),

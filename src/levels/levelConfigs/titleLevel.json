@@ -20,7 +20,6 @@
         }
       },
       "updatePredicate": "always",
-      "updaters": ["uiFollowCam"],
       "collisionPredicate": "children",
       "children": [
         {
@@ -72,18 +71,20 @@
       ]
     },
     {
-      "type": "uiDateVersionHash",
+      "type": "group",
       "positionRelativeToCam": "southWest",
       "camMargin": {"w": 1},
-      "updaters": ["uiFollowCam"]
+      "updatePredicate": "always",
+      "collisionPredicate": "children",
+      "children": [{"type": "uiDateVersionHash"}]
     },
     {
-      "type": "uiText",
-      "//": "[strings]",
-      "text": "oddoid",
+      "type": "group",
       "positionRelativeToCam": "southEast",
       "camMargin": {"w": 1},
-      "updaters": ["uiFollowCam"]
+      "updatePredicate": "always",
+      "collisionPredicate": "children",
+      "children": [{"type": "uiText", "//": "[strings]", "text": "oddoid"}]
     }
   ]
 }

@@ -1,7 +1,6 @@
 import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {CollisionType} from '../collision/CollisionType'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Rect} from '../math/Rect'
@@ -17,7 +16,6 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Bee.Variant, Bee.State>) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
@@ -59,7 +57,6 @@ const defaults = ObjectUtil.freeze({
   variant: Bee.Variant.NONE,
   state: Bee.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  updaters: [UpdaterType.WRAPAROUND],
   collisionType: CollisionType.TYPE_CHARACTER | CollisionType.HARMFUL,
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: [Rect.make(1, 1, 3, 2)]

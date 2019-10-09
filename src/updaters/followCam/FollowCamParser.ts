@@ -5,7 +5,7 @@ import {FollowCamOrientation, FollowCam} from './FollowCam'
 import {EntityConfig} from '../../entity/EntityParser'
 
 export interface FollowCamConfig {
-  readonly positionRelativeToCam: FollowCamOrientation
+  readonly positionRelativeToCam?: FollowCamOrientation
   readonly camMargin?: Partial<WH>
 }
 
@@ -15,9 +15,8 @@ export namespace FollowCamParser {
       'positionRelativeToCam' in config
         ? config['positionRelativeToCam']
         : undefined
-    if (!orientation)
-      throw new Error('Missing positionRelativeToCam in FollowCamConfig.')
     if (
+      orientation &&
       !ObjectUtil.assertValueOf(
         FollowCamOrientation,
         orientation,

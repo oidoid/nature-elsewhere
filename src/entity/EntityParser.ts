@@ -13,7 +13,6 @@ import {Entity} from './Entity'
 import {EntityID} from './EntityID'
 import {EntityFactory} from './EntityFactory'
 import {EntityType} from './EntityType'
-import {FollowCamParser} from '../updaters/followCam/FollowCamParser'
 import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
 import {
   ImageStateMapConfig,
@@ -22,16 +21,12 @@ import {
 import {LevelLinkParser} from '../entities/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
+import {GroupParser} from '../entities/group/GroupParser'
 import {TextParser} from '../entities/text/TextParser'
 import {
   UpdatePredicateConfig,
   UpdatePredicateParser
 } from '../updaters/updatePredicate/UpdatePredicateParser'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
-import {
-  UpdaterTypeArrayConfig,
-  UpdaterTypeParser
-} from '../updaters/updaterType/UpdaterTypeParser'
 import {XYConfig, XYParser} from '../math/XYParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
@@ -51,8 +46,6 @@ export interface EntityConfig {
   readonly map?: ImageStateMapConfig
   /** Defaults to BehaviorPredicate.NEVER. */
   readonly updatePredicate?: UpdatePredicateConfig
-  /** Defaults to []. */
-  readonly updaters?: UpdaterTypeArrayConfig
   /** Defaults to CollisionPredicate.NEVER. */
   readonly collisionType?: CollisionTypeConfig
   readonly collisionPredicate?: CollisionPredicateConfig
@@ -75,9 +68,7 @@ export namespace EntityParser {
   export function parse(config: EntityConfig, atlas: Atlas): Entity {
     let props = parseProps(config, parseType(config.type), atlas)
     props = parseTypeProps(config, props)
-    const entity = EntityFactory.produce(atlas, props)
-    parseUpdaterProps(config, entity)
-    return entity
+    return EntityFactory.produce(atlas, props)
   }
 
   export function parseID(config: EntityIDConfig): EntityID {
@@ -123,9 +114,6 @@ function parseProps(
     ...(config.updatePredicate && {
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate)
     }),
-    ...(config.updaters && {
-      updaters: UpdaterTypeParser.parseAll(config.updaters)
-    }),
     ...(config.collisionType && {
       collisionType: CollisionTypeParser.parse(config.collisionType)
     }),
@@ -149,6 +137,9 @@ function parseTypeProps(
 ): Entity.Props | Entity.SubProps {
   let typeProps: Maybe<Entity.Props | Entity.SubProps> = undefined
   switch (props.type) {
+    case EntityType.GROUP:
+      typeProps = GroupParser.parseProps(config)
+      break
     case EntityType.UI_TEXT:
     case EntityType.UI_CHECKBOX:
       typeProps = TextParser.parseProps(config)
@@ -158,14 +149,4 @@ function parseTypeProps(
       break
   }
   return {...props, ...typeProps}
-}
-
-function parseUpdaterProps(config: EntityConfig, entity: Entity): void {
-  for (const updater of config.updaters || []) {
-    switch (updater) {
-      case UpdaterType.UI_FOLLOW_CAM:
-        Object.assign(entity, FollowCamParser.parse(config))
-        break
-    }
-  }
 }

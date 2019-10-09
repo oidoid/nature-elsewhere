@@ -1,7 +1,6 @@
 import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {CollisionType} from '../collision/CollisionType'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {ImageRect} from '../imageStateMachine/ImageRect'
@@ -19,7 +18,6 @@ export class Snake extends Entity<Snake.Variant, Snake.State> {
   ) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Snake.State.IDLE]: new ImageRect({
@@ -56,7 +54,6 @@ const defaults = ObjectUtil.freeze({
   variant: Snake.Variant.NONE,
   state: Snake.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  updaters: [UpdaterType.CIRCLE],
   collisionType:
     CollisionType.TYPE_CHARACTER |
     CollisionType.HARMFUL |

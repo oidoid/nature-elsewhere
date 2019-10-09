@@ -1,18 +1,20 @@
+import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
+import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
-import {AtlasID} from '../atlas/AtlasID'
-import {XY} from '../math/XY'
-import {Layer} from '../image/Layer'
-import {CollisionType} from '../collision/CollisionType'
-import {Atlas} from 'aseprite-atlas'
 import {FollowCamOrientation, FollowCam} from '../updaters/followCam/FollowCam'
-import {WH} from '../math/WH'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
+import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {UpdateState} from '../updaters/UpdateState'
 
 export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
   implements FollowCam {
@@ -25,7 +27,6 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
   ) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Toolbar.State.VISIBLE]: new ImageRect({
@@ -55,6 +56,10 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State>
     this.camMargin = new WH(1, 1)
   }
 
+  update(state: UpdateState): UpdateStatus {
+    return super.update(state) | FollowCamUpdater.update(this, state)
+  }
+
   toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
@@ -75,6 +80,5 @@ const defaults = ObjectUtil.freeze({
   variant: Toolbar.Variant.NONE,
   state: Toolbar.State.VISIBLE,
   updatePredicate: UpdatePredicate.ALWAYS,
-  updaters: [UpdaterType.UI_FOLLOW_CAM],
   collisionType: CollisionType.TYPE_UI
 })

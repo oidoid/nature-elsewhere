@@ -1,22 +1,22 @@
+import {Atlas} from 'aseprite-atlas'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityID} from '../entity/EntityID'
 import {EntityType} from '../entity/EntityType'
+import {FollowCam, FollowCamOrientation} from '../updaters/followCam/FollowCam'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {JSONValue} from '../utils/JSON'
+import {LevelLink} from './levelLink/LevelLink'
+import {LevelType} from '../levels/LevelType'
+import {LocalStorage} from '../storage/LocalStorage'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
-import {FollowCam, FollowCamOrientation} from '../updaters/followCam/FollowCam'
 import {WH} from '../math/WH'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {XY} from '../math/XY'
-import {Atlas} from 'aseprite-atlas'
-import {LevelType} from '../levels/LevelType'
-import {LevelLink} from './levelLink/LevelLink'
-import {EntityID} from '../entity/EntityID'
-import {LocalStorage} from '../storage/LocalStorage'
+import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
 
 export class LevelEditorMenu
   extends Entity<LevelEditorMenu.Variant, LevelEditorMenu.State>
@@ -37,7 +37,6 @@ export class LevelEditorMenu
   ) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [LevelEditorMenu.State.VISIBLE]: new ImageRect()
@@ -91,7 +90,7 @@ export class LevelEditorMenu
   }
 
   update(state: UpdateState): UpdateStatus {
-    let status = super.update(state, true)
+    let status = super.update(state) | FollowCamUpdater.update(this, state)
 
     for (const child of this.children) {
       const childStatus = child.update(state)
@@ -138,8 +137,7 @@ const defaults = ObjectUtil.freeze({
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.CHILDREN,
   collisionType: CollisionType.TYPE_UI,
-  state: LevelEditorMenu.State.VISIBLE,
-  updaters: [UpdaterType.UI_FOLLOW_CAM]
+  state: LevelEditorMenu.State.VISIBLE
 })
 
 function newLink(

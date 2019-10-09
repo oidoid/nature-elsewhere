@@ -7,11 +7,13 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {WraparoundUpdater} from '../updaters/WraparoundUpdater'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
   constructor(
@@ -20,7 +22,6 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
   ) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cloud.State.NONE]: new ImageRect({
@@ -143,6 +144,10 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
     })
   }
 
+  update(state: UpdateState): UpdateStatus {
+    return super.update(state) | WraparoundUpdater.update(this, state)
+  }
+
   toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
@@ -193,6 +198,5 @@ const defaults = ObjectUtil.freeze({
   variant: Cloud.Variant.MEDIUM,
   state: Cloud.State.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  updaters: [UpdaterType.WRAPAROUND],
   collisionType: CollisionType.TYPE_SCENERY
 })

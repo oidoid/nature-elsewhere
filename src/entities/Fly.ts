@@ -1,7 +1,6 @@
 import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {CollisionType} from '../collision/CollisionType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Image} from '../image/Image'
@@ -16,7 +15,6 @@ export class Fly extends Entity<Fly.Variant, Fly.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Fly.Variant, Fly.State>) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Fly.State.IDLE]: new ImageRect({
@@ -60,6 +58,5 @@ const defaults = ObjectUtil.freeze({
   state: Fly.State.IDLE,
   variant: Fly.Variant.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  updaters: [UpdaterType.CIRCLE],
   collisionType: CollisionType.TYPE_CHARACTER
 })

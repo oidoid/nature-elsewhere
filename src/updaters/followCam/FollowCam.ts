@@ -1,7 +1,7 @@
 import {WH} from '../../math/WH'
 
 export interface FollowCam {
-  readonly positionRelativeToCam: FollowCamOrientation
+  readonly positionRelativeToCam?: FollowCamOrientation
   readonly camMargin: WH
 }
 

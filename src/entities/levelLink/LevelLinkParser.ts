@@ -2,12 +2,12 @@ import {LevelLink} from './LevelLink'
 import {LevelTypeConfig, LevelTypeParser} from '../../levels/LevelTypeParser'
 import {TextParser, TextPropsConfig} from '../text/TextParser'
 
-export interface LinkPropsConfig extends TextPropsConfig {
+export interface LevelLinkPropsConfig extends TextPropsConfig {
   readonly link?: LevelTypeConfig
 }
 
 export namespace LevelLinkParser {
-  export function parseProps(config: LinkPropsConfig): LevelLink.Props {
+  export function parseProps(config: LevelLinkPropsConfig): LevelLink.Props {
     const {text, textLayer, textScale, textMaxSize} = TextParser.parseProps(
       config
     )

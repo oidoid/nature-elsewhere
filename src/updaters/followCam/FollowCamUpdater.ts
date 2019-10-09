@@ -1,19 +1,18 @@
-import {Entity} from '../../entity/Entity'
 import {FollowCam, FollowCamOrientation} from './FollowCam'
 import {ReadonlyRect} from '../../math/Rect'
-import {Update} from '../Update'
 import {UpdateStatus} from '../updateStatus/UpdateStatus'
-import {UpdaterType} from '../updaterType/UpdaterType'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
+import {UpdateState} from '../UpdateState'
+import {Entity} from '../../entity/Entity'
 
 export namespace FollowCamUpdater {
-  export function is(entity: Entity): entity is FollowCam & Entity {
-    return entity.updaters.includes(UpdaterType.UI_FOLLOW_CAM)
-  }
+  export function update(
+    entity: Entity & FollowCam,
+    state: UpdateState
+  ): UpdateStatus {
+    if (!entity.positionRelativeToCam) return UpdateStatus.UNCHANGED
 
-  export const update: Update = (entity, state) => {
-    if (!is(entity)) throw new Error()
     const to = orientationToXY(
       entity.bounds,
       state.level.cam.bounds,
@@ -31,7 +30,7 @@ export namespace FollowCamUpdater {
 function orientationToXY(
   entity: ReadonlyRect,
   cam: ReadonlyRect,
-  margin: WH,
+  margin: Readonly<WH>,
   orientation: FollowCamOrientation
 ): XY {
   return new XY(
@@ -43,7 +42,7 @@ function orientationToXY(
 function orientationToX(
   entity: ReadonlyRect,
   cam: ReadonlyRect,
-  margin: WH,
+  margin: Readonly<WH>,
   orientation: FollowCamOrientation
 ): number {
   let x = cam.position.x
@@ -71,7 +70,7 @@ function orientationToX(
 function orientationToY(
   entity: ReadonlyRect,
   cam: ReadonlyRect,
-  margin: WH,
+  margin: Readonly<WH>,
   orientation: FollowCamOrientation
 ): number {
   let y = cam.position.y

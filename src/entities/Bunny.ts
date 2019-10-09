@@ -1,7 +1,6 @@
 import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdaterType} from '../updaters/updaterType/UpdaterType'
 import {CollisionType} from '../collision/CollisionType'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {ImageRect} from '../imageStateMachine/ImageRect'
@@ -20,7 +19,6 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
   ) {
     super({
       ...defaults,
-      updaters: [...defaults.updaters],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bunny.State.IDLE]: new ImageRect({
@@ -65,7 +63,6 @@ const defaults = ObjectUtil.freeze({
   variant: Bunny.Variant.NONE,
   state: Bunny.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  updaters: [UpdaterType.WRAPAROUND],
   collisionType: CollisionType.TYPE_CHARACTER | CollisionType.IMPEDIMENT,
   collisionPredicate: CollisionPredicate.BODIES
 })
