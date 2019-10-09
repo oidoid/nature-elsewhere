@@ -14,7 +14,7 @@ export class DateVersionHash extends Entity<
 > {
   constructor(
     atlas: Atlas,
-    props?: Text.Props<DateVersionHash.Variant, Text.State>
+    props?: Text.Props<DateVersionHash.Variant, DateVersionHash.State>
   ) {
     super({
       ...defaults,

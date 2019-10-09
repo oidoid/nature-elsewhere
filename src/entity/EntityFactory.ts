@@ -21,6 +21,7 @@ import {Frog} from '../entities/Frog'
 import {Grass} from '../entities/Grass'
 import {Group} from '../entities/Group'
 import {IsoGrass} from '../entities/IsoGrass'
+import {LevelEditorMenu} from '../entities/LevelEditorMenu'
 import {LevelEditorPanelBackground} from '../entities/levelEditorPanel/LevelEditorPanelBackground'
 import {LevelEditorPanel} from '../entities/levelEditorPanel/LevelEditorPanel'
 import {LevelEditorSandbox} from '../entities/LevelEditorSandbox'
@@ -36,6 +37,7 @@ import {Subshrub} from '../entities/Subshrub'
 import {Text} from '../entities/text/Text'
 import {Toolbar} from '../entities/Toolbar'
 import {Tree} from '../entities/Tree'
+import {LevelLink} from '../entities/levelLink/LevelLink'
 
 export namespace EntityFactory {
   export function produce(
@@ -57,6 +59,8 @@ export namespace EntityFactory {
         return new Snake(atlas, props)
       case EntityType.GROUP:
         return new Group(props)
+      case EntityType.LEVEL_EDITOR_MENU:
+        return new LevelEditorMenu(atlas, props)
       case EntityType.LEVEL_EDITOR_SANDBOX:
         return new LevelEditorSandbox(props)
       case EntityType.SCENERY_BUSH:
@@ -105,6 +109,8 @@ export namespace EntityFactory {
         return new LevelEditorPanel(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:
         return new LevelEditorPanelBackground(atlas, props)
+      case EntityType.UI_LEVEL_LINK:
+        return new LevelLink(atlas, props)
       case EntityType.UI_MARQUEE:
         return new Marquee(atlas, props)
       case EntityType.UI_RADIO_CHECKBOX_GROUP:

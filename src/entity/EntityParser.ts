@@ -19,10 +19,10 @@ import {
   ImageStateMapConfig,
   ImageStateMachineParser
 } from '../imageStateMachine/ImageStateMachineParser'
-import {LevelLinkParser} from '../updaters/levelLink/LevelLinkParser'
+import {LevelLinkParser} from '../entities/levelLink/LevelLinkParser'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {RectArrayConfig, RectParser} from '../math/RectParser'
-import {TextPropsParser} from '../entities/text/TextParser'
+import {TextParser} from '../entities/text/TextParser'
 import {
   UpdatePredicateConfig,
   UpdatePredicateParser
@@ -151,7 +151,11 @@ function parseTypeProps(
   switch (props.type) {
     case EntityType.UI_TEXT:
     case EntityType.UI_CHECKBOX:
-      typeProps = TextPropsParser.parse(config)
+      typeProps = TextParser.parseProps(config)
+      break
+    case EntityType.UI_LEVEL_LINK:
+      typeProps = LevelLinkParser.parseProps(config)
+      break
   }
   return {...props, ...typeProps}
 }
@@ -159,9 +163,6 @@ function parseTypeProps(
 function parseUpdaterProps(config: EntityConfig, entity: Entity): void {
   for (const updater of config.updaters || []) {
     switch (updater) {
-      case UpdaterType.UI_LEVEL_LINK:
-        Object.assign(entity, LevelLinkParser.parse(config))
-        break
       case UpdaterType.UI_FOLLOW_CAM:
         Object.assign(entity, FollowCamParser.parse(config))
         break

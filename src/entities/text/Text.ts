@@ -12,7 +12,7 @@ import {ImageParser} from '../../image/ImageParser'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {EntityType} from '../../entity/EntityType'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
-import {JSONValue, JSONObject} from '../../utils/JSON'
+import {JSONObject} from '../../utils/JSON'
 import {AlphaComposition} from '../../image/AlphaComposition'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 
@@ -62,8 +62,8 @@ export class Text extends Entity<Text.Variant, Text.State> {
     this.addImages(...textImages)
   }
 
-  toJSON(): JSONValue {
-    const diff = <JSONObject>this._toJSON(defaults)
+  toJSON(): JSONObject {
+    const diff = this._toJSON(defaults)
     if (this.text !== defaults.text) diff.text = this.text
     if (this.textLayer !== defaults.textLayer) diff.textLayer = this.textLayer
     if (!this.textScale.equal(defaults.textScale))

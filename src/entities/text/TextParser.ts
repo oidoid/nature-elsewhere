@@ -11,8 +11,8 @@ export interface TextPropsConfig extends EntityConfig {
   readonly textMaxSize?: WHConfig
 }
 
-export namespace TextPropsParser {
-  export function parse(config: TextPropsConfig): Text.Props {
+export namespace TextParser {
+  export function parseProps(config: TextPropsConfig): Text.Props {
     return {
       ...(config.text && {text: config.text}),
       ...(config.textLayer !== undefined && {

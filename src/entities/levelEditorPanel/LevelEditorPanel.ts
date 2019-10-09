@@ -269,7 +269,9 @@ export class LevelEditorPanel
 
     if (this._load) {
       this._load = false
-      const data = LocalStorage.get('levelEditorSandbox')
+      const data = LocalStorage.get(
+        LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE
+      )
       if (data !== undefined) {
         const config = JSON.parse(data)
         const sandboxChildren = EntityParser.parseAll(config, state.level.atlas)
@@ -391,9 +393,8 @@ export class LevelEditorPanel
         EntityID.UI_LEVEL_EDITOR_SANDBOX
       )
       if (sandbox) {
-        console.log('save')
         const data = JSON.stringify(sandbox.toJSON(), null, 2)
-        LocalStorage.put('levelEditorSandbox', data)
+        LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE, data)
       }
     }
 

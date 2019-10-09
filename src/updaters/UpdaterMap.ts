@@ -1,6 +1,4 @@
 import {FollowCamUpdater} from './followCam/FollowCamUpdater'
-import {LevelLinkUpdater} from './levelLink/LevelLinkUpdater'
-import {LinkUpdater} from './LinkUpdater'
 import {NumberUtil} from '../math/NumberUtil'
 import {Update} from './Update'
 import {UpdateStatus} from './updateStatus/UpdateStatus'
@@ -30,8 +28,6 @@ export const UpdaterMap: Readonly<Record<UpdaterType, Update>> = {
   },
   [UpdaterType.CIRCLE]: wraparound,
   [UpdaterType.UI_FOLLOW_CAM]: FollowCamUpdater.update,
-  [UpdaterType.UI_LEVEL_LINK]: LevelLinkUpdater.update,
-  [UpdaterType.UI_LINK]: LinkUpdater.update,
   [UpdaterType.WRAPAROUND]: wraparound
 }
 export type UpdaterMap = typeof UpdaterMap[keyof typeof UpdaterMap]

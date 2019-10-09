@@ -37,43 +37,35 @@
           "collisionPredicate": "children",
           "children": [
             {
-              "type": "uiText",
+              "type": "uiLevelLink",
               "//": "[strings]",
               "text": "play",
               "textScale": {"x": 2, "y": 2},
-              "link": "playFields",
-              "updaters": ["uiLink", "uiLevelLink"],
-              "collisionPredicate": "bounds"
+              "link": "playFields"
             },
             {
-              "type": "uiText",
+              "type": "uiLevelLink",
               "position": {"y": 12},
               "//": "[strings]",
               "text": "options",
               "textScale": {"x": 2, "y": 2},
-              "link": "uiOptions",
-              "updaters": ["uiLink", "uiLevelLink"],
-              "collisionPredicate": "bounds"
+              "link": "uiOptions"
             },
             {
-              "type": "uiText",
+              "type": "uiLevelLink",
               "position": {"y": 24},
               "//": "[strings]",
               "text": "level editor",
               "textScale": {"x": 2, "y": 2},
-              "link": "uiLevelEditor",
-              "updaters": ["uiLink", "uiLevelLink"],
-              "collisionPredicate": "bounds"
+              "link": "uiLevelEditor"
             },
             {
-              "type": "uiText",
+              "type": "uiLevelLink",
               "position": {"y": 36},
               "//": "[strings]",
               "text": "exit",
               "textScale": {"x": 2, "y": 2},
-              "link": "uiExit",
-              "updaters": ["uiLink", "uiLevelLink"],
-              "collisionPredicate": "bounds"
+              "link": "uiExit"
             }
           ]
         }
