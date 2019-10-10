@@ -1,12 +1,12 @@
 export enum LevelType {
-  UI_EXIT = 'uiExit',
-  UI_BACK = 'uiBack',
-  UI_TITLE = 'uiTitle',
-  UI_PAUSE = 'uiPause',
-  UI_OPTIONS = 'uiOptions',
-  UI_LEVEL_EDITOR = 'uiLevelEditor',
-  UI_LEVEL_EDITOR_MENU = 'uiLevelEditorMenu',
-  PLAY_FIELDS = 'playFields',
+  EXIT = 'exit',
+  BACK = 'back',
+  TITLE = 'title',
+  PAUSE = 'pause',
+  OPTIONS = 'options',
+  LEVEL_EDITOR = 'levelEditor',
+  LEVEL_EDITOR_MENU = 'levelEditorMenu',
+  FIELDS = 'fields',
   TEST_PERFORMANCE = 'testPerformance',
   TEST_SHADER = 'testShader'
 }

@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "type": "uiTitle",
+  "type": "title",
   "size": {"w": 256, "h": 256},
   "minViewport": {"w": 132, "h": 128},
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
@@ -40,7 +40,7 @@
               "//": "[strings]",
               "text": "play",
               "textScale": {"x": 2, "y": 2},
-              "link": "playFields"
+              "link": "fields"
             },
             {
               "type": "uiLevelLink",
@@ -48,7 +48,7 @@
               "//": "[strings]",
               "text": "options",
               "textScale": {"x": 2, "y": 2},
-              "link": "uiOptions"
+              "link": "options"
             },
             {
               "type": "uiLevelLink",
@@ -56,7 +56,7 @@
               "//": "[strings]",
               "text": "level editor",
               "textScale": {"x": 2, "y": 2},
-              "link": "uiLevelEditor"
+              "link": "levelEditor"
             },
             {
               "type": "uiLevelLink",
@@ -64,7 +64,7 @@
               "//": "[strings]",
               "text": "exit",
               "textScale": {"x": 2, "y": 2},
-              "link": "uiExit"
+              "link": "exit"
             }
           ]
         }

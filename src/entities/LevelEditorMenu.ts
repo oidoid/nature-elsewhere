@@ -54,35 +54,35 @@ export class LevelEditorMenu extends Entity<
       EntityID.UI_LEVEL_EDITOR_MENU_EXPORT,
       new XY(0, 0),
       'export level', // [strings]
-      LevelType.UI_BACK
+      LevelType.BACK
     )
     this._import = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_IMPORT,
       new XY(0, 6),
       'import level', // [strings]
-      LevelType.UI_BACK
+      LevelType.BACK
     )
     this._reset = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_RESET,
       new XY(0, 12),
       'reset level',
-      LevelType.UI_BACK
+      LevelType.BACK
     )
     this._backToTitle = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_TITLE,
       new XY(0, 18),
       'back to title', // [strings]
-      LevelType.UI_TITLE
+      LevelType.TITLE
     )
     this._backToEditor = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_EDITOR,
       new XY(0, 24),
       'back to level editor', // [strings]
-      LevelType.UI_BACK
+      LevelType.BACK
     )
 
     this.addChildren(

@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "type": "uiPause",
+  "type": "pause",
   "size": {"w": 128, "h": 96},
   "minViewport": {"w": 128, "h": 96},
   "cursor": {"type": "uiCursor"},

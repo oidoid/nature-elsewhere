@@ -33,7 +33,7 @@ export class LevelLink extends Text {
 
     if (!collision || !Input.inactiveTriggered(state.inputs.pick)) return status
 
-    if (this.link === LevelType.UI_BACK) state.level.advance = LevelAdvance.PREV
+    if (this.link === LevelType.BACK) state.level.advance = LevelAdvance.PREV
     else Level.advance(state.level, this.link)
     return status | UpdateStatus.UPDATED | UpdateStatus.TERMINATE
   }

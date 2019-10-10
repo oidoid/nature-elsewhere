@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "type": "playFields",
+  "type": "fields",
   "size": {"w": 256, "h": 256},
   "minViewport": {"w": 96, "h": 96},
   "cam": {"followID": "uiPlayer"},

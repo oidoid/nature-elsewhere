@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "type": "uiLevelEditorMenu",
+  "type": "levelEditorMenu",
   "size": {"w": 96, "h": 96},
   "minViewport": {"w": 96, "h": 96},
   "cursor": {"type": "uiCursor"},

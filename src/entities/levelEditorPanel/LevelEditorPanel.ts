@@ -275,7 +275,7 @@ export class LevelEditorPanel extends Entity<
     }
 
     if (this._menuButton.clicked) {
-      Level.advance(state.level, LevelType.UI_LEVEL_EDITOR_MENU)
+      Level.advance(state.level, LevelType.LEVEL_EDITOR_MENU)
       status |= UpdateStatus.UPDATED | UpdateStatus.TERMINATE
     }
 
