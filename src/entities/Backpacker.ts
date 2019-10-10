@@ -66,43 +66,43 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
     const objective = this._computeObjective(state)
 
-    /** If not moving, don't pursue objectives practically underfoot. */
-    const stopped = !this.velocity.x && !this.velocity.y
-    if (stopped && objective.sub(this.bounds.position).magnitude() < 4)
-      return UpdateStatus.UNCHANGED
-
     const {x, y} = this.bounds.position
     const left = objective.x < x
     const right = objective.x > x
     const up = objective.y < y
     const down = objective.y > y
-    this.velocity.x = (left ? -1 : right ? 1 : 0) * 80
-    this.velocity.y = (up ? -1 : down ? 1 : 0) * 80
 
-    const idle = !this.velocity.x && !this.velocity.y
-    const distance = objective.sub(this.bounds.position).abs()
-    const horizontal =
-      distance.x &&
-      (this.state() === Backpacker.State.WALK_RIGHT || distance.x > 3)
+    this.velocity.x = (left ? -1 : right ? 1 : 0) * 80 // (In one ten-thousandth of a pixel per millisecond (.1 px / s).)
+    this.velocity.y = (up ? -1 : down ? 1 : 0) * 80
+    const stopped = !this.velocity.x && !this.velocity.y
 
     let nextState = this.state()
-    if (idle) {
+    if (stopped) {
       nextState = idleStateFor[this.state()]
-      if (state.level.destination)
-        state.level.destination.transition(Entity.BaseState.HIDDEN)
+      hideDestinationMarker(state)
     } else {
-      if (up) nextState = Backpacker.State.WALK_UP
-      if (down) nextState = Backpacker.State.WALK_DOWN
-      if ((left || right) && ((!up && !down) || horizontal))
+      // If already in a horizontal state and further horizontal movement is
+      // needed, allow the horizontal state to persist. Otherwise, require some
+      // distance to transition. This prevents rapidly oscillating between
+      // horizontal and vertical states when on a diagonal boundary.
+      const distance = objective.sub(this.bounds.position).abs()
+      const horizontalStatePreferred =
+        distance.x &&
+        (this.state() === Backpacker.State.WALK_RIGHT || distance.x > 3)
+
+      if ((left || right) && ((!up && !down) || horizontalStatePreferred))
         nextState = Backpacker.State.WALK_RIGHT
+      else if (down) nextState = Backpacker.State.WALK_DOWN
+      else if (up) nextState = Backpacker.State.WALK_UP
+
+      const scale = this.scale().copy()
+      if (left && ((!up && !down) || horizontalStatePreferred))
+        scale.x = -1 * Math.abs(scale.x)
+      else if (up || down || right) scale.x = Math.abs(scale.x)
+      status |= this.scaleTo(scale)
     }
 
-    const scale = this.scale().copy()
-    if (up || down || right) scale.x = Math.abs(scale.x)
-    if (left && horizontal) scale.x = -1 * Math.abs(scale.x)
-
-    this.scaleTo(scale)
-    this.transition(nextState)
+    status |= this.transition(nextState)
 
     return status
   }
@@ -113,8 +113,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
       const idle = idleStateFor[this.state()]
       if (!state.inputs.pick || !state.inputs.pick.active) {
         this.transition(idle)
-        if (state.level.destination)
-          state.level.destination.transition(Entity.BaseState.HIDDEN)
+        hideDestinationMarker(state)
       }
     }
   }
@@ -125,13 +124,22 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
   private _computeObjective(state: UpdateState): XY {
     const {destination} = state.level
+
     if (!destination || destination.state() === Entity.BaseState.HIDDEN)
       return this.bounds.position.copy()
+
     const {x, y} = destination.bounds.position.add(this.origin())
-    return new XY(
+    const objective = new XY(
       NumberUtil.clamp(x, 0, state.level.size.w - this.bounds.size.w),
       NumberUtil.clamp(y, 0, state.level.size.h - this.bounds.size.h)
     )
+
+    // If not already moving, don't pursue objectives practically underfoot.
+    const stopped = !this.velocity.x && !this.velocity.y
+    if (stopped && objective.sub(this.bounds.position).magnitude() < 4)
+      return this.bounds.position.copy()
+
+    return objective
   }
 }
 
@@ -162,6 +170,11 @@ function newImageRect(
       new Image(atlas, {id: shadow, layer: Layer.SHADOW})
     ]
   })
+}
+
+function hideDestinationMarker(state: UpdateState): void {
+  if (state.level.destination)
+    state.level.destination.transition(Entity.BaseState.HIDDEN)
 }
 
 /** A mapping of the current state to the appropriate idle state. For example,
