@@ -9,12 +9,12 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {NumberUtil} from '../math/NumberUtil'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   constructor(
@@ -65,7 +65,6 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     let status = super.update(state)
 
     const objective = this._computeObjective(state)
-    if (!objective) return UpdateStatus.UNCHANGED
 
     /** If not moving, don't pursue objectives practically underfoot. */
     const stopped = !this.velocity.x && !this.velocity.y
@@ -112,9 +111,11 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     super.collides(entity, state)
     if (entity.collisionType & CollisionType.OBSTACLE) {
       const idle = idleStateFor[this.state()]
-      if (!state.inputs.pick || !state.inputs.pick.active) this.transition(idle)
-      if (state.level.destination)
-        state.level.destination.transition(Entity.BaseState.HIDDEN)
+      if (!state.inputs.pick || !state.inputs.pick.active) {
+        this.transition(idle)
+        if (state.level.destination)
+          state.level.destination.transition(Entity.BaseState.HIDDEN)
+      }
     }
   }
 
@@ -122,9 +123,10 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     return this._toJSON(defaults)
   }
 
-  private _computeObjective(state: UpdateState): Maybe<XY> {
+  private _computeObjective(state: UpdateState): XY {
     const {destination} = state.level
-    if (!destination || destination.state() === Entity.BaseState.HIDDEN) return
+    if (!destination || destination.state() === Entity.BaseState.HIDDEN)
+      return this.bounds.position.copy()
     const {x, y} = destination.bounds.position.add(this.origin())
     return new XY(
       NumberUtil.clamp(x, 0, state.level.size.w - this.bounds.size.w),
@@ -150,14 +152,14 @@ export namespace Backpacker {
 
 function newImageRect(
   atlas: Atlas,
-  movement: AtlasID,
-  silhouette: AtlasID
+  action: AtlasID,
+  shadow: AtlasID
 ): ImageRect {
   return new ImageRect({
     origin: new XY(-2, -13),
     images: [
-      new Image(atlas, {id: movement}),
-      new Image(atlas, {id: silhouette, layer: Layer.SHADOW})
+      new Image(atlas, {id: action}),
+      new Image(atlas, {id: shadow, layer: Layer.SHADOW})
     ]
   })
 }
