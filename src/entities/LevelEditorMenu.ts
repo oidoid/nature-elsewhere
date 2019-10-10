@@ -18,6 +18,8 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
 import {DownloadUtil} from '../storage/DownloadUtil'
+import {reaullyLoadTheStuff} from './levelEditorPanel/LevelEditorPanel'
+import {LevelEditorSandbox} from './LevelEditorSandbox'
 
 export class LevelEditorMenu extends Entity<
   LevelEditorMenu.Variant,
@@ -102,23 +104,48 @@ export class LevelEditorMenu extends Entity<
       if (child instanceof LevelLink && childStatus & UpdateStatus.TERMINATE) {
         switch (child.id) {
           case EntityID.UI_LEVEL_EDITOR_MENU_EXPORT:
-            DownloadUtil.download(
+            DownloadUtil.downloadString(
               state.win.document,
               'level.json',
               LocalStorage.get(
                 LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE
-              ) || '',
+              ) || '[]',
               'application/json'
             )
             break
           case EntityID.UI_LEVEL_EDITOR_MENU_IMPORT:
-            console.log('import')
+            DownloadUtil.uploadString(
+              state.win.document,
+              'application/json'
+            ).then(({data}) => {
+              const sandbox =
+                state.level.prevLevel &&
+                Entity.findAnyByID(
+                  state.level.prevLevel.parentEntities,
+                  EntityID.UI_LEVEL_EDITOR_SANDBOX
+                )
+              if (sandbox) {
+                sandbox.clearChildren()
+                reaullyLoadTheStuff(
+                  state.level.atlas,
+                  <LevelEditorSandbox>sandbox,
+                  data
+                )
+              }
+            })
             break
           case EntityID.UI_LEVEL_EDITOR_MENU_RESET:
             LocalStorage.put(
               LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE,
               undefined
             )
+            if (state.level.prevLevel) {
+              const sandbox = Entity.findAnyByID(
+                state.level.prevLevel.parentEntities,
+                EntityID.UI_LEVEL_EDITOR_SANDBOX
+              )
+              if (sandbox) sandbox.clearChildren()
+            }
             break
         }
       }

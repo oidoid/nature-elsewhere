@@ -191,6 +191,10 @@ export abstract class Entity<
     this.invalidateBounds()
   }
 
+  clearChildren(): void {
+    this._children.length = 0
+  }
+
   replaceChild(child: Readonly<Entity>, entity: Entity): void {
     const index = this.children.findIndex(entity => child.equal(entity))
     if (index === -1) return

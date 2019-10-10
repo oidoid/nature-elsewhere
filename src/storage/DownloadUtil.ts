@@ -1,5 +1,5 @@
 export namespace DownloadUtil {
-  export function download(
+  export function downloadString(
     doc: Document,
     filename: string,
     data: string,
@@ -13,5 +13,34 @@ export namespace DownloadUtil {
     doc.body.appendChild(link)
     link.click()
     doc.body.removeChild(link)
+  }
+
+  export function uploadString(
+    doc: Document,
+    type: string // E.g., 'application/json'.
+  ): Promise<{file: File; data: string}> {
+    return new Promise((resolve, reject) => {
+      const input = doc.createElement('input')
+      input.style.display = 'none'
+      input.type = 'file'
+      input.accept = type
+      input.onchange = () => {
+        const file = input.files && input.files[0]
+        if (!file) {
+          reject()
+          return
+        }
+
+        const reader = new FileReader()
+        reader.onload = evt =>
+          evt.target && evt.target.result
+            ? resolve({file, data: evt.target.result.toString()})
+            : reject()
+        reader.readAsText(file)
+      }
+      doc.body.appendChild(input)
+      input.click()
+      doc.body.removeChild(input)
+    })
   }
 }

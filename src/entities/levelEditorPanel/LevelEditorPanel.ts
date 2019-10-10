@@ -509,19 +509,27 @@ function saveTheStuff(sandbox: LevelEditorSandbox): void {
 function loadTheStuff(atlas: Atlas, sandbox: LevelEditorSandbox) {
   const data = LocalStorage.get(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE)
   if (data !== undefined) {
-    const config = JSON.parse(data)
-    let sandboxChildren: Maybe<Entity[]>
-    try {
-      sandboxChildren = EntityParser.parseAll(config, atlas)
-    } catch (e) {
-      console.error(e, data, config)
-      LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
+    reaullyLoadTheStuff(atlas, sandbox, data)
+  }
+}
+
+export function reaullyLoadTheStuff(
+  atlas: Atlas,
+  sandbox: LevelEditorSandbox,
+  data: string
+): void {
+  const config = JSON.parse(data)
+  let sandboxChildren: Maybe<Entity[]>
+  try {
+    sandboxChildren = EntityParser.parseAll(config, atlas)
+  } catch (e) {
+    console.error(e, data, config)
+    LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
+  }
+  if (sandboxChildren) {
+    for (const child of sandboxChildren) {
+      child.collisionPredicate = CollisionPredicate.BOUNDS
     }
-    if (sandboxChildren) {
-      for (const child of sandboxChildren) {
-        child.collisionPredicate = CollisionPredicate.BOUNDS
-      }
-      sandbox.addChildren(...sandboxChildren)
-    }
+    sandbox.addChildren(...sandboxChildren)
   }
 }
