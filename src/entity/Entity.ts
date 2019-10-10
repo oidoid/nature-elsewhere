@@ -360,7 +360,7 @@ export abstract class Entity<
     for (const child of this.children) child.elevate(offset)
   }
 
-  collides(_entity: Entity, _state: UpdateState): void {}
+  collides(_entities: readonly Entity[], _state: UpdateState): void {}
 
   abstract toJSON(): JSONValue
 
@@ -439,14 +439,13 @@ export abstract class Entity<
     const entities = Level.activeParentsWithPlayer(state.level)
 
     let collidesWith = EntityCollider.collidesEntities(this, entities)
+
     if (
-      !collidesWith.some(
+      diagonal &&
+      collidesWith.some(
         collision => collision.collisionType & CollisionType.OBSTACLE
       )
-    )
-      return status
-
-    if (diagonal && collidesWith.length) {
+    ) {
       status |= this.moveTo(new XY(to.x, from.y))
       collidesWith = EntityCollider.collidesEntities(this, entities)
       if (
@@ -466,7 +465,7 @@ export abstract class Entity<
     )
       status |= this.moveTo(new XY(from.x, from.y))
 
-    for (const entity of collidesWith) this.collides(entity, state)
+    this.collides(collidesWith, state)
 
     return status
   }

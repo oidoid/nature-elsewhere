@@ -9,11 +9,14 @@ import {CollisionType} from '../collision/CollisionType'
 import {XY} from '../math/XY'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {CollisionPredicate} from '../collision/CollisionPredicate'
+import {Rect} from '../math/Rect'
 
 export class Pond extends Entity<Pond.Variant, Pond.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Pond.Variant, Pond.State>) {
     super({
       ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pond.State.VISIBLE]: new ImageRect({
@@ -58,5 +61,7 @@ const defaults = ObjectUtil.freeze({
   collisionType:
     CollisionType.TYPE_SCENERY |
     CollisionType.DEEP_WATER |
-    CollisionType.IMPEDIMENT
+    CollisionType.IMPEDIMENT,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: [Rect.make(5, 4, 12, 7), Rect.make(4, 5, 14, 4)]
 })

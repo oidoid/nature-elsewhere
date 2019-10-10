@@ -15,11 +15,18 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
+import {WH} from '../math/WH'
 
 export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<Backpacker.Variant.NONE, Backpacker.State>
+    props?: Entity.SubProps<Backpacker.Variant.NONE, Backpacker.State>,
+    // This reference is passed to all images so that any changes affect all
+    // character images for all states. This orchestration could probably be
+    // handled better, possibly with some new state or some way of generating
+    // states on the fly, but it's unclear how to change the current system
+    // without invalidating a lot of the encapsulation it provides.
+    private readonly _size: WH = new WH(9, 16)
   ) {
     super({
       ...defaults,
@@ -29,32 +36,38 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
         [Backpacker.State.IDLE_UP]: newImageRect(
           atlas,
           AtlasID.BACKPACKER_IDLE_UP,
-          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
+          _size
         ),
         [Backpacker.State.IDLE_RIGHT]: newImageRect(
           atlas,
           AtlasID.BACKPACKER_IDLE_RIGHT,
-          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
+          _size
         ),
         [Backpacker.State.IDLE_DOWN]: newImageRect(
           atlas,
           AtlasID.BACKPACKER_IDLE_DOWN,
-          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
+          _size
         ),
         [Backpacker.State.WALK_UP]: newImageRect(
           atlas,
           AtlasID.BACKPACKER_WALK_UP,
-          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
+          _size
         ),
         [Backpacker.State.WALK_RIGHT]: newImageRect(
           atlas,
           AtlasID.BACKPACKER_WALK_RIGHT,
-          AtlasID.BACKPACKER_WALK_RIGHT_SHADOW
+          AtlasID.BACKPACKER_WALK_RIGHT_SHADOW,
+          _size
         ),
         [Backpacker.State.WALK_DOWN]: newImageRect(
           atlas,
           AtlasID.BACKPACKER_WALK_DOWN,
-          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
+          _size
         )
       },
       ...props
@@ -107,19 +120,31 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     return status
   }
 
-  collides(entity: Entity, state: UpdateState): void {
-    super.collides(entity, state)
-    if (entity.collisionType & CollisionType.OBSTACLE) {
-      const idle = idleStateFor[this.state()]
-      if (!state.inputs.pick || !state.inputs.pick.active) {
-        this.transition(idle)
-        hideDestinationMarker(state)
+  collides(entities: readonly Entity[], state: UpdateState): void {
+    super.collides(entities, state)
+    const collisionType = entities.reduce(
+      (type, entity) => type | entity.collisionType,
+      CollisionType.INERT
+    )
+    {
+      if (collisionType & CollisionType.OBSTACLE) {
+        const idle = idleStateFor[this.state()]
+        if (!state.inputs.pick || !state.inputs.pick.active) {
+          this.transition(idle)
+          hideDestinationMarker(state)
+        }
       }
     }
+
+    this._submerge(!!(collisionType & CollisionType.DEEP_WATER))
   }
 
   toJSON(): JSONValue {
     return this._toJSON(defaults)
+  }
+
+  private _submerge(submerge: boolean): void {
+    this._size.h = 16 - (submerge ? 3 : 0)
   }
 
   private _computeObjective(state: UpdateState): XY {
@@ -160,14 +185,15 @@ export namespace Backpacker {
 
 function newImageRect(
   atlas: Atlas,
-  action: AtlasID,
-  shadow: AtlasID
+  character: AtlasID,
+  shadow: AtlasID,
+  size: WH
 ): ImageRect {
   return new ImageRect({
     origin: new XY(-2, -13),
     images: [
-      new Image(atlas, {id: action}),
-      new Image(atlas, {id: shadow, layer: Layer.SHADOW})
+      new Image(atlas, {id: character, size}),
+      new Image(atlas, {id: shadow, size, layer: Layer.SHADOW})
     ]
   })
 }
