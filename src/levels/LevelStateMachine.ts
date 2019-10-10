@@ -8,6 +8,7 @@ import {Store} from '../store/Store'
 import {UpdateState} from '../updaters/UpdateState'
 
 export interface LevelStateMachine {
+  prevLevel?: Level
   level?: Level
   readonly store: Store
 }
@@ -27,20 +28,19 @@ export namespace LevelStateMachine {
 
 function updateLevel(machine: LevelStateMachine): void {
   if (!machine.level) return
-
   if (machine.level.advance === LevelAdvance.UNCHANGED) return
 
   if (machine.level.advance === LevelAdvance.PREV) {
-    const config =
-      machine.level.prevLevel && LevelConfigMap[machine.level.prevLevel]
-    machine.level = config
-      ? LevelParser.parse(config, machine.level.atlas)
-      : undefined
+    const {level} = machine
+    machine.level = machine.prevLevel
+    machine.prevLevel = level
+    if (machine.level) machine.level.advance = LevelAdvance.UNCHANGED
     return
   }
 
   const config =
     machine.level.nextLevel && LevelConfigMap[machine.level.nextLevel]
+  machine.prevLevel = machine.level
   machine.level = config
     ? LevelParser.parse(config, machine.level.atlas)
     : undefined

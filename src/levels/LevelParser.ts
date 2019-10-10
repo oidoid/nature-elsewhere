@@ -14,12 +14,6 @@ import {WH} from '../math/WH'
 export interface LevelConfig {
   readonly version: string
   readonly type: LevelTypeConfig
-  /** The level shown when escape or back is pressed. Usually
-      LevelType.PAUSE_LEVEL. For the initial level, this is undefined. */
-  readonly prevLevel?: LevelTypeConfig
-  /** The level shown when the current level is completed. For the last level,
-      this is undefined. */
-  readonly nextLevel?: LevelTypeConfig
   readonly size: {w: number; h: number}
   readonly minViewport: {w: number; h: number}
   readonly cam?: CameraConfig
@@ -49,12 +43,6 @@ export namespace LevelParser {
       throw new Error(`Unsupported level config version "${config.version}".`)
     return {
       type: LevelTypeParser.parse(config.type),
-      ...(config.prevLevel && {
-        prevLevel: LevelTypeParser.parse(config.prevLevel)
-      }),
-      ...(config.nextLevel && {
-        nextLevel: LevelTypeParser.parse(config.nextLevel)
-      }),
       advance: LevelAdvance.UNCHANGED,
       size: new WH(config.size.w, config.size.h),
       minViewport: new WH(config.minViewport.w, config.minViewport.h),

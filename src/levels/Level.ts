@@ -15,8 +15,6 @@ import {Marquee} from '../entities/Marquee'
 
 export interface Level {
   readonly type: LevelType
-  /** Usually LevelType.PAUSE_LEVEL. */
-  prevLevel?: LevelType
   nextLevel?: LevelType
   advance: LevelAdvance
   readonly size: WH

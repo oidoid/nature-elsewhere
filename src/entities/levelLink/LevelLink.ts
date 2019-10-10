@@ -10,6 +10,7 @@ import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Text} from '../text/Text'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
+import {LevelAdvance} from '../../levels/LevelAdvance'
 
 export class LevelLink extends Text {
   private _link?: LevelType
@@ -32,7 +33,8 @@ export class LevelLink extends Text {
 
     if (!collision || !Input.inactiveTriggered(state.inputs.pick)) return status
 
-    Level.advance(state.level, this.link)
+    if (this.link === LevelType.UI_BACK) state.level.advance = LevelAdvance.PREV
+    else Level.advance(state.level, this.link)
     return status | UpdateStatus.UPDATED | UpdateStatus.TERMINATE
   }
 

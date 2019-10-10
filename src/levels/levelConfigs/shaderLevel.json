@@ -1,8 +1,6 @@
 {
   "version": "0.0.0",
   "type": "testShader",
-  "prevLevel": "uiPause",
-  "nextLevel": "testPerformance",
   "size": {"w": 48, "h": 48},
   "minViewport": {"w": 48, "h": 48},
   "cursor": {"type": "uiCursor"},

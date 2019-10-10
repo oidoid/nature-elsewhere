@@ -276,6 +276,7 @@ export class LevelEditorPanel extends Entity<
           sandboxChildren = EntityParser.parseAll(config, state.level.atlas)
         } catch (e) {
           console.error(e, data, config)
+          LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
         }
         if (sandboxChildren) {
           const sandbox = Entity.findAnyByID(
