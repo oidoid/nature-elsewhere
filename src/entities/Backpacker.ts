@@ -112,7 +112,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     super.collides(entity, state)
     if (entity.collisionType & CollisionType.OBSTACLE) {
       const idle = idleStateFor[this.state()]
-      this.transition(idle)
+      if (!state.inputs.pick || !state.inputs.pick.active) this.transition(idle)
       if (state.level.destination)
         state.level.destination.transition(Entity.BaseState.HIDDEN)
     }
