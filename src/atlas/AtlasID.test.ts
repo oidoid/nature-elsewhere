@@ -2,18 +2,22 @@ import {Atlas, Parser} from 'aseprite-atlas'
 import {AtlasID} from './AtlasID'
 import * as atlasJSON from './atlas.json'
 import {ObjectUtil} from '../utils/ObjectUtil'
-import {TestUtil} from '../utils/TestUtil'
 
 const atlas: Atlas = Parser.parse(atlasJSON)
 const ids: readonly AtlasID[] = Object.freeze(ObjectUtil.values(AtlasID))
 
+// Every AtlasID exists in the Atlas.
 test.each(ids)('%# AtlasID %p has an Animation', id =>
   expect(atlas.animations).toHaveProperty(id)
 )
 
+// Every Animation ID in the Atlas exists in AtlasID.
 test.each(Object.keys(atlas.animations))(
-  '%# animation ID %p has a AtlasID',
-  id => expect(ids.filter(val => id === val)).toHaveLength(1)
+  '%# animation ID %p has an AtlasID',
+  id => expect(ids).toContainEqual(id)
 )
 
-TestUtil.testValuesAreUnique(AtlasID, 'AtlasID')
+// Every AtlasID value is unique.
+test.each(ids)(`%# AtlasID %p is unique`, id =>
+  expect(ids.filter(val => id === val)).toHaveLength(1)
+)
