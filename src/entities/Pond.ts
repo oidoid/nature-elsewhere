@@ -18,42 +18,17 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pond.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {
-              id: AtlasID.POND,
-              layer: Layer.ABOVE_PLANE
-            }),
-            new Image(atlas, {
-              id: AtlasID.CATTAILS,
-              position: new XY(15, -3)
-            }),
-            new Image(atlas, {
-              id: AtlasID.GRASS_1,
-              position: new XY(1, 4)
-            }),
-            new Image(atlas, {
-              id: AtlasID.GRASS_2,
-              position: new XY(12, 11)
-            }),
-            new Image(atlas, {
-              id: AtlasID.GRASS_6,
-              position: new XY(24, 4)
-            }),
-            new Image(atlas, {
-              id: AtlasID.GRASS_8,
-              position: new XY(26, 6)
-            }),
-            new Image(atlas, {
-              id: AtlasID.GRASS_9,
-              position: new XY(11, -1)
-            }),
-            new Image(atlas, {
-              id: AtlasID.GRASS_10,
-              position: new XY(6, 10)
-            }),
-            new Image(atlas, {
-              id: AtlasID.GRASS_5,
-              position: new XY(21, 10)
-            })
+            new Image(atlas, {id: AtlasID.POND, layer: Layer.ABOVE_PLANE}),
+            new Image(atlas, {id: AtlasID.CATTAILS, position: new XY(10, -5)}),
+            new Image(atlas, {id: AtlasID.GRASS_01, position: new XY(1, 4)}),
+            new Image(atlas, {id: AtlasID.GRASS_02, position: new XY(12, 11)}),
+            new Image(atlas, {id: AtlasID.GRASS_09, position: new XY(18, 0)}),
+            new Image(atlas, {id: AtlasID.GRASS_10, position: new XY(5, 10)}),
+            new Image(atlas, {id: AtlasID.GRASS_05, position: new XY(17, 9)}),
+            new Image(atlas, {id: AtlasID.GRASS_11, position: new XY(21, 3)}),
+            new Image(atlas, {id: AtlasID.GRASS_03, position: new XY(0, 5)}),
+            new Image(atlas, {id: AtlasID.GRASS_06, position: new XY(0, 0)}),
+            new Image(atlas, {id: AtlasID.GRASS_07, position: new XY(4, -2)})
           ]
         })
       },

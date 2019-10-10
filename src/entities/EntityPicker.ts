@@ -141,6 +141,7 @@ function getChildStates(child: Entity): readonly (string)[] {
 const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
   EntityType.LEVEL_EDITOR_SANDBOX,
+  EntityType.PLANE,
   ...ObjectUtil.keys(EntityType)
     .filter(type => type.startsWith(UI_KEY_PREFIX))
     .map(key => EntityType[key])

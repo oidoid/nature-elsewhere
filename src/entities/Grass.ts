@@ -5,7 +5,6 @@ import {Image} from '../image/Image'
 import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
-import {XY} from '../math/XY'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
@@ -19,10 +18,16 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Grass.State.VISIBLE]: new ImageRect({
-          images: variantImages(
-            atlas,
-            (props && props.variant) || Grass.Variant.SMALL
-          )
+          images: [
+            new Image(atlas, {
+              id:
+                AtlasID[
+                  <keyof typeof AtlasID>(
+                    ('GRASS_' + ((props && props.variant) || defaults.variant))
+                  )
+                ]
+            })
+          ]
         })
       },
       ...props
@@ -36,9 +41,22 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
 
 export namespace Grass {
   export enum Variant {
-    SMALL = 'small',
-    MEDIUM = 'medium',
-    LARGE = 'large'
+    N00 = '00',
+    N01 = '01',
+    N02 = '02',
+    N03 = '03',
+    N04 = '04',
+    N05 = '05',
+    N06 = '06',
+    N07 = '07',
+    N08 = '08',
+    N09 = '09',
+    N10 = '10',
+    N11 = '11',
+    N12 = '12',
+    N13 = '13',
+    N14 = '14',
+    N15 = '15'
   }
 
   export enum State {
@@ -46,35 +64,9 @@ export namespace Grass {
   }
 }
 
-function variantImages(atlas: Atlas, variant: Grass.Variant): Image[] {
-  if (variant === Grass.Variant.SMALL)
-    return [new Image(atlas, {id: AtlasID.GRASS_0})]
-
-  if (variant === Grass.Variant.MEDIUM)
-    return [
-      new Image(atlas, {id: AtlasID.GRASS_1}),
-      new Image(atlas, {
-        id: AtlasID.GRASS_3,
-        position: new XY(4, 1)
-      })
-    ]
-
-  return [
-    new Image(atlas, {id: AtlasID.GRASS_2}),
-    new Image(atlas, {
-      id: AtlasID.GRASS_0,
-      position: new XY(6, 2)
-    }),
-    new Image(atlas, {
-      id: AtlasID.GRASS_1,
-      position: new XY(3, 3)
-    })
-  ]
-}
-
 const defaults = ObjectUtil.freeze({
   type: EntityType.GRASS,
-  variant: Grass.Variant.SMALL,
+  variant: Grass.Variant.N00,
   state: Grass.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY
 })

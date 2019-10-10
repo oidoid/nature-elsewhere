@@ -5,12 +5,7 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with
     Add title, editor, and pause levels.
       Make a level editor.
         Make outstanding UI.
--->       Mock the level editor.
--->       Add masking logic.
-            Add good text coloring support.
-          Editor needs a nice way to group entities like text groups images. Entities are mostly image groupings. Just need a recursive way to efficiently mix different defaults and non-defaults.
           How will I implement it?
-            UI is a special case. Most are just rectangles with centered contents relative. The relative positioning logic already exists for all entities.
             What examples are there for making 9png like UI?
               Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
               What examples are there of single file C libraries for UI?

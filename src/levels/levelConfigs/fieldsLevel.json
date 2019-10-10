@@ -16,27 +16,11 @@
   "parentEntities": [
     {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"},
     {"type": "plane", "variant": "paleGreen"},
-    {
-      "type": "cloud",
-      "position": {"x": 20, "y": 20},
-      "velocity": {"x": -6}
-    },
-    {
-      "type": "cloud",
-      "state": "drizzle",
-      "position": {"x": 30, "y": 28}
-    },
-    {
-      "type": "cloud",
-      "state": "shower",
-      "position": {"x": 54, "y": 50}
-    },
+    {"type": "cloud", "position": {"x": 20, "y": 20}, "velocity": {"x": -6}},
+    {"type": "cloud", "state": "drizzle", "position": {"x": 30, "y": 28}},
+    {"type": "cloud", "state": "shower", "position": {"x": 54, "y": 50}},
     {"type": "bee", "position": {"x": 80, "y": 40}, "velocity": {"y": 15}},
-    {
-      "type": "cloud",
-      "state": "drizzle",
-      "position": {"x": 80, "y": 30}
-    },
+    {"type": "cloud", "state": "drizzle", "position": {"x": 80, "y": 30}},
     {
       "type": "cloud",
       "state": "downpour",
@@ -82,38 +66,18 @@
     },
     {"type": "bee", "state": "dead", "position": {"x": 60, "y": 126}},
     {"type": "clover", "position": {"x": 54, "y": 12}},
-    {
-      "type": "clover",
-      "variant": "medium",
-      "position": {"x": 66, "y": 24}
-    },
+    {"type": "clover", "variant": "medium", "position": {"x": 66, "y": 24}},
     {"type": "grass", "position": {"x": 45, "y": 117}},
-    {
-      "type": "grass",
-      "variant": "medium",
-      "position": {"x": 101, "y": 17}
-    },
-    {
-      "type": "grass",
-      "variant": "medium",
-      "position": {"x": 111, "y": 57}
-    },
-    {
-      "type": "grass",
-      "variant": "large",
-      "position": {"x": 141, "y": 77}
-    },
+    {"type": "grass", "variant": "10", "position": {"x": 101, "y": 17}},
+    {"type": "grass", "variant": "10", "position": {"x": 111, "y": 57}},
+    {"type": "grass", "variant": "14", "position": {"x": 141, "y": 77}},
     {"type": "bush", "position": {"x": 151, "y": 30}},
     {"type": "subshrub", "position": {"x": 159, "y": 32}},
     {"type": "subshrub", "position": {"x": 163, "y": 36}},
     {"type": "pyramid", "position": {"x": 129, "y": 105}},
     {"type": "tree", "position": {"x": 159, "y": 126}},
     {"type": "conifer", "position": {"x": 119, "y": 116}},
-    {
-      "type": "fly",
-      "position": {"x": 120, "y": 130},
-      "velocity": {"x": -9}
-    },
+    {"type": "fly", "position": {"x": 120, "y": 130}, "velocity": {"x": -9}},
     {"type": "fly", "state": "dead", "position": {"x": 125, "y": 132}},
     {"type": "cloud", "position": {"x": 90, "y": 122}},
     {"type": "pond", "position": {"x": 80, "y": 148}},
@@ -121,11 +85,7 @@
     {"type": "bunny", "position": {"x": 40, "y": 48}},
     {"type": "bunny", "state": "dead", "position": {"x": 48, "y": 48}},
     {"type": "flag", "position": {"x": 77, "y": 17}},
-    {
-      "type": "snake",
-      "position": {"x": 121, "y": 30},
-      "velocity": {"x": -12}
-    },
+    {"type": "snake", "position": {"x": 121, "y": 30}, "velocity": {"x": -12}},
     {"type": "isoGrass", "position": {"x": 160, "y": 96}},
     {"type": "path", "variant": "/", "position": {"x": 160, "y": 96}},
     {"type": "path", "variant": "/", "position": {"x": 176, "y": 88}},
