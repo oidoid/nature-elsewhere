@@ -34,6 +34,7 @@ import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
 import {FollowCamUpdater} from '../../updaters/followCam/FollowCamUpdater'
+import {LevelEditorSandbox} from '../LevelEditorSandbox'
 
 export class LevelEditorPanel extends Entity<
   LevelEditorPanel.Variant,
@@ -266,27 +267,11 @@ export class LevelEditorPanel extends Entity<
 
     if (this._load) {
       this._load = false
-      const data = LocalStorage.get(
-        LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE
+      const sandbox = Entity.findAnyByID(
+        state.level.parentEntities,
+        EntityID.UI_LEVEL_EDITOR_SANDBOX
       )
-      if (data !== undefined) {
-        const config = JSON.parse(data)
-        let sandboxChildren: Maybe<Entity[]>
-        try {
-          sandboxChildren = EntityParser.parseAll(config, state.level.atlas)
-        } catch (e) {
-          console.error(e, data, config)
-          LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
-        }
-        if (sandboxChildren) {
-          const sandbox = Entity.findAnyByID(
-            state.level.parentEntities,
-            EntityID.UI_LEVEL_EDITOR_SANDBOX
-          )
-          if (!sandbox) throw new Error('Missing sandbox.')
-          sandbox.addChildren(...sandboxChildren)
-        }
-      }
+      if (sandbox) loadTheStuff(state.level.atlas, <LevelEditorSandbox>sandbox)
     }
 
     if (this._menuButton.clicked) {
@@ -397,10 +382,7 @@ export class LevelEditorPanel extends Entity<
         state.level.parentEntities,
         EntityID.UI_LEVEL_EDITOR_SANDBOX
       )
-      if (sandbox) {
-        const data = JSON.stringify(sandbox.toJSON(), null, 2)
-        LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE, data)
-      }
+      if (sandbox) saveTheStuff(<LevelEditorSandbox>sandbox)
     }
 
     return status
@@ -514,3 +496,32 @@ const defaults = ObjectUtil.freeze({
   collisionPredicate: CollisionPredicate.CHILDREN,
   state: LevelEditorPanel.State.VISIBLE
 })
+
+function saveTheStuff(sandbox: LevelEditorSandbox): void {
+  const json = sandbox.toJSON()
+  for (const item of json)
+    if (typeof item === 'object' && 'collisionPredicate' in item)
+      delete item.collisionPredicate
+  const data = JSON.stringify(json, null, 2)
+  LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE, data)
+}
+
+function loadTheStuff(atlas: Atlas, sandbox: LevelEditorSandbox) {
+  const data = LocalStorage.get(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE)
+  if (data !== undefined) {
+    const config = JSON.parse(data)
+    let sandboxChildren: Maybe<Entity[]>
+    try {
+      sandboxChildren = EntityParser.parseAll(config, atlas)
+    } catch (e) {
+      console.error(e, data, config)
+      LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
+    }
+    if (sandboxChildren) {
+      for (const child of sandboxChildren) {
+        child.collisionPredicate = CollisionPredicate.BOUNDS
+      }
+      sandbox.addChildren(...sandboxChildren)
+    }
+  }
+}

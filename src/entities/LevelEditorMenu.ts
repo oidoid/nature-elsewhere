@@ -17,6 +17,7 @@ import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
+import {DownloadUtil} from '../storage/DownloadUtil'
 
 export class LevelEditorMenu extends Entity<
   LevelEditorMenu.Variant,
@@ -101,7 +102,14 @@ export class LevelEditorMenu extends Entity<
       if (child instanceof LevelLink && childStatus & UpdateStatus.TERMINATE) {
         switch (child.id) {
           case EntityID.UI_LEVEL_EDITOR_MENU_EXPORT:
-            console.log('export')
+            DownloadUtil.download(
+              state.win.document,
+              'level.json',
+              LocalStorage.get(
+                LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE
+              ) || '',
+              'application/json'
+            )
             break
           case EntityID.UI_LEVEL_EDITOR_MENU_IMPORT:
             console.log('import')

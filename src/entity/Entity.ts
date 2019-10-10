@@ -68,23 +68,23 @@ export abstract class Entity<
   private readonly _children: Entity[]
 
   constructor(props: Entity.Props<Variant, State>) {
-    this._id = props.id || entityDefaults.id
+    this._id = props.id || Entity.defaults.id
     this._type = props.type
     this._variant = props.variant
     this._bounds = Rect.make(0, 0, 0, 0)
-    this._velocity = props.velocity || entityDefaults.velocity.copy()
+    this._velocity = props.velocity || Entity.defaults.velocity.copy()
     this._velocityFraction = {x: 0, y: 0}
     this._machine = new ImageStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
-      props.updatePredicate || entityDefaults.updatePredicate
+      props.updatePredicate || Entity.defaults.updatePredicate
     this._collisionType =
       props.collisionType === undefined
-        ? entityDefaults.collisionType
+        ? Entity.defaults.collisionType
         : props.collisionType
     this._collisionPredicate =
-      props.collisionPredicate || entityDefaults.collisionPredicate
+      props.collisionPredicate || Entity.defaults.collisionPredicate
     this._collisionBodies = props.collisionBodies || [
-      ...entityDefaults.collisionBodies.map(rect =>
+      ...Entity.defaults.collisionBodies.map(rect =>
         Rect.make(rect.position.x, rect.position.y, rect.size.w, rect.size.h)
       )
     ]
@@ -356,16 +356,18 @@ export abstract class Entity<
     for (const child of this.children) child.elevate(offset)
   }
 
+  collides(_entity: Entity, _state: UpdateState): void {}
+
   abstract toJSON(): JSONValue
 
   protected _toJSON(
     subDefaults: Omit<
       DeepImmutable<Entity.SubProps<Variant, State | Entity.BaseState>>,
-      'children' | 'map'
+      'children' | 'map' | 'collisionBodies'
     >
   ): JSONObject {
-    const defaults: typeof entityDefaults & typeof subDefaults = {
-      ...entityDefaults,
+    const defaults: typeof Entity.defaults & typeof subDefaults = {
+      ...Entity.defaults,
       state: Entity.BaseState.HIDDEN,
       ...ObjectUtil.definedEntry(subDefaults, 'id'),
       ...ObjectUtil.definedEntry(subDefaults, 'type'),
@@ -377,8 +379,7 @@ export abstract class Entity<
       ...ObjectUtil.definedEntry(subDefaults, 'state'),
       ...ObjectUtil.definedEntry(subDefaults, 'updatePredicate'),
       ...ObjectUtil.definedEntry(subDefaults, 'collisionType'),
-      ...ObjectUtil.definedEntry(subDefaults, 'collisionPredicate'),
-      ...ObjectUtil.definedEntry(subDefaults, 'collisionBodies')
+      ...ObjectUtil.definedEntry(subDefaults, 'collisionPredicate')
     }
     const diff: Writable<EntityConfig> = {type: this.type}
     if (this.id !== defaults.id) diff.id = this.id
@@ -397,12 +398,6 @@ export abstract class Entity<
       diff.collisionType = this.collisionType
     if (this.collisionPredicate !== defaults.collisionPredicate)
       diff.collisionPredicate = this.collisionPredicate
-    if (
-      this.collisionBodies.some(
-        (body, i) => !Rect.equal(body, defaults.collisionBodies[i])
-      )
-    )
-      diff.collisionBodies = this.collisionBodies
     return <JSONObject>(<unknown>diff)
   }
 
@@ -467,6 +462,8 @@ export abstract class Entity<
     )
       status |= this.moveTo(new XY(from.x, from.y))
 
+    for (const entity of collidesWith) this.collides(entity, state)
+
     return status
   }
 }
@@ -519,6 +516,22 @@ export namespace Entity {
       | 'collisionBodies'
     > {}
 
+  export const defaults: DeepImmutable<Omit<
+    Required<Entity.Props>,
+    'type' | 'variant' | 'map' | 'imageID' | 'children'
+  >> = Object.freeze({
+    id: EntityID.ANONYMOUS,
+    state: Entity.BaseState.HIDDEN,
+    position: Object.freeze(new XY(0, 0)),
+    velocity: Object.freeze(new XY(0, 0)),
+    updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
+    collisionType: CollisionType.INERT,
+    collisionPredicate: CollisionPredicate.NEVER,
+    collisionBodies: Object.freeze([]),
+    imageID: undefined,
+    scale: Object.freeze(new XY(1, 1))
+  })
+
   export function findAnyBySpawnID(
     entities: readonly Entity[],
     spawnID: Symbol
@@ -541,19 +554,3 @@ export namespace Entity {
     return
   }
 }
-
-const entityDefaults: DeepImmutable<Omit<
-  Required<Entity.Props>,
-  'type' | 'variant' | 'map' | 'imageID' | 'children'
->> = Object.freeze({
-  id: EntityID.ANONYMOUS,
-  state: Entity.BaseState.HIDDEN,
-  position: Object.freeze(new XY(0, 0)),
-  velocity: Object.freeze(new XY(0, 0)),
-  updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  collisionType: CollisionType.INERT,
-  collisionPredicate: CollisionPredicate.NEVER,
-  collisionBodies: Object.freeze([]),
-  imageID: undefined,
-  scale: Object.freeze(new XY(1, 1))
-})

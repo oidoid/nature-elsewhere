@@ -108,6 +108,16 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     return status
   }
 
+  collides(entity: Entity, state: UpdateState): void {
+    super.collides(entity, state)
+    if (entity.collisionType & CollisionType.OBSTACLE) {
+      const idle = idleStateFor[this.state()]
+      this.transition(idle)
+      if (state.level.destination)
+        state.level.destination.transition(Entity.BaseState.HIDDEN)
+    }
+  }
+
   toJSON(): JSONValue {
     return this._toJSON(defaults)
   }
@@ -135,19 +145,6 @@ export namespace Backpacker {
     WALK_UP = 'walkUp',
     WALK_RIGHT = 'walkRight',
     WALK_DOWN = 'walkDown'
-  }
-
-  export function collides(
-    backpacker: Backpacker,
-    entity: Entity,
-    state: UpdateState
-  ): void {
-    if (entity.collisionType & CollisionType.OBSTACLE) {
-      const idle = idleStateFor[backpacker.state()]
-      backpacker.transition(idle)
-      if (state.level.destination)
-        state.level.destination.transition(Entity.BaseState.HIDDEN)
-    }
   }
 }
 

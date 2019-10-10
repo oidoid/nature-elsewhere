@@ -104,6 +104,7 @@ function onFrame(game: Game, time: number): void {
     LevelStateMachine.update(
       game.levelStateMachine,
       UpdateState.make(
+        game.win,
         game.tick,
         game.levelStateMachine.level,
         canvasWH,
