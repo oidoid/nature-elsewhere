@@ -20,7 +20,6 @@ import {Fly} from '../entities/Fly'
 import {Frog} from '../entities/Frog'
 import {Grass} from '../entities/Grass'
 import {Group} from '../entities/group/Group'
-import {IsoGrass} from '../entities/IsoGrass'
 import {LevelEditorMenu} from '../entities/LevelEditorMenu'
 import {LevelEditorPanelBackground} from '../entities/levelEditorPanel/LevelEditorPanelBackground'
 import {LevelEditorPanel} from '../entities/levelEditorPanel/LevelEditorPanel'
@@ -30,7 +29,6 @@ import {Mountain} from '../entities/Mountain'
 import {Path} from '../entities/Path'
 import {Plane} from '../entities/Plane'
 import {Pond} from '../entities/Pond'
-import {Pyramid} from '../entities/Pyramid'
 import {RadioCheckboxGroup} from '../entities/RadioCheckboxGroup'
 import {Snake} from '../entities/Snake'
 import {Subshrub} from '../entities/Subshrub'
@@ -75,8 +73,6 @@ export namespace EntityFactory {
         return new Flag(atlas, props)
       case EntityType.GRASS:
         return new Grass(atlas, props)
-      case EntityType.ISO_GRASS:
-        return new IsoGrass(atlas, props)
       case EntityType.MOUNTAIN:
         return new Mountain(atlas, props)
       case EntityType.PATH:
@@ -85,8 +81,6 @@ export namespace EntityFactory {
         return new Plane(atlas, props)
       case EntityType.POND:
         return new Pond(atlas, props)
-      case EntityType.PYRAMID:
-        return new Pyramid(atlas, props)
       case EntityType.SUBSHRUB:
         return new Subshrub(atlas, props)
       case EntityType.TREE:
