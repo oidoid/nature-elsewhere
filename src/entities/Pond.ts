@@ -63,5 +63,5 @@ const defaults = ObjectUtil.freeze({
     CollisionType.DEEP_WATER |
     CollisionType.IMPEDIMENT,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(5, 3, 12, 8), Rect.make(4, 5, 14, 4)]
+  collisionBodies: [Rect.make(6, 3, 10, 7), Rect.make(5, 5, 12, 4)]
 })
