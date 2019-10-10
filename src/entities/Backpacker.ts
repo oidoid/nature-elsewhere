@@ -85,8 +85,8 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     const up = objective.y < y
     const down = objective.y > y
 
-    this.velocity.x = (left ? -1 : right ? 1 : 0) * 80 // (In one ten-thousandth of a pixel per millisecond (.1 px / s).)
-    this.velocity.y = (up ? -1 : down ? 1 : 0) * 80
+    this.velocity.x = (left ? -1 : right ? 1 : 0) * 90 // (In one ten-thousandth of a pixel per millisecond (.1 px / s).)
+    this.velocity.y = (up ? -1 : down ? 1 : 0) * 90
     const stopped = !this.velocity.x && !this.velocity.y
 
     let nextState = this.state()
