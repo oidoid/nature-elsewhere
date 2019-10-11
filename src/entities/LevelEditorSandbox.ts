@@ -5,6 +5,8 @@ import {JSONArray} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 export class LevelEditorSandbox extends Entity<
   LevelEditorSandbox.Variant,
@@ -24,6 +26,10 @@ export class LevelEditorSandbox extends Entity<
       },
       ...props
     })
+  }
+
+  update(state: UpdateState): UpdateStatus {
+    return super.update(state, true) // Children are forbidden from updating.
   }
 
   toJSON(): JSONArray {
