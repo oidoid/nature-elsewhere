@@ -16,32 +16,33 @@
     "position": {"x": 80, "y": 102}
   },
   "parentEntities": [
-    {"type": "cloud", "position": {"x": 20, "y": 20}, "velocity": {"x": -6}},
+    {
+      "type": "cloud",
+      "position": {"x": 20, "y": 20},
+      "velocity": {"x": -6, "y": 0}
+    },
     {"type": "cloud", "state": "drizzle", "position": {"x": 30, "y": 28}},
     {"type": "cloud", "state": "shower", "position": {"x": 54, "y": 50}},
-    {"type": "bee", "position": {"x": 80, "y": 40}, "velocity": {"y": 15}},
+    {
+      "type": "bee",
+      "position": {"x": 80, "y": 40},
+      "velocity": {"x": 0, "y": 15}
+    },
     {"type": "cloud", "state": "drizzle", "position": {"x": 80, "y": 30}},
     {
       "type": "cloud",
       "state": "downpour",
       "position": {"x": 110, "y": 5},
-      "velocity": {"y": 6}
+      "velocity": {"x": 0, "y": 6}
     },
-    {
-      "type": "group",
-      "position": {"x": 50},
-      "collisionPredicate": "children",
-      "children": [
-        {"type": "conifer", "position": {"x": 9, "y": 78}},
-        {"type": "conifer", "position": {"x": 14, "y": 85}},
-        {"type": "conifer", "position": {"x": 18, "y": 84}},
-        {"type": "conifer", "position": {"x": 10, "y": 83}},
-        {"type": "conifer", "position": {"x": 40, "y": 21}},
-        {"type": "mountain", "position": {"x": 30, "y": 83}},
-        {"type": "mountain", "position": {"x": 70, "y": 99}},
-        {"type": "mountain", "position": {"x": -30, "y": 130}}
-      ]
-    },
+    {"type": "conifer", "position": {"x": 59, "y": 78}},
+    {"type": "conifer", "position": {"x": 64, "y": 85}},
+    {"type": "conifer", "position": {"x": 68, "y": 84}},
+    {"type": "conifer", "position": {"x": 60, "y": 83}},
+    {"type": "conifer", "position": {"x": 90, "y": 21}},
+    {"type": "mountain", "position": {"x": 80, "y": 83}},
+    {"type": "mountain", "position": {"x": 120, "y": 99}},
+    {"type": "mountain", "position": {"x": 20, "y": 130}},
     {"type": "tree", "position": {"x": 100, "y": 12}},
     {"type": "tree", "position": {"x": 12, "y": 100}},
     {"type": "tree", "position": {"x": 24, "y": 96}},
@@ -54,15 +55,14 @@
     {
       "type": "bee",
       "position": {"x": 54, "y": 118},
-      "animator": {"period": 1},
-      "scale": {"x": -1},
+      "scale": {"x": -1, "y": 1},
       "velocity": {"x": 15, "y": 15}
     },
     {
       "type": "bee",
       "state": "dead",
       "position": {"x": 55, "y": 122},
-      "scale": {"x": -1}
+      "scale": {"x": -1, "y": 1}
     },
     {"type": "bee", "state": "dead", "position": {"x": 60, "y": 126}},
     {"type": "clover", "position": {"x": 54, "y": 12}},
@@ -76,7 +76,11 @@
     {"type": "subshrub", "position": {"x": 163, "y": 36}},
     {"type": "tree", "position": {"x": 159, "y": 126}},
     {"type": "conifer", "position": {"x": 119, "y": 116}},
-    {"type": "fly", "position": {"x": 120, "y": 130}, "velocity": {"x": -9}},
+    {
+      "type": "fly",
+      "position": {"x": 120, "y": 130},
+      "velocity": {"x": -9, "y": 0}
+    },
     {"type": "fly", "state": "dead", "position": {"x": 125, "y": 132}},
     {"type": "cloud", "position": {"x": 90, "y": 122}},
     {"type": "pond", "position": {"x": 80, "y": 148}},
@@ -84,7 +88,11 @@
     {"type": "bunny", "position": {"x": 40, "y": 48}},
     {"type": "bunny", "state": "dead", "position": {"x": 48, "y": 48}},
     {"type": "flag", "position": {"x": 77, "y": 17}},
-    {"type": "snake", "position": {"x": 121, "y": 30}, "velocity": {"x": -12}},
+    {
+      "type": "snake",
+      "position": {"x": 121, "y": 30},
+      "velocity": {"x": -12, "y": 0}
+    },
     {"type": "path", "variant": "/", "position": {"x": 160, "y": 96}},
     {"type": "path", "variant": "/", "position": {"x": 176, "y": 88}},
     {"type": "path", "variant": "/", "position": {"x": 192, "y": 80}},
@@ -100,6 +108,6 @@
     {"type": "path", "variant": "^", "position": {"x": 192, "y": 16}},
     {"type": "conifer", "position": {"x": 188, "y": 27}},
     {"type": "pond", "position": {"x": 160, "y": 48}},
-    {"type": "pond", "position": {"y": 64}}
+    {"type": "pond", "position": {"x": 0, "y": 64}}
   ]
 }

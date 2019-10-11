@@ -435,7 +435,8 @@ export abstract class Entity<
       diff.velocity = {x: this.velocity.x, y: this.velocity.y}
     if (this.imageID() && this.imageID() !== defaults.imageID)
       diff.imageID = this.imageID()
-    if (!this.scale().equal(defaults.scale)) diff.scale = this.scale()
+    if (!this.scale().equal(defaults.scale))
+      diff.scale = {x: this.scale().x, y: this.scale().y}
     if (this.state() !== defaults.state) diff.state = this.state()
     if (this.updatePredicate !== defaults.updatePredicate)
       diff.updatePredicate = this.updatePredicate
