@@ -13,11 +13,11 @@ import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
 import {JSONValue, JSONObject} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export abstract class Entity<
   Variant extends string = string,
@@ -416,7 +416,7 @@ export abstract class Entity<
       state: Entity.BaseState.HIDDEN,
       ...ObjectUtil.definedEntry(subDefaults, 'id'),
       ...ObjectUtil.definedEntry(subDefaults, 'type'),
-      ...(<Variant>ObjectUtil.definedEntry(subDefaults, 'variant')),
+      ...ObjectUtil.definedEntry(subDefaults, 'variant'),
       ...ObjectUtil.definedEntry(subDefaults, 'position'),
       ...ObjectUtil.definedEntry(subDefaults, 'velocity'),
       ...ObjectUtil.definedEntry(subDefaults, 'imageID'),

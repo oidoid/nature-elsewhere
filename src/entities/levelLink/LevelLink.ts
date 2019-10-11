@@ -4,13 +4,13 @@ import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {EntityType} from '../../entity/EntityType'
 import {Input} from '../../inputs/Input'
 import {JSONObject} from '../../utils/JSON'
+import {LevelAdvance} from '../../levels/LevelAdvance'
 import {Level} from '../../levels/Level'
 import {LevelType} from '../../levels/LevelType'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Text} from '../text/Text'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
-import {LevelAdvance} from '../../levels/LevelAdvance'
 
 export class LevelLink extends Text {
   private _link?: LevelType

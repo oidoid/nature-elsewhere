@@ -53,9 +53,6 @@ module.exports = () => {
       stats: 'errors-warnings'
     },
 
-    performance: {
-      maxAssetSize: 512 * 1024,
-      maxEntrypointSize: 512 * 1024
-    }
+    performance: {maxAssetSize: 512 * 1024, maxEntrypointSize: 512 * 1024}
   }
 }
