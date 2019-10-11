@@ -18,96 +18,464 @@
   "parentEntities": [
     {
       "type": "cloud",
-      "position": {"x": 20, "y": 20},
-      "velocity": {"x": -6, "y": 0}
+      "position": {
+        "x": 20,
+        "y": 20
+      },
+      "velocity": {
+        "x": -6,
+        "y": 0
+      }
     },
-    {"type": "cloud", "state": "drizzle", "position": {"x": 30, "y": 28}},
-    {"type": "cloud", "state": "shower", "position": {"x": 54, "y": 50}},
-    {
-      "type": "bee",
-      "position": {"x": 80, "y": 40},
-      "velocity": {"x": 0, "y": 15}
-    },
-    {"type": "cloud", "state": "drizzle", "position": {"x": 80, "y": 30}},
     {
       "type": "cloud",
-      "state": "downpour",
-      "position": {"x": 110, "y": 5},
-      "velocity": {"x": 0, "y": 6}
+      "position": {
+        "x": 30,
+        "y": 28
+      },
+      "state": "drizzle"
     },
-    {"type": "conifer", "position": {"x": 59, "y": 78}},
-    {"type": "conifer", "position": {"x": 64, "y": 85}},
-    {"type": "conifer", "position": {"x": 68, "y": 84}},
-    {"type": "conifer", "position": {"x": 60, "y": 83}},
-    {"type": "conifer", "position": {"x": 90, "y": 21}},
-    {"type": "mountain", "position": {"x": 80, "y": 83}},
-    {"type": "mountain", "position": {"x": 120, "y": 99}},
-    {"type": "mountain", "position": {"x": 20, "y": 130}},
-    {"type": "tree", "position": {"x": 100, "y": 12}},
-    {"type": "tree", "position": {"x": 12, "y": 100}},
-    {"type": "tree", "position": {"x": 24, "y": 96}},
-    {"type": "tree", "position": {"x": 18, "y": 108}},
     {
-      "type": "bee",
-      "position": {"x": 50, "y": 114},
-      "velocity": {"x": 15, "y": 15}
+      "type": "cloud",
+      "position": {
+        "x": 54,
+        "y": 50
+      },
+      "state": "shower"
     },
     {
       "type": "bee",
-      "position": {"x": 54, "y": 118},
-      "scale": {"x": -1, "y": 1},
-      "velocity": {"x": 15, "y": 15}
+      "position": {
+        "x": 80,
+        "y": 40
+      },
+      "velocity": {
+        "x": 0,
+        "y": 15
+      }
+    },
+    {
+      "type": "cloud",
+      "position": {
+        "x": 80,
+        "y": 30
+      },
+      "state": "drizzle"
+    },
+    {
+      "type": "cloud",
+      "position": {
+        "x": 110,
+        "y": 5
+      },
+      "velocity": {
+        "x": 0,
+        "y": 6
+      },
+      "state": "downpour"
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 59,
+        "y": 78
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 64,
+        "y": 85
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 68,
+        "y": 84
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 60,
+        "y": 83
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 90,
+        "y": 21
+      }
+    },
+    {
+      "type": "mountain",
+      "position": {
+        "x": 80,
+        "y": 83
+      }
+    },
+    {
+      "type": "mountain",
+      "position": {
+        "x": 120,
+        "y": 99
+      }
+    },
+    {
+      "type": "mountain",
+      "position": {
+        "x": 20,
+        "y": 130
+      }
+    },
+    {
+      "type": "tree",
+      "position": {
+        "x": 100,
+        "y": 12
+      }
+    },
+    {
+      "type": "tree",
+      "position": {
+        "x": 12,
+        "y": 100
+      }
+    },
+    {
+      "type": "tree",
+      "position": {
+        "x": 24,
+        "y": 96
+      }
+    },
+    {
+      "type": "tree",
+      "position": {
+        "x": 18,
+        "y": 108
+      }
     },
     {
       "type": "bee",
-      "state": "dead",
-      "position": {"x": 55, "y": 122},
-      "scale": {"x": -1, "y": 1}
+      "position": {
+        "x": 50,
+        "y": 114
+      },
+      "velocity": {
+        "x": 15,
+        "y": 15
+      }
     },
-    {"type": "bee", "state": "dead", "position": {"x": 60, "y": 126}},
-    {"type": "clover", "position": {"x": 54, "y": 12}},
-    {"type": "clover", "variant": "medium", "position": {"x": 66, "y": 24}},
-    {"type": "grass", "position": {"x": 45, "y": 117}},
-    {"type": "grass", "variant": "10", "position": {"x": 101, "y": 17}},
-    {"type": "grass", "variant": "10", "position": {"x": 111, "y": 57}},
-    {"type": "grass", "variant": "14", "position": {"x": 141, "y": 77}},
-    {"type": "bush", "position": {"x": 151, "y": 30}},
-    {"type": "subshrub", "position": {"x": 159, "y": 32}},
-    {"type": "subshrub", "position": {"x": 163, "y": 36}},
-    {"type": "tree", "position": {"x": 159, "y": 126}},
-    {"type": "conifer", "position": {"x": 119, "y": 116}},
+    {
+      "type": "bee",
+      "position": {
+        "x": 54,
+        "y": 118
+      },
+      "velocity": {
+        "x": 15,
+        "y": 15
+      },
+      "scale": {
+        "x": -1,
+        "y": 1
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 55,
+        "y": 122
+      },
+      "scale": {
+        "x": -1,
+        "y": 1
+      },
+      "state": "dead"
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 60,
+        "y": 126
+      },
+      "state": "dead"
+    },
+    {
+      "type": "clover",
+      "position": {
+        "x": 54,
+        "y": 12
+      }
+    },
+    {
+      "type": "clover",
+      "variant": "medium",
+      "position": {
+        "x": 66,
+        "y": 24
+      }
+    },
+    {
+      "type": "grass",
+      "position": {
+        "x": 45,
+        "y": 117
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "10",
+      "position": {
+        "x": 101,
+        "y": 17
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "10",
+      "position": {
+        "x": 111,
+        "y": 57
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "14",
+      "position": {
+        "x": 141,
+        "y": 77
+      }
+    },
+    {
+      "type": "bush",
+      "position": {
+        "x": 151,
+        "y": 30
+      }
+    },
+    {
+      "type": "subshrub",
+      "position": {
+        "x": 159,
+        "y": 32
+      }
+    },
+    {
+      "type": "subshrub",
+      "position": {
+        "x": 163,
+        "y": 36
+      }
+    },
+    {
+      "type": "tree",
+      "position": {
+        "x": 159,
+        "y": 126
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 119,
+        "y": 116
+      }
+    },
     {
       "type": "fly",
-      "position": {"x": 120, "y": 130},
-      "velocity": {"x": -9, "y": 0}
+      "position": {
+        "x": 120,
+        "y": 130
+      },
+      "velocity": {
+        "x": -9,
+        "y": 0
+      }
     },
-    {"type": "fly", "state": "dead", "position": {"x": 125, "y": 132}},
-    {"type": "cloud", "position": {"x": 90, "y": 122}},
-    {"type": "pond", "position": {"x": 80, "y": 148}},
-    {"type": "frog", "position": {"x": 12, "y": 58}},
-    {"type": "bunny", "position": {"x": 40, "y": 48}},
-    {"type": "bunny", "state": "dead", "position": {"x": 48, "y": 48}},
-    {"type": "flag", "position": {"x": 77, "y": 17}},
+    {
+      "type": "fly",
+      "position": {
+        "x": 125,
+        "y": 132
+      },
+      "state": "dead"
+    },
+    {
+      "type": "cloud",
+      "position": {
+        "x": 90,
+        "y": 122
+      }
+    },
+    {
+      "type": "pond",
+      "position": {
+        "x": 80,
+        "y": 148
+      }
+    },
+    {
+      "type": "frog",
+      "position": {
+        "x": 12,
+        "y": 58
+      }
+    },
+    {
+      "type": "bunny",
+      "position": {
+        "x": 40,
+        "y": 48
+      }
+    },
+    {
+      "type": "bunny",
+      "position": {
+        "x": 48,
+        "y": 48
+      },
+      "state": "dead"
+    },
+    {
+      "type": "flag",
+      "position": {
+        "x": 77,
+        "y": 17
+      }
+    },
     {
       "type": "snake",
-      "position": {"x": 121, "y": 30},
-      "velocity": {"x": -12, "y": 0}
+      "position": {
+        "x": 121,
+        "y": 30
+      },
+      "velocity": {
+        "x": -12,
+        "y": 0
+      }
     },
-    {"type": "path", "variant": "/", "position": {"x": 160, "y": 96}},
-    {"type": "path", "variant": "/", "position": {"x": 176, "y": 88}},
-    {"type": "path", "variant": "/", "position": {"x": 192, "y": 80}},
-    {"type": "path", "variant": ">", "position": {"x": 208, "y": 72}},
-    {"type": "path", "variant": "\\", "position": {"x": 192, "y": 64}},
-    {"type": "path", "variant": "^", "position": {"x": 176, "y": 56}},
-    {"type": "path", "variant": "v", "position": {"x": 160, "y": 64}},
-    {"type": "path", "variant": "\\", "position": {"x": 144, "y": 56}},
-    {"type": "path", "variant": "<", "position": {"x": 128, "y": 48}},
-    {"type": "path", "variant": "/", "position": {"x": 144, "y": 40}},
-    {"type": "path", "variant": "/", "position": {"x": 160, "y": 32}},
-    {"type": "path", "variant": "/", "position": {"x": 176, "y": 24}},
-    {"type": "path", "variant": "^", "position": {"x": 192, "y": 16}},
-    {"type": "conifer", "position": {"x": 188, "y": 27}},
-    {"type": "pond", "position": {"x": 160, "y": 48}},
-    {"type": "pond", "position": {"x": 0, "y": 64}}
+    {
+      "type": "path",
+      "position": {
+        "x": 160,
+        "y": 96
+      }
+    },
+    {
+      "type": "path",
+      "position": {
+        "x": 176,
+        "y": 88
+      }
+    },
+    {
+      "type": "path",
+      "position": {
+        "x": 192,
+        "y": 80
+      }
+    },
+    {
+      "type": "path",
+      "variant": ">",
+      "position": {
+        "x": 208,
+        "y": 72
+      }
+    },
+    {
+      "type": "path",
+      "variant": "\\",
+      "position": {
+        "x": 192,
+        "y": 64
+      }
+    },
+    {
+      "type": "path",
+      "variant": "^",
+      "position": {
+        "x": 176,
+        "y": 56
+      }
+    },
+    {
+      "type": "path",
+      "variant": "v",
+      "position": {
+        "x": 160,
+        "y": 64
+      }
+    },
+    {
+      "type": "path",
+      "variant": "\\",
+      "position": {
+        "x": 144,
+        "y": 56
+      }
+    },
+    {
+      "type": "path",
+      "variant": "<",
+      "position": {
+        "x": 128,
+        "y": 48
+      }
+    },
+    {
+      "type": "path",
+      "position": {
+        "x": 144,
+        "y": 40
+      }
+    },
+    {
+      "type": "path",
+      "position": {
+        "x": 160,
+        "y": 32
+      }
+    },
+    {
+      "type": "path",
+      "position": {
+        "x": 176,
+        "y": 24
+      }
+    },
+    {
+      "type": "path",
+      "variant": "^",
+      "position": {
+        "x": 192,
+        "y": 16
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 188,
+        "y": 27
+      }
+    },
+    {
+      "type": "pond",
+      "position": {
+        "x": 160,
+        "y": 48
+      }
+    },
+    {
+      "type": "pond",
+      "position": {
+        "x": 0,
+        "y": 64
+      }
+    }
   ]
 }
