@@ -3,9 +3,9 @@
   "type": "title",
   "size": {"w": 256, "h": 256},
   "minViewport": {"w": 132, "h": 128},
+  "planes": [{"type": "plane", "variant": "white"}],
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
-    {"type": "plane", "variant": "white"},
     {
       "type": "group",
       "positionRelativeToCam": "center",

@@ -10,6 +10,7 @@ import {Level} from './Level'
 import {LevelTypeConfig} from './LevelTypeParser'
 import {LevelTypeParser} from './LevelTypeParser'
 import {WH} from '../math/WH'
+import {Plane} from '../entities/Plane'
 
 export interface LevelConfig {
   readonly version: string
@@ -17,6 +18,7 @@ export interface LevelConfig {
   readonly size: {w: number; h: number}
   readonly minViewport: {w: number; h: number}
   readonly cam?: CameraConfig
+  readonly planes: EntityConfig[]
   readonly cursor: EntityConfig
   readonly destination?: EntityConfig
   readonly player?: EntityConfig
@@ -47,6 +49,7 @@ export namespace LevelParser {
       size: new WH(config.size.w, config.size.h),
       minViewport: new WH(config.minViewport.w, config.minViewport.h),
       cam: CameraParser.parse(config.cam),
+      planes: <Plane[]>EntityParser.parseAll(config.planes, atlas),
       cursor: <Cursor>EntityParser.parse(config.cursor, atlas),
       ...(config.destination && {
         destination: EntityParser.parse(config.destination, atlas)

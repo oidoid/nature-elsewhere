@@ -30,6 +30,7 @@ export namespace Store {
     if (state.level.destination)
       images.push(...updateAndAnimate([state.level.destination], state))
     images.push(
+      ...updateAndAnimate(state.level.planes, state),
       ...updateAndAnimate(Level.activeParentsNoPlayer(state.level), state)
     )
     images = images.sort((lhs, rhs) => lhs.compareElevation(rhs))

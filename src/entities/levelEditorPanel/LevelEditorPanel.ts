@@ -469,8 +469,8 @@ function checkboxNumber(checkbox: Checkbox) {
 }
 
 function toggleGrid(state: UpdateState): void {
-  const grid = Entity.findAnyByID(state.level.parentEntities, EntityID.UI_GRID)
-  if (!grid) throw new Error('Missing grid.')
+  const grid = Entity.findAnyByID(state.level.planes, EntityID.UI_GRID)
+  if (!grid) return
   const toggle =
     grid.state() === Entity.BaseState.HIDDEN
       ? Plane.State.VISIBLE

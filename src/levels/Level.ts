@@ -12,6 +12,7 @@ import {WH} from '../math/WH'
 import {XY, FloatXY} from '../math/XY'
 import {UpdateState} from '../updaters/UpdateState'
 import {Marquee} from '../entities/Marquee'
+import {Plane} from '../entities/Plane'
 
 export interface Level {
   readonly type: LevelType
@@ -21,10 +22,12 @@ export interface Level {
   readonly size: WH
   readonly minViewport: WH
   readonly cam: Camera
+  readonly planes: Plane[]
   readonly cursor: Cursor
-  readonly player?: Backpacker
   readonly destination?: Entity
-  /** Cursor and player are not included in parentEntities. */
+  readonly player?: Backpacker
+  /** Planes, cursor, destination, and player are not included in
+      parentEntities. */
   readonly parentEntities: Entity[]
   readonly atlas: Atlas
 }

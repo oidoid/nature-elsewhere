@@ -3,9 +3,7 @@
   "type": "levelEditorMenu",
   "size": {"w": 96, "h": 96},
   "minViewport": {"w": 96, "h": 96},
+  "planes": [{"type": "plane", "variant": "white"}],
   "cursor": {"type": "uiCursor"},
-  "parentEntities": [
-    {"type": "plane", "variant": "white"},
-    {"type": "uiLevelEditorMenu"}
-  ]
+  "parentEntities": [{"type": "uiLevelEditorMenu"}]
 }

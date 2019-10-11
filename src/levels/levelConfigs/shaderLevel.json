@@ -4,8 +4,8 @@
   "size": {"w": 48, "h": 48},
   "minViewport": {"w": 48, "h": 48},
   "cursor": {"type": "uiCursor"},
+  "planes": [{"type": "plane", "variant": "white"}],
   "parentEntities": [
-    {"type": "plane", "variant": "white"},
     {
       "type": "group",
       "map": {
