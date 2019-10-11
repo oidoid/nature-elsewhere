@@ -1,6 +1,6 @@
 import {CollisionPredicate} from './CollisionPredicate'
 import {Entity} from '../entity/Entity'
-import {Rect, ReadonlyRect} from '../math/Rect'
+import {Rect} from '../math/Rect'
 import {ArrayUtil} from '../utils/ArrayUtil'
 
 export namespace EntityCollider {
@@ -42,7 +42,7 @@ export namespace EntityCollider {
       // The initiator only has bounding rectangle collision. If the test entity
       // or its children collide with the initiator's bounds, a collision has
       // occurred.
-      return collidesRect(entity, initiator.bounds)
+      return entity.collidesRect(initiator.bounds)
 
     // The initiator has image, body, or children collision.
 
@@ -53,7 +53,7 @@ export namespace EntityCollider {
       if (!Rect.intersects(initiator.imageBounds(), entity.bounds))
         return collisions
       for (const image of initiator.images())
-        collisions.push(...collidesRect(entity, image.bounds))
+        collisions.push(...entity.collidesRect(image.bounds))
 
       // Each image must be tested against the entity in case it has children so
       // that all collisions are reported. However, each collision should only
@@ -66,7 +66,7 @@ export namespace EntityCollider {
       // children collide with any of the initiator's bodies, a collision has
       // occurred. Otherwise, no collision has occurred.
       for (const body of initiator.collisionBodies)
-        collisions.push(...collidesRect(entity, body))
+        collisions.push(...entity.collidesRect(body))
       // Each body must be tested against the entity in case it has children so
       // that all collisions are reported. However, each collision should only
       // be reported once.
@@ -81,47 +81,5 @@ export namespace EntityCollider {
     // that all collisions are reported. However, each collision should only
     // be reported once.
     return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
-  }
-
-  export function collidesRect(entity: Entity, rect: ReadonlyRect): Entity[] {
-    const collisions: Entity[] = []
-    if (entity.collisionPredicate === CollisionPredicate.NEVER)
-      return collisions
-
-    if (!Rect.intersects(entity.bounds, rect))
-      // Any collisions requires the rectangle intersect with the entity's
-      // bounds.
-      return collisions
-
-    if (entity.collisionPredicate === CollisionPredicate.BOUNDS) {
-      // No further tests.
-      collisions.push(entity)
-      return collisions
-    }
-
-    if (entity.collisionPredicate === CollisionPredicate.IMAGES) {
-      // Test if any image collides.
-      if (
-        Rect.intersects(entity.imageBounds(), rect) &&
-        entity.images().some(image => Rect.intersects(rect, image.bounds))
-      )
-        collisions.push(entity)
-      return collisions
-    }
-
-    if (entity.collisionPredicate === CollisionPredicate.BODIES) {
-      // Test if any body collides.
-      if (entity.collisionBodies.some(body => Rect.intersects(rect, body)))
-        collisions.push(entity)
-      return collisions
-    }
-
-    // Collision type is CollisionPredicate.CHILDREN.
-    for (const child of entity.children)
-      collisions.push(...collidesRect(child, rect))
-
-    // Children are not shared so the collision array will not contain
-    // duplicates.
-    return collisions
   }
 }

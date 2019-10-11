@@ -122,7 +122,7 @@ export namespace Level {
       const marqueeCollision =
         marquee &&
         marquee.selection &&
-        EntityCollider.collidesRect(state.level.cursor, marquee.bounds).length
+        state.level.cursor.collidesRect(marquee.bounds).length
       if (hudCollision && !marqueeCollision) return
       const destination = Level.fclamp(
         state.level,

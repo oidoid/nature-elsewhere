@@ -312,13 +312,11 @@ export class LevelEditorPanel extends Entity<
           checkboxNumber(this._yCheckbox)
         )
         let entity = EntityFactory.produce(state.level.atlas, {
-            type: child.type,
-            state: child.state(),
-            variant: child.variant,
-            position
-          })
-          // force collision to bounds for picking
-        ;(<any>entity).collisionPredicate = CollisionPredicate.BOUNDS
+          type: child.type,
+          state: child.state(),
+          variant: child.variant,
+          position
+        })
         const sandbox = Entity.findAnyByID(
           state.level.parentEntities,
           EntityID.UI_LEVEL_EDITOR_SANDBOX
@@ -498,11 +496,7 @@ const defaults = ObjectUtil.freeze({
 })
 
 function saveTheStuff(sandbox: LevelEditorSandbox): void {
-  const json = sandbox.toJSON()
-  for (const item of json)
-    if (typeof item === 'object' && 'collisionPredicate' in item)
-      delete item.collisionPredicate
-  const data = JSON.stringify(json, null, 2)
+  const data = JSON.stringify(sandbox.toJSON(), null, 2)
   LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE, data)
 }
 
@@ -527,9 +521,6 @@ export function reaullyLoadTheStuff(
     LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
   }
   if (sandboxChildren) {
-    for (const child of sandboxChildren) {
-      child.collisionPredicate = CollisionPredicate.BOUNDS
-    }
     sandbox.addChildren(...sandboxChildren)
   }
 }

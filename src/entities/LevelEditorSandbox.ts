@@ -7,6 +7,7 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {ReadonlyRect, Rect} from '../math/Rect'
 
 export class LevelEditorSandbox extends Entity<
   LevelEditorSandbox.Variant,
@@ -30,6 +31,16 @@ export class LevelEditorSandbox extends Entity<
 
   update(state: UpdateState): UpdateStatus {
     return super.update(state, true) // Children are forbidden from updating.
+  }
+
+  collidesRect(rect: ReadonlyRect): Entity[] {
+    const collisions = []
+
+    // Force bounds collision for children only.
+    for (const child of this.children)
+      if (Rect.intersects(child.bounds, rect)) collisions.push(child)
+
+    return collisions
   }
 
   toJSON(): JSONArray {

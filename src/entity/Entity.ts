@@ -336,6 +336,47 @@ export abstract class Entity<
     return status
   }
 
+  collidesRect(rect: ReadonlyRect): Entity[] {
+    const collisions: Entity[] = []
+    if (this.collisionPredicate === CollisionPredicate.NEVER) return collisions
+
+    if (!Rect.intersects(this.bounds, rect))
+      // Any collisions requires the rectangle intersect with the entity's
+      // bounds.
+      return collisions
+
+    if (this.collisionPredicate === CollisionPredicate.BOUNDS) {
+      // No further tests.
+      collisions.push(this)
+      return collisions
+    }
+
+    if (this.collisionPredicate === CollisionPredicate.IMAGES) {
+      // Test if any image collides.
+      if (
+        Rect.intersects(this.imageBounds(), rect) &&
+        this.images().some(image => Rect.intersects(rect, image.bounds))
+      )
+        collisions.push(this)
+      return collisions
+    }
+
+    if (this.collisionPredicate === CollisionPredicate.BODIES) {
+      // Test if any body collides.
+      if (this.collisionBodies.some(body => Rect.intersects(rect, body)))
+        collisions.push(this)
+      return collisions
+    }
+
+    // Collision type is CollisionPredicate.CHILDREN.
+    for (const child of this.children)
+      collisions.push(...child.collidesRect(rect))
+
+    // Children are not shared so the collision array will not contain
+    // duplicates.
+    return collisions
+  }
+
   findByID(id: EntityID): Maybe<Entity> {
     return this.find(entity => entity.id === id)
   }
