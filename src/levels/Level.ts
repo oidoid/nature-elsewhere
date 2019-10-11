@@ -25,8 +25,9 @@ export interface Level {
   readonly planes: Plane[]
   readonly cursor: Cursor
   readonly destination?: Entity
+  readonly hud: Entity[]
   readonly player?: Backpacker
-  /** Planes, cursor, destination, and player are not included in
+  /** Planes, cursor, destination, HUD, and player are not included in
       parentEntities. */
   readonly parentEntities: Entity[]
   readonly atlas: Atlas
@@ -50,7 +51,8 @@ export namespace Level {
     const entities = []
     if (level.player) entities.push(level.player)
     entities.push(
-      ...level.parentEntities.filter(entity => entity.active(level.cam.bounds))
+      ...level.parentEntities.filter(entity => entity.active(level.cam.bounds)),
+      ...level.hud
     )
     return entities
   }
@@ -110,20 +112,18 @@ export namespace Level {
         )
       }
       if (Rect.intersects(cameraDeadZone, state.level.cursor.bounds)) return
-      const panel = Entity.findAnyByID(
-        state.level.parentEntities,
-        EntityID.UI_LEVEL_EDITOR_PANEL
-      )
       const marquee = <Maybe<Marquee>>(
         Entity.findAnyByID(state.level.parentEntities, EntityID.UI_MARQUEE)
       )
-      const panelCollision =
-        panel && EntityCollider.collidesEntity(state.level.cursor, panel).length //collisionWithCursor(state.level, panel)
+      const hudCollision = EntityCollider.collidesEntities(
+        state.level.cursor,
+        state.level.hud
+      ).length
       const marqueeCollision =
         marquee &&
         marquee.selection &&
-        EntityCollider.collidesRect(state.level.cursor, marquee.bounds).length // collisionWithCursor(state.level, marquee)
-      if (panelCollision && !marqueeCollision) return
+        EntityCollider.collidesRect(state.level.cursor, marquee.bounds).length
+      if (hudCollision && !marqueeCollision) return
       const destination = Level.fclamp(
         state.level,
         FloatXY.lerp(

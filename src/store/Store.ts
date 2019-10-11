@@ -26,10 +26,13 @@ export namespace Store {
 
     Level.updateCamera(state)
 
-    images.push(...updateAndAnimate([state.level.cursor], state))
-    if (state.level.destination)
-      images.push(...updateAndAnimate([state.level.destination], state))
     images.push(
+      ...updateAndAnimate([state.level.cursor], state),
+      ...updateAndAnimate(
+        state.level.destination ? [state.level.destination] : [],
+        state
+      ),
+      ...updateAndAnimate(state.level.hud, state),
       ...updateAndAnimate(state.level.planes, state),
       ...updateAndAnimate(Level.activeParentsNoPlayer(state.level), state)
     )

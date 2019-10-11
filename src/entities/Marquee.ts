@@ -76,13 +76,10 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       return status
     }
 
-    const panel = Entity.findAnyByID(
-      state.level.parentEntities,
-      EntityID.UI_LEVEL_EDITOR_PANEL
+    const hudCollision = EntityCollider.collidesEntities(
+      state.level.cursor,
+      state.level.hud
     )
-    const panelCollision = panel
-      ? EntityCollider.collidesEntity(state.level.cursor, panel)
-      : []
 
     const pickCenter = Rect.centerOf(state.level.cursor.bounds)
     const cursorSandboxCollision = EntityCollider.collidesEntity(
@@ -108,7 +105,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       sandbox.invalidateBounds()
     } else if (
       triggered &&
-      !panelCollision.length &&
+      !hudCollision.length &&
       cursorSandboxCollision.length
     ) {
       status |= this.transition(Marquee.State.VISIBLE)
@@ -131,7 +128,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       this._dragOffset = sandboxEntity.bounds.position.sub(
         state.level.cursor.bounds.position
       )
-    } else if (triggered && !panelCollision.length) {
+    } else if (triggered && !hudCollision.length) {
       status |= this.transition(Entity.BaseState.HIDDEN)
       this.selection = undefined
       this._dragOffset = undefined

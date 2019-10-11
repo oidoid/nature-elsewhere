@@ -3,7 +3,7 @@ import {Backpacker} from '../entities/Backpacker'
 import {CameraConfig} from './CameraParser'
 import {CameraParser} from './CameraParser'
 import {Cursor} from '../entities/Cursor'
-import {EntityConfig} from '../entity/EntityParser'
+import {EntityConfig, EntityArrayConfig} from '../entity/EntityParser'
 import {EntityParser} from '../entity/EntityParser'
 import {LevelAdvance} from './LevelAdvance'
 import {Level} from './Level'
@@ -18,9 +18,10 @@ export interface LevelConfig {
   readonly size: {w: number; h: number}
   readonly minViewport: {w: number; h: number}
   readonly cam?: CameraConfig
-  readonly planes: EntityConfig[]
+  readonly planes: EntityArrayConfig
   readonly cursor: EntityConfig
   readonly destination?: EntityConfig
+  readonly hud?: EntityArrayConfig
   readonly player?: EntityConfig
   /** Entities to populate the level. Any children of these entities will be
       considered "active" as a first pass if it's parent root entity is. For
@@ -51,6 +52,10 @@ export namespace LevelParser {
       cam: CameraParser.parse(config.cam),
       planes: <Plane[]>EntityParser.parseAll(config.planes, atlas),
       cursor: <Cursor>EntityParser.parse(config.cursor, atlas),
+      ...(config.destination && {
+        destination: EntityParser.parse(config.destination, atlas)
+      }),
+      hud: EntityParser.parseAll(config.hud, atlas),
       ...(config.destination && {
         destination: EntityParser.parse(config.destination, atlas)
       }),

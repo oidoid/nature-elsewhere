@@ -7,13 +7,15 @@
   "planes": [{"type": "plane", "variant": "paleGreen"}],
   "cursor": {"type": "uiCursor"},
   "destination": {"type": "uiDestinationMarker"},
+  "hud": [
+    {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"}
+  ],
   "player": {
     "id": "uiPlayer",
     "type": "backpacker",
     "position": {"x": 80, "y": 102}
   },
   "parentEntities": [
-    {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"},
     {"type": "cloud", "position": {"x": 20, "y": 20}, "velocity": {"x": -6}},
     {"type": "cloud", "state": "drizzle", "position": {"x": 30, "y": 28}},
     {"type": "cloud", "state": "shower", "position": {"x": 54, "y": 50}},

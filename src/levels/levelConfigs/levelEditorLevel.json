@@ -8,9 +8,9 @@
     {"id": "uiGrid", "type": "plane", "variant": "grid"}
   ],
   "cursor": {"type": "uiCursor"},
+  "hud": [{"id": "uiLevelEditorPanel", "type": "uiLevelEditorPanel"}],
   "parentEntities": [
     {"id": "uiMarquee", "type": "uiMarquee"},
-    {"id": "uiLevelEditorPanel", "type": "uiLevelEditorPanel"},
     {"id": "uiLevelEditorSandbox", "type": "levelEditorSandbox"}
   ]
 }
