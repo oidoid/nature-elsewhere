@@ -430,13 +430,26 @@ export abstract class Entity<
     if (this.id !== defaults.id) diff.id = this.id
     if (this.variant !== defaults.variant) diff.variant = this.variant
     if (!this.bounds.position.equal(defaults.position))
-      diff.position = {x: this.bounds.position.x, y: this.bounds.position.y}
+      diff.position = {
+        ...(this.bounds.position.x !== defaults.position.x && {
+          x: this.bounds.position.x
+        }),
+        ...(this.bounds.position.y !== defaults.position.y && {
+          y: this.bounds.position.y
+        })
+      }
     if (!this.velocity.equal(defaults.velocity))
-      diff.velocity = {x: this.velocity.x, y: this.velocity.y}
+      diff.velocity = {
+        ...(this.velocity.x !== defaults.velocity.x && {x: this.velocity.x}),
+        ...(this.velocity.y !== defaults.velocity.y && {y: this.velocity.y})
+      }
     if (this.imageID() && this.imageID() !== defaults.imageID)
       diff.imageID = this.imageID()
     if (!this.scale().equal(defaults.scale))
-      diff.scale = {x: this.scale().x, y: this.scale().y}
+      diff.scale = {
+        ...(this.scale().x !== defaults.scale.x && {x: this.scale().x}),
+        ...(this.scale().y !== defaults.scale.y && {y: this.scale().y})
+      }
     if (this.state() !== defaults.state) diff.state = this.state()
     if (this.updatePredicate !== defaults.updatePredicate)
       diff.updatePredicate = this.updatePredicate

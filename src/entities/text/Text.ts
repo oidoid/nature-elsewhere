@@ -67,9 +67,19 @@ export class Text extends Entity<Text.Variant, Text.State> {
     if (this.text !== defaults.text) diff.text = this.text
     if (this.textLayer !== defaults.textLayer) diff.textLayer = this.textLayer
     if (!this.textScale.equal(defaults.textScale))
-      diff.textScale = {x: this.textScale.x, y: this.textScale.y}
+      diff.textScale = {
+        ...(this.textScale.x !== defaults.textScale.x && {x: this.textScale.x}),
+        ...(this.textScale.y !== defaults.textScale.y && {y: this.textScale.y})
+      }
     if (!this.textMaxSize.equal(defaults.textMaxSize))
-      diff.textMaxSize = {w: this.textMaxSize.w, h: this.textMaxSize.h}
+      diff.textMaxSize = {
+        ...(this.textMaxSize.w !== defaults.textMaxSize.w && {
+          w: this.textMaxSize.w
+        }),
+        ...(this.textMaxSize.h !== defaults.textMaxSize.h && {
+          h: this.textMaxSize.h
+        })
+      }
     return diff
   }
 }

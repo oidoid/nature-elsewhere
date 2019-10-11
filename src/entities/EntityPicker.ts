@@ -13,6 +13,8 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
 
@@ -46,6 +48,10 @@ export class EntityPicker extends Entity<
     }
     this.showActiveChild()
     this.invalidateBounds()
+  }
+
+  update(state: UpdateState): UpdateStatus {
+    return super.update(state, true) // Children are forbidden from updating.
   }
 
   get activeChildIndex(): number {
