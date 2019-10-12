@@ -8,7 +8,6 @@ import {Rect} from '../../math/Rect'
 import {TextLayout} from '../../text/TextLayout'
 import {Image} from '../../image/Image'
 import {AtlasID, MEM_FONT_PREFIX} from '../../atlas/AtlasID'
-import {ImageParser} from '../../image/ImageParser'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {EntityType} from '../../entity/EntityType'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
@@ -113,24 +112,29 @@ function toImages(
   y: number = 0
 ): readonly Image[] {
   const images = []
-  const {positions} = TextLayout.layout(string, bounds.size.w, scale)
-  for (let i = 0; i < positions.length; ++i) {
-    const position = positions[i]
-    if (!position) continue
-    if (TextLayout.nextLine(position.y, scale).y < y) continue
-    if (position.y > y + bounds.size.h) break
+  const {chars} = TextLayout.layout(string, bounds.size.w, scale)
+  for (let i = 0; i < chars.length; ++i) {
+    const char = chars[i]
+    if (!char) continue
+    if (TextLayout.nextLine(char.position.y, scale).y < y) continue
+    if (char.position.y > y + bounds.size.h) break
 
-    const char = newCharacterImage(
+    const image = newCharacterImage(
       string.charCodeAt(i),
       new XY(
-        bounds.position.x + position.x,
-        bounds.position.y + position.y - y
+        bounds.position.x + char.position.x,
+        bounds.position.y + char.position.y - y
       ),
+      // Size is only needed for the last character to ensure minimal width
+      // instead of maximal letter width bounding (five pixels, at time of
+      // writing, which may be a good bit larger than some single pixel
+      // character like an exclamation mark.)
+      char.size,
       scale,
       imageID,
       atlas
     )
-    images.push(char)
+    images.push(image)
   }
   return images
 }
@@ -138,21 +142,21 @@ function toImages(
 function newCharacterImage(
   char: number,
   position: XY,
+  size: WH,
   scale: XY,
   imageID: Maybe<AtlasID>,
   atlas: Atlas
 ): Image {
-  const id = MEM_FONT_PREFIX + char.toString().padStart(3, '0')
-  return ImageParser.parse(
-    {
-      id,
-      bounds: {position},
-      scale,
-      imageID,
-      alphaComposition: AlphaComposition.SOURCE_MASK
-    },
-    atlas
-  )
+  const id = <AtlasID>(MEM_FONT_PREFIX + char.toString().padStart(3, '0'))
+  const alphaComposition = AlphaComposition.SOURCE_MASK
+  return new Image(atlas, {
+    id,
+    position,
+    size,
+    scale,
+    imageID,
+    alphaComposition
+  })
 }
 
 const defaults = ObjectUtil.freeze({

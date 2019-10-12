@@ -1,10 +1,11 @@
 import {Font} from './Font'
 import * as memFont from './memFont.json'
 import {XY} from '../math/XY'
+import {Rect} from '../math/Rect'
 
 export interface TextLayout {
   /** The length of this array matches the string length. */
-  readonly positions: readonly Maybe<XY>[]
+  readonly chars: readonly Maybe<Rect>[]
   /** The offset in pixels. */
   readonly cursor: XY
 }
@@ -14,7 +15,7 @@ const font: Font = Object.freeze(memFont)
 export namespace TextLayout {
   /** @arg width The allowed layout width in pixels. */
   export function layout(string: string, width: number, scale: XY): TextLayout {
-    const positions: Maybe<XY>[] = []
+    const chars: Maybe<Rect>[] = []
     let cursor = new XY(0, 0)
     for (let i = 0; i < string.length; ) {
       let layout
@@ -38,12 +39,12 @@ export namespace TextLayout {
           }
         }
       }
-      positions.push(...layout.positions)
+      chars.push(...layout.chars)
       cursor.x = layout.cursor.x
       cursor.y = layout.cursor.y
-      i += layout.positions.length
+      i += layout.chars.length
     }
-    return {positions, cursor}
+    return {chars, cursor}
   }
 
   /** @arg {x,y} The cursor offset in pixels.
@@ -55,15 +56,22 @@ export namespace TextLayout {
     index: number,
     scale: XY
   ): TextLayout {
-    const positions = []
+    const chars = []
     while (index < string.length && !/\s/.test(string[index])) {
       const span = tracking(string[index], scale, string[index + 1])
       if (x && x + span > width) ({x, y} = nextLine(y, scale))
-      positions.push(new XY(x, y))
+      // Width is not span since, with kerning, that may exceed the actual
+      // width of the letter's image. For example, if w has the maximal letter
+      // width of five pixels and a one pixel kerning for a given pair of
+      // letters, it will have a span of six pixels which is greater than the
+      // maximal five pixel image that can be rendered.
+      const w = scale.x * Font.letterWidth(font, string[index])
+      const h = scale.y * font.letterHeight
+      chars.push(Rect.make(x, y, w, h))
       x += span
       ++index
     }
-    return {positions, cursor: new XY(x, y)}
+    return {chars, cursor: new XY(x, y)}
   }
 
   export function nextLine(y: number, scale: XY): XY {
@@ -74,7 +82,7 @@ export namespace TextLayout {
 /** @arg cursor The cursor offset in pixels. */
 function layoutNewline({y}: XY, scale: XY): TextLayout {
   return {
-    positions: [undefined],
+    chars: [undefined],
     cursor: TextLayout.nextLine(y, scale)
   }
 }
@@ -91,7 +99,7 @@ function layoutSpace(
 ): TextLayout {
   const cursor =
     x && x + span >= width ? TextLayout.nextLine(y, scale) : new XY(x + span, y)
-  return {positions: [undefined], cursor}
+  return {chars: [undefined], cursor}
 }
 
 /** @return The distance in pixels from the start of lhs to the start of rhs. */

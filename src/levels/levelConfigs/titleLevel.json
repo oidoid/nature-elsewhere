@@ -1,8 +1,8 @@
 {
   "version": "0.0.0",
   "type": "title",
-  "size": {"w": 256, "h": 256},
-  "minViewport": {"w": 132, "h": 128},
+  "size": {"w": 136, "h": 128},
+  "minViewport": {"w": 136, "h": 128},
   "planes": [{"type": "plane", "variant": "white"}],
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
@@ -14,7 +14,7 @@
           "images": [
             {
               "id": "palette-paleGreen",
-              "bounds": {"position": {"y": 44}, "size": {"w": 128, "h": 2}}
+              "bounds": {"position": {"y": 44}, "size": {"w": 136, "h": 2}}
             }
           ]
         }
