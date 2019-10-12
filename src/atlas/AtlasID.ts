@@ -211,6 +211,7 @@ export enum AtlasID {
   MEM_FONT_125 = 'memFont-125',
   MEM_FONT_126 = 'memFont-126',
   MEM_FONT_127 = 'memFont-127',
+  ODDOID = 'oddoid',
   PALETTE_BLACK = 'palette-black',
   PALETTE_BLUE = 'palette-blue',
   PALETTE_DARK_GREEN = 'palette-darkGreen',

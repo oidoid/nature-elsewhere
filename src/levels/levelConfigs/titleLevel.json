@@ -81,10 +81,11 @@
     {
       "type": "group",
       "positionRelativeToCam": "southEast",
-      "camMargin": {"w": 1},
+      "camMargin": {"w": 1, "h": 1},
       "updatePredicate": "always",
       "collisionPredicate": "children",
-      "children": [{"type": "uiText", "//": "[strings]", "text": "oddoid"}]
+      "//": "[strings]",
+      "map": {"visible": {"images": [{"id": "oddoid"}]}}
     }
   ]
 }
