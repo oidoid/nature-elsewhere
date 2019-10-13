@@ -18,6 +18,7 @@ export enum EntityType {
   CONIFER = 'conifer',
   FLAG = 'flag',
   GRASS = 'grass',
+  MONUMENT = 'monument',
   MOUNTAIN = 'mountain',
   PATH = 'path',
   PLANE = 'plane',

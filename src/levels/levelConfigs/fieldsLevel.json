@@ -562,15 +562,15 @@
     {
       "type": "subshrub",
       "position": {
-        "x": 40,
+        "x": 37,
         "y": 135
       }
     },
     {
       "type": "subshrub",
       "position": {
-        "x": 34,
-        "y": 138
+        "x": 33,
+        "y": 139
       }
     },
     {
@@ -697,6 +697,55 @@
       "position": {
         "x": 115,
         "y": 20
+      }
+    },
+    {
+      "type": "monument",
+      "position": {
+        "x": 129,
+        "y": 160
+      }
+    },
+    {
+      "type": "tree",
+      "position": {
+        "x": 105,
+        "y": 176
+      }
+    },
+    {
+      "type": "tree",
+      "position": {
+        "x": 109,
+        "y": 178
+      }
+    },
+    {
+      "type": "appleTree",
+      "position": {
+        "x": 88,
+        "y": 185
+      }
+    },
+    {
+      "type": "apple",
+      "position": {
+        "x": 97,
+        "y": 198
+      }
+    },
+    {
+      "type": "apple",
+      "position": {
+        "x": 89,
+        "y": 198
+      }
+    },
+    {
+      "type": "cloud",
+      "position": {
+        "x": 156,
+        "y": 153
       }
     }
   ]

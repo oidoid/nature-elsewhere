@@ -1,3 +1,4 @@
+import {Apple} from '../entities/Apple'
 import {AppleTree} from '../entities/AppleTree'
 import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/Backpacker'
@@ -25,7 +26,9 @@ import {LevelEditorMenu} from '../entities/LevelEditorMenu'
 import {LevelEditorPanelBackground} from '../entities/levelEditorPanel/LevelEditorPanelBackground'
 import {LevelEditorPanel} from '../entities/levelEditorPanel/LevelEditorPanel'
 import {LevelEditorSandbox} from '../entities/LevelEditorSandbox'
+import {LevelLink} from '../entities/levelLink/LevelLink'
 import {Marquee} from '../entities/Marquee'
+import {Monument} from '../entities/Monument'
 import {Mountain} from '../entities/Mountain'
 import {Path} from '../entities/Path'
 import {Plane} from '../entities/Plane'
@@ -36,8 +39,6 @@ import {Subshrub} from '../entities/Subshrub'
 import {Text} from '../entities/text/Text'
 import {Toolbar} from '../entities/Toolbar'
 import {Tree} from '../entities/Tree'
-import {LevelLink} from '../entities/levelLink/LevelLink'
-import {Apple} from '../entities/Apple'
 
 export namespace EntityFactory {
   export function produce(
@@ -79,6 +80,8 @@ export namespace EntityFactory {
         return new Flag(atlas, props)
       case EntityType.GRASS:
         return new Grass(atlas, props)
+      case EntityType.MONUMENT:
+        return new Monument(atlas, props)
       case EntityType.MOUNTAIN:
         return new Mountain(atlas, props)
       case EntityType.PATH:

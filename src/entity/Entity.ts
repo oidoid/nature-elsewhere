@@ -18,6 +18,7 @@ import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {WH} from '../math/WH'
 
 export abstract class Entity<
   Variant extends string = string,
@@ -149,6 +150,11 @@ export abstract class Entity<
       this._bounds.size.w = bounds.size.w
       this._bounds.size.h = bounds.size.h
     }
+  }
+
+  protected forceSizeTo(to: Readonly<WH>): void {
+    this._bounds.size.w = to.w
+    this._bounds.size.h = to.h
   }
 
   get velocity(): XY {

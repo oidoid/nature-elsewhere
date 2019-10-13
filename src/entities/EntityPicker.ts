@@ -16,7 +16,10 @@ import {JSONValue} from '../utils/JSON'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
-const entityWindowSize: Readonly<WH> = Object.freeze(new WH(32, 26))
+const pickerSize: Readonly<WH> = Object.freeze(new WH(32, 27))
+const entityWindowSize: Readonly<WH> = Object.freeze(
+  new WH(pickerSize.w, pickerSize.h - 1)
+)
 
 export class EntityPicker extends Entity<
   EntityPicker.Variant,
@@ -48,6 +51,8 @@ export class EntityPicker extends Entity<
     }
     this.showActiveChild()
     this.invalidateBounds()
+    this.forceSizeTo(pickerSize)
+    console.log(this)
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -101,6 +106,7 @@ export class EntityPicker extends Entity<
     newChild.elevate(2 * Layer.UI_PICKER_OFFSET)
     this.replaceChild(oldChild, newChild)
   }
+
   private _entityWindowBounds(): ReadonlyRect {
     return {
       position: new XY(
