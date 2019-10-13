@@ -1,7 +1,8 @@
-import {ReadonlyRect} from '../math/Rect'
 import {EntityID} from '../entity/EntityID'
-import {FloatXY, XY} from '../math/XY'
+import {FloatXY} from '../math/FloatXY'
+import {ReadonlyRect} from '../math/Rect'
 import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 export class Camera {
   readonly _bounds: {position: FloatXY; size: WH}

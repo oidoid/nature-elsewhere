@@ -52,7 +52,6 @@ export class EntityPicker extends Entity<
     this.showActiveChild()
     this.invalidateBounds()
     this.forceSizeTo(pickerSize)
-    console.log(this)
   }
 
   update(state: UpdateState): UpdateStatus {

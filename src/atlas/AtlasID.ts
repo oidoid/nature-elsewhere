@@ -32,6 +32,7 @@ export enum AtlasID {
   FROG_IDLE_SHADOW = 'frog-idleShadow',
   FROG_LEAP = 'frog-leap',
   PIG = 'pig',
+  PIG_SHADOW = 'pig-shadow',
   SNAKE = 'snake',
   SNAKE_SHADOW = 'snake-shadow',
   BUSH = 'bush',

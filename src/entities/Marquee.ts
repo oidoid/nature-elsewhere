@@ -189,6 +189,7 @@ function resize(
   marqueeImages[Images.BOTTOM].wrapTo(
     new XY((sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0, 0)
   )
+  marquee.invalidateImageBounds()
   marquee.invalidateBounds()
 }
 

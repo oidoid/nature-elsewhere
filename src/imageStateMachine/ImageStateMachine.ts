@@ -33,6 +33,10 @@ export class ImageStateMachine<State extends string = string> {
     return this._imageRect().images
   }
 
+  invalidate(): void {
+    this._imageRect().invalidate()
+  }
+
   bounds(): ReadonlyRect {
     return this._imageRect().bounds
   }

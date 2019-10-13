@@ -1,7 +1,8 @@
-import {FloatXY, XY} from '../math/XY'
+import {FloatXY} from '../math/FloatXY'
+import {ReadonlyRect} from '../math/Rect'
 import {Viewport} from '../renderer/Viewport'
 import {WH} from '../math/WH'
-import {ReadonlyRect} from '../math/Rect'
+import {XY} from '../math/XY'
 
 export interface Input {
   /** True if input is on. */

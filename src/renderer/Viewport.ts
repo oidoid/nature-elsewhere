@@ -1,6 +1,7 @@
+import {FloatXY} from '../math/FloatXY'
 import {ReadonlyRect} from '../math/Rect'
 import {WH} from '../math/WH'
-import {FloatXY, XY} from '../math/XY'
+import {XY} from '../math/XY'
 
 export namespace Viewport {
   /** @return The maximum scale possible. */

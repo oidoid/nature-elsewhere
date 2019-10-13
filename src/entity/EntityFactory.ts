@@ -31,6 +31,7 @@ import {Marquee} from '../entities/Marquee'
 import {Monument} from '../entities/Monument'
 import {Mountain} from '../entities/Mountain'
 import {Path} from '../entities/Path'
+import {Pig} from '../entities/Pig'
 import {Plane} from '../entities/Plane'
 import {Pond} from '../entities/Pond'
 import {RadioCheckboxGroup} from '../entities/RadioCheckboxGroup'
@@ -60,6 +61,8 @@ export namespace EntityFactory {
         return new Fly(atlas, props)
       case EntityType.FROG:
         return new Frog(atlas, props)
+      case EntityType.PIG:
+        return new Pig(atlas, props)
       case EntityType.SNAKE:
         return new Snake(atlas, props)
       case EntityType.GROUP:

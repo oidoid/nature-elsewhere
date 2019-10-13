@@ -8,6 +8,7 @@ export enum EntityType {
   BUNNY = 'bunny',
   FLY = 'fly',
   FROG = 'frog',
+  PIG = 'pig',
   SNAKE = 'snake',
   GROUP = 'group',
   LEVEL_EDITOR_SANDBOX = 'levelEditorSandbox',

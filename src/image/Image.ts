@@ -1,9 +1,9 @@
+import {AlphaComposition} from './AlphaComposition'
 import {AtlasID} from '../atlas/AtlasID'
 import {Animator, Atlas} from 'aseprite-atlas'
-import {DecamillipixelIntXY, XY} from '../math/XY'
+import {DecamillipixelXY, XY} from '../math/XY'
 import {Layer} from './Layer'
 import {Rect, ReadonlyRect} from '../math/Rect'
-import {AlphaComposition} from './AlphaComposition'
 import {WH} from '../math/WH'
 
 /** A mapping from a source atlas subtexture to a target. The target region
@@ -36,11 +36,11 @@ export class Image {
   private readonly _scale: XY
 
   /** Specifies the initial marquee offset. */
-  private readonly _wrap: DecamillipixelIntXY
+  private readonly _wrap: DecamillipixelXY
 
   /** Specifies the additional marquee offset added by the shader according to
       the game clock. */
-  private readonly _wrapVelocity: DecamillipixelIntXY
+  private readonly _wrapVelocity: DecamillipixelXY
 
   private readonly _alphaComposition: AlphaComposition
 
@@ -88,11 +88,11 @@ export class Image {
     return this._scale
   }
 
-  get wrap(): Readonly<DecamillipixelIntXY> {
+  get wrap(): Readonly<DecamillipixelXY> {
     return this._wrap
   }
 
-  get wrapVelocity(): Readonly<DecamillipixelIntXY> {
+  get wrapVelocity(): Readonly<DecamillipixelXY> {
     return this._wrapVelocity
   }
 
@@ -178,8 +178,8 @@ export namespace Image {
     readonly layer?: Layer
     readonly animator?: Animator
     readonly scale?: XY
-    readonly wrap?: DecamillipixelIntXY
-    readonly wrapVelocity?: DecamillipixelIntXY
+    readonly wrap?: DecamillipixelXY
+    readonly wrapVelocity?: DecamillipixelXY
     readonly alphaComposition?: AlphaComposition
   }
 }

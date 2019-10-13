@@ -8,7 +8,6 @@ import {
   CollisionTypeConfig,
   CollisionTypeParser
 } from '../collision/CollisionTypeParser'
-import {DecamillipixelIntXYConfig} from '../math/DecamillipixelXYParser'
 import {Entity} from './Entity'
 import {EntityID} from './EntityID'
 import {EntityFactory} from './EntityFactory'
@@ -38,7 +37,7 @@ export interface EntityConfig {
   readonly variant?: VariantConfig
   /** Defaults to (0, 0). */
   readonly position?: XYConfig
-  readonly velocity?: DecamillipixelIntXYConfig
+  readonly velocity?: XYConfig // Decamillipixel
   readonly imageID?: AtlasIDConfig
   readonly scale?: ImageScaleConfig
   /** Defaults to {}. */

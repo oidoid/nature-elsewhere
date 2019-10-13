@@ -1,27 +1,33 @@
-import {NumberUtil} from './NumberUtil'
 import {Build} from '../utils/Build'
-
-export interface FloatXY {
-  x: number
-  y: number
-}
+import {FloatXY} from './FloatXY'
 
 /** Integral XY in 1/10000 of a pixel. */
-export type DecamillipixelIntXY = XY
 export type DecamillipixelXY = XY
 
 /** Integral wrapper of x and y-axis components. This class exists to make
     rounding errors easier to debug by encapsulating mutation in setters with
     integer state checks. */
 export class XY {
-  static trunc(x: number, y: number): XY {
-    return new XY(Math.trunc(x), Math.trunc(y))
+  static trunc(xy: Readonly<FloatXY>): XY
+  static trunc(x: number, y: number): XY
+  static trunc(val: number | Readonly<FloatXY>, y?: number): XY {
+    if (typeof val === 'number') {
+      if (typeof y !== 'number') throw new Error('Invalid y.')
+      return new XY(Math.trunc(val), Math.trunc(y))
+    }
+    return new XY(Math.trunc(val.x), Math.trunc(val.y))
+  }
+
+  static diagonal(component: number): XY {
+    return new XY(component, component)
   }
 
   private _x: number
   private _y: number
 
   constructor(x: number, y: number) {
+    validate(x)
+    validate(y)
     this._x = x
     this._y = y
   }
@@ -31,8 +37,7 @@ export class XY {
   }
 
   set x(x: number) {
-    if (Build.dev && !Number.isInteger(x))
-      throw new Error(`${x} fractional x is forbidden.`)
+    validate(x)
     this._x = x
   }
 
@@ -41,75 +46,65 @@ export class XY {
   }
 
   set y(y: number) {
-    if (Build.dev && !Number.isInteger(y))
-      throw new Error(`${y} fractional y is forbidden.`)
+    validate(y)
     this._y = y
   }
 
   copy(): XY {
-    return new XY(this.x, this.y)
+    return fromFloatXY(FloatXY.copy(this))
   }
 
-  add(val: Readonly<XY> | number): XY {
-    val = toXY(val)
-    return new XY(this.x + val.x, this.y + val.y)
+  equal(xy: Readonly<FloatXY>): boolean {
+    return FloatXY.equal(this, xy)
   }
 
-  sub({x, y}: Readonly<XY>): XY {
-    return new XY(this.x - x, this.y - y)
+  toFloatXY(): FloatXY {
+    return {x: this.x, y: this.y}
+  }
+
+  add(val: Readonly<FloatXY> | number): XY {
+    return fromFloatXY(FloatXY.add(this, val))
+  }
+
+  sub(xy: Readonly<FloatXY>): XY {
+    return fromFloatXY(FloatXY.sub(this, xy))
   }
 
   abs(): XY {
-    return new XY(Math.abs(this.x), Math.abs(this.y))
+    return fromFloatXY(FloatXY.abs(this))
   }
 
-  mul({x, y}: Readonly<XY>): XY {
-    return new XY(this.x * x, this.y * y)
+  mul(xy: Readonly<FloatXY>): XY {
+    return fromFloatXY(FloatXY.mul(this, xy))
   }
 
-  div({x, y}: Readonly<XY>): XY {
-    return new XY(this.x / x, this.y / y)
+  div(xy: Readonly<FloatXY>): XY {
+    return fromFloatXY(FloatXY.div(this, xy))
   }
 
-  equal({x, y}: Readonly<XY>): boolean {
-    return this.x === x && this.y === y
+  min(xy: Readonly<FloatXY>): XY {
+    return fromFloatXY(FloatXY.min(this, xy))
   }
 
-  min({x, y}: Readonly<XY>): XY {
-    return new XY(Math.min(this.x, x), Math.min(this.y, y))
-  }
-
-  max({x, y}: Readonly<XY>): XY {
-    return new XY(Math.max(this.x, x), Math.max(this.y, y))
+  max(xy: Readonly<FloatXY>): XY {
+    return fromFloatXY(FloatXY.max(this, xy))
   }
 
   magnitude(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y)
+    return FloatXY.magnitude(this)
+  }
+
+  clamp(min: Readonly<FloatXY>, max: Readonly<FloatXY>): XY {
+    return fromFloatXY(FloatXY.clamp(this, min, max))
   }
 }
 
-export namespace FloatXY {
-  export function lerp(
-    from: Readonly<XY | FloatXY>,
-    to: Readonly<XY | FloatXY>,
-    ratio: number
-  ): FloatXY {
-    const x = from.x * (1 - ratio) + to.x * ratio
-    const y = from.y * (1 - ratio) + to.y * ratio
-    return {x, y}
-  }
-
-  export function clamp(
-    val: Readonly<XY | FloatXY>,
-    min: Readonly<XY>,
-    max: Readonly<XY>
-  ): FloatXY {
-    const x = NumberUtil.clamp(val.x, min.x, max.x)
-    const y = NumberUtil.clamp(val.y, min.y, max.y)
-    return {x, y}
-  }
+function validate(component: number): void {
+  if (Build.dev && !Number.isInteger(component))
+    throw new Error(`${component} fractional component forbidden.`)
 }
 
-function toXY(val: Readonly<XY> | number): Readonly<XY> {
-  return typeof val === 'number' ? new XY(val, val) : val
+/** Assumes integral FloatXY. */
+function fromFloatXY({x, y}: Readonly<FloatXY>): XY {
+  return new XY(x, y)
 }

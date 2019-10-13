@@ -40,7 +40,7 @@ export class ImageRect {
     this._scale = new XY(1, 1)
     this._images = (props && props.images) || []
     this._imageID = props && props.imageID
-    this._invalidate()
+    this.invalidate()
     if (props && props.position) this.moveBy(props.position)
     if (props && props.scale) this.scaleBy(props.scale)
   }
@@ -76,7 +76,7 @@ export class ImageRect {
 
   add(...images: readonly Image[]): void {
     this._images.push(...images)
-    this._invalidate()
+    this.invalidate()
   }
 
   replace(...images: readonly Image[]): void {
@@ -102,7 +102,7 @@ export class ImageRect {
     for (const image of this.images) image.scaleBy(to.div(this.scale))
     this._scale.x = to.x
     this._scale.y = to.y
-    this._invalidate()
+    this.invalidate()
     return UpdateStatus.UPDATED
   }
 
@@ -118,7 +118,7 @@ export class ImageRect {
     return this.images.filter(image => Rect.intersects(bounds, image.bounds))
   }
 
-  private _invalidate(): void {
+  invalidate(): void {
     const union = Rect.unionAll(this.images.map(image => image.bounds))
     if (union) {
       this._bounds.position.x = union.position.x

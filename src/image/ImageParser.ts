@@ -5,18 +5,13 @@ import {
 import {Animator, Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
-import {
-  DecamillipixelIntXYConfig,
-  DecamillipixelIntXYParser
-} from '../math/DecamillipixelXYParser'
 import {Image} from './Image'
 import {RectConfig} from '../math/RectParser'
-import {XYConfig} from '../math/XYParser'
-import {XYParser} from '../math/XYParser'
 import {XY} from '../math/XY'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Layer} from './Layer'
 import {WH} from '../math/WH'
+import {XYConfig, XYParser} from '../math/XYParser'
 
 export interface ImageConfig {
   readonly id: AtlasIDConfig
@@ -25,8 +20,8 @@ export interface ImageConfig {
   readonly layer?: LayerConfig
   readonly animator?: AnimatorConfig
   readonly scale?: XYConfig
-  readonly wrap?: DecamillipixelIntXYConfig
-  readonly wrapVelocity?: DecamillipixelIntXYConfig
+  readonly wrap?: XYConfig // Decamillipixel
+  readonly wrapVelocity?: XYConfig // Decamillipixel
   readonly alphaComposition?: AlphaCompositionConfig
 }
 
@@ -52,8 +47,8 @@ export namespace ImageParser {
       layer: parseLayer(config.layer),
       animator: config.animator ? parseAnimator(config.animator) : undefined,
       scale: parseScale(config.scale),
-      wrap: DecamillipixelIntXYParser.parse(config.wrap),
-      wrapVelocity: DecamillipixelIntXYParser.parse(config.wrapVelocity),
+      wrap: XYParser.parse(config.wrap),
+      wrapVelocity: XYParser.parse(config.wrapVelocity),
       alphaComposition: AlphaCompositionParser.parse(config.alphaComposition)
     })
   }

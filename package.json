@@ -15,7 +15,7 @@
   "license": "GPL-3.0-only AND CC-BY-SA-4.0",
   "scripts": {
     "start": "webpack-dev-server",
-    "test:unit": "jest -c jest.config.json",
+    "test:unit": "NODE_ENV=development jest -c jest.config.json",
     "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit",
     "build": "webpack -p",
     "format": "npm -s run formatter -- --write",

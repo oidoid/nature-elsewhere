@@ -6,7 +6,7 @@ import {EntityCollider} from '../collision/EntityCollider'
 import {EntityConfig} from './EntityParser'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
-import {FloatXY, XY} from '../math/XY'
+import {FloatXY} from '../math/FloatXY'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
@@ -19,6 +19,7 @@ import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 export abstract class Entity<
   Variant extends string = string,
@@ -265,6 +266,10 @@ export abstract class Entity<
 
   images(): readonly Readonly<Image>[] {
     return this._machine.images()
+  }
+
+  invalidateImageBounds(): void {
+    this._machine.invalidate()
   }
 
   replaceImages(state: State, ...images: readonly Image[]): UpdateStatus {
