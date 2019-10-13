@@ -586,6 +586,118 @@
         "x": 12,
         "y": 136
       }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 215,
+        "y": 22
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 198,
+        "y": 21
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 220,
+        "y": 36
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 195,
+        "y": 32
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 204,
+        "y": 13
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 212,
+        "y": 9
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 192,
+        "y": 6
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 208,
+        "y": 3
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 229,
+        "y": 15
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 232,
+        "y": 30
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 223,
+        "y": 11
+      }
+    },
+    {
+      "type": "bee",
+      "position": {
+        "x": 192,
+        "y": 12
+      }
+    },
+    {
+      "type": "appleTree",
+      "position": {
+        "x": 122,
+        "y": 19
+      }
+    },
+    {
+      "type": "appleTree",
+      "position": {
+        "x": 41,
+        "y": 59
+      }
+    },
+    {
+      "type": "appleTree",
+      "position": {
+        "x": 97,
+        "y": 47
+      }
+    },
+    {
+      "type": "appleTree",
+      "position": {
+        "x": 115,
+        "y": 20
+      }
     }
   ]
 }

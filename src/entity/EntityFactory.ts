@@ -1,3 +1,4 @@
+import {AppleTree} from '../entities/AppleTree'
 import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/Backpacker'
 import {Bee} from '../entities/Bee'
@@ -36,6 +37,7 @@ import {Text} from '../entities/text/Text'
 import {Toolbar} from '../entities/Toolbar'
 import {Tree} from '../entities/Tree'
 import {LevelLink} from '../entities/levelLink/LevelLink'
+import {Apple} from '../entities/Apple'
 
 export namespace EntityFactory {
   export function produce(
@@ -43,6 +45,10 @@ export namespace EntityFactory {
     props: Entity.SubProps<any, any>
   ): Entity {
     switch (props.type) {
+      case EntityType.APPLE:
+        return new Apple(atlas, props)
+      case EntityType.APPLE_TREE:
+        return new AppleTree(atlas, props)
       case EntityType.BACKPACKER:
         return new Backpacker(atlas, props)
       case EntityType.BEE:

@@ -1,6 +1,8 @@
 /** Identifier for distinguishing among entity classes and tracing configuration
     selection. */
 export enum EntityType {
+  APPLE = 'apple',
+  APPLE_TREE = 'appleTree',
   BACKPACKER = 'backpacker',
   BEE = 'bee',
   BUNNY = 'bunny',

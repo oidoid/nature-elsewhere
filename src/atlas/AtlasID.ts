@@ -1,11 +1,13 @@
 /** The Atlas.Animation identifier for all Animations in the Atlas. IDs are used
     to reference immutable image source properties, such as dimensions and
     animation duration, from the Atlas. The tag convention used here is
-    <file stem>-<state>. */
+    <file stem>-<state or variant or ancillary image>. */
 export enum AtlasID {
   ARROW_DIAGONAL = 'arrow-upRight',
   ARROW_HORIZONTAL = 'arrow-right',
   ARROW_VERTICAL = 'arrow-up',
+  APPLE_TREE = 'appleTree',
+  APPLE_TREE_SHADOW = 'appleTree-shadow',
   BACKPACKER_IDLE_DOWN = 'backpacker-idleDown',
   BACKPACKER_IDLE_RIGHT = 'backpacker-idleRight',
   BACKPACKER_IDLE_UP = 'backpacker-idleUp',
