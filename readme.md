@@ -80,14 +80,18 @@ Now that the player has moved to -0.5 px:
 | Floor.       | floor(-0.5 px) + 100.9 px | 99.9 px  | 0 px            | 99 px           | **99 px**         |
 | Ceil.        | ceil(-0.5 px) + 100.9 px  | 100.9 px | 0 px            | 100 px          | **100 px**        |
 
-It's also possible to see heavy jitter when moving diagonally. E.g., moving an
-image left one pixel on one frame and then up another pixel on the next frame.
-It is often better to instead synchronize the movements in each direction to
-occur on the same frame.
+It's also possible to see intense jittering when moving diagonally. E.g., moving
+an image left one pixel on one frame and then up another pixel on the next
+frame. It is often better to instead synchronize the movements in each direction
+to occur on the same frame.
+
+Since JavaScript only supports BigInt and typed arrays natively, the
+[XY](src/math/XY.ts) and [WH](src/math/WH.ts) classes help encapsulate some of
+the truncation inherent when working with strictly integers.
 
 #### Shader Floating Point Limits
 
-My Pixel XL's [`mediump` precision is noticeably
+My Pixel XL phone's [`mediump` precision is noticeably
 lower](https://stackoverflow.com/a/4430934/970346) than my laptop's. Since the
 program's execution time is fed into the shader as a floating point, this was
 quickly overflowing causing calculations to become quite out of sync. I've
@@ -95,8 +99,8 @@ since increased the request to `highp`.
 
 #### Floating Point Modulo
 
-I also had some floating point errors when taking relatively small divisors of
-very large numbers. [The following] seemed to work ok and is [the definition for
+Floating point errors can occur when taking relatively small divisors of very
+large numbers. [The following] seemed to work ok and is [the definition for
 OpenGL's `mod`](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/mod.xhtml):
 
 ```
@@ -108,29 +112,33 @@ val = val - Math.trunc(val / 0x4000) \* 0x4000
 
 ### Scaling
 
-It took me way too long to figure this out but only integer scaling with a
-minimum size works the way I wanted.
+Integer scaling with a minimum size seems to work best.
 
+- Maximum integer scaling to the minimum dimension (width or height) can leave
+  large empty areas. For example, these might be rendered as vacant black bars
+  on the left and right.
 - Noninteger scaling produces odd pixels that are inconsistently sized. This is
   especially noticeable for such large, low-resolution virtual pixels. Either
-  they're slightly larger than their neighbors or, if I recall correctly,
-  missing.
+  they're slightly larger than their neighbors, missing, or rendered incorrectly
+  (e.g., black or glitchy) due to integer assumptions elsewhere.
 - Given an ideal viewport size, integer scaling usually generates an image
-  that's either too large or too small. I found that picking the maximum integer
-  scale that shows a minimum viewport size works well. The result is either a
-  viewport that is scaled to exactly the document size or the next size smaller.
+  that's either too large or too small. Picking the maximum integer scale that
+  shows a minimum viewport size works well. The result is either a
+  viewport that is scaled exactly to the document size or the next size larger.
   In the (frequent) latter case, the result is simply to show larger viewport
   than ideal. If different minimum viewport sizes are used, the scaling may
-  vary which means that pixels will vary in size between levels. I think this
-  works visually. Even with integral scaling, both dimensions (which are likely
-  disproportionate) must be considered and rounding up must be performed.
-  Otherwise, strange and often subtle visual artifacts will creep in.
+  vary which means that pixels will vary in size between levels. This is a
+  compromise but seems to work visually. Even with integral scaling, both
+  dimensions (which are likely disproportionate) must be considered and rounding
+  up must be performed. Otherwise, strange and often subtle visual artifacts
+  will creep in.
 
-The scaling transformation can be done in a number of ways. I think the best is
-probably to change the canvas and viewport size to match the document every
-frame, and then do all the scaling in WebGL. This keeps all the math as a
-projection in WebGL which keeps things much simpler than diving into the world
-of CSS.
+The scaling transformation can be done in a number of ways. The best approach
+may be to change the canvas and viewport size to match the document every frame,
+and then do all the scaling in WebGL. This keeps all the math as a projection
+in WebGL which keeps things much simpler than diving into the world of CSS. Note
+also that the width and height Canvas attributes are changed, not the style
+width and height properties. The latter is a scaling operation.
 
 Listening for window size events asynchronously seems to be a common pitfall as
 well, which I stumbled into while working with Phaser.
@@ -150,12 +158,12 @@ used consistently.
 
 The [Khronos website has microscopic examples on how to properly manage a
 renderer](https://www.khronos.org/webgl/wiki/HandlingContextLost).
-Of course, I seemed to have neverending difficulties in writing a slim manager.
-Its design was encumbered by other systemic factors but I just couldn't seem to
-wrap my head around how to handle the states nicely in TypeScript and the code
-was a disheartening disaster for a long time. I eventually stripped everything
-away and wrote a synchronous version. I then realized the loop couldn't "wake"
-back up once suspended, and mimicked the simple synchronous version so much as
+Of course, I seemed to have unending difficulties in writing a slim manager. Its
+design was encumbered by other systemic factors but I just couldn't seem to wrap
+my head around how to handle the states nicely in TypeScript and the code was a
+disheartening disaster for a long time. I eventually stripped everything away
+and wrote a synchronous version. I then realized the loop couldn't "wake" back
+up once suspended, and mimicked the simple synchronous version so much as
 possible using EventListeners which seems to work pretty well.
 
 ### Isometric
@@ -165,17 +173,17 @@ side-scroller. That is, a flat as in paper, no depth, wallpaper-like game. It
 was very easy for me to envision and reason about conceptually, both technically
 and visually, and I never thought of it any other way. However, I don't think it
 fit in well with the themes of adventure and exploration nearly so well. I had a
-hard time picturing exploration without adding the usual platform mechanics of
+hard time picturing exploring without adding the usual platform mechanics of
 jumping from place to place. I love pre-scripted content but it felt much too
 linear. My feelings were that I wanted to avoid platformer mechanics if possible
 because there are many such games and I think it could distract from a sense of
 wandering. Maybe it wouldn't have been bad if I had been able to do some kind of
-enjoyable water physics but bah.
+enjoyable water physics but I didn't try.
 
 So eventually I worked my way towards an isometric style which has been very
 difficult for me to visualize but has the atmosphere I was seeking. I played a
 lot of Diablo II and a little SimCity 2000 but throughout development and long
-before, I always come back to "a simple good game would be a nature-y take on
+before, I always came back to "a simple good game would be a nature-y take on
 Super Mario Bros. 3." Nature Elsewhere is kind of a mix of them all, I suppose.
 
 I drew a lot of contrast, pixeling, and inspiration in general from
@@ -195,7 +203,7 @@ Initially, I wanted to pursue a minimalismistic style as much as possible
 because I'm not a good artist and I hoped that the constraints would help me be
 more efficient and eliminate some opportunities for my shortcomings to show.
 This style choice went all the way back to "Once and Future Cactus" and, to an
-even greater extent, "Sound of Water." Well, after working on nature elsewhere
+even greater extent, "Sound of Water." Well, after working on Nature Elsewhere
 for some long time, I just wanted more. The backpacker avatar was about as
 minimal as you can get, seven black pixels when idle:
 
@@ -210,7 +218,8 @@ xx
 There were some things I really liked about it. Well, I was doodling one evening
 and came up with some designs I thought I might like much better if I could
 animate them. Another night, I had the walking animation and I thought it was
-quite an improvement. I'm still pursuing minimalism but less aggressively so.
+quite an improvement. I'm still pursuing minimalism but less aggressively so. I
+even increased the font size from three by four pixels to five by five!
 
 ### Palettes
 
@@ -219,14 +228,15 @@ bleached look you see on a blindingly bright day, or maybe my recollections of
 the bloom effect in Ico and Shadow of the Colossus, but it wasn't so enjoyable
 in practice. I focused on giving the palette more saturation and contrast with
 fewer colors over _many_ iterations including several rewrites. I think this
-works much better for a pixel game.
+works much better for a pixel game and reminds of the palettes used in the NES
+Teenage Mutant Ninja Turtles games or some of the X-Men arcade games.
 
 I struggled a lot with palette swapping too. Old versions of the engine
 supported many complex visual operations, including palette swapping. Not in
 itself complex, but the system I built around the feature, in combination with
 other features, really made development a lot more complex and slower than it
 needed to be and I just had a hard time grasping how multiple palettes should
-work.
+work. I am striving for a minimal palette for the forseeable future.
 
 ### Entities
 
@@ -240,7 +250,7 @@ usually easier reason about after its written. I'm not sure I could generalize
 which is easier to conceptualize a system for.
 
 I am quite pleased to have finally extracted a lot of the data into JSON
-configuration files, as opposed to code, which has a number of benefits: 1)
+configuration files, as opposed to code, which has a number of benefit s: 1)
 reasoning about data is closer to reasoning a picture than code (much easier and
 fewer bugs) 2) dumb data is easier to serialize and deserialize than dynamic
 code. That number is more than two, I think, but that's all I have at the
@@ -316,15 +326,36 @@ The `type` syntax looks nicer than `interface` and allows `Readonly` wrappers.
 Prettier also formats `interface` types more verbosely than single line `type`
 types. However, VS Code presents types declared with `type` as property
 collections. Types declared with `interface` syntax are presented as proper
-named types. Given these tradeoffs, when a type can fit on one line, use `type`,
-otherwise use `interface`.
+named types. Given the lengthy printouts of types by TypeScript, interfaces are
+preferred.
 
 #### Imports
 
-Wildcard imports are used to better support a functional programming style. When
-order is irrelevant, case-insensitive alphabetical is used.
+Namespaces are favored because they:
 
-For comparison, consider the following class:
+- Give a pattern to every module that prevents naming conflicts and reduces
+  cognitive load.
+- Significantly improve automated refactors. VS Code understand namespaces well
+  and reliably supports renaming as opposed to wildcard and default imports.
+- Define grouping at declaration time and encourage its usage by consumers. This
+  allows export naming to be terser given the context provided by the namespace
+  name and doesn't require naming by the consumer.
+
+PascalCase naming is used for namespaces and classes to avoid collision with
+variables.
+
+I wish TypeScript supported a syntax for declaring the current file to be within
+a namespace without the burden of a file level indent.
+
+When order is irrelevant, case-insensitive alphabetical is used.
+
+#### Classes and Utilities
+
+Classes are used where polymorphic behavior or strong encapsulation is required.
+Otherwise, functional utilities are used because they're far easier to compose
+and tend to be more explicit and simpler.
+
+For example, consider the following class:
 
 ```ts
 export class Random {
@@ -350,30 +381,47 @@ console.log(random.next())
 Now the functional implementation:
 
 ```ts
-export function init(seed: number) {
-  return seed & 0xff
-}
-export function next(seed: number) {
-  return {seed: (seed + 1) & 0xff, val: seed ^ 0xff}
+export namespace Random {
+  export function init(seed: number) {
+    return seed & 0xff
+  }
+  export function next(seed: number) {
+    return {seed: (seed + 1) & 0xff, val: seed ^ 0xff}
+  }
 }
 ```
 
-And its usage with wildcard imports:
+And its usage:
 
 ```ts
-import * as Random from './random'
+import {Random} from './random'
 
 let random = Random.next(random.init(0))
 console.log(random.val)
 ```
 
-The named imports could be used but they lack the context of dotting off Random.
+It is very easy to forget to mutate random so a class is used.
 
-A proper TypeScript namespace could also be used, which VS Code has better
-refactor support for and it may also encourage more consistent usage, but this
-adds an extra level of indentation to every file.
+#### Deep-ish Objects
 
-PascalCase is used to avoid collision with variables.
+Flat objects are often nice to work with, especially when writing configuration
+files by hand. However, they seem to be harder to compose:
+
+- TypeScript's type checker will accept any superset of a type for better and
+  worse. E.g., a Rect type with x, y, w, and h members will match an XY or WH
+  type with x and y or w and h members which can introduce extra properties
+  unexpectedly by the spread and rest operators in particular. Grab-bag flat
+  objects make this potential issue more prevalent.
+- Flat objects prevent composing references for better and worse. For example, a
+  a WH object cannot be composed by reference into a flat Rect object.
+- Flat types seem more like inheritance than composed members. E.g., a flat Rect
+  should probably be expressed as `interface Rect extends XY, WH {}` as opposed
+  to a composition `interface Rect {readonly size: WH; readonly position: XY}`.
+
+For these reasons, compositions are favored. The downsides seem to be:
+
+- Verbose property accessors.
+- Poor built-in support for deep immutable types.
 
 #### Divide State and Code
 
@@ -432,6 +480,25 @@ clone._flipped = flipper.flipped() // Forbidden.
 ```
 
 Favor an alternative approach. E.g.:
+
+```ts
+function newFlipper(state: number, flipped: number = 0) {
+  return {
+    state(): number {
+      return state
+    },
+    flip(): void {
+      ++flipped
+      state ^= 0xff
+    },
+    flipped(): number {
+      return flipped
+    }
+  }
+}
+```
+
+Or:
 
 ```ts
 type Flipper = Readonly<{state: number; flipped: number}>
@@ -537,23 +604,37 @@ functional and object-oriented implementations:
 
 ```ts
 // Functional
-
-export function seed(seed: number): number {
-  seed = seed % 0x7fff_ffff
-  if (seed <= 0) seed += 0x7fff_fffe
-  return seed
+export interface Random {
+  readonly val: number
+  readonly seed: number
 }
 
-export function float(seed: number, min = 0, max = 1) {
-  seed = (seed * 16807) % 0x7fff_ffff
-  const val = min + ((max - min) * (seed - 1)) / 0x7fff_fffe
-  return {seed, val}
-}
+export namespace Random {
+  export function seed(seed: number): number {
+    seed = seed % 0x7fff_ffff
+    if (seed <= 0) seed += 0x7fff_fffe
+    return seed
+  }
 
-export function int(seed: number, min = 0, max = Number.MAX_SAFE_INTEGER) {
-  let val
-  ;({seed, val} = float(seed, min, max))
-  return {seed, val: Math.floor(val)}
+  export function float(
+    seed: number,
+    min: number = 0,
+    max: number = 1
+  ): Random {
+    seed = (seed * 16807) % 0x7fff_ffff
+    const val = min + ((max - min) * (seed - 1)) / 0x7fff_fffe
+    return {seed, val}
+  }
+
+  export function int(
+    seed: number,
+    min: number = 0,
+    max: number = Number.MAX_SAFE_INTEGER
+  ): Random {
+    let val
+    ;({seed, val} = float(seed, min, max))
+    return {seed, val: Math.floor(val)}
+  }
 }
 ```
 
@@ -580,16 +661,12 @@ export class Random {
 Both look ok to me:
 
 - The number of lines of code and readability are similar.
-- The functional approach has a lesser level of indent but that would be lost if
-  it were wrapped in a namespace.
 - The usual tradeoff of explicit (functional) vs implicit (object-oriented)
   state is present but the object is quite tightly scoped so the negative impact
   of the latter is minimal.
 - The functional approach requires a special seed-only state since there's no
   valid value at construction. The object-orient approach does a little bit of
   work in the constructor to avoid the intermediate seed-only state.
-- I've omitted return types for the functional result objects. For more complex
-  code, I may need them.
 - "val" is used for the random number generated. "random" was considered but
   a client may call their result object "random" and `random.random` doesn't
   read as nicely as `random.val`.
@@ -600,7 +677,7 @@ threading state through the system. For instance, the seed:
 ```ts
 // Functional
 
-function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
+function randomPoint(seed: number): Random {
   let x
   ;({seed, val: x} = Random.int(seed, 0, 10))
   let y
@@ -642,7 +719,7 @@ Random) is verbose and fallible:
 - It's easy to forget to return the new seed.
 - It's easy to misuse functions when the programmer isn't in a "thinking about
   random" space. E.g., the following functional implementation is incorrect but
-  compiles:
+  compiles without warning:
   ```ts
   function randomPoint(seed: number): Readonly<{seed: number; point: XY}> {
     return {
@@ -666,10 +743,10 @@ Random) is verbose and fallible:
   ```
 
 I love how plain and readable the functional implementation is but using it is a
-drudgery and entirely unfun. The object-oriented implementation isn't
-appreciably worse, is easy to write and painless to use. I also think that
-certain expressions, such as polymorphic behavior, can be more natural in
-object-oriented designs.
+drudgery, loses some of the typing provided by classes, and entirely unfun. The
+object-oriented implementation isn't appreciably worse, is easy to write and
+painless to use. I also think that certain expressions, such as polymorphic
+behavior, can be more natural in object-oriented designs.
 
 Functional programming conventions are preferred. That is:
 
@@ -809,6 +886,12 @@ The following abbreviations are only used for function locals:
   programming language
 - WH: having width and height
 - XY: having _x_- and _y_-coordinate dimensions such as a position
+
+## Known Issues
+
+- iOS only supports WebGL v1.
+- [Switching apps on Android may show a big white bar on the bottom of the
+  screen.](https://bugs.chromium.org/p/chromium/issues/detail?id=1013888)
 
 ## License
 

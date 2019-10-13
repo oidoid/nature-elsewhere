@@ -6,7 +6,7 @@ import {XY} from './XY'
 
 export type RectArrayConfig = Maybe<readonly RectConfig[]>
 export type RectConfig = Maybe<
-  Partial<{position?: Partial<XY>; size?: Partial<WH>}>
+  Partial<Readonly<{position?: Partial<XY>; size?: Partial<WH>}>>
 >
 
 export namespace RectParser {
