@@ -5,7 +5,7 @@
   "minViewport": {"w": 96, "h": 96},
   "cam": {"followID": "uiPlayer"},
   "planes": [{"type": "plane", "variant": "paleGreen"}],
-  "cursor": {"type": "uiCursor"},
+  "cursor": {"type": "uiCursor", "variant": "reticle"},
   "destination": {"type": "uiDestinationMarker"},
   "hud": [
     {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"}
