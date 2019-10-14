@@ -1,16 +1,17 @@
+import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
 import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
-import {Rect} from '../math/Rect'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Image} from '../image/Image'
-import {Layer} from '../image/Layer'
-import {AtlasID} from '../atlas/AtlasID'
-import {Atlas} from 'aseprite-atlas'
 import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {Rect} from '../math/Rect'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 
 export class Bee extends Entity<Bee.Variant, Bee.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Bee.Variant, Bee.State>) {
@@ -37,7 +38,7 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

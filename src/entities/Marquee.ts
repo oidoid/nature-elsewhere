@@ -1,22 +1,23 @@
+import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
 import {EntityCollider} from '../collision/EntityCollider'
 import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
-import {Input} from '../inputs/Input'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {XY} from '../math/XY'
-import {UpdateState} from '../updaters/UpdateState'
-import {WH} from '../math/WH'
+import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Image} from '../image/Image'
-import {Atlas} from 'aseprite-atlas'
-import {AtlasID} from '../atlas/AtlasID'
-import {Layer} from '../image/Layer'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {NumberUtil} from '../math/NumberUtil'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
+import {NumberUtil} from '../math/NumberUtil'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
   selection?: Entity
@@ -138,7 +139,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

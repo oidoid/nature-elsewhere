@@ -9,11 +9,13 @@ import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
 import {EntityParser} from '../../entity/EntityParser'
 import {EntityPicker} from '../EntityPicker'
+import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {
   FollowCam,
   FollowCamOrientation
 } from '../../updaters/followCam/FollowCam'
+import {FollowCamUpdater} from '../../updaters/followCam/FollowCamUpdater'
 import {Group} from '../group/Group'
 import {Image} from '../../image/Image'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
@@ -21,6 +23,7 @@ import {JSONValue} from '../../utils/JSON'
 import {Layer} from '../../image/Layer'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
 import {Level} from '../../levels/Level'
+import {LevelEditorSandbox} from '../LevelEditorSandbox'
 import {LevelType} from '../../levels/LevelType'
 import {LocalStorage} from '../../storage/LocalStorage'
 import {Marquee} from '../Marquee'
@@ -33,8 +36,6 @@ import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
-import {FollowCamUpdater} from '../../updaters/followCam/FollowCamUpdater'
-import {LevelEditorSandbox} from '../LevelEditorSandbox'
 
 export class LevelEditorPanel extends Entity<
   LevelEditorPanel.Variant,
@@ -439,7 +440,7 @@ export class LevelEditorPanel extends Entity<
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 
   private _updateNumberCheckbox(

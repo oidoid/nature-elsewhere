@@ -1,25 +1,26 @@
 import {Atlas} from 'aseprite-atlas'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
+import {DownloadUtil} from '../storage/DownloadUtil'
 import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
+import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {FollowCam, FollowCamOrientation} from '../updaters/followCam/FollowCam'
+import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
+import {LevelEditorSandbox} from './LevelEditorSandbox'
 import {LevelLink} from './levelLink/LevelLink'
 import {LevelType} from '../levels/LevelType'
 import {LocalStorage} from '../storage/LocalStorage'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {reaullyLoadTheStuff} from './levelEditorPanel/LevelEditorPanel'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
-import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
-import {DownloadUtil} from '../storage/DownloadUtil'
-import {reaullyLoadTheStuff} from './levelEditorPanel/LevelEditorPanel'
-import {LevelEditorSandbox} from './LevelEditorSandbox'
 
 export class LevelEditorMenu extends Entity<
   LevelEditorMenu.Variant,
@@ -156,7 +157,7 @@ export class LevelEditorMenu extends Entity<
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

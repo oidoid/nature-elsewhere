@@ -2,19 +2,20 @@ import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {FollowCamOrientation, FollowCam} from '../updaters/followCam/FollowCam'
+import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
-import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {UpdateState} from '../updaters/UpdateState'
 
 export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
   private readonly _followCam: DeepImmutable<FollowCam>
@@ -64,7 +65,7 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

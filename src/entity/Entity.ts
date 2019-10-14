@@ -3,17 +3,15 @@ import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {EntityCollider} from '../collision/EntityCollider'
-import {EntityConfig} from './EntityParser'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {FloatXY} from '../math/FloatXY'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
-import {JSONValue, JSONObject} from '../utils/JSON'
+import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -415,61 +413,6 @@ export abstract class Entity<
   collides(_entities: readonly Entity[], _state: UpdateState): void {}
 
   abstract toJSON(): JSONValue
-
-  protected _toJSON(
-    subDefaults: Omit<
-      DeepImmutable<Entity.SubProps<Variant, State | Entity.BaseState>>,
-      'children' | 'map' | 'collisionBodies'
-    >
-  ): JSONObject {
-    const defaults: typeof Entity.defaults & typeof subDefaults = {
-      ...Entity.defaults,
-      state: Entity.BaseState.HIDDEN,
-      ...ObjectUtil.definedEntry(subDefaults, 'id'),
-      ...ObjectUtil.definedEntry(subDefaults, 'type'),
-      ...ObjectUtil.definedEntry(subDefaults, 'variant'),
-      ...ObjectUtil.definedEntry(subDefaults, 'position'),
-      ...ObjectUtil.definedEntry(subDefaults, 'velocity'),
-      ...ObjectUtil.definedEntry(subDefaults, 'imageID'),
-      ...ObjectUtil.definedEntry(subDefaults, 'scale'),
-      ...ObjectUtil.definedEntry(subDefaults, 'state'),
-      ...ObjectUtil.definedEntry(subDefaults, 'updatePredicate'),
-      ...ObjectUtil.definedEntry(subDefaults, 'collisionType'),
-      ...ObjectUtil.definedEntry(subDefaults, 'collisionPredicate')
-    }
-    const diff: Writable<EntityConfig> = {type: this.type}
-    if (this.id !== defaults.id) diff.id = this.id
-    if (this.variant !== defaults.variant) diff.variant = this.variant
-    if (!this.bounds.position.equal(defaults.position))
-      diff.position = {
-        ...(this.bounds.position.x !== defaults.position.x && {
-          x: this.bounds.position.x
-        }),
-        ...(this.bounds.position.y !== defaults.position.y && {
-          y: this.bounds.position.y
-        })
-      }
-    if (!this.velocity.equal(defaults.velocity))
-      diff.velocity = {
-        ...(this.velocity.x !== defaults.velocity.x && {x: this.velocity.x}),
-        ...(this.velocity.y !== defaults.velocity.y && {y: this.velocity.y})
-      }
-    if (this.imageID() && this.imageID() !== defaults.imageID)
-      diff.imageID = this.imageID()
-    if (!this.scale().equal(defaults.scale))
-      diff.scale = {
-        ...(this.scale().x !== defaults.scale.x && {x: this.scale().x}),
-        ...(this.scale().y !== defaults.scale.y && {y: this.scale().y})
-      }
-    if (this.state() !== defaults.state) diff.state = this.state()
-    if (this.updatePredicate !== defaults.updatePredicate)
-      diff.updatePredicate = this.updatePredicate
-    if (this.collisionType !== defaults.collisionType)
-      diff.collisionType = this.collisionType
-    if (this.collisionPredicate !== defaults.collisionPredicate)
-      diff.collisionPredicate = this.collisionPredicate
-    return <JSONObject>(<unknown>diff)
-  }
 
   private _updatePosition(state: UpdateState): UpdateStatus {
     // [todo] level bounds checking

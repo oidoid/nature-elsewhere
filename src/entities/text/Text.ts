@@ -1,19 +1,20 @@
-import {Entity} from '../../entity/Entity'
-import {Layer} from '../../image/Layer'
-import {Limits} from '../../math/Limits'
-import {WH} from '../../math/WH'
-import {XY} from '../../math/XY'
+import {AlphaComposition} from '../../image/AlphaComposition'
 import {Atlas} from 'aseprite-atlas'
-import {Rect} from '../../math/Rect'
-import {TextLayout} from '../../text/TextLayout'
-import {Image} from '../../image/Image'
 import {AtlasID, MEM_FONT_PREFIX} from '../../atlas/AtlasID'
-import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
+import {Entity} from '../../entity/Entity'
+import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
+import {Image} from '../../image/Image'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONObject} from '../../utils/JSON'
-import {AlphaComposition} from '../../image/AlphaComposition'
+import {Layer} from '../../image/Layer'
+import {Limits} from '../../math/Limits'
 import {ObjectUtil} from '../../utils/ObjectUtil'
+import {Rect} from '../../math/Rect'
+import {TextLayout} from '../../text/TextLayout'
+import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
+import {WH} from '../../math/WH'
+import {XY} from '../../math/XY'
 
 export class Text extends Entity<Text.Variant, Text.State> {
   text: string
@@ -62,7 +63,7 @@ export class Text extends Entity<Text.Variant, Text.State> {
   }
 
   toJSON(): JSONObject {
-    const diff = this._toJSON(defaults)
+    const diff = EntitySerializer.serialize(this, defaults)
     if (this.text !== defaults.text) diff.text = this.text
     if (this.textLayer !== defaults.textLayer) diff.textLayer = this.textLayer
     if (!this.textScale.equal(defaults.textScale))

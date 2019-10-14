@@ -2,13 +2,14 @@ import {Checkbox} from './Checkbox'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdateState} from '../updaters/UpdateState'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 export class RadioCheckboxGroup extends Entity<
   RadioCheckboxGroup.Variant,
@@ -61,7 +62,7 @@ export class RadioCheckboxGroup extends Entity<
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

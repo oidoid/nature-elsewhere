@@ -1,14 +1,15 @@
-import {Entity} from '../entity/Entity'
-import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
-import {AtlasID} from '../atlas/AtlasID'
 import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
 import {CollisionType} from '../collision/CollisionType'
-import {XY} from '../math/XY'
-import {Layer} from '../image/Layer'
+import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
+import {EntityType} from '../entity/EntityType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {XY} from '../math/XY'
 
 export class Path extends Entity<Path.Variant, Path.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Path.Variant, Path.State>) {
@@ -28,7 +29,7 @@ export class Path extends Entity<Path.Variant, Path.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

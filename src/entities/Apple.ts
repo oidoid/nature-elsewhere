@@ -1,11 +1,12 @@
-import {Entity} from '../entity/Entity'
-import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
+import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
-import {Atlas} from 'aseprite-atlas'
+import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
+import {EntityType} from '../entity/EntityType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
@@ -27,7 +28,7 @@ export class Apple extends Entity<Apple.Variant, Apple.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

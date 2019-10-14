@@ -1,17 +1,18 @@
-import {Entity} from '../entity/Entity'
-import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
-import {AtlasID} from '../atlas/AtlasID'
-import {XY} from '../math/XY'
-import {Layer} from '../image/Layer'
-import {CollisionPredicate} from '../collision/CollisionPredicate'
-import {Rect} from '../math/Rect'
-import {CollisionType} from '../collision/CollisionType'
-import {Atlas} from 'aseprite-atlas'
-import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Apple} from './Apple'
+import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
+import {CollisionPredicate} from '../collision/CollisionPredicate'
+import {CollisionType} from '../collision/CollisionType'
+import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
+import {EntityType} from '../entity/EntityType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
+import {ObjectUtil} from '../utils/ObjectUtil'
+import {Rect} from '../math/Rect'
+import {XY} from '../math/XY'
 
 export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
   constructor(
@@ -44,7 +45,7 @@ export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

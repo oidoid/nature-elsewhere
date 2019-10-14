@@ -1,18 +1,19 @@
-import {Entity} from '../entity/Entity'
-import {Input} from '../inputs/Input'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {UpdateState} from '../updaters/UpdateState'
-import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
+import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
+import {EntityType} from '../entity/EntityType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Input} from '../inputs/Input'
+import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {Image} from '../image/Image'
-import {AtlasID} from '../atlas/AtlasID'
-import {Layer} from '../image/Layer'
-import {Atlas} from 'aseprite-atlas'
-import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
 
 export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
@@ -59,7 +60,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

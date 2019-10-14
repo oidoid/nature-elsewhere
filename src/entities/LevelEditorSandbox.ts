@@ -1,13 +1,13 @@
+import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Entity} from '../entity/Entity'
 import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONArray} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {ReadonlyRect, Rect} from '../math/Rect'
 
 export class LevelEditorSandbox extends Entity<
   LevelEditorSandbox.Variant,

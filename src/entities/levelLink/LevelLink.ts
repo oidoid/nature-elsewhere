@@ -1,6 +1,7 @@
 import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../../atlas/AtlasID'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
+import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {Input} from '../../inputs/Input'
 import {JSONObject} from '../../utils/JSON'
@@ -39,7 +40,7 @@ export class LevelLink extends Text {
   }
 
   toJSON(): JSONObject {
-    const diff = super._toJSON(defaults)
+    const diff = EntitySerializer.serialize(this, defaults)
     if (this._link) diff.link = this._link
     return diff
   }

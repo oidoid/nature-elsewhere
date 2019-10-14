@@ -2,19 +2,20 @@ import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {EntityFactory} from '../entity/EntityFactory'
 import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType, UI_KEY_PREFIX} from '../entity/EntityType'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import * as memFont from '../text/memFont.json'
 import {NumberUtil} from '../math/NumberUtil'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {WH} from '../math/WH'
-import {XY} from '../math/XY'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {JSONValue} from '../utils/JSON'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 const pickerSize: Readonly<WH> = Object.freeze(new WH(32, 27))
 const entityWindowSize: Readonly<WH> = Object.freeze(
@@ -117,7 +118,7 @@ export class EntityPicker extends Entity<
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 
   private hideActiveChild(): void {

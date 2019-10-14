@@ -1,12 +1,13 @@
 import {Atlas} from 'aseprite-atlas'
-import {Text} from './text/Text'
 import {Build} from '../utils/Build'
-import {EntityType} from '../entity/EntityType'
 import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
+import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {Text} from './text/Text'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 
 export class DateVersionHash extends Entity<
   DateVersionHash.Variant,
@@ -33,7 +34,7 @@ export class DateVersionHash extends Entity<
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

@@ -3,21 +3,22 @@ import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Input} from '../inputs/Input'
+import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
+import {Limits} from '../math/Limits'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {Text} from './text/Text'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
-import {JSONValue, JSONObject} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
-import {Limits} from '../math/Limits'
 
 export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
   private _textLayer: Layer
@@ -94,7 +95,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
   }
 
   toJSON(): JSONValue {
-    const diff = <JSONObject>this._toJSON(defaults)
+    const diff = EntitySerializer.serialize(this, defaults)
     if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
     if (!this._textScale.equal(defaults.textScale))
       diff.textScale = {x: this._textScale.x, y: this._textScale.y}

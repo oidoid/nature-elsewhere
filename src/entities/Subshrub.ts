@@ -1,12 +1,13 @@
-import {Entity} from '../entity/Entity'
-import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
-import {AtlasID} from '../atlas/AtlasID'
-import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
 import {CollisionType} from '../collision/CollisionType'
+import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
+import {EntityType} from '../entity/EntityType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
@@ -33,7 +34,7 @@ export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 

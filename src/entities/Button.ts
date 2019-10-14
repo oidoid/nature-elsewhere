@@ -1,19 +1,20 @@
-import {Entity} from '../entity/Entity'
-import {Input} from '../inputs/Input'
-import {Level} from '../levels/Level'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {UpdateState} from '../updaters/UpdateState'
-import {EntityType} from '../entity/EntityType'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {CollisionType} from '../collision/CollisionType'
-import {CollisionPredicate} from '../collision/CollisionPredicate'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
-import {AtlasID} from '../atlas/AtlasID'
-import {Layer} from '../image/Layer'
 import {Atlas} from 'aseprite-atlas'
+import {AtlasID} from '../atlas/AtlasID'
+import {CollisionPredicate} from '../collision/CollisionPredicate'
+import {CollisionType} from '../collision/CollisionType'
+import {Entity} from '../entity/Entity'
+import {EntitySerializer} from '../entity/EntitySerializer'
+import {EntityType} from '../entity/EntityType'
+import {Image} from '../image/Image'
+import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
+import {Layer} from '../image/Layer'
+import {Level} from '../levels/Level'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdateState} from '../updaters/UpdateState'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 export class Button extends Entity<Button.Variant, Button.State> {
   clicked: boolean
@@ -79,7 +80,7 @@ export class Button extends Entity<Button.Variant, Button.State> {
   }
 
   toJSON(): JSONValue {
-    return this._toJSON(defaults)
+    return EntitySerializer.serialize(this, defaults)
   }
 }
 
