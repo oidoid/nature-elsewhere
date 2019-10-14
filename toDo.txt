@@ -1,19 +1,18 @@
-Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with tremendous colors.
+Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built game with tremendous colors.
   Make large, lavish, content-rich levels.
-    Add "a summary of you" / inven / journal screen level.
-    Add old options UI.
-    Add title, editor, and pause levels.
-      Make a level editor.
-        Make outstanding UI.
-          How will I implement it?
-            What examples are there for making 9png like UI?
-              Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
-              What examples are there of single file C libraries for UI?
-                What other single file libraries should I take a page from?
-                  How can I be more single file functional and structural?
+    Add options UI.
+    Add pause level.
+    Improve the title screen and Nature Elsewhere logo. It needs to pop.
+    Improve the level editor and toolbelt UI. Shift a little more towards ornate.
+      Maybe a big heart bar or health globe.
+    Add inventory management.
+      Add "a summary of you" / inven / journal screen level.
+      Add more items to gather like artifacts and animal byproducts like bee stingers.
+    Add gameplay.
+      Maybe you attack by touching enemies at diagonally.
+      Are there ranged attacks like bow and arrows?
     Make many wonderful entities.
-      Copy the old content (images and code) from previous commits, tmp/, and old animation and shader techniques.
-      I think I only need left / right, back, and forward animation states.
+      Add more monuments and stained glass.
       Add tornados.
       Add lightning to the cloud entity.
       Add cactus.
@@ -23,16 +22,17 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with
       Add waterfall.
       Add quicksand.
       Add more trees.
+      Add level boundaries. Maybe tileable water.
+      Improve the grass clumps. The mocks seem a lot nicer. Maybe just make them all shorter?
+      Improve grass patches. These are currently path hacks and should be nicer.
       Check that the entities have strong, even, isometric perspectives.
       I need a better way to manage states and transitions.
         Entities are currently convenient configurations to pass to image factories that generate groups of images. The default entity can literally just be images.
         There's some great examples of how to do player states, FSMs, and collision detection / gravity in https://script-8.github.io/?id=a3b40a159db3c794c1024fba73f4eb99.
         There's some good examples in Underrun too. E.g., the Entity class: https://github.com/phoboslab/underrun/blob/master/source/entity-sentry.js
-        I may want to add flipped states given shadow alignment or I can try to account for it with event offsets in the image itself.
       Consider alternative rain shader patterns.
       Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
       Add some kind of unstoppable giant monster / colossus / death entity.
-    Add collision detection.
   Synthesize sounds.
     Understand the basics: https://news.ycombinator.com/item?id=20272346
     Rename audio player to speaker or something.
@@ -40,17 +40,10 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with
       Synthesize crickets, wind, rain, thunder, and birds.
     Survey all the demos in Super Collider.
   Improve the structure. Write little, clearly.
-    Add note about declarative style to readme. Declarative configs are awesome!
-    In CS, everything was an object. This worked. But we also did tricks like overlaying memory onto plain data.
-    Do I keep it flat (e.g., extends XY) or try to stick to composing types?
-      GLSL's trunc() operates on any kind of vector, e.g. JS can take two Record<keyof any, number> to return a new sum object or test equality.
-    Improve my JSON config DSL.
-      Explore better ways to represent states.
-      Add configuration tests that check the atlas.
-        Check that all animation IDs references by entities exist in the parsed atlas.
     What TypeScript and other open source examples should I consider?
     Re-review WebGL implementations.
     Update the readme.
+      It's pretty incoherent and out of date WRT the devlog, the codebase, and Twitter.
   Add windy grass displacement shader to make the fields pop.
     Maybe look through shader toys and displacement shader 101s.
       https://forums.tigsource.com/index.php?topic=40539.20
@@ -61,8 +54,8 @@ Develop Nature Elsewhere into a complete, beautiful, fun, finely built game with
   Review Diablo tile IDs: https://www.boristhebrave.com/2019/07/14/dungeon-generation-in-diablo-1/
 
 aseprite-atlas
-  [dev] Add demo, and better document the API and examples.
   Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.
+  Keep thinking on OO tradeoffs.
 mem-font
   Push mem-font changes upstream and rework project.
   Move mem-font to oddoid repo.
