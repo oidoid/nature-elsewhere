@@ -30,7 +30,7 @@
     "aseprite-atlas": "2.0.5",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.0.4",
-    "fork-ts-checker-webpack-plugin": "1.5.0",
+    "fork-ts-checker-webpack-plugin": "1.5.1",
     "jest": "24.9.0",
     "pre-commit": "1.2.2",
     "prettier": "github:prettier/prettier#7cb0c23",
@@ -38,7 +38,7 @@
     "ts-jest": "24.1.0",
     "ts-loader": "6.2.0",
     "typescript": "3.6.4",
-    "webpack": "4.41.0",
+    "webpack": "4.41.1",
     "webpack-cli": "3.3.9",
     "webpack-dev-server": "3.8.2"
   },
