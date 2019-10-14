@@ -242,7 +242,7 @@
     {
       "type": "tree",
       "position": {
-        "x": 157,
+        "x": 155,
         "y": 130
       }
     },
@@ -744,8 +744,16 @@
     {
       "type": "cloud",
       "position": {
-        "x": 156,
-        "y": 153
+        "x": 242,
+        "y": 137
+      }
+    },
+    {
+      "type": "monument",
+      "variant": "medium",
+      "position": {
+        "x": 203,
+        "y": 118
       }
     }
   ]
