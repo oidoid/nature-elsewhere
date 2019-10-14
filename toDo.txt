@@ -1,46 +1,80 @@
 Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built game with tremendous colors.
   Make large, lavish, content-rich levels.
-    Add options UI.
-    Add pause level.
-    Improve the title screen and Nature Elsewhere logo. It needs to pop.
-    Make the level editor more featureful.
-      Add scale and velocity fields.
-      Set marquee selection on entity drop and update all fields.
-      Encapsulate marquee selection and the marquee API / sandbox / panel API in general.
-      Always drop entities in the center of screen or, better, make some kind of drag and drop interface.
-      Is a post-inflation lifecycle useful beyond on the panel? The panel would benefit from it to find the sandbox and load the entities.
-    Improve the level editor and toolbelt UI. Shift a little more towards ornate.
-      Maybe a big heart bar or health globe.
-    Add inventory management.
-      Add "a summary of you" / inven / journal screen level.
-      Add more items to gather like artifacts and animal byproducts like bee stingers.
-    Add gameplay.
-      Maybe you attack by touching enemies at diagonally.
-      Are there ranged attacks like bow and arrows?
-      Maybe hover text for hit points.
-    Make many wonderful entities.
-      Add more monuments and stained glass.
-      Add tornados.
-      Add lightning to the cloud entity.
-      Add cactus.
-      Add more clouds.
-      Add pond shader.
-      Add rainbow.
-      Add waterfall.
-      Add quicksand.
-      Add more trees.
-      Fade out the destination maker and allow a few instances.
-      Add level boundaries. Maybe tileable water.
-      Improve the grass clumps. The mocks seem a lot nicer. Maybe just make them all shorter?
-      Improve grass patches. These are currently path hacks and should be nicer.
-      Check that the entities have strong, even, isometric perspectives.
-      I need a better way to manage states and transitions.
-        Entities are currently convenient configurations to pass to image factories that generate groups of images. The default entity can literally just be images.
-        There's some great examples of how to do player states, FSMs, and collision detection / gravity in https://script-8.github.io/?id=a3b40a159db3c794c1024fba73f4eb99.
-        There's some good examples in Underrun too. E.g., the Entity class: https://github.com/phoboslab/underrun/blob/master/source/entity-sentry.js
-      Consider alternative rain shader patterns.
-      Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
-      Add some kind of unstoppable giant monster / colossus / death entity.
+    Complete one level.
+      Add options UI.
+      Add pause level.
+      Improve the title screen and Nature Elsewhere logo. It needs to pop.
+      Make the level editor more featureful.
+        Add scale and velocity fields. Maybe remove x and y fields--these seem less useful.
+        Set marquee selection on entity drop and update all fields.
+        Allow state and variant changes of selected entity.
+        Improve the level editor menu.
+        Pan on click and "dragging the plane" rather than clicking outside the deadzone.
+        Allow the editor to jump in and out of play mode (must reset state when going back to edit mode).
+        Encapsulate marquee selection and the marquee API / sandbox / panel API in general.
+        Always drop entities in the center of screen or, better, make some kind of drag and drop interface.
+        Is a post-inflation lifecycle useful beyond on the panel? The panel would benefit from it to find the sandbox and load the entities.
+        Add a die button for setting a random variant.
+        Figure out a way to signal 1) entities offscreen and 2) fully overlapped entities.
+        Add undo and redo buttons.
+          Make editor support commands.
+        Increase and decrease arrows are confusing. Increase is down and decrease is up, for example.
+        The buttons are pretty far away from their selector knobs. How can this be improved?
+      Add game over / continue screen / loop.
+      Add next level portal.
+      Improve the backpacker.
+        How can the contrast with water be improved? Will water traversal be permitted?
+        How can the animations be improved? They were made pretty haphazardly but now maybe that can be reevaluated.
+        How can the sprite be improved? What other visuals can be considered? Does it fit the theme? Is it compelling enough for an avatar?
+        Can it be made accessorizable? At least coloring?
+      Improve the palette. Tremendous colors!
+        I think that shade of blue in particular isn't quite right. I need a deep lake blue and couple extra values. Most probably lots of tweaking is needed.
+      Improve the level editor and toolbelt UI. Shift a little more towards ornate. It should be delightful and intuitive!
+        Start with a highly detailed mock.
+        Maybe a big heart bar or health globe.
+        Can I use the old inverse kinematic JS code?
+        UI should be easy to use on mobile.
+      Add inventory management.
+        Start with a highly detailed mock.
+        Add "a summary of you" / inven / journal screen level.
+        Add more items to gather like artifacts and animal byproducts like bee stingers.
+        Consider minimap.
+        Can encumber code be used?
+      Add gameplay.
+        Maybe you attack by touching enemies at diagonally. Does it work on mobile?
+        Are there ranged attacks like bow and arrows?
+        Maybe hover text for hit points.
+        Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator.
+        Do I need A*?
+      Make many wonderful entities.
+        Add more monuments and stained glass.
+        Add tornados.
+        Add lightning to the cloud entity.
+        Add cactus.
+        Add more clouds.
+        Add pond shader.
+        Add rainbow.
+        Add waterfall.
+        Add quicksand.
+        Add more trees.
+        Fade out the destination maker and allow a few instances.
+        Add level boundaries. Maybe tileable water.
+        Improve the grass clumps. The mocks seem a lot nicer. Maybe just make them all shorter?
+        Improve grass patches. These are currently path hacks and should be nicer.
+        Check that the entities have strong, even, isometric perspectives.
+        I need a better way to manage states and transitions.
+          ImageStateMachine doesn't really do anything. It has a state and then then the images for each state. Maybe this should move back to entity to limit all the invalidation walking.
+          There's some great examples of how to do player states, FSMs, and collision detection / gravity in https://script-8.github.io/?id=a3b40a159db3c794c1024fba73f4eb99.
+          There's some good examples in Underrun too. E.g., the Entity class: https://github.com/phoboslab/underrun/blob/master/source/entity-sentry.js
+        I need a better way to manage inter-entity and inter-level communication.
+          What are my current needs? There are currently lots of communications with cursor, marquee, and panel. What about some common interactions like collision or parent to child or the update termination? These all kind of suck right now.
+        How can I make the entity serializer / differ thing a less clunky? Can I expose defaults instead of toJSON() and the let the serializer pull that?
+        Add versions to configs.
+        Do I need different collision body states? It seems like a good deal of the time I don't want this with the notable exception of maybe on death but hopefully I can just change the collision type. For example, DEAD_BODY.
+        Is there a bug when an active entity on the screen boundary collides with an inactive entity just off screen?
+        Consider alternative rain shader patterns.
+        Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
+        Add some kind of unstoppable giant monster / colossus / death entity.
   Synthesize sounds.
     Understand the basics: https://news.ycombinator.com/item?id=20272346
     Rename audio player to speaker or something.
@@ -60,6 +94,13 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
     Do I need a shader for better types of water? What does it look like?
   How can I move my planning materials into the VCS?
   Review Diablo tile IDs: https://www.boristhebrave.com/2019/07/14/dungeon-generation-in-diablo-1/
+  Improve favicon.
+  Add performance test level.
+  Set up natureelsewhere.com GitHub page. Point to demo at ne.netlify.com.
+  Evaluate fixing known issues in readme.
+    If I drop WebGL v2, drop @types/webgl2.
+  What examples are there for making 9png like UI?
+    Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
 
 aseprite-atlas
   Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.
@@ -67,3 +108,5 @@ aseprite-atlas
 mem-font
   Push mem-font changes upstream and rework project.
   Move mem-font to oddoid repo.
+oddoid
+  Keep thinking on names.

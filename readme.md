@@ -346,6 +346,14 @@ collections. Types declared with `interface` syntax are presented as proper
 named types. Given the lengthy printouts of types by TypeScript, interfaces are
 preferred.
 
+#### Readonly as Needed
+
+Specifying everything as readonly by default works great when a type is always
+immutable. However, for types that are in certain circumstances mutable or
+composed as mutable in other objects, it ends up being a huge hassle and makes
+it challenging to see truly immutable types. For this reason, unless a type is
+always immutable, types are mutable by default and opportunistically mutable.
+
 #### Imports
 
 Namespaces are favored because they:
