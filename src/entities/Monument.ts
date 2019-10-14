@@ -60,7 +60,7 @@ const defaults = ObjectUtil.freeze({
   collisionBodies: {
     [Monument.Variant.SMALL]: [
       Rect.make(7, 28, 23, 3),
-      Rect.make(24, 23, 15, 6)
+      Rect.make(20, 23, 15, 6)
     ],
     [Monument.Variant.MEDIUM]: [
       Rect.make(6, 35, 25, 11),

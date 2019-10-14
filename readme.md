@@ -238,6 +238,12 @@ other features, really made development a lot more complex and slower than it
 needed to be and I just had a hard time grasping how multiple palettes should
 work. I am striving for a minimal palette for the forseeable future.
 
+Translucent colors used to be present and were used foremost for rain. They
+increased the complexity of the palette though because it wasn't always clear
+when to use a translucent color and a similar opaque color in all contexts and
+that caused the palette to grow. I've since omitted all translucency and I think
+the consistent hard pixel look is better fitting.
+
 ### Entities
 
 I've had something of an identity crisis while working on Nature Elsewhere. Is
@@ -941,3 +947,15 @@ This work, excluding source code, is licensed under the Creative Commons
 Attribution-ShareAlike 4.0 International License. To view a copy of this
 license, visit https://creativecommons.org/licenses/by-sa/4.0/ or send a letter
 to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+<!-- language: lang-none -->
+
+    ╭>°╮┌─╮┌─╮╭─╮┬┌─╮
+    │  ││ ││ ││ │││ │
+    ╰──╯└─╯└─╯╰─╯┴└─╯
+
+<!--
+┌>°┐
+│  │DDOID
+└──┘
+-->

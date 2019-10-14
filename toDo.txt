@@ -3,7 +3,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
     Complete one level.
       Add options UI.
       Add pause level.
-      Improve the title screen and Nature Elsewhere logo. It needs to pop.
+      Improve the title screen and Nature Elsewhere logo. The opening needs to pop.
       Make the level editor more featureful.
         Add scale and velocity fields. Maybe remove x and y fields--these seem less useful.
         Set marquee selection on entity drop and update all fields.
@@ -12,6 +12,8 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
         Pan on click and "dragging the plane" rather than clicking outside the deadzone.
         Allow the editor to jump in and out of play mode (must reset state when going back to edit mode).
         Encapsulate marquee selection and the marquee API / sandbox / panel API in general.
+        Import and export entire levels, not just the entities.
+        Allow changing level properties like minViewport, cam position, player position, and plane.
         Always drop entities in the center of screen or, better, make some kind of drag and drop interface.
         Is a post-inflation lifecycle useful beyond on the panel? The panel would benefit from it to find the sandbox and load the entities.
         Add a die button for setting a random variant.
@@ -43,8 +45,9 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
       Add gameplay.
         Maybe you attack by touching enemies at diagonally. Does it work on mobile?
         Are there ranged attacks like bow and arrows?
+          It would be neat if arrows stuck in the ground or scattered and emitted a little cloud of dust on impact. Arrows should make a dumb little sound when shot.
         Maybe hover text for hit points.
-        Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator.
+        Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator. Escape and Android back support are needed.
         Do I need A*?
       Make many wonderful entities.
         Add more monuments and stained glass.
@@ -69,18 +72,24 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
         I need a better way to manage inter-entity and inter-level communication.
           What are my current needs? There are currently lots of communications with cursor, marquee, and panel. What about some common interactions like collision or parent to child or the update termination? These all kind of suck right now.
         How can I make the entity serializer / differ thing a less clunky? Can I expose defaults instead of toJSON() and the let the serializer pull that?
+        Entities need to respect level boundaries better.
         Add versions to configs.
         Do I need different collision body states? It seems like a good deal of the time I don't want this with the notable exception of maybe on death but hopefully I can just change the collision type. For example, DEAD_BODY.
         Is there a bug when an active entity on the screen boundary collides with an inactive entity just off screen?
+        How can the entity type be simplified technically and in presentation?
+          The entities are quite complex at the moment. They have a ton of state, rectangles especially. Each entity can have multiple collision bodies, images, variants, states, and children recursively.
+          What constraints can we set? Max images? Max size? Max children?
+        Adding collision bodies is back to manual now. Is it easy to set them for all cels?
         Consider alternative rain shader patterns.
         Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
         Add some kind of unstoppable giant monster / colossus / death entity.
-  Synthesize sounds.
+  Synthesize fantastic sounds.
     Understand the basics: https://news.ycombinator.com/item?id=20272346
     Rename audio player to speaker or something.
     Flesh out the audio system.
       Synthesize crickets, wind, rain, thunder, and birds.
     Survey all the demos in Super Collider.
+    Probably pursue lofi.
   Improve the structure. Write little, clearly.
     What TypeScript and other open source examples should I consider?
     Re-review WebGL implementations.
@@ -96,6 +105,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
   Review Diablo tile IDs: https://www.boristhebrave.com/2019/07/14/dungeon-generation-in-diablo-1/
   Improve favicon.
   Add performance test level.
+  Add test for newing each entity variant.
   Set up natureelsewhere.com GitHub page. Point to demo at ne.netlify.com.
   Evaluate fixing known issues in readme.
     If I drop WebGL v2, drop @types/webgl2.
