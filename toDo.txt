@@ -3,6 +3,12 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
     Add options UI.
     Add pause level.
     Improve the title screen and Nature Elsewhere logo. It needs to pop.
+    Make the level editor more featureful.
+      Add scale and velocity fields.
+      Set marquee selection on entity drop and update all fields.
+      Encapsulate marquee selection and the marquee API / sandbox / panel API in general.
+      Always drop entities in the center of screen or, better, make some kind of drag and drop interface.
+      Is a post-inflation lifecycle useful beyond on the panel? The panel would benefit from it to find the sandbox and load the entities.
     Improve the level editor and toolbelt UI. Shift a little more towards ornate.
       Maybe a big heart bar or health globe.
     Add inventory management.
@@ -11,6 +17,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
     Add gameplay.
       Maybe you attack by touching enemies at diagonally.
       Are there ranged attacks like bow and arrows?
+      Maybe hover text for hit points.
     Make many wonderful entities.
       Add more monuments and stained glass.
       Add tornados.
@@ -22,6 +29,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
       Add waterfall.
       Add quicksand.
       Add more trees.
+      Fade out the destination maker and allow a few instances.
       Add level boundaries. Maybe tileable water.
       Improve the grass clumps. The mocks seem a lot nicer. Maybe just make them all shorter?
       Improve grass patches. These are currently path hacks and should be nicer.

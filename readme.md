@@ -249,17 +249,34 @@ than functional. The former comes naturally to me and the latter is easier to
 usually easier reason about after its written. I'm not sure I could generalize
 which is easier to conceptualize a system for.
 
-I am quite pleased to have finally extracted a lot of the data into JSON
+I was quite pleased to have finally extracted a lot of the data into JSON
 configuration files, as opposed to code, which has a number of benefit s: 1)
-reasoning about data is closer to reasoning a picture than code (much easier and
-fewer bugs) 2) dumb data is easier to serialize and deserialize than dynamic
-code. That number is more than two, I think, but that's all I have at the
-moment.
+reasoning about data is closer to reasoning about a picture than code (much
+easier and fewer bugs) 2) dumb data is easier to serialize and deserialize than
+dynamic code 3) JSON is vastly more declarative and a lot less implementation
+heavy than JavaScript. Unfortunately, without a tightly coupled mechanism like
+JSX, it's not really possible to construct any object without either parsing or
+redundantly embedding all of the same defaults into the constructors of
+JavaScript equivalents. Parsing post-construction phase is heavy, and feels kind
+of lame not to be able just new up an object, and a binding phase will be
+needed. I also lost TypeScript type checking (which was a huge compilation speed
+boost but) sucked. For these reasons, I dumped everything but the most high-
+level JSON, levels.
 
 I had a lot of trouble understanding what the responsibilities of images should
 be and what their relationship is to entities. All of these concerns were
-compounded by managing groups of images and entities and how they correlated to
-the Aseprite format.
+compounded by managing groups of images and entities, parsing, construction,
+binding, and subtype behavior overlapping complications, and how they correlated
+to the Aseprite format.
+
+### Atlas
+
+The sprite sheet logic lives in
+[aseprite-atlas](https://github.com/oddoid/aseprite-atlas) and has the following
+properties:
+
+- The Atlas is immutable.
+- The Animator is dumb.
 
 ### Other Engines
 

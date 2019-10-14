@@ -66,5 +66,5 @@ function register(machine: RendererStateMachine, register: boolean): void {
   const fn = register ? 'addEventListener' : 'removeEventListener'
   machine.canvas[fn]('webglcontextrestored', machine.onEvent)
   machine.canvas[fn]('webglcontextlost', machine.onEvent)
-  ;['focus', 'blur'].forEach(ev => machine.window[fn](ev, machine.onEvent))
+  for (const ev of ['focus', 'blur']) machine.window[fn](ev, machine.onEvent)
 }
