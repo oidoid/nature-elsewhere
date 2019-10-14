@@ -132,6 +132,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
         if (!state.inputs.pick || !state.inputs.pick.active) {
           this.transition(idle)
           hideDestinationMarker(state)
+          state.win.navigator.vibrate(1)
         }
       }
     }
