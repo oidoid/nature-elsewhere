@@ -1,6 +1,6 @@
 Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built game with tremendous colors.
   Make large, lavish, content-rich levels.
-    Complete one level.
+    Complete one level. The goal is to identify and solve any infrastructure requirements and architectural complexities that require deep considerations. The idea is that if one level is technically feasible and fun, the whole game is a worthwhile inevitability given hard work.
       Add options UI.
       Add pause level.
       Improve the title screen and Nature Elsewhere logo. The opening needs to pop.
@@ -31,7 +31,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
         Can it be made accessorizable? At least coloring?
       Improve the palette. Tremendous colors!
         I think that shade of blue in particular isn't quite right. I need a deep lake blue and couple extra values. Most probably lots of tweaking is needed.
-      Improve the level editor and toolbelt UI. Shift a little more towards ornate. It should be delightful and intuitive!
+      Improve the level editor and toolbelt UI. Shift a little more towards ornate or intricate. It should be delightful and intuitive!
         Start with a highly detailed mock.
         Maybe a big heart bar or health globe.
         Can I use the old inverse kinematic JS code?
@@ -42,7 +42,9 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
         Add more items to gather like artifacts and animal byproducts like bee stingers.
         Consider minimap.
         Can encumber code be used?
-      Add gameplay.
+----> Add gameplay. How codes combat and inventory work?
+        Mock out some bee hunting and interactions.
+        Maybe favor straight line moving.
         Maybe you attack by touching enemies at diagonally. Does it work on mobile?
         Are there ranged attacks like bow and arrows?
           It would be neat if arrows stuck in the ground or scattered and emitted a little cloud of dust on impact. Arrows should make a dumb little sound when shot.
@@ -75,11 +77,13 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
         Entities need to respect level boundaries better.
         Add versions to configs.
         Do I need different collision body states? It seems like a good deal of the time I don't want this with the notable exception of maybe on death but hopefully I can just change the collision type. For example, DEAD_BODY.
-        Is there a bug when an active entity on the screen boundary collides with an inactive entity just off screen?
+        Is there a bug when an active entity on the screen boundary collides with an inactive entity just off screen? Maybe any entity that is active, recursively activates all other entities they touch? I'm not quite sure how htat works.
         How can the entity type be simplified technically and in presentation?
           The entities are quite complex at the moment. They have a ton of state, rectangles especially. Each entity can have multiple collision bodies, images, variants, states, and children recursively.
           What constraints can we set? Max images? Max size? Max children?
         Adding collision bodies is back to manual now. Is it easy to set them for all cels?
+        This decamillipixel nonsense is confusing. It's like .1px/s but everything is .6px/s or more. Is the half pixel needed? Millipixel would be a lot nicer.
+        Maybe base Entity should support targeting. Entities often have a destination.
         Consider alternative rain shader patterns.
         Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
         Add some kind of unstoppable giant monster / colossus / death entity.

@@ -284,6 +284,18 @@ properties:
 - The Atlas is immutable.
 - The Animator is dumb.
 
+### Collisions
+
+- Avoid changing collision footprint across frames or states as it can create a
+  collision unexpectedly and cause entities to get stuck.
+- Minimize collision areas. It is nicer for the player to move uninhibited.
+- Minimize rectangle cavities. The draw sort works by height and caverns often
+  must be "roped off" by invisible collision bodies to prevent the player from
+  unexpectedly snapping behind the entity they're exploring. This can be avoided
+  by using multiple images instead of one big one. For example, on an isometric
+  fence post corner, use a front facing image along the x-axis and one or more
+  _short_ diagonal images.
+
 ### Other Engines
 
 I tried a few other engines and tools, notably Phaser v2.x and Tiled. I found it
@@ -453,6 +465,29 @@ For these reasons, compositions are favored. The downsides seem to be:
 
 - Verbose property accessors.
 - Poor built-in support for deep immutable types.
+
+#### Language
+
+TypeScript has been an indispensable improvement over JavaScript and, in
+general, the following faculties have been valuable:
+
+- Node.js Package Manager. It is far, far from perfect but easily the easiest
+  package manager I've ever used. I don't have to wreck my system installing
+  dependencies or lean too heavily on virtalization for trusted projects.
+- Lingua franca: ubiquitous support on desktop web browsers, native desktop apps
+  via Electron, mobile web browsers, and mobile native apps via WebViews.
+- A technology intersection with my profession.
+- Pretty simple most of the time.
+- A stunning ecosystem of examples and resources.
+- Reasonable typing. Interface type resolution has also been powerful.
+- Platform support for GL, DOM, and application development.
+- Very good IDE support and tooling.
+- Great JSON support.
+
+I dislike the Webpack craziness, and the fast, immature, and sprawling nature of
+the entire stack. I think my code is verbose and not so nice but it can be easy
+to reason about and change. I often think of other languages but TypeScript
+offers lots.
 
 #### Divide State and Code
 
@@ -854,11 +889,15 @@ avoid:
 - I don't know enough about the details of modules, scope, and hoisting.
   Fortunately, I don't seem to need to by sticking to const, let, class, and
   import. It kind of all just works as expected without any arcane knowledge.
-- I try to avoid loops. Although the syntax is less appealing to me,
+- I used to try to avoid loops. Although the syntax is less appealing to me,
   Array.forEach() provides updated variables for the current value, index, and
   array under iteration. I also think it's nice to be able to forget about the
   for..in / for..of distinction, and Object.hasOwnProperty() which is an
-  inheritance smell.
+  inheritance smell. However, all my code is my own so I don't have a lot of
+  inheritance and I don't normally need the extra variables so I've been using
+  the loops more.
+- Don't build intricately. Build for the idiot that comes in next morning,
+  tired, clueless, and not too sharp.
 - I try not to use null. I think there's a whole article about why it's
   generally unnecessary by the TypeScript folks that I agreed with. Regardless,
   I don't even like that an object can have undefined values for key values and
