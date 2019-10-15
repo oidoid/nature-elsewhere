@@ -499,8 +499,11 @@ of rewrites I've done so far, I've increasingly valued rather plain and blunt
 implementations, that are extensible, written as simply as possible, and easy to
 read and reason about. I've never been very good at holding a project in my head
 overnight so I've increasingly been writing for the idiot that comes in in the
-morning. Easier said than done but making new features obvious is the hope for
-the new entity subsystem especially.
+morning. It's worse now that I only work evenings and weekends. Easier said than
+done but making new features obvious is the hope for the new entity subsystem
+especially.
+
+This is going to take a while so high readability is a must.
 
 #### Serialization
 
@@ -584,6 +587,10 @@ As a project entirely of my own volition, my failures are my own and there is no
 recompense for self-deception.
 
 I don't know why it's taking me so long.
+
+#### Planning
+
+Detailed mocks have been among the most valuable plans.
 
 ### Implicit Coupling
 
