@@ -7,7 +7,9 @@
     "game",
     "webgl",
     "isometric",
-    "adventure"
+    "adventure",
+    "pixel-art",
+    "aseprite"
   ],
   "homepage": "https://github.com/oddoid/nature-elsewhere",
   "repository": "github:oddoid/nature-elsewhere",

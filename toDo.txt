@@ -1,6 +1,6 @@
 Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built game with tremendous colors.
   Make large, lavish, content-rich levels.
-    Complete one level. The goal is to identify and solve any infrastructure requirements and architectural complexities that require deep considerations. The idea is that if one level is technically feasible and fun, the whole game is a worthwhile inevitability given hard work.
+    Complete one level. The goal is to identify and solve any infrastructure requirements and architectural complexities, and eliminate ambiguities that require deep consideration. The idea is that if one level is technically feasible and fun, the whole game is a worthwhile inevitability, not just a possibility, given hard work.
       Add options UI.
       Add pause level.
       Improve the title screen and Nature Elsewhere logo. The opening needs to pop.
@@ -43,13 +43,13 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
         Consider minimap.
         Can encumber code be used?
 ----> Add gameplay. How codes combat and inventory work?
-        Mock out some bee hunting and interactions.
+        Mock out some bee hunting and interactions in great detail. Review past mocks and inspirado.
         Maybe favor straight line moving.
         Maybe you attack by touching enemies at diagonally. Does it work on mobile?
         Are there ranged attacks like bow and arrows?
           It would be neat if arrows stuck in the ground or scattered and emitted a little cloud of dust on impact. Arrows should make a dumb little sound when shot.
         Maybe hover text for hit points.
-        Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator. Escape and Android back support are needed.
+        Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator. Escape and Android back support are needed, and editor and debug shortcuts might be nice.
         Do I need A*?
       Make many wonderful entities.
         Add more monuments and stained glass.
@@ -80,6 +80,8 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
         Is there a bug when an active entity on the screen boundary collides with an inactive entity just off screen? Maybe any entity that is active, recursively activates all other entities they touch? I'm not quite sure how htat works.
         How can the entity type be simplified technically and in presentation?
           The entities are quite complex at the moment. They have a ton of state, rectangles especially. Each entity can have multiple collision bodies, images, variants, states, and children recursively.
+          How can I improve rectangle / recursive coordinate system management?
+          Statically defining variants and states doesn't seem ideal.
           What constraints can we set? Max images? Max size? Max children?
         Adding collision bodies is back to manual now. Is it easy to set them for all cels?
         This decamillipixel nonsense is confusing. It's like .1px/s but everything is .6px/s or more. Is the half pixel needed? Millipixel would be a lot nicer.
@@ -97,8 +99,6 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, finely built g
   Improve the structure. Write little, clearly.
     What TypeScript and other open source examples should I consider?
     Re-review WebGL implementations.
-    Update the readme.
-      It's pretty incoherent and out of date WRT the devlog, the codebase, and Twitter.
   Add windy grass displacement shader to make the fields pop.
     Maybe look through shader toys and displacement shader 101s.
       https://forums.tigsource.com/index.php?topic=40539.20

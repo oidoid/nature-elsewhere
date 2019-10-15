@@ -1,7 +1,14 @@
 import {AssetLoader} from './loaders/AssetLoader'
+import {Build} from './utils/Build'
 import {Game} from './Game'
 import {Settings} from './settings/Settings'
 ;(async () => {
+  console.log(`
+┌>°┐
+│  │DDOID ${Build.date} v${Build.version} ${Build.hash}
+└──┘
+`)
+
   const canvas = document.querySelector('canvas')
   if (!canvas) throw new Error('Canvas missing.')
 
