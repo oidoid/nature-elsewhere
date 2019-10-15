@@ -69,7 +69,6 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Add more trees.
         Add Storymaker bubble egg.
         Fade out the destination maker and allow a few instances. Maybe reverse the animation.
-        Add level boundaries. Maybe tileable water or boundary treeline hints.
 ------->Improve the grass clumps. The mocks seem a lot nicer. Maybe just make them all shorter? Try perspective.
 ------->Improve grass patches. These are currently path hacks and should be nicer.
         Check that the entities have strong, even, isometric perspectives.

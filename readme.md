@@ -384,11 +384,11 @@ for some long time, I just wanted more. The backpacker avatar was about as
 minimal as you can get, seven black pixels when idle:
 
 ```
- x
-xx
-xx
- x
- x
+ █
+██
+██
+ █
+ █
 ```
 
 There were some things I really liked about it. Well, I was doodling one evening

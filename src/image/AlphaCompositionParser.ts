@@ -1,12 +1,14 @@
 import {AlphaComposition} from './AlphaComposition'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
-export type AlphaCompositionConfig = Maybe<AlphaComposition>
+export type AlphaCompositionConfig = Maybe<string | number | AlphaComposition>
 
 export namespace AlphaCompositionParser {
   export function parse(config: AlphaCompositionConfig): AlphaComposition {
     const composition = config === undefined ? AlphaComposition.IMAGE : config
     ObjectUtil.assertKeyOf(AlphaComposition, composition, 'AlphaComposition')
-    return composition
+    return typeof composition === 'number'
+      ? composition
+      : AlphaComposition[<keyof typeof AlphaComposition>composition]
   }
 }

@@ -4,7 +4,42 @@
   "size": {"w": 256, "h": 256},
   "minViewport": {"w": 96, "h": 96},
   "cam": {"followID": "uiPlayer"},
-  "planes": [{"type": "plane", "variant": "paleGreen"}],
+  "planes": [
+    {"type": "plane", "variant": "paleGreen"},
+    {
+      "type": "group",
+      "map": {
+        "visible": {
+          "images": [
+            {
+              "id": "uiCheckerboard-blackTransparent",
+              "imageID": "palette-green",
+              "alphaComposition": "SOURCE_MASK",
+              "bounds": {"size": {"w": 32767, "h": 1}}
+            },
+            {
+              "id": "uiCheckerboard-blackTransparent",
+              "imageID": "palette-green",
+              "alphaComposition": "SOURCE_MASK",
+              "bounds": {"position": {"x": 255}, "size": {"w": 1, "h": 32767}}
+            },
+            {
+              "id": "uiCheckerboard-blackTransparent",
+              "imageID": "palette-green",
+              "alphaComposition": "SOURCE_MASK",
+              "bounds": {"position": {"y": 255}, "size": {"w": 32767, "h": 1}}
+            },
+            {
+              "id": "uiCheckerboard-blackTransparent",
+              "imageID": "palette-green",
+              "alphaComposition": "SOURCE_MASK",
+              "bounds": {"size": {"w": 1, "h": 32767}}
+            }
+          ]
+        }
+      }
+    }
+  ],
   "cursor": {"type": "uiCursor", "variant": "reticle"},
   "destination": {"type": "uiDestinationMarker"},
   "hud": [

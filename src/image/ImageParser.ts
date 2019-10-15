@@ -17,12 +17,13 @@ export interface ImageConfig {
   readonly id: AtlasIDConfig
   readonly imageID?: AtlasIDConfig
   readonly bounds?: RectConfig
-  readonly layer?: LayerConfig
+  readonly layer?: Exclude<LayerConfig, undefined> & string
   readonly animator?: AnimatorConfig
   readonly scale?: XYConfig
   readonly wrap?: XYConfig // Decamillipixel
   readonly wrapVelocity?: XYConfig // Decamillipixel
-  readonly alphaComposition?: AlphaCompositionConfig
+  readonly alphaComposition?: Exclude<AlphaCompositionConfig, undefined> &
+    string
 }
 
 export type AnimatorConfig = Readonly<{
@@ -32,7 +33,7 @@ export type AnimatorConfig = Readonly<{
 
 /** Defaults to (1, 1). */
 export type ImageScaleConfig = Maybe<Partial<XY>>
-export type LayerConfig = Maybe<Layer>
+export type LayerConfig = Maybe<string | number | Layer>
 
 export namespace ImageParser {
   export function parse(config: ImageConfig, atlas: Atlas): Image {
@@ -63,7 +64,7 @@ export namespace ImageParser {
   export function parseLayer(config: LayerConfig): Layer {
     const layer = config === undefined ? Layer.DEFAULT : config
     ObjectUtil.assertKeyOf(Layer, layer, 'Layer')
-    return layer
+    return typeof layer === 'number' ? layer : Layer[<keyof typeof Layer>layer]
   }
 }
 
