@@ -7,12 +7,11 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
       Improve the title screen and Nature Elsewhere logo. The opening needs to pop.
       Make the level editor more featureful.
         Add scale and velocity fields. I think I need to expose a generic property bag. Maybe remove x and y fields--these seem less useful.
-        Set marquee selection on entity drop and update all fields.
         Allow state and variant changes of selected entity.
         Improve the level editor menu.
         Pan on click and "dragging the plane" rather than clicking outside the deadzone.
         Allow the editor to jump in and out of play mode (must reset state when going back to edit mode).
-        Encapsulate marquee selection and the marquee API / sandbox / panel API in general.
+        Encapsulate the marquee API / sandbox / panel API in general.
         Import and export entire levels, not just the entities.
         Allow changing level properties like minViewport, cam position, player position, and plane.
         Always drop entities in the center of screen or, better, make some kind of drag and drop interface.

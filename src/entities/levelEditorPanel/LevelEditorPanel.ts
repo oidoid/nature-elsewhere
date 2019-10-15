@@ -324,9 +324,11 @@ export class LevelEditorPanel extends Entity<
         )
         if (!sandbox) throw new Error('Missing sandbox.')
 
-        // marquee.setSelection(entity)
         sandbox.addChildren(entity)
-        // [todo] set selection here
+        const marquee = <Maybe<Marquee>>(
+          Entity.findAnyByID(state.level.parentEntities, EntityID.UI_MARQUEE)
+        )
+        if (marquee) marquee.setSelection(entity, state.level.cursor)
       }
     }
     if (this._toggleGridButton.clicked) toggleGrid(state)
@@ -347,8 +349,7 @@ export class LevelEditorPanel extends Entity<
       if (!sandbox) throw new Error('Missing sandbox.')
       if (this._destroyButton.clicked) {
         status |= UpdateStatus.UPDATED
-        marquee.selection = undefined
-        marquee.transition(Entity.BaseState.HIDDEN)
+        marquee.setSelection(undefined, state.level.cursor)
         sandbox.removeChild(selection)
       }
       if (

@@ -1,5 +1,6 @@
 import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
+import {Cursor} from './Cursor'
 import {EntityCollider} from '../collision/EntityCollider'
 import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
@@ -20,7 +21,7 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 
 export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
-  selection?: Entity
+  private _selection?: Entity
   private _dragOffset?: Readonly<XY>
 
   constructor(
@@ -58,8 +59,36 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       },
       ...props
     })
-    this.selection = undefined
+    this._selection = undefined
     this._dragOffset = undefined
+  }
+
+  get selection(): Maybe<Entity> {
+    return this._selection
+  }
+
+  setSelection(selection: Maybe<Entity>, cursor: Cursor): UpdateStatus {
+    let status = UpdateStatus.UNCHANGED
+    if (this._selection === selection) return status
+
+    // If the state is now visible, transition prior to trying to manipulate the
+    // marquee images as they only exist in visible.
+    status |= this.transition(
+      selection ? Marquee.State.VISIBLE : Entity.BaseState.HIDDEN
+    )
+
+    if (selection) {
+      status |= UpdateStatus.UPDATED
+      const to = selection.bounds.position.sub(new XY(1, 1))
+      status |= this.moveTo(to)
+      this._resize(to, selection)
+    }
+
+    this._selection = selection
+    this._dragOffset = selection
+      ? selection.bounds.position.sub(cursor.bounds.position)
+      : undefined
+    return status
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -97,20 +126,18 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
           .magnitude()
     )
     const triggered = Input.activeTriggered(state.inputs.pick)
-    if (!triggered && this.selection && this._dragOffset) {
+    if (!triggered && this._selection && this._dragOffset) {
       const destination = state.level.cursor.bounds.position.add(
         this._dragOffset
       )
       status |= this.moveTo(destination.sub(new XY(1, 1)))
-      status |= this.selection.moveTo(destination)
+      status |= this._selection.moveTo(destination)
       sandbox.invalidateBounds()
     } else if (
       triggered &&
       !hudCollision.length &&
       cursorSandboxCollision.length
     ) {
-      status |= this.transition(Marquee.State.VISIBLE)
-
       const {selection} = this
       const currentIndex = selection
         ? cursorSandboxCollision.findIndex(entity => entity.equal(selection))
@@ -121,25 +148,50 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
         cursorSandboxCollision.length
       )
       const sandboxEntity = cursorSandboxCollision[nextIndex] // this won't work correctly for sub-entities
-      this.selection = sandboxEntity
-
-      const destination = sandboxEntity.bounds.position.sub(new XY(1, 1))
-      status |= this.moveTo(destination)
-      resize(this, destination, sandboxEntity)
-      this._dragOffset = sandboxEntity.bounds.position.sub(
-        state.level.cursor.bounds.position
-      )
-    } else if (triggered && !hudCollision.length) {
-      status |= this.transition(Entity.BaseState.HIDDEN)
-      this.selection = undefined
-      this._dragOffset = undefined
-    }
+      this.setSelection(sandboxEntity, state.level.cursor)
+    } else if (triggered && !hudCollision.length)
+      this.setSelection(undefined, state.level.cursor)
 
     return status
   }
 
   toJSON(): JSONValue {
     return EntitySerializer.serialize(this, defaults)
+  }
+
+  /** These images are only present in the visible state. */
+  private _resize(destination: XY, sandboxEntity: Entity): void {
+    const marqueeImages = this.images()
+
+    marqueeImages[Images.TOP].moveTo(destination)
+    marqueeImages[Images.TOP].sizeTo(new WH(sandboxEntity.bounds.size.w + 2, 1))
+
+    marqueeImages[Images.LEFT].moveTo(destination)
+    marqueeImages[Images.LEFT].sizeTo(
+      new WH(1, sandboxEntity.bounds.size.h + 2)
+    )
+
+    marqueeImages[Images.RIGHT].moveTo(
+      new XY(destination.x + sandboxEntity.bounds.size.w + 1, destination.y)
+    )
+    marqueeImages[Images.RIGHT].sizeTo(
+      new WH(1, sandboxEntity.bounds.size.h + 2)
+    )
+    marqueeImages[Images.RIGHT].wrapTo(
+      new XY((sandboxEntity.bounds.size.w + 1) & 1 ? 1 : 0, 0)
+    )
+
+    marqueeImages[Images.BOTTOM].moveTo(
+      new XY(destination.x, destination.y + sandboxEntity.bounds.size.h + 1)
+    )
+    marqueeImages[Images.BOTTOM].sizeTo(
+      new WH(sandboxEntity.bounds.size.w + 2, 1)
+    )
+    marqueeImages[Images.BOTTOM].wrapTo(
+      new XY((sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0, 0)
+    )
+    this.invalidateImageBounds()
+    this.invalidateBounds()
   }
 }
 
@@ -158,40 +210,6 @@ enum Images {
   RIGHT = 1,
   BOTTOM = 2,
   LEFT = 3
-}
-
-function resize(
-  marquee: Marquee,
-  destination: XY,
-  sandboxEntity: Entity
-): void {
-  const marqueeImages = marquee.images()
-
-  marqueeImages[Images.TOP].moveTo(destination)
-  marqueeImages[Images.TOP].sizeTo(new WH(sandboxEntity.bounds.size.w + 2, 1))
-
-  marqueeImages[Images.LEFT].moveTo(destination)
-  marqueeImages[Images.LEFT].sizeTo(new WH(1, sandboxEntity.bounds.size.h + 2))
-
-  marqueeImages[Images.RIGHT].moveTo(
-    new XY(destination.x + sandboxEntity.bounds.size.w + 1, destination.y)
-  )
-  marqueeImages[Images.RIGHT].sizeTo(new WH(1, sandboxEntity.bounds.size.h + 2))
-  marqueeImages[Images.RIGHT].wrapTo(
-    new XY((sandboxEntity.bounds.size.w + 1) & 1 ? 1 : 0, 0)
-  )
-
-  marqueeImages[Images.BOTTOM].moveTo(
-    new XY(destination.x, destination.y + sandboxEntity.bounds.size.h + 1)
-  )
-  marqueeImages[Images.BOTTOM].sizeTo(
-    new WH(sandboxEntity.bounds.size.w + 2, 1)
-  )
-  marqueeImages[Images.BOTTOM].wrapTo(
-    new XY((sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0, 0)
-  )
-  marquee.invalidateImageBounds()
-  marquee.invalidateBounds()
 }
 
 const defaults = ObjectUtil.freeze({
