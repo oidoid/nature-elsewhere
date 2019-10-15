@@ -22,7 +22,9 @@ import {XY} from '../math/XY'
 
 export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
   private _selection?: Entity
-  private _dragOffset?: Readonly<XY>
+  /** The offset from the top-left of the selection to the cursor when the
+      cursor is active. */
+  private readonly _cursorOffset: XY
 
   constructor(
     atlas: Atlas,
@@ -60,7 +62,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       ...props
     })
     this._selection = undefined
-    this._dragOffset = undefined
+    this._cursorOffset = new XY(0, 0)
   }
 
   get selection(): Maybe<Entity> {
@@ -69,7 +71,6 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
 
   setSelection(selection: Maybe<Entity>, cursor: Cursor): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
-    if (this._selection === selection) return status
 
     // If the state is now visible, transition prior to trying to manipulate the
     // marquee images as they only exist in visible.
@@ -85,14 +86,19 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     }
 
     this._selection = selection
-    this._dragOffset = selection
+    const offset = selection
       ? selection.bounds.position.sub(cursor.bounds.position)
-      : undefined
+      : new XY(0, 0)
+    this._cursorOffset.x = offset.x
+    this._cursorOffset.y = offset.y
     return status
   }
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
+
+    const {pick} = state.inputs
+    if (!pick || !pick.active) return status
 
     const sandbox = Entity.findAnyByID(
       state.level.parentEntities,
@@ -100,54 +106,55 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     )
     if (!sandbox) return status
 
-    const {pick} = state.inputs
-    if (!pick || !pick.active) {
-      this._dragOffset = undefined
-      return status
-    }
-
-    const hudCollision = EntityCollider.collidesEntities(
+    const sandboxChildren = this._sandboxChildrenCollidingWithCursor(
+      sandbox,
+      state
+    )
+    const hudCollision = !!EntityCollider.collidesEntities(
       state.level.cursor,
       state.level.hud
-    )
+    ).length
 
-    const pickCenter = Rect.centerOf(state.level.cursor.bounds)
-    const cursorSandboxCollision = EntityCollider.collidesEntity(
-      state.level.cursor,
-      sandbox
-    ).sort(compareCentroidTo(pickCenter))
     const triggered = Input.activeTriggered(state.inputs.pick)
-    if (!triggered && this._selection && this._dragOffset) {
-      const destination = state.level.cursor.bounds.position.add(
-        this._dragOffset
-      )
-      status |= this.moveTo(destination.sub(new XY(1, 1)))
-      status |= this._selection.moveTo(destination)
-      sandbox.invalidateBounds()
-    } else if (
-      triggered &&
-      !hudCollision.length &&
-      cursorSandboxCollision.length
-    ) {
+    if (triggered && !hudCollision) {
       const {selection} = this
       const currentIndex = selection
-        ? cursorSandboxCollision.findIndex(entity => entity.equal(selection))
+        ? sandboxChildren.findIndex(entity => entity.equal(selection))
         : -1
       const nextIndex = NumberUtil.wrap(
         currentIndex + 1,
         0,
-        cursorSandboxCollision.length
+        sandboxChildren.length
       )
-      const sandboxEntity = cursorSandboxCollision[nextIndex] // this won't work correctly for sub-entities
-      this.setSelection(sandboxEntity, state.level.cursor)
-    } else if (triggered && !hudCollision.length)
-      this.setSelection(undefined, state.level.cursor)
+      const entity: Maybe<Entity> = sandboxChildren[nextIndex]
+      return this.setSelection(entity, state.level.cursor)
+    }
+
+    if (!triggered && this._selection) {
+      const destination = state.level.cursor.bounds.position.add(
+        this._cursorOffset
+      )
+      status |= this.moveTo(destination.sub(new XY(1, 1)))
+      status |= this._selection.moveTo(destination)
+      sandbox.invalidateBounds()
+      return status | UpdateStatus.UPDATED
+    }
 
     return status
   }
 
   toJSON(): JSONValue {
     return EntitySerializer.serialize(this, defaults)
+  }
+
+  private _sandboxChildrenCollidingWithCursor(
+    sandbox: Entity,
+    state: UpdateState
+  ): Entity[] {
+    const pickCenter = Rect.centerOf(state.level.cursor.bounds)
+    return EntityCollider.collidesEntity(state.level.cursor, sandbox).sort(
+      compareCentroidTo(pickCenter)
+    )
   }
 
   /** These images are only present in the visible state. */

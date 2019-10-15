@@ -245,7 +245,7 @@ general, the following faculties have been valuable:
   school seeing Java applets on the way out but people had done so many cool
   things with them. I think JavaScript has since supplanted applets and has a
   great wealth of neat stuff.
-- Reasonable typing. Interface type resolution has also been powerful.
+- Reasonable typing. Nice duck typing and inference have also been powerful.
 - Platform support for GL, DOM, and application development.
 - Very good IDE support and tooling. The refactors are ok, not as good as in the
   C++ or Java toolchains, but I couldn't be happier to not be using a Java
