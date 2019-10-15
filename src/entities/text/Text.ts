@@ -17,10 +17,10 @@ import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
 
 export class Text extends Entity<Text.Variant, Text.State> {
-  text: string
-  readonly textLayer: Layer
-  readonly textScale: XY
-  readonly textMaxSize: WH
+  private _text: string
+  private readonly _textLayer: Layer
+  private readonly _textScale: XY
+  private readonly _textMaxSize: WH
 
   constructor(atlas: Atlas, props?: Text.Props<Text.Variant, Text.State>) {
     super({
@@ -32,52 +32,60 @@ export class Text extends Entity<Text.Variant, Text.State> {
       ...props
     })
 
-    this.text = (props && props.text) || defaults.text
-    this.textLayer = (props && props.textLayer) || defaults.textLayer
-    this.textScale = (props && props.textScale) || defaults.textScale.copy()
-    this.textMaxSize =
+    this._text = (props && props.text) || defaults.text
+    this._textLayer = (props && props.textLayer) || defaults.textLayer
+    this._textScale = (props && props.textScale) || defaults.textScale.copy()
+    this._textMaxSize =
       (props && props.textMaxSize) || defaults.textMaxSize.copy()
 
     const textImages = toImages(
       atlas,
-      this.text,
-      this.textScale,
+      this._text,
+      this._textScale,
       {
         position: this.imageBounds().position.copy(),
         size: new WH(
-          this.textMaxSize && this.textMaxSize.w
-            ? this.textMaxSize.w
+          this._textMaxSize && this._textMaxSize.w
+            ? this._textMaxSize.w
             : Limits.maxShort,
 
-          this.textMaxSize && this.textMaxSize.h
-            ? this.textMaxSize.h
+          this._textMaxSize && this._textMaxSize.h
+            ? this._textMaxSize.h
             : Limits.maxShort
         )
       },
       this.imageID()
     )
-    if (this.textLayer)
-      for (const image of textImages) image.elevate(this.textLayer)
+    if (this._textLayer)
+      for (const image of textImages) image.elevate(this._textLayer)
 
     this.addImages(...textImages)
   }
 
+  get text(): string {
+    return this._text
+  }
+
   toJSON(): JSONObject {
     const diff = EntitySerializer.serialize(this, defaults)
-    if (this.text !== defaults.text) diff.text = this.text
-    if (this.textLayer !== defaults.textLayer) diff.textLayer = this.textLayer
-    if (!this.textScale.equal(defaults.textScale))
+    if (this._text !== defaults.text) diff.text = this._text
+    if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
+    if (!this._textScale.equal(defaults.textScale))
       diff.textScale = {
-        ...(this.textScale.x !== defaults.textScale.x && {x: this.textScale.x}),
-        ...(this.textScale.y !== defaults.textScale.y && {y: this.textScale.y})
-      }
-    if (!this.textMaxSize.equal(defaults.textMaxSize))
-      diff.textMaxSize = {
-        ...(this.textMaxSize.w !== defaults.textMaxSize.w && {
-          w: this.textMaxSize.w
+        ...(this._textScale.x !== defaults.textScale.x && {
+          x: this._textScale.x
         }),
-        ...(this.textMaxSize.h !== defaults.textMaxSize.h && {
-          h: this.textMaxSize.h
+        ...(this._textScale.y !== defaults.textScale.y && {
+          y: this._textScale.y
+        })
+      }
+    if (!this._textMaxSize.equal(defaults.textMaxSize))
+      diff.textMaxSize = {
+        ...(this._textMaxSize.w !== defaults.textMaxSize.w && {
+          w: this._textMaxSize.w
+        }),
+        ...(this._textMaxSize.h !== defaults.textMaxSize.h && {
+          h: this._textMaxSize.h
         })
       }
     return diff

@@ -17,8 +17,8 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 export class Button extends Entity<Button.Variant, Button.State> {
-  clicked: boolean
-  longClicked: boolean
+  private _clicked: boolean
+  private _longClicked: boolean
   private _engaged: boolean
   constructor(atlas: Atlas, props?: Button.Props) {
     super({
@@ -48,15 +48,23 @@ export class Button extends Entity<Button.Variant, Button.State> {
       },
       ...props
     })
-    this.clicked = (props && props.clicked) || false
-    this.longClicked = (props && props.longClicked) || false
+    this._clicked = (props && props.clicked) || false
+    this._longClicked = (props && props.longClicked) || false
     this._engaged = false
+  }
+
+  get clicked(): boolean {
+    return this._clicked
+  }
+
+  get longClicked(): boolean {
+    return this._longClicked
   }
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
 
-    this.clicked = false
+    this._clicked = false
     const collision = Level.collisionWithCursor(state.level, this)
     this._engaged =
       (collision && (!state.inputs.pick || !state.inputs.pick.active)) ||
@@ -71,10 +79,10 @@ export class Button extends Entity<Button.Variant, Button.State> {
     const nextClicked =
       this._engaged && Input.inactiveTriggered(state.inputs.pick)
     const nextLongClicked = this._engaged && Input.activeLong(state.inputs.pick)
-    if (this.clicked !== nextClicked) status |= UpdateStatus.TERMINATE
-    if (this.longClicked !== nextLongClicked) status |= UpdateStatus.TERMINATE
-    this.clicked = nextClicked
-    this.longClicked = nextLongClicked
+    if (this._clicked !== nextClicked) status |= UpdateStatus.TERMINATE
+    if (this._longClicked !== nextLongClicked) status |= UpdateStatus.TERMINATE
+    this._clicked = nextClicked
+    this._longClicked = nextLongClicked
 
     return status
   }
