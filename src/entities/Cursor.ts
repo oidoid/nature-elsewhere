@@ -23,7 +23,10 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
   ) {
     super({
       ...defaults,
-      collisionBodies: defaults.collisionBodies.map(Rect.copy),
+      collisionBodies:
+        ((props && props.variant) || defaults.variant) === Cursor.Variant.DOT
+          ? [Rect.make(-1, -1, 3, 3)]
+          : [Rect.make(0, 0, 9, 7)],
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cursor.State.VISIBLE]: variantRect(atlas, props)
@@ -80,10 +83,9 @@ const defaults = ObjectUtil.freeze({
   variant: Cursor.Variant.DOT,
   state: Entity.BaseState.HIDDEN,
   updatePredicate: UpdatePredicate.ALWAYS,
-  // Use bodies so that collision remains the same regardless of whether
-  // hidden or not.
-  collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(0, 0, 1, 1)]
+  // Use bodies so that collision remains the same regardless of whether hidden
+  // or not.
+  collisionPredicate: CollisionPredicate.BODIES
 })
 
 function variantRect(
@@ -93,7 +95,7 @@ function variantRect(
   const dot =
     ((props && props.variant) || defaults.variant) === Cursor.Variant.DOT
   return new ImageRect({
-    origin: dot ? undefined : new XY(4, 3),
+    origin: dot ? new XY(1, 1) : new XY(4, 3),
     images: [
       new Image(atlas, {
         id: dot ? AtlasID.PALETTE_BLACK : AtlasID.UI_CURSOR_RETICLE,

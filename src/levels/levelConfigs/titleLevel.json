@@ -44,7 +44,7 @@
             },
             {
               "type": "uiLevelLink",
-              "position": {"y": 12},
+              "position": {"y": 15},
               "//": "[strings]",
               "text": "options",
               "textScale": {"x": 2, "y": 2},
@@ -52,7 +52,7 @@
             },
             {
               "type": "uiLevelLink",
-              "position": {"y": 24},
+              "position": {"y": 30},
               "//": "[strings]",
               "text": "level editor",
               "textScale": {"x": 2, "y": 2},
@@ -60,7 +60,7 @@
             },
             {
               "type": "uiLevelLink",
-              "position": {"y": 36},
+              "position": {"y": 45},
               "//": "[strings]",
               "text": "exit",
               "textScale": {"x": 2, "y": 2},
