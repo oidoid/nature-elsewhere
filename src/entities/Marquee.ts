@@ -115,16 +115,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     const cursorSandboxCollision = EntityCollider.collidesEntity(
       state.level.cursor,
       sandbox
-    ).sort(
-      // Sort by centroid.
-      (lhs, rhs) =>
-        Rect.centerOf(lhs.bounds)
-          .sub(pickCenter)
-          .magnitude() -
-        Rect.centerOf(rhs.bounds)
-          .sub(pickCenter)
-          .magnitude()
-    )
+    ).sort(compareCentroidTo(pickCenter))
     const triggered = Input.activeTriggered(state.inputs.pick)
     if (!triggered && this._selection && this._dragOffset) {
       const destination = state.level.cursor.bounds.position.add(
@@ -190,6 +181,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     marqueeImages[Images.BOTTOM].wrapTo(
       new XY((sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0, 0)
     )
+
     this.invalidateImageBounds()
     this.invalidateBounds()
   }
@@ -218,3 +210,15 @@ const defaults = ObjectUtil.freeze({
   state: Entity.BaseState.HIDDEN,
   updatePredicate: UpdatePredicate.ALWAYS
 })
+
+function compareCentroidTo(
+  to: Readonly<XY>
+): (lhs: Readonly<Entity>, rhs: Readonly<Entity>) => number {
+  return (lhs, rhs) =>
+    Rect.centerOf(lhs.bounds)
+      .sub(to)
+      .magnitude() -
+    Rect.centerOf(rhs.bounds)
+      .sub(to)
+      .magnitude()
+}

@@ -98,12 +98,6 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Consider alternative rain shader patterns.
         Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
         Add some kind of unstoppable giant monster / colossus / death entity.
-        Do I want to add AND_NOT_SOURCE_MASK alpha composition? I think I can use it for button borders .
-          left and top start from the same origin, so they are unadjusted.
-          right starts from the same top origin but if the top ends on an odd pixel, must be offset by 1:
-            w % 2
-          bottom starts at the same x but
-            h % 2
   Synthesize fantastic sounds.
     Understand the basics: https://news.ycombinator.com/item?id=20272346
     Rename audio player to speaker or something.
