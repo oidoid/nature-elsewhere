@@ -3,7 +3,6 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Cursor} from './Cursor'
 import {EntityCollider} from '../collision/EntityCollider'
 import {Entity} from '../entity/Entity'
-import {EntityID} from '../entity/EntityID'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {Image} from '../image/Image'
@@ -23,8 +22,9 @@ import {XY} from '../math/XY'
 export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
   private _selection?: Entity
   /** The offset from the top-left of the selection to the cursor when the
-      cursor is active. */
-  private readonly _cursorOffset: XY
+      cursor is in "drag mode." Undefined when no selection or not in drag
+      mode. */
+  private _cursorOffset: Maybe<XY>
 
   constructor(
     atlas: Atlas,
@@ -62,7 +62,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       ...props
     })
     this._selection = undefined
-    this._cursorOffset = new XY(0, 0)
+    this._cursorOffset = undefined
   }
 
   get selection(): Maybe<Entity> {
@@ -86,11 +86,9 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     }
 
     this._selection = selection
-    const offset = selection
+    this._cursorOffset = selection
       ? selection.bounds.position.sub(cursor.bounds.position)
       : new XY(0, 0)
-    this._cursorOffset.x = offset.x
-    this._cursorOffset.y = offset.y
     return status
   }
 
@@ -98,12 +96,12 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     let status = super.update(state)
 
     const {pick} = state.inputs
-    if (!pick || !pick.active) return status
+    if (!pick || !pick.active) {
+      this._cursorOffset = undefined // Exit drag mode.
+      return status
+    }
 
-    const sandbox = Entity.findAnyByID(
-      state.level.parentEntities,
-      EntityID.UI_LEVEL_EDITOR_SANDBOX
-    )
+    const {sandbox} = state.level
     if (!sandbox) return status
 
     const sandboxChildren = this._sandboxChildrenCollidingWithCursor(
@@ -130,12 +128,13 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       return this.setSelection(entity, state.level.cursor)
     }
 
-    if (!triggered && this._selection) {
+    const {selection} = this
+    if (!triggered && selection && this._cursorOffset) {
       const destination = state.level.cursor.bounds.position.add(
         this._cursorOffset
       )
       status |= this.moveTo(destination.sub(new XY(1, 1)))
-      status |= this._selection.moveTo(destination)
+      status |= selection.moveTo(destination)
       sandbox.invalidateBounds()
       return status | UpdateStatus.UPDATED
     }

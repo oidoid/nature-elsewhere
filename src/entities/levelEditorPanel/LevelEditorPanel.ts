@@ -7,7 +7,6 @@ import {CollisionType} from '../../collision/CollisionType'
 import {EntityFactory} from '../../entity/EntityFactory'
 import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
-import {EntityParser} from '../../entity/EntityParser'
 import {EntityPicker} from '../EntityPicker'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
@@ -103,7 +102,7 @@ export class LevelEditorPanel extends Entity<
       imageID: AtlasID.PALETTE_BLACK
     })
     this._radioGroup = new RadioCheckboxGroup({
-      position: new XY(50, 2),
+      position: new XY(55, 2),
       children: [
         new Text(atlas, {
           text: 'var',
@@ -151,7 +150,7 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._decrementButton = new Button(atlas, {
-      position: new XY(10, 22),
+      position: new XY(11, 22),
       children: [
         new Group({
           map: {
@@ -169,7 +168,7 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._incrementButton = new Button(atlas, {
-      position: new XY(18, 22),
+      position: new XY(20, 22),
       children: [
         new Group({
           map: {
@@ -187,7 +186,7 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._destroyButton = new Button(atlas, {
-      position: new XY(26, 22),
+      position: new XY(29, 22),
       children: [
         new Group({
           map: {
@@ -205,7 +204,7 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._createButton = new Button(atlas, {
-      position: new XY(34, 22),
+      position: new XY(38, 22),
       children: [
         new Group({
           map: {
@@ -223,7 +222,7 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._toggleGridButton = new Button(atlas, {
-      position: new XY(42, 22),
+      position: new XY(47, 22),
       children: [
         new Group({
           map: {
@@ -268,10 +267,7 @@ export class LevelEditorPanel extends Entity<
 
     if (this._load) {
       this._load = false
-      const sandbox = Entity.findAnyByID(
-        state.level.parentEntities,
-        EntityID.UI_LEVEL_EDITOR_SANDBOX
-      )
+      const {sandbox} = state.level
       if (sandbox) loadTheStuff(state.level.atlas, <LevelEditorSandbox>sandbox)
     }
 
@@ -318,10 +314,7 @@ export class LevelEditorPanel extends Entity<
           variant: child.variant,
           position
         })
-        const sandbox = Entity.findAnyByID(
-          state.level.parentEntities,
-          EntityID.UI_LEVEL_EDITOR_SANDBOX
-        )
+        const {sandbox} = state.level
         if (!sandbox) throw new Error('Missing sandbox.')
 
         sandbox.addChildren(entity)
@@ -342,10 +335,7 @@ export class LevelEditorPanel extends Entity<
       marquee.state() !== Entity.BaseState.HIDDEN
     ) {
       const {selection} = marquee
-      const sandbox = Entity.findAnyByID(
-        state.level.parentEntities,
-        EntityID.UI_LEVEL_EDITOR_SANDBOX
-      )
+      const {sandbox} = state.level
       if (!sandbox) throw new Error('Missing sandbox.')
       if (this._destroyButton.clicked) {
         status |= UpdateStatus.UPDATED
@@ -378,11 +368,8 @@ export class LevelEditorPanel extends Entity<
     }
 
     if (status & UpdateStatus.UPDATED) {
-      const sandbox = Entity.findAnyByID(
-        state.level.parentEntities,
-        EntityID.UI_LEVEL_EDITOR_SANDBOX
-      )
-      if (sandbox) saveTheStuff(<LevelEditorSandbox>sandbox)
+      const {sandbox} = state.level
+      if (sandbox) saveTheStuff(sandbox)
     }
 
     return status
@@ -505,24 +492,6 @@ function saveTheStuff(sandbox: LevelEditorSandbox): void {
 function loadTheStuff(atlas: Atlas, sandbox: LevelEditorSandbox) {
   const data = LocalStorage.get(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE)
   if (data !== undefined) {
-    reaullyLoadTheStuff(atlas, sandbox, data)
-  }
-}
-
-export function reaullyLoadTheStuff(
-  atlas: Atlas,
-  sandbox: LevelEditorSandbox,
-  data: string
-): void {
-  const config = JSON.parse(data)
-  let sandboxChildren: Maybe<Entity[]>
-  try {
-    sandboxChildren = EntityParser.parseAll(config, atlas)
-  } catch (e) {
-    console.error(e, data, config)
-    LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
-  }
-  if (sandboxChildren) {
-    sandbox.addChildren(...sandboxChildren)
+    sandbox.load(atlas, data)
   }
 }

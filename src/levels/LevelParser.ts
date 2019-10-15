@@ -3,14 +3,15 @@ import {Backpacker} from '../entities/Backpacker'
 import {CameraConfig} from './CameraParser'
 import {CameraParser} from './CameraParser'
 import {Cursor} from '../entities/Cursor'
-import {EntityConfig, EntityArrayConfig} from '../entity/EntityParser'
+import {EntityArrayConfig, EntityConfig} from '../entity/EntityParser'
 import {EntityParser} from '../entity/EntityParser'
 import {LevelAdvance} from './LevelAdvance'
 import {Level} from './Level'
+import {LevelEditorSandbox} from '../entities/LevelEditorSandbox'
 import {LevelTypeConfig} from './LevelTypeParser'
 import {LevelTypeParser} from './LevelTypeParser'
-import {WH} from '../math/WH'
 import {Plane} from '../entities/Plane'
+import {WH} from '../math/WH'
 
 export interface LevelConfig {
   readonly version: string
@@ -23,6 +24,7 @@ export interface LevelConfig {
   readonly destination?: EntityConfig
   readonly hud?: EntityArrayConfig
   readonly player?: EntityConfig
+  readonly sandbox?: EntityConfig
   /** Entities to populate the level. Any children of these entities will be
       considered "active" as a first pass if it's parent root entity is. For
       this reason, favoring shallowing entities is best. Entity composition is
@@ -61,6 +63,9 @@ export namespace LevelParser {
       }),
       ...(config.player && {
         player: <Backpacker>EntityParser.parse(config.player, atlas)
+      }),
+      ...(config.sandbox && {
+        sandbox: <LevelEditorSandbox>EntityParser.parse(config.sandbox, atlas)
       }),
       parentEntities: EntityParser.parseAll(config.parentEntities, atlas),
       atlas

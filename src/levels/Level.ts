@@ -14,6 +14,7 @@ import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdateState} from '../updaters/UpdateState'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {LevelEditorSandbox} from '../entities/LevelEditorSandbox'
 
 export interface Level {
   readonly type: LevelType
@@ -28,6 +29,7 @@ export interface Level {
   readonly destination?: Entity
   readonly hud: Entity[]
   readonly player?: Backpacker
+  readonly sandbox?: LevelEditorSandbox
   /** Planes, cursor, destination, HUD, and player are not included in
       parentEntities. */
   readonly parentEntities: Entity[]
@@ -55,6 +57,7 @@ export namespace Level {
       ...level.parentEntities.filter(entity => entity.active(level.cam.bounds)),
       ...level.hud
     )
+    if (level.sandbox) entities.push(level.sandbox)
     return entities
   }
 

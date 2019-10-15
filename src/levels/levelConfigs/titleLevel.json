@@ -2,7 +2,7 @@
   "version": "0.0.0",
   "type": "title",
   "size": {"w": 136, "h": 128},
-  "minViewport": {"w": 136, "h": 128},
+  "minViewport": {"w": 148, "h": 128},
   "planes": [{"type": "plane", "variant": "white"}],
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
@@ -13,7 +13,7 @@
         "visible": {
           "images": [
             {
-              "id": "palette-paleGreen",
+              "id": "palette-lightGreen",
               "bounds": {"position": {"y": 44}, "size": {"w": 136, "h": 2}}
             }
           ]
@@ -31,7 +31,7 @@
         },
         {
           "type": "group",
-          "position": {"y": 60},
+          "position": {"y": 54},
           "updatePredicate": "always",
           "collisionPredicate": "children",
           "children": [
@@ -44,7 +44,7 @@
             },
             {
               "type": "uiLevelLink",
-              "position": {"y": 15},
+              "position": {"y": 16},
               "//": "[strings]",
               "text": "options",
               "textScale": {"x": 2, "y": 2},
@@ -52,7 +52,7 @@
             },
             {
               "type": "uiLevelLink",
-              "position": {"y": 30},
+              "position": {"y": 32},
               "//": "[strings]",
               "text": "level editor",
               "textScale": {"x": 2, "y": 2},
@@ -60,7 +60,7 @@
             },
             {
               "type": "uiLevelLink",
-              "position": {"y": 45},
+              "position": {"y": 48},
               "//": "[strings]",
               "text": "exit",
               "textScale": {"x": 2, "y": 2},

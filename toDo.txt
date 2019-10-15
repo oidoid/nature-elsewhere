@@ -32,7 +32,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
       Improve the palette. Tremendous colors!
         I think that shade of blue in particular isn't quite right. I need a deep lake blue and couple extra values. Most probably lots of tweaking is needed.
         The cursor probably needs a unique color like the shadows.
-      Improve the level editor and toolbelt UI. Shift a little more towards ornate or intricate. It should be delightful and intuitive! I love the Diablo globes but maybe with even more saturated colors.
+      Improve the level editor and toolbelt / toolbar UI. Shift a little more towards ornate or intricate. It should be delightful and intuitive! I love the Diablo globes but maybe with even more saturated colors.
         Start with a highly detailed mock.
         Maybe a big heart bar or health globe.
         Can I use the old inverse kinematic JS code?
@@ -98,6 +98,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Consider alternative rain shader patterns.
         Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
         Add some kind of unstoppable giant monster / colossus / death entity.
+        The s/getter syntax is terser but isn't very flexible compared to functions: 1) no support for multiple parameters 2) types must match 3) creates ambiguity with functions 4) for better and worse, allows implicit conversions via duck typing. Should I change them to functions?
   Synthesize fantastic sounds.
     Understand the basics: https://news.ycombinator.com/item?id=20272346
     Rename audio player to speaker or something.

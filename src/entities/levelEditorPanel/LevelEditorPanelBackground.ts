@@ -56,7 +56,7 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     {
       id: AtlasID.PALETTE_WHITE,
       position: new XY(1, 21),
-      size: new WH(50, 11),
+      size: new WH(55, 11),
       layer: Layer.ABOVE_PLANE
     },
     {
@@ -68,50 +68,50 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       position: new XY(1, 20),
-      size: new WH(50, 1),
+      size: new WH(55, 1),
       layer: Layer.UI_MID
     },
     {
       id: AtlasID.PALETTE_WHITE,
-      position: new XY(51, 13),
-      size: new WH(45, 19),
+      position: new XY(56, 13),
+      size: new WH(50, 19),
       layer: Layer.UI_LO
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      position: new XY(50, 13),
+      position: new XY(55, 13),
       size: new WH(1, 7),
       layer: Layer.UI_MID
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      position: new XY(51, 12),
+      position: new XY(56, 12),
       size: new WH(44, 1),
       layer: Layer.UI_MID
     },
     {
       id: AtlasID.PALETTE_WHITE,
-      position: new XY(95, 1),
+      position: new XY(100, 1),
       size: new WH(34, 31),
       layer: Layer.UI_LO
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      position: new XY(95, 1),
+      position: new XY(100, 1),
       size: new WH(1, 11),
       wrap: new XY(0, 1),
       layer: Layer.UI_MID
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      position: new XY(96, 0),
+      position: new XY(101, 0),
       size: new WH(32, 1),
       wrap: new XY(1, 0),
       layer: Layer.UI_MID
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      position: new XY(128, 1),
+      position: new XY(133, 1),
       size: new WH(1, 1),
       layer: Layer.UI_MID
     }

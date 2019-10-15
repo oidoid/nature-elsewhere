@@ -34,6 +34,10 @@ export namespace Store {
       ),
       ...updateAndAnimate(state.level.hud, state),
       ...updateAndAnimate(state.level.planes, state),
+      ...updateAndAnimate(
+        state.level.sandbox ? [state.level.sandbox] : [],
+        state
+      ),
       ...updateAndAnimate(Level.activeParentsNoPlayer(state.level), state)
     )
     images = images.sort((lhs, rhs) => lhs.compareElevation(rhs))

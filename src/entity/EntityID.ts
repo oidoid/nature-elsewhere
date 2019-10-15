@@ -6,11 +6,10 @@ export enum EntityID {
   UI_GRID = 'uiGrid',
   UI_MARQUEE = 'uiMarquee',
   UI_PLAYER = 'uiPlayer',
-  UI_LEVEL_EDITOR_PANEL = 'uiLevelEditorPanel',
-  UI_LEVEL_EDITOR_SANDBOX = 'uiLevelEditorSandbox',
   UI_LEVEL_EDITOR_MENU_EXPORT = 'uiLevelEditorMenuExport',
   UI_LEVEL_EDITOR_MENU_IMPORT = 'uiLevelEditorMenuImport',
   UI_LEVEL_EDITOR_MENU_RESET = 'uiLevelEditorMenuReset',
+  UI_LEVEL_EDITOR_MENU_RESTORE_BACKUP = 'uiLevelEditorMenuRestoreBackup',
   UI_LEVEL_EDITOR_MENU_BACK_TO_TITLE = 'uiLevelEditorMenuBackToTitle',
   UI_LEVEL_EDITOR_MENU_BACK_TO_EDITOR = 'uiLevelEditorMenuBackToEditor'
 }
