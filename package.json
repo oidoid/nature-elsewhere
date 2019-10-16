@@ -26,10 +26,10 @@
     "palettize": "cd assets/atlas && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {
-    "@types/jest": "24.0.18",
+    "@types/jest": "24.0.19",
     "@types/webgl2": "0.0.5",
     "@types/webpack-dev-server": "3.1.7",
-    "aseprite-atlas": "2.0.5",
+    "aseprite-atlas": "2.0.6",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.0.4",
     "fork-ts-checker-webpack-plugin": "1.5.1",
@@ -40,7 +40,7 @@
     "ts-jest": "24.1.0",
     "ts-loader": "6.2.0",
     "typescript": "3.6.4",
-    "webpack": "4.41.1",
+    "webpack": "4.41.2",
     "webpack-cli": "3.3.9",
     "webpack-dev-server": "3.8.2"
   },
