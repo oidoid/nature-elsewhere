@@ -87,6 +87,7 @@ export enum AtlasID {
   SUBSHRUB_SHADOW = 'subshrub-shadow',
   TREE = 'tree',
   TREE_SHADOW = 'tree-shadow',
+  LATTICE = 'lattice',
   MEM_FONT_000 = 'memFont-000',
   MEM_FONT_001 = 'memFont-001',
   MEM_FONT_002 = 'memFont-002',

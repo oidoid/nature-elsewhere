@@ -14,6 +14,11 @@
               "id": "wave",
               "bounds": {"position": {"y": 24}, "size": {"w": 32767}},
               "wrapVelocity": {"x": 32}
+            },
+            {
+              "id": "lattice",
+              "bounds": {"position": {"x": 24}, "size": {"h": 32767}},
+              "wrapVelocity": {"y": 200}
             }
           ]
         }

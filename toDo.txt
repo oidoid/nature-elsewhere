@@ -58,6 +58,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Do I need A*?
       Make many wonderful entities.
         Add tornados.
+        Add grasshopper.
         Add lightning to the cloud entity.
         Add cactus.
         Add more clouds.
@@ -125,6 +126,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
   What examples are there for making 9png like UI?
     Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
   Research videos and articles by the experts like GDC.
+  Extract the natural engine to a distributable package
 
 aseprite-atlas
   Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.
