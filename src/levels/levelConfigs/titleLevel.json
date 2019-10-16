@@ -41,7 +41,7 @@
         }
       },
       "updatePredicate": "always",
-      "collisionPredicate": "children",
+      "collisionPredicate": 8,
       "children": [
         {
           "type": "uiText",
@@ -54,7 +54,7 @@
           "type": "group",
           "position": {"y": 54},
           "updatePredicate": "always",
-          "collisionPredicate": "children",
+          "collisionPredicate": 8,
           "children": [
             {
               "type": "uiLevelLink",
@@ -96,7 +96,7 @@
       "positionRelativeToCam": "southWest",
       "camMargin": {"w": 1},
       "updatePredicate": "always",
-      "collisionPredicate": "children",
+      "collisionPredicate": 8,
       "children": [{"type": "uiDateVersionHash"}]
     },
     {
@@ -104,7 +104,7 @@
       "positionRelativeToCam": "southEast",
       "camMargin": {"w": 1, "h": 1},
       "updatePredicate": "always",
-      "collisionPredicate": "children",
+      "collisionPredicate": 8,
       "//": "[strings]",
       "map": {"visible": {"images": [{"id": "oddoid"}]}}
     }

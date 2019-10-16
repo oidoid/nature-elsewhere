@@ -21,13 +21,13 @@
               "id": "uiCheckerboard-blackTransparent",
               "imageID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"position": {"x": 511}, "size": {"h": 32767}}
+              "bounds": {"position": {"x": 510}, "size": {"h": 32767}}
             },
             {
               "id": "uiCheckerboard-blackTransparent",
               "imageID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"position": {"y": 255}, "size": {"w": 32767}}
+              "bounds": {"position": {"y": 254}, "size": {"w": 32767}}
             },
             {
               "id": "uiCheckerboard-blackTransparent",

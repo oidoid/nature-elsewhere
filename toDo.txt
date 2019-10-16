@@ -127,6 +127,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
     Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
   Research videos and articles by the experts like GDC.
   Extract the natural engine to a distributable package
+  Enums are serializing their keys or their bits: 1) the mechanism should probably be consistent 2) either the keys or the bits can't change; with string enums it felt more flexible since the value string was a more abstract thing than a specific power of two, for example.
 
 aseprite-atlas
   Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.

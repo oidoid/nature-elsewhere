@@ -110,13 +110,13 @@ function parseProps(
     ...(config.map && {
       map: ImageStateMachineParser.parseMap(config.map, atlas)
     }),
-    ...(config.updatePredicate && {
+    ...(config.updatePredicate !== undefined && {
       updatePredicate: UpdatePredicateParser.parse(config.updatePredicate)
     }),
-    ...(config.collisionType && {
+    ...(config.collisionType !== undefined && {
       collisionType: CollisionTypeParser.parse(config.collisionType)
     }),
-    ...(config.collisionPredicate && {
+    ...(config.collisionPredicate !== undefined && {
       collisionPredicate: CollisionPredicateParser.parse(
         config.collisionPredicate
       )

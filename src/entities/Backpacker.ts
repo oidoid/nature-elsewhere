@@ -123,18 +123,20 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
   collides(entities: readonly Entity[], state: UpdateState): void {
     super.collides(entities, state)
-    const collisionType = entities.reduce(
-      (type, entity) => type | entity.collisionType,
-      CollisionType.INERT
-    )
-    {
-      if (collisionType & CollisionType.OBSTACLE) {
-        const idle = idleStateFor[this.state()]
-        if (!state.inputs.pick || !state.inputs.pick.active) {
-          this.transition(idle)
-          hideDestinationMarker(state)
-          state.win.navigator.vibrate(1)
-        }
+    let collisionType = CollisionType.INERT
+    for (const entity of entities) {
+      collisionType |= entity.collisionType
+
+      if (entity.collisionType & CollisionType.TYPE_ITEM)
+        Entity.removeAny(state.level.parentEntities, entity)
+    }
+
+    if (collisionType & CollisionType.OBSTACLE) {
+      const idle = idleStateFor[this.state()]
+      if (!state.inputs.pick || !state.inputs.pick.active) {
+        this.transition(idle)
+        hideDestinationMarker(state)
+        state.win.navigator.vibrate(1)
       }
     }
 

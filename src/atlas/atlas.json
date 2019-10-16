@@ -3014,6 +3014,25 @@
       },
       {"name": "wave", "from": 0, "to": 0, "direction": "forward"}
     ],
-    "slices": []
+    "slices": [
+      {
+        "name": "arrow-right",
+        "color": "#0000ffff",
+        "keys": [
+          {"frame": 0, "bounds": {"x": 1, "y": 2, "w": 3, "h": 1}},
+          {"frame": 1, "bounds": {"x": 1, "y": 2, "w": 3, "h": 1}}
+        ]
+      },
+      {
+        "name": "arrow-up",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 1, "y": 0, "w": 1, "h": 3}}]
+      },
+      {
+        "name": "arrow-upRight",
+        "color": "#0000ffff",
+        "keys": [{"frame": 0, "bounds": {"x": 1, "y": 0, "w": 3, "h": 3}}]
+      }
+    ]
   }
 }

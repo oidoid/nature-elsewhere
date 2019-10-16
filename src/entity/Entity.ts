@@ -54,7 +54,7 @@ export abstract class Entity<
   private readonly _machine: ImageStateMachine<State | Entity.BaseState>
 
   private readonly _updatePredicate: UpdatePredicate
-  private readonly _collisionType: CollisionType
+  private _collisionType: CollisionType
 
   private _collisionPredicate: CollisionPredicate
 
@@ -169,6 +169,10 @@ export abstract class Entity<
     return this._collisionType
   }
 
+  setCollisiontype(type: CollisionType): void {
+    this._collisionType = type
+  }
+
   get collisionPredicate(): CollisionPredicate {
     return this._collisionPredicate
   }
@@ -190,11 +194,23 @@ export abstract class Entity<
     this.invalidateBounds()
   }
 
-  removeChild(child: Readonly<Entity>): void {
-    const index = this.children.findIndex(entity => child.equal(entity))
-    if (index === -1) return
-    this._children.splice(index, 1)
-    this.invalidateBounds()
+  removeChild(child: Readonly<Entity>): boolean {
+    for (let i = 0; i < this.children.length; ++i) {
+      if (this.children[i] === child) {
+        this._children.splice(i, 1)
+        this.invalidateBounds()
+        return true
+      }
+      if (
+        this.children[i].children.some(grandchild =>
+          grandchild.removeChild(child)
+        )
+      ) {
+        this.invalidateBounds()
+        return true
+      }
+    }
+    return false
   }
 
   clearChildren(): void {
@@ -351,36 +367,37 @@ export abstract class Entity<
     if (this.collisionPredicate === CollisionPredicate.NEVER) return collisions
 
     if (!Rect.intersects(this.bounds, rect))
-      // Any collisions requires the rectangle intersect with the entity's
+      // Any collisions requires the rectangle to intersect with the entity's
       // bounds.
       return collisions
 
-    if (this.collisionPredicate === CollisionPredicate.BOUNDS) {
-      // No further tests.
+    if (this.collisionPredicate & CollisionPredicate.BOUNDS)
       collisions.push(this)
-      return collisions
-    }
 
-    if (this.collisionPredicate === CollisionPredicate.IMAGES) {
+    if (
+      this.collisionPredicate & CollisionPredicate.IMAGES &&
+      !collisions.length
+    ) {
       // Test if any image collides.
       if (
         Rect.intersects(this.imageBounds(), rect) &&
         this.images().some(image => Rect.intersects(rect, image.bounds))
       )
         collisions.push(this)
-      return collisions
     }
 
-    if (this.collisionPredicate === CollisionPredicate.BODIES) {
+    if (
+      this.collisionPredicate & CollisionPredicate.BODIES &&
+      !collisions.length
+    ) {
       // Test if any body collides.
       if (this.collisionBodies.some(body => Rect.intersects(rect, body)))
         collisions.push(this)
-      return collisions
     }
 
-    // Collision type is CollisionPredicate.CHILDREN.
-    for (const child of this.children)
-      collisions.push(...child.collidesRect(rect))
+    if (this.collisionPredicate & CollisionPredicate.CHILDREN)
+      for (const child of this.children)
+        collisions.push(...child.collidesRect(rect))
 
     // Children are not shared so the collision array will not contain
     // duplicates.
@@ -544,6 +561,20 @@ export namespace Entity {
     imageID: undefined,
     scale: new XY(1, 1)
   })
+
+  export function removeAny(
+    entities: Entity[],
+    member: Readonly<Entity>
+  ): boolean {
+    for (let i = 0; i < entities.length; ++i) {
+      if (entities[i] === member) {
+        entities.splice(i, 1)
+        return true
+      }
+      if (entities[i].removeChild(member)) return true
+    }
+    return false
+  }
 
   export function findAnyBySpawnID(
     entities: readonly Entity[],

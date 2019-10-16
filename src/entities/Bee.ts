@@ -12,11 +12,14 @@ import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 
 export class Bee extends Entity<Bee.Variant, Bee.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Bee.Variant, Bee.State>) {
     super({
       ...defaults,
+      collisionType:
+        defaults.collisionType[(props && props.state) || defaults.state],
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
@@ -37,8 +40,17 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
     })
   }
 
+  transition(state: Bee.State | Entity.BaseState): UpdateStatus {
+    const status = super.transition(state)
+    this.setCollisiontype(defaults.collisionType[state])
+    return status
+  }
+
   toJSON(): JSONValue {
-    return EntitySerializer.serialize(this, defaults)
+    return EntitySerializer.serialize(this, {
+      ...defaults,
+      collisionType: defaults.collisionType[this.state()]
+    })
   }
 }
 
@@ -58,7 +70,11 @@ const defaults = ObjectUtil.freeze({
   variant: Bee.Variant.NONE,
   state: Bee.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
-  collisionType: CollisionType.TYPE_CHARACTER | CollisionType.HARMFUL,
+  collisionType: {
+    [Entity.BaseState.HIDDEN]: CollisionType.INERT,
+    [Bee.State.IDLE]: CollisionType.TYPE_CHARACTER | CollisionType.HARMFUL,
+    [Bee.State.DEAD]: CollisionType.TYPE_CHARACTER | CollisionType.TYPE_ITEM
+  },
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: [Rect.make(1, 1, 3, 2)]
 })

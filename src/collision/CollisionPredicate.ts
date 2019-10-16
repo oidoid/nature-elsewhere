@@ -13,31 +13,37 @@
     tests are independent of layout, drawing, and update intersection tests.
 
     CollisionPredicates apply only to one half of a collision test. The other
-    entity's collision predicate is honored. */
+    entity's collision predicate is honored.
+
+    BOUNDS, IMAGES, and BODIES apply to the owning entity only. An OR'd
+    predicate of BOUNDS | IMAGES | BODIES but an intersecting entity tested will
+    be included once even if it matches multiple predicates. ORing with CHILDREN
+    only has the additional behavior of accumulating the result of
+    descending. */
 export enum CollisionPredicate {
   /** No intersection tests on the entity or its children regardless of their
       predicates. All tests are considered failed. */
-  NEVER = 'never',
+  NEVER = 0b0000,
 
   /** Intersection tests on only the specifying entity's bounds. Any collision
       bodies and children are ignored. */
-  BOUNDS = 'bounds',
+  BOUNDS = 0b0001,
 
   /** Intersection tests on only the specifying entity's bounds and images for
       the current state. Any collision bodies and children are ignored. This is
       useful for non-rectangular panels that appear above other entities and
       wish to consume all collisions for the entities they obscure. */
-  IMAGES = 'images',
+  IMAGES = 0b0010,
 
   /** Intersection tests on only the specifying entity's bounds and collision
       bodies. The bounds and _any_ body must intersect to pass the test. If the
       entity has no bodies, the test fails. Children are not solicited. */
-  BODIES = 'bodies',
+  BODIES = 0b0100,
 
   /** Intersection tests on the specifying entity's bounds and, if passed, test
       all descendants recursively as specified by each parent in the chain for
       the first passing child. If a child collides, the top-most parents are
       tasked with resolution in their updaters. The child does not get the
       option unless requested by the parent's updater. */
-  CHILDREN = 'children'
+  CHILDREN = 0b1000
 }

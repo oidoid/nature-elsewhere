@@ -63,7 +63,7 @@ const defaults = ObjectUtil.freeze({
   type: EntityType.APPLE_TREE,
   variant: AppleTree.Variant.NONE,
   state: AppleTree.State.VISIBLE,
-  collisionPredicate: CollisionPredicate.BODIES,
+  collisionPredicate: CollisionPredicate.BODIES | CollisionPredicate.CHILDREN,
   collisionBodies: [Rect.make(3, 10, 7, 1)],
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })

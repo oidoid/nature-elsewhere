@@ -1,7 +1,7 @@
 import {AlphaComposition} from './AlphaComposition'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
-export type AlphaCompositionConfig = Maybe<string | number | AlphaComposition>
+export type AlphaCompositionConfig = Maybe<AlphaComposition | string | number>
 
 export namespace AlphaCompositionParser {
   export function parse(config: AlphaCompositionConfig): AlphaComposition {
