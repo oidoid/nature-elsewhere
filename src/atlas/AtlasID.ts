@@ -248,7 +248,8 @@ export enum AtlasID {
   UI_CURSOR_RETICLE = 'uiReticle',
   UI_SWITCH = 'uiSwitch',
   UI_WINDOW_MODE_CHART = 'uiWindowModeChart',
-  UI_ZOOM_MULTIPLIER_CHART = 'uiZoomMultiplierChart'
+  UI_ZOOM_MULTIPLIER_CHART = 'uiZoomMultiplierChart',
+  WAVE = 'wave'
 }
 
 export const MEM_FONT_PREFIX = 'memFont-'

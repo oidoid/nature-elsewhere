@@ -239,7 +239,7 @@ export class LevelEditorPanel extends Entity<
         })
       ]
     })
-    this._entityPicker = new EntityPicker(atlas, {position: new XY(97, 0)})
+    this._entityPicker = new EntityPicker(atlas, {position: new XY(102, 0)})
     this.addChildren(
       this._menuButton,
       this._decrementButton,

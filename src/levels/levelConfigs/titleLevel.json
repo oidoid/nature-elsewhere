@@ -3,7 +3,23 @@
   "type": "title",
   "size": {"w": 136, "h": 128},
   "minViewport": {"w": 148, "h": 128},
-  "planes": [{"type": "plane", "variant": "white"}],
+  "planes": [
+    {"type": "plane", "variant": "white"},
+    {
+      "type": "group",
+      "map": {
+        "visible": {
+          "images": [
+            {
+              "id": "wave",
+              "bounds": {"position": {"y": 24}, "size": {"w": 32767}},
+              "wrapVelocity": {"x": 50}
+            }
+          ]
+        }
+      }
+    }
+  ],
   "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
   "parentEntities": [
     {

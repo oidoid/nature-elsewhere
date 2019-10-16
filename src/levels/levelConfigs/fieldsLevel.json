@@ -48,7 +48,7 @@
   "player": {
     "id": "uiPlayer",
     "type": "backpacker",
-    "position": {"x": 80, "y": 102}
+    "position": {"x": 128, "y": 196}
   },
   "parentEntities": [
     {
