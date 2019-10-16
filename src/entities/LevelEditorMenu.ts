@@ -1,7 +1,7 @@
 import {Atlas} from 'aseprite-atlas'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
-import {DownloadUtil} from '../storage/DownloadUtil'
+import {FilePrompt} from '../storage/FilePrompt'
 import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
 import {EntitySerializer} from '../entity/EntitySerializer'
@@ -21,6 +21,7 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {LevelEditorSandboxFileUtil} from './LevelEditorSandboxFileUtil'
 
 export class LevelEditorMenu extends Entity<
   LevelEditorMenu.Variant,
@@ -82,14 +83,14 @@ export class LevelEditorMenu extends Entity<
     this._backToTitle = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_TITLE,
-      new XY(0, 24),
+      new XY(0, 30),
       'back to title', // [strings]
       LevelType.TITLE
     )
     this._backToEditor = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_EDITOR,
-      new XY(0, 32),
+      new XY(0, 36),
       'back to level editor', // [strings]
       LevelType.BACK
     )
@@ -139,7 +140,7 @@ export class LevelEditorMenu extends Entity<
 }
 
 function exportLevel(state: UpdateState): void {
-  DownloadUtil.downloadString(
+  FilePrompt.downloadString(
     state.win.document,
     'level.json',
     LocalStorage.get(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE) || '[]',
@@ -148,13 +149,13 @@ function exportLevel(state: UpdateState): void {
 }
 
 function importLevel(state: UpdateState): void {
-  DownloadUtil.uploadString(state.win.document, 'application/json').then(
+  FilePrompt.uploadString(state.win.document, 'application/json').then(
     ({data}) => {
       const sandbox = state.level.prevLevel && state.level.prevLevel.sandbox
       if (data && sandbox) {
         replaceBackupWithAutoSave()
         resetSandbox(sandbox, state)
-        sandbox.load(state.level.atlas, data)
+        LevelEditorSandboxFileUtil.load(sandbox, state.level.atlas, data)
       }
     }
   )
@@ -172,7 +173,7 @@ function restoreBackup(state: UpdateState): void {
   if (backup && sandbox) {
     replaceBackupWithAutoSave()
     resetSandbox(sandbox, state)
-    sandbox.load(state.level.atlas, backup)
+    LevelEditorSandboxFileUtil.load(sandbox, state.level.atlas, backup)
   }
 }
 

@@ -24,15 +24,9 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
           images: [
             new Image(atlas, {id: AtlasID.POND, layer: Layer.ABOVE_PLANE}),
             new Image(atlas, {id: AtlasID.CATTAILS, position: new XY(10, -5)}),
-            new Image(atlas, {id: AtlasID.GRASS_01, position: new XY(1, 4)}),
-            new Image(atlas, {id: AtlasID.GRASS_02, position: new XY(12, 11)}),
-            new Image(atlas, {id: AtlasID.GRASS_09, position: new XY(18, 0)}),
-            new Image(atlas, {id: AtlasID.GRASS_10, position: new XY(5, 10)}),
-            new Image(atlas, {id: AtlasID.GRASS_05, position: new XY(17, 9)}),
-            new Image(atlas, {id: AtlasID.GRASS_11, position: new XY(21, 3)}),
-            new Image(atlas, {id: AtlasID.GRASS_03, position: new XY(0, 5)}),
-            new Image(atlas, {id: AtlasID.GRASS_06, position: new XY(0, 0)}),
-            new Image(atlas, {id: AtlasID.GRASS_07, position: new XY(4, -2)})
+            new Image(atlas, {id: AtlasID.GRASS_01, position: new XY(-3, -6)}),
+            new Image(atlas, {id: AtlasID.GRASS_09, position: new XY(20, 0)}),
+            new Image(atlas, {id: AtlasID.GRASS_10, position: new XY(10, 8)})
           ]
         })
       },

@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "type": "fields",
-  "size": {"w": 256, "h": 256},
+  "size": {"w": 512, "h": 256},
   "minViewport": {"w": 96, "h": 96},
   "cam": {"followID": "uiPlayer"},
   "planes": [
@@ -21,7 +21,7 @@
               "id": "uiCheckerboard-blackTransparent",
               "imageID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"position": {"x": 255}, "size": {"w": 1, "h": 32767}}
+              "bounds": {"position": {"x": 511}, "size": {"w": 1, "h": 32767}}
             },
             {
               "id": "uiCheckerboard-blackTransparent",
@@ -110,8 +110,8 @@
     {
       "type": "conifer",
       "position": {
-        "x": 90,
-        "y": 21
+        "x": 57,
+        "y": 13
       }
     },
     {
@@ -138,8 +138,8 @@
     {
       "type": "tree",
       "position": {
-        "x": 100,
-        "y": 12
+        "x": 29,
+        "y": 4
       }
     },
     {
@@ -225,32 +225,24 @@
     {
       "type": "grass",
       "position": {
-        "x": 45,
-        "y": 117
+        "x": 44,
+        "y": 120
       }
     },
     {
       "type": "grass",
       "variant": "10",
       "position": {
-        "x": 101,
-        "y": 17
-      }
-    },
-    {
-      "type": "grass",
-      "variant": "10",
-      "position": {
-        "x": 137,
-        "y": 77
+        "x": 72,
+        "y": 115
       }
     },
     {
       "type": "grass",
       "variant": "14",
       "position": {
-        "x": 145,
-        "y": 77
+        "x": 45,
+        "y": 8
       }
     },
     {
@@ -330,15 +322,15 @@
     {
       "type": "bunny",
       "position": {
-        "x": 40,
-        "y": 48
+        "x": 83,
+        "y": 16
       }
     },
     {
       "type": "bunny",
       "position": {
-        "x": 48,
-        "y": 48
+        "x": 94,
+        "y": 27
       },
       "state": "dead"
     },
@@ -457,8 +449,8 @@
     {
       "type": "pond",
       "position": {
-        "x": 4,
-        "y": 59
+        "x": 1,
+        "y": 58
       }
     },
     {
@@ -543,22 +535,22 @@
       "type": "grass",
       "variant": "12",
       "position": {
-        "x": 172,
-        "y": 139
+        "x": 176,
+        "y": 143
       }
     },
     {
       "type": "grass",
       "variant": "11",
       "position": {
-        "x": 167,
-        "y": 138
+        "x": 168,
+        "y": 141
       }
     },
     {
       "type": "grass",
       "position": {
-        "x": 147,
+        "x": 146,
         "y": 138
       }
     },
@@ -566,32 +558,32 @@
       "type": "grass",
       "variant": "01",
       "position": {
-        "x": 177,
-        "y": 135
+        "x": 175,
+        "y": 138
       }
     },
     {
       "type": "grass",
       "variant": "01",
       "position": {
-        "x": 142,
-        "y": 77
+        "x": 107,
+        "y": 65
       }
     },
     {
       "type": "grass",
       "variant": "02",
       "position": {
-        "x": 148,
-        "y": 77
+        "x": 112,
+        "y": 66
       }
     },
     {
       "type": "grass",
       "variant": "03",
       "position": {
-        "x": 134,
-        "y": 75
+        "x": 66,
+        "y": 116
       }
     },
     {
@@ -779,16 +771,94 @@
     {
       "type": "cloud",
       "position": {
-        "x": 242,
-        "y": 137
+        "x": 276,
+        "y": 84
       }
     },
     {
       "type": "monument",
       "variant": "medium",
       "position": {
-        "x": 203,
-        "y": 118
+        "x": 248,
+        "y": 73
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "11",
+      "position": {
+        "x": 223,
+        "y": 121
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "12",
+      "position": {
+        "x": 231,
+        "y": 122
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "13",
+      "position": {
+        "x": 284,
+        "y": 114
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "07",
+      "position": {
+        "x": 273,
+        "y": 129
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "06",
+      "position": {
+        "x": 280,
+        "y": 129
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 8,
+        "y": 10
+      }
+    },
+    {
+      "type": "conifer",
+      "position": {
+        "x": 53,
+        "y": 19
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "10",
+      "position": {
+        "x": 38,
+        "y": 10
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "07",
+      "position": {
+        "x": 88,
+        "y": 12
+      }
+    },
+    {
+      "type": "grass",
+      "variant": "02",
+      "position": {
+        "x": 96,
+        "y": 19
       }
     }
   ]

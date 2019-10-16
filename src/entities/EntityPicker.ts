@@ -50,7 +50,7 @@ export class EntityPicker extends Entity<
       child.moveTo(center)
       child.transition(Entity.BaseState.HIDDEN)
     }
-    this.showActiveChild()
+    this._showActiveChild()
     this.invalidateBounds()
     this.forceSizeTo(pickerSize)
   }
@@ -69,9 +69,9 @@ export class EntityPicker extends Entity<
 
   setActiveChild(index: number): void {
     if (!this.children.length) return
-    this.hideActiveChild()
+    this._hideActiveChild()
     this._activeChildIndex = NumberUtil.wrap(index, 0, this.children.length)
-    this.showActiveChild()
+    this._showActiveChild()
   }
 
   offsetActiveChildStateIndex(offset: number): void {
@@ -96,7 +96,13 @@ export class EntityPicker extends Entity<
       0,
       variants.length
     )
-    const variant = variants[index]
+    const variant = oldChild.variants()[index]
+    this.setActiveChildVariant(atlas, variant)
+  }
+
+  setActiveChildVariant(atlas: Atlas, variant: string): void {
+    const oldChild = this.getActiveChild()
+    if (!oldChild) return
     const newChild = EntityFactory.produce(atlas, {
       type: oldChild.type,
       variant,
@@ -105,6 +111,10 @@ export class EntityPicker extends Entity<
     newChild.moveTo(oldChild.bounds.position)
     newChild.elevate(2 * Layer.UI_PICKER_OFFSET)
     this.replaceChild(oldChild, newChild)
+  }
+
+  toJSON(): JSONValue {
+    return EntitySerializer.serialize(this, defaults)
   }
 
   private _entityWindowBounds(): ReadonlyRect {
@@ -117,18 +127,14 @@ export class EntityPicker extends Entity<
     }
   }
 
-  toJSON(): JSONValue {
-    return EntitySerializer.serialize(this, defaults)
-  }
-
-  private hideActiveChild(): void {
+  private _hideActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
     child.elevate(-2 * Layer.UI_PICKER_OFFSET)
   }
 
-  private showActiveChild(): void {
-    this.hideActiveChild()
+  private _showActiveChild(): void {
+    this._hideActiveChild()
     const child = this.getActiveChild()
     if (!child) return
     // const defaultState = getChildStates(child)[0]
@@ -150,15 +156,6 @@ function getChildStates(child: Entity): readonly (string)[] {
   return child.states().filter(state => state !== Entity.BaseState.HIDDEN)
 }
 
-const typeBlacklist: readonly string[] = Object.freeze([
-  EntityType.GROUP,
-  EntityType.LEVEL_EDITOR_SANDBOX,
-  EntityType.PLANE,
-  ...ObjectUtil.keys(EntityType)
-    .filter(type => type.startsWith(UI_KEY_PREFIX))
-    .map(key => EntityType[key])
-])
-
 function makeChildren(atlas: Atlas): Entity[] {
   const children = []
   for (const type of Object.values(EntityType)) {
@@ -176,3 +173,12 @@ const defaults = ObjectUtil.freeze({
   state: EntityPicker.State.VISIBLE,
   collisionType: CollisionType.TYPE_UI
 })
+
+const typeBlacklist: readonly string[] = ObjectUtil.freeze([
+  EntityType.GROUP,
+  EntityType.LEVEL_EDITOR_SANDBOX,
+  EntityType.PLANE,
+  ...ObjectUtil.keys(EntityType)
+    .filter(type => type.startsWith(UI_KEY_PREFIX))
+    .map(key => EntityType[key])
+])

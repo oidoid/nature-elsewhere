@@ -1,4 +1,4 @@
-export namespace DownloadUtil {
+export namespace FilePrompt {
   export function downloadString(
     doc: Document,
     filename: string,
@@ -32,9 +32,9 @@ export namespace DownloadUtil {
         }
 
         const reader = new FileReader()
-        reader.onload = evt =>
-          evt.target && evt.target.result
-            ? resolve({file, data: evt.target.result.toString()})
+        reader.onload = ev =>
+          ev.target && ev.target.result
+            ? resolve({file, data: ev.target.result.toString()})
             : reject()
         reader.readAsText(file)
       }

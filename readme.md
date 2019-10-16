@@ -930,7 +930,8 @@ The following abbreviations are used regardless of context except for types:
 
 - config: a configuration, usually JSON imported from a local file.
 - dat: data.
-- doc: document, usually the Web global.
+- doc: document, usually the Web global. Since `document` is a global, this
+  abbreviation is useful for avoiding an accidental implicit dependency.
 - ev: event, usually from the Web API.
 - fn: function.
 - init: initialize, initial value.
@@ -939,7 +940,8 @@ The following abbreviations are used regardless of context except for types:
 - min: minimum.
 - obj: object.
 - rect: rectangle.
-- win: window, usually the Web global.
+- win: window, usually the Web global. Since `window` is a global, this
+  abbreviation is useful for avoiding an accidental implicit dependency.
 
 The following abbreviations are only used for function parameters and locals:
 

@@ -69,7 +69,6 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Add more trees.
         Add Storymaker bubble egg.
         Fade out the destination maker and allow a few instances. Maybe reverse the animation.
-------->Improve the grass clumps. The mocks seem a lot nicer. Maybe just make them all shorter? Try perspective.
 ------->Improve grass patches. These are currently path hacks and should be nicer.
         Check that the entities have strong, even, isometric perspectives.
         I need a better way to manage states and transitions.
@@ -97,7 +96,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Consider alternative rain shader patterns.
         Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
         Add some kind of unstoppable giant monster / colossus / death entity.
-        The s/getter syntax is terser but isn't very flexible compared to functions: 1) no support for multiple parameters 2) types must match 3) creates ambiguity with functions 4) for better and worse, allows implicit conversions via duck typing. Should I change them to functions?
+        The s/getter syntax is terser but isn't very flexible compared to functions: 1) no support for multiple parameters 2) types must match 3) creates ambiguity with functions 4) for better and worse, allows implicit conversions via duck typing 5) abstracts properties as functions which can work well for otherwise plain data types but similarly creates confusion for fixed mutation / copy methods. Should I change them to functions?
   Synthesize fantastic sounds.
     Understand the basics: https://news.ycombinator.com/item?id=20272346
     Rename audio player to speaker or something.

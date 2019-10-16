@@ -8,6 +8,7 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {Layer} from '../image/Layer'
 
 export class Grass extends Entity<Grass.Variant, Grass.State> {
   constructor(
@@ -27,7 +28,8 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
                     ('GRASS_' + ((props && props.variant) || defaults.variant))
                   )
                 ]
-            })
+            }),
+            new Image(atlas, {id: AtlasID.GRASS_SHADOW, layer: Layer.SHADOW})
           ]
         })
       },

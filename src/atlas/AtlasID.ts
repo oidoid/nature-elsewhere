@@ -76,6 +76,7 @@ export enum AtlasID {
   GRASS_13 = 'grass-13',
   GRASS_14 = 'grass-14',
   GRASS_15 = 'grass-15',
+  GRASS_SHADOW = 'grass-shadow',
   MOUNTAIN = 'mountain',
   MOUNTAIN_SHADOW = 'mountain-shadow',
   PATH_CORNER_E = 'path->',

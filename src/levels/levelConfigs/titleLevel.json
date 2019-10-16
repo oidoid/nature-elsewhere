@@ -13,7 +13,7 @@
             {
               "id": "wave",
               "bounds": {"position": {"y": 24}, "size": {"w": 32767}},
-              "wrapVelocity": {"x": 50}
+              "wrapVelocity": {"x": 32}
             }
           ]
         }

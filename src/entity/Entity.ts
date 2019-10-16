@@ -18,6 +18,7 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {ObjectUtil} from '../utils/ObjectUtil'
 
 export abstract class Entity<
   Variant extends string = string,
@@ -531,17 +532,17 @@ export namespace Entity {
   export const defaults: DeepImmutable<Omit<
     Required<Entity.Props>,
     'type' | 'variant' | 'map' | 'imageID' | 'children'
-  >> = Object.freeze({
+  >> = ObjectUtil.freeze({
     id: EntityID.ANONYMOUS,
     state: Entity.BaseState.HIDDEN,
-    position: Object.freeze(new XY(0, 0)),
-    velocity: Object.freeze(new XY(0, 0)),
+    position: new XY(0, 0),
+    velocity: new XY(0, 0),
     updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
     collisionType: CollisionType.INERT,
     collisionPredicate: CollisionPredicate.NEVER,
-    collisionBodies: Object.freeze([]),
+    collisionBodies: [],
     imageID: undefined,
-    scale: Object.freeze(new XY(1, 1))
+    scale: new XY(1, 1)
   })
 
   export function findAnyBySpawnID(

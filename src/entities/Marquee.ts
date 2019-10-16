@@ -20,6 +20,7 @@ import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 
 export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
+  selectionTriggered: boolean
   private _selection?: Entity
   /** The offset from the top-left of the selection to the cursor when the
       cursor is in "drag mode." Undefined when no selection or not in drag
@@ -63,6 +64,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     })
     this._selection = undefined
     this._cursorOffset = undefined
+    this.selectionTriggered = false
   }
 
   get selection(): Maybe<Entity> {
@@ -95,6 +97,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
 
+    this.selectionTriggered = false
     const {pick} = state.inputs
     if (!pick || !pick.active) {
       this._cursorOffset = undefined // Exit drag mode.
@@ -125,6 +128,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
         sandboxChildren.length
       )
       const entity: Maybe<Entity> = sandboxChildren[nextIndex]
+      if (selection !== entity) this.selectionTriggered = true
       return this.setSelection(entity, state.level.cursor)
     }
 

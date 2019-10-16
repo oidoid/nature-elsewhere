@@ -1,11 +1,8 @@
-import {Atlas} from 'aseprite-atlas'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Entity} from '../entity/Entity'
-import {EntityParser} from '../entity/EntityParser'
 import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONArray} from '../utils/JSON'
-import {LocalStorage} from '../storage/LocalStorage'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
@@ -30,18 +27,6 @@ export class LevelEditorSandbox extends Entity<
       },
       ...props
     })
-  }
-
-  load(atlas: Atlas, data: string): void {
-    const config = JSON.parse(data)
-    let sandboxChildren: Entity[] = []
-    try {
-      sandboxChildren = EntityParser.parseAll(config, atlas)
-    } catch (e) {
-      console.error(e, data, config)
-      LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)
-    }
-    this.addChildren(...sandboxChildren)
   }
 
   update(state: UpdateState): UpdateStatus {

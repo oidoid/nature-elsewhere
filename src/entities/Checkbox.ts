@@ -41,11 +41,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     this._textMaxSize =
       (props && props.textMaxSize) || defaults.textMaxSize.copy()
     this._textImageID = (props && props.imageID) || defaults.textImageID
-    this.setText(
-      {type: EntityType.UI_TEXT, text: props && props.text},
-      0,
-      atlas
-    )
+    this.setText((props && props.text) || '', 0, atlas)
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -64,18 +60,14 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     )
   }
 
-  setText(
-    props: Text.Props<Text.Variant, Text.State>,
-    layerOffset: number,
-    atlas: Atlas
-  ): void {
+  setText(text: string, layerOffset: number, atlas: Atlas): void {
     const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
     const child = new Text(atlas, {
       textLayer: this._textLayer,
       textScale: this._textScale,
       textMaxSize: this._textMaxSize,
       imageID: this._textImageID,
-      ...props,
+      text,
       position
     })
     child.elevate(layerOffset)
