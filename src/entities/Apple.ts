@@ -47,5 +47,5 @@ const defaults = ObjectUtil.freeze({
   variant: Apple.Variant.NONE,
   state: Apple.State.VISIBLE,
   collisionPredicate: CollisionPredicate.IMAGES,
-  collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
+  collisionType: CollisionType.TYPE_SCENERY | CollisionType.TYPE_ITEM
 })
