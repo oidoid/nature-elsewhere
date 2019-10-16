@@ -2,7 +2,7 @@
   "version": "0.0.0",
   "type": "fields",
   "size": {"w": 512, "h": 256},
-  "minViewport": {"w": 96, "h": 96},
+  "minViewport": {"w": 104, "h": 104},
   "cam": {"followID": "uiPlayer"},
   "planes": [
     {"type": "plane", "variant": "paleGreen"},
@@ -15,25 +15,25 @@
               "id": "uiCheckerboard-blackTransparent",
               "imageID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"size": {"w": 32767, "h": 1}}
+              "bounds": {"size": {"w": 32767}}
             },
             {
               "id": "uiCheckerboard-blackTransparent",
               "imageID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"position": {"x": 511}, "size": {"w": 1, "h": 32767}}
+              "bounds": {"position": {"x": 511}, "size": {"h": 32767}}
             },
             {
               "id": "uiCheckerboard-blackTransparent",
               "imageID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"position": {"y": 255}, "size": {"w": 32767, "h": 1}}
+              "bounds": {"position": {"y": 255}, "size": {"w": 32767}}
             },
             {
               "id": "uiCheckerboard-blackTransparent",
               "imageID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"size": {"w": 1, "h": 32767}}
+              "bounds": {"size": {"h": 32767}}
             }
           ]
         }
