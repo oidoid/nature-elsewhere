@@ -35,11 +35,11 @@
     "fork-ts-checker-webpack-plugin": "1.5.1",
     "jest": "24.9.0",
     "pre-commit": "1.2.2",
-    "prettier": "github:prettier/prettier#7cb0c23",
+    "prettier": "github:prettier/prettier#a8a3a91",
     "raw-loader": "3.1.0",
     "ts-jest": "24.1.0",
     "ts-loader": "6.2.0",
-    "typescript": "3.6.4",
+    "typescript": "3.7.0-beta",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.9",
     "webpack-dev-server": "3.8.2"

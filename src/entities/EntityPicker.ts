@@ -155,7 +155,7 @@ export namespace EntityPicker {
   }
 }
 
-function getChildStates(child: Entity): readonly (string)[] {
+function getChildStates(child: Entity): readonly string[] {
   return child.states().filter(state => state !== Entity.BaseState.HIDDEN)
 }
 
