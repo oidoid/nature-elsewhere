@@ -25,6 +25,7 @@ import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
 import {LevelEditorSandboxFileUtil} from '../LevelEditorSandboxFileUtil'
 import {LevelType} from '../../levels/LevelType'
 import {Marquee} from '../Marquee'
+import * as memFont from '../../text/memFont.json'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Plane} from '../Plane'
 import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
@@ -238,7 +239,9 @@ export class LevelEditorPanel extends Entity<
         })
       ]
     })
-    this._entityPicker = new EntityPicker(atlas, {position: new XY(102, 0)})
+    this._entityPicker = new EntityPicker(atlas, {
+      position: new XY(101, 1 + memFont.lineHeight)
+    })
     this.addChildren(
       this._menuButton,
       this._decrementButton,

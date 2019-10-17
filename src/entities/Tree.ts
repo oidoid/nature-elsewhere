@@ -17,18 +17,18 @@ export class Tree extends Entity<Tree.Variant, Tree.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Tree.Variant, Tree.State>) {
     super({
       ...defaults,
-      collisionBodies: defaults.collisionBodies.map(Rect.copy),
+      collisionBodies: atlas.animations[
+        ((props && props.variant) || defaults.variant) === Tree.Variant.SMALL
+          ? AtlasID.TREE_SMALL
+          : AtlasID.TREE_LARGE
+      ].cels[0].slices.map(({x, y, w, h}) => Rect.make(x, y, w, h)),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Tree.State.VISIBLE]: new ImageRect({
-          images: [
-            new Image(atlas, {id: AtlasID.TREE}),
-            new Image(atlas, {
-              id: AtlasID.TREE_SHADOW,
-              position: new XY(0, 1),
-              layer: Layer.SHADOW
-            })
-          ]
+          images: variantImages(
+            atlas,
+            (props && props.variant) || defaults.variant
+          )
         })
       },
       ...props
@@ -42,7 +42,9 @@ export class Tree extends Entity<Tree.Variant, Tree.State> {
 
 export namespace Tree {
   export enum Variant {
-    NONE = 'none'
+    SMALL = 'small',
+    LARGE = 'large',
+    LARGE_BARE = 'largeBare'
   }
 
   export enum State {
@@ -50,11 +52,36 @@ export namespace Tree {
   }
 }
 
+function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
+  if (variant === Tree.Variant.SMALL)
+    return [
+      new Image(atlas, {id: AtlasID.TREE_SMALL}),
+      new Image(atlas, {
+        id: AtlasID.TREE_SMALL_SHADOW,
+        position: new XY(0, 1),
+        layer: Layer.SHADOW
+      })
+    ]
+
+  return [
+    new Image(atlas, {
+      id:
+        variant === Tree.Variant.LARGE
+          ? AtlasID.TREE_LARGE
+          : AtlasID.TREE_LARGE_BARE
+    }),
+    new Image(atlas, {
+      id: AtlasID.TREE_LARGE_SHADOW,
+      position: new XY(0, 2),
+      layer: Layer.SHADOW
+    })
+  ]
+}
+
 const defaults = ObjectUtil.freeze({
   type: EntityType.TREE,
-  variant: Tree.Variant.NONE,
+  variant: Tree.Variant.SMALL,
   state: Tree.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(3, 8, 4, 3)],
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })

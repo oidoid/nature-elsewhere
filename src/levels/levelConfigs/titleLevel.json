@@ -1,8 +1,8 @@
 {
   "version": "0.0.0",
   "type": "title",
-  "size": {"w": 136, "h": 128},
-  "minViewport": {"w": 148, "h": 128},
+  "size": {"w": 160, "h": 160},
+  "minViewport": {"w": 160, "h": 160},
   "planes": [
     {"type": "plane", "variant": "white"},
     {
@@ -29,7 +29,16 @@
   "parentEntities": [
     {
       "type": "group",
-      "positionRelativeToCam": "center",
+      "positionRelativeToCam": "northEast",
+      "map": {
+        "visible": {"images": [{"id": "moon", "scale": {"x": 3, "y": 3}}]}
+      },
+      "updatePredicate": "always"
+    },
+    {
+      "type": "group",
+      "positionRelativeToCam": "north",
+      "camMargin": {"h": 50},
       "map": {
         "visible": {
           "images": [

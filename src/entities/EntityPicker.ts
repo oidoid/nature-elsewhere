@@ -7,7 +7,6 @@ import {EntityType, UI_KEY_PREFIX} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import * as memFont from '../text/memFont.json'
 import {NumberUtil} from '../math/NumberUtil'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect, ReadonlyRect} from '../math/Rect'
@@ -17,9 +16,9 @@ import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 
-const pickerSize: Readonly<WH> = Object.freeze(new WH(32, 27))
+const pickerSize: Readonly<WH> = Object.freeze(new WH(33, 25))
 const entityWindowSize: Readonly<WH> = Object.freeze(
-  new WH(pickerSize.w, pickerSize.h - 1)
+  new WH(pickerSize.w, pickerSize.h)
 )
 
 export class EntityPicker extends Entity<
@@ -40,19 +39,15 @@ export class EntityPicker extends Entity<
       children: makeChildren(atlas),
       ...props
     })
+    for (const child of this.children)
+      child.elevate(-2 * Layer.UI_PICKER_OFFSET)
     this._activeChildIndex = 0
-
-    const entityWindowBounds = this._entityWindowBounds()
-    for (const child of this.children) {
-      const center = Rect.centerOn(child.bounds, entityWindowBounds).max(
-        entityWindowBounds.position
-      )
-      child.moveTo(center)
-      child.transition(Entity.BaseState.HIDDEN)
-    }
     this._showActiveChild()
-    this.invalidateBounds()
-    this.forceSizeTo(pickerSize)
+  }
+
+  invalidateBounds(): void {
+    this._bounds.size.w = pickerSize.w
+    this._bounds.size.h = pickerSize.h
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -108,7 +103,7 @@ export class EntityPicker extends Entity<
       variant,
       state: oldChild.state()
     })
-    newChild.moveTo(oldChild.bounds.position)
+    this._centerChild(newChild)
     newChild.elevate(2 * Layer.UI_PICKER_OFFSET)
     this.replaceChild(oldChild, newChild)
   }
@@ -119,10 +114,7 @@ export class EntityPicker extends Entity<
 
   private _entityWindowBounds(): ReadonlyRect {
     return {
-      position: new XY(
-        this.bounds.position.x - 1,
-        this.bounds.position.y + 1 + memFont.lineHeight
-      ),
+      position: new XY(this.bounds.position.x, this.bounds.position.y),
       size: entityWindowSize
     }
   }
@@ -137,8 +129,19 @@ export class EntityPicker extends Entity<
     this._hideActiveChild()
     const child = this.getActiveChild()
     if (!child) return
+
+    this._centerChild(child)
+
     // const defaultState = getChildStates(child)[0]
     child.elevate(2 * Layer.UI_PICKER_OFFSET)
+  }
+
+  private _centerChild(child: Entity): void {
+    const entityWindowBounds = this._entityWindowBounds()
+    const center = Rect.centerOn(child.bounds, entityWindowBounds).max(
+      entityWindowBounds.position
+    )
+    child.moveTo(center)
   }
 }
 

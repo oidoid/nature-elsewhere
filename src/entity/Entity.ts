@@ -16,7 +16,6 @@ import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
@@ -45,7 +44,7 @@ export abstract class Entity<
       local coordinate system is necessary for calculating absolute translations
       (moveTo), and quick cached collision and layout checks such as determining
       if the entity is on screen. All of these states must be kept in sync. */
-  private readonly _bounds: Rect
+  protected readonly _bounds: Rect
 
   private readonly _velocity: XY
 
@@ -151,12 +150,6 @@ export abstract class Entity<
       this._bounds.size.h = bounds.size.h
     }
   }
-
-  protected forceSizeTo(to: Readonly<WH>): void {
-    this._bounds.size.w = to.w
-    this._bounds.size.h = to.h
-  }
-
   get velocity(): XY {
     return this._velocity
   }
