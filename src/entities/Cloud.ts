@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Layer} from '../image/Layer'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
@@ -40,13 +39,13 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 2),
-              size: new WH(5, 32), // todo: no way to specify just width
+              w: 5,
               wrapVelocity: new XY(0, 225)
             }),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 6),
-              size: new WH(7, 32),
+              w: 7,
               wrap: new XY(0, 8),
               wrapVelocity: new XY(0, 340)
             }),
@@ -65,13 +64,13 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 6),
-              size: new WH(7, 32), // todo: no way to specify just width
+              w: 7,
               wrapVelocity: new XY(0, 300)
             }),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 2),
-              size: new WH(7, 32),
+              w: 7,
               wrapVelocity: new XY(0, 337)
             }),
             new Image(atlas, {
@@ -81,21 +80,23 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 2),
-              size: new WH(7, 32),
+              w: 7,
               wrapVelocity: new XY(0, 225)
             }),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_PUDDLE,
               position: new XY(2, 36),
               layer: Layer.DECAL,
-              size: new WH(5, 3),
+              w: 5,
+              h: 3,
               wrapVelocity: new XY(-44, 22)
             }),
             new Image(atlas, {
               id: AtlasID.PALETTE_GREEN,
               position: new XY(1, 37),
               layer: Layer.DECAL,
-              size: new WH(7, 1)
+              w: 7,
+              h: 1
             })
           ]
         }),
@@ -108,13 +109,13 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(1, 6),
-              size: new WH(9, 32), // todo: no way to specify just width
+              w: 9,
               wrapVelocity: new XY(0, 323)
             }),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN,
               position: new XY(2, 6),
-              size: new WH(8, 32),
+              w: 8,
               wrap: new XY(0, 12),
               wrapVelocity: new XY(0, 398)
             }),
@@ -122,20 +123,22 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               id: AtlasID.CLOUD_RAIN_PUDDLE,
               position: new XY(2, 35),
               layer: Layer.DECAL,
-              size: new WH(7, 5),
+              w: 7,
+              h: 5,
               wrapVelocity: new XY(8, 215)
             }),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_PUDDLE,
               position: new XY(0, 37),
               layer: Layer.DECAL,
-              size: new WH(11, 1),
+              w: 11,
+              h: 1,
               wrapVelocity: new XY(-90, 0)
             }),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               position: new XY(2, 6),
-              size: new WH(8, 32), // todo: no way to specify just width
+              w: 8,
               wrapVelocity: new XY(0, 368)
             })
           ]

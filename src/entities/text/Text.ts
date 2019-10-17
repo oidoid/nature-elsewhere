@@ -151,7 +151,7 @@ function toImages(
 function newCharacterImage(
   char: number,
   position: XY,
-  size: WH,
+  {w, h}: WH,
   scale: XY,
   imageID: Maybe<AtlasID>,
   atlas: Atlas
@@ -161,7 +161,8 @@ function newCharacterImage(
   return new Image(atlas, {
     id,
     position,
-    size,
+    w,
+    h,
     scale,
     imageID,
     alphaComposition

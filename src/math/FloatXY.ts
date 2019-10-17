@@ -31,16 +31,25 @@ export namespace FloatXY {
 
   export function sub(
     lhs: Readonly<FloatXY>,
-    {x, y}: Readonly<FloatXY>
+    rhs: Readonly<FloatXY> | number
   ): FloatXY {
-    return {x: lhs.x - x, y: lhs.y - y}
+    rhs = toFloatXY(rhs)
+    return {x: lhs.x - rhs.x, y: lhs.y - rhs.y}
   }
 
-  export function mul(lhs: Readonly<FloatXY>, rhs: Readonly<FloatXY>): FloatXY {
+  export function mul(
+    lhs: Readonly<FloatXY>,
+    rhs: Readonly<FloatXY> | number
+  ): FloatXY {
+    rhs = toFloatXY(rhs)
     return {x: lhs.x * rhs.x, y: lhs.y * rhs.y}
   }
 
-  export function div(lhs: Readonly<FloatXY>, rhs: Readonly<FloatXY>): FloatXY {
+  export function div(
+    lhs: Readonly<FloatXY>,
+    rhs: Readonly<FloatXY> | number
+  ): FloatXY {
+    rhs = toFloatXY(rhs)
     return {x: lhs.x / rhs.x, y: lhs.y / rhs.y}
   }
 
@@ -48,11 +57,19 @@ export namespace FloatXY {
     return {x: Math.abs(x), y: Math.abs(y)}
   }
 
-  export function min(lhs: Readonly<FloatXY>, rhs: Readonly<FloatXY>): FloatXY {
+  export function min(
+    lhs: Readonly<FloatXY>,
+    rhs: Readonly<FloatXY> | number
+  ): FloatXY {
+    rhs = toFloatXY(rhs)
     return {x: Math.min(lhs.x, rhs.x), y: Math.min(lhs.y, rhs.y)}
   }
 
-  export function max(lhs: Readonly<FloatXY>, rhs: Readonly<FloatXY>): FloatXY {
+  export function max(
+    lhs: Readonly<FloatXY>,
+    rhs: Readonly<FloatXY> | number
+  ): FloatXY {
+    rhs = toFloatXY(rhs)
     return {x: Math.max(lhs.x, rhs.x), y: Math.max(lhs.y, rhs.y)}
   }
 

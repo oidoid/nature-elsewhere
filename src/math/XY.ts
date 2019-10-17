@@ -1,5 +1,6 @@
 import {Build} from '../utils/Build'
 import {FloatXY} from './FloatXY'
+import {Integer} from 'aseprite-atlas'
 
 /** Integral XY in 1/10000 of a pixel. */
 export type DecamillipixelXY = XY
@@ -18,34 +19,34 @@ export class XY {
     return new XY(Math.trunc(val.x), Math.trunc(val.y))
   }
 
-  static diagonal(component: number): XY {
+  static diagonal(component: Integer): XY {
     return new XY(component, component)
   }
 
-  private _x: number
-  private _y: number
+  private _x: Integer
+  private _y: Integer
 
-  constructor(x: number, y: number) {
+  constructor(x: Integer, y: Integer) {
     validate(x)
     validate(y)
     this._x = x
     this._y = y
   }
 
-  get x(): number {
+  get x(): Integer {
     return this._x
   }
 
-  set x(x: number) {
+  set x(x: Integer) {
     validate(x)
     this._x = x
   }
 
-  get y(): number {
+  get y(): Integer {
     return this._y
   }
 
-  set y(y: number) {
+  set y(y: Integer) {
     validate(y)
     this._y = y
   }
@@ -62,11 +63,11 @@ export class XY {
     return {x: this.x, y: this.y}
   }
 
-  add(val: Readonly<FloatXY> | number): XY {
+  add(val: Readonly<FloatXY> | Integer): XY {
     return fromFloatXY(FloatXY.add(this, val))
   }
 
-  sub(xy: Readonly<FloatXY>): XY {
+  sub(xy: Readonly<FloatXY> | Integer): XY {
     return fromFloatXY(FloatXY.sub(this, xy))
   }
 
@@ -74,23 +75,23 @@ export class XY {
     return fromFloatXY(FloatXY.abs(this))
   }
 
-  mul(xy: Readonly<FloatXY>): XY {
+  mul(xy: Readonly<FloatXY> | Integer): XY {
     return fromFloatXY(FloatXY.mul(this, xy))
   }
 
-  div(xy: Readonly<FloatXY>): XY {
+  div(xy: Readonly<FloatXY> | Integer): XY {
     return fromFloatXY(FloatXY.div(this, xy))
   }
 
-  min(xy: Readonly<FloatXY>): XY {
+  min(xy: Readonly<FloatXY> | Integer): XY {
     return fromFloatXY(FloatXY.min(this, xy))
   }
 
-  max(xy: Readonly<FloatXY>): XY {
+  max(xy: Readonly<FloatXY> | Integer): XY {
     return fromFloatXY(FloatXY.max(this, xy))
   }
 
-  magnitude(): number {
+  magnitude(): Integer {
     return FloatXY.magnitude(this)
   }
 

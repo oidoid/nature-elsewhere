@@ -140,13 +140,15 @@ function newBackgroundImages(
   const backgroundImage = new Image(atlas, {
     id,
     position: new XY(1, 0),
-    size: new WH(w, h),
+    w,
+    h,
     layer
   })
   const borderImage = new Image(atlas, {
     id,
     position: new XY(0, 1),
-    size: new WH(w + 2, Math.max(h - 2, 2)),
+    w: w + 2,
+    h: Math.max(h - 2, 2),
     layer
   })
   return [backgroundImage, borderImage]

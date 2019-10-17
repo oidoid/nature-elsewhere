@@ -40,13 +40,18 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         What would a Myst / Diablo crossover look like?
       Add inventory management.
         Start with a highly detailed mock.
+        Move collected items to inventory instead of just deleting them from the level.
         Add "a summary of you" / inven / journal screen level.
         Add more items to gather like artifacts and animal byproducts like bee stingers.
         Consider minimap.
         Can encumber code be used? What about other projects?
         I think collecting, XP, and HP, could be major parts of the game. I love the Diablo II horadric cube, and RE4 and Symphony of the Night inventory management. Maybe Diablo meets Solar Jetman meets Earthbound.
 ----> Add gameplay. How codes combat and inventory work?
+        Something like Diablo with immunity on diagonal attacks. Tap on the enemy for improved damage. Automatically melee if in range _and_ hostile? How does one not attack? It's unclear what the melee weapon should be. Arrows should be fired automatically at enemies if equipped and not moving?
+        Gameplay AND art constraints inform structure of code, Aseprite files, etc.
         Mock out some bee hunting and interactions in great detail. Review past mocks, inspirado, and the old notes. What's a fun design?
+          Review materials, synthesize and write tiny plans, do each plan.
+          What would mocking out a whole scene from scratch now look like?
         What should the enemies be?
         Maybe favor straight line moving.
         I like the idea of auto-attacking but also ammo conservation. If auto-range attacks exist, they should be opt-in.
@@ -62,6 +67,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Add lightning to the cloud entity.
         Add cactus.
         Add more clouds.
+          Should the clouds dump long sloppy streams of water or pitter-patter? Some mocks on this in mock-encounter.aseprite and garfbage.aseprite and probably elsewhere.
         Add pond shader.
         Add rainbow.
         Add fire. See tileset-big.ase.
@@ -72,23 +78,35 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Add streams. Example in mock.aseprite.
         Add warning monuments. Examples in mock.aseprite and tileset-big.ase.
         Add more water.
+          Improve pond water effect.
         Add quicksand.
         Add more trees.
+          Starting with the tree skeleton is great and may help parametrize content later
+          Draw the large tree in perspective. There's a shadow demo in garfbage.aseprite.
         Maybe draw sandtraps as obstacles.
         Add dead logs.
         Add lighthouse or windmill?
         Add tree stumps.
         Add some super saturated and connected clumps of grass. Some examples in grassss.aseprite.
         Add teleport.
+        Add more "errant" textures to each image like little single pixels of grass.
+        Try a baseline grass texture again just to see what it adds. Example in map5.aseprite.
+        Review stained glass (there are at least two big circles) in tileset-big.ase.
         Add brain and frozen brain. See tileset-big.ase.
         Add duck? See mock-utility-belt.aseprite.
         Add skeleton? See mock-utility-belt.aseprite.
         Add ooz tube and gore fountain. See rubbish.aseprite.
         Add well. See rubbish.aseprite.
         Add Storymaker bubble egg.
+        Improve the level boundaries. Maybe leaves or trees.
+        Decide on clovers or reduce their size. Can I add more of the micro-flowers like in the old old mocks instead?
+        Do I want to better distinguish the backpacker from the background? For example, in front of water the colors are identical.
+        Add more flowers but try to put them in perspective.
         Fade out the destination maker and allow a few instances. Maybe reverse the animation.
 ------->Improve grass patches. These are currently path hacks and should be nicer.
         Check that the entities have strong, even, isometric perspectives.
+          Correct the path perspective. There's one that links up properly in mock-path.aseprite.
+          There's some really nice golf course and level box perspectives in garfbage.aseprite. General perspective nots in rubbish.aseprite.
         I need a better way to manage states and transitions.
           ImageStateMachine doesn't really do anything. It has a state and then then the images for each state. Maybe this should move back to entity to limit all the invalidation walking.
           There's some great examples of how to do player states, FSMs, and collision detection / gravity in https://script-8.github.io/?id=a3b40a159db3c794c1024fba73f4eb99.
@@ -99,6 +117,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Entities need to respect level boundaries better.
         Add versions to configs.
         Do I need different collision body states? It seems like a good deal of the time I don't want this with the notable exception of maybe on death but hopefully I can just change the collision type. For example, DEAD_BODY.
+        Do I want to support elevations the explorer can ascend like little dirt mounds, mountains, plateaus, and even buildings? What are the implications for htings like clouds, mount / dismount, gameplay and pathfinding, and others?
         Is there a bug when an active entity on the screen boundary collides with an inactive entity just off screen? Maybe any entity that is active, recursively activates all other entities they touch? I'm not quite sure how htat works.
         How can the entity type be simplified technically and in presentation?
           The entities are quite complex at the moment. They have a ton of state, rectangles especially. Each entity can have multiple collision bodies, images, variants, states, and children recursively.
@@ -127,6 +146,8 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
     What TypeScript and other open source examples should I consider?
     Re-review WebGL implementations.
   Add windy grass displacement shader to make the fields pop.
+    Can I do large fields of windy grass either with a shader or an animation or both? I think this would be invaluable to the atmosphere quality of the game. Some examples in map3.aseprite.
+    Improve the foreground and background coloring of grass clumps. Some nice examples in map5.aseprite.
     Maybe look through shader toys and displacement shader 101s.
       https://forums.tigsource.com/index.php?topic=40539.20
       https://www.austinobrien.me/blog/shader-study/slime-rancher-pixel-display
@@ -146,6 +167,12 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
   Research videos and articles by the experts like GDC.
   Extract the natural engine to a distributable package
   Enums are serializing their keys or their bits: 1) the mechanism should probably be consistent 2) either the keys or the bits can't change; with string enums it felt more flexible since the value string was a more abstract thing than a specific power of two, for example.
+  Do I want to support sublevels like caves, pits, and houses?
+  Add moon level. See moon, satellite, and castle ruin from tileset-big.ase.
+  Add Nature Elsewhere logo.
+  On a multitouch, if you touch left and right sides of the screen at the same time, the player oscillates.
+  Experiment with drawing the logo in multiple color and animation passes. The shader can be used or an animation.
+  Serialize to components like x,y,w,h?
 
 aseprite-atlas
   Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.

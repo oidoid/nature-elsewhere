@@ -1,6 +1,6 @@
 import {AlphaComposition} from './AlphaComposition'
 import {AtlasID} from '../atlas/AtlasID'
-import {Animator, Atlas} from 'aseprite-atlas'
+import {Animator, Atlas, Integer} from 'aseprite-atlas'
 import {DecamillipixelXY, XY} from '../math/XY'
 import {Layer} from './Layer'
 import {Rect, ReadonlyRect} from '../math/Rect'
@@ -45,18 +45,28 @@ export class Image {
   private readonly _alphaComposition: AlphaComposition
 
   constructor(atlas: Atlas, props: Image.Props) {
-    const position = props.position || new XY(0, 0)
+    this._scale =
+      props.scale ||
+      new XY(
+        props.sx === undefined ? 1 : props.sx,
+        props.sy === undefined ? 1 : props.sy
+      )
+    const position = props.position || new XY(props.x || 0, props.y || 0)
+    const animation = atlas.animations[props.id]
     const size = props.size
       ? props.size
-      : defaultSize(props.size, props.scale, props.id, atlas)
+      : defaultSize(props.w, props.h, this._scale, animation)
     this._id = props.id
     this._imageID = props.imageID || props.id
-    this._bounds = {position, size}
+    this._bounds = props.bounds || {position, size}
     this._layer = props.layer === undefined ? Layer.DEFAULT : props.layer
-    this._animator = props.animator || {period: 0, exposure: 0}
-    this._scale = props.scale || new XY(1, 1)
-    this._wrap = props.wrap || new XY(0, 0)
-    this._wrapVelocity = props.wrapVelocity || new XY(0, 0)
+    this._animator = props.animator || {
+      period: props.period || 0,
+      exposure: props.exposure || 0
+    }
+    this._wrap = props.wrap || new XY(props.wx || 0, props.wy || 0)
+    this._wrapVelocity =
+      props.wrapVelocity || new XY(props.wvx || 0, props.wvy || 0)
     this._alphaComposition = props.alphaComposition || AlphaComposition.IMAGE
   }
 
@@ -173,30 +183,46 @@ export namespace Image {
   export interface Props {
     readonly id: AtlasID
     readonly imageID?: AtlasID
+
+    readonly bounds?: Rect
+    readonly x?: Integer
+    readonly y?: Integer
     readonly position?: XY
+    readonly w?: Integer
+    readonly h?: Integer
     readonly size?: WH
+
     readonly layer?: Layer
+
+    readonly period?: Integer
+    readonly exposure?: Milliseconds
     readonly animator?: Animator
+
+    readonly sx?: Integer
+    readonly sy?: Integer
     readonly scale?: XY
+
+    readonly wx?: Integer
+    readonly wy?: Integer
     readonly wrap?: DecamillipixelXY
+
+    readonly wvx?: Integer
+    readonly wvy?: Integer
     readonly wrapVelocity?: DecamillipixelXY
+
     readonly alphaComposition?: AlphaComposition
   }
 }
 
 function defaultSize(
-  size: Maybe<Readonly<WH>>,
-  scale: Maybe<Readonly<XY>>,
-  id: AtlasID,
-  atlas: Atlas
+  w: Maybe<number>,
+  h: Maybe<number>,
+  scale: Readonly<XY>,
+  {size}: Atlas.Animation
 ): WH {
-  const w = size
-    ? size.w
-    : Math.abs(scale && scale.x !== undefined ? scale.x : 1) *
-      atlas.animations[id].size.w
-  const h = size
-    ? size.h
-    : Math.abs(scale && scale.y !== undefined ? scale.y : 1) *
-      atlas.animations[id].size.h
+  w =
+    w === undefined ? size.w * Math.abs(scale.x !== undefined ? scale.x : 1) : w
+  h =
+    h === undefined ? Math.abs(scale.y !== undefined ? scale.y : 1) * size.h : h
   return new WH(w, h)
 }
