@@ -20,6 +20,7 @@ import {LevelType} from '../../levels/LevelType'
 import {LocalStorage} from '../../storage/LocalStorage'
 import {Marquee} from '../Marquee'
 import {ObjectUtil} from '../../utils/ObjectUtil'
+import * as strings from '../../utils/strings.json'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
@@ -59,42 +60,42 @@ export class LevelEditorMenu extends Entity<
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_EXPORT,
       new XY(0, 0),
-      'export level', // [strings]
+      strings['levelEditor/export'],
       LevelType.BACK
     )
     this._import = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_IMPORT,
       new XY(0, 6),
-      'import level', // [strings]
+      strings['levelEditor/import'],
       LevelType.BACK
     )
     this._reset = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_RESET,
       new XY(0, 12),
-      'reset level',
+      strings['levelEditor/reset'],
       LevelType.BACK
     )
     this._restore = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_RESTORE_BACKUP,
       new XY(0, 18),
-      'restore backup', // [strings]
+      strings['levelEditor/restore'],
       LevelType.BACK
     )
     this._backToTitle = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_TITLE,
       new XY(0, 30),
-      'back to title', // [strings]
+      strings['backToTitle'],
       LevelType.TITLE
     )
     this._backToEditor = newLink(
       atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_EDITOR,
       new XY(0, 36),
-      'back to level editor', // [strings]
+      strings['levelEditor/backToEditor'],
       LevelType.BACK
     )
 

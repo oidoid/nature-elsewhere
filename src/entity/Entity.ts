@@ -18,6 +18,7 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {Integer} from 'aseprite-atlas'
 
 export abstract class Entity<
   Variant extends string = string,
@@ -72,7 +73,11 @@ export abstract class Entity<
     this._type = props.type
     this._variant = props.variant
     this._bounds = Rect.make(0, 0, 0, 0)
-    this._velocity = props.velocity ?? Entity.defaults.velocity.copy()
+    this._velocity =
+      props.velocity ??
+      (props.vx !== undefined || props.vy !== undefined
+        ? new XY(props.vx ?? 0, props.vy ?? 0)
+        : Entity.defaults.velocity.copy())
     this._velocityFraction = {x: 0, y: 0}
     this._machine = new ImageStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
@@ -92,9 +97,20 @@ export abstract class Entity<
     // children. Children themselves are not invalidated by this call.
     this.invalidateBounds()
 
-    if (props.position) this.moveTo(props.position)
-    if (props.scale) this.scaleTo(props.scale)
+    const position =
+      props.position ??
+      (props.x !== undefined || props.y !== undefined
+        ? new XY(props.x ?? 0, props.y ?? 0)
+        : undefined)
+    if (position !== undefined) this.moveTo(position)
+    const scale =
+      props.scale ??
+      (props.sx !== undefined || props.sy !== undefined
+        ? new XY(props.sx ?? 1, props.sy ?? 1)
+        : undefined)
+    if (scale !== undefined) this.scaleTo(scale)
 
+    // EntityParser doesn't have access to the array of variants.
     Assert.assert(
       this.variants().includes(props.variant),
       `Unknown variant "${props.variant}".`
@@ -140,12 +156,11 @@ export abstract class Entity<
       ...this.collisionBodies,
       ...this.children.map(child => child.bounds)
     ])
-    if (bounds) {
-      this._bounds.position.x = bounds.position.x
-      this._bounds.position.y = bounds.position.y
-      this._bounds.size.w = bounds.size.w
-      this._bounds.size.h = bounds.size.h
-    }
+    if (!bounds) return
+    this._bounds.position.x = bounds.position.x
+    this._bounds.position.y = bounds.position.y
+    this._bounds.size.w = bounds.size.w
+    this._bounds.size.h = bounds.size.h
   }
   get velocity(): XY {
     return this._velocity
@@ -327,11 +342,11 @@ export abstract class Entity<
   }
 
   states(): (State | Entity.BaseState)[] {
-    return this._machine.getStates()
+    return this._machine.states()
   }
 
   transition(state: State | Entity.BaseState): UpdateStatus {
-    const status = this._machine.setState(state)
+    const status = this._machine.transition(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
   }
@@ -502,9 +517,15 @@ export namespace Entity {
     readonly type: EntityType
     readonly variant: Variant
     /** Defaults to (0, 0). */
-    readonly position?: Readonly<XY>
-    readonly scale?: XY
+    readonly x?: Integer
+    readonly y?: Integer
+    readonly position?: Readonly<XY> // This isn't used as a reference.
+    readonly sx?: Integer
+    readonly sy?: Integer
+    readonly scale?: Readonly<XY> // This isn't used as a reference.
     readonly imageID?: AtlasID
+    readonly vx?: Integer
+    readonly vy?: Integer
     readonly velocity?: XY
     /** Defaults to {}. */
     readonly state: State | BaseState
@@ -538,7 +559,17 @@ export namespace Entity {
 
   export const defaults: DeepImmutable<Omit<
     Required<Entity.Props>,
-    'type' | 'variant' | 'map' | 'imageID' | 'children'
+    | 'type'
+    | 'variant'
+    | 'map'
+    | 'imageID'
+    | 'children'
+    | 'x'
+    | 'y'
+    | 'sx'
+    | 'sy'
+    | 'vx'
+    | 'vy'
   >> = ObjectUtil.freeze({
     id: EntityID.ANONYMOUS,
     state: Entity.BaseState.HIDDEN,

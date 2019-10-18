@@ -52,58 +52,45 @@ export namespace LevelEditorPanelBackground {
 
 function newBackgroundImages(atlas: Atlas): Image[] {
   return (<const>[
-    {
-      id: 'PALETTE_WHITE',
-      position: new XY(1, 21),
-      w: 55,
-      h: 11,
-      layer: Layer.ABOVE_PLANE
-    },
+    {id: 'PALETTE_WHITE', x: 1, y: 21, w: 55, h: 11, layer: Layer.ABOVE_PLANE},
     {
       id: 'UI_CHECKERBOARD_BLUE_GREY',
-      position: new XY(0, 21),
+      x: 0,
+      y: 21,
       w: 1,
       h: 11,
       layer: Layer.UI_MID
     },
     {
       id: 'UI_CHECKERBOARD_BLUE_GREY',
-      position: new XY(1, 20),
+      x: 1,
+      y: 20,
       w: 55,
       h: 1,
       layer: Layer.UI_MID
     },
-    {
-      id: 'PALETTE_WHITE',
-      position: new XY(56, 13),
-      w: 50,
-      h: 19,
-      layer: Layer.UI_LO
-    },
+    {id: 'PALETTE_WHITE', x: 56, y: 13, w: 50, h: 19, layer: Layer.UI_LO},
     {
       id: 'UI_CHECKERBOARD_BLUE_GREY',
-      position: new XY(55, 13),
+      x: 55,
+      y: 13,
       w: 1,
       h: 7,
       layer: Layer.UI_MID
     },
     {
       id: 'UI_CHECKERBOARD_BLUE_GREY',
-      position: new XY(56, 12),
+      x: 56,
+      y: 12,
       w: 44,
       h: 1,
       layer: Layer.UI_MID
     },
-    {
-      id: 'PALETTE_WHITE',
-      position: new XY(100, 1),
-      w: 34,
-      h: 31,
-      layer: Layer.UI_LO
-    },
+    {id: 'PALETTE_WHITE', x: 100, y: 1, w: 34, h: 31, layer: Layer.UI_LO},
     {
       id: 'UI_CHECKERBOARD_BLUE_GREY',
-      position: new XY(100, 1),
+      x: 100,
+      y: 1,
       w: 1,
       h: 11,
       wrap: new XY(0, 1),
@@ -111,7 +98,8 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     },
     {
       id: 'UI_CHECKERBOARD_BLUE_GREY',
-      position: new XY(101, 0),
+      x: 101,
+      y: 0,
       w: 32,
       h: 1,
       wrap: new XY(1, 0),
@@ -119,7 +107,8 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     },
     {
       id: 'UI_CHECKERBOARD_BLUE_GREY',
-      position: new XY(133, 1),
+      x: 133,
+      y: 1,
       w: 1,
       h: 1,
       layer: Layer.UI_MID

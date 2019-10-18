@@ -82,14 +82,15 @@ export namespace EntityParser {
   }
 
   export function parseVariant(config: VariantConfig): Maybe<string> {
-    // [todo] validate variant.
+    // Variant is validated in the Entity constructor.
     return config
   }
 
   export function parseState(
     config: EntityStateConfig
   ): Entity.BaseState | string {
-    return config ?? Entity.BaseState.HIDDEN
+    // State is validated in the Entity constructor.
+    return config || Entity.BaseState.HIDDEN
   }
 }
 

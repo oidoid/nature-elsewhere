@@ -1,12 +1,12 @@
+import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {Image} from '../image/Image'
 import {ImageRect} from './ImageRect'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {ReadonlyRect} from '../math/Rect'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
-import {ReadonlyRect} from '../math/Rect'
-import {Assert} from '../utils/Assert'
 
 export type ImageStateMap<State extends string = string> = Readonly<
   Record<State, ImageRect>
@@ -19,13 +19,19 @@ export class ImageStateMachine<State extends string = string> {
   constructor(props: ImageStateMachine.Props<State>) {
     this._state = props.state
     this._map = props.map
+
+    // EntityParser doesn't have access to the array of states.
+    Assert.assert(
+      this.states().includes(props.state),
+      `Unknown state "${props.state}".`
+    )
   }
 
   get state(): State {
     return this._state
   }
 
-  getStates(): State[] {
+  states(): State[] {
     return ObjectUtil.keys(this._map)
   }
 
@@ -64,7 +70,7 @@ export class ImageStateMachine<State extends string = string> {
     return status
   }
 
-  setState(state: State): UpdateStatus {
+  transition(state: State): UpdateStatus {
     if (this.state === state) return UpdateStatus.UNCHANGED
     const {bounds, scale} = this._imageRect()
     this._state = state

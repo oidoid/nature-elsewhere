@@ -39,24 +39,24 @@ export namespace EntityCollider {
     // The entities intersect.
 
     if (initiator.collisionPredicate & CollisionPredicate.BOUNDS)
-      // The initiator only has bounding rectangle collision. If the test entity
-      // or its children collide with the initiator's bounds, a collision has
+      // The initiator has bounding rectangle collision. If the test entity or
+      // its children collide with the initiator's bounds, a collision has
       // occurred.
       collisions.push(...entity.collidesRect(initiator.bounds))
 
     if (initiator.collisionPredicate & CollisionPredicate.IMAGES) {
-      // The initiator only has image collision. If the test entity or its
-      // children collide with any of the initiator's images, a collision has
-      // occurred. Otherwise, no collision has occurred.
+      // The initiator has image collision. If the test entity or its children
+      // collide with any of the initiator's images, a collision has occurred.
+      // Otherwise, no collision has occurred.
       if (Rect.intersects(initiator.imageBounds(), entity.bounds))
         for (const image of initiator.images())
           collisions.push(...entity.collidesRect(image.bounds))
     }
 
     if (initiator.collisionPredicate & CollisionPredicate.BODIES) {
-      // The initiator only has collision bodies. If the test entity or its
-      // children collide with any of the initiator's bodies, a collision has
-      // occurred. Otherwise, no collision has occurred.
+      // The initiator has collision bodies. If the test entity or its children
+      // collide with any of the initiator's bodies, a collision has occurred.
+      // Otherwise, no collision has occurred.
       for (const body of initiator.collisionBodies)
         collisions.push(...entity.collidesRect(body))
     }

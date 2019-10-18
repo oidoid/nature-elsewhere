@@ -75,64 +75,75 @@ export class LevelEditorPanel extends Entity<
     })
     this._variantCheckbox = new Checkbox(atlas, {
       textMaxSize: new WH(31, 5),
-      position: new XY(13, 12),
+      x: 13,
+      y: 12,
       imageID: AtlasID.PALETTE_BLACK
     })
     this._stateCheckbox = new Checkbox(atlas, {
       textMaxSize: new WH(34, 5),
-      position: new XY(10, 18),
+      x: 10,
+      y: 18,
       imageID: AtlasID.PALETTE_BLACK
     })
     this._xCheckbox = new Checkbox(atlas, {
       text: '0',
       textLayer: Layer.UI_HI,
-      position: new XY(4, 24),
+      x: 4,
+      y: 24,
       imageID: AtlasID.PALETTE_BLACK
     })
     this._yCheckbox = new Checkbox(atlas, {
       text: '0',
       textLayer: Layer.UI_HI,
-      position: new XY(26, 24),
+      x: 26,
+      y: 24,
       imageID: AtlasID.PALETTE_BLACK
     })
     this._entityCheckbox = new Checkbox(atlas, {
       state: Checkbox.State.CHECKED,
       textMaxSize: new WH(32, 5),
-      position: new XY(46, 0),
+      x: 46,
+      y: 0,
       imageID: AtlasID.PALETTE_BLACK
     })
     this._radioGroup = new RadioCheckboxGroup({
-      position: new XY(55, 2),
+      x: 55,
+      y: 2,
       children: [
         new Text(atlas, {
           text: 'var',
           textLayer: Layer.UI_HI,
-          position: new XY(2, 12)
+          x: 2,
+          y: 12
         }),
         this._variantCheckbox,
         new Text(atlas, {
           text: 'st',
           textLayer: Layer.UI_HI,
-          position: new XY(2, 18)
+          x: 2,
+          y: 18
         }),
         this._stateCheckbox,
         new Text(atlas, {
           text: 'x',
           textLayer: Layer.UI_HI,
-          position: new XY(0, 24)
+          x: 0,
+          y: 24
         }),
         this._xCheckbox,
         new Text(atlas, {
           text: 'y',
           textLayer: Layer.UI_HI,
-          position: new XY(22, 24)
+          x: 22,
+          y: 24
         }),
         this._yCheckbox,
         this._entityCheckbox
       ]
     })
     this._menuButton = new Button(atlas, {
-      position: new XY(2, 22),
+      x: 2,
+      y: 22,
       children: [
         new Group({
           map: {
@@ -150,7 +161,8 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._decrementButton = new Button(atlas, {
-      position: new XY(11, 22),
+      x: 11,
+      y: 22,
       children: [
         new Group({
           map: {
@@ -168,7 +180,8 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._incrementButton = new Button(atlas, {
-      position: new XY(20, 22),
+      x: 20,
+      y: 22,
       children: [
         new Group({
           map: {
@@ -186,7 +199,8 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._destroyButton = new Button(atlas, {
-      position: new XY(29, 22),
+      x: 29,
+      y: 22,
       children: [
         new Group({
           map: {
@@ -204,7 +218,8 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._createButton = new Button(atlas, {
-      position: new XY(38, 22),
+      x: 38,
+      y: 22,
       children: [
         new Group({
           map: {
@@ -222,7 +237,8 @@ export class LevelEditorPanel extends Entity<
       ]
     })
     this._toggleGridButton = new Button(atlas, {
-      position: new XY(47, 22),
+      x: 47,
+      y: 22,
       children: [
         new Group({
           map: {

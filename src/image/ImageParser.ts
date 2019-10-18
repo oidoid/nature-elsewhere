@@ -73,15 +73,14 @@ export namespace ImageParser {
   }
 }
 
-function parseSize(config: ImageConfig, id: AtlasID, atlas: Atlas): WH {
+function parseSize(config: ImageConfig, id: AtlasID, {animations}: Atlas): WH {
+  const {size} = animations[id]
   const w =
     config.bounds?.size?.w ??
-    Math.abs(config.scale && config.scale.x ? config.scale.x : 1) *
-      atlas.animations[id].size.w
+    Math.abs(config.scale && config.scale.x ? config.scale.x : 1) * size.w
   const h =
     config.bounds?.size?.h ??
-    Math.abs(config.scale && config.scale.y ? config.scale.y : 1) *
-      atlas.animations[id].size.h
+    Math.abs(config.scale && config.scale.y ? config.scale.y : 1) * size.h
   return new WH(w, h)
 }
 

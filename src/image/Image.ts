@@ -174,6 +174,9 @@ export class Image {
 }
 
 export namespace Image {
+  /** References like bounds (Rect), position (XY), size (WH),
+      animator (Animator), etc have precedence over their destructured
+      properties. */
   export interface Props {
     readonly id: AtlasID
     readonly imageID?: AtlasID

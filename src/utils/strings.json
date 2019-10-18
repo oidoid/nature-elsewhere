@@ -1,0 +1,9 @@
+{
+  "//": "[strings]",
+  "levelEditor/import": "import level",
+  "levelEditor/export": "export level",
+  "levelEditor/reset": "reset level",
+  "levelEditor/restore": "restore backup",
+  "levelEditor/backToEditor": "back to level editor",
+  "backToTitle": "back to title"
+}

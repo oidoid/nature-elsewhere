@@ -1,10 +1,10 @@
+import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {Image} from '../image/Image'
 import {Layer} from '../image/Layer'
 import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
-import {Assert} from '../utils/Assert'
 
 export class ImageRect {
   /** The upper-left and size of the local coordinate system. The images are
@@ -34,15 +34,21 @@ export class ImageRect {
   /** If set, the imageID for all images. See Image._imageID. */
   private _imageID?: AtlasID
 
-  constructor(props?: ImageRect.Props) {
-    this._origin = props?.origin ?? new XY(0, 0)
+  constructor(props: ImageRect.Props = {}) {
+    this._origin = props.origin ?? new XY(0, 0)
     this._bounds = Rect.make(0, 0, 0, 0)
     this._scale = new XY(1, 1)
-    this._images = props?.images ?? []
-    this._imageID = props?.imageID
+    this._images = props.images ?? []
+    this._imageID = props.imageID
     this.invalidate()
-    if (props?.position) this.moveBy(props.position)
-    if (props?.scale) this.scaleBy(props.scale)
+    if (props.position) this.moveBy(props.position)
+    if (props.scale) {
+      Assert.assert(
+        props.scale.x && props.scale.y,
+        `Scale must be nonzero (x=${props.scale.x}, y=${props.scale.y}).`
+      )
+      this.scaleBy(props.scale)
+    }
   }
 
   get bounds(): ReadonlyRect {
@@ -69,8 +75,7 @@ export class ImageRect {
   setImageID(id?: AtlasID): UpdateStatus {
     if (this.imageID === id) return UpdateStatus.UNCHANGED
     this._imageID = id
-    for (const image of this._images)
-      image.imageID = id === undefined ? image.id : id
+    for (const image of this._images) image.imageID = id ?? image.id
     return UpdateStatus.UPDATED
   }
 
@@ -120,12 +125,11 @@ export class ImageRect {
 
   invalidate(): void {
     const union = Rect.unionAll(this.images.map(image => image.bounds))
-    if (union) {
-      this._bounds.position.x = union.position.x
-      this._bounds.position.y = union.position.y
-      this._bounds.size.w = union.size.w
-      this._bounds.size.h = union.size.h
-    }
+    if (!union) return
+    this._bounds.position.x = union.position.x
+    this._bounds.position.y = union.position.y
+    this._bounds.size.w = union.size.w
+    this._bounds.size.h = union.size.h
   }
 }
 
