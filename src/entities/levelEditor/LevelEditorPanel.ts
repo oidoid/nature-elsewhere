@@ -22,7 +22,7 @@ import {JSONValue} from '../../utils/JSON'
 import {Layer} from '../../image/Layer'
 import {Level} from '../../levels/Level'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
-import {LevelEditorSandboxFileUtil} from '../LevelEditorSandboxFileUtil'
+import {LevelEditorSandboxFileUtil} from './LevelEditorSandboxFileUtil'
 import {LevelType} from '../../levels/LevelType'
 import {Marquee} from '../Marquee'
 import * as memFont from '../../text/memFont.json'
@@ -319,9 +319,7 @@ export class LevelEditorPanel extends Entity<
           position
         })
         const {sandbox} = state.level
-        if (!sandbox) throw new Error('Missing sandbox.')
-
-        sandbox.addChildren(entity)
+        if (sandbox) sandbox.addChildren(entity)
         const marquee = <Maybe<Marquee>>(
           Entity.findAnyByID(state.level.parentEntities, EntityID.UI_MARQUEE)
         )
@@ -340,11 +338,10 @@ export class LevelEditorPanel extends Entity<
     ) {
       const {selection} = marquee
       const {sandbox} = state.level
-      if (!sandbox) throw new Error('Missing sandbox.')
       if (this._destroyButton.clicked) {
         status |= UpdateStatus.UPDATED
         marquee.setSelection(undefined, state.level.cursor)
-        sandbox.removeChild(selection)
+        if (sandbox) sandbox.removeChild(selection)
       }
 
       if (
@@ -359,7 +356,7 @@ export class LevelEditorPanel extends Entity<
           parseIntCheckbox(this._yCheckbox)
         )
         selection.moveTo(position)
-        sandbox.invalidateBounds()
+        if (sandbox) sandbox.invalidateBounds()
         marquee.moveTo(new XY(position.x - 1, position.y - 1))
       } else {
         const {atlas} = state.level

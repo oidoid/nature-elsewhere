@@ -1,8 +1,8 @@
 import {Atlas} from 'aseprite-atlas'
-import {Entity} from '../entity/Entity'
-import {EntityParser} from '../entity/EntityParser'
+import {Entity} from '../../entity/Entity'
+import {EntityParser} from '../../entity/EntityParser'
 import {LevelEditorSandbox} from './LevelEditorSandbox'
-import {LocalStorage} from '../storage/LocalStorage'
+import {LocalStorage} from '../../storage/LocalStorage'
 
 export namespace LevelEditorSandboxFileUtil {
   export function autoSave(sandbox: LevelEditorSandbox): void {

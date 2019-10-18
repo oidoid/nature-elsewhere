@@ -7,6 +7,7 @@ import {Entity} from '../entity/Entity'
 import {EntityID} from '../entity/EntityID'
 import {FloatXY} from '../math/FloatXY'
 import {LevelAdvance} from './LevelAdvance'
+import {LevelEditorSandbox} from '../entities/levelEditor/LevelEditorSandbox'
 import {LevelType} from './LevelType'
 import {Marquee} from '../entities/Marquee'
 import {Plane} from '../entities/Plane'
@@ -14,7 +15,6 @@ import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdateState} from '../updaters/UpdateState'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
-import {LevelEditorSandbox} from '../entities/LevelEditorSandbox'
 
 export interface Level {
   readonly type: LevelType

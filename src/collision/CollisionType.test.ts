@@ -4,7 +4,7 @@ import {ObjectUtil} from '../utils/ObjectUtil'
 
 TestUtil.testValuesAreUnique(CollisionType, 'CollisionType')
 TestUtil.testValuesArePositivePowerOfTwo(
-  ObjectUtil.values(CollisionType)
-    .filter(val => typeof val === 'number')
-    .filter(val => val !== CollisionType.INERT)
+  ObjectUtil.values(CollisionType).filter(
+    val => typeof val === 'number' && val !== CollisionType.INERT
+  )
 )

@@ -187,12 +187,11 @@ export namespace Image {
     readonly bounds?: Rect
     readonly x?: Integer
     readonly y?: Integer
+    readonly layer?: Layer
     readonly position?: XY
     readonly w?: Integer
     readonly h?: Integer
     readonly size?: WH
-
-    readonly layer?: Layer
 
     readonly period?: Integer
     readonly exposure?: Milliseconds

@@ -28,10 +28,7 @@ export namespace ObjectUtil {
     return key in obj
   }
 
-  export function isValueOf<T>(
-    obj: T,
-    val: string
-  ): val is T[keyof T] & string {
+  export function isValueOf<T>(obj: T, val: unknown): val is T[keyof T] {
     return Object.values(obj).includes(val)
   }
 
@@ -39,22 +36,20 @@ export namespace ObjectUtil {
     obj: T,
     key: keyof any,
     type: string
-  ): key is keyof T {
+  ): asserts key is keyof T {
     Assert.assert(isKeyOf(obj, key), `${type} missing "${key.toString()}" key.`)
-    return true
   }
 
   export function assertValueOf<T>(
     obj: T,
-    val: string,
+    val: unknown,
     type: string
-  ): val is T[keyof T] & string {
+  ): asserts val is ValueOf<T> {
     Assert.assert(isValueOf(obj, val), `${type} missing "${val}" value.`)
-    return true
   }
 
   export function definedEntry<T, K extends keyof T = keyof T>(
-    record: Readonly<T>,
+    record: T,
     key: K
   ): {} | Record<K, Required<T>[K]> {
     return record[key] === undefined ? {} : {[key]: record[key]}
@@ -62,11 +57,9 @@ export namespace ObjectUtil {
 
   /** Recursively freeze obj. */
   export function freeze<T extends object>(obj: T): DeepImmutable<T> {
-    keys(obj)
-      .filter(key => typeof obj[key] === 'object')
-      .forEach(key => {
-        obj[key] = <T[keyof T] & object>freeze(<T[keyof T] & object>obj[key])
-      })
+    for (const key of keys(obj))
+      if (is(obj[key]))
+        obj[key] = <ValueOf<T>>freeze(<ValueOf<T> & object>obj[key])
     return <DeepImmutable<T>>Object.freeze(obj)
   }
 }

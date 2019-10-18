@@ -1,9 +1,9 @@
-import {Group} from './Group'
+import {EntityConfig} from '../../entity/EntityParser'
 import {
   FollowCamConfig,
   FollowCamParser
 } from '../../updaters/followCam/FollowCamParser'
-import {EntityConfig} from '../../entity/EntityParser'
+import {Group} from './Group'
 
 export interface GroupPropsConfig extends FollowCamConfig, EntityConfig {}
 

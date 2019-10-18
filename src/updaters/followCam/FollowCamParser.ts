@@ -15,15 +15,12 @@ export namespace FollowCamParser {
       'positionRelativeToCam' in config
         ? config['positionRelativeToCam']
         : undefined
-    if (
-      orientation &&
-      !ObjectUtil.assertValueOf(
+    if (orientation)
+      ObjectUtil.assertValueOf(
         FollowCamOrientation,
         orientation,
         'FollowCamOrientation'
       )
-    )
-      throw new Error()
     const camMargin = WHParser.parse(
       'camMargin' in config ? config['camMargin'] : undefined
     )

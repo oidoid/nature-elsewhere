@@ -72,14 +72,13 @@ export namespace EntityParser {
 
   export function parseID(config: EntityIDConfig): EntityID {
     const id = config || EntityID.ANONYMOUS
-    if (ObjectUtil.assertValueOf(EntityID, id, 'EntityID')) return id
-    throw new Error()
+    ObjectUtil.assertValueOf(EntityID, id, 'EntityID')
+    return id
   }
 
   export function parseType(config: EntityTypeConfig): EntityType {
-    if (ObjectUtil.assertValueOf(EntityType, config, 'EntityType'))
-      return config
-    throw new Error()
+    ObjectUtil.assertValueOf(EntityType, config, 'EntityType')
+    return config
   }
 
   export function parseVariant(config: VariantConfig): Maybe<string> {
