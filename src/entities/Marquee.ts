@@ -40,22 +40,22 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
             new Image(atlas, {
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
-              wrapVelocity: new XY(20, 0)
+              wvx: 20
             }),
             new Image(atlas, {
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
-              wrapVelocity: new XY(20, 0)
+              wvx: 20
             }),
             new Image(atlas, {
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
-              wrapVelocity: new XY(20, 0)
+              wvx: 20
             }),
             new Image(atlas, {
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
-              wrapVelocity: new XY(20, 0)
+              wvx: 20
             })
           ]
         })

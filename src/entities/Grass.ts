@@ -73,4 +73,3 @@ const defaults = ObjectUtil.freeze({
   state: Grass.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY
 })
-console.log(defaults.variant)

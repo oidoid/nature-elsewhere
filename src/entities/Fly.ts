@@ -10,7 +10,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
-import {XY} from '../math/XY'
 
 export class Fly extends Entity<Fly.Variant, Fly.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Fly.Variant, Fly.State>) {
@@ -23,7 +22,8 @@ export class Fly extends Entity<Fly.Variant, Fly.State> {
             new Image(atlas, {id: AtlasID.PALETTE_GREY}),
             new Image(atlas, {
               id: AtlasID.PALETTE_LIGHT_GREY,
-              position: new XY(0, 2),
+              x: 0,
+              y: 2,
               layer: Layer.SHADOW
             })
           ]

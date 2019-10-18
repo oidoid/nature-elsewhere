@@ -41,7 +41,7 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
 
   transition(state: Bee.State | Entity.BaseState): UpdateStatus {
     const status = super.transition(state)
-    this.setCollisiontype(defaults.collisionType[state])
+    this.setCollisionType(defaults.collisionType[state])
     return status
   }
 

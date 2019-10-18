@@ -11,7 +11,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {XY} from '../math/XY'
 
 export class Pond extends Entity<Pond.Variant, Pond.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Pond.Variant, Pond.State>) {
@@ -23,10 +22,10 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
         [Pond.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.POND, layer: Layer.ABOVE_PLANE}),
-            new Image(atlas, {id: AtlasID.CATTAILS, position: new XY(10, -5)}),
-            new Image(atlas, {id: AtlasID.GRASS_01, position: new XY(-3, -6)}),
-            new Image(atlas, {id: AtlasID.GRASS_09, position: new XY(20, 0)}),
-            new Image(atlas, {id: AtlasID.GRASS_10, position: new XY(10, 8)})
+            new Image(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
+            new Image(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
+            new Image(atlas, {id: AtlasID.GRASS_09, x: 20, y: 0}),
+            new Image(atlas, {id: AtlasID.GRASS_10, x: 10, y: 8})
           ]
         })
       },

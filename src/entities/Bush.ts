@@ -10,7 +10,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {XY} from '../math/XY'
 
 export class Bush extends Entity<Bush.Variant, Bush.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Bush.Variant, Bush.State>) {
@@ -24,7 +23,8 @@ export class Bush extends Entity<Bush.Variant, Bush.State> {
             new Image(atlas, {id: AtlasID.BUSH}),
             new Image(atlas, {
               id: AtlasID.BUSH_SHADOW,
-              position: new XY(0, 1),
+              x: 0,
+              y: 1,
               layer: Layer.SHADOW
             })
           ]

@@ -11,7 +11,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
-import {XY} from '../math/XY'
 
 export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
   constructor(
@@ -28,7 +27,8 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
             new Image(atlas, {
               id: AtlasID.BUNNY_SHADOW,
               layer: Layer.SHADOW,
-              position: new XY(0, 1)
+              x: 0,
+              y: 1
             })
           ]
         }),

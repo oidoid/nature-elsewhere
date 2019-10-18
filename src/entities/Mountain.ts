@@ -11,7 +11,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {XY} from '../math/XY'
 
 export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
   constructor(
@@ -28,7 +27,8 @@ export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
             new Image(atlas, {id: AtlasID.MOUNTAIN}),
             new Image(atlas, {
               id: AtlasID.MOUNTAIN_SHADOW,
-              position: new XY(-2, 1),
+              x: -2,
+              y: 1,
               layer: Layer.SHADOW
             })
           ]

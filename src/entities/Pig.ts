@@ -11,7 +11,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
-import {XY} from '../math/XY'
 
 export class Pig extends Entity<Pig.Variant, Pig.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Pig.Variant, Pig.State>) {
@@ -24,7 +23,8 @@ export class Pig extends Entity<Pig.Variant, Pig.State> {
             new Image(atlas, {id: AtlasID.PIG}),
             new Image(atlas, {
               id: AtlasID.PIG_SHADOW,
-              position: new XY(0, 1),
+              x: 0,
+              y: 1,
               layer: Layer.SHADOW
             })
           ]

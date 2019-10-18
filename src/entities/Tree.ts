@@ -11,7 +11,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {XY} from '../math/XY'
 
 export class Tree extends Entity<Tree.Variant, Tree.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Tree.Variant, Tree.State>) {
@@ -58,7 +57,8 @@ function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
       new Image(atlas, {id: AtlasID.TREE_SMALL}),
       new Image(atlas, {
         id: AtlasID.TREE_SMALL_SHADOW,
-        position: new XY(0, 1),
+        x: 0,
+        y: 1,
         layer: Layer.SHADOW
       })
     ]
@@ -72,7 +72,7 @@ function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
     }),
     new Image(atlas, {
       id: AtlasID.TREE_LARGE_SHADOW,
-      position: new XY(0, 2),
+      y: 2,
       layer: Layer.SHADOW
     })
   ]

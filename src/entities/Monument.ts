@@ -11,7 +11,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {XY} from '../math/XY'
 
 export class Monument extends Entity<Monument.Variant, Monument.State> {
   constructor(
@@ -77,7 +76,8 @@ function variantImages(atlas: Atlas, variant: Monument.Variant): Image[] {
       id: small
         ? AtlasID.MONUMENT_SMALL_SHADOW
         : AtlasID.MONUMENT_MEDIUM_SHADOW,
-      position: new XY(0, 1),
+      x: 0,
+      y: 1,
       layer: Layer.SHADOW
     })
   ]

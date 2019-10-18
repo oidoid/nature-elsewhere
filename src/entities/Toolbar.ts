@@ -14,7 +14,6 @@ import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
-import {XY} from '../math/XY'
 
 export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
   private readonly _followCam: DeepImmutable<FollowCam>
@@ -30,19 +29,11 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
         [Toolbar.State.VISIBLE]: new ImageRect({
           images: [
             new Image(atlas, {id: AtlasID.FLAG, layer: Layer.UI_HI}),
-            new Image(atlas, {
-              id: AtlasID.FLAG,
-              position: new XY(4, 0),
-              layer: Layer.UI_HI
-            }),
-            new Image(atlas, {
-              id: AtlasID.FLAG,
-              position: new XY(8, 0),
-              layer: Layer.UI_HI
-            }),
+            new Image(atlas, {id: AtlasID.FLAG, x: 4, layer: Layer.UI_HI}),
+            new Image(atlas, {id: AtlasID.FLAG, x: 8, layer: Layer.UI_HI}),
             new Image(atlas, {
               id: AtlasID.ARROW_DIAGONAL,
-              position: new XY(12, 0),
+              x: 12,
               layer: Layer.UI_HI
             })
           ]

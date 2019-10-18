@@ -175,7 +175,7 @@ export abstract class Entity<
     return this._collisionType
   }
 
-  setCollisiontype(type: CollisionType): void {
+  setCollisionType(type: CollisionType): void {
     this._collisionType = type
   }
 
