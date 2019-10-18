@@ -9,6 +9,7 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {ProcessChildren} from '../entity/ProcessChildren'
 import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -51,7 +52,8 @@ export class EntityPicker extends Entity<
   }
 
   update(state: UpdateState): UpdateStatus {
-    return super.update(state, true) // Children are forbidden from updating.
+    // Children are forbidden from updating.
+    return super.update(state, ProcessChildren.SKIP)
   }
 
   get activeChildIndex(): number {

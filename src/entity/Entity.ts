@@ -9,16 +9,17 @@ import {FloatXY} from '../math/FloatXY'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
+import {Integer} from 'aseprite-atlas'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
+import {ObjectUtil} from '../utils/ObjectUtil'
+import {ProcessChildren} from './ProcessChildren'
 import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
-import {ObjectUtil} from '../utils/ObjectUtil'
-import {Integer} from 'aseprite-atlas'
 
 export abstract class Entity<
   Variant extends string = string,
@@ -352,12 +353,15 @@ export abstract class Entity<
   }
 
   /** See UpdatePredicate. Actually this is going to go ahead and go into children so updte the docs */
-  update(state: UpdateState, skipChildren = false): UpdateStatus {
+  update(
+    state: UpdateState,
+    skipChildren: ProcessChildren = ProcessChildren.INCLUDE
+  ): UpdateStatus {
     if (!this.active(state.level.cam.bounds)) return UpdateStatus.UNCHANGED
 
     let status = this._updatePosition(state)
 
-    if (skipChildren) return status
+    if (skipChildren === ProcessChildren.SKIP) return status
 
     for (const child of this.children) {
       status |= child.update(state)

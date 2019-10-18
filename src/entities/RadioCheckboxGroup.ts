@@ -7,6 +7,7 @@ import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
+import {ProcessChildren} from '../entity/ProcessChildren'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
@@ -39,7 +40,8 @@ export class RadioCheckboxGroup extends Entity<
   }
 
   update(state: UpdateState): UpdateStatus {
-    let status = super.update(state, true)
+    // Children are processed in RadioCheckboxGroup, not the superclass.
+    let status = super.update(state, ProcessChildren.SKIP)
 
     let checked: Maybe<Checkbox> = undefined
     for (const child of this.children) {

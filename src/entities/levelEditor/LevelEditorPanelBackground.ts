@@ -11,7 +11,6 @@ import {JSONValue} from '../../utils/JSON'
 import {Layer} from '../../image/Layer'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
-import {XY} from '../../math/XY'
 
 export class LevelEditorPanelBackground extends Entity<
   LevelEditorPanelBackground.Variant,
@@ -51,10 +50,17 @@ export namespace LevelEditorPanelBackground {
 }
 
 function newBackgroundImages(atlas: Atlas): Image[] {
-  return (<const>[
-    {id: 'PALETTE_WHITE', x: 1, y: 21, w: 55, h: 11, layer: Layer.ABOVE_PLANE},
+  return [
     {
-      id: 'UI_CHECKERBOARD_BLUE_GREY',
+      id: AtlasID.PALETTE_WHITE,
+      x: 1,
+      y: 21,
+      w: 55,
+      h: 11,
+      layer: Layer.ABOVE_PLANE
+    },
+    {
+      id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 0,
       y: 21,
       w: 1,
@@ -62,16 +68,16 @@ function newBackgroundImages(atlas: Atlas): Image[] {
       layer: Layer.UI_MID
     },
     {
-      id: 'UI_CHECKERBOARD_BLUE_GREY',
+      id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 1,
       y: 20,
       w: 55,
       h: 1,
       layer: Layer.UI_MID
     },
-    {id: 'PALETTE_WHITE', x: 56, y: 13, w: 50, h: 19, layer: Layer.UI_LO},
+    {id: AtlasID.PALETTE_WHITE, x: 56, y: 13, w: 50, h: 19, layer: Layer.UI_LO},
     {
-      id: 'UI_CHECKERBOARD_BLUE_GREY',
+      id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 55,
       y: 13,
       w: 1,
@@ -79,41 +85,40 @@ function newBackgroundImages(atlas: Atlas): Image[] {
       layer: Layer.UI_MID
     },
     {
-      id: 'UI_CHECKERBOARD_BLUE_GREY',
+      id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 56,
       y: 12,
       w: 44,
       h: 1,
       layer: Layer.UI_MID
     },
-    {id: 'PALETTE_WHITE', x: 100, y: 1, w: 34, h: 31, layer: Layer.UI_LO},
+    {id: AtlasID.PALETTE_WHITE, x: 100, y: 1, w: 34, h: 31, layer: Layer.UI_LO},
     {
-      id: 'UI_CHECKERBOARD_BLUE_GREY',
+      id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 100,
       y: 1,
       w: 1,
       h: 11,
-      wrap: new XY(0, 1),
+      wy: 1,
       layer: Layer.UI_MID
     },
     {
-      id: 'UI_CHECKERBOARD_BLUE_GREY',
+      id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 101,
-      y: 0,
       w: 32,
       h: 1,
-      wrap: new XY(1, 0),
+      wx: 1,
       layer: Layer.UI_MID
     },
     {
-      id: 'UI_CHECKERBOARD_BLUE_GREY',
+      id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 133,
       y: 1,
       w: 1,
       h: 1,
       layer: Layer.UI_MID
     }
-  ]).map(props => new Image(atlas, {...props, id: AtlasID[props.id]}))
+  ].map(props => new Image(atlas, props))
 }
 
 const defaults = ObjectUtil.freeze({

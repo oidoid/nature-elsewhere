@@ -29,6 +29,7 @@ import * as memFont from '../../text/memFont.json'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Plane} from '../Plane'
 import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
+import * as strings from '../../utils/strings.json'
 import {Text} from '../text/Text'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../../updaters/UpdateState'
@@ -111,28 +112,28 @@ export class LevelEditorPanel extends Entity<
       y: 2,
       children: [
         new Text(atlas, {
-          text: 'var',
+          text: strings['levelEditor/variant'],
           textLayer: Layer.UI_HI,
           x: 2,
           y: 12
         }),
         this._variantCheckbox,
         new Text(atlas, {
-          text: 'st',
+          text: strings['levelEditor/state'],
           textLayer: Layer.UI_HI,
           x: 2,
           y: 18
         }),
         this._stateCheckbox,
         new Text(atlas, {
-          text: 'x',
+          text: strings['levelEditor/x'],
           textLayer: Layer.UI_HI,
           x: 0,
           y: 24
         }),
         this._xCheckbox,
         new Text(atlas, {
-          text: 'y',
+          text: strings['levelEditor/y'],
           textLayer: Layer.UI_HI,
           x: 22,
           y: 24
@@ -481,18 +482,16 @@ export namespace LevelEditorPanel {
 }
 
 function parseIntCheckbox(checkbox: Checkbox): number {
-  const text = checkbox.getText()
-  return Number.parseInt(text)
+  return Number.parseInt(checkbox.getText())
 }
 
 function toggleGrid(state: UpdateState): void {
   const grid = Entity.findAnyByID(state.level.planes, EntityID.UI_GRID)
-  if (!grid) return
   const toggle =
-    grid.state() === Entity.BaseState.HIDDEN
+    grid?.state() === Entity.BaseState.HIDDEN
       ? Plane.State.VISIBLE
       : Entity.BaseState.HIDDEN
-  grid.transition(toggle)
+  grid?.transition(toggle)
 }
 
 const defaults = ObjectUtil.freeze({

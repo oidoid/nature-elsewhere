@@ -4,6 +4,7 @@ import {EntityType} from '../../entity/EntityType'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONArray} from '../../utils/JSON'
 import {ObjectUtil} from '../../utils/ObjectUtil'
+import {ProcessChildren} from '../../entity/ProcessChildren'
 import {ReadonlyRect, Rect} from '../../math/Rect'
 import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../../updaters/UpdateState'
@@ -30,7 +31,8 @@ export class LevelEditorSandbox extends Entity<
   }
 
   update(state: UpdateState): UpdateStatus {
-    return super.update(state, true) // Children are forbidden from updating.
+    // Children are forbidden from updating.
+    return super.update(state, ProcessChildren.SKIP)
   }
 
   collidesRect(rect: ReadonlyRect): Entity[] {

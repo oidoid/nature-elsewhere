@@ -5,5 +5,9 @@
   "levelEditor/reset": "reset level",
   "levelEditor/restore": "restore backup",
   "levelEditor/backToEditor": "back to level editor",
+  "levelEditor/variant": "var",
+  "levelEditor/state": "st",
+  "levelEditor/x": "x",
+  "levelEditor/y": "y",
   "backToTitle": "back to title"
 }
