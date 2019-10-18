@@ -27,18 +27,12 @@ export class Button extends Entity<Button.Variant, Button.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Button.State.UNCLICKED]: new ImageRect({
           images: [
-            new Image(atlas, {
-              id: AtlasID.UI_BUTTON_BASE,
-              layer: Layer.UI_MID
-            })
+            new Image(atlas, {id: AtlasID.UI_BUTTON_BASE, layer: Layer.UI_MID})
           ]
         }),
         [Button.State.CLICKED]: new ImageRect({
           images: [
-            new Image(atlas, {
-              id: AtlasID.UI_BUTTON_BASE,
-              layer: Layer.UI_MID
-            }),
+            new Image(atlas, {id: AtlasID.UI_BUTTON_BASE, layer: Layer.UI_MID}),
             new Image(atlas, {
               id: AtlasID.UI_BUTTON_PRESSED,
               layer: Layer.UI_HI
@@ -48,8 +42,8 @@ export class Button extends Entity<Button.Variant, Button.State> {
       },
       ...props
     })
-    this._clicked = (props && props.clicked) || false
-    this._longClicked = (props && props.longClicked) || false
+    this._clicked = props?.clicked ?? false
+    this._longClicked = props?.longClicked ?? false
     this._engaged = false
   }
 
@@ -67,11 +61,8 @@ export class Button extends Entity<Button.Variant, Button.State> {
     this._clicked = false
     const collision = Level.collisionWithCursor(state.level, this)
     this._engaged =
-      (collision && (!state.inputs.pick || !state.inputs.pick.active)) ||
-      (this._engaged &&
-        collision &&
-        !!state.inputs.pick &&
-        state.inputs.pick.active)
+      !!(collision && !state.inputs.pick?.active) ||
+      !!(this._engaged && collision && state.inputs.pick?.active)
     status |= this.transition(
       this._engaged ? Button.State.CLICKED : Button.State.UNCLICKED
     ) // this is just presentation not click state

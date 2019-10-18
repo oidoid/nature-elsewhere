@@ -88,7 +88,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
     this.velocity.x = (left ? -1 : right ? 1 : 0) * 90 // (In one ten-thousandth of a pixel per millisecond (.1 px / s).)
     this.velocity.y = (up ? -1 : down ? 1 : 0) * 90
-    const stopped = !this.velocity.x && !this.velocity.y
+    const stopped = !this.velocity.magnitude()
 
     let nextState = this.state()
     if (stopped) {
@@ -164,7 +164,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     )
 
     // If not already moving, don't pursue objectives practically underfoot.
-    const stopped = !this.velocity.x && !this.velocity.y
+    const stopped = !this.velocity.magnitude()
     if (stopped && objective.sub(this.bounds.position).magnitude() < 4)
       return this.bounds.position.copy()
 
@@ -203,8 +203,7 @@ function newImageRect(
 }
 
 function hideDestinationMarker(state: UpdateState): void {
-  if (state.level.destination)
-    state.level.destination.transition(Entity.BaseState.HIDDEN)
+  state.level.destination?.transition(Entity.BaseState.HIDDEN)
 }
 
 /** A mapping of the current state to the appropriate idle state. For example,

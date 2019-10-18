@@ -24,7 +24,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
     super({
       ...defaults,
       collisionBodies:
-        ((props && props.variant) || defaults.variant) === Cursor.Variant.DOT
+        (props?.variant ?? defaults.variant) === Cursor.Variant.DOT
           ? [Rect.make(-1, -1, 3, 3)]
           : [Rect.make(0, 0, 9, 7)],
       map: {
@@ -92,8 +92,7 @@ function variantRect(
   atlas: Atlas,
   props?: Entity.SubProps<Cursor.Variant, Cursor.State>
 ): ImageRect {
-  const dot =
-    ((props && props.variant) || defaults.variant) === Cursor.Variant.DOT
+  const dot = (props?.variant ?? defaults.variant) === Cursor.Variant.DOT
   return new ImageRect({
     origin: dot ? new XY(1, 1) : new XY(4, 3),
     images: [

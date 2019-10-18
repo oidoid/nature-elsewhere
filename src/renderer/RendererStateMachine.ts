@@ -8,7 +8,7 @@ export interface RendererStateMachine {
   onFrame(time: number): void
   onPause(): void
   newRenderer(): Renderer
-  onEvent(ev: Event): void
+  onEvent(event: Event): void
 }
 
 export namespace RendererStateMachine {
@@ -19,7 +19,7 @@ export namespace RendererStateMachine {
     const machine = {
       ...start,
       renderer,
-      onEvent: (ev: Event) => onEvent(machine, ev)
+      onEvent: (event: Event) => onEvent(machine, event)
     }
     return machine
   }
@@ -44,19 +44,19 @@ function resume(machine: RendererStateMachine): void {
     loop(machine)
 }
 
-function onEvent(machine: RendererStateMachine, ev: Event): void {
-  if (ev.type === 'webglcontextrestored')
+function onEvent(machine: RendererStateMachine, event: Event): void {
+  if (event.type === 'webglcontextrestored')
     (machine.renderer = machine.newRenderer()), resume(machine)
-  else if (ev.type === 'focus') resume(machine)
+  else if (event.type === 'focus') resume(machine)
   else pause(machine)
-  ev.preventDefault()
+  event.preventDefault()
 }
 
 function loop(machine: RendererStateMachine, then?: number): void {
   machine.frameID = machine.window.requestAnimationFrame(now => {
     // Duration can be great when frame is held for debugging. Limit it to one
     // second.
-    const time = Math.min(now - (then || now), 1000)
+    const time = Math.min(now - (then ?? now), 1000)
     machine.onFrame(time)
     loop(machine, now)
   })
@@ -66,5 +66,6 @@ function register(machine: RendererStateMachine, register: boolean): void {
   const fn = register ? 'addEventListener' : 'removeEventListener'
   machine.canvas[fn]('webglcontextrestored', machine.onEvent)
   machine.canvas[fn]('webglcontextlost', machine.onEvent)
-  for (const ev of ['focus', 'blur']) machine.window[fn](ev, machine.onEvent)
+  for (const event of ['focus', 'blur'])
+    machine.window[fn](event, machine.onEvent)
 }

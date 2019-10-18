@@ -38,7 +38,7 @@
     {
       "type": "group",
       "positionRelativeToCam": "north",
-      "camMargin": {"h": 50},
+      "camMargin": {"h": 40},
       "map": {
         "visible": {
           "images": [

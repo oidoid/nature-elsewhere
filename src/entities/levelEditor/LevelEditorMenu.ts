@@ -146,7 +146,7 @@ function exportLevel(state: UpdateState): void {
   FilePrompt.downloadString(
     state.win.document,
     'level.json',
-    LocalStorage.get(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE) || '[]',
+    LocalStorage.get(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE) ?? '[]',
     'application/json'
   )
 }

@@ -11,4 +11,12 @@ export namespace Assert {
   ): asserts val is T {
     if (!fn(val)) throw new Error(`${fn.name}(${val}) failed type assertion.`)
   }
+
+  export function instanceOf<T>(
+    val: unknown,
+    instance: Function
+  ): asserts val is T {
+    if (!(val instanceof instance))
+      throw new Error(`${val} is not instance of ${instance.name}.`)
+  }
 }

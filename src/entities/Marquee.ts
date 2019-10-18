@@ -99,7 +99,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
 
     this.selectionTriggered = false
     const {pick} = state.inputs
-    if (!pick || !pick.active) {
+    if (!pick?.active) {
       this._cursorOffset = undefined // Exit drag mode.
       return status
     }

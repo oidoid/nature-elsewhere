@@ -15,6 +15,7 @@ export namespace NumberUtil {
   }
 
   export function ceilMultiple(multiple: number, val: number): number {
+    // n / 0 * 0 = NaN
     return multiple ? Math.ceil(val / multiple) * multiple : 0
   }
 }

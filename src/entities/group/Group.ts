@@ -24,9 +24,8 @@ export class Group extends Entity<Group.Variant, Group.State> {
     })
     this._followCam = {
       positionRelativeToCam:
-        (props && props.positionRelativeToCam) ||
-        defaults.positionRelativeToCam,
-      camMargin: (props && props.camMargin) || defaults.camMargin.copy()
+        props?.positionRelativeToCam ?? defaults.positionRelativeToCam,
+      camMargin: props?.camMargin ?? defaults.camMargin.copy()
     }
   }
 

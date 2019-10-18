@@ -18,8 +18,7 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Bee.Variant, Bee.State>) {
     super({
       ...defaults,
-      collisionType:
-        defaults.collisionType[(props && props.state) || defaults.state],
+      collisionType: defaults.collisionType[props?.state ?? defaults.state],
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),

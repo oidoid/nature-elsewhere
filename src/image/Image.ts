@@ -45,29 +45,23 @@ export class Image {
   private readonly _alphaComposition: AlphaComposition
 
   constructor(atlas: Atlas, props: Image.Props) {
-    this._scale =
-      props.scale ||
-      new XY(
-        props.sx === undefined ? 1 : props.sx,
-        props.sy === undefined ? 1 : props.sy
-      )
-    const position = props.position || new XY(props.x || 0, props.y || 0)
+    this._scale = props.scale ?? new XY(props.sx ?? 1, props.sy ?? 1)
+    const position = props.position ?? new XY(props.x ?? 0, props.y ?? 0)
     const animation = atlas.animations[props.id]
-    const size = props.size
-      ? props.size
-      : defaultSize(props.w, props.h, this._scale, animation)
+    const size =
+      props.size ?? defaultSize(props.w, props.h, this._scale, animation)
     this._id = props.id
-    this._imageID = props.imageID || props.id
-    this._bounds = props.bounds || {position, size}
-    this._layer = props.layer === undefined ? Layer.DEFAULT : props.layer
-    this._animator = props.animator || {
-      period: props.period || 0,
-      exposure: props.exposure || 0
+    this._imageID = props.imageID ?? props.id
+    this._bounds = props.bounds ?? {position, size}
+    this._layer = props.layer ?? Layer.DEFAULT
+    this._animator = props.animator ?? {
+      period: props.period ?? 0,
+      exposure: props.exposure ?? 0
     }
-    this._wrap = props.wrap || new XY(props.wx || 0, props.wy || 0)
+    this._wrap = props.wrap ?? new XY(props.wx ?? 0, props.wy ?? 0)
     this._wrapVelocity =
-      props.wrapVelocity || new XY(props.wvx || 0, props.wvy || 0)
-    this._alphaComposition = props.alphaComposition || AlphaComposition.IMAGE
+      props.wrapVelocity ?? new XY(props.wvx ?? 0, props.wvy ?? 0)
+    this._alphaComposition = props.alphaComposition ?? AlphaComposition.IMAGE
   }
 
   get id(): AtlasID {
@@ -159,13 +153,13 @@ export class Image {
   }
 
   animate(time: Milliseconds, atlas: Atlas): void {
-    const animator = Animator.animate(
+    const {period, exposure} = Animator.animate(
       this.animator.period,
       this.animator.exposure + time,
       atlas.animations[this.id]
     )
-    this._animator.period = animator.period
-    this._animator.exposure = animator.exposure
+    this._animator.period = period
+    this._animator.exposure = exposure
   }
 
   resetAnimation(): void {
@@ -219,9 +213,7 @@ function defaultSize(
   scale: Readonly<XY>,
   {size}: Atlas.Animation
 ): WH {
-  w =
-    w === undefined ? size.w * Math.abs(scale.x !== undefined ? scale.x : 1) : w
-  h =
-    h === undefined ? Math.abs(scale.y !== undefined ? scale.y : 1) * size.h : h
+  w = w ?? size.w * Math.abs(scale.x ?? 1)
+  h = h ?? size.h * Math.abs(scale.y ?? 1)
   return new WH(w, h)
 }

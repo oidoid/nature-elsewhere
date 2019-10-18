@@ -101,7 +101,7 @@ export namespace Level {
   export function updateCamera(state: UpdateState): void {
     if (state.level.cam.followID === EntityID.ANONYMOUS) {
       const {pick} = state.inputs
-      if (!pick || !pick.active) return
+      if (!pick?.active) return
       const ratio = 0.7
       const cameraDeadZone = {
         position: XY.trunc(

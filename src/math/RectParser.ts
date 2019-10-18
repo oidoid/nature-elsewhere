@@ -11,12 +11,12 @@ export type RectConfig = Maybe<
 
 export namespace RectParser {
   export function parseAll(config: RectArrayConfig): Rect[] {
-    return (config || []).map(parse)
+    return (config ?? []).map(parse)
   }
 
   export function parse(config: RectConfig): Rect {
-    const position = config ? XYParser.parse(config.position) : new XY(0, 0)
-    const size = config ? WHParser.parse(config.size) : new WH(0, 0)
+    const position = XYParser.parse(config?.position)
+    const size = WHParser.parse(config?.size)
     return {position, size}
   }
 }

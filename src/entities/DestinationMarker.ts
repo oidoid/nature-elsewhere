@@ -39,7 +39,7 @@ export class DestinationMarker extends Entity<
     let status = super.update(state)
 
     const {pick} = state.inputs
-    if (!pick || !pick.active) return status
+    if (!pick?.active) return status
     const position = Input.levelXY(
       pick,
       state.canvasSize,

@@ -61,7 +61,7 @@ export type EntityStateConfig = Maybe<Entity.BaseState | string>
 
 export namespace EntityParser {
   export function parseAll(config: EntityArrayConfig, atlas: Atlas): Entity[] {
-    return (config || []).map(entityConfig => parse(entityConfig, atlas))
+    return (config ?? []).map(entityConfig => parse(entityConfig, atlas))
   }
 
   export function parse(config: EntityConfig, atlas: Atlas): Entity {
@@ -71,7 +71,7 @@ export namespace EntityParser {
   }
 
   export function parseID(config: EntityIDConfig): EntityID {
-    const id = config || EntityID.ANONYMOUS
+    const id = config ?? EntityID.ANONYMOUS
     ObjectUtil.assertValueOf(EntityID, id, 'EntityID')
     return id
   }
@@ -82,13 +82,14 @@ export namespace EntityParser {
   }
 
   export function parseVariant(config: VariantConfig): Maybe<string> {
+    // [todo] validate variant.
     return config
   }
 
   export function parseState(
     config: EntityStateConfig
   ): Entity.BaseState | string {
-    return config || Entity.BaseState.HIDDEN
+    return config ?? Entity.BaseState.HIDDEN
   }
 }
 

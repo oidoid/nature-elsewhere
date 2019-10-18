@@ -18,7 +18,7 @@ export class Tree extends Entity<Tree.Variant, Tree.State> {
     super({
       ...defaults,
       collisionBodies: atlas.animations[
-        ((props && props.variant) || defaults.variant) === Tree.Variant.SMALL
+        (props?.variant ?? defaults.variant) === Tree.Variant.SMALL
           ? AtlasID.TREE_SMALL
           : AtlasID.TREE_LARGE
       ].cels[0].slices.map(({x, y, w, h}) => Rect.make(x, y, w, h)),

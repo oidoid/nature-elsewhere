@@ -12,10 +12,6 @@ export namespace InputState {
   }
 
   export function anyActive(state: InputState): boolean {
-    return (
-      (state.point && state.point.active) ||
-      (state.pick && state.pick.active) ||
-      false
-    )
+    return state.point?.active || state.pick?.active || false
   }
 }

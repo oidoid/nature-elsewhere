@@ -9,7 +9,6 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
-import {XY} from '../math/XY'
 
 export class Clover extends Entity<Clover.Variant, Clover.State> {
   constructor(
@@ -21,10 +20,7 @@ export class Clover extends Entity<Clover.Variant, Clover.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Clover.State.VISIBLE]: new ImageRect({
-          images: variantImages(
-            atlas,
-            (props && props.variant) || Clover.Variant.SMALL
-          )
+          images: variantImages(atlas, props?.variant ?? Clover.Variant.SMALL)
         })
       },
       ...props
@@ -53,27 +49,16 @@ function variantImages(atlas: Atlas, variant: Clover.Variant): Image[] {
       new Image(atlas, {id: AtlasID.CLOVER_0x0, layer: Layer.DECAL}),
       new Image(atlas, {
         id: AtlasID.CLOVER_0x1,
-        position: new XY(1, 3),
+        x: 1,
+        y: 3,
         layer: Layer.DECAL
       }),
-      new Image(atlas, {
-        id: AtlasID.CLOVER_0x0,
-        position: new XY(4, 1),
-        layer: Layer.DECAL
-      })
+      new Image(atlas, {id: AtlasID.CLOVER_0x0, x: 4, y: 1, layer: Layer.DECAL})
     ]
   return [
     new Image(atlas, {id: AtlasID.CLOVER_1x0, layer: Layer.DECAL}),
-    new Image(atlas, {
-      id: AtlasID.CLOVER_0x1,
-      position: new XY(1, 3),
-      layer: Layer.DECAL
-    }),
-    new Image(atlas, {
-      id: AtlasID.CLOVER_1x0,
-      position: new XY(4, 1),
-      layer: Layer.DECAL
-    })
+    new Image(atlas, {id: AtlasID.CLOVER_0x1, x: 1, y: 3, layer: Layer.DECAL}),
+    new Image(atlas, {id: AtlasID.CLOVER_1x0, x: 4, y: 1, layer: Layer.DECAL})
   ]
 }
 

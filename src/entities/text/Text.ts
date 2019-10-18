@@ -32,11 +32,10 @@ export class Text extends Entity<Text.Variant, Text.State> {
       ...props
     })
 
-    this._text = (props && props.text) || defaults.text
-    this._textLayer = (props && props.textLayer) || defaults.textLayer
-    this._textScale = (props && props.textScale) || defaults.textScale.copy()
-    this._textMaxSize =
-      (props && props.textMaxSize) || defaults.textMaxSize.copy()
+    this._text = props?.text ?? defaults.text
+    this._textLayer = props?.textLayer ?? defaults.textLayer
+    this._textScale = props?.textScale ?? defaults.textScale.copy()
+    this._textMaxSize = props?.textMaxSize ?? defaults.textMaxSize.copy()
 
     const textImages = toImages(
       atlas,
@@ -44,19 +43,11 @@ export class Text extends Entity<Text.Variant, Text.State> {
       this._textScale,
       {
         position: this.imageBounds().position.copy(),
-        size: new WH(
-          this._textMaxSize && this._textMaxSize.w
-            ? this._textMaxSize.w
-            : Limits.maxShort,
-
-          this._textMaxSize && this._textMaxSize.h
-            ? this._textMaxSize.h
-            : Limits.maxShort
-        )
+        size: this._textMaxSize
       },
       this.imageID()
     )
-    if (this._textLayer)
+    if (props?.textLayer)
       for (const image of textImages) image.elevate(this._textLayer)
 
     this.addImages(...textImages)

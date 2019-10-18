@@ -25,7 +25,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
               id:
                 AtlasID[
                   <keyof typeof AtlasID>(
-                    ('GRASS_' + ((props && props.variant) || defaults.variant))
+                    ('GRASS_' + (props?.variant ?? defaults.variant))
                   )
                 ]
             }),
@@ -73,3 +73,4 @@ const defaults = ObjectUtil.freeze({
   state: Grass.State.VISIBLE,
   collisionType: CollisionType.TYPE_SCENERY
 })
+console.log(defaults.variant)

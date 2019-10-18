@@ -40,25 +40,30 @@ export namespace ImageParser {
     const id = AtlasIDParser.parse(config.id)
     return new Image(atlas, {
       id,
-      imageID: config.imageID ? AtlasIDParser.parse(config.imageID) : undefined,
-      position: XYParser.parse(
-        config.bounds ? config.bounds.position : undefined
-      ),
+      ...(config.imageID !== undefined && {
+        imageID: AtlasIDParser.parse(config.imageID)
+      }),
+      ...(config.bounds?.position !== undefined && {
+        position: XYParser.parse(config.bounds?.position)
+      }),
       size: parseSize(config, id, atlas),
-      layer: parseLayer(config.layer),
-      animator: config.animator ? parseAnimator(config.animator) : undefined,
-      scale: parseScale(config.scale),
-      wrap: XYParser.parse(config.wrap),
-      wrapVelocity: XYParser.parse(config.wrapVelocity),
-      alphaComposition: AlphaCompositionParser.parse(config.alphaComposition)
+      ...(config.layer !== undefined && {layer: parseLayer(config.layer)}),
+      ...(config.animator !== undefined && {
+        animator: parseAnimator(config.animator)
+      }),
+      ...(config.scale !== undefined && {scale: parseScale(config.scale)}),
+      ...(config.wrap !== undefined && {wrap: XYParser.parse(config.wrap)}),
+      ...(config.wrapVelocity !== undefined && {
+        wrapVelocity: XYParser.parse(config.wrapVelocity)
+      }),
+      ...(config.alphaComposition !== undefined && {
+        alphaComposition: AlphaCompositionParser.parse(config.alphaComposition)
+      })
     })
   }
 
   export function parseScale(config: ImageScaleConfig): XY {
-    return new XY(
-      config && config.x !== undefined ? config.x : 1,
-      config && config.y !== undefined ? config.y : 1
-    )
+    return new XY(config?.x ?? 1, config?.y ?? 1)
   }
 
   export function parseLayer(config: LayerConfig): Layer {
@@ -70,18 +75,16 @@ export namespace ImageParser {
 
 function parseSize(config: ImageConfig, id: AtlasID, atlas: Atlas): WH {
   const w =
-    config.bounds && config.bounds.size && config.bounds.size.w !== undefined
-      ? config.bounds.size.w
-      : Math.abs(config.scale && config.scale.x ? config.scale.x : 1) *
-        atlas.animations[id].size.w
+    config.bounds?.size?.w ??
+    Math.abs(config.scale && config.scale.x ? config.scale.x : 1) *
+      atlas.animations[id].size.w
   const h =
-    config.bounds && config.bounds.size && config.bounds.size.h !== undefined
-      ? config.bounds.size.h
-      : Math.abs(config.scale && config.scale.y ? config.scale.y : 1) *
-        atlas.animations[id].size.h
+    config.bounds?.size?.h ??
+    Math.abs(config.scale && config.scale.y ? config.scale.y : 1) *
+      atlas.animations[id].size.h
   return new WH(w, h)
 }
 
 function parseAnimator(config: AnimatorConfig): Animator {
-  return {period: config.period || 0, exposure: config.exposure || 0}
+  return {period: config.period ?? 0, exposure: config.exposure ?? 0}
 }

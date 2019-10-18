@@ -18,15 +18,15 @@ export interface Input {
 
 export namespace Input {
   export function activeTriggered(input: Maybe<Input>): boolean {
-    return (input && input.active && !input.timer) || false
+    return !!(input?.active && !input.timer)
   }
 
   export function activeLong(input: Maybe<Input>): boolean {
-    return (input && input.active && input.timer > 500) || false
+    return !!(input?.active && input.timer > 500)
   }
 
   export function inactiveTriggered(input: Maybe<Input>): boolean {
-    return (input && !input.active && !input.timer) || false
+    return !input?.active && !input?.timer
   }
 
   export function levelXY(input: Input, canvasWH: WH, cam: ReadonlyRect): XY {

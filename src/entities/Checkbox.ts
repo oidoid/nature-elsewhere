@@ -36,12 +36,11 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
       ...props
     })
 
-    this._textLayer = (props && props.textLayer) || defaults.textLayer
-    this._textScale = (props && props.textScale) || defaults.textScale.copy()
-    this._textMaxSize =
-      (props && props.textMaxSize) || defaults.textMaxSize.copy()
-    this._textImageID = (props && props.imageID) || defaults.textImageID
-    this.setText((props && props.text) || '', 0, atlas)
+    this._textLayer = props?.textLayer ?? defaults.textLayer
+    this._textScale = props?.textScale ?? defaults.textScale.copy()
+    this._textMaxSize = props?.textMaxSize ?? defaults.textMaxSize.copy()
+    this._textImageID = props?.imageID ?? defaults.textImageID
+    this.setText(props?.text ?? '', 0, atlas)
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -71,7 +70,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
       position
     })
     child.elevate(layerOffset)
-    const imageID = this.children[0] ? this.children[0].imageID() : undefined
+    const imageID = this.children[0]?.imageID()
     if (imageID) child.setImageID(imageID)
     this.removeChild(this.children[0])
     this.addChildren(child)
@@ -83,7 +82,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
   }
 
   getText(): string {
-    return (<Text>this.children[0]).text
+    return (<Maybe<Text>>this.children[0])?.text ?? ''
   }
 
   toJSON(): JSONValue {

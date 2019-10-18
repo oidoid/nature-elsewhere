@@ -14,7 +14,7 @@ export namespace ImageRectParser {
     if (!config) return new ImageRect()
     const origin = XYParser.parse(config.origin)
     const scale = ImageParser.parseScale(config.scale)
-    const images = (config.images || []).map(image =>
+    const images = (config.images ?? []).map(image =>
       ImageParser.parse(image, atlas)
     )
     const rect = new ImageRect({origin, images, scale})

@@ -21,7 +21,7 @@ export namespace Viewport {
   }
 
   /** @arg {x, y} The viewport coordinates of the input in window pixels,
-                  usually new XY(ev.clientX, ev.clientY).
+                  usually new XY(event.clientX, event.clientY).
       @arg {w, h} The viewport dimensions in window pixels (canvasWH).
       @arg cam The coordinates and dimensions of the camera the input was made
                through in level pixels.

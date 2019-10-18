@@ -35,14 +35,14 @@ export class ImageRect {
   private _imageID?: AtlasID
 
   constructor(props?: ImageRect.Props) {
-    this._origin = (props && props.origin) || new XY(0, 0)
+    this._origin = props?.origin ?? new XY(0, 0)
     this._bounds = Rect.make(0, 0, 0, 0)
     this._scale = new XY(1, 1)
-    this._images = (props && props.images) || []
-    this._imageID = props && props.imageID
+    this._images = props?.images ?? []
+    this._imageID = props?.imageID
     this.invalidate()
-    if (props && props.position) this.moveBy(props.position)
-    if (props && props.scale) this.scaleBy(props.scale)
+    if (props?.position) this.moveBy(props.position)
+    if (props?.scale) this.scaleBy(props.scale)
   }
 
   get bounds(): ReadonlyRect {

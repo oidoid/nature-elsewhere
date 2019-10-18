@@ -932,7 +932,6 @@ The following abbreviations are used regardless of context except for types:
 - dat: data.
 - doc: document, usually the Web global. Since `document` is a global, this
   abbreviation is useful for avoiding an accidental implicit dependency.
-- ev: event, usually from the Web API.
 - fn: function.
 - init: initialize, initial value.
 - len: length.

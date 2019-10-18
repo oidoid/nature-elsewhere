@@ -32,9 +32,9 @@ export namespace FilePrompt {
         }
 
         const reader = new FileReader()
-        reader.onload = ev =>
-          ev.target && ev.target.result
-            ? resolve({file, data: ev.target.result.toString()})
+        reader.onload = event =>
+          event.target && event.target.result
+            ? resolve({file, data: event.target.result.toString()})
             : reject()
         reader.readAsText(file)
       }

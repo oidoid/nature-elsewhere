@@ -24,17 +24,11 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cloud.State.NONE]: new ImageRect({
-          images: variantImages(
-            atlas,
-            (props && props.variant) || Cloud.Variant.MEDIUM
-          )
+          images: variantImages(atlas, props?.variant ?? Cloud.Variant.MEDIUM)
         }),
         [Cloud.State.DRIZZLE]: new ImageRect({
           images: [
-            ...variantImages(
-              atlas,
-              (props && props.variant) || Cloud.Variant.MEDIUM
-            ),
+            ...variantImages(atlas, props?.variant ?? Cloud.Variant.MEDIUM),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               x: 2,
@@ -55,10 +49,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
         }),
         [Cloud.State.SHOWER]: new ImageRect({
           images: [
-            ...variantImages(
-              atlas,
-              (props && props.variant) || Cloud.Variant.MEDIUM
-            ),
+            ...variantImages(atlas, props?.variant ?? Cloud.Variant.MEDIUM),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               x: 2,
@@ -103,10 +94,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
         }),
         [Cloud.State.DOWNPOUR]: new ImageRect({
           images: [
-            ...variantImages(
-              atlas,
-              (props && props.variant) || Cloud.Variant.MEDIUM
-            ),
+            ...variantImages(atlas, props?.variant ?? Cloud.Variant.MEDIUM),
             new Image(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               x: 1,

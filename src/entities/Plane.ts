@@ -22,7 +22,12 @@ export class Plane extends Entity<Plane.Variant, Plane.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Plane.State.VISIBLE]: new ImageRect({
           images: [
-            variantImage(atlas, (props && props.variant) || Plane.Variant.BLACK)
+            new Image(atlas, {
+              id: variantToAtlasID[props?.variant ?? Plane.Variant.BLACK],
+              w: Limits.maxShort,
+              h: Limits.maxShort,
+              layer: Layer.PLANE
+            })
           ]
         })
       },
@@ -59,110 +64,25 @@ export namespace Plane {
   }
 }
 
-function variantImage(atlas: Atlas, variant: Plane.Variant): Image {
-  const w = Limits.maxShort
-  const h = Limits.maxShort
-  switch (variant) {
-    case Plane.Variant.GRID:
-      return new Image(atlas, {
-        id: AtlasID.UI_GRID,
-        w,
-        h,
-        layer: Layer.GRID
-      })
-    case Plane.Variant.TRANSPARENT:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_TRANSPARENT,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.WHITE:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_WHITE,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.PALE_GREEN:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_PALE_GREEN,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.LIGHT_GREEN:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_LIGHT_GREEN,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.GREEN:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_GREEN,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.DARK_GREEN:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_DARK_GREEN,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.BLACK:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_BLACK,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.GREY:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_GREY,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.BLUE:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_BLUE,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.LIGHT_BLUE:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_LIGHT_BLUE,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.RED:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_RED,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.ORANGE:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_ORANGE,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-    case Plane.Variant.LIGHT_GREY:
-      return new Image(atlas, {
-        id: AtlasID.PALETTE_LIGHT_GREY,
-        w,
-        h,
-        layer: Layer.PLANE
-      })
-  }
-}
+const variantToAtlasID: Readonly<Record<
+  Plane.Variant,
+  AtlasID
+>> = ObjectUtil.freeze({
+  [Plane.Variant.GRID]: AtlasID.UI_GRID,
+  [Plane.Variant.TRANSPARENT]: AtlasID.PALETTE_TRANSPARENT,
+  [Plane.Variant.WHITE]: AtlasID.PALETTE_WHITE,
+  [Plane.Variant.PALE_GREEN]: AtlasID.PALETTE_PALE_GREEN,
+  [Plane.Variant.LIGHT_GREEN]: AtlasID.PALETTE_LIGHT_GREEN,
+  [Plane.Variant.GREEN]: AtlasID.PALETTE_GREEN,
+  [Plane.Variant.DARK_GREEN]: AtlasID.PALETTE_DARK_GREEN,
+  [Plane.Variant.BLACK]: AtlasID.PALETTE_BLACK,
+  [Plane.Variant.GREY]: AtlasID.PALETTE_GREY,
+  [Plane.Variant.BLUE]: AtlasID.PALETTE_BLUE,
+  [Plane.Variant.LIGHT_BLUE]: AtlasID.PALETTE_LIGHT_BLUE,
+  [Plane.Variant.RED]: AtlasID.PALETTE_RED,
+  [Plane.Variant.ORANGE]: AtlasID.PALETTE_ORANGE,
+  [Plane.Variant.LIGHT_GREY]: AtlasID.PALETTE_LIGHT_GREY
+})
 
 const defaults = ObjectUtil.freeze({
   type: EntityType.SUBSHRUB,

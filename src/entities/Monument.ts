@@ -21,15 +21,12 @@ export class Monument extends Entity<Monument.Variant, Monument.State> {
     super({
       ...defaults,
       collisionBodies: defaults.collisionBodies[
-        (props && props.variant) || defaults.variant
+        props?.variant ?? defaults.variant
       ].map(Rect.copy),
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Monument.State.VISIBLE]: new ImageRect({
-          images: variantImages(
-            atlas,
-            (props && props.variant) || defaults.variant
-          )
+          images: variantImages(atlas, props?.variant ?? defaults.variant)
         })
       },
       ...props

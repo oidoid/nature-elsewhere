@@ -68,27 +68,24 @@ export abstract class Entity<
   private readonly _children: Entity[]
 
   constructor(props: Entity.Props<Variant, State>) {
-    this._id = props.id || Entity.defaults.id
+    this._id = props.id ?? Entity.defaults.id
     this._type = props.type
     this._variant = props.variant
     this._bounds = Rect.make(0, 0, 0, 0)
-    this._velocity = props.velocity || Entity.defaults.velocity.copy()
+    this._velocity = props.velocity ?? Entity.defaults.velocity.copy()
     this._velocityFraction = {x: 0, y: 0}
     this._machine = new ImageStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
-      props.updatePredicate || Entity.defaults.updatePredicate
-    this._collisionType =
-      props.collisionType === undefined
-        ? Entity.defaults.collisionType
-        : props.collisionType
+      props.updatePredicate ?? Entity.defaults.updatePredicate
+    this._collisionType = props.collisionType ?? Entity.defaults.collisionType
     this._collisionPredicate =
-      props.collisionPredicate || Entity.defaults.collisionPredicate
-    this._collisionBodies = props.collisionBodies || [
+      props.collisionPredicate ?? Entity.defaults.collisionPredicate
+    this._collisionBodies = props.collisionBodies ?? [
       ...Entity.defaults.collisionBodies.map(rect =>
         Rect.make(rect.position.x, rect.position.y, rect.size.w, rect.size.h)
       )
     ]
-    this._children = props.children || []
+    this._children = props.children ?? []
     this.setImageID(props.imageID)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
