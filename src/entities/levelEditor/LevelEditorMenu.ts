@@ -6,11 +6,7 @@ import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {
-  FollowCam,
-  FollowCamOrientation
-} from '../../updaters/followCam/FollowCam'
-import {FollowCamUpdater} from '../../updaters/followCam/FollowCamUpdater'
+import {FollowCam} from '../../updaters/followCam/FollowCam'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
 import {LevelEditorSandbox} from './LevelEditorSandbox'
@@ -53,7 +49,7 @@ export class LevelEditorMenu extends Entity<
     })
 
     this._followCam = ObjectUtil.freeze({
-      positionRelativeToCam: FollowCamOrientation.CENTER,
+      positionRelativeToCam: FollowCam.Orientation.CENTER,
       camMargin: new WH(0, 0)
     })
     this._export = newLink(
@@ -111,8 +107,7 @@ export class LevelEditorMenu extends Entity<
 
   update(state: UpdateState): UpdateStatus {
     let status =
-      super.update(state) |
-      FollowCamUpdater.update(this._followCam, this, state)
+      super.update(state) | FollowCam.update(this._followCam, this, state)
 
     for (const child of this.children) {
       const childStatus = child.update(state)

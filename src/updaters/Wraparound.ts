@@ -4,7 +4,7 @@ import {UpdateState} from './UpdateState'
 import {UpdateStatus} from './updateStatus/UpdateStatus'
 import {XY} from '../math/XY'
 
-export namespace WraparoundUpdater {
+export namespace Wraparound {
   export function update(entity: Entity, state: UpdateState): UpdateStatus {
     const {position, size} = entity.bounds
     const destination = new XY(

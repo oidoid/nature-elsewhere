@@ -1,11 +1,11 @@
 import {WHParser} from '../../math/WHParser'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {WH} from '../../math/WH'
-import {FollowCamOrientation, FollowCam} from './FollowCam'
+import {FollowCam} from './FollowCam'
 import {EntityConfig} from '../../entity/EntityParser'
 
 export interface FollowCamConfig {
-  readonly positionRelativeToCam?: FollowCamOrientation
+  readonly positionRelativeToCam?: FollowCam.Orientation
   readonly camMargin?: Partial<WH>
 }
 
@@ -17,7 +17,7 @@ export namespace FollowCamParser {
         : undefined
     if (orientation)
       ObjectUtil.assertValueOf(
-        FollowCamOrientation,
+        FollowCam.Orientation,
         orientation,
         'FollowCamOrientation'
       )

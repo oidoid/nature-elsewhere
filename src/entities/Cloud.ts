@@ -12,7 +12,7 @@ import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
-import {WraparoundUpdater} from '../updaters/WraparoundUpdater'
+import {Wraparound} from '../updaters/Wraparound'
 
 export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
   constructor(
@@ -143,7 +143,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
   }
 
   update(state: UpdateState): UpdateStatus {
-    return super.update(state) | WraparoundUpdater.update(this, state)
+    return super.update(state) | Wraparound.update(this, state)
   }
 
   toJSON(): JSONValue {

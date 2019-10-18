@@ -4,8 +4,7 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {FollowCamOrientation, FollowCam} from '../updaters/followCam/FollowCam'
-import {FollowCamUpdater} from '../updaters/followCam/FollowCamUpdater'
+import {FollowCam} from '../updaters/followCam/FollowCam'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
@@ -52,16 +51,13 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
       ...props
     })
     this._followCam = ObjectUtil.freeze({
-      positionRelativeToCam: FollowCamOrientation.SOUTH_WEST,
+      positionRelativeToCam: FollowCam.Orientation.SOUTH_WEST,
       camMargin: new WH(1, 1)
     })
   }
 
   update(state: UpdateState): UpdateStatus {
-    return (
-      super.update(state) |
-      FollowCamUpdater.update(this._followCam, this, state)
-    )
+    return super.update(state) | FollowCam.update(this._followCam, this, state)
   }
 
   toJSON(): JSONValue {

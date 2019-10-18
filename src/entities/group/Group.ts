@@ -2,7 +2,6 @@ import {Entity} from '../../entity/Entity'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {FollowCam} from '../../updaters/followCam/FollowCam'
-import {FollowCamUpdater} from '../../updaters/followCam/FollowCamUpdater'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
 import {ObjectUtil} from '../../utils/ObjectUtil'
@@ -31,8 +30,7 @@ export class Group extends Entity<Group.Variant, Group.State> {
 
   update(state: UpdateState): UpdateStatus {
     let status =
-      super.update(state) |
-      FollowCamUpdater.update(this._followCam, this, state)
+      super.update(state) | FollowCam.update(this._followCam, this, state)
     return status
   }
 

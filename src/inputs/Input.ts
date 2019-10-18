@@ -29,7 +29,11 @@ export namespace Input {
     return !input?.active && !input?.timer
   }
 
-  export function levelXY(input: Input, canvasWH: WH, cam: ReadonlyRect): XY {
+  export function levelXY(
+    input: Input,
+    canvasWH: Readonly<WH>,
+    cam: ReadonlyRect
+  ): XY {
     return Viewport.toLevelXY(input.windowPosition, canvasWH, cam)
   }
 

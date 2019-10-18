@@ -5,7 +5,11 @@ import {XY} from '../math/XY'
 
 export namespace Viewport {
   /** @return The maximum scale possible. */
-  export function scale(canvas: WH, minSize: WH, zoomOut: number): number {
+  export function scale(
+    canvas: Readonly<WH>,
+    minSize: Readonly<WH>,
+    zoomOut: number
+  ): number {
     const x = canvas.w / minSize.w
     const y = canvas.h / minSize.h
     return Math.max(1, Math.floor(Math.min(x, y)) - zoomOut)
@@ -16,7 +20,7 @@ export namespace Viewport {
     return new WH(clientWidth, clientHeight)
   }
 
-  export function camWH({w, h}: WH, scale: number): WH {
+  export function camWH({w, h}: Readonly<WH>, scale: number): WH {
     return new WH(Math.ceil(w / scale), Math.ceil(h / scale))
   }
 
@@ -27,8 +31,8 @@ export namespace Viewport {
                through in level pixels.
       @return The fractional position in level coordinates. */
   export function toLevelXY(
-    {x, y}: FloatXY | XY,
-    {w, h}: WH,
+    {x, y}: Readonly<FloatXY | XY>,
+    {w, h}: Readonly<WH>,
     cam: ReadonlyRect
   ): XY {
     return new XY(

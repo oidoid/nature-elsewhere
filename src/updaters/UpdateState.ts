@@ -9,7 +9,7 @@ export interface UpdateState {
   /** The duration of time to update state for. */
   readonly time: Milliseconds
   readonly level: Level
-  readonly canvasSize: WH
+  readonly canvasSize: Readonly<WH>
   readonly inputs: Readonly<InputState>
 }
 

@@ -10,11 +10,7 @@ import {EntityID} from '../../entity/EntityID'
 import {EntityPicker} from '../EntityPicker'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {
-  FollowCam,
-  FollowCamOrientation
-} from '../../updaters/followCam/FollowCam'
-import {FollowCamUpdater} from '../../updaters/followCam/FollowCamUpdater'
+import {FollowCam} from '../../updaters/followCam/FollowCam'
 import {Group} from '../group/Group'
 import {Image} from '../../image/Image'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
@@ -71,7 +67,7 @@ export class LevelEditorPanel extends Entity<
     })
 
     this._followCam = ObjectUtil.freeze({
-      positionRelativeToCam: FollowCamOrientation.SOUTH_EAST,
+      positionRelativeToCam: FollowCam.Orientation.SOUTH_EAST,
       camMargin: new WH(0, 0)
     })
     this._variantCheckbox = new Checkbox(atlas, {
@@ -282,7 +278,7 @@ export class LevelEditorPanel extends Entity<
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
 
-    status |= FollowCamUpdater.update(this._followCam, this, state)
+    status |= FollowCam.update(this._followCam, this, state)
 
     if (this._load) {
       this._load = false
