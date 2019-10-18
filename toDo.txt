@@ -103,7 +103,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Do I want to better distinguish the backpacker from the background? For example, in front of water the colors are identical.
         Add more flowers but try to put them in perspective.
         Fade out the destination maker and allow a few instances. Maybe reverse the animation.
-------->Improve grass patches. These are currently path hacks and should be nicer.
+        Improve grass patches. These are currently path hacks and should be nicer.
         Check that the entities have strong, even, isometric perspectives.
           Correct the path perspective. There's one that links up properly in mock-path.aseprite.
           There's some really nice golf course and level box perspectives in garfbage.aseprite. General perspective nots in rubbish.aseprite.

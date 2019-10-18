@@ -11,8 +11,8 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {UpdatePredicate} from '../updaters/UpdatePredicate'
+import {UpdateStatus} from '../updaters/UpdateStatus'
 
 export class Bee extends Entity<Bee.Variant, Bee.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Bee.Variant, Bee.State>) {

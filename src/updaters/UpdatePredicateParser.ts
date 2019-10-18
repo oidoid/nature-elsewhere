@@ -1,4 +1,4 @@
-import {ObjectUtil} from '../../utils/ObjectUtil'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from './UpdatePredicate'
 
 export type UpdatePredicateConfig = Maybe<UpdatePredicate | string>

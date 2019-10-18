@@ -3,7 +3,7 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Image} from '../image/Image'
 import {Layer} from '../image/Layer'
 import {Rect, ReadonlyRect} from '../math/Rect'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
 
 export class ImageRect {

@@ -1,9 +1,9 @@
-import {Entity} from '../../entity/Entity'
-import {ReadonlyRect} from '../../math/Rect'
-import {UpdateState} from '../UpdateState'
-import {UpdateStatus} from '../updateStatus/UpdateStatus'
-import {WH} from '../../math/WH'
-import {XY} from '../../math/XY'
+import {Entity} from '../entity/Entity'
+import {ReadonlyRect} from '../math/Rect'
+import {UpdateState} from './UpdateState'
+import {UpdateStatus} from './UpdateStatus'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 export interface FollowCam {
   readonly positionRelativeToCam?: FollowCam.Orientation

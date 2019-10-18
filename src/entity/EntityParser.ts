@@ -25,7 +25,7 @@ import {TextParser} from '../entities/text/TextParser'
 import {
   UpdatePredicateConfig,
   UpdatePredicateParser
-} from '../updaters/updatePredicate/UpdatePredicateParser'
+} from '../updaters/UpdatePredicateParser'
 import {XYConfig, XYParser} from '../math/XYParser'
 
 export type EntityArrayConfig = Maybe<readonly EntityConfig[]>

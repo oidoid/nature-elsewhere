@@ -11,9 +11,9 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
 
 export class Cursor extends Entity<Cursor.Variant, Cursor.State> {

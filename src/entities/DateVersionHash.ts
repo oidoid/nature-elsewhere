@@ -7,7 +7,7 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Text} from './text/Text'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class DateVersionHash extends Entity<
   DateVersionHash.Variant,

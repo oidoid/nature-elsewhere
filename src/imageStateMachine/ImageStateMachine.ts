@@ -5,7 +5,7 @@ import {ImageRect} from './ImageRect'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {ReadonlyRect} from '../math/Rect'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
 
 export type ImageStateMap<State extends string = string> = Readonly<

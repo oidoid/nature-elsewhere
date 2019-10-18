@@ -2,7 +2,7 @@
   "version": "0.0.0",
   "type": "fields",
   "size": {"w": 512, "h": 256},
-  "minViewport": {"w": 104, "h": 104},
+  "minViewport": {"w": 96, "h": 96},
   "cam": {"followID": "uiPlayer"},
   "planes": [
     {"type": "plane", "variant": "paleGreen"},

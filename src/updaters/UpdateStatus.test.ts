@@ -1,5 +1,5 @@
-import {TestUtil} from '../../utils/TestUtil'
-import {ObjectUtil} from '../../utils/ObjectUtil'
+import {TestUtil} from '../utils/TestUtil'
+import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdateStatus} from './UpdateStatus'
 
 TestUtil.testValuesAreUnique(UpdateStatus, 'UpdateStatus')

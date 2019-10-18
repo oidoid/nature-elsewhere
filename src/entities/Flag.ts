@@ -9,7 +9,7 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {XY} from '../math/XY'
 
 export class Flag extends Entity<Flag.Variant, Flag.State> {

@@ -11,7 +11,7 @@ import {LevelType} from '../../levels/LevelType'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Text} from '../text/Text'
 import {UpdateState} from '../../updaters/UpdateState'
-import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
+import {UpdateStatus} from '../../updaters/UpdateStatus'
 
 export class LevelLink extends Text {
   private _link?: LevelType

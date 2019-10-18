@@ -12,9 +12,9 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
 import {ObjectUtil} from '../utils/ObjectUtil'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {UpdateStatus} from '../updaters/UpdateStatus'
 
 export class Button extends Entity<Button.Variant, Button.State> {
   private _clicked: boolean

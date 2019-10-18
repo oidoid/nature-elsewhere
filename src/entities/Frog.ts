@@ -11,7 +11,7 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {XY} from '../math/XY'
 
 export class Frog extends Entity<Frog.Variant, Frog.State> {

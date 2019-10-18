@@ -5,7 +5,7 @@ import {Settings} from './settings/Settings'
 ;(async () => {
   console.log(`
 ┌>°┐
-│  │DDOID ${Build.date} v${Build.version} ${Build.hash}
+│  │DDOID Nature Elsewhere ${Build.date} v${Build.version} ${Build.hash}
 └──┘
 `)
 

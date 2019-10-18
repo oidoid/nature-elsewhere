@@ -12,7 +12,7 @@ import {Limits} from '../../math/Limits'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Rect} from '../../math/Rect'
 import {TextLayout} from '../../text/TextLayout'
-import {UpdatePredicate} from '../../updaters/updatePredicate/UpdatePredicate'
+import {UpdatePredicate} from '../../updaters/UpdatePredicate'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
 

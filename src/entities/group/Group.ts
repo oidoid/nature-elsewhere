@@ -1,12 +1,12 @@
 import {Entity} from '../../entity/Entity'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {FollowCam} from '../../updaters/followCam/FollowCam'
+import {FollowCam} from '../../updaters/FollowCam'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
 import {ObjectUtil} from '../../utils/ObjectUtil'
 import {UpdateState} from '../../updaters/UpdateState'
-import {UpdateStatus} from '../../updaters/updateStatus/UpdateStatus'
+import {UpdateStatus} from '../../updaters/UpdateStatus'
 import {WH} from '../../math/WH'
 
 export class Group extends Entity<Group.Variant, Group.State> {

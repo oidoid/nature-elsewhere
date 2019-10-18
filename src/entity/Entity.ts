@@ -16,9 +16,9 @@ import {Level} from '../levels/Level'
 import {ObjectUtil} from '../utils/ObjectUtil'
 import {ProcessChildren} from './ProcessChildren'
 import {ReadonlyRect, Rect} from '../math/Rect'
-import {UpdatePredicate} from '../updaters/updatePredicate/UpdatePredicate'
+import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
-import {UpdateStatus} from '../updaters/updateStatus/UpdateStatus'
+import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
 
 export abstract class Entity<

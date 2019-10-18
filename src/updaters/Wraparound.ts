@@ -1,7 +1,7 @@
 import {Entity} from '../entity/Entity'
 import {NumberUtil} from '../math/NumberUtil'
 import {UpdateState} from './UpdateState'
-import {UpdateStatus} from './updateStatus/UpdateStatus'
+import {UpdateStatus} from './UpdateStatus'
 import {XY} from '../math/XY'
 
 export namespace Wraparound {
