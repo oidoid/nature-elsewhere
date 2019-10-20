@@ -1,5 +1,6 @@
 import {Input} from './Input'
 import {InputState} from './InputState'
+import {Milliseconds} from 'aseprite-atlas'
 
 export interface InputPoller {
   readonly inputs: InputState

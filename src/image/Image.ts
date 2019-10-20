@@ -1,4 +1,4 @@
-import {Animator, Atlas, Integer} from 'aseprite-atlas'
+import {Animator, Atlas, Integer, Milliseconds} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {DecamillipixelXY, XY} from '../math/XY'
 import {ImageComposition} from './ImageComposition'

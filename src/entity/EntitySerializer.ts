@@ -9,32 +9,11 @@ export namespace EntitySerializer {
   >(
     entity: Entity<Variant, State>,
     subDefaults: Omit<
-      DeepImmutable<Entity.SubProps<Variant, State | Entity.BaseState>>,
+      Readonly<Entity.SubProps<Variant, State | Entity.BaseState>>,
       'children' | 'map' | 'collisionBodies'
     >
   ): JSONObject {
-    const defaults: Writable<typeof Entity.defaults & typeof subDefaults> = {
-      ...Entity.defaults,
-      state: Entity.BaseState.HIDDEN
-    }
-    if (subDefaults.id !== undefined) defaults.id = subDefaults.id
-    if (subDefaults.type !== undefined) defaults.type = subDefaults.type
-    if (subDefaults.variant !== undefined)
-      defaults.variant = subDefaults.variant
-    if (subDefaults.position !== undefined)
-      defaults.position = subDefaults.position
-    if (subDefaults.velocity !== undefined)
-      defaults.velocity = subDefaults.velocity
-    if (subDefaults.constituentID !== undefined)
-      defaults.constituentID = subDefaults.constituentID
-    if (subDefaults.scale !== undefined) defaults.scale = subDefaults.scale
-    if (subDefaults.state !== undefined) defaults.state = subDefaults.state
-    if (subDefaults.updatePredicate !== undefined)
-      defaults.updatePredicate = subDefaults.updatePredicate
-    if (subDefaults.collisionType !== undefined)
-      defaults.collisionType = subDefaults.collisionType
-    if (subDefaults.collisionPredicate !== undefined)
-      defaults.collisionPredicate = subDefaults.collisionPredicate
+    const defaults = {...Entity.defaults, ...subDefaults}
 
     const diff: Writable<EntityConfig> & JSONObject = {type: entity.type}
     if (entity.id !== defaults.id) diff.id = entity.id

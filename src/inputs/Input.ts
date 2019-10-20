@@ -1,4 +1,5 @@
 import {FloatXY} from '../math/FloatXY'
+import {Milliseconds} from 'aseprite-atlas'
 import {ReadonlyRect} from '../math/Rect'
 import {Viewport} from '../renderer/Viewport'
 import {WH} from '../math/WH'

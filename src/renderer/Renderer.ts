@@ -1,5 +1,6 @@
 import fragmentGLSL from './fragment.glsl'
 import {GLUtil} from './GLUtil'
+import {Milliseconds} from 'aseprite-atlas'
 import {ReadonlyRect} from '../math/Rect'
 import {ShaderLayout} from './ShaderLayout'
 import {Store} from '../store/Store'

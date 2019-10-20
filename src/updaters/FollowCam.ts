@@ -10,6 +10,11 @@ export interface FollowCam {
   readonly camMargin: WH
 }
 
+export interface ReadonlyFollowCam {
+  readonly positionRelativeToCam?: FollowCam.Orientation
+  readonly camMargin: Readonly<WH>
+}
+
 export namespace FollowCam {
   /** The position relative the camera's bounding rectangle. */
   export enum Orientation {
@@ -33,7 +38,7 @@ export namespace FollowCam {
   }
 
   export function update(
-    {positionRelativeToCam, camMargin}: DeepImmutable<FollowCam>,
+    {positionRelativeToCam, camMargin}: ReadonlyFollowCam,
     entity: Entity,
     state: UpdateState
   ): UpdateStatus {

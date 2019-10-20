@@ -126,6 +126,13 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
           Statically defining variants and states doesn't seem ideal.
           What constraints can we set? Max images? Max size? Max children?
         Adding collision bodies is back to manual now. Is it easy to set them for all cels?
+        Clean up Entity, State, ImageStateMachine, ImageStateMap, ImageRect and friends.
+          See Image for example.
+          Consider dropping Variant and State template parameters for strings and validation on setters.
+          Consider more getters where it makes sense.
+          Revise order of functions and props and JSDocs.
+          Generally, just needs a lot of polishing for consistency, rethinking, and cleaning up. There's so much state.
+        Review notes.txt
         Can collisions test and resolve within update? I think the testing is, it's just kind of convoluted.
         Reevaluate recursive collision and movement system.
           How should notifications work? I could also use a notify ID system for collision resolution instead but then IDs have to be unique which isn't bad. Might be nice instead of the hierarchy which is a little strange. Do I want this lookup over recursion? I could present and size by single entity only then!

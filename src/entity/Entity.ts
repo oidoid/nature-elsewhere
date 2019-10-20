@@ -80,9 +80,7 @@ export abstract class Entity<
     this._collisionPredicate =
       props.collisionPredicate ?? Entity.defaults.collisionPredicate
     this._collisionBodies = props.collisionBodies ?? [
-      ...Entity.defaults.collisionBodies.map(rect =>
-        Rect.make(rect.position.x, rect.position.y, rect.size.w, rect.size.h)
-      )
+      ...Entity.defaults.collisionBodies
     ]
     this._children = props.children ?? []
     this.setConstituentID(props.constituentID)
@@ -539,20 +537,7 @@ export namespace Entity {
       | 'collisionBodies'
     > {}
 
-  export const defaults: DeepImmutable<Omit<
-    Required<Entity.Props>,
-    | 'type'
-    | 'variant'
-    | 'map'
-    | 'constituentID'
-    | 'children'
-    | 'x'
-    | 'y'
-    | 'sx'
-    | 'sy'
-    | 'vx'
-    | 'vy'
-  >> = Object.freeze({
+  export const defaults = Object.freeze({
     id: EntityID.ANONYMOUS,
     state: Entity.BaseState.HIDDEN,
     position: Object.freeze(new XY(0, 0)),

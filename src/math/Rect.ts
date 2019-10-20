@@ -8,7 +8,10 @@ export interface Rect {
   readonly size: WH
 }
 
-export type ReadonlyRect = DeepImmutable<Rect>
+export interface ReadonlyRect {
+  readonly position: Readonly<XY>
+  readonly size: Readonly<WH>
+}
 
 export namespace Rect {
   export function trunc(x: number, y: number, w: number, h: number): Rect {

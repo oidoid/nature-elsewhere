@@ -130,10 +130,7 @@ export class EntityPicker extends Entity<
     this._hideActiveChild()
     const child = this.getActiveChild()
     if (!child) return
-
     this._centerChild(child)
-
-    // const defaultState = getChildStates(child)[0]
     child.elevate(2 * Layer.UI_PICKER_OFFSET)
   }
 

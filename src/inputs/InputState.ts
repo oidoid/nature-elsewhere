@@ -1,4 +1,5 @@
 import {Input} from './Input'
+import {Milliseconds} from 'aseprite-atlas'
 
 export interface InputState {
   point?: Input

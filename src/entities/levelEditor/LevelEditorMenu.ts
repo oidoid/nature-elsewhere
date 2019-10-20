@@ -5,7 +5,7 @@ import {Entity} from '../../entity/Entity'
 import {EntityID} from '../../entity/EntityID'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {FollowCam} from '../../updaters/FollowCam'
+import {FollowCam, ReadonlyFollowCam} from '../../updaters/FollowCam'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
 import {LevelEditorSandbox} from './LevelEditorSandbox'
@@ -25,7 +25,7 @@ export class LevelEditorMenu extends Entity<
   LevelEditorMenu.Variant,
   LevelEditorMenu.State
 > {
-  private readonly _followCam: DeepImmutable<FollowCam>
+  private readonly _followCam: ReadonlyFollowCam
   private readonly _export: LevelLink
   private readonly _import: LevelLink
   private readonly _reset: LevelLink

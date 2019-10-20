@@ -4,7 +4,7 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {FollowCam} from '../updaters/FollowCam'
+import {FollowCam, ReadonlyFollowCam} from '../updaters/FollowCam'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
@@ -15,7 +15,7 @@ import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
 
 export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
-  private readonly _followCam: DeepImmutable<FollowCam>
+  private readonly _followCam: ReadonlyFollowCam
 
   constructor(
     atlas: Atlas,

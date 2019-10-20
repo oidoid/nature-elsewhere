@@ -10,7 +10,7 @@ import {EntityID} from '../../entity/EntityID'
 import {EntityPicker} from '../EntityPicker'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {FollowCam} from '../../updaters/FollowCam'
+import {FollowCam, ReadonlyFollowCam} from '../../updaters/FollowCam'
 import {Group} from '../group/Group'
 import {Image} from '../../image/Image'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
@@ -36,7 +36,7 @@ export class LevelEditorPanel extends Entity<
   LevelEditorPanel.Variant,
   LevelEditorPanel.State
 > {
-  private readonly _followCam: DeepImmutable<FollowCam>
+  private readonly _followCam: ReadonlyFollowCam
   private readonly _radioGroup: Entity
   private readonly _xCheckbox: Checkbox
   private readonly _yCheckbox: Checkbox
