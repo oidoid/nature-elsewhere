@@ -24,10 +24,10 @@ void main() {
   vec4 constituentPx = texture(atlas, constituentPosition / vec2(atlasSize));
 
   if (vComposition == COMPOSITION_SOURCE) {
-    frag = vec4(constituentPx.rgb, sourcePx.a);
+    frag = vec4(sourcePx.rgb, sourcePx.a);
   } else if (vComposition == COMPOSITION_SOURCE_MASK) {
     frag = vec4(constituentPx.rgb, sourcePx.a);
-  } else if (vComposition == COMPOSITION_SOURCE_IN) {
-    frag = vec4(constituentPx.rgb, sign(sourcePx.a) * sign(constituentPx.a));
+  } else /*if (vComposition == COMPOSITION_SOURCE_IN)*/ {
+    frag = vec4(sourcePx.rgb, sign(sourcePx.a) * sign(constituentPx.a));
   }
 }

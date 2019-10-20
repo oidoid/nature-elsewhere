@@ -1,11 +1,14 @@
 import {Atlas} from 'aseprite-atlas'
+import {AtlasIDParser} from '../atlas/AtlasIDParser'
 import {CollisionPredicateParser} from '../collision/CollisionPredicateParser'
 import {CollisionTypeParser} from '../collision/CollisionTypeParser'
-import {EntityConfig} from './EntityConfig'
 import {Entity} from './Entity'
+import {EntityConfig} from './EntityConfig'
 import {EntityFactory} from './EntityFactory'
 import {EntityID} from './EntityID'
+import {EntityIDParser} from './EntityIDParser'
 import {EntityType} from '../entity/EntityType'
+import {EntityTypeParser} from './EntityTypeParser'
 import {GroupParser} from '../entities/group/GroupParser'
 import {ImageParser} from '../image/ImageParser'
 import {ImageStateMachineParser} from '../imageStateMachine/ImageStateMachineParser'
@@ -14,8 +17,6 @@ import {RectParser} from '../math/RectParser'
 import {TextParser} from '../entities/text/TextParser'
 import {UpdatePredicateParser} from '../updaters/UpdatePredicateParser'
 import {XYParser} from '../math/XYParser'
-import {EntityTypeParser} from './EntityTypeParser'
-import {EntityIDParser} from './EntityIDParser'
 
 export type EntityIDConfig = Maybe<EntityID | string>
 export type EntityTypeConfig = EntityType | string
@@ -70,7 +71,7 @@ function parseProps(
   if (config.velocity !== undefined)
     props.velocity = XYParser.parse(config.velocity)
   if (config.constituentID !== undefined)
-    props.constituentID = props.constituentID
+    props.constituentID = AtlasIDParser.parse(config.constituentID)
   if (config.state !== undefined) props.state = config.state
   if (config.map !== undefined)
     props.map = ImageStateMachineParser.parseMap(atlas, config.map)

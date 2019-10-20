@@ -14,27 +14,27 @@
             {
               "id": "uiCheckerboard-blackTransparent",
               "constituentID": "palette-green",
-              "alphaComposition": "SOURCE_MASK",
+              "composition": "SOURCE_MASK",
               "w": 32767
             },
             {
               "id": "uiCheckerboard-blackTransparent",
               "constituentID": "palette-green",
-              "alphaComposition": "SOURCE_MASK",
+              "composition": "SOURCE_MASK",
               "x": 510,
               "h": 32767
             },
             {
               "id": "uiCheckerboard-blackTransparent",
               "constituentID": "palette-green",
-              "alphaComposition": "SOURCE_MASK",
+              "composition": "SOURCE_MASK",
               "y": 254,
               "w": 32767
             },
             {
               "id": "uiCheckerboard-blackTransparent",
               "constituentID": "palette-green",
-              "alphaComposition": "SOURCE_MASK",
+              "composition": "SOURCE_MASK",
               "h": 32767
             }
           ]
