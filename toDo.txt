@@ -128,7 +128,6 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Adding collision bodies is back to manual now. Is it easy to set them for all cels?
         Clean up Entity, State, ImageStateMachine, ImageStateMap, ImageRect and friends.
           See Image for example.
-          Consider dropping Variant and State template parameters for strings and validation on setters.
           Consider more getters where it makes sense.
           Revise order of functions and props and JSDocs.
           Generally, just needs a lot of polishing for consistency, rethinking, and cleaning up. There's so much state.

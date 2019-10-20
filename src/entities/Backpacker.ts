@@ -36,8 +36,15 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
+        [Backpacker.State.IDLE_LEFT]: newImageRect(
+          AtlasID.BACKPACKER_IDLE_LEFT,
+          // Use vertical shadow to skip horizontal shadow animation.
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
+          _size
+        ),
         [Backpacker.State.IDLE_RIGHT]: newImageRect(
           AtlasID.BACKPACKER_IDLE_RIGHT,
+          // Use vertical shadow to skip horizontal shadow animation.
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
@@ -51,9 +58,14 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
+        [Backpacker.State.WALK_LEFT]: newImageRect(
+          AtlasID.BACKPACKER_WALK_LEFT,
+          AtlasID.BACKPACKER_WALK_HORIZONTAL_SHADOW,
+          _size
+        ),
         [Backpacker.State.WALK_RIGHT]: newImageRect(
           AtlasID.BACKPACKER_WALK_RIGHT,
-          AtlasID.BACKPACKER_WALK_RIGHT_SHADOW,
+          AtlasID.BACKPACKER_WALK_HORIZONTAL_SHADOW,
           _size
         ),
         [Backpacker.State.WALK_DOWN]: newImageRect(
@@ -96,15 +108,11 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
         (this.state() === Backpacker.State.WALK_RIGHT || distance.x > 3)
 
       if ((left || right) && ((!up && !down) || horizontalStatePreferred))
-        nextState = Backpacker.State.WALK_RIGHT
+        nextState = left
+          ? Backpacker.State.WALK_LEFT
+          : Backpacker.State.WALK_RIGHT
       else if (down) nextState = Backpacker.State.WALK_DOWN
       else if (up) nextState = Backpacker.State.WALK_UP
-
-      const scale = this.scale().copy()
-      if (left && ((!up && !down) || horizontalStatePreferred))
-        scale.x = -1 * Math.abs(scale.x)
-      else if (up || down || right) scale.x = Math.abs(scale.x)
-      status |= this.scaleTo(scale)
     }
 
     status |= this.transition(nextState)
@@ -170,9 +178,11 @@ export namespace Backpacker {
 
   export enum State {
     IDLE_UP = 'idleUp',
+    IDLE_LEFT = 'idleLeft',
     IDLE_RIGHT = 'idleRight',
     IDLE_DOWN = 'idleDown',
     WALK_UP = 'walkUp',
+    WALK_LEFT = 'walkLeft',
     WALK_RIGHT = 'walkRight',
     WALK_DOWN = 'walkDown'
   }
@@ -206,9 +216,11 @@ const idleStateFor: Readonly<Record<
 >> = Object.freeze({
   [Entity.BaseState.HIDDEN]: Entity.BaseState.HIDDEN,
   [Backpacker.State.IDLE_UP]: Backpacker.State.IDLE_UP,
+  [Backpacker.State.IDLE_LEFT]: Backpacker.State.IDLE_LEFT,
   [Backpacker.State.IDLE_RIGHT]: Backpacker.State.IDLE_RIGHT,
   [Backpacker.State.IDLE_DOWN]: Backpacker.State.IDLE_DOWN,
   [Backpacker.State.WALK_UP]: Backpacker.State.IDLE_UP,
+  [Backpacker.State.WALK_LEFT]: Backpacker.State.IDLE_LEFT,
   [Backpacker.State.WALK_RIGHT]: Backpacker.State.IDLE_RIGHT,
   [Backpacker.State.WALK_DOWN]: Backpacker.State.IDLE_DOWN
 })
