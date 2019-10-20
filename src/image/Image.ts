@@ -55,7 +55,7 @@ export class Image {
 
   /** Optionally, compute the image size from the animation source's size and
       the specified scale. */
-  static new(atlas: Atlas, props: Image.Props): Image {
+  static withAtlasSize(atlas: Atlas, props: Image.Props): Image {
     const animation = atlas.animations[props.id]
     const size =
       props.size ??

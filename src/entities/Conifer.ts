@@ -23,8 +23,8 @@ export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Conifer.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.CONIFER}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.CONIFER}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.CONIFER_SHADOW,
               y: 1,
               layer: Layer.SHADOW

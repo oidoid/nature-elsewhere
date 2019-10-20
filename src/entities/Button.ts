@@ -26,13 +26,19 @@ export class Button extends Entity<Button.Variant, Button.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Button.State.UNCLICKED]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.UI_BUTTON_BASE, layer: Layer.UI_MID})
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.UI_BUTTON_BASE,
+              layer: Layer.UI_MID
+            })
           ]
         }),
         [Button.State.CLICKED]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.UI_BUTTON_BASE, layer: Layer.UI_MID}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.UI_BUTTON_BASE,
+              layer: Layer.UI_MID
+            }),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.UI_BUTTON_PRESSED,
               layer: Layer.UI_HI
             })

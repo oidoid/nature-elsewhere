@@ -18,8 +18,8 @@ export class Flag extends Entity<Flag.Variant, Flag.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Flag.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.FLAG}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.FLAG}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.FLAG_SHADOW,
               x: -1,
               y: 1,

@@ -27,7 +27,9 @@ export class DestinationMarker extends Entity<
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [DestinationMarker.State.VISIBLE]: new ImageRect({
           origin: new XY(-2, -1),
-          images: [Image.new(atlas, {id: AtlasID.UI_DESTINATION_MARKER})]
+          images: [
+            Image.withAtlasSize(atlas, {id: AtlasID.UI_DESTINATION_MARKER})
+          ]
         })
       },
       ...props

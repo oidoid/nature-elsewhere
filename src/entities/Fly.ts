@@ -18,8 +18,8 @@ export class Fly extends Entity<Fly.Variant, Fly.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Fly.State.IDLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.PALETTE_GREY}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.PALETTE_GREY}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.PALETTE_LIGHT_GREY,
               y: 2,
               layer: Layer.SHADOW
@@ -28,7 +28,10 @@ export class Fly extends Entity<Fly.Variant, Fly.State> {
         }),
         [Fly.State.DEAD]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.PALETTE_RED, layer: Layer.BLOOD})
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.PALETTE_RED,
+              layer: Layer.BLOOD
+            })
           ]
         })
       },

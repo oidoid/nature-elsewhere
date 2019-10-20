@@ -23,8 +23,8 @@ export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Mountain.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.MOUNTAIN}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.MOUNTAIN}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.MOUNTAIN_SHADOW,
               x: -2,
               y: 1,

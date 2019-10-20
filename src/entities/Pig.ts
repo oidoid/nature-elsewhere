@@ -19,8 +19,8 @@ export class Pig extends Entity<Pig.Variant, Pig.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pig.State.IDLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.PIG}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.PIG}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.PIG_SHADOW,
               y: 1,
               layer: Layer.SHADOW

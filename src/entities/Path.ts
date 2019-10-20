@@ -48,10 +48,15 @@ export namespace Path {
 function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
   switch (variant) {
     case Path.Variant.STRAIGHT_NE:
-      return [Image.new(atlas, {id: AtlasID.PATH_NE, layer: Layer.ABOVE_PLANE})]
+      return [
+        Image.withAtlasSize(atlas, {
+          id: AtlasID.PATH_NE,
+          layer: Layer.ABOVE_PLANE
+        })
+      ]
     case Path.Variant.STRAIGHT_NW:
       return [
-        Image.new(atlas, {
+        Image.withAtlasSize(atlas, {
           id: AtlasID.PATH_NE,
           layer: Layer.ABOVE_PLANE,
           sx: -1
@@ -59,11 +64,14 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
       ]
     case Path.Variant.CORNER_E:
       return [
-        Image.new(atlas, {id: AtlasID.PATH_CORNER_E, layer: Layer.ABOVE_PLANE})
+        Image.withAtlasSize(atlas, {
+          id: AtlasID.PATH_CORNER_E,
+          layer: Layer.ABOVE_PLANE
+        })
       ]
     case Path.Variant.CORNER_W:
       return [
-        Image.new(atlas, {
+        Image.withAtlasSize(atlas, {
           id: AtlasID.PATH_CORNER_E,
           layer: Layer.ABOVE_PLANE,
           sx: -1
@@ -71,11 +79,14 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
       ]
     case Path.Variant.CORNER_N:
       return [
-        Image.new(atlas, {id: AtlasID.PATH_CORNER_N, layer: Layer.ABOVE_PLANE})
+        Image.withAtlasSize(atlas, {
+          id: AtlasID.PATH_CORNER_N,
+          layer: Layer.ABOVE_PLANE
+        })
       ]
     case Path.Variant.CORNER_S:
       return [
-        Image.new(atlas, {
+        Image.withAtlasSize(atlas, {
           id: AtlasID.PATH_CORNER_N,
           layer: Layer.ABOVE_PLANE,
           sy: -1

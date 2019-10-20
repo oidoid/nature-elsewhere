@@ -20,11 +20,14 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pond.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.POND, layer: Layer.ABOVE_PLANE}),
-            Image.new(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
-            Image.new(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
-            Image.new(atlas, {id: AtlasID.GRASS_09, x: 20}),
-            Image.new(atlas, {id: AtlasID.GRASS_10, x: 10, y: 8})
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.POND,
+              layer: Layer.ABOVE_PLANE
+            }),
+            Image.withAtlasSize(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
+            Image.withAtlasSize(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
+            Image.withAtlasSize(atlas, {id: AtlasID.GRASS_09, x: 20}),
+            Image.withAtlasSize(atlas, {id: AtlasID.GRASS_10, x: 10, y: 8})
           ]
         })
       },

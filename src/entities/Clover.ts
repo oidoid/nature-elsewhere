@@ -45,19 +45,34 @@ export namespace Clover {
 function variantImages(atlas: Atlas, variant: Clover.Variant): Image[] {
   if (variant === Clover.Variant.SMALL)
     return [
-      Image.new(atlas, {id: AtlasID.CLOVER_0x0, layer: Layer.DECAL}),
-      Image.new(atlas, {
+      Image.withAtlasSize(atlas, {id: AtlasID.CLOVER_0x0, layer: Layer.DECAL}),
+      Image.withAtlasSize(atlas, {
         id: AtlasID.CLOVER_0x1,
         x: 1,
         y: 3,
         layer: Layer.DECAL
       }),
-      Image.new(atlas, {id: AtlasID.CLOVER_0x0, x: 4, y: 1, layer: Layer.DECAL})
+      Image.withAtlasSize(atlas, {
+        id: AtlasID.CLOVER_0x0,
+        x: 4,
+        y: 1,
+        layer: Layer.DECAL
+      })
     ]
   return [
-    Image.new(atlas, {id: AtlasID.CLOVER_1x0, layer: Layer.DECAL}),
-    Image.new(atlas, {id: AtlasID.CLOVER_0x1, x: 1, y: 3, layer: Layer.DECAL}),
-    Image.new(atlas, {id: AtlasID.CLOVER_1x0, x: 4, y: 1, layer: Layer.DECAL})
+    Image.withAtlasSize(atlas, {id: AtlasID.CLOVER_1x0, layer: Layer.DECAL}),
+    Image.withAtlasSize(atlas, {
+      id: AtlasID.CLOVER_0x1,
+      x: 1,
+      y: 3,
+      layer: Layer.DECAL
+    }),
+    Image.withAtlasSize(atlas, {
+      id: AtlasID.CLOVER_1x0,
+      x: 4,
+      y: 1,
+      layer: Layer.DECAL
+    })
   ]
 }
 

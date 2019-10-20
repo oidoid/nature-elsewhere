@@ -22,8 +22,11 @@ export class Snake extends Entity<Snake.Variant, Snake.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Snake.State.IDLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.SNAKE}),
-            Image.new(atlas, {id: AtlasID.SNAKE_SHADOW, layer: Layer.SHADOW})
+            Image.withAtlasSize(atlas, {id: AtlasID.SNAKE}),
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.SNAKE_SHADOW,
+              layer: Layer.SHADOW
+            })
           ]
         })
       },

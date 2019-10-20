@@ -20,7 +20,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Grass.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {
               id:
                 AtlasID[
                   <keyof typeof AtlasID>(
@@ -28,7 +28,10 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
                   )
                 ]
             }),
-            Image.new(atlas, {id: AtlasID.GRASS_SHADOW, layer: Layer.SHADOW})
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.GRASS_SHADOW,
+              layer: Layer.SHADOW
+            })
           ]
         })
       },

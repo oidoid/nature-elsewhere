@@ -24,8 +24,8 @@ export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [AppleTree.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.APPLE_TREE}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.APPLE_TREE}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.APPLE_TREE_SHADOW,
               y: 1,
               layer: Layer.SHADOW

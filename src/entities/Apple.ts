@@ -19,7 +19,7 @@ export class Apple extends Entity<Apple.Variant, Apple.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Apple.State.VISIBLE]: new ImageRect({
-          images: [Image.new(atlas, {id: AtlasID.PALETTE_RED})]
+          images: [Image.withAtlasSize(atlas, {id: AtlasID.PALETTE_RED})]
         })
       },
       ...props

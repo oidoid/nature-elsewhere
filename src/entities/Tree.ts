@@ -53,8 +53,8 @@ export namespace Tree {
 function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
   if (variant === Tree.Variant.SMALL)
     return [
-      Image.new(atlas, {id: AtlasID.TREE_SMALL}),
-      Image.new(atlas, {
+      Image.withAtlasSize(atlas, {id: AtlasID.TREE_SMALL}),
+      Image.withAtlasSize(atlas, {
         id: AtlasID.TREE_SMALL_SHADOW,
         y: 1,
         layer: Layer.SHADOW
@@ -62,13 +62,17 @@ function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
     ]
 
   return [
-    Image.new(atlas, {
+    Image.withAtlasSize(atlas, {
       id:
         variant === Tree.Variant.LARGE
           ? AtlasID.TREE_LARGE
           : AtlasID.TREE_LARGE_BARE
     }),
-    Image.new(atlas, {id: AtlasID.TREE_LARGE_SHADOW, y: 2, layer: Layer.SHADOW})
+    Image.withAtlasSize(atlas, {
+      id: AtlasID.TREE_LARGE_SHADOW,
+      y: 2,
+      layer: Layer.SHADOW
+    })
   ]
 }
 

@@ -23,14 +23,20 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bee.State.IDLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.BEE}),
-            Image.new(atlas, {id: AtlasID.BEE_SHADOW, layer: Layer.SHADOW})
+            Image.withAtlasSize(atlas, {id: AtlasID.BEE}),
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.BEE_SHADOW,
+              layer: Layer.SHADOW
+            })
           ]
         }),
         [Bee.State.DEAD]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.BEE_DEAD}),
-            Image.new(atlas, {id: AtlasID.BEE_BLOOD, layer: Layer.BLOOD})
+            Image.withAtlasSize(atlas, {id: AtlasID.BEE_DEAD}),
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.BEE_BLOOD,
+              layer: Layer.BLOOD
+            })
           ]
         })
       },

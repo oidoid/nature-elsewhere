@@ -27,10 +27,18 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Toolbar.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.FLAG, layer: Layer.UI_HI}),
-            Image.new(atlas, {id: AtlasID.FLAG, x: 4, layer: Layer.UI_HI}),
-            Image.new(atlas, {id: AtlasID.FLAG, x: 8, layer: Layer.UI_HI}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.FLAG, layer: Layer.UI_HI}),
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.FLAG,
+              x: 4,
+              layer: Layer.UI_HI
+            }),
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.FLAG,
+              x: 8,
+              layer: Layer.UI_HI
+            }),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.ARROW_DIAGONAL,
               x: 12,
               layer: Layer.UI_HI

@@ -18,7 +18,7 @@ export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cattails.State.VISIBLE]: new ImageRect({
-          images: [Image.new(atlas, {id: AtlasID.CATTAILS})]
+          images: [Image.withAtlasSize(atlas, {id: AtlasID.CATTAILS})]
         })
       },
       ...props

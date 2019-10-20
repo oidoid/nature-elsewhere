@@ -20,8 +20,8 @@ export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Subshrub.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.SUBSHRUB}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.SUBSHRUB}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.SUBSHRUB_SHADOW,
               layer: Layer.SHADOW
             })

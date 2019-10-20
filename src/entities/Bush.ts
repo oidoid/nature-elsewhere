@@ -19,8 +19,8 @@ export class Bush extends Entity<Bush.Variant, Bush.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bush.State.VISIBLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.BUSH}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.BUSH}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.BUSH_SHADOW,
               y: 1,
               layer: Layer.SHADOW

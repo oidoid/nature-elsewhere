@@ -22,8 +22,8 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bunny.State.IDLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.BUNNY}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.BUNNY}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.BUNNY_SHADOW,
               layer: Layer.SHADOW,
               y: 1
@@ -32,8 +32,11 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
         }),
         [Bunny.State.DEAD]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.BUNNY_DEAD}),
-            Image.new(atlas, {id: AtlasID.BUNNY_BLOOD, layer: Layer.BLOOD})
+            Image.withAtlasSize(atlas, {id: AtlasID.BUNNY_DEAD}),
+            Image.withAtlasSize(atlas, {
+              id: AtlasID.BUNNY_BLOOD,
+              layer: Layer.BLOOD
+            })
           ]
         })
       },

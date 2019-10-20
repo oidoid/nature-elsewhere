@@ -21,8 +21,8 @@ export class Frog extends Entity<Frog.Variant, Frog.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Frog.State.IDLE]: new ImageRect({
           images: [
-            Image.new(atlas, {id: AtlasID.FROG_IDLE}),
-            Image.new(atlas, {
+            Image.withAtlasSize(atlas, {id: AtlasID.FROG_IDLE}),
+            Image.withAtlasSize(atlas, {
               id: AtlasID.FROG_IDLE_SHADOW,
               x: -1,
               y: 1,

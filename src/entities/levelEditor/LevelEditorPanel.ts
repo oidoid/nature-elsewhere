@@ -144,7 +144,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                Image.new(atlas, {
+                Image.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_MENU,
                   layer: Layer.UI_HIHI
                 })
@@ -163,7 +163,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                Image.new(atlas, {
+                Image.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_DECREMENT,
                   layer: Layer.UI_HIHI
                 })
@@ -182,7 +182,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                Image.new(atlas, {
+                Image.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_INCREMENT,
                   layer: Layer.UI_HIHI
                 })
@@ -201,7 +201,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                Image.new(atlas, {
+                Image.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_DESTROY,
                   layer: Layer.UI_HIHI
                 })
@@ -220,7 +220,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                Image.new(atlas, {
+                Image.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_CREATE,
                   layer: Layer.UI_HIHI
                 })
@@ -239,7 +239,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                Image.new(atlas, {
+                Image.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_TOGGLE_GRID,
                   layer: Layer.UI_HIHI
                 })

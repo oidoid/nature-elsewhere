@@ -13,7 +13,7 @@ import {XYConfig} from '../math/XYConfig'
 
 export namespace ImageParser {
   export function parse(atlas: Atlas, config: ImageConfig): Image {
-    return Image.new(atlas, parseProps(config))
+    return Image.withAtlasSize(atlas, parseProps(config))
   }
 
   export function parseProps(config: ImageConfig): Image.Props {

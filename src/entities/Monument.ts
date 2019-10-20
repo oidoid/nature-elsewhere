@@ -68,10 +68,10 @@ const defaults = Object.freeze({
 function variantImages(atlas: Atlas, variant: Monument.Variant): Image[] {
   const small = variant === Monument.Variant.SMALL
   return [
-    Image.new(atlas, {
+    Image.withAtlasSize(atlas, {
       id: small ? AtlasID.MONUMENT_SMALL : AtlasID.MONUMENT_MEDIUM
     }),
-    Image.new(atlas, {
+    Image.withAtlasSize(atlas, {
       id: small
         ? AtlasID.MONUMENT_SMALL_SHADOW
         : AtlasID.MONUMENT_MEDIUM_SHADOW,

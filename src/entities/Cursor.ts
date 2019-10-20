@@ -95,7 +95,7 @@ function variantRect(
   return new ImageRect({
     origin: dot ? new XY(1, 1) : new XY(4, 3),
     images: [
-      Image.new(atlas, {
+      Image.withAtlasSize(atlas, {
         id: dot ? AtlasID.PALETTE_BLACK : AtlasID.UI_CURSOR_RETICLE,
         layer: Layer.UI_CURSOR
       })
