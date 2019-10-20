@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
@@ -9,20 +8,16 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Limits} from '../math/Limits'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Plane extends Entity<Plane.Variant, Plane.State> {
-  constructor(
-    atlas: Atlas,
-    props?: Entity.SubProps<Plane.Variant, Plane.State>
-  ) {
+  constructor(props?: Entity.SubProps<Plane.Variant, Plane.State>) {
     super({
       ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Plane.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {
+            new Image({
               id: variantToAtlasID[props?.variant ?? Plane.Variant.BLACK],
               w: Limits.maxShort,
               h: Limits.maxShort,
@@ -67,7 +62,7 @@ export namespace Plane {
 const variantToAtlasID: Readonly<Record<
   Plane.Variant,
   AtlasID
->> = ObjectUtil.freeze({
+>> = Object.freeze({
   [Plane.Variant.GRID]: AtlasID.UI_GRID,
   [Plane.Variant.TRANSPARENT]: AtlasID.PALETTE_TRANSPARENT,
   [Plane.Variant.WHITE]: AtlasID.PALETTE_WHITE,
@@ -84,7 +79,7 @@ const variantToAtlasID: Readonly<Record<
   [Plane.Variant.LIGHT_GREY]: AtlasID.PALETTE_LIGHT_GREY
 })
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.SUBSHRUB,
   variant: Plane.Variant.BLACK,
   state: Plane.State.VISIBLE,

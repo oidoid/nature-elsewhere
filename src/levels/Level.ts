@@ -68,7 +68,7 @@ export namespace Level {
           activeParentsWithPlayer(level)
         )
       : []
-    return !!Entity.findAnyBySpawnID(collidesWith, entity.spawnID)
+    return Entity.member(collidesWith, entity)
   }
 
   export function clamp(

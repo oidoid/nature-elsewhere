@@ -1,58 +1,21 @@
 import {Atlas} from 'aseprite-atlas'
-import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
-import {
-  CollisionPredicateConfig,
-  CollisionPredicateParser
-} from '../collision/CollisionPredicateParser'
-import {
-  CollisionTypeConfig,
-  CollisionTypeParser
-} from '../collision/CollisionTypeParser'
+import {CollisionPredicateParser} from '../collision/CollisionPredicateParser'
+import {CollisionTypeParser} from '../collision/CollisionTypeParser'
+import {EntityConfig} from './EntityConfig'
 import {Entity} from './Entity'
-import {EntityID} from './EntityID'
 import {EntityFactory} from './EntityFactory'
-import {EntityType} from './EntityType'
-import {ImageParser, ImageScaleConfig} from '../image/ImageParser'
-import {
-  ImageStateMapConfig,
-  ImageStateMachineParser
-} from '../imageStateMachine/ImageStateMachineParser'
-import {LevelLinkParser} from '../entities/levelLink/LevelLinkParser'
-import {ObjectUtil} from '../utils/ObjectUtil'
-import {RectArrayConfig, RectParser} from '../math/RectParser'
+import {EntityID} from './EntityID'
+import {EntityType} from '../entity/EntityType'
 import {GroupParser} from '../entities/group/GroupParser'
+import {ImageParser} from '../image/ImageParser'
+import {ImageStateMachineParser} from '../imageStateMachine/ImageStateMachineParser'
+import {LevelLinkParser} from '../entities/levelLink/LevelLinkParser'
+import {RectParser} from '../math/RectParser'
 import {TextParser} from '../entities/text/TextParser'
-import {
-  UpdatePredicateConfig,
-  UpdatePredicateParser
-} from '../updaters/UpdatePredicateParser'
-import {XYConfig, XYParser} from '../math/XYParser'
-
-export type EntityArrayConfig = Maybe<readonly EntityConfig[]>
-
-export interface EntityConfig {
-  /** Defaults to EntityID.UNDEFINED. */
-  readonly id?: EntityIDConfig
-  readonly type: EntityTypeConfig
-  readonly variant?: VariantConfig
-  /** Defaults to (0, 0). */
-  readonly position?: XYConfig
-  readonly velocity?: XYConfig // Decamillipixel
-  readonly imageID?: AtlasIDConfig
-  readonly scale?: ImageScaleConfig
-  /** Defaults to {}. */
-  readonly state?: EntityStateConfig
-  readonly map?: ImageStateMapConfig
-  /** Defaults to BehaviorPredicate.NEVER. */
-  readonly updatePredicate?: UpdatePredicateConfig
-  /** Defaults to CollisionPredicate.NEVER. */
-  readonly collisionType?: CollisionTypeConfig
-  readonly collisionPredicate?: CollisionPredicateConfig
-  /** Defaults to []. In local coordinates (converted to level by parser). */
-  readonly collisionBodies?: RectArrayConfig
-  /** Defaults to []. */
-  readonly children?: EntityArrayConfig
-}
+import {UpdatePredicateParser} from '../updaters/UpdatePredicateParser'
+import {XYParser} from '../math/XYParser'
+import {EntityTypeParser} from './EntityTypeParser'
+import {EntityIDParser} from './EntityIDParser'
 
 export type EntityIDConfig = Maybe<EntityID | string>
 export type EntityTypeConfig = EntityType | string
@@ -60,25 +23,17 @@ export type VariantConfig = Maybe<string>
 export type EntityStateConfig = Maybe<Entity.BaseState | string>
 
 export namespace EntityParser {
-  export function parseAll(config: EntityArrayConfig, atlas: Atlas): Entity[] {
+  export function parseAll(
+    atlas: Atlas,
+    config: Maybe<readonly EntityConfig[]>
+  ): Entity[] {
     return (config ?? []).map(entityConfig => parse(entityConfig, atlas))
   }
 
   export function parse(config: EntityConfig, atlas: Atlas): Entity {
-    let props = parseProps(config, parseType(config.type), atlas)
+    let props = parseProps(atlas, config, EntityTypeParser.parse(config.type))
     props = parseTypeProps(config, props)
     return EntityFactory.produce(atlas, props)
-  }
-
-  export function parseID(config: EntityIDConfig): EntityID {
-    const id = config ?? EntityID.ANONYMOUS
-    ObjectUtil.assertValueOf(EntityID, id, 'EntityID')
-    return id
-  }
-
-  export function parseType(config: EntityTypeConfig): EntityType {
-    ObjectUtil.assertValueOf(EntityType, config, 'EntityType')
-    return config
   }
 
   export function parseVariant(config: VariantConfig): Maybe<string> {
@@ -95,40 +50,43 @@ export namespace EntityParser {
 }
 
 function parseProps(
+  atlas: Atlas,
   config: EntityConfig,
-  type: EntityType,
-  atlas: Atlas
+  type: EntityType
 ): Entity.Props | Entity.SubProps {
-  return {
-    ...(config.id && {id: EntityParser.parseID(config.id)}),
-    type,
-    ...(config.variant && {variant: EntityParser.parseVariant(config.variant)}),
-    ...(config.position && {position: XYParser.parse(config.position)}),
-    ...(config.scale && {scale: ImageParser.parseScale(config.scale)}),
-    ...(config.velocity && {velocity: XYParser.parse(config.velocity)}),
-    ...(config.imageID && {imageID: AtlasIDParser.parse(config.imageID)}),
-    ...(config.state && {state: EntityParser.parseState(config.state)}),
-    ...(config.map && {
-      map: ImageStateMachineParser.parseMap(config.map, atlas)
-    }),
-    ...(config.updatePredicate !== undefined && {
-      updatePredicate: UpdatePredicateParser.parse(config.updatePredicate)
-    }),
-    ...(config.collisionType !== undefined && {
-      collisionType: CollisionTypeParser.parse(config.collisionType)
-    }),
-    ...(config.collisionPredicate !== undefined && {
-      collisionPredicate: CollisionPredicateParser.parse(
-        config.collisionPredicate
-      )
-    }),
-    ...(config.collisionBodies && {
-      collisionBodies: RectParser.parseAll(config.collisionBodies)
-    }),
-    ...(config.children && {
-      children: EntityParser.parseAll(config.children, atlas)
-    })
-  }
+  const props: Writable<Entity.Props | Entity.SubProps> = {type}
+  if (config.id !== undefined) props.id = EntityIDParser.parse(config.id)
+  if (config.variant !== undefined) props.variant = config.variant
+  if (config.position !== undefined)
+    props.position = XYParser.parse(config.position)
+  if (config.x !== undefined) props.x = config.x
+  if (config.y !== undefined) props.y = config.y
+  if (config.scale !== undefined)
+    props.scale = ImageParser.parseScale(config.scale)
+  if (config.sx !== undefined) props.sx = config.sx
+  if (config.sy !== undefined) props.sy = config.sy
+  if (config.vx !== undefined) props.vx = config.vx
+  if (config.vy !== undefined) props.vy = config.vy
+  if (config.velocity !== undefined)
+    props.velocity = XYParser.parse(config.velocity)
+  if (config.constituentID !== undefined)
+    props.constituentID = props.constituentID
+  if (config.state !== undefined) props.state = config.state
+  if (config.map !== undefined)
+    props.map = ImageStateMachineParser.parseMap(atlas, config.map)
+  if (config.updatePredicate !== undefined)
+    props.updatePredicate = UpdatePredicateParser.parse(config.updatePredicate)
+  if (config.collisionType !== undefined)
+    props.collisionType = CollisionTypeParser.parse(config.collisionType)
+  if (config.collisionPredicate !== undefined)
+    props.collisionPredicate = CollisionPredicateParser.parse(
+      config.collisionPredicate
+    )
+  if (config.collisionBodies !== undefined)
+    props.collisionBodies = RectParser.parseAll(config.collisionBodies)
+  if (config.children !== undefined)
+    props.children = EntityParser.parseAll(atlas, config.children)
+  return props
 }
 
 function parseTypeProps(

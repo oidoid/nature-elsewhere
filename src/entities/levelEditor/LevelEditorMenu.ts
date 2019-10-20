@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {CollisionType} from '../../collision/CollisionType'
 import {FilePrompt} from '../../storage/FilePrompt'
@@ -15,7 +14,6 @@ import {LevelLink} from '../levelLink/LevelLink'
 import {LevelType} from '../../levels/LevelType'
 import {LocalStorage} from '../../storage/LocalStorage'
 import {Marquee} from '../Marquee'
-import {ObjectUtil} from '../../utils/ObjectUtil'
 import * as strings from '../../utils/strings.json'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
 import {UpdateState} from '../../updaters/UpdateState'
@@ -36,7 +34,6 @@ export class LevelEditorMenu extends Entity<
   private readonly _backToEditor: LevelLink
 
   constructor(
-    atlas: Atlas,
     props?: Entity.SubProps<LevelEditorMenu.Variant, LevelEditorMenu.State>
   ) {
     super({
@@ -48,47 +45,41 @@ export class LevelEditorMenu extends Entity<
       ...props
     })
 
-    this._followCam = ObjectUtil.freeze({
+    this._followCam = Object.freeze({
       positionRelativeToCam: FollowCam.Orientation.CENTER,
-      camMargin: new WH(0, 0)
+      camMargin: Object.freeze(new WH(0, 0))
     })
     this._export = newLink(
-      atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_EXPORT,
       new XY(0, 0),
       strings['levelEditor/export'],
       LevelType.BACK
     )
     this._import = newLink(
-      atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_IMPORT,
       new XY(0, 6),
       strings['levelEditor/import'],
       LevelType.BACK
     )
     this._reset = newLink(
-      atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_RESET,
       new XY(0, 12),
       strings['levelEditor/reset'],
       LevelType.BACK
     )
     this._restore = newLink(
-      atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_RESTORE_BACKUP,
       new XY(0, 18),
       strings['levelEditor/restore'],
       LevelType.BACK
     )
     this._backToTitle = newLink(
-      atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_TITLE,
       new XY(0, 30),
       strings['backToTitle'],
       LevelType.TITLE
     )
     this._backToEditor = newLink(
-      atlas,
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_EDITOR,
       new XY(0, 36),
       strings['levelEditor/backToEditor'],
@@ -154,7 +145,7 @@ function importLevel(state: UpdateState): void {
       if (data && sandbox) {
         replaceBackupWithAutoSave()
         resetSandbox(sandbox, state)
-        LevelEditorSandboxFileUtil.load(sandbox, state.level.atlas, data)
+        LevelEditorSandboxFileUtil.load(state.level.atlas, sandbox, data)
       }
     }
   )
@@ -172,7 +163,7 @@ function restoreBackup(state: UpdateState): void {
   if (backup && sandbox) {
     replaceBackupWithAutoSave()
     resetSandbox(sandbox, state)
-    LevelEditorSandboxFileUtil.load(sandbox, state.level.atlas, backup)
+    LevelEditorSandboxFileUtil.load(state.level.atlas, sandbox, backup)
   }
 }
 
@@ -205,7 +196,7 @@ export namespace LevelEditorMenu {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_LEVEL_EDITOR_MENU,
   variant: LevelEditorMenu.Variant.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
@@ -215,12 +206,11 @@ const defaults = ObjectUtil.freeze({
 })
 
 function newLink(
-  atlas: Atlas,
   id: EntityID,
   position: XY,
   text: string,
   link: LevelType
 ): LevelLink {
   const collisionPredicate = CollisionPredicate.BOUNDS
-  return new LevelLink(atlas, {id, position, text, link, collisionPredicate})
+  return new LevelLink({id, position, text, link, collisionPredicate})
 }

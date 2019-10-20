@@ -8,7 +8,6 @@ import {EntityType} from '../entity/EntityType'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Apple extends Entity<Apple.Variant, Apple.State> {
   constructor(
@@ -20,7 +19,7 @@ export class Apple extends Entity<Apple.Variant, Apple.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Apple.State.VISIBLE]: new ImageRect({
-          images: [new Image(atlas, {id: AtlasID.PALETTE_RED})]
+          images: [Image.new(atlas, {id: AtlasID.PALETTE_RED})]
         })
       },
       ...props
@@ -42,7 +41,7 @@ export namespace Apple {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.APPLE,
   variant: Apple.Variant.NONE,
   state: Apple.State.VISIBLE,

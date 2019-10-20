@@ -1,8 +1,6 @@
-import {ObjectUtil} from './ObjectUtil'
-
 export namespace TestUtil {
   export function testValuesAreUnique(obj: object, typeName: string): void {
-    const vals = ObjectUtil.values(obj)
+    const vals = Object.values(obj)
     test.each(vals)(`%# ${typeName} %p is unique`, val =>
       expect(vals.filter(rhs => val === rhs)).toHaveLength(1)
     )

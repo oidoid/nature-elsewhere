@@ -42,7 +42,7 @@ describe('collidesRect()', () => {
     })
     test('IMAGES but no image intersection.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
-      const entity = new Plane(atlas, {
+      const entity = new Plane({
         variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.IMAGES,
         position: new XY(10, 10)
@@ -51,12 +51,12 @@ describe('collidesRect()', () => {
     })
     test('CHILDREN short-circuited by failed entity bounds test.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
-      const entity = new Plane(atlas, {
+      const entity = new Plane({
         variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.CHILDREN,
         position: new XY(10, 10),
         children: [
-          new Plane(atlas, {
+          new Plane({
             variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
@@ -69,11 +69,11 @@ describe('collidesRect()', () => {
   describe('Parent collision.', () => {
     test('BOUNDS.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
-      const entity = new Plane(atlas, {
+      const entity = new Plane({
         variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.BOUNDS,
         children: [
-          new Plane(atlas, {
+          new Plane({
             variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
@@ -83,12 +83,12 @@ describe('collidesRect()', () => {
     })
     test('BODIES.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
-      const entity = new Plane(atlas, {
+      const entity = new Plane({
         variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.BODIES,
         collisionBodies: [Rect.make(0, 0, 9, 9)],
         children: [
-          new Plane(atlas, {
+          new Plane({
             variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })
@@ -98,11 +98,11 @@ describe('collidesRect()', () => {
     })
     test('IMAGES.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
-      const entity = new Plane(atlas, {
+      const entity = new Plane({
         variant: Plane.Variant.RED,
         collisionPredicate: CollisionPredicate.IMAGES,
         children: [
-          new Plane(atlas, {
+          new Plane({
             variant: Plane.Variant.BLUE,
             collisionPredicate: CollisionPredicate.IMAGES
           })

@@ -7,7 +7,6 @@ import {EntityType} from '../entity/EntityType'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
   constructor(
@@ -19,7 +18,7 @@ export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Cattails.State.VISIBLE]: new ImageRect({
-          images: [new Image(atlas, {id: AtlasID.CATTAILS})]
+          images: [Image.new(atlas, {id: AtlasID.CATTAILS})]
         })
       },
       ...props
@@ -41,7 +40,7 @@ export namespace Cattails {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.CATTAILS,
   variant: Cattails.Variant.NONE,
   state: Cattails.State.VISIBLE,

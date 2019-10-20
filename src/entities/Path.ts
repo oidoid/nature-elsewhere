@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Path extends Entity<Path.Variant, Path.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Path.Variant, Path.State>) {
@@ -49,10 +48,10 @@ export namespace Path {
 function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
   switch (variant) {
     case Path.Variant.STRAIGHT_NE:
-      return [new Image(atlas, {id: AtlasID.PATH_NE, layer: Layer.ABOVE_PLANE})]
+      return [Image.new(atlas, {id: AtlasID.PATH_NE, layer: Layer.ABOVE_PLANE})]
     case Path.Variant.STRAIGHT_NW:
       return [
-        new Image(atlas, {
+        Image.new(atlas, {
           id: AtlasID.PATH_NE,
           layer: Layer.ABOVE_PLANE,
           sx: -1
@@ -60,11 +59,11 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
       ]
     case Path.Variant.CORNER_E:
       return [
-        new Image(atlas, {id: AtlasID.PATH_CORNER_E, layer: Layer.ABOVE_PLANE})
+        Image.new(atlas, {id: AtlasID.PATH_CORNER_E, layer: Layer.ABOVE_PLANE})
       ]
     case Path.Variant.CORNER_W:
       return [
-        new Image(atlas, {
+        Image.new(atlas, {
           id: AtlasID.PATH_CORNER_E,
           layer: Layer.ABOVE_PLANE,
           sx: -1
@@ -72,11 +71,11 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
       ]
     case Path.Variant.CORNER_N:
       return [
-        new Image(atlas, {id: AtlasID.PATH_CORNER_N, layer: Layer.ABOVE_PLANE})
+        Image.new(atlas, {id: AtlasID.PATH_CORNER_N, layer: Layer.ABOVE_PLANE})
       ]
     case Path.Variant.CORNER_S:
       return [
-        new Image(atlas, {
+        Image.new(atlas, {
           id: AtlasID.PATH_CORNER_N,
           layer: Layer.ABOVE_PLANE,
           sy: -1
@@ -85,7 +84,7 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.PATH,
   variant: Path.Variant.STRAIGHT_NE,
   state: Path.State.VISIBLE,

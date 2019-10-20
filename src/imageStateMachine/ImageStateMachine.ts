@@ -1,9 +1,7 @@
-import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {Image} from '../image/Image'
 import {ImageRect} from './ImageRect'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {ReadonlyRect} from '../math/Rect'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
@@ -19,12 +17,7 @@ export class ImageStateMachine<State extends string = string> {
   constructor(props: ImageStateMachine.Props<State>) {
     this._state = props.state
     this._map = props.map
-
-    // EntityParser doesn't have access to the array of states.
-    Assert.assert(
-      this.states().includes(props.state),
-      `Unknown state "${props.state}".`
-    )
+    this._validateState(props.state)
   }
 
   get state(): State {
@@ -32,7 +25,7 @@ export class ImageStateMachine<State extends string = string> {
   }
 
   states(): State[] {
-    return ObjectUtil.keys(this._map)
+    return <State[]>Object.keys(this._map)
   }
 
   images(): readonly Readonly<Image>[] {
@@ -64,14 +57,16 @@ export class ImageStateMachine<State extends string = string> {
     this._imageRect().add(...images)
   }
 
-  setImageID(id?: AtlasID): UpdateStatus {
+  setConstituentID(id?: AtlasID): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
-    for (const state in this._map) status |= this._map[state].setImageID(id)
+    for (const state in this._map)
+      status |= this._map[state].setConstituentID(id)
     return status
   }
 
   transition(state: State): UpdateStatus {
     if (this.state === state) return UpdateStatus.UNCHANGED
+    this._validateState(state)
     const {bounds, scale} = this._imageRect()
     this._state = state
     this._imageRect().moveTo(bounds.position)
@@ -89,8 +84,8 @@ export class ImageStateMachine<State extends string = string> {
     return this._imageRect().scale
   }
 
-  getImageID(): Maybe<AtlasID> {
-    return this._imageRect().imageID
+  constituentID(): Maybe<AtlasID> {
+    return this._imageRect().constituentID
   }
 
   intersects(bounds: ReadonlyRect): Readonly<Image>[] {
@@ -98,7 +93,8 @@ export class ImageStateMachine<State extends string = string> {
   }
 
   scaleTo(to: Readonly<XY>): UpdateStatus {
-    Assert.assert(to.x && to.y, `Scale must be nonzero (x=${to.x}, y=${to.y}).`)
+    if (!to.x || !to.y)
+      throw new Error(`Scale must be nonzero (x=${to.x}, y=${to.y}).`)
     return this._imageRect().scaleTo(to)
   }
 
@@ -114,6 +110,11 @@ export class ImageStateMachine<State extends string = string> {
 
   private _imageRect(): ImageRect {
     return this._map[this.state]
+  }
+
+  private _validateState(state: State): void {
+    if (!this.states().includes(state))
+      throw new Error(`Unknown state "${state}".`)
   }
 }
 

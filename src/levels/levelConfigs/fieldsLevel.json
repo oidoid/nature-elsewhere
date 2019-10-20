@@ -13,27 +13,29 @@
           "images": [
             {
               "id": "uiCheckerboard-blackTransparent",
-              "imageID": "palette-green",
+              "constituentID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"size": {"w": 32767}}
+              "w": 32767
             },
             {
               "id": "uiCheckerboard-blackTransparent",
-              "imageID": "palette-green",
+              "constituentID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"position": {"x": 510}, "size": {"h": 32767}}
+              "x": 510,
+              "h": 32767
             },
             {
               "id": "uiCheckerboard-blackTransparent",
-              "imageID": "palette-green",
+              "constituentID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"position": {"y": 254}, "size": {"w": 32767}}
+              "y": 254,
+              "w": 32767
             },
             {
               "id": "uiCheckerboard-blackTransparent",
-              "imageID": "palette-green",
+              "constituentID": "palette-green",
               "alphaComposition": "SOURCE_MASK",
-              "bounds": {"size": {"h": 32767}}
+              "h": 32767
             }
           ]
         }
@@ -42,824 +44,696 @@
   ],
   "cursor": {"type": "uiCursor", "variant": "reticle"},
   "destination": {"type": "uiDestinationMarker"},
-  "hud": [
-    {"type": "uiToolbar", "position": {"x": 1, "y": 123}, "layer": "UI_LO"}
-  ],
-  "player": {
-    "id": "uiPlayer",
-    "type": "backpacker",
-    "position": {"x": 128, "y": 196}
-  },
+  "hud": [{"type": "uiToolbar", "x": 1, "y": 123, "layer": "UI_LO"}],
+  "player": {"id": "uiPlayer", "type": "backpacker", "x": 128, "y": 196},
   "parentEntities": [
     {
       "type": "cloud",
-      "position": {
-        "x": 20,
-        "y": 20
-      },
-      "velocity": {
-        "x": -6
-      }
+      "x": 20,
+      "y": 20,
+      "vx": -6,
+      "sy": 1
     },
     {
       "type": "cloud",
-      "position": {
-        "x": 70,
-        "y": 29
-      },
+      "x": 70,
+      "y": 29,
+      "sy": 1,
       "state": "drizzle"
     },
     {
       "type": "bee",
-      "position": {
-        "x": 80,
-        "y": 40
-      },
-      "velocity": {
-        "y": 15
-      }
+      "x": 80,
+      "y": 40,
+      "vy": 15,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 59,
-        "y": 78
-      }
+      "x": 59,
+      "y": 78,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 64,
-        "y": 85
-      }
+      "x": 64,
+      "y": 85,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 68,
-        "y": 84
-      }
+      "x": 68,
+      "y": 84,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 60,
-        "y": 83
-      }
+      "x": 60,
+      "y": 83,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 57,
-        "y": 13
-      }
+      "x": 57,
+      "y": 13,
+      "sy": 1
     },
     {
       "type": "mountain",
-      "position": {
-        "x": 80,
-        "y": 83
-      }
+      "x": 80,
+      "y": 83,
+      "sy": 1
     },
     {
       "type": "mountain",
-      "position": {
-        "x": 120,
-        "y": 99
-      }
+      "x": 120,
+      "y": 99,
+      "sy": 1
     },
     {
       "type": "mountain",
-      "position": {
-        "x": 19,
-        "y": 129
-      }
+      "x": 19,
+      "y": 129,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 29,
-        "y": 4
-      }
+      "x": 29,
+      "y": 4,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 12,
-        "y": 100
-      }
+      "x": 12,
+      "y": 100,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 24,
-        "y": 96
-      }
+      "x": 24,
+      "y": 96,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 18,
-        "y": 108
-      }
+      "x": 18,
+      "y": 108,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 50,
-        "y": 114
-      },
-      "velocity": {
-        "x": 15,
-        "y": 15
-      }
+      "x": 50,
+      "y": 114,
+      "vx": 15,
+      "vy": 15,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 54,
-        "y": 118
-      },
-      "velocity": {
-        "x": 15,
-        "y": 15
-      },
-      "scale": {
-        "x": -1
-      }
+      "x": 54,
+      "y": 118,
+      "vx": 15,
+      "vy": 15,
+      "sx": -1,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 55,
-        "y": 122
-      },
-      "scale": {
-        "x": -1
-      },
+      "x": 55,
+      "y": 122,
+      "sx": -1,
+      "sy": 1,
       "state": "dead"
     },
     {
       "type": "bee",
-      "position": {
-        "x": 60,
-        "y": 126
-      },
+      "x": 60,
+      "y": 126,
+      "sy": 1,
       "state": "dead"
     },
     {
       "type": "clover",
-      "position": {
-        "x": 51,
-        "y": 90
-      }
+      "x": 51,
+      "y": 90,
+      "sy": 1
     },
     {
       "type": "clover",
       "variant": "medium",
-      "position": {
-        "x": 30,
-        "y": 109
-      }
+      "x": 30,
+      "y": 109,
+      "sy": 1
     },
     {
       "type": "grass",
-      "position": {
-        "x": 44,
-        "y": 120
-      }
+      "x": 44,
+      "y": 120,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "10",
-      "position": {
-        "x": 72,
-        "y": 115
-      }
+      "x": 72,
+      "y": 115,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "14",
-      "position": {
-        "x": 45,
-        "y": 8
-      }
+      "x": 45,
+      "y": 8,
+      "sy": 1
     },
     {
       "type": "bush",
-      "position": {
-        "x": 151,
-        "y": 30
-      }
+      "x": 151,
+      "y": 30,
+      "sy": 1
     },
     {
       "type": "subshrub",
-      "position": {
-        "x": 145,
-        "y": 31
-      }
+      "x": 145,
+      "y": 31,
+      "sy": 1
     },
     {
       "type": "subshrub",
-      "position": {
-        "x": 147,
-        "y": 37
-      }
+      "x": 147,
+      "y": 37,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 155,
-        "y": 130
-      }
+      "x": 155,
+      "y": 130,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 98,
-        "y": 141
-      }
+      "x": 98,
+      "y": 141,
+      "sy": 1
     },
     {
       "type": "fly",
-      "position": {
-        "x": 78,
-        "y": 128
-      },
-      "velocity": {
-        "x": -9
-      }
+      "x": 78,
+      "y": 128,
+      "vx": -9,
+      "sy": 1
     },
     {
       "type": "fly",
-      "position": {
-        "x": 73,
-        "y": 126
-      },
+      "x": 73,
+      "y": 126,
+      "sy": 1,
       "state": "dead"
     },
     {
       "type": "cloud",
-      "position": {
-        "x": 95,
-        "y": 122
-      }
+      "x": 95,
+      "y": 122,
+      "sy": 1
     },
     {
       "type": "pond",
-      "position": {
-        "x": 85,
-        "y": 149
-      }
+      "x": 85,
+      "y": 149,
+      "sy": 1
     },
     {
       "type": "frog",
-      "position": {
-        "x": 10,
-        "y": 55
-      }
+      "x": 10,
+      "y": 55,
+      "sy": 1
     },
     {
       "type": "bunny",
-      "position": {
-        "x": 83,
-        "y": 16
-      }
+      "x": 83,
+      "y": 16,
+      "sy": 1
     },
     {
       "type": "bunny",
-      "position": {
-        "x": 94,
-        "y": 27
-      },
+      "x": 94,
+      "y": 27,
+      "sy": 1,
       "state": "dead"
     },
     {
       "type": "path",
-      "position": {
-        "x": 147,
-        "y": 130
-      }
+      "x": 147,
+      "y": 130,
+      "sy": 1
     },
     {
       "type": "path",
-      "position": {
-        "x": 150,
-        "y": 132
-      }
+      "x": 150,
+      "y": 132,
+      "sy": 1
     },
     {
       "type": "path",
-      "position": {
-        "x": 192,
-        "y": 80
-      }
+      "x": 192,
+      "y": 80,
+      "sy": 1
     },
     {
       "type": "path",
       "variant": ">",
-      "position": {
-        "x": 204,
-        "y": 71
-      }
+      "x": 204,
+      "y": 71,
+      "sy": 1
     },
     {
       "type": "path",
       "variant": "\\",
-      "position": {
-        "x": 194,
-        "y": 63
-      }
+      "x": 194,
+      "y": 63,
+      "sy": 1
     },
     {
       "type": "path",
       "variant": "^",
-      "position": {
-        "x": 176,
-        "y": 57
-      }
+      "x": 176,
+      "y": 57,
+      "sy": 1
     },
     {
       "type": "path",
       "variant": "v",
-      "position": {
-        "x": 158,
-        "y": 60
-      }
+      "x": 158,
+      "y": 60,
+      "sy": 1
     },
     {
       "type": "path",
       "variant": "\\",
-      "position": {
-        "x": 142,
-        "y": 55
-      }
+      "x": 142,
+      "y": 55,
+      "sy": 1
     },
     {
       "type": "path",
       "variant": "<",
-      "position": {
-        "x": 130,
-        "y": 46
-      }
+      "x": 130,
+      "y": 46,
+      "sy": 1
     },
     {
       "type": "path",
-      "position": {
-        "x": 140,
-        "y": 38
-      }
+      "x": 140,
+      "y": 38,
+      "sy": 1
     },
     {
       "type": "path",
-      "position": {
-        "x": 157,
-        "y": 30
-      }
+      "x": 157,
+      "y": 30,
+      "sy": 1
     },
     {
       "type": "path",
-      "position": {
-        "x": 173,
-        "y": 22
-      }
+      "x": 173,
+      "y": 22,
+      "sy": 1
     },
     {
       "type": "path",
       "variant": "^",
-      "position": {
-        "x": 192,
-        "y": 16
-      }
+      "x": 192,
+      "y": 16,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 183,
-        "y": 22
-      }
+      "x": 183,
+      "y": 22,
+      "sy": 1
     },
     {
       "type": "pond",
-      "position": {
-        "x": 159,
-        "y": 41
-      }
+      "x": 159,
+      "y": 41,
+      "sy": 1
     },
     {
       "type": "pond",
-      "position": {
-        "x": 1,
-        "y": 58
-      }
+      "x": 1,
+      "y": 58,
+      "sy": 1
     },
     {
       "type": "mountain",
-      "position": {
-        "x": 125,
-        "y": 95
-      }
+      "x": 125,
+      "y": 95,
+      "sy": 1
     },
     {
       "type": "mountain",
-      "position": {
-        "x": 119,
-        "y": 94
-      }
+      "x": 119,
+      "y": 94,
+      "sy": 1
     },
     {
       "type": "cloud",
       "variant": "large",
-      "position": {
-        "x": 107,
-        "y": 81
-      }
+      "x": 107,
+      "y": 81,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 103,
-        "y": 142
-      }
+      "x": 103,
+      "y": 142,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 120,
-        "y": 126
-      }
+      "x": 120,
+      "y": 126,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 124,
-        "y": 125
-      }
+      "x": 124,
+      "y": 125,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 105,
-        "y": 137
-      }
+      "x": 105,
+      "y": 137,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 107,
-        "y": 144
-      }
+      "x": 107,
+      "y": 144,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 152,
-        "y": 126
-      }
+      "x": 152,
+      "y": 126,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 159,
-        "y": 125
-      }
+      "x": 159,
+      "y": 125,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 170,
-        "y": 124
-      }
+      "x": 170,
+      "y": 124,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "12",
-      "position": {
-        "x": 176,
-        "y": 143
-      }
+      "x": 176,
+      "y": 143,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "11",
-      "position": {
-        "x": 168,
-        "y": 141
-      }
+      "x": 168,
+      "y": 141,
+      "sy": 1
     },
     {
       "type": "grass",
-      "position": {
-        "x": 146,
-        "y": 138
-      }
-    },
-    {
-      "type": "grass",
-      "variant": "01",
-      "position": {
-        "x": 175,
-        "y": 138
-      }
+      "x": 146,
+      "y": 138,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "01",
-      "position": {
-        "x": 107,
-        "y": 65
-      }
+      "x": 175,
+      "y": 138,
+      "sy": 1
+    },
+    {
+      "type": "grass",
+      "variant": "01",
+      "x": 107,
+      "y": 65,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "02",
-      "position": {
-        "x": 112,
-        "y": 66
-      }
+      "x": 112,
+      "y": 66,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "03",
-      "position": {
-        "x": 66,
-        "y": 116
-      }
+      "x": 66,
+      "y": 116,
+      "sy": 1
     },
     {
       "type": "subshrub",
-      "position": {
-        "x": 37,
-        "y": 135
-      }
+      "x": 37,
+      "y": 135,
+      "sy": 1
     },
     {
       "type": "subshrub",
-      "position": {
-        "x": 33,
-        "y": 139
-      }
+      "x": 33,
+      "y": 139,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 16,
-        "y": 131
-      }
+      "x": 16,
+      "y": 131,
+      "sy": 1
     },
     {
       "type": "clover",
-      "position": {
-        "x": 12,
-        "y": 136
-      }
+      "x": 12,
+      "y": 136,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 215,
-        "y": 22
-      }
+      "x": 215,
+      "y": 22,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 198,
-        "y": 21
-      }
+      "x": 198,
+      "y": 21,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 220,
-        "y": 36
-      }
+      "x": 220,
+      "y": 36,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 195,
-        "y": 32
-      }
+      "x": 195,
+      "y": 32,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 204,
-        "y": 13
-      }
+      "x": 204,
+      "y": 13,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 212,
-        "y": 9
-      }
+      "x": 212,
+      "y": 9,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 192,
-        "y": 6
-      }
+      "x": 192,
+      "y": 6,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 208,
-        "y": 3
-      }
+      "x": 208,
+      "y": 3,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 229,
-        "y": 15
-      }
+      "x": 229,
+      "y": 15,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 232,
-        "y": 30
-      }
+      "x": 232,
+      "y": 30,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 223,
-        "y": 11
-      }
+      "x": 223,
+      "y": 11,
+      "sy": 1
     },
     {
       "type": "bee",
-      "position": {
-        "x": 192,
-        "y": 12
-      }
+      "x": 192,
+      "y": 12,
+      "sy": 1
     },
     {
       "type": "appleTree",
-      "position": {
-        "x": 122,
-        "y": 19
-      }
+      "x": 122,
+      "y": 19,
+      "sy": 1
     },
     {
       "type": "appleTree",
-      "position": {
-        "x": 41,
-        "y": 59
-      }
+      "x": 41,
+      "y": 59,
+      "sy": 1
     },
     {
       "type": "appleTree",
-      "position": {
-        "x": 97,
-        "y": 47
-      }
+      "x": 97,
+      "y": 47,
+      "sy": 1
     },
     {
       "type": "appleTree",
-      "position": {
-        "x": 115,
-        "y": 20
-      }
+      "x": 115,
+      "y": 20,
+      "sy": 1
     },
     {
       "type": "monument",
-      "position": {
-        "x": 129,
-        "y": 160
-      }
+      "x": 129,
+      "y": 160,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 105,
-        "y": 176
-      }
+      "x": 105,
+      "y": 176,
+      "sy": 1
     },
     {
       "type": "tree",
-      "position": {
-        "x": 109,
-        "y": 178
-      }
+      "x": 109,
+      "y": 178,
+      "sy": 1
     },
     {
       "type": "appleTree",
-      "position": {
-        "x": 88,
-        "y": 185
-      }
+      "x": 88,
+      "y": 185,
+      "sy": 1
     },
     {
       "type": "apple",
-      "position": {
-        "x": 97,
-        "y": 198
-      }
+      "x": 97,
+      "y": 198,
+      "sy": 1
     },
     {
       "type": "apple",
-      "position": {
-        "x": 89,
-        "y": 198
-      }
+      "x": 89,
+      "y": 198,
+      "sy": 1
     },
     {
       "type": "cloud",
-      "position": {
-        "x": 276,
-        "y": 84
-      }
+      "x": 276,
+      "y": 84,
+      "sy": 1
     },
     {
       "type": "monument",
       "variant": "medium",
-      "position": {
-        "x": 248,
-        "y": 73
-      }
+      "x": 248,
+      "y": 73,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "11",
-      "position": {
-        "x": 223,
-        "y": 121
-      }
+      "x": 223,
+      "y": 121,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "12",
-      "position": {
-        "x": 231,
-        "y": 122
-      }
+      "x": 231,
+      "y": 122,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "13",
-      "position": {
-        "x": 284,
-        "y": 114
-      }
+      "x": 284,
+      "y": 114,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "07",
-      "position": {
-        "x": 273,
-        "y": 129
-      }
+      "x": 273,
+      "y": 129,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "06",
-      "position": {
-        "x": 280,
-        "y": 129
-      }
+      "x": 280,
+      "y": 129,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 8,
-        "y": 10
-      }
+      "x": 8,
+      "y": 10,
+      "sy": 1
     },
     {
       "type": "conifer",
-      "position": {
-        "x": 53,
-        "y": 19
-      }
+      "x": 53,
+      "y": 19,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "10",
-      "position": {
-        "x": 38,
-        "y": 10
-      }
+      "x": 38,
+      "y": 10,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "07",
-      "position": {
-        "x": 88,
-        "y": 12
-      }
+      "x": 88,
+      "y": 12,
+      "sy": 1
     },
     {
       "type": "grass",
       "variant": "02",
-      "position": {
-        "x": 96,
-        "y": 19
-      }
+      "x": 96,
+      "y": 19,
+      "sy": 1
     }
   ]
 }

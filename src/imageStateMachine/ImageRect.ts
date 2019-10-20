@@ -1,4 +1,3 @@
-import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {Image} from '../image/Image'
 import {Layer} from '../image/Layer'
@@ -31,24 +30,18 @@ export class ImageRect {
       instead. */
   private readonly _images: Image[]
 
-  /** If set, the imageID for all images. See Image._imageID. */
-  private _imageID?: AtlasID
+  /** If set, the constituentID for all images. See Image._constituentID. */
+  private _constituentID?: AtlasID
 
   constructor(props: ImageRect.Props = {}) {
     this._origin = props.origin ?? new XY(0, 0)
     this._bounds = Rect.make(0, 0, 0, 0)
     this._scale = new XY(1, 1)
     this._images = props.images ?? []
-    this._imageID = props.imageID
+    this._constituentID = props.constituentID
     this.invalidate()
     if (props.position) this.moveBy(props.position)
-    if (props.scale) {
-      Assert.assert(
-        props.scale.x && props.scale.y,
-        `Scale must be nonzero (x=${props.scale.x}, y=${props.scale.y}).`
-      )
-      this.scaleBy(props.scale)
-    }
+    if (props.scale) this.scaleBy(props.scale)
   }
 
   get bounds(): ReadonlyRect {
@@ -68,14 +61,14 @@ export class ImageRect {
     return this._images
   }
 
-  get imageID(): Maybe<AtlasID> {
-    return this._imageID
+  get constituentID(): Maybe<AtlasID> {
+    return this._constituentID
   }
 
-  setImageID(id?: AtlasID): UpdateStatus {
-    if (this.imageID === id) return UpdateStatus.UNCHANGED
-    this._imageID = id
-    for (const image of this._images) image.imageID = id ?? image.id
+  setConstituentID(id?: AtlasID): UpdateStatus {
+    if (this.constituentID === id) return UpdateStatus.UNCHANGED
+    this._constituentID = id
+    for (const image of this._images) image.constituentID = id ?? image.id
     return UpdateStatus.UPDATED
   }
 
@@ -102,7 +95,7 @@ export class ImageRect {
   }
 
   scaleTo(to: Readonly<XY>): UpdateStatus {
-    Assert.assert(to.x && to.y, `Scale must be nonzero (x=${to.x}, y=${to.y}).`)
+    Image.validateScale(to)
     if (this.scale.equal(to)) return UpdateStatus.UNCHANGED
     for (const image of this.images) image.scaleBy(to.div(this.scale))
     this._scale.x = to.x
@@ -116,7 +109,7 @@ export class ImageRect {
   }
 
   elevate(offset: Layer): void {
-    for (const image of this.images) image.elevate(offset)
+    for (const image of this._images) image.layer += offset
   }
 
   intersects(bounds: ReadonlyRect): Readonly<Image>[] {
@@ -139,6 +132,6 @@ export namespace ImageRect {
     readonly position?: XY
     readonly scale?: XY
     readonly images?: Image[]
-    readonly imageID?: AtlasID
+    readonly constituentID?: AtlasID
   }
 }

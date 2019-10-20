@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 
 export class Tree extends Entity<Tree.Variant, Tree.State> {
@@ -54,31 +53,26 @@ export namespace Tree {
 function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
   if (variant === Tree.Variant.SMALL)
     return [
-      new Image(atlas, {id: AtlasID.TREE_SMALL}),
-      new Image(atlas, {
+      Image.new(atlas, {id: AtlasID.TREE_SMALL}),
+      Image.new(atlas, {
         id: AtlasID.TREE_SMALL_SHADOW,
-        x: 0,
         y: 1,
         layer: Layer.SHADOW
       })
     ]
 
   return [
-    new Image(atlas, {
+    Image.new(atlas, {
       id:
         variant === Tree.Variant.LARGE
           ? AtlasID.TREE_LARGE
           : AtlasID.TREE_LARGE_BARE
     }),
-    new Image(atlas, {
-      id: AtlasID.TREE_LARGE_SHADOW,
-      y: 2,
-      layer: Layer.SHADOW
-    })
+    Image.new(atlas, {id: AtlasID.TREE_LARGE_SHADOW, y: 2, layer: Layer.SHADOW})
   ]
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.TREE,
   variant: Tree.Variant.SMALL,
   state: Tree.State.VISIBLE,

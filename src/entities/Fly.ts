@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Fly extends Entity<Fly.Variant, Fly.State> {
@@ -19,10 +18,9 @@ export class Fly extends Entity<Fly.Variant, Fly.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Fly.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.PALETTE_GREY}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.PALETTE_GREY}),
+            Image.new(atlas, {
               id: AtlasID.PALETTE_LIGHT_GREY,
-              x: 0,
               y: 2,
               layer: Layer.SHADOW
             })
@@ -30,7 +28,7 @@ export class Fly extends Entity<Fly.Variant, Fly.State> {
         }),
         [Fly.State.DEAD]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.PALETTE_RED, layer: Layer.BLOOD})
+            Image.new(atlas, {id: AtlasID.PALETTE_RED, layer: Layer.BLOOD})
           ]
         })
       },
@@ -54,7 +52,7 @@ export namespace Fly {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.FLY,
   state: Fly.State.IDLE,
   variant: Fly.Variant.NONE,

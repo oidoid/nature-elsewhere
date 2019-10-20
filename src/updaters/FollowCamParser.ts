@@ -1,8 +1,7 @@
-import {WHParser} from '../math/WHParser'
-import {ObjectUtil} from '../utils/ObjectUtil'
-import {WH} from '../math/WH'
+import {EntityConfig} from '../entity/EntityConfig'
 import {FollowCam} from './FollowCam'
-import {EntityConfig} from '../entity/EntityParser'
+import {WH} from '../math/WH'
+import {WHParser} from '../math/WHParser'
 
 export interface FollowCamConfig {
   readonly positionRelativeToCam?: FollowCam.Orientation
@@ -15,12 +14,11 @@ export namespace FollowCamParser {
       'positionRelativeToCam' in config
         ? config['positionRelativeToCam']
         : undefined
-    if (orientation)
-      ObjectUtil.assertValueOf(
-        FollowCam.Orientation,
-        orientation,
-        'FollowCamOrientation'
-      )
+    if (
+      orientation &&
+      !Object.values(FollowCam.Orientation).includes(orientation)
+    )
+      throw new Error(`Unknown FollowCam.Orientation "${orientation}".`)
     const camMargin = WHParser.parse(
       'camMargin' in config ? config['camMargin'] : undefined
     )

@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
@@ -12,7 +11,6 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
 import {Limits} from '../math/Limits'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Text} from './text/Text'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -24,8 +22,8 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
   private _textLayer: Layer
   private _textScale: XY
   private _textMaxSize: WH
-  private _textImageID: Maybe<AtlasID>
-  constructor(atlas: Atlas, props?: Checkbox.Props) {
+  private _textConstituentID: Maybe<AtlasID>
+  constructor(props?: Checkbox.Props) {
     super({
       ...defaults,
       map: {
@@ -39,8 +37,8 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     this._textLayer = props?.textLayer ?? defaults.textLayer
     this._textScale = props?.textScale ?? defaults.textScale.copy()
     this._textMaxSize = props?.textMaxSize ?? defaults.textMaxSize.copy()
-    this._textImageID = props?.imageID ?? defaults.textImageID
-    this.setText(props?.text ?? '', 0, atlas)
+    this._textConstituentID = props?.constituentID ?? defaults.textConstituentID
+    this.setText(props?.text ?? '', 0)
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -59,22 +57,22 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     )
   }
 
-  setText(text: string, layerOffset: number, atlas: Atlas): void {
+  setText(text: string, layerOffset: number): void {
     const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
-    const child = new Text(atlas, {
+    const child = new Text({
       textLayer: this._textLayer,
       textScale: this._textScale,
       textMaxSize: this._textMaxSize,
-      imageID: this._textImageID,
+      constituentID: this._textConstituentID,
       text,
       position
     })
     child.elevate(layerOffset)
-    const imageID = this.children[0]?.imageID()
-    if (imageID) child.setImageID(imageID)
+    const constituentID = this.children[0]?.constituentID()
+    if (constituentID) child.setConstituentID(constituentID)
     this.removeChild(this.children[0])
     this.addChildren(child)
-    this.setBackground(layerOffset, atlas)
+    this.setBackground(layerOffset)
   }
 
   checked(): boolean {
@@ -92,16 +90,16 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
       diff.textScale = {x: this._textScale.x, y: this._textScale.y}
     if (!this._textMaxSize.equal(defaults.textMaxSize))
       diff.textMaxSize = {w: this._textMaxSize.w, h: this._textMaxSize.h}
-    if (this._textImageID !== defaults.textImageID)
-      diff.textImageID = this._textImageID
+    if (this._textConstituentID !== defaults.textConstituentID)
+      diff.textConstituentID = this._textConstituentID
     return diff
   }
 
-  private setBackground(layerOffset: number, atlas: Atlas): void {
+  private setBackground(layerOffset: number): void {
     const text = this.children[0]
     for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
       const size = new WH(text.bounds.size.w, text.bounds.size.h)
-      const images = newBackgroundImages(state, layerOffset, atlas, size)
+      const images = newBackgroundImages(state, layerOffset, size)
       this.replaceImages(state, ...images)
     }
     this.moveImagesTo(
@@ -131,19 +129,12 @@ const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({
 function newBackgroundImages(
   state: Checkbox.State,
   layerOffset: number,
-  atlas: Atlas,
   {w, h}: WH
 ): Image[] {
   const id = backgroundID[state]
   const layer = Layer.UI_MID + layerOffset
-  const backgroundImage = new Image(atlas, {
-    id,
-    position: new XY(1, 0),
-    w,
-    h,
-    layer
-  })
-  const borderImage = new Image(atlas, {
+  const backgroundImage = new Image({id, position: new XY(1, 0), w, h, layer})
+  const borderImage = new Image({
     id,
     position: new XY(0, 1),
     w: w + 2,
@@ -153,7 +144,7 @@ function newBackgroundImages(
   return [backgroundImage, borderImage]
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_CHECKBOX,
   variant: Checkbox.Variant.NONE,
   state: Checkbox.State.UNCHECKED,
@@ -161,7 +152,7 @@ const defaults = ObjectUtil.freeze({
   collisionType: CollisionType.TYPE_UI,
   collisionPredicate: CollisionPredicate.BOUNDS,
   textLayer: Layer.UI_HI,
-  textScale: new XY(1, 1),
-  textMaxSize: new WH(Limits.maxShort, Limits.maxShort),
-  textImageID: undefined
+  textScale: Object.freeze(new XY(1, 1)),
+  textMaxSize: Object.freeze(new WH(Limits.maxShort, Limits.maxShort)),
+  textConstituentID: undefined
 })

@@ -1,8 +1,8 @@
 {
   "version": "0.0.0",
   "type": "testShader",
-  "size": {"w": 48, "h": 48},
-  "minViewport": {"w": 48, "h": 48},
+  "size": {"w": 96, "h": 96},
+  "minViewport": {"w": 96, "h": 96},
   "cursor": {"type": "uiCursor"},
   "planes": [{"type": "plane", "variant": "white"}],
   "parentEntities": [
@@ -11,99 +11,176 @@
       "map": {
         "visible": {
           "images": [
-            {"id": "memFont-090", "bounds": {"position": {"x": 1, "y": 1}}},
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 1, "y": 6}},
-              "scale": {"x": 2}
+              "id": "palette-orange",
+              "x": 1,
+              "y": 1,
+              "w": 41,
+              "h": 80,
+              "layer": "ABOVE_PLANE"
+            },
+            {"//": "Default", "id": "memFont-064", "x": 1, "y": 1},
+            {
+              "//": "2x width (scale)",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 7,
+              "sx": 2
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 1, "y": 12}, "size": {"w": 6}}
+              "//": "Truncate width",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 13,
+              "w": 3
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 1, "y": 18}},
-              "wrap": {"x": 1}
+              "//": "Truncate width + marquee offset",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 19,
+              "w": 3,
+              "wx": 1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 1, "y": 24}},
-              "scale": {"x": 2},
-              "wrap": {"x": 1}
+              "//": "Truncate width + marquee offset + marquee velocity",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 25,
+              "w": 3,
+              "wx": 1,
+              "wvx": 10
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 1, "y": 30}},
-              "scale": {"x": 2},
-              "wrapVelocity": {"x": -10}
+              "//": "Marquee offset",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 31,
+              "wx": 1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 1, "y": 36}, "size": {"w": 6}},
-              "wrapVelocity": {"x": -10}
+              "//": "2x width (scale) + marquee offset",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 37,
+              "sx": 2,
+              "wx": 1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 1, "y": 42}},
-              "wrap": {"x": 1},
-              "wrapVelocity": {"x": -10}
+              "//": "2x width (scale) + marquee velocity",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 43,
+              "sx": 2,
+              "wvx": -10
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 15, "y": 1}},
-              "scale": {"x": 4, "y": 4}
+              "//": "Marquee velocity",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 49,
+              "wvx": -10
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 1}},
-              "scale": {"x": -1}
+              "//": "Marquee offset + velocity",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 55,
+              "wx": 1,
+              "wvx": -10
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 6}},
-              "scale": {"x": -2}
+              "//": "4x (scale)",
+              "id": "memFont-064",
+              "x": 1,
+              "y": 61,
+              "sx": 4,
+              "sy": 4
+            },
+
+            {"//": "Flipped x", "id": "memFont-064", "x": 22, "y": 1, "sx": -1},
+            {
+              "//": "-2x width (scale)",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 7,
+              "sx": -2
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 12}, "size": {"w": 6}},
-              "scale": {"x": -1}
+              "//": "Flipped x, Truncate width",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 13,
+              "w": 3,
+              "sx": -1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 18}},
-              "scale": {"x": -1},
-              "wrap": {"x": 1}
+              "//": "Flipped x, Truncate width + marquee offset",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 19,
+              "w": 3,
+              "wx": 1,
+              "sx": -1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 24}},
-              "scale": {"x": -2},
-              "wrap": {"x": 1}
+              "//": "Flipped x, Truncate width + marquee offset + marquee velocity",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 25,
+              "w": 3,
+              "wx": 1,
+              "wvx": 10,
+              "sx": -1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 30}},
-              "scale": {"x": -2},
-              "wrapVelocity": {"x": -10}
+              "//": "Flipped x, marquee offset",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 31,
+              "wx": 1,
+              "sx": -1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 36}, "size": {"w": 6}},
-              "scale": {"x": -1},
-              "wrapVelocity": {"x": -10}
+              "//": "Flipped 2x width (scale) + marquee offset",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 37,
+              "sx": -2,
+              "wx": 1
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 8, "y": 42}},
-              "scale": {"x": -1},
-              "wrap": {"x": 1},
-              "wrapVelocity": {"x": -10}
+              "//": "Flipped 2x width (scale) + marquee velocity",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 43,
+              "sx": -2,
+              "wvx": -10
             },
             {
-              "id": "memFont-090",
-              "bounds": {"position": {"x": 15, "y": 24}},
-              "scale": {"x": 4, "y": -4}
+              "//": "Flipped x, marquee velocity",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 49,
+              "wvx": -10,
+              "sx": -1
+            },
+            {
+              "//": "Flipped x, marquee offset + velocity",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 55,
+              "wx": 1,
+              "wvx": -10,
+              "sx": -1
+            },
+            {
+              "//": "Flipped x, 4x (scale)",
+              "id": "memFont-064",
+              "x": 22,
+              "y": 61,
+              "sx": -4,
+              "sy": 4
             }
           ]
         }

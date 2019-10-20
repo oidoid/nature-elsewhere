@@ -11,24 +11,24 @@ export namespace LevelEditorSandboxFileUtil {
   }
 
   export function loadAutoSave(
-    sandbox: LevelEditorSandbox,
-    atlas: Atlas
+    atlas: Atlas,
+    sandbox: LevelEditorSandbox
   ): void {
     const data = LocalStorage.get(
       LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE
     )
-    if (data !== undefined) load(sandbox, atlas, data)
+    if (data !== undefined) load(atlas, sandbox, data)
   }
 
   export function load(
-    sandbox: LevelEditorSandbox,
     atlas: Atlas,
+    sandbox: LevelEditorSandbox,
     data: string
   ): void {
     const config = JSON.parse(data)
     let sandboxChildren: Entity[] = []
     try {
-      sandboxChildren = EntityParser.parseAll(config, atlas)
+      sandboxChildren = EntityParser.parseAll(atlas, config)
     } catch (e) {
       console.error(e, data, config)
       LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_BACK_UP, data)

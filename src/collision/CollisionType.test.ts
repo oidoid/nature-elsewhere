@@ -1,10 +1,11 @@
 import {CollisionType} from './CollisionType'
 import {TestUtil} from '../utils/TestUtil'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 TestUtil.testValuesAreUnique(CollisionType, 'CollisionType')
 TestUtil.testValuesArePositivePowerOfTwo(
-  ObjectUtil.values(CollisionType).filter(
-    val => typeof val === 'number' && val !== CollisionType.INERT
+  <number[]>(
+    Object.values(CollisionType).filter(
+      val => typeof val === 'number' && val !== CollisionType.INERT
+    )
   )
 )

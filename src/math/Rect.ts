@@ -48,34 +48,19 @@ export namespace Rect {
       independent. */
   export function intersects(lhs: ReadonlyRect, rhs: ReadonlyRect): boolean {
     return (
-      lhs.position.x + lhs.size.w > rhs.position.x &&
       lhs.position.x < rhs.position.x + rhs.size.w &&
-      lhs.position.y + lhs.size.h > rhs.position.y &&
-      lhs.position.y < rhs.position.y + rhs.size.h
+      lhs.position.x + lhs.size.w > rhs.position.x &&
+      lhs.position.y < rhs.position.y + rhs.size.h &&
+      lhs.position.y + lhs.size.h > rhs.position.y
     )
   }
 
-  export function intersectsPoint(
-    rect: ReadonlyRect,
-    point: Readonly<XY>
-  ): boolean {
+  export function within(lhs: ReadonlyRect, rhs: ReadonlyRect): boolean {
     return (
-      rect.position.x + rect.size.w > point.x &&
-      rect.position.x < point.x &&
-      rect.position.y + rect.size.h > point.y &&
-      rect.position.y < point.y
-    )
-  }
-
-  export function within(
-    {position, size}: ReadonlyRect,
-    rhs: ReadonlyRect
-  ): boolean {
-    return (
-      position.x >= rhs.position.x &&
-      position.x + size.w <= rhs.position.x + rhs.size.w &&
-      position.y >= rhs.position.y &&
-      position.y + size.h <= rhs.position.y + rhs.size.h
+      lhs.position.x >= rhs.position.x &&
+      lhs.position.x + lhs.size.w <= rhs.position.x + rhs.size.w &&
+      lhs.position.y >= rhs.position.y &&
+      lhs.position.y + lhs.size.h <= rhs.position.y + rhs.size.h
     )
   }
 

@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
@@ -10,7 +9,6 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {NumberUtil} from '../math/NumberUtil'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -20,7 +18,6 @@ import {WH} from '../math/WH'
 
 export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   constructor(
-    atlas: Atlas,
     props?: Entity.SubProps<Backpacker.Variant.NONE, Backpacker.State>,
     // This reference is passed to all images so that any changes affect all
     // character images for all states. This orchestration could probably be
@@ -35,37 +32,31 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Backpacker.State.IDLE_UP]: newImageRect(
-          atlas,
           AtlasID.BACKPACKER_IDLE_UP,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
         [Backpacker.State.IDLE_RIGHT]: newImageRect(
-          atlas,
           AtlasID.BACKPACKER_IDLE_RIGHT,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
         [Backpacker.State.IDLE_DOWN]: newImageRect(
-          atlas,
           AtlasID.BACKPACKER_IDLE_DOWN,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
         [Backpacker.State.WALK_UP]: newImageRect(
-          atlas,
           AtlasID.BACKPACKER_WALK_UP,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
         [Backpacker.State.WALK_RIGHT]: newImageRect(
-          atlas,
           AtlasID.BACKPACKER_WALK_RIGHT,
           AtlasID.BACKPACKER_WALK_RIGHT_SHADOW,
           _size
         ),
         [Backpacker.State.WALK_DOWN]: newImageRect(
-          atlas,
           AtlasID.BACKPACKER_WALK_DOWN,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
@@ -188,7 +179,6 @@ export namespace Backpacker {
 }
 
 function newImageRect(
-  atlas: Atlas,
   character: AtlasID,
   shadow: AtlasID,
   size: WH
@@ -196,8 +186,8 @@ function newImageRect(
   return new ImageRect({
     origin: new XY(-2, -13),
     images: [
-      new Image(atlas, {id: character, size}),
-      new Image(atlas, {id: shadow, size, layer: Layer.SHADOW})
+      new Image({id: character, size}),
+      new Image({id: shadow, size, layer: Layer.SHADOW})
     ]
   })
 }
@@ -223,7 +213,7 @@ const idleStateFor: Readonly<Record<
   [Backpacker.State.WALK_DOWN]: Backpacker.State.IDLE_DOWN
 })
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.BACKPACKER,
   state: Backpacker.State.IDLE_DOWN,
   variant: Backpacker.Variant.NONE,
@@ -234,5 +224,5 @@ const defaults = ObjectUtil.freeze({
     CollisionType.HARMFUL |
     CollisionType.IMPEDIMENT,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(2, 12, 4, 3)]
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(2, 12, 4, 3))])
 })

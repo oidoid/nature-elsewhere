@@ -8,7 +8,7 @@
   "perVertex": [{"name": "uv", "type": "SHORT", "len": 2}],
   "perInstance": [
     {"name": "source", "type": "SHORT", "len": 4},
-    {"name": "image", "type": "SHORT", "len": 4},
+    {"name": "constituent", "type": "SHORT", "len": 4},
     {"name": "composition", "type": "UNSIGNED_SHORT", "len": 1},
     {"name": "target", "type": "SHORT", "len": 4},
     {"name": "scale", "type": "SHORT", "len": 2},

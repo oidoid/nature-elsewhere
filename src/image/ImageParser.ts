@@ -1,89 +1,61 @@
-import {
-  AlphaCompositionConfig,
-  AlphaCompositionParser
-} from './AlphaCompositionParser'
-import {Animator, Atlas} from 'aseprite-atlas'
-import {AtlasID} from '../atlas/AtlasID'
-import {AtlasIDConfig, AtlasIDParser} from '../atlas/AtlasIDParser'
+import {AnimatorParser} from './AnimatorParser'
+import {Atlas} from 'aseprite-atlas'
+import {AtlasIDParser} from '../atlas/AtlasIDParser'
 import {Image} from './Image'
-import {RectConfig} from '../math/RectParser'
+import {ImageCompositionParser} from './ImageCompositionParser'
+import {ImageConfig} from './ImageConfig'
+import {LayerParser} from './LayerParser'
+import {RectParser} from '../math/RectParser'
+import {WHParser} from '../math/WHParser'
 import {XY} from '../math/XY'
-import {ObjectUtil} from '../utils/ObjectUtil'
-import {Layer} from './Layer'
-import {WH} from '../math/WH'
-import {XYConfig, XYParser} from '../math/XYParser'
-
-export interface ImageConfig {
-  readonly id: AtlasIDConfig
-  readonly imageID?: AtlasIDConfig
-  readonly bounds?: RectConfig
-  readonly layer?: Exclude<LayerConfig, undefined> & string
-  readonly animator?: AnimatorConfig
-  readonly scale?: XYConfig
-  readonly wrap?: XYConfig // Decamillipixel
-  readonly wrapVelocity?: XYConfig // Decamillipixel
-  readonly alphaComposition?: Exclude<AlphaCompositionConfig, undefined> &
-    string
-}
-
-export type AnimatorConfig = Readonly<{
-  period?: number
-  exposure?: Milliseconds
-}>
-
-/** Defaults to (1, 1). */
-export type ImageScaleConfig = Maybe<Partial<XY>>
-export type LayerConfig = Maybe<string | number | Layer>
+import {XYParser} from '../math/XYParser'
+import {XYConfig} from '../math/XYConfig'
 
 export namespace ImageParser {
-  export function parse(config: ImageConfig, atlas: Atlas): Image {
-    const id = AtlasIDParser.parse(config.id)
-    return new Image(atlas, {
-      id,
-      ...(config.imageID !== undefined && {
-        imageID: AtlasIDParser.parse(config.imageID)
-      }),
-      ...(config.bounds?.position !== undefined && {
-        position: XYParser.parse(config.bounds?.position)
-      }),
-      size: parseSize(config, id, atlas),
-      ...(config.layer !== undefined && {layer: parseLayer(config.layer)}),
-      ...(config.animator !== undefined && {
-        animator: parseAnimator(config.animator)
-      }),
-      ...(config.scale !== undefined && {scale: parseScale(config.scale)}),
-      ...(config.wrap !== undefined && {wrap: XYParser.parse(config.wrap)}),
-      ...(config.wrapVelocity !== undefined && {
-        wrapVelocity: XYParser.parse(config.wrapVelocity)
-      }),
-      ...(config.alphaComposition !== undefined && {
-        alphaComposition: AlphaCompositionParser.parse(config.alphaComposition)
-      })
-    })
+  export function parse(atlas: Atlas, config: ImageConfig): Image {
+    return Image.new(atlas, parseProps(config))
   }
 
-  export function parseScale(config: ImageScaleConfig): XY {
+  export function parseProps(config: ImageConfig): Image.Props {
+    // Excessive spread conditionals cause compiler OOM errors, use if
+    // assignments instead. E.g.,
+    // `if (config.x !== undefined) props.x = config.x` instead of
+    // `...config.x !== undefined && {x: config.x}`.
+    // https://github.com/microsoft/TypeScript/issues/34599
+    const props: Writable<Image.Props> = {id: AtlasIDParser.parse(config.id)}
+    if (config.constituentID !== undefined)
+      props.constituentID = AtlasIDParser.parse(config.constituentID)
+    if (config.composition !== undefined)
+      props.composition = ImageCompositionParser.parse(config.composition)
+    if (config.bounds !== undefined)
+      props.bounds = RectParser.parse(config.bounds)
+    if (config.position !== undefined)
+      props.position = XYParser.parse(config.position)
+    if (config.x !== undefined) props.x = config.x
+    if (config.y !== undefined) props.y = config.y
+    if (config.size !== undefined) props.size = WHParser.parse(config.size)
+    if (config.w !== undefined) props.w = config.w
+    if (config.h !== undefined) props.h = config.h
+    if (config.layer !== undefined)
+      props.layer = LayerParser.parse(config.layer)
+    if (config.scale !== undefined) props.scale = parseScale(config.scale)
+    if (config.sx !== undefined) props.sx = config.sx
+    if (config.sy !== undefined) props.sy = config.sy
+    if (config.animator !== undefined)
+      props.animator = AnimatorParser.parse(config.animator)
+    if (config.period !== undefined) props.period = config.period
+    if (config.exposure !== undefined) props.exposure = config.exposure
+    if (config.wrap !== undefined) props.wrap = XYParser.parse(config.wrap)
+    if (config.wx !== undefined) props.wx = config.wx
+    if (config.wy !== undefined) props.wy = config.wy
+    if (config.wrapVelocity !== undefined)
+      props.wrapVelocity = XYParser.parse(config.wrapVelocity)
+    if (config.wvx !== undefined) props.wvx = config.wvx
+    if (config.wvy !== undefined) props.wvy = config.wvy
+    return props
+  }
+
+  export function parseScale(config: XYConfig): XY {
     return new XY(config?.x ?? 1, config?.y ?? 1)
   }
-
-  export function parseLayer(config: LayerConfig): Layer {
-    const layer = config === undefined ? Layer.DEFAULT : config
-    ObjectUtil.assertKeyOf(Layer, layer, 'Layer')
-    return typeof layer === 'number' ? layer : Layer[<keyof typeof Layer>layer]
-  }
-}
-
-function parseSize(config: ImageConfig, id: AtlasID, {animations}: Atlas): WH {
-  const {size} = animations[id]
-  const w =
-    config.bounds?.size?.w ??
-    Math.abs(config.scale && config.scale.x ? config.scale.x : 1) * size.w
-  const h =
-    config.bounds?.size?.h ??
-    Math.abs(config.scale && config.scale.y ? config.scale.y : 1) * size.h
-  return new WH(w, h)
-}
-
-function parseAnimator(config: AnimatorConfig): Animator {
-  return {period: config.period ?? 0, exposure: config.exposure ?? 0}
 }

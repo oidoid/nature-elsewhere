@@ -1,5 +1,4 @@
 import {CollisionPredicate} from './CollisionPredicate'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export type CollisionPredicateConfig = Maybe<CollisionPredicate>
 
@@ -13,6 +12,6 @@ export namespace CollisionPredicateParser {
 
 function assertType(predicate: CollisionPredicate): void {
   for (let bit = 1; bit <= predicate; bit <<= 1)
-    if (bit & predicate)
-      ObjectUtil.assertKeyOf(CollisionPredicate, bit, 'CollisionPredicate')
+    if (bit & predicate && !(bit in CollisionPredicate))
+      throw new Error(`Unknown CollisionPredicate "${bit}".`)
 }

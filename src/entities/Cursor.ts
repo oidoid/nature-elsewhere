@@ -9,7 +9,6 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -78,7 +77,7 @@ export namespace Cursor {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_CURSOR,
   variant: Cursor.Variant.DOT,
   state: Entity.BaseState.HIDDEN,
@@ -96,7 +95,7 @@ function variantRect(
   return new ImageRect({
     origin: dot ? new XY(1, 1) : new XY(4, 3),
     images: [
-      new Image(atlas, {
+      Image.new(atlas, {
         id: dot ? AtlasID.PALETTE_BLACK : AtlasID.UI_CURSOR_RETICLE,
         layer: Layer.UI_CURSOR
       })

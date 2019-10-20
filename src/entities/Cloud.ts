@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
@@ -29,14 +28,14 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
         [Cloud.State.DRIZZLE]: new ImageRect({
           images: [
             ...variantImages(atlas, props?.variant ?? Cloud.Variant.MEDIUM),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               x: 2,
               y: 2,
               w: 5,
               wvy: 225
             }),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN,
               x: 2,
               y: 6,
@@ -44,35 +43,35 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               wy: 8,
               wvy: 340
             }),
-            new Image(atlas, {id: AtlasID.CLOUD_RAIN_SPLASH, y: 35})
+            Image.new(atlas, {id: AtlasID.CLOUD_RAIN_SPLASH, y: 35})
           ]
         }),
         [Cloud.State.SHOWER]: new ImageRect({
           images: [
             ...variantImages(atlas, props?.variant ?? Cloud.Variant.MEDIUM),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               x: 2,
               y: 6,
               w: 7,
               wvy: 300
             }),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN,
               x: 2,
               y: 2,
               w: 7,
               wvy: 337
             }),
-            new Image(atlas, {id: AtlasID.CLOUD_RAIN_SPLASH, y: 35}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.CLOUD_RAIN_SPLASH, y: 35}),
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN,
               x: 2,
               y: 2,
               w: 7,
               wvy: 225
             }),
-            new Image(atlas, {
+            new Image({
               id: AtlasID.CLOUD_RAIN_PUDDLE,
               x: 2,
               y: 36,
@@ -82,7 +81,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               wvx: -44,
               wvy: 22
             }),
-            new Image(atlas, {
+            new Image({
               id: AtlasID.PALETTE_GREEN,
               x: 1,
               y: 37,
@@ -95,14 +94,14 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
         [Cloud.State.DOWNPOUR]: new ImageRect({
           images: [
             ...variantImages(atlas, props?.variant ?? Cloud.Variant.MEDIUM),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               x: 1,
               y: 6,
               w: 9,
               wvy: 323
             }),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN,
               x: 2,
               y: 6,
@@ -110,7 +109,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               wy: 12,
               wvy: 398
             }),
-            new Image(atlas, {
+            new Image({
               id: AtlasID.CLOUD_RAIN_PUDDLE,
               x: 2,
               y: 35,
@@ -120,7 +119,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               wvx: 8,
               wvy: 215
             }),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN_PUDDLE,
               y: 37,
               layer: Layer.DECAL,
@@ -128,7 +127,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
               h: 1,
               wvx: -90
             }),
-            new Image(atlas, {
+            Image.new(atlas, {
               id: AtlasID.CLOUD_RAIN_SPRINKLE,
               x: 2,
               y: 6,
@@ -167,8 +166,8 @@ export namespace Cloud {
 function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
   if (variant === Cloud.Variant.MEDIUM)
     return [
-      new Image(atlas, {id: AtlasID.CLOUD_MEDIUM, layer: Layer.FLOATS}),
-      new Image(atlas, {
+      Image.new(atlas, {id: AtlasID.CLOUD_MEDIUM, layer: Layer.FLOATS}),
+      Image.new(atlas, {
         id: AtlasID.CLOUD_MEDIUM_SHADOW,
         y: 32,
         layer: Layer.SHADOW
@@ -176,8 +175,8 @@ function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
     ]
 
   return [
-    new Image(atlas, {id: AtlasID.CLOUD_LARGE, layer: Layer.FLOATS}),
-    new Image(atlas, {
+    Image.new(atlas, {id: AtlasID.CLOUD_LARGE, layer: Layer.FLOATS}),
+    Image.new(atlas, {
       id: AtlasID.CLOUD_LARGE_SHADOW,
       y: 32,
       layer: Layer.SHADOW
@@ -185,7 +184,7 @@ function variantImages(atlas: Atlas, variant: Cloud.Variant): Image[] {
   ]
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.CLOUD,
   variant: Cloud.Variant.MEDIUM,
   state: Cloud.State.NONE,

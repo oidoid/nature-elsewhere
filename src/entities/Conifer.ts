@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 
 export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
@@ -24,10 +23,9 @@ export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Conifer.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.CONIFER}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.CONIFER}),
+            Image.new(atlas, {
               id: AtlasID.CONIFER_SHADOW,
-              x: 0,
               y: 1,
               layer: Layer.SHADOW
             })
@@ -53,11 +51,11 @@ export namespace Conifer {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.CONIFER,
   variant: Conifer.Variant.NONE,
   state: Conifer.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(2, 9, 3, 3)],
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(2, 9, 3, 3))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })

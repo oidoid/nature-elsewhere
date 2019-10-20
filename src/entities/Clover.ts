@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Clover extends Entity<Clover.Variant, Clover.State> {
   constructor(
@@ -46,23 +45,23 @@ export namespace Clover {
 function variantImages(atlas: Atlas, variant: Clover.Variant): Image[] {
   if (variant === Clover.Variant.SMALL)
     return [
-      new Image(atlas, {id: AtlasID.CLOVER_0x0, layer: Layer.DECAL}),
-      new Image(atlas, {
+      Image.new(atlas, {id: AtlasID.CLOVER_0x0, layer: Layer.DECAL}),
+      Image.new(atlas, {
         id: AtlasID.CLOVER_0x1,
         x: 1,
         y: 3,
         layer: Layer.DECAL
       }),
-      new Image(atlas, {id: AtlasID.CLOVER_0x0, x: 4, y: 1, layer: Layer.DECAL})
+      Image.new(atlas, {id: AtlasID.CLOVER_0x0, x: 4, y: 1, layer: Layer.DECAL})
     ]
   return [
-    new Image(atlas, {id: AtlasID.CLOVER_1x0, layer: Layer.DECAL}),
-    new Image(atlas, {id: AtlasID.CLOVER_0x1, x: 1, y: 3, layer: Layer.DECAL}),
-    new Image(atlas, {id: AtlasID.CLOVER_1x0, x: 4, y: 1, layer: Layer.DECAL})
+    Image.new(atlas, {id: AtlasID.CLOVER_1x0, layer: Layer.DECAL}),
+    Image.new(atlas, {id: AtlasID.CLOVER_0x1, x: 1, y: 3, layer: Layer.DECAL}),
+    Image.new(atlas, {id: AtlasID.CLOVER_1x0, x: 4, y: 1, layer: Layer.DECAL})
   ]
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.CLOVER,
   variant: Clover.Variant.SMALL,
   state: Clover.State.VISIBLE,

@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../../atlas/AtlasID'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {EntitySerializer} from '../../entity/EntitySerializer'
@@ -8,15 +7,14 @@ import {JSONObject} from '../../utils/JSON'
 import {LevelAdvance} from '../../levels/LevelAdvance'
 import {Level} from '../../levels/Level'
 import {LevelType} from '../../levels/LevelType'
-import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Text} from '../text/Text'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/UpdateStatus'
 
 export class LevelLink extends Text {
   private _link?: LevelType
-  constructor(atlas: Atlas, props?: LevelLink.Props) {
-    super(atlas, {...defaults, ...props})
+  constructor(props?: LevelLink.Props) {
+    super({...defaults, ...props})
     this._link = props ? props.link : undefined
   }
 
@@ -30,7 +28,7 @@ export class LevelLink extends Text {
 
     const collision = Level.collisionWithCursor(state.level, this)
     const color = collision ? AtlasID.PALETTE_BLACK : AtlasID.PALETTE_GREY
-    status |= this.setImageID(color)
+    status |= this.setConstituentID(color)
 
     if (!collision || !Input.inactiveTriggered(state.inputs.pick)) return status
 
@@ -61,7 +59,7 @@ export namespace LevelLink {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_LEVEL_LINK,
   variant: LevelLink.Variant.NONE,
   state: LevelLink.State.VISIBLE,

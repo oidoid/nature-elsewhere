@@ -10,7 +10,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 
 export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
@@ -25,10 +24,9 @@ export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [AppleTree.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.APPLE_TREE}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.APPLE_TREE}),
+            Image.new(atlas, {
               id: AtlasID.APPLE_TREE_SHADOW,
-              x: 0,
               y: 1,
               layer: Layer.SHADOW
             })
@@ -59,11 +57,11 @@ export namespace AppleTree {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.APPLE_TREE,
   variant: AppleTree.Variant.NONE,
   state: AppleTree.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES | CollisionPredicate.CHILDREN,
-  collisionBodies: [Rect.make(3, 10, 7, 1)],
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(3, 10, 7, 1))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })

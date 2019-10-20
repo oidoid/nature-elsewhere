@@ -6,7 +6,6 @@ import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {ProcessChildren} from '../entity/ProcessChildren'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -78,7 +77,7 @@ export namespace RadioCheckboxGroup {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_RADIO_CHECKBOX_GROUP,
   variant: RadioCheckboxGroup.Variant.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,

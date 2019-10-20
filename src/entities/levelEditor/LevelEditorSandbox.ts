@@ -3,7 +3,6 @@ import {Entity} from '../../entity/Entity'
 import {EntityType} from '../../entity/EntityType'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONArray} from '../../utils/JSON'
-import {ObjectUtil} from '../../utils/ObjectUtil'
 import {ProcessChildren} from '../../entity/ProcessChildren'
 import {ReadonlyRect, Rect} from '../../math/Rect'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
@@ -60,7 +59,7 @@ export namespace LevelEditorSandbox {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.LEVEL_EDITOR_SANDBOX,
   variant: LevelEditorSandbox.Variant.NONE,
   state: LevelEditorSandbox.State.VISIBLE,

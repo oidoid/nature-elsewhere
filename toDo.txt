@@ -172,7 +172,6 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
   Add Nature Elsewhere logo.
   On a multitouch, if you touch left and right sides of the screen at the same time, the player oscillates.
   Experiment with drawing the logo in multiple color and animation passes. The shader can be used or an animation.
-  Serialize to components like x,y,w,h?
 
 aseprite-atlas
   Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.

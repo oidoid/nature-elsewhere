@@ -11,8 +11,8 @@ export type ImageStateMapConfig = Maybe<
 
 export namespace ImageStateMachineParser {
   export function parseMap(
-    config: ImageStateMapConfig,
-    atlas: Atlas
+    atlas: Atlas,
+    config: ImageStateMapConfig
   ): ImageStateMap {
     const map: Record<Entity.BaseState | string, ImageRect> = {
       [Entity.BaseState.HIDDEN]: new ImageRect()
@@ -21,7 +21,7 @@ export namespace ImageStateMachineParser {
     for (const stateConfig in config) {
       const state = EntityParser.parseState(stateConfig)
       const rectConfig = config[stateConfig]
-      map[state] = ImageRectParser.parse(rectConfig, atlas)
+      map[state] = ImageRectParser.parse(atlas, rectConfig)
     }
     return map
   }

@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
@@ -22,8 +21,8 @@ export class Frog extends Entity<Frog.Variant, Frog.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Frog.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.FROG_IDLE}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.FROG_IDLE}),
+            Image.new(atlas, {
               id: AtlasID.FROG_IDLE_SHADOW,
               x: -1,
               y: 1,
@@ -51,12 +50,12 @@ export namespace Frog {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.FROG,
   state: Frog.State.IDLE,
   variant: Frog.Variant.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
   collisionType: CollisionType.TYPE_CHARACTER | CollisionType.OBSTACLE,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(1, 14, 6, 2)]
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(1, 14, 6, 2))])
 })

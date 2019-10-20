@@ -1,11 +1,8 @@
 import {XY} from './XY'
-
-export type XYConfig = Maybe<Partial<XY>>
+import {XYConfig} from './XYConfig'
 
 export namespace XYParser {
   export function parse(config: XYConfig): XY {
-    const x = config && config.x !== undefined ? config.x : 0
-    const y = config && config.y !== undefined ? config.y : 0
-    return new XY(x, y)
+    return new XY(config?.x ?? 0, config?.y ?? 0)
   }
 }

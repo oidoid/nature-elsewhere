@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {Cursor} from './Cursor'
 import {EntityCollider} from '../collision/EntityCollider'
@@ -11,7 +10,6 @@ import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {NumberUtil} from '../math/NumberUtil'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -27,32 +25,29 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
       mode. */
   private _cursorOffset: Maybe<XY>
 
-  constructor(
-    atlas: Atlas,
-    props?: Entity.SubProps<Marquee.Variant, Marquee.State>
-  ) {
+  constructor(props?: Entity.SubProps<Marquee.Variant, Marquee.State>) {
     super({
       ...defaults,
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Marquee.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {
+            new Image({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
             }),
-            new Image(atlas, {
+            new Image({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
             }),
-            new Image(atlas, {
+            new Image({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
             }),
-            new Image(atlas, {
+            new Image({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
@@ -120,7 +115,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     if (triggered && !hudCollision) {
       const {selection} = this
       const currentIndex = selection
-        ? sandboxChildren.findIndex(entity => entity.equal(selection))
+        ? sandboxChildren.findIndex(entity => entity === selection)
         : -1
       const nextIndex = NumberUtil.wrap(
         currentIndex + 1,
@@ -214,7 +209,7 @@ enum Images {
   LEFT = 3
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_MARQUEE,
   variant: Marquee.Variant.NONE,
   state: Entity.BaseState.HIDDEN,

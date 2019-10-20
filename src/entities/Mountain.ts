@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 
 export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
@@ -24,8 +23,8 @@ export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Mountain.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.MOUNTAIN}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.MOUNTAIN}),
+            Image.new(atlas, {
               id: AtlasID.MOUNTAIN_SHADOW,
               x: -2,
               y: 1,
@@ -53,11 +52,11 @@ export namespace Mountain {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.MOUNTAIN,
   variant: Mountain.Variant.NONE,
   state: Mountain.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(0, 5, 13, 4)],
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(0, 5, 13, 4))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })

@@ -9,7 +9,6 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Image} from '../image/Image'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateStatus} from '../updaters/UpdateStatus'
@@ -24,14 +23,14 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bee.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.BEE}),
-            new Image(atlas, {id: AtlasID.BEE_SHADOW, layer: Layer.SHADOW})
+            Image.new(atlas, {id: AtlasID.BEE}),
+            Image.new(atlas, {id: AtlasID.BEE_SHADOW, layer: Layer.SHADOW})
           ]
         }),
         [Bee.State.DEAD]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.BEE_DEAD}),
-            new Image(atlas, {id: AtlasID.BEE_BLOOD, layer: Layer.BLOOD})
+            Image.new(atlas, {id: AtlasID.BEE_DEAD}),
+            Image.new(atlas, {id: AtlasID.BEE_BLOOD, layer: Layer.BLOOD})
           ]
         })
       },
@@ -64,7 +63,7 @@ export namespace Bee {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.BEE,
   variant: Bee.Variant.NONE,
   state: Bee.State.IDLE,
@@ -75,5 +74,5 @@ const defaults = ObjectUtil.freeze({
     [Bee.State.DEAD]: CollisionType.TYPE_CHARACTER | CollisionType.TYPE_ITEM
   },
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(1, 1, 3, 2)]
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(1, 1, 3, 2))])
 })

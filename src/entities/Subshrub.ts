@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
   constructor(
@@ -21,8 +20,8 @@ export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Subshrub.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SUBSHRUB}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.SUBSHRUB}),
+            Image.new(atlas, {
               id: AtlasID.SUBSHRUB_SHADOW,
               layer: Layer.SHADOW
             })
@@ -48,7 +47,7 @@ export namespace Subshrub {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.SUBSHRUB,
   variant: Subshrub.Variant.NONE,
   state: Subshrub.State.VISIBLE,

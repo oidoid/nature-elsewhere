@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Flag extends Entity<Flag.Variant, Flag.State> {
@@ -19,8 +18,8 @@ export class Flag extends Entity<Flag.Variant, Flag.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Flag.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.FLAG}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.FLAG}),
+            Image.new(atlas, {
               id: AtlasID.FLAG_SHADOW,
               x: -1,
               y: 1,
@@ -48,7 +47,7 @@ export namespace Flag {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.FLAG,
   variant: Flag.Variant.NONE,
   state: Flag.State.VISIBLE,

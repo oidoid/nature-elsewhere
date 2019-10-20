@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Pig extends Entity<Pig.Variant, Pig.State> {
@@ -20,10 +19,9 @@ export class Pig extends Entity<Pig.Variant, Pig.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pig.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.PIG}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.PIG}),
+            Image.new(atlas, {
               id: AtlasID.PIG_SHADOW,
-              x: 0,
               y: 1,
               layer: Layer.SHADOW
             })
@@ -49,7 +47,7 @@ export namespace Pig {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.PIG,
   variant: Pig.Variant.NONE,
   state: Pig.State.IDLE,

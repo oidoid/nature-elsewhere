@@ -1,14 +1,16 @@
 import {Build} from '../utils/Build'
 import {FloatXY} from './FloatXY'
 import {Integer} from 'aseprite-atlas'
+import {ReadonlyRect} from './Rect'
 
 /** Integral XY in 1/10000 of a pixel. */
 export type DecamillipixelXY = XY
 
 /** Integral wrapper of x and y-axis components. This class exists to make
     rounding errors easier to debug by encapsulating mutation in setters with
-    integer state checks. */
-export class XY {
+    integer state checks. G/setter syntax is used for API compatibility with the
+    FloatXY data interface. */
+export class XY implements FloatXY {
   static trunc(xy: Readonly<FloatXY>): XY
   static trunc(x: number, y: number): XY
   static trunc(val: number | Readonly<FloatXY>, y?: number): XY {
@@ -97,6 +99,10 @@ export class XY {
 
   clamp(min: Readonly<FloatXY>, max: Readonly<FloatXY>): XY {
     return fromFloatXY(FloatXY.clamp(this, min, max))
+  }
+
+  intersects(rect: ReadonlyRect): boolean {
+    return FloatXY.intersects(this, rect)
   }
 }
 

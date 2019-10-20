@@ -52,7 +52,7 @@ export namespace EntityFactory {
       case EntityType.APPLE_TREE:
         return new AppleTree(atlas, props)
       case EntityType.BACKPACKER:
-        return new Backpacker(atlas, props)
+        return new Backpacker(props)
       case EntityType.BEE:
         return new Bee(atlas, props)
       case EntityType.BUNNY:
@@ -90,7 +90,7 @@ export namespace EntityFactory {
       case EntityType.PATH:
         return new Path(atlas, props)
       case EntityType.PLANE:
-        return new Plane(atlas, props)
+        return new Plane(props)
       case EntityType.POND:
         return new Pond(atlas, props)
       case EntityType.SUBSHRUB:
@@ -100,29 +100,29 @@ export namespace EntityFactory {
       case EntityType.UI_BUTTON:
         return new Button(atlas, props)
       case EntityType.UI_CHECKBOX:
-        return new Checkbox(atlas, props)
+        return new Checkbox(props)
       case EntityType.UI_CURSOR:
         return new Cursor(atlas, props)
       case EntityType.UI_DATE_VERSION_HASH:
-        return new DateVersionHash(atlas, props)
+        return new DateVersionHash(props)
       case EntityType.UI_DESTINATION_MARKER:
         return new DestinationMarker(atlas, props)
       case EntityType.UI_ENTITY_PICKER:
         return new EntityPicker(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_MENU:
-        return new LevelEditorMenu(atlas, props)
+        return new LevelEditorMenu(props)
       case EntityType.UI_LEVEL_EDITOR_PANEL:
         return new LevelEditorPanel(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND:
-        return new LevelEditorPanelBackground(atlas, props)
+        return new LevelEditorPanelBackground(props)
       case EntityType.UI_LEVEL_LINK:
-        return new LevelLink(atlas, props)
+        return new LevelLink(props)
       case EntityType.UI_MARQUEE:
-        return new Marquee(atlas, props)
+        return new Marquee(props)
       case EntityType.UI_RADIO_CHECKBOX_GROUP:
         return new RadioCheckboxGroup(props)
       case EntityType.UI_TEXT:
-        return new Text(atlas, props)
+        return new Text(props)
       case EntityType.UI_TOOLBAR:
         return new Toolbar(atlas, props)
     }

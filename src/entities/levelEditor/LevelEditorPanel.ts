@@ -22,7 +22,6 @@ import {LevelEditorSandboxFileUtil} from './LevelEditorSandboxFileUtil'
 import {LevelType} from '../../levels/LevelType'
 import {Marquee} from '../Marquee'
 import * as memFont from '../../text/memFont.json'
-import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Plane} from '../Plane'
 import {RadioCheckboxGroup} from '../RadioCheckboxGroup'
 import * as strings from '../../utils/strings.json'
@@ -66,69 +65,67 @@ export class LevelEditorPanel extends Entity<
       ...props
     })
 
-    this._followCam = ObjectUtil.freeze({
+    this._followCam = Object.freeze({
       positionRelativeToCam: FollowCam.Orientation.SOUTH_EAST,
-      camMargin: new WH(0, 0)
+      camMargin: Object.freeze(new WH(0, 0))
     })
-    this._variantCheckbox = new Checkbox(atlas, {
+    this._variantCheckbox = new Checkbox({
       textMaxSize: new WH(31, 5),
       x: 13,
       y: 12,
-      imageID: AtlasID.PALETTE_BLACK
+      constituentID: AtlasID.PALETTE_BLACK
     })
-    this._stateCheckbox = new Checkbox(atlas, {
+    this._stateCheckbox = new Checkbox({
       textMaxSize: new WH(34, 5),
       x: 10,
       y: 18,
-      imageID: AtlasID.PALETTE_BLACK
+      constituentID: AtlasID.PALETTE_BLACK
     })
-    this._xCheckbox = new Checkbox(atlas, {
+    this._xCheckbox = new Checkbox({
       text: '0',
       textLayer: Layer.UI_HI,
       x: 4,
       y: 24,
-      imageID: AtlasID.PALETTE_BLACK
+      constituentID: AtlasID.PALETTE_BLACK
     })
-    this._yCheckbox = new Checkbox(atlas, {
+    this._yCheckbox = new Checkbox({
       text: '0',
       textLayer: Layer.UI_HI,
       x: 26,
       y: 24,
-      imageID: AtlasID.PALETTE_BLACK
+      constituentID: AtlasID.PALETTE_BLACK
     })
-    this._entityCheckbox = new Checkbox(atlas, {
+    this._entityCheckbox = new Checkbox({
       state: Checkbox.State.CHECKED,
       textMaxSize: new WH(32, 5),
       x: 46,
-      y: 0,
-      imageID: AtlasID.PALETTE_BLACK
+      constituentID: AtlasID.PALETTE_BLACK
     })
     this._radioGroup = new RadioCheckboxGroup({
       x: 55,
       y: 2,
       children: [
-        new Text(atlas, {
+        new Text({
           text: strings['levelEditor/variant'],
           textLayer: Layer.UI_HI,
           x: 2,
           y: 12
         }),
         this._variantCheckbox,
-        new Text(atlas, {
+        new Text({
           text: strings['levelEditor/state'],
           textLayer: Layer.UI_HI,
           x: 2,
           y: 18
         }),
         this._stateCheckbox,
-        new Text(atlas, {
+        new Text({
           text: strings['levelEditor/x'],
           textLayer: Layer.UI_HI,
-          x: 0,
           y: 24
         }),
         this._xCheckbox,
-        new Text(atlas, {
+        new Text({
           text: strings['levelEditor/y'],
           textLayer: Layer.UI_HI,
           x: 22,
@@ -147,7 +144,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                new Image(atlas, {
+                Image.new(atlas, {
                   id: AtlasID.UI_BUTTON_MENU,
                   layer: Layer.UI_HIHI
                 })
@@ -166,7 +163,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                new Image(atlas, {
+                Image.new(atlas, {
                   id: AtlasID.UI_BUTTON_DECREMENT,
                   layer: Layer.UI_HIHI
                 })
@@ -185,7 +182,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                new Image(atlas, {
+                Image.new(atlas, {
                   id: AtlasID.UI_BUTTON_INCREMENT,
                   layer: Layer.UI_HIHI
                 })
@@ -204,7 +201,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                new Image(atlas, {
+                Image.new(atlas, {
                   id: AtlasID.UI_BUTTON_DESTROY,
                   layer: Layer.UI_HIHI
                 })
@@ -223,7 +220,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                new Image(atlas, {
+                Image.new(atlas, {
                   id: AtlasID.UI_BUTTON_CREATE,
                   layer: Layer.UI_HIHI
                 })
@@ -242,7 +239,7 @@ export class LevelEditorPanel extends Entity<
             [Entity.BaseState.HIDDEN]: new ImageRect(),
             [Group.State.VISIBLE]: new ImageRect({
               images: [
-                new Image(atlas, {
+                Image.new(atlas, {
                   id: AtlasID.UI_BUTTON_TOGGLE_GRID,
                   layer: Layer.UI_HIHI
                 })
@@ -264,7 +261,7 @@ export class LevelEditorPanel extends Entity<
       this._toggleGridButton,
       this._entityPicker,
       this._radioGroup,
-      new LevelEditorPanelBackground(atlas)
+      new LevelEditorPanelBackground()
     )
 
     this._offsetEntityCheckboxIndex(atlas, 0)
@@ -284,7 +281,7 @@ export class LevelEditorPanel extends Entity<
       this._load = false
       const {sandbox} = state.level
       if (sandbox)
-        LevelEditorSandboxFileUtil.loadAutoSave(sandbox, state.level.atlas)
+        LevelEditorSandboxFileUtil.loadAutoSave(state.level.atlas, sandbox)
     }
 
     if (this._menuButton.clicked) {
@@ -306,13 +303,12 @@ export class LevelEditorPanel extends Entity<
           ? 1
           : 0
       if (this._xCheckbox.checked())
-        this._offsetRadioCheckbox(this._xCheckbox, state.level.atlas, offset)
+        this._offsetRadioCheckbox(this._xCheckbox, offset)
       else if (this._yCheckbox.checked())
-        this._offsetRadioCheckbox(this._yCheckbox, state.level.atlas, offset)
+        this._offsetRadioCheckbox(this._yCheckbox, offset)
       else if (this._entityCheckbox.checked())
         this._offsetEntityCheckboxIndex(state.level.atlas, offset)
-      else if (this._stateCheckbox.checked())
-        this._offsetStateCheckbox(state.level.atlas, offset)
+      else if (this._stateCheckbox.checked()) this._offsetStateCheckbox(offset)
       else if (this._variantCheckbox.checked())
         this._offsetVariantCheckbox(state.level.atlas, offset)
     }
@@ -375,15 +371,15 @@ export class LevelEditorPanel extends Entity<
         const {atlas} = state.level
         const xOffset =
           selection.bounds.position.x - parseIntCheckbox(this._xCheckbox)
-        this._offsetRadioCheckbox(this._xCheckbox, atlas, xOffset)
+        this._offsetRadioCheckbox(this._xCheckbox, xOffset)
         const yOffset =
           selection.bounds.position.y - parseIntCheckbox(this._yCheckbox)
-        this._offsetRadioCheckbox(this._yCheckbox, atlas, yOffset)
+        this._offsetRadioCheckbox(this._yCheckbox, yOffset)
         if (marquee.selectionTriggered) {
           const index = this._pickerIndexOf(selection)
           if (index !== undefined) this._setEntityCheckboxIndex(atlas, index)
           this._setVariantCheckbox(atlas, selection.variant)
-          this._setStateCheckbox(atlas, selection.state())
+          this._setStateCheckbox(selection.state())
         }
         status |= UpdateStatus.UPDATED
       }
@@ -416,53 +412,42 @@ export class LevelEditorPanel extends Entity<
     this._entityPicker.setActiveChild(index)
     const child = this._entityPicker.getActiveChild()
     if (!child) return
-    this._setRadioCheckboxText(this._entityCheckbox, atlas, child.type)
-    this._offsetStateCheckbox(atlas, 0)
+    this._setRadioCheckboxText(this._entityCheckbox, child.type)
+    this._offsetStateCheckbox(0)
     this._offsetVariantCheckbox(atlas, 0)
   }
 
-  private _offsetStateCheckbox(atlas: Atlas, offset: number): void {
+  private _offsetStateCheckbox(offset: number): void {
     this._entityPicker.offsetActiveChildStateIndex(offset)
     const child = this._entityPicker.getActiveChild()
-    if (child)
-      this._setRadioCheckboxText(this._stateCheckbox, atlas, child.state())
+    if (child) this._setRadioCheckboxText(this._stateCheckbox, child.state())
   }
 
-  private _setStateCheckbox(atlas: Atlas, state: string): void {
+  private _setStateCheckbox(state: string): void {
     const child = this._entityPicker.getActiveChild()
     if (child) child.transition(state)
-    this._setRadioCheckboxText(this._stateCheckbox, atlas, state)
+    this._setRadioCheckboxText(this._stateCheckbox, state)
   }
 
   private _offsetVariantCheckbox(atlas: Atlas, offset: number): void {
     this._entityPicker.offsetActiveChildVariantIndex(atlas, offset)
     const child = this._entityPicker.getActiveChild()
-    if (child)
-      this._setRadioCheckboxText(this._variantCheckbox, atlas, child.variant)
+    if (child) this._setRadioCheckboxText(this._variantCheckbox, child.variant)
   }
 
   private _setVariantCheckbox(atlas: Atlas, variant: string): void {
     this._entityPicker.setActiveChildVariant(atlas, variant)
     const child = this._entityPicker.getActiveChild()
-    if (child)
-      this._setRadioCheckboxText(this._variantCheckbox, atlas, child.variant)
+    if (child) this._setRadioCheckboxText(this._variantCheckbox, child.variant)
   }
 
-  private _offsetRadioCheckbox(
-    checkbox: Checkbox,
-    atlas: Atlas,
-    offset: number
-  ): void {
+  private _offsetRadioCheckbox(checkbox: Checkbox, offset: number): void {
     const int = parseIntCheckbox(checkbox) + offset
-    this._setRadioCheckboxText(checkbox, atlas, int.toString())
+    this._setRadioCheckboxText(checkbox, int.toString())
   }
 
-  private _setRadioCheckboxText(
-    checkbox: Checkbox,
-    atlas: Atlas,
-    text: string
-  ): void {
-    checkbox.setText(text, Layer.UI_PICKER_OFFSET, atlas)
+  private _setRadioCheckboxText(checkbox: Checkbox, text: string): void {
+    checkbox.setText(text, Layer.UI_PICKER_OFFSET)
     this._radioGroup.invalidateBounds()
   }
 }
@@ -490,7 +475,7 @@ function toggleGrid(state: UpdateState): void {
   grid?.transition(toggle)
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_LEVEL_EDITOR_PANEL,
   variant: LevelEditorPanel.Variant.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,

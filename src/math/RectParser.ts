@@ -1,16 +1,10 @@
 import {Rect} from './Rect'
+import {RectConfig} from './RectConfig'
 import {WHParser} from './WHParser'
 import {XYParser} from './XYParser'
-import {WH} from './WH'
-import {XY} from './XY'
-
-export type RectArrayConfig = Maybe<readonly RectConfig[]>
-export type RectConfig = Maybe<
-  Partial<Readonly<{position?: Partial<XY>; size?: Partial<WH>}>>
->
 
 export namespace RectParser {
-  export function parseAll(config: RectArrayConfig): Rect[] {
+  export function parseAll(config: Maybe<readonly RectConfig[]>): Rect[] {
     return (config ?? []).map(parse)
   }
 

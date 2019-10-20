@@ -1,4 +1,5 @@
 import {NumberUtil} from './NumberUtil'
+import {ReadonlyRect} from './Rect'
 
 export interface FloatXY {
   x: number
@@ -95,6 +96,18 @@ export namespace FloatXY {
     const x = from.x * (1 - ratio) + to.x * ratio
     const y = from.y * (1 - ratio) + to.y * ratio
     return {x, y}
+  }
+
+  export function intersects(
+    point: Readonly<FloatXY>,
+    rect: ReadonlyRect
+  ): boolean {
+    return (
+      rect.position.x + rect.size.w > point.x &&
+      rect.position.x < point.x &&
+      rect.position.y + rect.size.h > point.y &&
+      rect.position.y < point.y
+    )
   }
 }
 

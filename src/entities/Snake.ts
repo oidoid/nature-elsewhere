@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Snake extends Entity<Snake.Variant, Snake.State> {
@@ -23,11 +22,8 @@ export class Snake extends Entity<Snake.Variant, Snake.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Snake.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.SNAKE}),
-            new Image(atlas, {
-              id: AtlasID.SNAKE_SHADOW,
-              layer: Layer.SHADOW
-            })
+            Image.new(atlas, {id: AtlasID.SNAKE}),
+            Image.new(atlas, {id: AtlasID.SNAKE_SHADOW, layer: Layer.SHADOW})
           ]
         })
       },
@@ -50,7 +46,7 @@ export namespace Snake {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.SNAKE,
   variant: Snake.Variant.NONE,
   state: Snake.State.IDLE,

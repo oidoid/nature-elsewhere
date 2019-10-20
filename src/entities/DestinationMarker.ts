@@ -8,7 +8,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
@@ -28,7 +27,7 @@ export class DestinationMarker extends Entity<
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [DestinationMarker.State.VISIBLE]: new ImageRect({
           origin: new XY(-2, -1),
-          images: [new Image(atlas, {id: AtlasID.UI_DESTINATION_MARKER})]
+          images: [Image.new(atlas, {id: AtlasID.UI_DESTINATION_MARKER})]
         })
       },
       ...props
@@ -68,7 +67,7 @@ export namespace DestinationMarker {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_DESTINATION_MARKER,
   variant: DestinationMarker.Variant.NONE,
   state: Entity.BaseState.HIDDEN,

@@ -7,7 +7,6 @@ import {EntityType} from '../entity/EntityType'
 import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Layer} from '../image/Layer'
 
 export class Grass extends Entity<Grass.Variant, Grass.State> {
@@ -21,7 +20,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Grass.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {
+            Image.new(atlas, {
               id:
                 AtlasID[
                   <keyof typeof AtlasID>(
@@ -29,7 +28,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
                   )
                 ]
             }),
-            new Image(atlas, {id: AtlasID.GRASS_SHADOW, layer: Layer.SHADOW})
+            Image.new(atlas, {id: AtlasID.GRASS_SHADOW, layer: Layer.SHADOW})
           ]
         })
       },
@@ -67,7 +66,7 @@ export namespace Grass {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.GRASS,
   variant: Grass.Variant.N00,
   state: Grass.State.VISIBLE,

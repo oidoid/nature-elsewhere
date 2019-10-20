@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 
 export class Pond extends Entity<Pond.Variant, Pond.State> {
@@ -21,11 +20,11 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Pond.State.VISIBLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.POND, layer: Layer.ABOVE_PLANE}),
-            new Image(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
-            new Image(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
-            new Image(atlas, {id: AtlasID.GRASS_09, x: 20, y: 0}),
-            new Image(atlas, {id: AtlasID.GRASS_10, x: 10, y: 8})
+            Image.new(atlas, {id: AtlasID.POND, layer: Layer.ABOVE_PLANE}),
+            Image.new(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
+            Image.new(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
+            Image.new(atlas, {id: AtlasID.GRASS_09, x: 20}),
+            Image.new(atlas, {id: AtlasID.GRASS_10, x: 10, y: 8})
           ]
         })
       },
@@ -48,7 +47,7 @@ export namespace Pond {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.POND,
   variant: Pond.Variant.NONE,
   state: Pond.State.VISIBLE,
@@ -57,5 +56,8 @@ const defaults = ObjectUtil.freeze({
     CollisionType.DEEP_WATER |
     CollisionType.IMPEDIMENT,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: [Rect.make(6, 3, 10, 7), Rect.make(5, 5, 12, 4)]
+  collisionBodies: Object.freeze([
+    Object.freeze(Rect.make(6, 3, 10, 7)),
+    Object.freeze(Rect.make(5, 5, 12, 4))
+  ])
 })

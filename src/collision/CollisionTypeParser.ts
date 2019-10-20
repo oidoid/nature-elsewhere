@@ -1,5 +1,4 @@
 import {CollisionType} from './CollisionType'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 export type CollisionTypeConfig = Maybe<CollisionType>
 
@@ -13,5 +12,6 @@ export namespace CollisionTypeParser {
 
 function assertType(type: CollisionType): void {
   for (let bit = 1; bit <= type; bit <<= 1)
-    if (bit & type) ObjectUtil.assertKeyOf(CollisionType, bit, 'CollisionType')
+    if (bit & type && !(bit in CollisionType))
+      throw new Error(`Unknown CollisionType "${bit}".`)
 }

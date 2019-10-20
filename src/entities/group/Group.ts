@@ -4,7 +4,6 @@ import {EntityType} from '../../entity/EntityType'
 import {FollowCam} from '../../updaters/FollowCam'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
-import {ObjectUtil} from '../../utils/ObjectUtil'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/UpdateStatus'
 import {WH} from '../../math/WH'
@@ -53,10 +52,10 @@ export namespace Group {
       Partial<FollowCam> {}
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.GROUP,
   variant: Group.Variant.NONE,
   state: Group.State.VISIBLE,
   positionRelativeToCam: undefined,
-  camMargin: new WH(0, 0)
+  camMargin: Object.freeze(new WH(0, 0))
 })

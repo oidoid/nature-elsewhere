@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
@@ -23,19 +22,18 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [Bunny.State.IDLE]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.BUNNY}),
-            new Image(atlas, {
+            Image.new(atlas, {id: AtlasID.BUNNY}),
+            Image.new(atlas, {
               id: AtlasID.BUNNY_SHADOW,
               layer: Layer.SHADOW,
-              x: 0,
               y: 1
             })
           ]
         }),
         [Bunny.State.DEAD]: new ImageRect({
           images: [
-            new Image(atlas, {id: AtlasID.BUNNY_DEAD}),
-            new Image(atlas, {id: AtlasID.BUNNY_BLOOD, layer: Layer.BLOOD})
+            Image.new(atlas, {id: AtlasID.BUNNY_DEAD}),
+            Image.new(atlas, {id: AtlasID.BUNNY_BLOOD, layer: Layer.BLOOD})
           ]
         })
       },
@@ -59,7 +57,7 @@ export namespace Bunny {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.BUNNY,
   variant: Bunny.Variant.NONE,
   state: Bunny.State.IDLE,

@@ -1,4 +1,3 @@
-import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../../atlas/AtlasID'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {CollisionType} from '../../collision/CollisionType'
@@ -9,7 +8,6 @@ import {Image} from '../../image/Image'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONValue} from '../../utils/JSON'
 import {Layer} from '../../image/Layer'
-import {ObjectUtil} from '../../utils/ObjectUtil'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
 
 export class LevelEditorPanelBackground extends Entity<
@@ -17,7 +15,6 @@ export class LevelEditorPanelBackground extends Entity<
   LevelEditorPanelBackground.State
 > {
   constructor(
-    atlas: Atlas,
     props?: Entity.SubProps<
       LevelEditorPanelBackground.Variant,
       LevelEditorPanelBackground.State
@@ -28,7 +25,7 @@ export class LevelEditorPanelBackground extends Entity<
       map: {
         [Entity.BaseState.HIDDEN]: new ImageRect(),
         [LevelEditorPanelBackground.State.VISIBLE]: new ImageRect({
-          images: newBackgroundImages(atlas)
+          images: newBackgroundImages()
         })
       },
       ...props
@@ -49,7 +46,7 @@ export namespace LevelEditorPanelBackground {
   }
 }
 
-function newBackgroundImages(atlas: Atlas): Image[] {
+function newBackgroundImages(): Image[] {
   return [
     {
       id: AtlasID.PALETTE_WHITE,
@@ -61,7 +58,6 @@ function newBackgroundImages(atlas: Atlas): Image[] {
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      x: 0,
       y: 21,
       w: 1,
       h: 11,
@@ -118,10 +114,10 @@ function newBackgroundImages(atlas: Atlas): Image[] {
       h: 1,
       layer: Layer.UI_MID
     }
-  ].map(props => new Image(atlas, props))
+  ].map(props => new Image(props))
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
   variant: LevelEditorPanelBackground.Variant.NONE,
   collisionType: CollisionType.TYPE_UI,

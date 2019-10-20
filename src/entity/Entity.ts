@@ -1,4 +1,3 @@
-import {Assert} from '../utils/Assert'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
@@ -13,7 +12,6 @@ import {Integer} from 'aseprite-atlas'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {Level} from '../levels/Level'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {ProcessChildren} from './ProcessChildren'
 import {ReadonlyRect, Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -25,11 +23,6 @@ export abstract class Entity<
   Variant extends string = string,
   State extends string = string
 > {
-  /** A globally unique identifier for quick equality checks. It should be used
-      for no other purpose. The value is transient and should not be preserved
-      on entity serialization. */
-  private readonly _spawnID: symbol = Symbol()
-
   private readonly _id: EntityID
 
   private readonly _type: EntityType
@@ -92,7 +85,7 @@ export abstract class Entity<
       )
     ]
     this._children = props.children ?? []
-    this.setImageID(props.imageID)
+    this.setConstituentID(props.constituentID)
 
     // Calculate the bounds of the entity's images, collision bodies, and all
     // children. Children themselves are not invalidated by this call.
@@ -112,21 +105,9 @@ export abstract class Entity<
     if (scale !== undefined) this.scaleTo(scale)
 
     // EntityParser doesn't have access to the array of variants.
-    Assert.assert(
-      this.variants().includes(props.variant),
-      `Unknown variant "${props.variant}".`
-    )
+    if (!this.variants().includes(props.variant))
+      throw new Error(`Unknown variant "${props.variant}".`)
   }
-
-  get spawnID(): symbol {
-    return this._spawnID
-  }
-
-  /** See Entity.spawnID. */
-  equal(entity: Readonly<Entity>): boolean {
-    return this.spawnID === entity.spawnID
-  }
-
   get id(): EntityID {
     return this._id
   }
@@ -139,9 +120,9 @@ export abstract class Entity<
     return this._variant
   }
 
-  variants(): readonly Variant[] {
+  variants(): Variant[] {
     if ('Variant' in this.constructor)
-      return <Variant[]>Object.values(this.constructor['Variant'])
+      return Object.values(this.constructor['Variant'])
     return [this.variant]
   }
 
@@ -224,7 +205,7 @@ export abstract class Entity<
   }
 
   replaceChild(child: Readonly<Entity>, entity: Entity): void {
-    const index = this.children.findIndex(entity => child.equal(entity))
+    const index = this.children.findIndex(entity => child === entity)
     if (index === -1) return
     this._children[index] = entity
     this.invalidateBounds()
@@ -263,7 +244,8 @@ export abstract class Entity<
   }
 
   scaleTo(to: Readonly<XY>): UpdateStatus {
-    Assert.assert(to.x && to.y, `Scale must be nonzero (x=${to.x}, y=${to.y}).`)
+    if (!to.x || !to.y)
+      throw new Error(`Scale must be nonzero (x=${to.x}, y=${to.y}).`)
     if (this.scale().equal(to)) return UpdateStatus.UNCHANGED
     const collisionScale = to.div(this.scale())
     const status = this._machine.scaleTo(to)
@@ -277,12 +259,12 @@ export abstract class Entity<
     return status
   }
 
-  imageID(): Maybe<AtlasID> {
-    return this._machine.getImageID()
+  constituentID(): Maybe<AtlasID> {
+    return this._machine.constituentID()
   }
 
-  setImageID(id?: AtlasID): UpdateStatus {
-    return this._machine.setImageID(id)
+  setConstituentID(id?: AtlasID): UpdateStatus {
+    return this._machine.setConstituentID(id)
   }
 
   images(): readonly Readonly<Image>[] {
@@ -320,7 +302,7 @@ export abstract class Entity<
   animate(state: UpdateState): Readonly<Image>[] {
     if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
     const visible = this._machine.intersects(state.level.cam.bounds)
-    for (const image of visible) image.animate(state.time, state.level.atlas)
+    for (const image of visible) image.animate(state.level.atlas, state.time)
     for (const child of this.children) visible.push(...child.animate(state))
     return visible
   }
@@ -415,10 +397,6 @@ export abstract class Entity<
 
   findByID(id: EntityID): Maybe<Entity> {
     return this.find(entity => entity.id === id)
-  }
-
-  findBySpawnID(spawnID: Symbol): Maybe<Entity> {
-    return this.find(entity => entity.spawnID === spawnID)
   }
 
   find(predicate: (entity: Entity) => boolean): Maybe<Entity> {
@@ -527,7 +505,7 @@ export namespace Entity {
     readonly sx?: Integer
     readonly sy?: Integer
     readonly scale?: Readonly<XY> // This isn't used as a reference.
-    readonly imageID?: AtlasID
+    readonly constituentID?: AtlasID
     readonly vx?: Integer
     readonly vy?: Integer
     readonly velocity?: XY
@@ -566,7 +544,7 @@ export namespace Entity {
     | 'type'
     | 'variant'
     | 'map'
-    | 'imageID'
+    | 'constituentID'
     | 'children'
     | 'x'
     | 'y'
@@ -574,17 +552,17 @@ export namespace Entity {
     | 'sy'
     | 'vx'
     | 'vy'
-  >> = ObjectUtil.freeze({
+  >> = Object.freeze({
     id: EntityID.ANONYMOUS,
     state: Entity.BaseState.HIDDEN,
-    position: new XY(0, 0),
-    velocity: new XY(0, 0),
+    position: Object.freeze(new XY(0, 0)),
+    velocity: Object.freeze(new XY(0, 0)),
     updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
     collisionType: CollisionType.INERT,
     collisionPredicate: CollisionPredicate.NEVER,
-    collisionBodies: [],
-    imageID: undefined,
-    scale: new XY(1, 1)
+    collisionBodies: Object.freeze([]),
+    constituentID: undefined,
+    scale: Object.freeze(new XY(1, 1))
   })
 
   export function removeAny(
@@ -601,17 +579,6 @@ export namespace Entity {
     return false
   }
 
-  export function findAnyBySpawnID(
-    entities: readonly Entity[],
-    spawnID: Symbol
-  ): Maybe<Entity> {
-    for (const entity of entities) {
-      const found = entity.findBySpawnID(spawnID)
-      if (found) return found
-    }
-    return
-  }
-
   export function findAnyByID(
     entities: readonly Entity[],
     id: EntityID
@@ -621,5 +588,14 @@ export namespace Entity {
       if (found) return found
     }
     return
+  }
+
+  export function member(
+    entities: readonly Readonly<Entity>[],
+    sought: Readonly<Entity>
+  ): boolean {
+    for (const member of entities)
+      if (member.find(entity => entity === sought)) return true
+    return false
   }
 }

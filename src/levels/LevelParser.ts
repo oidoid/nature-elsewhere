@@ -3,7 +3,6 @@ import {Backpacker} from '../entities/Backpacker'
 import {CameraConfig} from './CameraParser'
 import {CameraParser} from './CameraParser'
 import {Cursor} from '../entities/Cursor'
-import {EntityArrayConfig, EntityConfig} from '../entity/EntityParser'
 import {EntityParser} from '../entity/EntityParser'
 import {LevelAdvance} from './LevelAdvance'
 import {Level} from './Level'
@@ -12,6 +11,7 @@ import {LevelTypeConfig} from './LevelTypeParser'
 import {LevelTypeParser} from './LevelTypeParser'
 import {Plane} from '../entities/Plane'
 import {WH} from '../math/WH'
+import {EntityConfig} from '../entity/EntityConfig'
 
 export interface LevelConfig {
   readonly version: string
@@ -19,10 +19,10 @@ export interface LevelConfig {
   readonly size: {w: number; h: number}
   readonly minViewport: {w: number; h: number}
   readonly cam?: CameraConfig
-  readonly planes: EntityArrayConfig
+  readonly planes: Maybe<readonly EntityConfig[]>
   readonly cursor: EntityConfig
   readonly destination?: EntityConfig
-  readonly hud?: EntityArrayConfig
+  readonly hud?: Maybe<readonly EntityConfig[]>
   readonly player?: EntityConfig
   readonly sandbox?: EntityConfig
   /** Entities to populate the level. Any children of these entities will be
@@ -52,12 +52,12 @@ export namespace LevelParser {
       size: new WH(config.size.w, config.size.h),
       minViewport: new WH(config.minViewport.w, config.minViewport.h),
       cam: CameraParser.parse(config.cam),
-      planes: <Plane[]>EntityParser.parseAll(config.planes, atlas),
+      planes: <Plane[]>EntityParser.parseAll(atlas, config.planes),
       cursor: <Cursor>EntityParser.parse(config.cursor, atlas),
       ...(config.destination && {
         destination: EntityParser.parse(config.destination, atlas)
       }),
-      hud: EntityParser.parseAll(config.hud, atlas),
+      hud: EntityParser.parseAll(atlas, config.hud),
       ...(config.destination && {
         destination: EntityParser.parse(config.destination, atlas)
       }),
@@ -67,7 +67,7 @@ export namespace LevelParser {
       ...(config.sandbox && {
         sandbox: <LevelEditorSandbox>EntityParser.parse(config.sandbox, atlas)
       }),
-      parentEntities: EntityParser.parseAll(config.parentEntities, atlas),
+      parentEntities: EntityParser.parseAll(atlas, config.parentEntities),
       atlas
     }
   }

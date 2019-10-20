@@ -1,4 +1,4 @@
-import {EntityConfig} from '../../entity/EntityParser'
+import {EntityConfig} from '../../entity/EntityConfig'
 import {FollowCamConfig, FollowCamParser} from '../../updaters/FollowCamParser'
 import {Group} from './Group'
 

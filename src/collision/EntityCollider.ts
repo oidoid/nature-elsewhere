@@ -1,7 +1,7 @@
+import {ArrayUtil} from '../utils/ArrayUtil'
 import {CollisionPredicate} from './CollisionPredicate'
 import {Entity} from '../entity/Entity'
 import {Rect} from '../math/Rect'
-import {ArrayUtil} from '../utils/ArrayUtil'
 
 export namespace EntityCollider {
   export function collidesEntities(
@@ -28,7 +28,7 @@ export namespace EntityCollider {
       return collisions
 
     // The initiator and entity are identical.
-    if (initiator.equal(entity)) return collisions
+    if (initiator === entity) return collisions
 
     // Both of the entities have collision.
 
@@ -68,6 +68,6 @@ export namespace EntityCollider {
     // Each child must be tested against the entity in case it has children so
     // that all collisions are reported. However, each collision should only
     // be reported once.
-    return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs.equal(rhs)))
+    return collisions.filter(ArrayUtil.unique((lhs, rhs) => lhs === rhs))
   }
 }

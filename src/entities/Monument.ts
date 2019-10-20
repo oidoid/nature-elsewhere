@@ -9,7 +9,6 @@ import {Image} from '../image/Image'
 import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {Rect} from '../math/Rect'
 
 export class Monument extends Entity<Monument.Variant, Monument.State> {
@@ -48,35 +47,34 @@ export namespace Monument {
   }
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.MONUMENT,
   variant: Monument.Variant.SMALL,
   state: Monument.State.VISIBLE,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: {
-    [Monument.Variant.SMALL]: [
-      Rect.make(5, 28, 25, 3),
-      Rect.make(20, 23, 15, 6)
-    ],
-    [Monument.Variant.MEDIUM]: [
-      Rect.make(6, 35, 25, 11),
-      Rect.make(5, 46, 28, 6)
-    ]
-  },
+  collisionBodies: Object.freeze({
+    [Monument.Variant.SMALL]: Object.freeze([
+      Object.freeze(Rect.make(5, 28, 25, 3)),
+      Object.freeze(Rect.make(20, 23, 15, 6))
+    ]),
+    [Monument.Variant.MEDIUM]: Object.freeze([
+      Object.freeze(Rect.make(6, 35, 25, 11)),
+      Object.freeze(Rect.make(5, 46, 28, 6))
+    ])
+  }),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })
 
 function variantImages(atlas: Atlas, variant: Monument.Variant): Image[] {
   const small = variant === Monument.Variant.SMALL
   return [
-    new Image(atlas, {
+    Image.new(atlas, {
       id: small ? AtlasID.MONUMENT_SMALL : AtlasID.MONUMENT_MEDIUM
     }),
-    new Image(atlas, {
+    Image.new(atlas, {
       id: small
         ? AtlasID.MONUMENT_SMALL_SHADOW
         : AtlasID.MONUMENT_MEDIUM_SHADOW,
-      x: 0,
       y: 1,
       layer: Layer.SHADOW
     })

@@ -4,7 +4,7 @@ type Milliseconds = number
 /** An integer. */
 type Int = number
 /** An integer in units of a thousandth of a pixel. */
-type DecamillipixelInt = Int
+type DecamillipixelInteger = Int
 type ValueOf<T> = T[keyof T]
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 type NonOptional<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>

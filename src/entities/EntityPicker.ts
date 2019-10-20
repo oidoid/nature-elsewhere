@@ -8,7 +8,6 @@ import {ImageRect} from '../imageStateMachine/ImageRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../image/Layer'
 import {NumberUtil} from '../math/NumberUtil'
-import {ObjectUtil} from '../utils/ObjectUtil'
 import {ProcessChildren} from '../entity/ProcessChildren'
 import {Rect, ReadonlyRect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -171,7 +170,7 @@ function makeChildren(atlas: Atlas): Entity[] {
   return children
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_ENTITY_PICKER,
   variant: EntityPicker.Variant.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
@@ -179,11 +178,11 @@ const defaults = ObjectUtil.freeze({
   collisionType: CollisionType.TYPE_UI
 })
 
-const typeBlacklist: readonly string[] = ObjectUtil.freeze([
+const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
   EntityType.LEVEL_EDITOR_SANDBOX,
   EntityType.PLANE,
-  ...ObjectUtil.keys(EntityType)
-    .filter(type => type.startsWith(UI_KEY_PREFIX))
-    .map(key => EntityType[key])
+  ...Object.keys(EntityType)
+    .filter(typeKey => typeKey.startsWith(UI_KEY_PREFIX))
+    .map(typeKey => EntityType[<keyof typeof EntityType>typeKey])
 ])

@@ -10,28 +10,20 @@
       "map": {
         "visible": {
           "images": [
-            {
-              "id": "wave",
-              "bounds": {"position": {"y": 24}, "size": {"w": 32767}},
-              "wrapVelocity": {"x": 32}
-            },
-            {
-              "id": "lattice",
-              "bounds": {"position": {"x": 24}, "size": {"h": 32767}},
-              "wrapVelocity": {"y": 200}
-            }
+            {"id": "wave", "y": 24, "w": 32767, "wvx": 32},
+            {"id": "lattice", "x": 24, "h": 32767, "wvy": 200}
           ]
         }
       }
     }
   ],
-  "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
+  "cursor": {"type": "uiCursor", "sx": 2, "sy": 2},
   "parentEntities": [
     {
       "type": "group",
       "positionRelativeToCam": "northEast",
       "map": {
-        "visible": {"images": [{"id": "moon", "scale": {"x": 3, "y": 3}}]}
+        "visible": {"images": [{"id": "moon", "sx": 3, "sy": 3}]}
       },
       "updatePredicate": "always"
     },
@@ -41,12 +33,7 @@
       "camMargin": {"h": 40},
       "map": {
         "visible": {
-          "images": [
-            {
-              "id": "palette-lightGreen",
-              "bounds": {"position": {"y": 44}, "size": {"w": 136, "h": 2}}
-            }
-          ]
+          "images": [{"id": "palette-lightGreen", "y": 44, "w": 136, "h": 2}]
         }
       },
       "updatePredicate": "always",
@@ -57,11 +44,11 @@
           "//": "[strings]",
           "text": "nature\nelsewhere",
           "textScale": {"x": 4, "y": 4},
-          "imageID": "palette-black"
+          "constituentID": "palette-black"
         },
         {
           "type": "group",
-          "position": {"y": 54},
+          "y": 54,
           "updatePredicate": "always",
           "collisionPredicate": 8,
           "children": [

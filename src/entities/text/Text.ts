@@ -1,15 +1,13 @@
-import {AlphaComposition} from '../../image/AlphaComposition'
-import {Atlas} from 'aseprite-atlas'
 import {AtlasID, MEM_FONT_PREFIX} from '../../atlas/AtlasID'
 import {Entity} from '../../entity/Entity'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {Image} from '../../image/Image'
+import {ImageComposition} from '../../image/ImageComposition'
 import {ImageRect} from '../../imageStateMachine/ImageRect'
 import {JSONObject} from '../../utils/JSON'
 import {Layer} from '../../image/Layer'
 import {Limits} from '../../math/Limits'
-import {ObjectUtil} from '../../utils/ObjectUtil'
 import {Rect} from '../../math/Rect'
 import {TextLayout} from '../../text/TextLayout'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
@@ -22,7 +20,7 @@ export class Text extends Entity<Text.Variant, Text.State> {
   private readonly _textScale: XY
   private readonly _textMaxSize: WH
 
-  constructor(atlas: Atlas, props?: Text.Props<Text.Variant, Text.State>) {
+  constructor(props?: Text.Props<Text.Variant, Text.State>) {
     super({
       ...defaults,
       map: {
@@ -38,17 +36,16 @@ export class Text extends Entity<Text.Variant, Text.State> {
     this._textMaxSize = props?.textMaxSize ?? defaults.textMaxSize.copy()
 
     const textImages = toImages(
-      atlas,
       this._text,
       this._textScale,
       {
         position: this.imageBounds().position.copy(),
         size: this._textMaxSize
       },
-      this.imageID()
+      this.constituentID()
     )
     if (props?.textLayer)
-      for (const image of textImages) image.elevate(this._textLayer)
+      for (const image of textImages) image.layer = this._textLayer
 
     this.addImages(...textImages)
   }
@@ -104,11 +101,10 @@ export namespace Text {
 
 /** @arg y The vertical scroll offset in pixels. */
 function toImages(
-  atlas: Atlas,
   string: string,
   scale: XY,
   bounds: Rect,
-  imageID?: AtlasID,
+  constituentID?: AtlasID,
   y: number = 0
 ): readonly Image[] {
   const images = []
@@ -131,8 +127,7 @@ function toImages(
       // character like an exclamation mark.)
       char.size,
       scale,
-      imageID,
-      atlas
+      constituentID
     )
     images.push(image)
   }
@@ -144,29 +139,20 @@ function newCharacterImage(
   position: XY,
   {w, h}: WH,
   scale: XY,
-  imageID: Maybe<AtlasID>,
-  atlas: Atlas
+  constituentID: Maybe<AtlasID>
 ): Image {
   const id = <AtlasID>(MEM_FONT_PREFIX + char.toString().padStart(3, '0'))
-  const alphaComposition = AlphaComposition.SOURCE_MASK
-  return new Image(atlas, {
-    id,
-    position,
-    w,
-    h,
-    scale,
-    imageID,
-    alphaComposition
-  })
+  const composition = ImageComposition.SOURCE_MASK
+  return new Image({id, constituentID, composition, position, w, h, scale})
 }
 
-const defaults = ObjectUtil.freeze({
+const defaults = Object.freeze({
   type: EntityType.UI_TEXT,
   variant: Text.Variant.NONE,
   state: Text.State.VISIBLE,
   updatePredicate: UpdatePredicate.ALWAYS,
   text: '',
   textLayer: Layer.UI_LO,
-  textScale: new XY(1, 1),
-  textMaxSize: new WH(Limits.maxShort, Limits.maxShort)
+  textScale: Object.freeze(new XY(1, 1)),
+  textMaxSize: Object.freeze(new WH(Limits.maxShort, Limits.maxShort))
 })

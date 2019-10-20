@@ -1,10 +1,9 @@
 import {Atlas, Parser} from 'aseprite-atlas'
 import {AtlasID} from './AtlasID'
 import * as atlasJSON from './atlas.json'
-import {ObjectUtil} from '../utils/ObjectUtil'
 
 const atlas: Atlas = Parser.parse(atlasJSON)
-const ids: readonly AtlasID[] = Object.freeze(ObjectUtil.values(AtlasID))
+const ids: readonly AtlasID[] = Object.freeze(Object.values(AtlasID))
 
 // Every AtlasID exists in the Atlas.
 test.each(ids)('%# AtlasID %p has an Animation', id =>
