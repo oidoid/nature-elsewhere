@@ -16,16 +16,20 @@ import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
 import {DestinationMarker} from './DestinationMarker'
+import {Atlas} from 'aseprite-atlas'
 
 export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   constructor(
+    atlas: Atlas,
     props?: Entity.SubProps<Backpacker.Variant.NONE, Backpacker.State>,
     // This reference is passed to all sprites so that any changes affect all
     // character sprites for all states. This orchestration could probably be
     // handled better, possibly with some new state or some way of generating
     // states on the fly, but it's unclear how to change the current system
     // without invalidating a lot of the encapsulation it provides.
-    private readonly _size: WH = new WH(9, 16)
+    private readonly _size: WH = WH.fromProps(
+      atlas.animations[AtlasID.BACKPACKER_IDLE_DOWN].size
+    )
   ) {
     super({
       ...defaults,

@@ -4,6 +4,10 @@ import {NumberUtil} from './NumberUtil'
 
 /** Integral wrapper for nonnegative width and height (size / area). See XY. */
 export class WH {
+  static fromProps({w, h}: Readonly<{w: number; h: number}>) {
+    return new WH(w, h)
+  }
+
   static trunc(w: number, h: number): WH {
     return new WH(Math.trunc(w), Math.trunc(h))
   }

@@ -52,7 +52,7 @@ export namespace EntityFactory {
       case EntityType.APPLE_TREE:
         return new AppleTree(atlas, props)
       case EntityType.BACKPACKER:
-        return new Backpacker(props)
+        return new Backpacker(atlas, props)
       case EntityType.BEE:
         return new Bee(atlas, props)
       case EntityType.BUNNY:
