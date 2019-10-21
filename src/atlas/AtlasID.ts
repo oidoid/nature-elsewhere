@@ -18,6 +18,7 @@ export enum AtlasID {
   BACKPACKER_WALK_HORIZONTAL_SHADOW = 'backpacker-walkHorizontalShadow',
   BACKPACKER_WALK_UP = 'backpacker-walkUp',
   BACKPACKER_WALK_VERTICAL_SHADOW = 'backpacker-walkVerticalShadow',
+  BACKPACKER_MELEE_RIGHT = 'backpacker-meleeRight',
   BEE = 'bee',
   BEE_BLOOD = 'bee-blood',
   BEE_DEAD = 'bee-dead',

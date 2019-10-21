@@ -72,6 +72,11 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
           AtlasID.BACKPACKER_WALK_DOWN,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
+        ),
+        [Backpacker.State.MELEE_RIGHT]: newImageRect(
+          AtlasID.BACKPACKER_MELEE_RIGHT,
+          AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW, // avoid anim
+          _size
         )
       },
       ...props
@@ -184,7 +189,8 @@ export namespace Backpacker {
     WALK_UP = 'walkUp',
     WALK_LEFT = 'walkLeft',
     WALK_RIGHT = 'walkRight',
-    WALK_DOWN = 'walkDown'
+    WALK_DOWN = 'walkDown',
+    MELEE_RIGHT = 'meleeRight'
   }
 }
 
@@ -217,6 +223,7 @@ const idleStateFor: Readonly<Record<
   [Entity.BaseState.HIDDEN]: Entity.BaseState.HIDDEN,
   [Backpacker.State.IDLE_UP]: Backpacker.State.IDLE_UP,
   [Backpacker.State.IDLE_LEFT]: Backpacker.State.IDLE_LEFT,
+  [Backpacker.State.MELEE_RIGHT]: Backpacker.State.IDLE_RIGHT,
   [Backpacker.State.IDLE_RIGHT]: Backpacker.State.IDLE_RIGHT,
   [Backpacker.State.IDLE_DOWN]: Backpacker.State.IDLE_DOWN,
   [Backpacker.State.WALK_UP]: Backpacker.State.IDLE_UP,
