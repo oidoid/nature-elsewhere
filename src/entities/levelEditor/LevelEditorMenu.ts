@@ -39,7 +39,6 @@ export class LevelEditorMenu extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [LevelEditorMenu.State.VISIBLE]: new SpriteRect()
       },
       ...props

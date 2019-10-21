@@ -24,7 +24,6 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Toolbar.State.VISIBLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.FLAG, layer: Layer.UI_HI}),

@@ -16,7 +16,6 @@ export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Cattails.State.VISIBLE]: new SpriteRect({
           sprites: [Sprite.withAtlasSize(atlas, {id: AtlasID.CATTAILS})]
         })

@@ -23,7 +23,6 @@ export class Button extends Entity<Button.Variant, Button.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Button.State.UNCLICKED]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {

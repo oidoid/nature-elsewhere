@@ -14,7 +14,7 @@ export class Plane extends Entity<Plane.Variant, Plane.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Plane.State.HIDDEN]: new SpriteRect(),
         [Plane.State.VISIBLE]: new SpriteRect({
           sprites: [
             new Sprite({
@@ -55,6 +55,7 @@ export namespace Plane {
   }
 
   export enum State {
+    HIDDEN = 'hidden',
     VISIBLE = 'visible'
   }
 }

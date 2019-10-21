@@ -16,7 +16,6 @@ export class Pig extends Entity<Pig.Variant, Pig.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Pig.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.PIG}),

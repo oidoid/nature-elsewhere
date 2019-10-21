@@ -45,7 +45,7 @@ export abstract class Entity<
 
   private readonly _velocityFraction: FloatXY
 
-  private readonly _machine: SpriteStateMachine<State | Entity.BaseState>
+  private readonly _machine: SpriteStateMachine<State>
 
   private readonly _updatePredicate: UpdatePredicate
   private _collisionType: CollisionType
@@ -318,15 +318,15 @@ export abstract class Entity<
     )
   }
 
-  state(): State | Entity.BaseState {
+  state(): State {
     return this._machine.state
   }
 
-  states(): (State | Entity.BaseState)[] {
+  states(): State[] {
     return this._machine.states()
   }
 
-  transition(state: State | Entity.BaseState): UpdateStatus {
+  transition(state: State): UpdateStatus {
     const status = this._machine.transition(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
@@ -484,10 +484,6 @@ export abstract class Entity<
 }
 
 export namespace Entity {
-  export enum BaseState {
-    HIDDEN = 'hidden'
-  }
-
   export interface Props<
     Variant extends string = string,
     State extends string = string
@@ -508,8 +504,8 @@ export namespace Entity {
     readonly vy?: Integer
     readonly velocity?: XY
     /** Defaults to {}. */
-    readonly state: State | BaseState
-    readonly map: Record<State | BaseState, SpriteRect>
+    readonly state: State
+    readonly map: Record<State, SpriteRect>
     /** Defaults to BehaviorPredicate.NEVER. */
     readonly updatePredicate?: UpdatePredicate
     /** Defaults to CollisionPredicate.NEVER. */
@@ -539,7 +535,6 @@ export namespace Entity {
 
   export const defaults = Object.freeze({
     id: EntityID.ANONYMOUS,
-    state: Entity.BaseState.HIDDEN,
     position: Object.freeze(new XY(0, 0)),
     velocity: Object.freeze(new XY(0, 0)),
     updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,

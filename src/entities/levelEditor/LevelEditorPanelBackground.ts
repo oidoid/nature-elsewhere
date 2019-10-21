@@ -23,7 +23,6 @@ export class LevelEditorPanelBackground extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [LevelEditorPanelBackground.State.VISIBLE]: new SpriteRect({
           sprites: newBackgroundSprites()
         })

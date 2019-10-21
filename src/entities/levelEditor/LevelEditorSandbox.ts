@@ -22,7 +22,6 @@ export class LevelEditorSandbox extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [LevelEditorSandbox.State.VISIBLE]: new SpriteRect()
       },
       ...props

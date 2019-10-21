@@ -20,7 +20,6 @@ export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Mountain.State.VISIBLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.MOUNTAIN}),

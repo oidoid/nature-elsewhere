@@ -15,7 +15,6 @@ export class Group extends Entity<Group.Variant, Group.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Group.State.VISIBLE]: new SpriteRect()
       },
       ...props

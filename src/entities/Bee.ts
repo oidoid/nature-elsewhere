@@ -20,7 +20,6 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
       collisionType: defaults.collisionType[props?.state ?? defaults.state],
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Bee.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.BEE}),
@@ -44,7 +43,7 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
     })
   }
 
-  transition(state: Bee.State | Entity.BaseState): UpdateStatus {
+  transition(state: Bee.State): UpdateStatus {
     const status = super.transition(state)
     this.setCollisionType(defaults.collisionType[state])
     return status
@@ -75,7 +74,6 @@ const defaults = Object.freeze({
   state: Bee.State.IDLE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
   collisionType: {
-    [Entity.BaseState.HIDDEN]: CollisionType.INERT,
     [Bee.State.IDLE]: CollisionType.TYPE_CHARACTER | CollisionType.HARMFUL,
     [Bee.State.DEAD]: CollisionType.TYPE_CHARACTER | CollisionType.TYPE_ITEM
   },

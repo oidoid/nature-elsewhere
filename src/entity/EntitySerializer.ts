@@ -9,7 +9,7 @@ export namespace EntitySerializer {
   >(
     entity: Entity<Variant, State>,
     subDefaults: Omit<
-      Readonly<Entity.SubProps<Variant, State | Entity.BaseState>>,
+      Readonly<Entity.SubProps<Variant, State>>,
       'children' | 'map' | 'collisionBodies'
     >
   ): JSONObject {

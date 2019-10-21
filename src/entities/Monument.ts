@@ -22,7 +22,6 @@ export class Monument extends Entity<Monument.Variant, Monument.State> {
         props?.variant ?? defaults.variant
       ].map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Monument.State.VISIBLE]: new SpriteRect({
           sprites: variantSprites(atlas, props?.variant ?? defaults.variant)
         })

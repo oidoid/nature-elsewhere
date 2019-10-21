@@ -21,7 +21,6 @@ export class Tree extends Entity<Tree.Variant, Tree.State> {
           : AtlasID.TREE_LARGE
       ].cels[0].slices.map(({x, y, w, h}) => Rect.make(x, y, w, h)),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Tree.State.VISIBLE]: new SpriteRect({
           sprites: variantSprites(
             atlas,

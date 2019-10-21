@@ -33,7 +33,6 @@ export class EntityPicker extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [EntityPicker.State.VISIBLE]: new SpriteRect()
       },
       children: makeChildren(atlas),
@@ -73,7 +72,7 @@ export class EntityPicker extends Entity<
   offsetActiveChildStateIndex(offset: number): void {
     const child = this.getActiveChild()
     if (!child) return
-    const states = getChildStates(child)
+    const states = child.states()
     const index = NumberUtil.wrap(
       states.indexOf(child.state()) + offset,
       0,
@@ -151,10 +150,6 @@ export namespace EntityPicker {
   export enum State {
     VISIBLE = 'visible'
   }
-}
-
-function getChildStates(child: Entity): readonly string[] {
-  return child.states().filter(state => state !== Entity.BaseState.HIDDEN)
 }
 
 function makeChildren(atlas: Atlas): Entity[] {

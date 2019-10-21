@@ -24,7 +24,6 @@ export class Text extends Entity<Text.Variant, Text.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Text.State.VISIBLE]: new SpriteRect()
       },
       ...props

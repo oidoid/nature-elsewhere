@@ -21,7 +21,6 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Cloud.State.NONE]: new SpriteRect({
           sprites: variantSprites(atlas, props?.variant ?? Cloud.Variant.MEDIUM)
         }),

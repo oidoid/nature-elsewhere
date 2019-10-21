@@ -20,7 +20,6 @@ export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Conifer.State.VISIBLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.CONIFER}),

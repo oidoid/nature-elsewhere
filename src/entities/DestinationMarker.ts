@@ -24,7 +24,7 @@ export class DestinationMarker extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [DestinationMarker.State.HIDDEN]: new SpriteRect(),
         [DestinationMarker.State.VISIBLE]: new SpriteRect({
           origin: new XY(-2, -1),
           sprites: [
@@ -65,6 +65,7 @@ export namespace DestinationMarker {
   }
 
   export enum State {
+    HIDDEN = 'hidden',
     VISIBLE = 'visible'
   }
 }
@@ -72,7 +73,7 @@ export namespace DestinationMarker {
 const defaults = Object.freeze({
   type: EntityType.UI_DESTINATION_MARKER,
   variant: DestinationMarker.Variant.NONE,
-  state: Entity.BaseState.HIDDEN,
+  state: DestinationMarker.State.HIDDEN,
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionType: CollisionType.TYPE_UI
 })

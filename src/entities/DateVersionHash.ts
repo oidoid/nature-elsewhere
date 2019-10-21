@@ -17,7 +17,6 @@ export class DateVersionHash extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [DateVersionHash.State.VISIBLE]: new SpriteRect()
       },
       children: [

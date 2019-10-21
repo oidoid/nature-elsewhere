@@ -15,7 +15,6 @@ export class Flag extends Entity<Flag.Variant, Flag.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Flag.State.VISIBLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.FLAG}),

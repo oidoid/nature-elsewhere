@@ -19,7 +19,6 @@ export class Snake extends Entity<Snake.Variant, Snake.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Snake.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.SNAKE}),

@@ -17,7 +17,6 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Grass.State.VISIBLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {

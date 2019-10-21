@@ -15,7 +15,6 @@ export class Fly extends Entity<Fly.Variant, Fly.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Fly.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.PALETTE_GREY}),

@@ -27,7 +27,6 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Checkbox.State.UNCHECKED]: new SpriteRect(),
         [Checkbox.State.CHECKED]: new SpriteRect()
       },

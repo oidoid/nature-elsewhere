@@ -21,7 +21,6 @@ export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [AppleTree.State.VISIBLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.APPLE_TREE}),

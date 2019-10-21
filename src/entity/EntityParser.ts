@@ -21,7 +21,7 @@ import {XYParser} from '../math/XYParser'
 export type EntityIDConfig = Maybe<EntityID | string>
 export type EntityTypeConfig = EntityType | string
 export type VariantConfig = Maybe<string>
-export type EntityStateConfig = Maybe<Entity.BaseState | string>
+export type EntityStateConfig = string
 
 export namespace EntityParser {
   export function parseAll(
@@ -35,18 +35,6 @@ export namespace EntityParser {
     let props = parseProps(atlas, config, EntityTypeParser.parse(config.type))
     props = parseTypeProps(config, props)
     return EntityFactory.produce(atlas, props)
-  }
-
-  export function parseVariant(config: VariantConfig): Maybe<string> {
-    // Variant is validated in the Entity constructor.
-    return config
-  }
-
-  export function parseState(
-    config: EntityStateConfig
-  ): Entity.BaseState | string {
-    // State is validated in the Entity constructor.
-    return config || Entity.BaseState.HIDDEN
   }
 }
 

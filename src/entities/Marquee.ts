@@ -29,7 +29,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Marquee.State.HIDDEN]: new SpriteRect(),
         [Marquee.State.VISIBLE]: new SpriteRect({
           sprites: [
             new Sprite({
@@ -72,7 +72,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     // If the state is now visible, transition prior to trying to manipulate the
     // marquee sprites as they only exist in visible.
     status |= this.transition(
-      selection ? Marquee.State.VISIBLE : Entity.BaseState.HIDDEN
+      selection ? Marquee.State.VISIBLE : Marquee.State.HIDDEN
     )
 
     if (selection) {
@@ -200,6 +200,7 @@ export namespace Marquee {
   }
 
   export enum State {
+    HIDDEN = 'hidden',
     VISIBLE = 'visible'
   }
 }
@@ -214,7 +215,7 @@ enum Sprites {
 const defaults = Object.freeze({
   type: EntityType.UI_MARQUEE,
   variant: Marquee.Variant.NONE,
-  state: Entity.BaseState.HIDDEN,
+  state: Marquee.State.HIDDEN,
   updatePredicate: UpdatePredicate.ALWAYS
 })
 

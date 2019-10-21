@@ -25,7 +25,6 @@ export class RadioCheckboxGroup extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [RadioCheckboxGroup.State.VISIBLE]: new SpriteRect()
       },
       ...props

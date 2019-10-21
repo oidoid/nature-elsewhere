@@ -27,7 +27,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
           ? [Rect.make(-1, -1, 3, 3)]
           : [Rect.make(0, 0, 9, 7)],
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Cursor.State.HIDDEN]: new SpriteRect(),
         [Cursor.State.VISIBLE]: variantRect(atlas, props)
       },
       ...props
@@ -36,7 +36,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
-    let nextState: Entity.BaseState | Cursor.State = this.state()
+    let nextState = this.state()
     const {point, pick} = state.inputs
     if (pick && pick.active) {
       // it would be good to throttle this so precise picking is easier
@@ -73,6 +73,7 @@ export namespace Cursor {
   }
 
   export enum State {
+    HIDDEN = 'hidden',
     VISIBLE = 'visible'
   }
 }
@@ -80,7 +81,7 @@ export namespace Cursor {
 const defaults = Object.freeze({
   type: EntityType.UI_CURSOR,
   variant: Cursor.Variant.DOT,
-  state: Entity.BaseState.HIDDEN,
+  state: Cursor.State.HIDDEN,
   updatePredicate: UpdatePredicate.ALWAYS,
   // Use bodies so that collision remains the same regardless of whether hidden
   // or not.

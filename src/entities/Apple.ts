@@ -17,7 +17,6 @@ export class Apple extends Entity<Apple.Variant, Apple.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Apple.State.VISIBLE]: new SpriteRect({
           sprites: [Sprite.withAtlasSize(atlas, {id: AtlasID.PALETTE_RED})]
         })

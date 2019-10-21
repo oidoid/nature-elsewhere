@@ -18,7 +18,6 @@ export class Frog extends Entity<Frog.Variant, Frog.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Frog.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.FROG_IDLE}),

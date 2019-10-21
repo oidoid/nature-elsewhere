@@ -17,7 +17,6 @@ export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Subshrub.State.VISIBLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.SUBSHRUB}),

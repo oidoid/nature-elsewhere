@@ -14,7 +14,6 @@ export class Path extends Entity<Path.Variant, Path.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Path.State.VISIBLE]: new SpriteRect({
           sprites: variantSprites(
             atlas,

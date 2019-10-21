@@ -15,6 +15,7 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {DestinationMarker} from './DestinationMarker'
 
 export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   constructor(
@@ -30,7 +31,6 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Backpacker.State.IDLE_UP]: newSpriteRect(
           AtlasID.BACKPACKER_IDLE_UP,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
@@ -158,7 +158,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   private _computeObjective(state: UpdateState): XY {
     const {destination} = state.level
 
-    if (!destination || destination.state() === Entity.BaseState.HIDDEN)
+    if (!destination || destination.state() === DestinationMarker.State.HIDDEN)
       return this.bounds.position.copy()
 
     const {x, y} = destination.bounds.position.add(this.origin())
@@ -209,7 +209,7 @@ function newSpriteRect(
 }
 
 function hideDestinationMarker(state: UpdateState): void {
-  state.level.destination?.transition(Entity.BaseState.HIDDEN)
+  state.level.destination?.transition(DestinationMarker.State.HIDDEN)
 }
 
 /** A mapping of the current state to the appropriate idle state. For example,
@@ -217,10 +217,9 @@ function hideDestinationMarker(state: UpdateState): void {
     mapped. If the backpacker is walking down then stops, the idle down
     animation is mapped. */
 const idleStateFor: Readonly<Record<
-  Backpacker.State | Entity.BaseState,
-  Backpacker.State | Entity.BaseState
+  Backpacker.State,
+  Backpacker.State
 >> = Object.freeze({
-  [Entity.BaseState.HIDDEN]: Entity.BaseState.HIDDEN,
   [Backpacker.State.IDLE_UP]: Backpacker.State.IDLE_UP,
   [Backpacker.State.IDLE_LEFT]: Backpacker.State.IDLE_LEFT,
   [Backpacker.State.MELEE_RIGHT]: Backpacker.State.IDLE_RIGHT,

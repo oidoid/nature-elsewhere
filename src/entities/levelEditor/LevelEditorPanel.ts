@@ -59,7 +59,6 @@ export class LevelEditorPanel extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [LevelEditorPanel.State.VISIBLE]: new SpriteRect()
       },
       ...props
@@ -141,7 +140,6 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new SpriteRect(),
             [Group.State.VISIBLE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
@@ -160,7 +158,6 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new SpriteRect(),
             [Group.State.VISIBLE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
@@ -179,7 +176,6 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new SpriteRect(),
             [Group.State.VISIBLE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
@@ -198,7 +194,6 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new SpriteRect(),
             [Group.State.VISIBLE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
@@ -217,7 +212,6 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new SpriteRect(),
             [Group.State.VISIBLE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
@@ -236,7 +230,6 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new SpriteRect(),
             [Group.State.VISIBLE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
@@ -469,9 +462,9 @@ function parseIntCheckbox(checkbox: Checkbox): number {
 function toggleGrid(state: UpdateState): void {
   const grid = Entity.findAnyByID(state.level.planes, EntityID.UI_GRID)
   const toggle =
-    grid?.state() === Entity.BaseState.HIDDEN
+    grid?.state() === Plane.State.HIDDEN
       ? Plane.State.VISIBLE
-      : Entity.BaseState.HIDDEN
+      : Plane.State.HIDDEN
   grid?.transition(toggle)
 }
 

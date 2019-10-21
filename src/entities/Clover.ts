@@ -17,7 +17,6 @@ export class Clover extends Entity<Clover.Variant, Clover.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Clover.State.VISIBLE]: new SpriteRect({
           sprites: variantSprites(atlas, props?.variant ?? Clover.Variant.SMALL)
         })

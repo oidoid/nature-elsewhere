@@ -19,7 +19,6 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Bunny.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.BUNNY}),
