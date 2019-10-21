@@ -16,7 +16,7 @@ export interface Game {
   readonly win: Window
   /** The total execution time in milliseconds excluding pauses. */
   age: Milliseconds
-  /** The outstanding time accrual to execute in milliseconds. */
+  /** The outstanding time elapsed accrual to execute in milliseconds. */
   time: Milliseconds
   /** The exact duration in milliseconds to apply each update. Any number of
       updates may occur per animation frame. */

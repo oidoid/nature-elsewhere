@@ -25,17 +25,20 @@ export namespace RendererStateMachine {
   }
 
   export function start(machine: RendererStateMachine): void {
-    register(machine, true), resume(machine)
+    register(machine, true)
+    resume(machine)
   }
 
   export function stop(machine: RendererStateMachine): void {
-    pause(machine), register(machine, false)
+    pause(machine)
+    register(machine, false)
   }
 }
 
 function pause(machine: RendererStateMachine): void {
   if (machine.frameID) machine.window.cancelAnimationFrame(machine.frameID)
-  ;(machine.frameID = undefined), machine.onPause()
+  machine.frameID = undefined
+  machine.onPause()
 }
 
 function resume(machine: RendererStateMachine): void {
@@ -45,16 +48,17 @@ function resume(machine: RendererStateMachine): void {
 }
 
 function onEvent(machine: RendererStateMachine, event: Event): void {
-  if (event.type === 'webglcontextrestored')
-    (machine.renderer = machine.newRenderer()), resume(machine)
-  else if (event.type === 'focus') resume(machine)
+  if (event.type === 'webglcontextrestored') {
+    machine.renderer = machine.newRenderer()
+    resume(machine)
+  } else if (event.type === 'focus') resume(machine)
   else pause(machine)
   event.preventDefault()
 }
 
 function loop(machine: RendererStateMachine, then?: number): void {
   machine.frameID = machine.window.requestAnimationFrame(now => {
-    // Duration can be great when frame is held for debugging. Limit it to one
+    // Duration can be great when a frame is held for debugging. Limit it to one
     // second.
     const time = Math.min(now - (then ?? now), 1000)
     machine.onFrame(time)
@@ -64,8 +68,8 @@ function loop(machine: RendererStateMachine, then?: number): void {
 
 function register(machine: RendererStateMachine, register: boolean): void {
   const fn = register ? 'addEventListener' : 'removeEventListener'
-  machine.canvas[fn]('webglcontextrestored', machine.onEvent)
-  machine.canvas[fn]('webglcontextlost', machine.onEvent)
-  for (const event of ['focus', 'blur'])
-    machine.window[fn](event, machine.onEvent)
+  for (const type of ['webglcontextrestored', 'webglcontextlost'])
+    machine.canvas[fn](type, machine.onEvent)
+  for (const type of ['focus', 'blur'])
+    machine.window[fn](type, machine.onEvent)
 }
