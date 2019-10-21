@@ -1,7 +1,7 @@
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {Entity} from '../../entity/Entity'
 import {EntityType} from '../../entity/EntityType'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {JSONArray} from '../../utils/JSON'
 import {ProcessChildren} from '../../entity/ProcessChildren'
 import {ReadonlyRect, Rect} from '../../math/Rect'
@@ -22,8 +22,8 @@ export class LevelEditorSandbox extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [LevelEditorSandbox.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [LevelEditorSandbox.State.VISIBLE]: new SpriteRect()
       },
       ...props
     })

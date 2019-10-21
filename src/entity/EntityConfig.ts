@@ -1,6 +1,6 @@
 import {CollisionPredicateConfig} from '../collision/CollisionPredicateParser'
 import {CollisionTypeConfig} from '../collision/CollisionTypeParser'
-import {ImageStateMapConfig} from '../imageStateMachine/ImageStateMachineParser'
+import {SpriteStateMapConfig} from '../spriteStateMachine/SpriteStateMachineParser'
 import {Integer} from 'aseprite-atlas'
 import {RectConfig} from '../math/RectConfig'
 import {UpdatePredicateConfig} from '../updaters/UpdatePredicateParser'
@@ -22,7 +22,7 @@ export interface EntityConfig {
   readonly sy?: Integer
   readonly scale?: XYConfig
   readonly state?: string
-  readonly map?: ImageStateMapConfig
+  readonly map?: SpriteStateMapConfig
   readonly updatePredicate?: UpdatePredicateConfig
   readonly collisionType?: CollisionTypeConfig
   readonly collisionPredicate?: CollisionPredicateConfig

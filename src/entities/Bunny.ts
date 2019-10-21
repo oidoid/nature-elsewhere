@@ -5,10 +5,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
@@ -19,21 +19,21 @@ export class Bunny extends Entity<Bunny.Variant, Bunny.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Bunny.State.IDLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.BUNNY}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Bunny.State.IDLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.BUNNY}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.BUNNY_SHADOW,
               layer: Layer.SHADOW,
               y: 1
             })
           ]
         }),
-        [Bunny.State.DEAD]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.BUNNY_DEAD}),
-            Image.withAtlasSize(atlas, {
+        [Bunny.State.DEAD]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.BUNNY_DEAD}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.BUNNY_BLOOD,
               layer: Layer.BLOOD
             })

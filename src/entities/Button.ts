@@ -5,11 +5,11 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Level} from '../levels/Level'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -23,22 +23,22 @@ export class Button extends Entity<Button.Variant, Button.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Button.State.UNCLICKED]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Button.State.UNCLICKED]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.UI_BUTTON_BASE,
               layer: Layer.UI_MID
             })
           ]
         }),
-        [Button.State.CLICKED]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {
+        [Button.State.CLICKED]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.UI_BUTTON_BASE,
               layer: Layer.UI_MID
             }),
-            Image.withAtlasSize(atlas, {
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.UI_BUTTON_PRESSED,
               layer: Layer.UI_HI
             })

@@ -40,11 +40,11 @@ describe('collidesRect()', () => {
       )
       expect(entity.collidesRect(rect)).toStrictEqual([])
     })
-    test('IMAGES but no image intersection.', () => {
+    test('SPRITES but no sprite intersection.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane({
         variant: Plane.Variant.RED,
-        collisionPredicate: CollisionPredicate.IMAGES,
+        collisionPredicate: CollisionPredicate.SPRITES,
         position: new XY(10, 10)
       })
       expect(entity.collidesRect(rect)).toStrictEqual([])
@@ -58,7 +58,7 @@ describe('collidesRect()', () => {
         children: [
           new Plane({
             variant: Plane.Variant.BLUE,
-            collisionPredicate: CollisionPredicate.IMAGES
+            collisionPredicate: CollisionPredicate.SPRITES
           })
         ]
       })
@@ -75,7 +75,7 @@ describe('collidesRect()', () => {
         children: [
           new Plane({
             variant: Plane.Variant.BLUE,
-            collisionPredicate: CollisionPredicate.IMAGES
+            collisionPredicate: CollisionPredicate.SPRITES
           })
         ]
       })
@@ -90,21 +90,21 @@ describe('collidesRect()', () => {
         children: [
           new Plane({
             variant: Plane.Variant.BLUE,
-            collisionPredicate: CollisionPredicate.IMAGES
+            collisionPredicate: CollisionPredicate.SPRITES
           })
         ]
       })
       expect(entity.collidesRect(rect)).toStrictEqual([entity])
     })
-    test('IMAGES.', () => {
+    test('SPRITES.', () => {
       const rect = {position: new XY(0, 0), size: new WH(9, 9)}
       const entity = new Plane({
         variant: Plane.Variant.RED,
-        collisionPredicate: CollisionPredicate.IMAGES,
+        collisionPredicate: CollisionPredicate.SPRITES,
         children: [
           new Plane({
             variant: Plane.Variant.BLUE,
-            collisionPredicate: CollisionPredicate.IMAGES
+            collisionPredicate: CollisionPredicate.SPRITES
           })
         ]
       })

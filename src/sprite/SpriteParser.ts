@@ -1,9 +1,9 @@
 import {AnimatorParser} from './AnimatorParser'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasIDParser} from '../atlas/AtlasIDParser'
-import {Image} from './Image'
-import {ImageCompositionParser} from './ImageCompositionParser'
-import {ImageConfig} from './ImageConfig'
+import {Sprite} from './Sprite'
+import {SpriteCompositionParser} from './SpriteCompositionParser'
+import {SpriteConfig} from './SpriteConfig'
 import {LayerParser} from './LayerParser'
 import {RectParser} from '../math/RectParser'
 import {WHParser} from '../math/WHParser'
@@ -11,22 +11,22 @@ import {XY} from '../math/XY'
 import {XYParser} from '../math/XYParser'
 import {XYConfig} from '../math/XYConfig'
 
-export namespace ImageParser {
-  export function parse(atlas: Atlas, config: ImageConfig): Image {
-    return Image.withAtlasSize(atlas, parseProps(config))
+export namespace SpriteParser {
+  export function parse(atlas: Atlas, config: SpriteConfig): Sprite {
+    return Sprite.withAtlasSize(atlas, parseProps(config))
   }
 
-  export function parseProps(config: ImageConfig): Image.Props {
+  export function parseProps(config: SpriteConfig): Sprite.Props {
     // Excessive spread conditionals cause compiler OOM errors, use if
     // assignments instead. E.g.,
     // `if (config.x !== undefined) props.x = config.x` instead of
     // `...config.x !== undefined && {x: config.x}`.
     // https://github.com/microsoft/TypeScript/issues/34599
-    const props: Writable<Image.Props> = {id: AtlasIDParser.parse(config.id)}
+    const props: Writable<Sprite.Props> = {id: AtlasIDParser.parse(config.id)}
     if (config.constituentID !== undefined)
       props.constituentID = AtlasIDParser.parse(config.constituentID)
     if (config.composition !== undefined)
-      props.composition = ImageCompositionParser.parse(config.composition)
+      props.composition = SpriteCompositionParser.parse(config.composition)
     if (config.bounds !== undefined)
       props.bounds = RectParser.parse(config.bounds)
     if (config.position !== undefined)

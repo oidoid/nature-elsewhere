@@ -1,20 +1,20 @@
 import {AtlasID} from '../atlas/AtlasID'
-import {Image} from '../image/Image'
-import {ImageRect} from './ImageRect'
-import {Layer} from '../image/Layer'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from './SpriteRect'
+import {Layer} from '../sprite/Layer'
 import {ReadonlyRect} from '../math/Rect'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
 
-export type ImageStateMap<State extends string = string> = Readonly<
-  Record<State, ImageRect>
+export type SpriteStateMap<State extends string = string> = Readonly<
+  Record<State, SpriteRect>
 >
 
-export class ImageStateMachine<State extends string = string> {
+export class SpriteStateMachine<State extends string = string> {
   private _state: State
-  private readonly _map: ImageStateMap<State>
+  private readonly _map: SpriteStateMap<State>
 
-  constructor(props: ImageStateMachine.Props<State>) {
+  constructor(props: SpriteStateMachine.Props<State>) {
     this._state = props.state
     this._map = props.map
     this._validateState(props.state)
@@ -28,33 +28,33 @@ export class ImageStateMachine<State extends string = string> {
     return <State[]>Object.keys(this._map)
   }
 
-  images(): readonly Readonly<Image>[] {
-    return this._imageRect().images
+  sprites(): readonly Readonly<Sprite>[] {
+    return this._spriteRect().sprites
   }
 
   invalidate(): void {
-    this._imageRect().invalidate()
+    this._spriteRect().invalidate()
   }
 
   bounds(): ReadonlyRect {
-    return this._imageRect().bounds
+    return this._spriteRect().bounds
   }
 
-  /** See ImageRect._origin. */
+  /** See SpriteRect._origin. */
   origin(): Readonly<XY> {
-    return this._imageRect().origin
+    return this._spriteRect().origin
   }
 
   moveBy(by: Readonly<XY>): UpdateStatus {
-    return this._imageRect().moveBy(by)
+    return this._spriteRect().moveBy(by)
   }
 
   moveTo(to: Readonly<XY>): UpdateStatus {
-    return this._imageRect().moveTo(to)
+    return this._spriteRect().moveTo(to)
   }
 
-  addImages(...images: readonly Image[]): void {
-    this._imageRect().add(...images)
+  addSprites(...sprites: readonly Sprite[]): void {
+    this._spriteRect().add(...sprites)
   }
 
   setConstituentID(id?: AtlasID): UpdateStatus {
@@ -67,48 +67,48 @@ export class ImageStateMachine<State extends string = string> {
   transition(state: State): UpdateStatus {
     if (this.state === state) return UpdateStatus.UNCHANGED
     this._validateState(state)
-    const {bounds, scale} = this._imageRect()
+    const {bounds, scale} = this._spriteRect()
     this._state = state
-    this._imageRect().moveTo(bounds.position)
+    this._spriteRect().moveTo(bounds.position)
     this.resetAnimation()
     this.scaleTo(scale)
     return UpdateStatus.UPDATED
   }
 
-  replaceImages(state: State, ...images: readonly Image[]): UpdateStatus {
-    this._map[state].replace(...images)
+  replaceSprites(state: State, ...sprites: readonly Sprite[]): UpdateStatus {
+    this._map[state].replace(...sprites)
     return UpdateStatus.UPDATED
   }
 
   getScale(): Readonly<XY> {
-    return this._imageRect().scale
+    return this._spriteRect().scale
   }
 
   constituentID(): Maybe<AtlasID> {
-    return this._imageRect().constituentID
+    return this._spriteRect().constituentID
   }
 
-  intersects(bounds: ReadonlyRect): Readonly<Image>[] {
-    return this._imageRect().intersects(bounds)
+  intersects(bounds: ReadonlyRect): Readonly<Sprite>[] {
+    return this._spriteRect().intersects(bounds)
   }
 
   scaleTo(to: Readonly<XY>): UpdateStatus {
     if (!to.x || !to.y)
       throw new Error(`Scale must be nonzero (x=${to.x}, y=${to.y}).`)
-    return this._imageRect().scaleTo(to)
+    return this._spriteRect().scaleTo(to)
   }
 
-  /** Raise or lower all images for all states. */
+  /** Raise or lower all sprites for all states. */
   elevate(offset: Layer): void {
     for (const state in this._map) this._map[state].elevate(offset)
   }
 
-  /** Reset the animations of all images in the current state. */
+  /** Reset the animations of all sprites in the current state. */
   resetAnimation(): void {
-    for (const image of this.images()) image.resetAnimation()
+    for (const sprite of this.sprites()) sprite.resetAnimation()
   }
 
-  private _imageRect(): ImageRect {
+  private _spriteRect(): SpriteRect {
     return this._map[this.state]
   }
 
@@ -118,9 +118,9 @@ export class ImageStateMachine<State extends string = string> {
   }
 }
 
-export namespace ImageStateMachine {
+export namespace SpriteStateMachine {
   export interface Props<State extends string> {
     state: State
-    map: Record<State, ImageRect>
+    map: Record<State, SpriteRect>
   }
 }

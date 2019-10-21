@@ -5,10 +5,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 
 export class Monument extends Entity<Monument.Variant, Monument.State> {
@@ -22,9 +22,9 @@ export class Monument extends Entity<Monument.Variant, Monument.State> {
         props?.variant ?? defaults.variant
       ].map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Monument.State.VISIBLE]: new ImageRect({
-          images: variantImages(atlas, props?.variant ?? defaults.variant)
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Monument.State.VISIBLE]: new SpriteRect({
+          sprites: variantSprites(atlas, props?.variant ?? defaults.variant)
         })
       },
       ...props
@@ -65,13 +65,13 @@ const defaults = Object.freeze({
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })
 
-function variantImages(atlas: Atlas, variant: Monument.Variant): Image[] {
+function variantSprites(atlas: Atlas, variant: Monument.Variant): Sprite[] {
   const small = variant === Monument.Variant.SMALL
   return [
-    Image.withAtlasSize(atlas, {
+    Sprite.withAtlasSize(atlas, {
       id: small ? AtlasID.MONUMENT_SMALL : AtlasID.MONUMENT_MEDIUM
     }),
-    Image.withAtlasSize(atlas, {
+    Sprite.withAtlasSize(atlas, {
       id: small
         ? AtlasID.MONUMENT_SMALL_SHADOW
         : AtlasID.MONUMENT_MEDIUM_SHADOW,

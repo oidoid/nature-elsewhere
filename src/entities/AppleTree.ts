@@ -6,10 +6,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 
 export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
@@ -21,11 +21,11 @@ export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [AppleTree.State.VISIBLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.APPLE_TREE}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [AppleTree.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.APPLE_TREE}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.APPLE_TREE_SHADOW,
               y: 1,
               layer: Layer.SHADOW

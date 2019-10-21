@@ -5,10 +5,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 
 export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
@@ -20,11 +20,11 @@ export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Mountain.State.VISIBLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.MOUNTAIN}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Mountain.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.MOUNTAIN}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.MOUNTAIN_SHADOW,
               x: -2,
               y: 1,

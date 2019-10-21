@@ -10,7 +10,7 @@
       "type": "group",
       "map": {
         "visible": {
-          "images": [
+          "sprites": [
             {
               "id": "uiCheckerboard-blackTransparent",
               "constituentID": "palette-green",

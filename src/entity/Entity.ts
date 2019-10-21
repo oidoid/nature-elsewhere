@@ -5,12 +5,12 @@ import {EntityCollider} from '../collision/EntityCollider'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {FloatXY} from '../math/FloatXY'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {ImageStateMachine} from '../imageStateMachine/ImageStateMachine'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
+import {SpriteStateMachine} from '../spriteStateMachine/SpriteStateMachine'
 import {Integer} from 'aseprite-atlas'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Level} from '../levels/Level'
 import {ProcessChildren} from './ProcessChildren'
 import {ReadonlyRect, Rect} from '../math/Rect'
@@ -33,7 +33,7 @@ export abstract class Entity<
   private readonly _variant: Variant
 
   /** The local coordinate system or minimal union of the entity and all of its
-      children given in level coordinates with origin at (x, y). All images,
+      children given in level coordinates with origin at (x, y). All sprites,
       collisions, and children are always in bounds and are also specified in
       level coordinates, not coordinates relative the local entity origin. This
       local coordinate system is necessary for calculating absolute translations
@@ -45,7 +45,7 @@ export abstract class Entity<
 
   private readonly _velocityFraction: FloatXY
 
-  private readonly _machine: ImageStateMachine<State | Entity.BaseState>
+  private readonly _machine: SpriteStateMachine<State | Entity.BaseState>
 
   private readonly _updatePredicate: UpdatePredicate
   private _collisionType: CollisionType
@@ -53,7 +53,7 @@ export abstract class Entity<
   private _collisionPredicate: CollisionPredicate
 
   /** Collision bodies in level coordinates. Check for bounds intersection
-      before testing each body. Images should not be considered directly for
+      before testing each body. Sprites should not be considered directly for
       collision tests. */
   private readonly _collisionBodies: readonly Rect[]
 
@@ -73,7 +73,7 @@ export abstract class Entity<
         ? new XY(props.vx ?? 0, props.vy ?? 0)
         : Entity.defaults.velocity.copy())
     this._velocityFraction = {x: 0, y: 0}
-    this._machine = new ImageStateMachine({state: props.state, map: props.map})
+    this._machine = new SpriteStateMachine({state: props.state, map: props.map})
     this._updatePredicate =
       props.updatePredicate ?? Entity.defaults.updatePredicate
     this._collisionType = props.collisionType ?? Entity.defaults.collisionType
@@ -85,7 +85,7 @@ export abstract class Entity<
     this._children = props.children ?? []
     this.setConstituentID(props.constituentID)
 
-    // Calculate the bounds of the entity's images, collision bodies, and all
+    // Calculate the bounds of the entity's sprites, collision bodies, and all
     // children. Children themselves are not invalidated by this call.
     this.invalidateBounds()
 
@@ -132,7 +132,7 @@ export abstract class Entity<
       parents' bounds should be updated. */
   invalidateBounds(): void {
     const bounds = Rect.unionAll([
-      this.imageBounds(),
+      this.spriteBounds(),
       ...this.collisionBodies,
       ...this.children.map(child => child.bounds)
     ])
@@ -209,14 +209,14 @@ export abstract class Entity<
     this.invalidateBounds()
   }
 
-  addImages(...images: readonly Image[]): void {
-    this._machine.addImages(...images)
+  addSprites(...sprites: readonly Sprite[]): void {
+    this._machine.addSprites(...sprites)
     this.invalidateBounds()
   }
 
-  /** The image bounds for the current entity (children and collision rectangles
-      are not considered). */
-  imageBounds(): ReadonlyRect {
+  /** The sprite bounds for the current entity (children and collision
+      rectangles are not considered). */
+  spriteBounds(): ReadonlyRect {
     return this._machine.bounds()
   }
 
@@ -224,7 +224,7 @@ export abstract class Entity<
     return this.moveBy(to.sub(this.bounds.position))
   }
 
-  /** Recursively move the entity, its images, its collision bodies, and all of
+  /** Recursively move the entity, its sprites, its collision bodies, and all of
       its children. */
   moveBy(by: Readonly<XY>): UpdateStatus {
     let status = UpdateStatus.UNCHANGED
@@ -265,31 +265,31 @@ export abstract class Entity<
     return this._machine.setConstituentID(id)
   }
 
-  images(): readonly Readonly<Image>[] {
-    return this._machine.images()
+  sprites(): readonly Readonly<Sprite>[] {
+    return this._machine.sprites()
   }
 
-  invalidateImageBounds(): void {
+  invalidateSpriteBounds(): void {
     this._machine.invalidate()
   }
 
-  replaceImages(state: State, ...images: readonly Image[]): UpdateStatus {
-    return this._machine.replaceImages(state, ...images)
+  replaceSprites(state: State, ...sprites: readonly Sprite[]): UpdateStatus {
+    return this._machine.replaceSprites(state, ...sprites)
   }
 
-  moveImagesBy(by: Readonly<XY>): UpdateStatus {
+  moveSpritesBy(by: Readonly<XY>): UpdateStatus {
     const status = this._machine.moveBy(by)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
   }
 
-  moveImagesTo(to: Readonly<XY>): UpdateStatus {
+  moveSpritesTo(to: Readonly<XY>): UpdateStatus {
     const status = this._machine.moveTo(to)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
   }
 
-  /** See ImageRect._origin. */
+  /** See SpriteRect._origin. */
   origin(): Readonly<XY> {
     return this._machine.origin()
   }
@@ -297,10 +297,10 @@ export abstract class Entity<
   /** Recursively animate the entity and its children. Only visible entities are
       animated so its possible for a composition entity's children to be fully,
       *partly*, or not animated together. */
-  animate(state: UpdateState): Readonly<Image>[] {
+  animate(state: UpdateState): Readonly<Sprite>[] {
     if (!Rect.intersects(state.level.cam.bounds, this.bounds)) return []
     const visible = this._machine.intersects(state.level.cam.bounds)
-    for (const image of visible) image.animate(state.level.atlas, state.time)
+    for (const sprite of visible) sprite.animate(state.level.atlas, state.time)
     for (const child of this.children) visible.push(...child.animate(state))
     return visible
   }
@@ -364,13 +364,13 @@ export abstract class Entity<
       collisions.push(this)
 
     if (
-      this.collisionPredicate & CollisionPredicate.IMAGES &&
+      this.collisionPredicate & CollisionPredicate.SPRITES &&
       !collisions.length
     ) {
-      // Test if any image collides.
+      // Test if any sprite collides.
       if (
-        Rect.intersects(this.imageBounds(), rect) &&
-        this.images().some(image => Rect.intersects(rect, image.bounds))
+        Rect.intersects(this.spriteBounds(), rect) &&
+        this.sprites().some(sprite => Rect.intersects(rect, sprite.bounds))
       )
         collisions.push(this)
     }
@@ -406,7 +406,7 @@ export abstract class Entity<
     return
   }
 
-  /** Raise or lower an entity's images and its descendants' images for all
+  /** Raise or lower an entity's sprites and its descendants' sprites for all
       states. */
   elevate(offset: Layer): void {
     this._machine.elevate(offset)
@@ -509,7 +509,7 @@ export namespace Entity {
     readonly velocity?: XY
     /** Defaults to {}. */
     readonly state: State | BaseState
-    readonly map: Record<State | BaseState, ImageRect>
+    readonly map: Record<State | BaseState, SpriteRect>
     /** Defaults to BehaviorPredicate.NEVER. */
     readonly updatePredicate?: UpdatePredicate
     /** Defaults to CollisionPredicate.NEVER. */

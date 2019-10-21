@@ -61,10 +61,10 @@ export namespace TextLayout {
       const span = tracking(string[index], scale, string[index + 1])
       if (x && x + span > width) ({x, y} = nextLine(y, scale))
       // Width is not span since, with kerning, that may exceed the actual
-      // width of the letter's image. For example, if w has the maximal letter
+      // width of the letter's sprite. For example, if w has the maximal letter
       // width of five pixels and a one pixel kerning for a given pair of
       // letters, it will have a span of six pixels which is greater than the
-      // maximal five pixel image that can be rendered.
+      // maximal five pixel sprite that can be rendered.
       const w = scale.x * Font.letterWidth(font, string[index])
       const h = scale.y * font.letterHeight
       chars.push(Rect.make(x, y, w, h))

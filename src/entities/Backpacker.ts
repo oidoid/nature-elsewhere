@@ -4,10 +4,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -19,8 +19,8 @@ import {WH} from '../math/WH'
 export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   constructor(
     props?: Entity.SubProps<Backpacker.Variant.NONE, Backpacker.State>,
-    // This reference is passed to all images so that any changes affect all
-    // character images for all states. This orchestration could probably be
+    // This reference is passed to all sprites so that any changes affect all
+    // character sprites for all states. This orchestration could probably be
     // handled better, possibly with some new state or some way of generating
     // states on the fly, but it's unclear how to change the current system
     // without invalidating a lot of the encapsulation it provides.
@@ -30,50 +30,50 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Backpacker.State.IDLE_UP]: newImageRect(
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Backpacker.State.IDLE_UP]: newSpriteRect(
           AtlasID.BACKPACKER_IDLE_UP,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
-        [Backpacker.State.IDLE_LEFT]: newImageRect(
+        [Backpacker.State.IDLE_LEFT]: newSpriteRect(
           AtlasID.BACKPACKER_IDLE_LEFT,
           // Use vertical shadow to skip horizontal shadow animation.
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
-        [Backpacker.State.IDLE_RIGHT]: newImageRect(
+        [Backpacker.State.IDLE_RIGHT]: newSpriteRect(
           AtlasID.BACKPACKER_IDLE_RIGHT,
           // Use vertical shadow to skip horizontal shadow animation.
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
-        [Backpacker.State.IDLE_DOWN]: newImageRect(
+        [Backpacker.State.IDLE_DOWN]: newSpriteRect(
           AtlasID.BACKPACKER_IDLE_DOWN,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
-        [Backpacker.State.WALK_UP]: newImageRect(
+        [Backpacker.State.WALK_UP]: newSpriteRect(
           AtlasID.BACKPACKER_WALK_UP,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
-        [Backpacker.State.WALK_LEFT]: newImageRect(
+        [Backpacker.State.WALK_LEFT]: newSpriteRect(
           AtlasID.BACKPACKER_WALK_LEFT,
           AtlasID.BACKPACKER_WALK_HORIZONTAL_SHADOW,
           _size
         ),
-        [Backpacker.State.WALK_RIGHT]: newImageRect(
+        [Backpacker.State.WALK_RIGHT]: newSpriteRect(
           AtlasID.BACKPACKER_WALK_RIGHT,
           AtlasID.BACKPACKER_WALK_HORIZONTAL_SHADOW,
           _size
         ),
-        [Backpacker.State.WALK_DOWN]: newImageRect(
+        [Backpacker.State.WALK_DOWN]: newSpriteRect(
           AtlasID.BACKPACKER_WALK_DOWN,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW,
           _size
         ),
-        [Backpacker.State.MELEE_RIGHT]: newImageRect(
+        [Backpacker.State.MELEE_RIGHT]: newSpriteRect(
           AtlasID.BACKPACKER_MELEE_RIGHT,
           AtlasID.BACKPACKER_WALK_VERTICAL_SHADOW, // avoid anim
           _size
@@ -194,16 +194,16 @@ export namespace Backpacker {
   }
 }
 
-function newImageRect(
+function newSpriteRect(
   character: AtlasID,
   shadow: AtlasID,
   size: WH
-): ImageRect {
-  return new ImageRect({
+): SpriteRect {
+  return new SpriteRect({
     origin: new XY(-2, -13),
-    images: [
-      new Image({id: character, size}),
-      new Image({id: shadow, size, layer: Layer.SHADOW})
+    sprites: [
+      new Sprite({id: character, size}),
+      new Sprite({id: shadow, size, layer: Layer.SHADOW})
     ]
   })
 }

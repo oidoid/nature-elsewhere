@@ -4,7 +4,7 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
 import {ProcessChildren} from '../entity/ProcessChildren'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -25,8 +25,8 @@ export class RadioCheckboxGroup extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [RadioCheckboxGroup.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [RadioCheckboxGroup.State.VISIBLE]: new SpriteRect()
       },
       ...props
     })

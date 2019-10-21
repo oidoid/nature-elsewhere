@@ -5,10 +5,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 
 export class Pond extends Entity<Pond.Variant, Pond.State> {
@@ -17,17 +17,17 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Pond.State.VISIBLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Pond.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.POND,
               layer: Layer.ABOVE_PLANE
             }),
-            Image.withAtlasSize(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
-            Image.withAtlasSize(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
-            Image.withAtlasSize(atlas, {id: AtlasID.GRASS_09, x: 20}),
-            Image.withAtlasSize(atlas, {id: AtlasID.GRASS_10, x: 10, y: 8})
+            Sprite.withAtlasSize(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
+            Sprite.withAtlasSize(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
+            Sprite.withAtlasSize(atlas, {id: AtlasID.GRASS_09, x: 20}),
+            Sprite.withAtlasSize(atlas, {id: AtlasID.GRASS_10, x: 10, y: 8})
           ]
         })
       },

@@ -2,7 +2,7 @@ import {Entity} from '../../entity/Entity'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {FollowCam} from '../../updaters/FollowCam'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../../utils/JSON'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/UpdateStatus'
@@ -15,8 +15,8 @@ export class Group extends Entity<Group.Variant, Group.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Group.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Group.State.VISIBLE]: new SpriteRect()
       },
       ...props
     })

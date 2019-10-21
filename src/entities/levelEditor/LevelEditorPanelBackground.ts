@@ -4,10 +4,10 @@ import {CollisionType} from '../../collision/CollisionType'
 import {Entity} from '../../entity/Entity'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {Image} from '../../image/Image'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {Sprite} from '../../sprite/Sprite'
+import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../../utils/JSON'
-import {Layer} from '../../image/Layer'
+import {Layer} from '../../sprite/Layer'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
 
 export class LevelEditorPanelBackground extends Entity<
@@ -23,9 +23,9 @@ export class LevelEditorPanelBackground extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [LevelEditorPanelBackground.State.VISIBLE]: new ImageRect({
-          images: newBackgroundImages()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [LevelEditorPanelBackground.State.VISIBLE]: new SpriteRect({
+          sprites: newBackgroundSprites()
         })
       },
       ...props
@@ -46,7 +46,7 @@ export namespace LevelEditorPanelBackground {
   }
 }
 
-function newBackgroundImages(): Image[] {
+function newBackgroundSprites(): Sprite[] {
   return [
     {
       id: AtlasID.PALETTE_WHITE,
@@ -114,14 +114,14 @@ function newBackgroundImages(): Image[] {
       h: 1,
       layer: Layer.UI_MID
     }
-  ].map(props => new Image(props))
+  ].map(props => new Sprite(props))
 }
 
 const defaults = Object.freeze({
   type: EntityType.UI_LEVEL_EDITOR_PANEL_BACKGROUND,
   variant: LevelEditorPanelBackground.Variant.NONE,
   collisionType: CollisionType.TYPE_UI,
-  collisionPredicate: CollisionPredicate.IMAGES,
+  collisionPredicate: CollisionPredicate.SPRITES,
   updatePredicate: UpdatePredicate.ALWAYS,
   state: LevelEditorPanelBackground.State.VISIBLE
 })

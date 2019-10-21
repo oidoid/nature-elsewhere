@@ -4,8 +4,8 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
 
 export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
@@ -16,9 +16,9 @@ export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Cattails.State.VISIBLE]: new ImageRect({
-          images: [Image.withAtlasSize(atlas, {id: AtlasID.CATTAILS})]
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Cattails.State.VISIBLE]: new SpriteRect({
+          sprites: [Sprite.withAtlasSize(atlas, {id: AtlasID.CATTAILS})]
         })
       },
       ...props

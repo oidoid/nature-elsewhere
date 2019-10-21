@@ -4,19 +4,19 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 
 export class Path extends Entity<Path.Variant, Path.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Path.Variant, Path.State>) {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Path.State.VISIBLE]: new ImageRect({
-          images: variantImages(
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Path.State.VISIBLE]: new SpriteRect({
+          sprites: variantSprites(
             atlas,
             props?.variant ?? Path.Variant.STRAIGHT_NE
           )
@@ -45,18 +45,18 @@ export namespace Path {
   }
 }
 
-function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
+function variantSprites(atlas: Atlas, variant: Path.Variant): Sprite[] {
   switch (variant) {
     case Path.Variant.STRAIGHT_NE:
       return [
-        Image.withAtlasSize(atlas, {
+        Sprite.withAtlasSize(atlas, {
           id: AtlasID.PATH_NE,
           layer: Layer.ABOVE_PLANE
         })
       ]
     case Path.Variant.STRAIGHT_NW:
       return [
-        Image.withAtlasSize(atlas, {
+        Sprite.withAtlasSize(atlas, {
           id: AtlasID.PATH_NE,
           layer: Layer.ABOVE_PLANE,
           sx: -1
@@ -64,14 +64,14 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
       ]
     case Path.Variant.CORNER_E:
       return [
-        Image.withAtlasSize(atlas, {
+        Sprite.withAtlasSize(atlas, {
           id: AtlasID.PATH_CORNER_E,
           layer: Layer.ABOVE_PLANE
         })
       ]
     case Path.Variant.CORNER_W:
       return [
-        Image.withAtlasSize(atlas, {
+        Sprite.withAtlasSize(atlas, {
           id: AtlasID.PATH_CORNER_E,
           layer: Layer.ABOVE_PLANE,
           sx: -1
@@ -79,14 +79,14 @@ function variantImages(atlas: Atlas, variant: Path.Variant): Image[] {
       ]
     case Path.Variant.CORNER_N:
       return [
-        Image.withAtlasSize(atlas, {
+        Sprite.withAtlasSize(atlas, {
           id: AtlasID.PATH_CORNER_N,
           layer: Layer.ABOVE_PLANE
         })
       ]
     case Path.Variant.CORNER_S:
       return [
-        Image.withAtlasSize(atlas, {
+        Sprite.withAtlasSize(atlas, {
           id: AtlasID.PATH_CORNER_N,
           layer: Layer.ABOVE_PLANE,
           sy: -1

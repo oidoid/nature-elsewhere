@@ -1,5 +1,5 @@
 // See https://developer.android.com/reference/android/graphics/PorterDuff.Mode.
-export enum ImageComposition {
+export enum SpriteComposition {
   /** The constituent is unused. The source is rendered unaltered. */
   SOURCE,
   /** The constituent is rendered with the source's alpha. */

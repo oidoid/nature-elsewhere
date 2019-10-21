@@ -4,11 +4,11 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Level} from '../levels/Level'
 import {Limits} from '../math/Limits'
 import {Text} from './text/Text'
@@ -27,9 +27,9 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Checkbox.State.UNCHECKED]: new ImageRect(),
-        [Checkbox.State.CHECKED]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Checkbox.State.UNCHECKED]: new SpriteRect(),
+        [Checkbox.State.CHECKED]: new SpriteRect()
       },
       ...props
     })
@@ -99,10 +99,10 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     const text = this.children[0]
     for (const state of [Checkbox.State.UNCHECKED, Checkbox.State.CHECKED]) {
       const size = new WH(text.bounds.size.w, text.bounds.size.h)
-      const images = newBackgroundImages(state, layerOffset, size)
-      this.replaceImages(state, ...images)
+      const sprites = newBackgroundSprites(state, layerOffset, size)
+      this.replaceSprites(state, ...sprites)
     }
-    this.moveImagesTo(
+    this.moveSpritesTo(
       new XY(text.bounds.position.x - 1, this.bounds.position.y)
     )
   }
@@ -126,22 +126,22 @@ const backgroundID: Readonly<Record<Checkbox.State, AtlasID>> = Object.freeze({
   [Checkbox.State.CHECKED]: AtlasID.PALETTE_LIGHT_GREEN
 })
 
-function newBackgroundImages(
+function newBackgroundSprites(
   state: Checkbox.State,
   layerOffset: number,
   {w, h}: WH
-): Image[] {
+): Sprite[] {
   const id = backgroundID[state]
   const layer = Layer.UI_MID + layerOffset
-  const backgroundImage = new Image({id, position: new XY(1, 0), w, h, layer})
-  const borderImage = new Image({
+  const backgroundSprite = new Sprite({id, position: new XY(1, 0), w, h, layer})
+  const borderSprite = new Sprite({
     id,
     position: new XY(0, 1),
     w: w + 2,
     h: Math.max(h - 2, 2),
     layer
   })
-  return [backgroundImage, borderImage]
+  return [backgroundSprite, borderSprite]
 }
 
 const defaults = Object.freeze({

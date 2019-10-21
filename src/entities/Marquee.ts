@@ -4,11 +4,11 @@ import {EntityCollider} from '../collision/EntityCollider'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -29,25 +29,25 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Marquee.State.VISIBLE]: new ImageRect({
-          images: [
-            new Image({
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Marquee.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            new Sprite({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
             }),
-            new Image({
+            new Sprite({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
             }),
-            new Image({
+            new Sprite({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
             }),
-            new Image({
+            new Sprite({
               id: AtlasID.UI_CHECKERBOARD_BLACK_WHITE,
               layer: Layer.UI_HIHI,
               wvx: 20
@@ -70,7 +70,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     let status = UpdateStatus.UNCHANGED
 
     // If the state is now visible, transition prior to trying to manipulate the
-    // marquee images as they only exist in visible.
+    // marquee sprites as they only exist in visible.
     status |= this.transition(
       selection ? Marquee.State.VISIBLE : Entity.BaseState.HIDDEN
     )
@@ -155,39 +155,41 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     )
   }
 
-  /** These images are only present in the visible state. */
+  /** These sprites are only present in the visible state. */
   private _resize(destination: XY, sandboxEntity: Entity): void {
-    const marqueeImages = this.images()
+    const marqueeSprites = this.sprites()
 
-    marqueeImages[Images.TOP].moveTo(destination)
-    marqueeImages[Images.TOP].sizeTo(new WH(sandboxEntity.bounds.size.w + 2, 1))
+    marqueeSprites[Sprites.TOP].moveTo(destination)
+    marqueeSprites[Sprites.TOP].sizeTo(
+      new WH(sandboxEntity.bounds.size.w + 2, 1)
+    )
 
-    marqueeImages[Images.LEFT].moveTo(destination)
-    marqueeImages[Images.LEFT].sizeTo(
+    marqueeSprites[Sprites.LEFT].moveTo(destination)
+    marqueeSprites[Sprites.LEFT].sizeTo(
       new WH(1, sandboxEntity.bounds.size.h + 2)
     )
 
-    marqueeImages[Images.RIGHT].moveTo(
+    marqueeSprites[Sprites.RIGHT].moveTo(
       new XY(destination.x + sandboxEntity.bounds.size.w + 1, destination.y)
     )
-    marqueeImages[Images.RIGHT].sizeTo(
+    marqueeSprites[Sprites.RIGHT].sizeTo(
       new WH(1, sandboxEntity.bounds.size.h + 2)
     )
-    marqueeImages[Images.RIGHT].wrapTo(
+    marqueeSprites[Sprites.RIGHT].wrapTo(
       new XY((sandboxEntity.bounds.size.w + 1) & 1 ? 1 : 0, 0)
     )
 
-    marqueeImages[Images.BOTTOM].moveTo(
+    marqueeSprites[Sprites.BOTTOM].moveTo(
       new XY(destination.x, destination.y + sandboxEntity.bounds.size.h + 1)
     )
-    marqueeImages[Images.BOTTOM].sizeTo(
+    marqueeSprites[Sprites.BOTTOM].sizeTo(
       new WH(sandboxEntity.bounds.size.w + 2, 1)
     )
-    marqueeImages[Images.BOTTOM].wrapTo(
+    marqueeSprites[Sprites.BOTTOM].wrapTo(
       new XY((sandboxEntity.bounds.size.h + 1) & 1 ? 1 : 0, 0)
     )
 
-    this.invalidateImageBounds()
+    this.invalidateSpriteBounds()
     this.invalidateBounds()
   }
 }
@@ -202,7 +204,7 @@ export namespace Marquee {
   }
 }
 
-enum Images {
+enum Sprites {
   TOP = 0,
   RIGHT = 1,
   BOTTOM = 2,

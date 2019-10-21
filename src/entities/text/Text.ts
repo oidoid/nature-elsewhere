@@ -2,11 +2,11 @@ import {AtlasID, MEM_FONT_PREFIX} from '../../atlas/AtlasID'
 import {Entity} from '../../entity/Entity'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {Image} from '../../image/Image'
-import {ImageComposition} from '../../image/ImageComposition'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {Sprite} from '../../sprite/Sprite'
+import {SpriteComposition} from '../../sprite/SpriteComposition'
+import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {JSONObject} from '../../utils/JSON'
-import {Layer} from '../../image/Layer'
+import {Layer} from '../../sprite/Layer'
 import {Limits} from '../../math/Limits'
 import {Rect} from '../../math/Rect'
 import {TextLayout} from '../../text/TextLayout'
@@ -24,8 +24,8 @@ export class Text extends Entity<Text.Variant, Text.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Text.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Text.State.VISIBLE]: new SpriteRect()
       },
       ...props
     })
@@ -35,19 +35,19 @@ export class Text extends Entity<Text.Variant, Text.State> {
     this._textScale = props?.textScale ?? defaults.textScale.copy()
     this._textMaxSize = props?.textMaxSize ?? defaults.textMaxSize.copy()
 
-    const textImages = toImages(
+    const textSprites = toSprites(
       this._text,
       this._textScale,
       {
-        position: this.imageBounds().position.copy(),
+        position: this.spriteBounds().position.copy(),
         size: this._textMaxSize
       },
       this.constituentID()
     )
     if (props?.textLayer)
-      for (const image of textImages) image.layer = this._textLayer
+      for (const sprite of textSprites) sprite.layer = this._textLayer
 
-    this.addImages(...textImages)
+    this.addSprites(...textSprites)
   }
 
   get text(): string {
@@ -100,14 +100,14 @@ export namespace Text {
 }
 
 /** @arg y The vertical scroll offset in pixels. */
-function toImages(
+function toSprites(
   string: string,
   scale: XY,
   bounds: Rect,
   constituentID?: AtlasID,
   y: number = 0
-): readonly Image[] {
-  const images = []
+): readonly Sprite[] {
+  const sprites = []
   const {chars} = TextLayout.layout(string, bounds.size.w, scale)
   for (let i = 0; i < chars.length; ++i) {
     const char = chars[i]
@@ -115,7 +115,7 @@ function toImages(
     if (TextLayout.nextLine(char.position.y, scale).y < y) continue
     if (char.position.y > y + bounds.size.h) break
 
-    const image = newCharacterImage(
+    const sprite = newCharacterSprite(
       string.charCodeAt(i),
       new XY(
         bounds.position.x + char.position.x,
@@ -129,21 +129,21 @@ function toImages(
       scale,
       constituentID
     )
-    images.push(image)
+    sprites.push(sprite)
   }
-  return images
+  return sprites
 }
 
-function newCharacterImage(
+function newCharacterSprite(
   char: number,
   position: XY,
   {w, h}: WH,
   scale: XY,
   constituentID: Maybe<AtlasID>
-): Image {
+): Sprite {
   const id = <AtlasID>(MEM_FONT_PREFIX + char.toString().padStart(3, '0'))
-  const composition = ImageComposition.SOURCE_MASK
-  return new Image({id, constituentID, composition, position, w, h, scale})
+  const composition = SpriteComposition.SOURCE_MASK
+  return new Sprite({id, constituentID, composition, position, w, h, scale})
 }
 
 const defaults = Object.freeze({

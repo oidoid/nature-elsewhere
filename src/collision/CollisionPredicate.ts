@@ -1,5 +1,5 @@
 /** Collisions bodies are a subset of entity bounds. In some cases, a
-    bounds-only test is sufficient. In other cases, bounds-and-bodies or image
+    bounds-only test is sufficient. In other cases, bounds-and-bodies or sprite
     rectangle tests are necessary for additional precision. The entity bounds is
     still checked in the latter cases since it is a superset of the union of
     rectangular collision bodies and a quick narrowing test.
@@ -15,10 +15,10 @@
     CollisionPredicates apply only to one half of a collision test. The other
     entity's collision predicate is honored.
 
-    BOUNDS, IMAGES, and BODIES apply to the owning entity only. An OR'd
-    predicate of BOUNDS | IMAGES | BODIES but an intersecting entity tested will
-    be included once even if it matches multiple predicates. ORing with CHILDREN
-    only has the additional behavior of accumulating the result of
+    BOUNDS, SPRITES, and BODIES apply to the owning entity only. An OR'd
+    predicate of BOUNDS | SPRITES | BODIES but an intersecting entity tested
+    will be included once even if it matches multiple predicates. ORing with
+    CHILDREN only has the additional behavior of accumulating the result of
     descending. */
 export enum CollisionPredicate {
   /** No intersection tests on the entity or its children regardless of their
@@ -29,11 +29,11 @@ export enum CollisionPredicate {
       bodies and children are ignored. */
   BOUNDS = 0b0001,
 
-  /** Intersection tests on only the specifying entity's bounds and images for
+  /** Intersection tests on only the specifying entity's bounds and sprites for
       the current state. Any collision bodies and children are ignored. This is
       useful for non-rectangular panels that appear above other entities and
       wish to consume all collisions for the entities they obscure. */
-  IMAGES = 0b0010,
+  SPRITES = 0b0010,
 
   /** Intersection tests on only the specifying entity's bounds and collision
       bodies. The bounds and _any_ body must intersect to pass the test. If the

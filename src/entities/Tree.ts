@@ -5,10 +5,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 
 export class Tree extends Entity<Tree.Variant, Tree.State> {
@@ -21,9 +21,9 @@ export class Tree extends Entity<Tree.Variant, Tree.State> {
           : AtlasID.TREE_LARGE
       ].cels[0].slices.map(({x, y, w, h}) => Rect.make(x, y, w, h)),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Tree.State.VISIBLE]: new ImageRect({
-          images: variantImages(
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Tree.State.VISIBLE]: new SpriteRect({
+          sprites: variantSprites(
             atlas,
             (props && props.variant) || defaults.variant
           )
@@ -50,11 +50,11 @@ export namespace Tree {
   }
 }
 
-function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
+function variantSprites(atlas: Atlas, variant: Tree.Variant): Sprite[] {
   if (variant === Tree.Variant.SMALL)
     return [
-      Image.withAtlasSize(atlas, {id: AtlasID.TREE_SMALL}),
-      Image.withAtlasSize(atlas, {
+      Sprite.withAtlasSize(atlas, {id: AtlasID.TREE_SMALL}),
+      Sprite.withAtlasSize(atlas, {
         id: AtlasID.TREE_SMALL_SHADOW,
         y: 1,
         layer: Layer.SHADOW
@@ -62,13 +62,13 @@ function variantImages(atlas: Atlas, variant: Tree.Variant): Image[] {
     ]
 
   return [
-    Image.withAtlasSize(atlas, {
+    Sprite.withAtlasSize(atlas, {
       id:
         variant === Tree.Variant.LARGE
           ? AtlasID.TREE_LARGE
           : AtlasID.TREE_LARGE_BARE
     }),
-    Image.withAtlasSize(atlas, {
+    Sprite.withAtlasSize(atlas, {
       id: AtlasID.TREE_LARGE_SHADOW,
       y: 2,
       layer: Layer.SHADOW

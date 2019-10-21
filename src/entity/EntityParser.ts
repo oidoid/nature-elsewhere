@@ -10,8 +10,8 @@ import {EntityIDParser} from './EntityIDParser'
 import {EntityType} from '../entity/EntityType'
 import {EntityTypeParser} from './EntityTypeParser'
 import {GroupParser} from '../entities/group/GroupParser'
-import {ImageParser} from '../image/ImageParser'
-import {ImageStateMachineParser} from '../imageStateMachine/ImageStateMachineParser'
+import {SpriteParser} from '../sprite/SpriteParser'
+import {SpriteStateMachineParser} from '../spriteStateMachine/SpriteStateMachineParser'
 import {LevelLinkParser} from '../entities/levelLink/LevelLinkParser'
 import {RectParser} from '../math/RectParser'
 import {TextParser} from '../entities/text/TextParser'
@@ -63,7 +63,7 @@ function parseProps(
   if (config.x !== undefined) props.x = config.x
   if (config.y !== undefined) props.y = config.y
   if (config.scale !== undefined)
-    props.scale = ImageParser.parseScale(config.scale)
+    props.scale = SpriteParser.parseScale(config.scale)
   if (config.sx !== undefined) props.sx = config.sx
   if (config.sy !== undefined) props.sy = config.sy
   if (config.vx !== undefined) props.vx = config.vx
@@ -74,7 +74,7 @@ function parseProps(
     props.constituentID = AtlasIDParser.parse(config.constituentID)
   if (config.state !== undefined) props.state = config.state
   if (config.map !== undefined)
-    props.map = ImageStateMachineParser.parseMap(atlas, config.map)
+    props.map = SpriteStateMachineParser.parseMap(atlas, config.map)
   if (config.updatePredicate !== undefined)
     props.updatePredicate = UpdatePredicateParser.parse(config.updatePredicate)
   if (config.collisionType !== undefined)

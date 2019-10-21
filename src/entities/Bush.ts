@@ -4,10 +4,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 
 export class Bush extends Entity<Bush.Variant, Bush.State> {
@@ -16,11 +16,11 @@ export class Bush extends Entity<Bush.Variant, Bush.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Bush.State.VISIBLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.BUSH}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Bush.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.BUSH}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.BUSH_SHADOW,
               y: 1,
               layer: Layer.SHADOW

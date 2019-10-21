@@ -3,10 +3,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Limits} from '../math/Limits'
 
 export class Plane extends Entity<Plane.Variant, Plane.State> {
@@ -14,10 +14,10 @@ export class Plane extends Entity<Plane.Variant, Plane.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Plane.State.VISIBLE]: new ImageRect({
-          images: [
-            new Image({
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Plane.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            new Sprite({
               id: variantToAtlasID[props?.variant ?? Plane.Variant.BLACK],
               w: Limits.maxShort,
               h: Limits.maxShort,

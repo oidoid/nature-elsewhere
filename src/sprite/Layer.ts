@@ -1,5 +1,5 @@
-/** The image draw order from bottom (lesser) to top (greater). Within a Layer,
-    images are drawn in y-coordinate + height ascending order (lesser to
+/** The sprite draw order from bottom (lesser) to top (greater). Within a Layer,
+    sprites are drawn in y-coordinate + height ascending order (lesser to
     greater). y-coordinate + height-ordering is the preferred resolution
     mechanism but the lowest possible Layer may be used where necessary. Layer
     is like a z-coordinate. */

@@ -4,10 +4,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Flag extends Entity<Flag.Variant, Flag.State> {
@@ -15,11 +15,11 @@ export class Flag extends Entity<Flag.Variant, Flag.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Flag.State.VISIBLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.FLAG}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Flag.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.FLAG}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.FLAG_SHADOW,
               x: -1,
               y: 1,

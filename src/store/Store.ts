@@ -1,4 +1,4 @@
-import {Image} from '../image/Image'
+import {Sprite} from '../sprite/Sprite'
 import {InstanceBuffer} from './InstanceBuffer'
 import {ShaderLayout} from '../renderer/ShaderLayout'
 import {UpdateState} from '../updaters/UpdateState'
@@ -19,14 +19,14 @@ export namespace Store {
   }
 
   export function update(store: Store, state: UpdateState): void {
-    let images = []
+    let sprites = []
 
     if (state.level.player)
-      images.push(...updateAndAnimate([state.level.player], state))
+      sprites.push(...updateAndAnimate([state.level.player], state))
 
     Level.updateCamera(state)
 
-    images.push(
+    sprites.push(
       ...updateAndAnimate([state.level.cursor], state),
       ...updateAndAnimate(
         state.level.destination ? [state.level.destination] : [],
@@ -40,14 +40,14 @@ export namespace Store {
       ),
       ...updateAndAnimate(Level.activeParentsNoPlayer(state.level), state)
     )
-    images = images.sort((lhs, rhs) => lhs.compareElevation(rhs))
+    sprites = sprites.sort((lhs, rhs) => lhs.compareElevation(rhs))
 
-    const size = InstanceBuffer.size(store.layout, images.length)
+    const size = InstanceBuffer.size(store.layout, sprites.length)
     if (store.dat.byteLength < size) store.dat = InstanceBuffer.make(size * 2)
-    store.len = images.length
+    store.len = sprites.length
 
-    images.forEach((image, i) =>
-      InstanceBuffer.set(store.layout, state.level.atlas, store.dat, i, image)
+    sprites.forEach((sprite, i) =>
+      InstanceBuffer.set(store.layout, state.level.atlas, store.dat, i, sprite)
     )
   }
 }
@@ -55,11 +55,11 @@ export namespace Store {
 function updateAndAnimate(
   entities: readonly Entity[],
   state: UpdateState
-): Readonly<Image>[] {
-  const images = []
+): Readonly<Sprite>[] {
+  const sprites = []
   for (const entity of entities) {
     entity.update(state)
-    images.push(...entity.animate(state))
+    sprites.push(...entity.animate(state))
   }
-  return images
+  return sprites
 }

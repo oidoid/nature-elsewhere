@@ -4,10 +4,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 
 export class Grass extends Entity<Grass.Variant, Grass.State> {
   constructor(
@@ -17,10 +17,10 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Grass.State.VISIBLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Grass.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {
               id:
                 AtlasID[
                   <keyof typeof AtlasID>(
@@ -28,7 +28,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
                   )
                 ]
             }),
-            Image.withAtlasSize(atlas, {
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.GRASS_SHADOW,
               layer: Layer.SHADOW
             })

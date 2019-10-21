@@ -1,41 +1,41 @@
 import {Animator, Atlas, Integer, Milliseconds} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {DecamillipixelXY, XY} from '../math/XY'
-import {ImageComposition} from './ImageComposition'
+import {SpriteComposition} from './SpriteComposition'
 import {Layer} from './Layer'
 import {Rect, ReadonlyRect} from '../math/Rect'
 import {WH} from '../math/WH'
 
 /** A mapping from an immutable source atlas subtexture to a mutable rendered
-    destination region. The image may be animated. */
-export class Image {
+    destination region. The sprite may be animated. */
+export class Sprite {
   /** The atlas subtexture identifier. The identifier should be unique within
-      the atlas but may be referenced by multiple images. */
+      the atlas but may be referenced by multiple sprites. */
   private readonly _id: AtlasID
 
-  /** See ImageComposition. */
+  /** See SpriteComposition. */
   private _constituentID: AtlasID
-  private _composition: ImageComposition
+  private _composition: SpriteComposition
 
   /** The position and size of the destination, includes scaling. The width and
-      height are never negative even when scaling indicates the image will be
+      height are never negative even when scaling indicates the sprite will be
       flipped when rendered.
 
-      Each animation cel has the same size so an image's dimensions only change
+      Each animation cel has the same size so an sprite's dimensions only change
       when instructed by the caller. Specifying a different destination width or
       height than the source truncates or repeats the scaled rendered source.
 
-      Images.bounds are used to determine when the image is on screen and
+      Sprite.bounds are used to determine when the sprite is on screen and
       therefor should be drawn, as well as for rendering itself.
 
-      Images.bounds are used for some collision tests (see CollisionPredicate)
-      as entity bounds are calculated in part by Image.bounds, ImageRect.bounds,
-      and Entity.bounds. */
+      Sprite.bounds are used for some collision tests (see CollisionPredicate)
+      as entity bounds are calculated in part by Sprite.bounds,
+      SpriteRect.bounds, and Entity.bounds. */
   private readonly _bounds: Rect
 
   /** The drawing layer. A higher number indicates a later draw relative other
-      images. The effect is that an image may be drawn above or below other
-      images in a controlled manner allowing for effects like shadows to
+      sprites. The effect is that an sprite may be drawn above or below other
+      sprites in a controlled manner allowing for effects like shadows to
       consistently be drawn below the object meant to cast it. For objects on
       the same layer, the greater destination position and height is drawn
       last. */
@@ -53,9 +53,9 @@ export class Image {
       the game clock. */
   private readonly _wrapVelocity: DecamillipixelXY
 
-  /** Optionally, compute the image size from the animation source's size and
+  /** Optionally, compute the sprite size from the animation source's size and
       the specified scale. */
-  static withAtlasSize(atlas: Atlas, props: Image.Props): Image {
+  static withAtlasSize(atlas: Atlas, props: Sprite.Props): Sprite {
     const animation = atlas.animations[props.id]
     const size =
       props.size ??
@@ -63,15 +63,15 @@ export class Image {
         props.w ?? animation.size.w * Math.abs(props.scale?.x ?? props.sx ?? 1),
         props.h ?? animation.size.h * Math.abs(props.scale?.y ?? props.sy ?? 1)
       )
-    return new Image({...props, size})
+    return new Sprite({...props, size})
   }
 
-  constructor(props: Image.Props) {
+  constructor(props: Sprite.Props) {
     this._id = props.id
     this._constituentID = props.constituentID ?? props.id
-    this._composition = props.composition ?? ImageComposition.SOURCE
+    this._composition = props.composition ?? SpriteComposition.SOURCE
     this._scale = props.scale ?? new XY(props.sx ?? 1, props.sy ?? 1)
-    Image.validateScale(this._scale)
+    Sprite.validateScale(this._scale)
     this._bounds = props.bounds ?? {
       position: props.position ?? new XY(props.x ?? 0, props.y ?? 0),
       size: props.size ?? new WH(props.w ?? 0, props.h ?? 0)
@@ -98,11 +98,11 @@ export class Image {
     this._constituentID = id
   }
 
-  get composition(): ImageComposition {
+  get composition(): SpriteComposition {
     return this._composition
   }
 
-  set composition(composition: ImageComposition) {
+  set composition(composition: SpriteComposition) {
     this._composition = composition
   }
 
@@ -133,9 +133,9 @@ export class Image {
     this._layer = layer
   }
 
-  /** See Image.compareElevation(). */
-  compareElevation(image: Readonly<Image>): Integer {
-    return Image.compareElevation(this, image)
+  /** See Sprite.compareElevation(). */
+  compareElevation(sprite: Readonly<Sprite>): Integer {
+    return Sprite.compareElevation(this, sprite)
   }
 
   get scale(): Readonly<XY> {
@@ -144,7 +144,7 @@ export class Image {
 
   /** Set absolute scale. */
   scaleTo(to: Readonly<XY>): void {
-    Image.validateScale(to)
+    Sprite.validateScale(to)
     this._bounds.size.w *= Math.abs(to.x / this.scale.x)
     this._bounds.size.h *= Math.abs(to.y / this.scale.y)
     this._scale.x = to.x
@@ -153,7 +153,7 @@ export class Image {
 
   /** Multiply by scale. */
   scaleBy(by: Readonly<XY>): void {
-    Image.validateScale(by)
+    Sprite.validateScale(by)
     this._bounds.size.w *= Math.abs(by.x)
     this._bounds.size.h *= Math.abs(by.y)
     this._scale.x *= by.x
@@ -198,7 +198,7 @@ export class Image {
   }
 }
 
-export namespace Image {
+export namespace Sprite {
   /** Outermost references have precedence over destructured properties when
       specified. E.g., bounds > position > x. Callers can change the referenced
       objects at their own peril. */
@@ -207,8 +207,8 @@ export namespace Image {
 
     /** Defaults to Props.id. */
     readonly constituentID?: AtlasID
-    /** Defaults to ImageComposition.SOURCE. */
-    readonly composition?: ImageComposition
+    /** Defaults to SpriteComposition.SOURCE. */
+    readonly composition?: SpriteComposition
 
     /** Defaults to a rectangle with source width and height time scale at
         0, 0. If bounds or size are specified, the source size is not
@@ -247,8 +247,8 @@ export namespace Image {
 
   /** Return the draw order. */
   export function compareElevation(
-    lhs: Readonly<Image>,
-    rhs: Readonly<Image>
+    lhs: Readonly<Sprite>,
+    rhs: Readonly<Sprite>
   ): Integer {
     return (
       lhs.layer - rhs.layer ||

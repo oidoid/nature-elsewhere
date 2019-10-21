@@ -4,8 +4,8 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -24,11 +24,11 @@ export class DestinationMarker extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [DestinationMarker.State.VISIBLE]: new ImageRect({
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [DestinationMarker.State.VISIBLE]: new SpriteRect({
           origin: new XY(-2, -1),
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.UI_DESTINATION_MARKER})
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.UI_DESTINATION_MARKER})
           ]
         })
       },

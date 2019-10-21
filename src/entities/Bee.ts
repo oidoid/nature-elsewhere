@@ -5,10 +5,10 @@ import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {CollisionType} from '../collision/CollisionType'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
-import {ImageRect} from '../imageStateMachine/ImageRect'
-import {Image} from '../image/Image'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
+import {Sprite} from '../sprite/Sprite'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateStatus} from '../updaters/UpdateStatus'
@@ -20,20 +20,20 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
       collisionType: defaults.collisionType[props?.state ?? defaults.state],
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Bee.State.IDLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.BEE}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Bee.State.IDLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.BEE}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.BEE_SHADOW,
               layer: Layer.SHADOW
             })
           ]
         }),
-        [Bee.State.DEAD]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.BEE_DEAD}),
-            Image.withAtlasSize(atlas, {
+        [Bee.State.DEAD]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.BEE_DEAD}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.BEE_BLOOD,
               layer: Layer.BLOOD
             })

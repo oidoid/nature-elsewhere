@@ -4,11 +4,11 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
@@ -27,7 +27,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
           ? [Rect.make(-1, -1, 3, 3)]
           : [Rect.make(0, 0, 9, 7)],
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
         [Cursor.State.VISIBLE]: variantRect(atlas, props)
       },
       ...props
@@ -90,12 +90,12 @@ const defaults = Object.freeze({
 function variantRect(
   atlas: Atlas,
   props?: Entity.SubProps<Cursor.Variant, Cursor.State>
-): ImageRect {
+): SpriteRect {
   const dot = (props?.variant ?? defaults.variant) === Cursor.Variant.DOT
-  return new ImageRect({
+  return new SpriteRect({
     origin: dot ? new XY(1, 1) : new XY(4, 3),
-    images: [
-      Image.withAtlasSize(atlas, {
+    sprites: [
+      Sprite.withAtlasSize(atlas, {
         id: dot ? AtlasID.PALETTE_BLACK : AtlasID.UI_CURSOR_RETICLE,
         layer: Layer.UI_CURSOR
       })

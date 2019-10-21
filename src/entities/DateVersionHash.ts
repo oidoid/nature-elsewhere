@@ -2,7 +2,7 @@ import {Build} from '../utils/Build'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
 import {Text} from './text/Text'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -17,8 +17,8 @@ export class DateVersionHash extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [DateVersionHash.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [DateVersionHash.State.VISIBLE]: new SpriteRect()
       },
       children: [
         new Text({

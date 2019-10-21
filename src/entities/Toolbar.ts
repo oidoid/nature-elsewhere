@@ -5,10 +5,10 @@ import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {FollowCam, ReadonlyFollowCam} from '../updaters/FollowCam'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
@@ -24,21 +24,21 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Toolbar.State.VISIBLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.FLAG, layer: Layer.UI_HI}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Toolbar.State.VISIBLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.FLAG, layer: Layer.UI_HI}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.FLAG,
               x: 4,
               layer: Layer.UI_HI
             }),
-            Image.withAtlasSize(atlas, {
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.FLAG,
               x: 8,
               layer: Layer.UI_HI
             }),
-            Image.withAtlasSize(atlas, {
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.ARROW_DIAGONAL,
               x: 12,
               layer: Layer.UI_HI

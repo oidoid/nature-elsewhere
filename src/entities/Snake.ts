@@ -5,10 +5,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 
 export class Snake extends Entity<Snake.Variant, Snake.State> {
@@ -19,11 +19,11 @@ export class Snake extends Entity<Snake.Variant, Snake.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Snake.State.IDLE]: new ImageRect({
-          images: [
-            Image.withAtlasSize(atlas, {id: AtlasID.SNAKE}),
-            Image.withAtlasSize(atlas, {
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Snake.State.IDLE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {id: AtlasID.SNAKE}),
+            Sprite.withAtlasSize(atlas, {
               id: AtlasID.SNAKE_SHADOW,
               layer: Layer.SHADOW
             })

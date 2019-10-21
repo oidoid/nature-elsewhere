@@ -6,7 +6,7 @@ import {EntityID} from '../../entity/EntityID'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {FollowCam, ReadonlyFollowCam} from '../../updaters/FollowCam'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../../utils/JSON'
 import {LevelEditorSandbox} from './LevelEditorSandbox'
 import {LevelEditorSandboxFileUtil} from './LevelEditorSandboxFileUtil'
@@ -39,8 +39,8 @@ export class LevelEditorMenu extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [LevelEditorMenu.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [LevelEditorMenu.State.VISIBLE]: new SpriteRect()
       },
       ...props
     })

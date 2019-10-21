@@ -12,10 +12,10 @@ import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {FollowCam, ReadonlyFollowCam} from '../../updaters/FollowCam'
 import {Group} from '../group/Group'
-import {Image} from '../../image/Image'
-import {ImageRect} from '../../imageStateMachine/ImageRect'
+import {Sprite} from '../../sprite/Sprite'
+import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../../utils/JSON'
-import {Layer} from '../../image/Layer'
+import {Layer} from '../../sprite/Layer'
 import {Level} from '../../levels/Level'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
 import {LevelEditorSandboxFileUtil} from './LevelEditorSandboxFileUtil'
@@ -59,8 +59,8 @@ export class LevelEditorPanel extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [LevelEditorPanel.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [LevelEditorPanel.State.VISIBLE]: new SpriteRect()
       },
       ...props
     })
@@ -141,10 +141,10 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new ImageRect(),
-            [Group.State.VISIBLE]: new ImageRect({
-              images: [
-                Image.withAtlasSize(atlas, {
+            [Entity.BaseState.HIDDEN]: new SpriteRect(),
+            [Group.State.VISIBLE]: new SpriteRect({
+              sprites: [
+                Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_MENU,
                   layer: Layer.UI_HIHI
                 })
@@ -160,10 +160,10 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new ImageRect(),
-            [Group.State.VISIBLE]: new ImageRect({
-              images: [
-                Image.withAtlasSize(atlas, {
+            [Entity.BaseState.HIDDEN]: new SpriteRect(),
+            [Group.State.VISIBLE]: new SpriteRect({
+              sprites: [
+                Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_DECREMENT,
                   layer: Layer.UI_HIHI
                 })
@@ -179,10 +179,10 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new ImageRect(),
-            [Group.State.VISIBLE]: new ImageRect({
-              images: [
-                Image.withAtlasSize(atlas, {
+            [Entity.BaseState.HIDDEN]: new SpriteRect(),
+            [Group.State.VISIBLE]: new SpriteRect({
+              sprites: [
+                Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_INCREMENT,
                   layer: Layer.UI_HIHI
                 })
@@ -198,10 +198,10 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new ImageRect(),
-            [Group.State.VISIBLE]: new ImageRect({
-              images: [
-                Image.withAtlasSize(atlas, {
+            [Entity.BaseState.HIDDEN]: new SpriteRect(),
+            [Group.State.VISIBLE]: new SpriteRect({
+              sprites: [
+                Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_DESTROY,
                   layer: Layer.UI_HIHI
                 })
@@ -217,10 +217,10 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new ImageRect(),
-            [Group.State.VISIBLE]: new ImageRect({
-              images: [
-                Image.withAtlasSize(atlas, {
+            [Entity.BaseState.HIDDEN]: new SpriteRect(),
+            [Group.State.VISIBLE]: new SpriteRect({
+              sprites: [
+                Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_CREATE,
                   layer: Layer.UI_HIHI
                 })
@@ -236,10 +236,10 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Entity.BaseState.HIDDEN]: new ImageRect(),
-            [Group.State.VISIBLE]: new ImageRect({
-              images: [
-                Image.withAtlasSize(atlas, {
+            [Entity.BaseState.HIDDEN]: new SpriteRect(),
+            [Group.State.VISIBLE]: new SpriteRect({
+              sprites: [
+                Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_TOGGLE_GRID,
                   layer: Layer.UI_HIHI
                 })

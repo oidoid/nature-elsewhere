@@ -4,9 +4,9 @@ import {EntityFactory} from '../entity/EntityFactory'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType, UI_KEY_PREFIX} from '../entity/EntityType'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {ProcessChildren} from '../entity/ProcessChildren'
 import {Rect, ReadonlyRect} from '../math/Rect'
@@ -33,8 +33,8 @@ export class EntityPicker extends Entity<
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [EntityPicker.State.VISIBLE]: new ImageRect()
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [EntityPicker.State.VISIBLE]: new SpriteRect()
       },
       children: makeChildren(atlas),
       ...props

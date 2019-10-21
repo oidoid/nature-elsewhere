@@ -4,10 +4,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
-import {Layer} from '../image/Layer'
+import {Layer} from '../sprite/Layer'
 
 export class Clover extends Entity<Clover.Variant, Clover.State> {
   constructor(
@@ -17,9 +17,9 @@ export class Clover extends Entity<Clover.Variant, Clover.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Clover.State.VISIBLE]: new ImageRect({
-          images: variantImages(atlas, props?.variant ?? Clover.Variant.SMALL)
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Clover.State.VISIBLE]: new SpriteRect({
+          sprites: variantSprites(atlas, props?.variant ?? Clover.Variant.SMALL)
         })
       },
       ...props
@@ -42,17 +42,17 @@ export namespace Clover {
   }
 }
 
-function variantImages(atlas: Atlas, variant: Clover.Variant): Image[] {
+function variantSprites(atlas: Atlas, variant: Clover.Variant): Sprite[] {
   if (variant === Clover.Variant.SMALL)
     return [
-      Image.withAtlasSize(atlas, {id: AtlasID.CLOVER_0x0, layer: Layer.DECAL}),
-      Image.withAtlasSize(atlas, {
+      Sprite.withAtlasSize(atlas, {id: AtlasID.CLOVER_0x0, layer: Layer.DECAL}),
+      Sprite.withAtlasSize(atlas, {
         id: AtlasID.CLOVER_0x1,
         x: 1,
         y: 3,
         layer: Layer.DECAL
       }),
-      Image.withAtlasSize(atlas, {
+      Sprite.withAtlasSize(atlas, {
         id: AtlasID.CLOVER_0x0,
         x: 4,
         y: 1,
@@ -60,14 +60,14 @@ function variantImages(atlas: Atlas, variant: Clover.Variant): Image[] {
       })
     ]
   return [
-    Image.withAtlasSize(atlas, {id: AtlasID.CLOVER_1x0, layer: Layer.DECAL}),
-    Image.withAtlasSize(atlas, {
+    Sprite.withAtlasSize(atlas, {id: AtlasID.CLOVER_1x0, layer: Layer.DECAL}),
+    Sprite.withAtlasSize(atlas, {
       id: AtlasID.CLOVER_0x1,
       x: 1,
       y: 3,
       layer: Layer.DECAL
     }),
-    Image.withAtlasSize(atlas, {
+    Sprite.withAtlasSize(atlas, {
       id: AtlasID.CLOVER_1x0,
       x: 4,
       y: 1,

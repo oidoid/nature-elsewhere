@@ -5,8 +5,8 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Image} from '../image/Image'
-import {ImageRect} from '../imageStateMachine/ImageRect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
 
 export class Apple extends Entity<Apple.Variant, Apple.State> {
@@ -17,9 +17,9 @@ export class Apple extends Entity<Apple.Variant, Apple.State> {
     super({
       ...defaults,
       map: {
-        [Entity.BaseState.HIDDEN]: new ImageRect(),
-        [Apple.State.VISIBLE]: new ImageRect({
-          images: [Image.withAtlasSize(atlas, {id: AtlasID.PALETTE_RED})]
+        [Entity.BaseState.HIDDEN]: new SpriteRect(),
+        [Apple.State.VISIBLE]: new SpriteRect({
+          sprites: [Sprite.withAtlasSize(atlas, {id: AtlasID.PALETTE_RED})]
         })
       },
       ...props
@@ -45,6 +45,6 @@ const defaults = Object.freeze({
   type: EntityType.APPLE,
   variant: Apple.Variant.NONE,
   state: Apple.State.VISIBLE,
-  collisionPredicate: CollisionPredicate.IMAGES,
+  collisionPredicate: CollisionPredicate.SPRITES,
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.TYPE_ITEM
 })
