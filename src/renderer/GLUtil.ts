@@ -79,13 +79,13 @@ export namespace GLUtil {
     image: HTMLImageElement
   ): GLTexture => {
     gl.activeTexture(textureUnit)
-    const ret = gl.createTexture()
-    gl.bindTexture(GL.TEXTURE_2D, ret)
+    const texture = gl.createTexture()
+    gl.bindTexture(GL.TEXTURE_2D, texture)
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST)
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST)
     gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, image)
     gl.bindTexture(GL.TEXTURE_2D, null)
-    return ret
+    return texture
   }
 
   export const uniformLocations = (
@@ -94,13 +94,13 @@ export namespace GLUtil {
   ): Readonly<Record<string, GLUniformLocation>> => {
     if (!program) return {}
     const len = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS)
-    const ret: Record<string, GLUniformLocation> = {}
+    const locations: Record<string, GLUniformLocation> = {}
     for (let i = 0; i < len; ++i) {
       const uniform = gl.getActiveUniform(program, i)
       if (!uniform) throw new Error(`Can't get uniform at index ${i}.`)
-      ret[uniform.name] = gl.getUniformLocation(program, uniform.name)
+      locations[uniform.name] = gl.getUniformLocation(program, uniform.name)
     }
-    return ret
+    return locations
   }
 
   export const attributeLocations = (
@@ -109,12 +109,12 @@ export namespace GLUtil {
   ): Readonly<Record<string, number>> => {
     if (!program) return {}
     const len = gl.getProgramParameter(program, GL.ACTIVE_ATTRIBUTES)
-    const ret: Record<string, number> = {}
+    const locations: Record<string, number> = {}
     for (let i = 0; i < len; ++i) {
       const attr = gl.getActiveAttrib(program, i)
       if (!attr) throw new Error(`Can't get attribute at index ${i}.`)
-      ret[attr.name] = gl.getAttribLocation(program, attr.name)
+      locations[attr.name] = gl.getAttribLocation(program, attr.name)
     }
-    return ret
+    return locations
   }
 }

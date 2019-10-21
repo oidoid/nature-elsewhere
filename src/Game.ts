@@ -36,17 +36,16 @@ export namespace Game {
     {atlas, atlasImage, shaderLayout}: Assets,
     settings: Settings
   ): Game {
-    const tick = 1000 / 60
-    const ret: Game = {
+    const game: Game = {
       win,
       age: 0,
       time: 0,
-      tick,
+      tick: 1000 / 60,
       levelStateMachine: LevelStateMachine.make(shaderLayout, atlas),
       rendererStateMachine: RendererStateMachine.make({
-        window: win,
+        win,
         canvas,
-        onFrame: time => onFrame(ret, time),
+        onFrame: time => onFrame(game, time),
         onPause: () => {},
         newRenderer: () => Renderer.make(canvas, atlasImage, shaderLayout)
       }),
@@ -58,7 +57,7 @@ export namespace Game {
       ),
       settings
     }
-    return ret
+    return game
   }
 
   export function start(game: Game): void {
@@ -98,20 +97,18 @@ function onFrame(game: Game, time: number): void {
   const anyInput = InputState.anyActive(game.inputPoller.inputs)
   game.requestWindowSetting = game.requestWindowSetting(anyInput)
 
-  game.time += time
-  game.age += game.time - (game.time % game.tick)
+  game.time += time // Add elapsed time to the pending delta total.
+  game.age += game.time - (game.time % game.tick) // Add delta less remainder.
   while (game.levelStateMachine.level && game.time >= game.tick) {
     game.time -= game.tick
-    LevelStateMachine.update(
-      game.levelStateMachine,
-      UpdateState.make(
-        game.win,
-        game.tick,
-        game.levelStateMachine.level,
-        canvasWH,
-        game.inputPoller.inputs
-      )
+    const state = UpdateState.make(
+      game.win,
+      game.tick,
+      game.levelStateMachine.level,
+      canvasWH,
+      game.inputPoller.inputs
     )
+    LevelStateMachine.update(game.levelStateMachine, state)
     InputPoller.update(game.inputPoller, game.tick)
   }
 
