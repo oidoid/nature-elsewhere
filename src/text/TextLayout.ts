@@ -1,7 +1,7 @@
-import {Font} from './Font'
 import * as memFont from './memFont.json'
-import {XY} from '../math/XY'
+import {Font} from './Font'
 import {Rect} from '../math/Rect'
+import {XY} from '../math/XY'
 
 export interface TextLayout {
   /** The length of this array matches the string length. */

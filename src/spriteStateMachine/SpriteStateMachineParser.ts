@@ -1,8 +1,8 @@
 import {Atlas} from 'aseprite-atlas'
-import {EntityParser, EntityStateConfig} from '../entity/EntityParser'
-import {SpriteRectConfig, SpriteRectParser} from './SpriteRectParser'
-import {SpriteRect} from './SpriteRect'
 import {Entity} from '../entity/Entity'
+import {EntityParser, EntityStateConfig} from '../entity/EntityParser'
+import {SpriteRect} from './SpriteRect'
+import {SpriteRectConfig, SpriteRectParser} from './SpriteRectParser'
 import {SpriteStateMap} from './SpriteStateMachine'
 
 export type SpriteStateMapConfig = Maybe<

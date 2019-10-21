@@ -1,6 +1,6 @@
-import {Atlas, Animator} from 'aseprite-atlas'
-import {Sprite} from '../sprite/Sprite'
+import {Animator, Atlas} from 'aseprite-atlas'
 import {ShaderLayout} from '../renderer/ShaderLayout'
+import {Sprite} from '../sprite/Sprite'
 
 const littleEndian: boolean = !!new Int8Array(new Int16Array([1]).buffer)[0]
 

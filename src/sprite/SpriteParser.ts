@@ -1,15 +1,15 @@
 import {AnimatorParser} from './AnimatorParser'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasIDParser} from '../atlas/AtlasIDParser'
+import {LayerParser} from './LayerParser'
+import {RectParser} from '../math/RectParser'
 import {Sprite} from './Sprite'
 import {SpriteCompositionParser} from './SpriteCompositionParser'
 import {SpriteConfig} from './SpriteConfig'
-import {LayerParser} from './LayerParser'
-import {RectParser} from '../math/RectParser'
 import {WHParser} from '../math/WHParser'
 import {XY} from '../math/XY'
-import {XYParser} from '../math/XYParser'
 import {XYConfig} from '../math/XYConfig'
+import {XYParser} from '../math/XYParser'
 
 export namespace SpriteParser {
   export function parse(atlas: Atlas, config: SpriteConfig): Sprite {

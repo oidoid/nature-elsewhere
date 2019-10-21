@@ -1,13 +1,13 @@
-import {LevelType} from '../LevelType'
-import * as TITLE from './titleLevel.json'
-import * as PAUSE from './pauseLevel.json'
+import * as FIELDS from './fieldsLevel.json'
 import * as LEVEL_EDITOR from './levelEditorLevel.json'
 import * as LEVEL_EDITOR_MENU from './levelEditorMenuLevel.json'
 import * as OPTIONS from './optionsLevel.json'
-import * as FIELDS from './fieldsLevel.json'
+import * as PAUSE from './pauseLevel.json'
 import * as TEST_PERFORMANCE from './performanceLevel.json'
 import * as TEST_SHADER from './shaderLevel.json'
+import * as TITLE from './titleLevel.json'
 import {LevelConfig} from '../LevelParser'
+import {LevelType} from '../LevelType'
 
 export const LevelConfigMap: Readonly<Record<
   LevelType,

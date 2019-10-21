@@ -4,9 +4,9 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
+import {JSONValue} from '../utils/JSON'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
-import {JSONValue} from '../utils/JSON'
 
 export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
   constructor(

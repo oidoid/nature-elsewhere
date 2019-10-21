@@ -1,7 +1,7 @@
 import {lineHeight} from './memFont.json'
+import {Rect} from '../math/Rect'
 import {TextLayout} from './TextLayout'
 import {XY} from '../math/XY'
-import {Rect} from '../math/Rect'
 
 describe('layout()', () =>
   test.each(<readonly [string, number, TextLayout][]>[

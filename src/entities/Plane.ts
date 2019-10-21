@@ -3,11 +3,11 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Sprite} from '../sprite/Sprite'
-import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {Limits} from '../math/Limits'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 
 export class Plane extends Entity<Plane.Variant, Plane.State> {
   constructor(props?: Entity.SubProps<Plane.Variant, Plane.State>) {

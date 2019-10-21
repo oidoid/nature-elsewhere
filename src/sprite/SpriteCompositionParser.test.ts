@@ -1,5 +1,5 @@
-import {SpriteCompositionParser} from './SpriteCompositionParser'
 import {SpriteComposition} from './SpriteComposition'
+import {SpriteCompositionParser} from './SpriteCompositionParser'
 
 describe('parse()', () => {
   test('number', () =>

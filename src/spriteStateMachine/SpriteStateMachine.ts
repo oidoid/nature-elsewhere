@@ -1,8 +1,8 @@
 import {AtlasID} from '../atlas/AtlasID'
-import {Sprite} from '../sprite/Sprite'
-import {SpriteRect} from './SpriteRect'
 import {Layer} from '../sprite/Layer'
 import {ReadonlyRect} from '../math/Rect'
+import {Sprite} from '../sprite/Sprite'
+import {SpriteRect} from './SpriteRect'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
 

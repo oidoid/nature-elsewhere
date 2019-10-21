@@ -1,9 +1,9 @@
-import {Sprite} from '../sprite/Sprite'
-import {InstanceBuffer} from './InstanceBuffer'
-import {ShaderLayout} from '../renderer/ShaderLayout'
-import {UpdateState} from '../updaters/UpdateState'
 import {Entity} from '../entity/Entity'
+import {InstanceBuffer} from './InstanceBuffer'
 import {Level} from '../levels/Level'
+import {ShaderLayout} from '../renderer/ShaderLayout'
+import {Sprite} from '../sprite/Sprite'
+import {UpdateState} from '../updaters/UpdateState'
 
 export interface Store {
   readonly layout: ShaderLayout

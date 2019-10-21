@@ -3,15 +3,15 @@ import {Backpacker} from '../entities/Backpacker'
 import {CameraConfig} from './CameraParser'
 import {CameraParser} from './CameraParser'
 import {Cursor} from '../entities/Cursor'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntityParser} from '../entity/EntityParser'
-import {LevelAdvance} from './LevelAdvance'
 import {Level} from './Level'
+import {LevelAdvance} from './LevelAdvance'
 import {LevelEditorSandbox} from '../entities/levelEditor/LevelEditorSandbox'
 import {LevelTypeConfig} from './LevelTypeParser'
 import {LevelTypeParser} from './LevelTypeParser'
 import {Plane} from '../entities/Plane'
 import {WH} from '../math/WH'
-import {EntityConfig} from '../entity/EntityConfig'
 
 export interface LevelConfig {
   readonly version: string

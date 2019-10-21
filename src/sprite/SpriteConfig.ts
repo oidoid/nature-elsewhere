@@ -1,9 +1,9 @@
 import {AnimatorConfig} from './AnimatorConfig'
 import {AtlasIDConfig} from '../atlas/AtlasIDParser'
-import {SpriteCompositionConfig} from './SpriteCompositionConfig'
 import {Integer, Milliseconds} from 'aseprite-atlas'
 import {LayerConfig} from './LayerConfig'
 import {RectConfig} from '../math/RectConfig'
+import {SpriteCompositionConfig} from './SpriteCompositionConfig'
 import {WHConfig} from '../math/WHConfig'
 import {XYConfig} from '../math/XYConfig'
 

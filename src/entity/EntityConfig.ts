@@ -1,8 +1,8 @@
 import {CollisionPredicateConfig} from '../collision/CollisionPredicateParser'
 import {CollisionTypeConfig} from '../collision/CollisionTypeParser'
-import {SpriteStateMapConfig} from '../spriteStateMachine/SpriteStateMachineParser'
 import {Integer} from 'aseprite-atlas'
 import {RectConfig} from '../math/RectConfig'
+import {SpriteStateMapConfig} from '../spriteStateMachine/SpriteStateMachineParser'
 import {UpdatePredicateConfig} from '../updaters/UpdatePredicateParser'
 import {XYConfig} from '../math/XYConfig'
 

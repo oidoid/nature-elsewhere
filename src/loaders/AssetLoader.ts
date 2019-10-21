@@ -1,8 +1,8 @@
-import {Assets} from './Assets'
 import * as atlasJSON from '../atlas/atlas.json'
+import * as shaderLayoutConfig from '../renderer/shaderLayoutConfig.json'
+import {Assets} from './Assets'
 import {ImageLoader} from './ImageLoader'
 import {Parser} from 'aseprite-atlas'
-import * as shaderLayoutConfig from '../renderer/shaderLayoutConfig.json'
 import {ShaderLayoutParser} from '../renderer/ShaderLayoutParser'
 
 export namespace AssetLoader {

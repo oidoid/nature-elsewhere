@@ -1,5 +1,5 @@
-import {Atlas, Parser} from 'aseprite-atlas'
 import * as atlasJSON from '../../atlas/atlas.json'
+import {Atlas, Parser} from 'aseprite-atlas'
 import {LevelConfig, LevelParser} from '../LevelParser'
 import {LevelConfigMap} from './LevelConfigMap'
 import {ValueUtil} from '../../utils/ValueUtil'

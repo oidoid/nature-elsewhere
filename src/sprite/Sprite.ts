@@ -1,9 +1,9 @@
 import {Animator, Atlas, Integer, Milliseconds} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {DecamillipixelXY, XY} from '../math/XY'
-import {SpriteComposition} from './SpriteComposition'
 import {Layer} from './Layer'
-import {Rect, ReadonlyRect} from '../math/Rect'
+import {ReadonlyRect, Rect} from '../math/Rect'
+import {SpriteComposition} from './SpriteComposition'
 import {WH} from '../math/WH'
 
 /** A mapping from an immutable source atlas subtexture to a mutable rendered

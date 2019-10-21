@@ -1,5 +1,5 @@
-import {Atlas, Parser} from 'aseprite-atlas'
 import * as atlasJSON from '../atlas/atlas.json'
+import {Atlas, Parser} from 'aseprite-atlas'
 import {EntityParser} from './EntityParser'
 import {EntityType} from './EntityType'
 

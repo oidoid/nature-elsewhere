@@ -1,12 +1,12 @@
-import {Atlas, Parser} from 'aseprite-atlas'
 import * as atlasJSON from '../atlas/atlas.json'
+import {Atlas, Parser} from 'aseprite-atlas'
+import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {EntityParser} from './EntityParser'
 import {EntityType} from './EntityType'
-import {WH} from '../math/WH'
-import {XY} from '../math/XY'
-import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {Plane} from '../entities/Plane'
 import {Rect} from '../math/Rect'
+import {WH} from '../math/WH'
+import {XY} from '../math/XY'
 
 const atlas: Atlas = Object.freeze(Parser.parse(atlasJSON))
 

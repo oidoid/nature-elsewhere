@@ -1,6 +1,6 @@
+import * as atlasJSON from './atlas.json'
 import {Atlas, Parser} from 'aseprite-atlas'
 import {AtlasID} from './AtlasID'
-import * as atlasJSON from './atlas.json'
 
 const atlas: Atlas = Parser.parse(atlasJSON)
 const ids: readonly AtlasID[] = Object.freeze(Object.values(AtlasID))

@@ -1,6 +1,6 @@
 import {Rect} from './Rect'
-import {XY} from './XY'
 import {WH} from './WH'
+import {XY} from './XY'
 
 /** [
       diagram: string,

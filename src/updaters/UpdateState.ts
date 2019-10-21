@@ -1,5 +1,5 @@
-import {Level} from '../levels/Level'
 import {InputState} from '../inputs/InputState'
+import {Level} from '../levels/Level'
 import {Milliseconds} from 'aseprite-atlas'
 import {WH} from '../math/WH'
 
