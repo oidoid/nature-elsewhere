@@ -26,7 +26,7 @@ export class DestinationMarker extends Entity<
       map: {
         [DestinationMarker.State.HIDDEN]: new SpriteRect(),
         [DestinationMarker.State.VISIBLE]: new SpriteRect({
-          origin: new XY(-2, -1),
+          origin: new XY(2, 1),
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.UI_DESTINATION_MARKER})
           ]
@@ -48,8 +48,7 @@ export class DestinationMarker extends Entity<
     )
     status |= this.transition(DestinationMarker.State.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
-    const destination = position.add(this.origin())
-    status |= this.moveTo(destination)
+    status |= this.moveTo(position)
 
     return status
   }

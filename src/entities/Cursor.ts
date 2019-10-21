@@ -46,7 +46,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
         state.canvasSize,
         state.level.cam.bounds
       )
-      status |= this.moveTo(position.sub(this.origin()))
+      status |= this.moveTo(position)
     } else if (point && point.active) {
       nextState = Cursor.State.VISIBLE
       const position = Input.levelXY(
@@ -54,7 +54,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
         state.canvasSize,
         state.level.cam.bounds
       )
-      status |= this.moveTo(position.sub(this.origin()))
+      status |= this.moveTo(position)
     }
     status |= this.transition(nextState)
 

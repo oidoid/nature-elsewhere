@@ -38,7 +38,7 @@ export class Text extends Entity<Text.Variant, Text.State> {
       this._text,
       this._textScale,
       {
-        position: this.spriteBounds().position.copy(),
+        position: this.bounds.position.copy(),
         size: this._textMaxSize
       },
       this.constituentID()

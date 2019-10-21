@@ -221,6 +221,10 @@ export abstract class Entity<
   }
 
   moveTo(to: Readonly<XY>): UpdateStatus {
+    return this.moveBy(to.sub(this.origin()))
+  }
+
+  moveBoundsTo(to: Readonly<XY>): UpdateStatus {
     return this.moveBy(to.sub(this.bounds.position))
   }
 
@@ -419,7 +423,7 @@ export abstract class Entity<
 
   private _updatePosition(state: UpdateState): UpdateStatus {
     // [todo] level bounds checking
-    const from: Readonly<XY> = this.bounds.position.copy()
+    const from: Readonly<XY> = this.origin().copy()
 
     const diagonal = this.velocity.x && this.velocity.y
 
@@ -444,7 +448,7 @@ export abstract class Entity<
     this._velocityFraction.x -= translate.x * 10_000
     this._velocityFraction.y -= translate.y * 10_000
 
-    const to: Readonly<XY> = this.bounds.position.add(translate)
+    const to: Readonly<XY> = this.origin().add(translate)
     let status = this.moveTo(to)
     if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
 

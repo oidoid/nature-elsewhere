@@ -114,7 +114,7 @@ export class EntityPicker extends Entity<
 
   private _entityWindowBounds(): ReadonlyRect {
     return {
-      position: new XY(this.bounds.position.x, this.bounds.position.y),
+      position: new XY(this.origin().x, this.origin().y),
       size: entityWindowSize
     }
   }
@@ -138,7 +138,7 @@ export class EntityPicker extends Entity<
     const center = Rect.centerOn(child.bounds, entityWindowBounds).max(
       entityWindowBounds.position
     )
-    child.moveTo(center)
+    child.moveBoundsTo(center)
   }
 }
 

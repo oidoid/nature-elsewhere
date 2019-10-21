@@ -51,9 +51,7 @@ export namespace FollowCam {
       positionRelativeToCam
     )
 
-    if (entity.bounds.position.equal(to)) return UpdateStatus.UNCHANGED
-
-    return entity.moveTo(to)
+    return entity.moveBoundsTo(to)
   }
 }
 

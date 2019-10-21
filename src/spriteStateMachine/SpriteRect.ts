@@ -12,7 +12,7 @@ export class SpriteRect {
 
   /** For sprites that require a center offset, an origin may be specified and
       referenced manually in translation calculations. */
-  private readonly _origin: XY
+  private readonly _origin: Readonly<XY>
 
   /** Collision bodies are not scaled. Sprite.bounds includes scaling so
       SpriteRect.bounds does as well. flipImages only controls whether each
@@ -41,7 +41,7 @@ export class SpriteRect {
     this._sprites = props.sprites ?? []
     this._constituentID = props.constituentID
     this.invalidate()
-    if (props.position) this.moveBy(props.position)
+    if (props.position) this.moveTo(props.position)
     if (props.scale) this.scaleBy(props.scale)
   }
 
@@ -51,7 +51,7 @@ export class SpriteRect {
 
   /** See SpriteRect._origin. */
   get origin(): Readonly<XY> {
-    return this._origin
+    return this.bounds.position.add(this._origin)
   }
 
   get scale(): Readonly<XY> {
@@ -84,7 +84,7 @@ export class SpriteRect {
   }
 
   moveTo(to: Readonly<XY>): UpdateStatus {
-    return this.moveBy(to.sub(this.bounds.position))
+    return this.moveBy(to.sub(this.origin))
   }
 
   moveBy(by: Readonly<XY>): UpdateStatus {
@@ -129,7 +129,7 @@ export class SpriteRect {
 
 export namespace SpriteRect {
   export interface Props {
-    readonly origin?: XY
+    readonly origin?: Readonly<XY>
     readonly position?: XY
     readonly scale?: XY
     readonly sprites?: Sprite[]

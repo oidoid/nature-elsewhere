@@ -92,7 +92,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
     const objective = this._computeObjective(state)
 
-    const {x, y} = this.bounds.position
+    const {x, y} = this.origin()
     const left = objective.x < x
     const right = objective.x > x
     const up = objective.y < y
@@ -111,7 +111,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
       // needed, allow the horizontal state to persist. Otherwise, require some
       // distance to transition. This prevents rapidly oscillating between
       // horizontal and vertical states when on a diagonal boundary.
-      const distance = objective.sub(this.bounds.position).abs()
+      const distance = objective.sub(this.origin()).abs()
       const horizontalStatePreferred =
         distance.x &&
         (this.state() === Backpacker.State.WALK_LEFT ||
@@ -165,9 +165,9 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     const {destination} = state.level
 
     if (!destination || destination.state() === DestinationMarker.State.HIDDEN)
-      return this.bounds.position.copy()
+      return this.origin().copy()
 
-    const {x, y} = destination.bounds.position.add(this.origin())
+    const {x, y} = destination.origin()
     const objective = new XY(
       NumberUtil.clamp(x, 0, state.level.size.w - this.bounds.size.w),
       NumberUtil.clamp(y, 0, state.level.size.h - this.bounds.size.h)
@@ -175,8 +175,8 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
     // If not already moving, don't pursue objectives practically underfoot.
     const stopped = !this.velocity.magnitude()
-    if (stopped && objective.sub(this.bounds.position).magnitude() < 4)
-      return this.bounds.position.copy()
+    if (stopped && objective.sub(this.origin()).magnitude() < 4)
+      return this.origin().copy()
 
     return objective
   }
@@ -206,7 +206,7 @@ function newSpriteRect(
   size: WH
 ): SpriteRect {
   return new SpriteRect({
-    origin: new XY(-2, -13),
+    origin: new XY(6, 14),
     sprites: [
       new Sprite({id: character, size}),
       new Sprite({id: shadow, size, layer: Layer.SHADOW})

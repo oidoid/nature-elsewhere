@@ -67,9 +67,9 @@ export class SpriteStateMachine<State extends string = string> {
   transition(state: State): UpdateStatus {
     if (this.state === state) return UpdateStatus.UNCHANGED
     this._validateState(state)
-    const {bounds, scale} = this._spriteRect()
+    const {origin, scale} = this._spriteRect()
     this._state = state
-    this._spriteRect().moveTo(bounds.position)
+    this._spriteRect().moveTo(origin)
     this.resetAnimation()
     this.scaleTo(scale)
     return UpdateStatus.UPDATED
