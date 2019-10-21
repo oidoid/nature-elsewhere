@@ -4,7 +4,6 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
@@ -41,14 +40,9 @@ export class DestinationMarker extends Entity<
 
     const {pick} = state.inputs
     if (!pick?.active) return status
-    const position = Input.levelXY(
-      pick,
-      state.canvasSize,
-      state.level.cam.bounds
-    )
     status |= this.transition(DestinationMarker.State.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
-    status |= this.moveTo(position)
+    status |= this.moveTo(state.level.cursor.origin())
 
     return status
   }
