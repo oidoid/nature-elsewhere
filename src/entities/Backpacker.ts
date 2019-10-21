@@ -110,7 +110,9 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
       const distance = objective.sub(this.bounds.position).abs()
       const horizontalStatePreferred =
         distance.x &&
-        (this.state() === Backpacker.State.WALK_RIGHT || distance.x > 3)
+        (this.state() === Backpacker.State.WALK_LEFT ||
+          this.state() === Backpacker.State.WALK_RIGHT ||
+          distance.x > 3)
 
       if ((left || right) && ((!up && !down) || horizontalStatePreferred))
         nextState = left
