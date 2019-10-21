@@ -1,6 +1,5 @@
 import {CollisionType} from './CollisionType'
-
-export type CollisionTypeConfig = Maybe<CollisionType>
+import {CollisionTypeConfig} from './CollisionTypeConfig'
 
 export namespace CollisionTypeParser {
   export function parse(config: CollisionTypeConfig): CollisionType {

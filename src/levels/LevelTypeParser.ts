@@ -1,6 +1,5 @@
 import {LevelType} from './LevelType'
-
-export type LevelTypeConfig = LevelType | string
+import {LevelTypeConfig} from './LevelTypeConfig'
 
 export namespace LevelTypeParser {
   export function parse(config: LevelTypeConfig): LevelType {

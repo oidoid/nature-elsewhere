@@ -1,5 +1,5 @@
 import {AnimatorConfig} from './AnimatorConfig'
-import {AtlasIDConfig} from '../atlas/AtlasIDParser'
+import {AtlasIDConfig} from '../atlas/AtlasIDConfig'
 import {Integer, Milliseconds} from 'aseprite-atlas'
 import {LayerConfig} from './LayerConfig'
 import {RectConfig} from '../math/RectConfig'

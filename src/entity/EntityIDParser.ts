@@ -1,5 +1,5 @@
 import {EntityID} from './EntityID'
-import {EntityIDConfig} from './EntityParser'
+import {EntityIDConfig} from './EntityIDConfig'
 
 export namespace EntityIDParser {
   export function parse(config: EntityIDConfig): EntityID {

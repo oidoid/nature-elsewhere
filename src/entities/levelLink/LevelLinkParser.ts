@@ -1,10 +1,7 @@
 import {LevelLink} from './LevelLink'
-import {LevelTypeConfig, LevelTypeParser} from '../../levels/LevelTypeParser'
-import {TextParser, TextPropsConfig} from '../text/TextParser'
-
-export interface LevelLinkPropsConfig extends TextPropsConfig {
-  readonly link?: LevelTypeConfig
-}
+import {LevelLinkPropsConfig} from './LevelLinkPropsConfig'
+import {LevelTypeParser} from '../../levels/LevelTypeParser'
+import {TextParser} from '../text/TextParser'
 
 export namespace LevelLinkParser {
   export function parseProps(config: LevelLinkPropsConfig): LevelLink.Props {

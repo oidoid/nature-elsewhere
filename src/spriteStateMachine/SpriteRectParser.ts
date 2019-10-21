@@ -1,15 +1,8 @@
 import {Atlas} from 'aseprite-atlas'
-import {SpriteConfig} from '../sprite/SpriteConfig'
 import {SpriteParser} from '../sprite/SpriteParser'
 import {SpriteRect} from './SpriteRect'
-import {XYConfig} from '../math/XYConfig'
+import {SpriteRectConfig} from './SpriteRectConfig'
 import {XYParser} from '../math/XYParser'
-
-export type SpriteRectConfig = Maybe<{
-  readonly origin?: XYConfig
-  readonly scale?: XYConfig
-  readonly sprites?: readonly SpriteConfig[]
-}>
 
 export namespace SpriteRectParser {
   export function parse(atlas: Atlas, config: SpriteRectConfig): SpriteRect {

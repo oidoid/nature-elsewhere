@@ -5,7 +5,6 @@ import {CollisionTypeParser} from '../collision/CollisionTypeParser'
 import {Entity} from './Entity'
 import {EntityConfig} from './EntityConfig'
 import {EntityFactory} from './EntityFactory'
-import {EntityID} from './EntityID'
 import {EntityIDParser} from './EntityIDParser'
 import {EntityType} from '../entity/EntityType'
 import {EntityTypeParser} from './EntityTypeParser'
@@ -18,8 +17,6 @@ import {TextParser} from '../entities/text/TextParser'
 import {UpdatePredicateParser} from '../updaters/UpdatePredicateParser'
 import {XYParser} from '../math/XYParser'
 
-export type EntityIDConfig = Maybe<EntityID | string>
-export type EntityTypeConfig = EntityType | string
 export type VariantConfig = Maybe<string>
 export type EntityStateConfig = string
 

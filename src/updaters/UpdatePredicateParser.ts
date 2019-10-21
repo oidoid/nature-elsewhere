@@ -1,6 +1,5 @@
 import {UpdatePredicate} from './UpdatePredicate'
-
-export type UpdatePredicateConfig = Maybe<UpdatePredicate | string>
+import {UpdatePredicateConfig} from './UpdatePredicateConfig'
 
 export namespace UpdatePredicateParser {
   export function parse(config: UpdatePredicateConfig): UpdatePredicate {

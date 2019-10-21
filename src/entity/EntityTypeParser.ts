@@ -1,5 +1,5 @@
 import {EntityType} from './EntityType'
-import {EntityTypeConfig} from './EntityParser'
+import {EntityTypeConfig} from './EntityTypeConfig'
 
 export namespace EntityTypeParser {
   export function parse(config: EntityTypeConfig): EntityType {

@@ -1,6 +1,5 @@
 import {AtlasID} from './AtlasID'
-
-export type AtlasIDConfig = AtlasID | string
+import {AtlasIDConfig} from './AtlasIDConfig'
 
 export namespace AtlasIDParser {
   export function parse(config: AtlasIDConfig): AtlasID {

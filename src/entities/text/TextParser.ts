@@ -1,18 +1,8 @@
-import {EntityConfig} from '../../entity/EntityConfig'
-import {LayerConfig} from '../../sprite/LayerConfig'
 import {LayerParser} from '../../sprite/LayerParser'
 import {SpriteParser} from '../../sprite/SpriteParser'
 import {Text} from './Text'
-import {WHConfig} from '../../math/WHConfig'
+import {TextPropsConfig} from './TextPropsConfig'
 import {WHParser} from '../../math/WHParser'
-import {XYConfig} from '../../math/XYConfig'
-
-export interface TextPropsConfig extends EntityConfig {
-  readonly text?: string
-  readonly textLayer?: LayerConfig
-  readonly textScale?: XYConfig
-  readonly textMaxSize?: WHConfig
-}
 
 export namespace TextParser {
   export function parseProps(config: TextPropsConfig): Text.Props {

@@ -6,7 +6,7 @@ import * as PAUSE from './pauseLevel.json'
 import * as TEST_PERFORMANCE from './performanceLevel.json'
 import * as TEST_SHADER from './shaderLevel.json'
 import * as TITLE from './titleLevel.json'
-import {LevelConfig} from '../LevelParser'
+import {LevelConfig} from '../LevelConfig'
 import {LevelType} from '../LevelType'
 
 export const LevelConfigMap: Readonly<Record<

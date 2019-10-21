@@ -1,44 +1,15 @@
 import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/Backpacker'
-import {CameraConfig} from './CameraParser'
 import {CameraParser} from './CameraParser'
 import {Cursor} from '../entities/Cursor'
-import {EntityConfig} from '../entity/EntityConfig'
 import {EntityParser} from '../entity/EntityParser'
 import {Level} from './Level'
 import {LevelAdvance} from './LevelAdvance'
+import {LevelConfig} from './LevelConfig'
 import {LevelEditorSandbox} from '../entities/levelEditor/LevelEditorSandbox'
-import {LevelTypeConfig} from './LevelTypeParser'
 import {LevelTypeParser} from './LevelTypeParser'
 import {Plane} from '../entities/Plane'
-import {WH} from '../math/WH'
-
-export interface LevelConfig {
-  readonly version: string
-  readonly type: LevelTypeConfig
-  readonly size: {w: number; h: number}
-  readonly minViewport: {w: number; h: number}
-  readonly cam?: CameraConfig
-  readonly planes: Maybe<readonly EntityConfig[]>
-  readonly cursor: EntityConfig
-  readonly destination?: EntityConfig
-  readonly hud?: Maybe<readonly EntityConfig[]>
-  readonly player?: EntityConfig
-  readonly sandbox?: EntityConfig
-  /** Entities to populate the level. Any children of these entities will be
-      considered "active" as a first pass if it's parent root entity is. For
-      this reason, favoring shallowing entities is best. Entity composition is
-      wanted but it is an antipattern to specify a single root parent entity and
-      then lump all other entities underneath it as children. The entity update
-      system was designed to allow group update relationships, such as
-      translations and collisions, to occur from parent to child by only
-      surfacing the root parent.
-
-      It's possible to write level sections as single entities. This is probably
-      ok if they do not occupy large areas that span multiple viewports since
-      that breaks "active" entity viewport filtering. */
-  readonly parentEntities: readonly EntityConfig[]
-}
+import {WHParser} from '../math/WHParser'
 
 export namespace LevelParser {
   export const version: string = '0.0.0'
@@ -46,11 +17,12 @@ export namespace LevelParser {
   export function parse(config: LevelConfig, atlas: Atlas): Level {
     if (config.version !== version)
       throw new Error(`Unsupported level config version "${config.version}".`)
-    return {
+
+    const level: Writable<Level> = {
       type: LevelTypeParser.parse(config.type),
       advance: LevelAdvance.UNCHANGED,
-      size: new WH(config.size.w, config.size.h),
-      minViewport: new WH(config.minViewport.w, config.minViewport.h),
+      size: WHParser.parse(config.size),
+      minViewport: WHParser.parse(config.minViewport),
       cam: CameraParser.parse(config.cam),
       planes: <Plane[]>EntityParser.parseAll(atlas, config.planes),
       cursor: <Cursor>EntityParser.parse(config.cursor, atlas),
@@ -58,17 +30,17 @@ export namespace LevelParser {
         destination: EntityParser.parse(config.destination, atlas)
       }),
       hud: EntityParser.parseAll(atlas, config.hud),
-      ...(config.destination && {
-        destination: EntityParser.parse(config.destination, atlas)
-      }),
-      ...(config.player && {
-        player: <Backpacker>EntityParser.parse(config.player, atlas)
-      }),
-      ...(config.sandbox && {
-        sandbox: <LevelEditorSandbox>EntityParser.parse(config.sandbox, atlas)
-      }),
       parentEntities: EntityParser.parseAll(atlas, config.parentEntities),
       atlas
     }
+    if (config.destination)
+      level.destination = EntityParser.parse(config.destination, atlas)
+    if (config.player)
+      level.player = <Backpacker>EntityParser.parse(config.player, atlas)
+    if (config.sandbox)
+      level.sandbox = <LevelEditorSandbox>(
+        EntityParser.parse(config.sandbox, atlas)
+      )
+    return level
   }
 }

@@ -1,6 +1,5 @@
 import {CollisionPredicate} from './CollisionPredicate'
-
-export type CollisionPredicateConfig = Maybe<CollisionPredicate>
+import {CollisionPredicateConfig} from './CollisionPredicateConfig'
 
 export namespace CollisionPredicateParser {
   export function parse(config: CollisionPredicateConfig): CollisionPredicate {

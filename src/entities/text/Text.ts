@@ -13,6 +13,7 @@ import {TextLayout} from '../../text/TextLayout'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
+import {XYConfig} from '../../math/XYConfig'
 
 export class Text extends Entity<Text.Variant, Text.State> {
   private _text: string
@@ -57,15 +58,14 @@ export class Text extends Entity<Text.Variant, Text.State> {
     const diff = EntitySerializer.serialize(this, defaults)
     if (this._text !== defaults.text) diff.text = this._text
     if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
-    if (!this._textScale.equal(defaults.textScale))
-      diff.textScale = {
-        ...(this._textScale.x !== defaults.textScale.x && {
-          x: this._textScale.x
-        }),
-        ...(this._textScale.y !== defaults.textScale.y && {
-          y: this._textScale.y
-        })
-      }
+    if (!this._textScale.equal(defaults.textScale)) {
+      const textScale: Writable<XYConfig> = {}
+      if (this._textScale.x !== defaults.textScale.x)
+        textScale.x = this._textScale.x
+      if (this._textScale.y !== defaults.textScale.y)
+        textScale.y = this._textScale.y
+      diff.textScale = textScale
+    }
     if (!this._textMaxSize.equal(defaults.textMaxSize))
       diff.textMaxSize = {
         ...(this._textMaxSize.w !== defaults.textMaxSize.w && {
