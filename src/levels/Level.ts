@@ -2,6 +2,7 @@ import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/Backpacker'
 import {Camera} from './Camera'
 import {Cursor} from '../entities/Cursor'
+import {DestinationMarker} from '../entities/DestinationMarker'
 import {Entity} from '../entity/Entity'
 import {EntityCollider} from '../collision/EntityCollider'
 import {EntityID} from '../entity/EntityID'
@@ -26,7 +27,7 @@ export interface Level {
   readonly cam: Camera
   readonly planes: Plane[]
   readonly cursor: Cursor
-  readonly destination?: Entity
+  readonly destination?: DestinationMarker
   readonly hud: Entity[]
   readonly player?: Backpacker
   readonly sandbox?: LevelEditorSandbox

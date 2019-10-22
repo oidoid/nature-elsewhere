@@ -2,6 +2,7 @@ import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/Backpacker'
 import {CameraParser} from './CameraParser'
 import {Cursor} from '../entities/Cursor'
+import {DestinationMarker} from '../entities/DestinationMarker'
 import {EntityParser} from '../entity/EntityParser'
 import {Level} from './Level'
 import {LevelAdvance} from './LevelAdvance'
@@ -26,15 +27,14 @@ export namespace LevelParser {
       cam: CameraParser.parse(config.cam),
       planes: <Plane[]>EntityParser.parseAll(atlas, config.planes),
       cursor: <Cursor>EntityParser.parse(config.cursor, atlas),
-      ...(config.destination && {
-        destination: EntityParser.parse(config.destination, atlas)
-      }),
       hud: EntityParser.parseAll(atlas, config.hud),
       parentEntities: EntityParser.parseAll(atlas, config.parentEntities),
       atlas
     }
     if (config.destination)
-      level.destination = EntityParser.parse(config.destination, atlas)
+      level.destination = <DestinationMarker>(
+        EntityParser.parse(config.destination, atlas)
+      )
     if (config.player)
       level.player = <Backpacker>EntityParser.parse(config.player, atlas)
     if (config.sandbox)

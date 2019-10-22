@@ -35,6 +35,18 @@ export class DestinationMarker extends Entity<
     })
   }
 
+  get visible(): boolean {
+    return this.state === DestinationMarker.State.VISIBLE
+  }
+
+  hide(): void {
+    this.transition(DestinationMarker.State.HIDDEN)
+  }
+
+  show(): void {
+    this.transition(DestinationMarker.State.VISIBLE)
+  }
+
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
 

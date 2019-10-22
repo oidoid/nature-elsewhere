@@ -2,7 +2,6 @@ import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
-import {DestinationMarker} from './DestinationMarker'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
@@ -105,7 +104,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     let nextState = this.state
     if (stopped) {
       nextState = idleStateFor[this.state]
-      hideDestinationMarker(state)
+      state.level.destination?.hide()
     } else {
       // If already in a horizontal state and further horizontal movement is
       // needed, allow the horizontal state to persist. Otherwise, require some
@@ -145,7 +144,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
       const idle = idleStateFor[this.state]
       if (!state.inputs.pick || !state.inputs.pick.active) {
         this.transition(idle)
-        hideDestinationMarker(state)
+        state.level.destination?.hide()
         state.win.navigator.vibrate(1)
       }
     }
@@ -164,8 +163,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   private _computeObjective(state: UpdateState): XY {
     const {destination} = state.level
 
-    if (!destination || destination.state === DestinationMarker.State.HIDDEN)
-      return this.origin.copy()
+    if (!destination?.visible) return this.origin.copy()
 
     const {x, y} = destination.origin
     const objective = new XY(
@@ -212,10 +210,6 @@ function newSpriteRect(
       new Sprite({id: shadow, size, layer: Layer.SHADOW})
     ]
   })
-}
-
-function hideDestinationMarker(state: UpdateState): void {
-  state.level.destination?.transition(DestinationMarker.State.HIDDEN)
 }
 
 /** A mapping of the current state to the appropriate idle state. For example,

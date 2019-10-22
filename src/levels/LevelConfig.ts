@@ -5,8 +5,8 @@ import {LevelTypeConfig} from './LevelTypeConfig'
 export interface LevelConfig {
   readonly version: string
   readonly type: LevelTypeConfig
-  readonly size: {w: number; h: number}
-  readonly minViewport: {w: number; h: number}
+  readonly size: Readonly<{w: number; h: number}>
+  readonly minViewport: Readonly<{w: number; h: number}>
   readonly cam?: CameraConfig
   readonly planes: Maybe<readonly EntityConfig[]>
   readonly cursor: EntityConfig
