@@ -179,6 +179,22 @@ export class Sprite {
     this._animator.exposure = 0
   }
 
+  animation(atlas: Atlas): Atlas.Animation {
+    return atlas.animations[this.id]
+  }
+
+  cel(atlas: Atlas): Atlas.Cel {
+    return this.animation(atlas).cels[this.celIndex(atlas)]
+  }
+
+  bodies(atlas: Atlas): Rect[] {
+    return this.cel(atlas).slices.map(({x, y, w, h}) => Rect.make(x, y, w, h))
+  }
+
+  celIndex(atlas: Atlas): Integer {
+    return Animator.index(this.animator.period, this.animation(atlas).cels)
+  }
+
   get wrap(): Readonly<XY> {
     return this._wrap
   }

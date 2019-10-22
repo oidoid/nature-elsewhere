@@ -1,6 +1,8 @@
+import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
+import {DestinationMarker} from './DestinationMarker'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
@@ -15,8 +17,6 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
-import {DestinationMarker} from './DestinationMarker'
-import {Atlas} from 'aseprite-atlas'
 
 export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   constructor(
@@ -248,5 +248,5 @@ const defaults = Object.freeze({
     CollisionType.HARMFUL |
     CollisionType.IMPEDIMENT,
   collisionPredicate: CollisionPredicate.BODIES,
-  collisionBodies: Object.freeze([Object.freeze(Rect.make(2, 12, 4, 3))])
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(4, 12, 4, 3))])
 })

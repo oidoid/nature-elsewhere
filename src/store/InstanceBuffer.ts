@@ -25,9 +25,8 @@ export namespace InstanceBuffer {
   ): void {
     const i = index * layout.perInstance.stride
 
-    const animation = atlas.animations[sprite.id]
-    const celIndex = Animator.index(sprite.animator.period, animation.cels)
-    const cel = animation.cels[celIndex]
+    const animation = sprite.animation(atlas)
+    const cel = sprite.cel(atlas)
     dat.setInt16(i + 0, cel.position.x, littleEndian)
     dat.setInt16(i + 2, cel.position.y, littleEndian)
     dat.setInt16(i + 4, animation.size.w, littleEndian)

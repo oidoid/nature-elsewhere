@@ -53,8 +53,8 @@ const defaults = Object.freeze({
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: Object.freeze({
     [Monument.Variant.SMALL]: Object.freeze([
-      Object.freeze(Rect.make(5, 28, 25, 3)),
-      Object.freeze(Rect.make(20, 23, 15, 6))
+      Object.freeze(Rect.make(1, 28, 29, 3)),
+      Object.freeze(Rect.make(20, 23, 14, 6))
     ]),
     [Monument.Variant.MEDIUM]: Object.freeze([
       Object.freeze(Rect.make(6, 35, 25, 11)),
