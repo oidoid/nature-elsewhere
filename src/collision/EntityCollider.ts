@@ -48,8 +48,8 @@ export namespace EntityCollider {
       // The initiator has sprite collision. If the test entity or its children
       // collide with any of the initiator's sprites, a collision has occurred.
       // Otherwise, no collision has occurred.
-      if (Rect.intersects(initiator.spriteBounds(), entity.bounds))
-        for (const sprite of initiator.sprites())
+      if (Rect.intersects(initiator.spriteBounds, entity.bounds))
+        for (const sprite of initiator.sprites)
           collisions.push(...entity.collidesRect(sprite.bounds))
     }
 

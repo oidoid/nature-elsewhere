@@ -36,7 +36,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
-    let nextState = this.state()
+    let nextState = this.state
     const {point, pick} = state.inputs
     if (pick && pick.active) {
       // it would be good to throttle this so precise picking is easier

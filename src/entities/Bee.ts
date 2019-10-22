@@ -45,14 +45,14 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
 
   transition(state: Bee.State): UpdateStatus {
     const status = super.transition(state)
-    this.setCollisionType(defaults.collisionType[state])
+    this.collisionType = defaults.collisionType[state]
     return status
   }
 
   toJSON(): JSONValue {
     return EntitySerializer.serialize(this, {
       ...defaults,
-      collisionType: defaults.collisionType[this.state()]
+      collisionType: defaults.collisionType[this.state]
     })
   }
 }

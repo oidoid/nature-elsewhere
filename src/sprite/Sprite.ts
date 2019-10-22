@@ -18,8 +18,8 @@ export class Sprite {
   private _composition: SpriteComposition
 
   /** The position and size of the destination, includes scaling. The width and
-      height are never negative even when scaling indicates the sprite will be
-      flipped when rendered.
+      height are unsigned and never negative even when scaling indicates the
+      sprite will be flipped when rendered.
 
       Each animation cel has the same size so an sprite's dimensions only change
       when instructed by the caller. Specifying a different destination width or
@@ -216,7 +216,7 @@ export class Sprite {
 
 export namespace Sprite {
   /** Outermost references have precedence over destructured properties when
-      specified. E.g., bounds > position > x. Callers can change the referenced
+      specified. E.g., bounds > position > x. Callers can mutate the referenced
       objects at their own peril. */
   export interface Props {
     readonly id: AtlasID
@@ -226,9 +226,8 @@ export namespace Sprite {
     /** Defaults to SpriteComposition.SOURCE. */
     readonly composition?: SpriteComposition
 
-    /** Defaults to a rectangle with source width and height time scale at
-        0, 0. If bounds or size are specified, the source size is not
-        considered. */
+    /** Defaults to a rectangle with atlas source width and height at 0, 0.
+        If bounds or size are specified, the source size is not considered. */
     readonly bounds?: Rect
     readonly position?: XY
     readonly x?: Integer

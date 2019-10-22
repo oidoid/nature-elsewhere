@@ -92,7 +92,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
     const objective = this._computeObjective(state)
 
-    const {x, y} = this.origin()
+    const {x, y} = this.origin
     const left = objective.x < x
     const right = objective.x > x
     const up = objective.y < y
@@ -102,20 +102,20 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     this.velocity.y = (up ? -1 : down ? 1 : 0) * 90
     const stopped = !this.velocity.magnitude()
 
-    let nextState = this.state()
+    let nextState = this.state
     if (stopped) {
-      nextState = idleStateFor[this.state()]
+      nextState = idleStateFor[this.state]
       hideDestinationMarker(state)
     } else {
       // If already in a horizontal state and further horizontal movement is
       // needed, allow the horizontal state to persist. Otherwise, require some
       // distance to transition. This prevents rapidly oscillating between
       // horizontal and vertical states when on a diagonal boundary.
-      const distance = objective.sub(this.origin()).abs()
+      const distance = objective.sub(this.origin).abs()
       const horizontalStatePreferred =
         distance.x &&
-        (this.state() === Backpacker.State.WALK_LEFT ||
-          this.state() === Backpacker.State.WALK_RIGHT ||
+        (this.state === Backpacker.State.WALK_LEFT ||
+          this.state === Backpacker.State.WALK_RIGHT ||
           distance.x > 3)
 
       if ((left || right) && ((!up && !down) || horizontalStatePreferred))
@@ -142,7 +142,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     }
 
     if (collisionType & CollisionType.OBSTACLE) {
-      const idle = idleStateFor[this.state()]
+      const idle = idleStateFor[this.state]
       if (!state.inputs.pick || !state.inputs.pick.active) {
         this.transition(idle)
         hideDestinationMarker(state)
@@ -164,10 +164,10 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
   private _computeObjective(state: UpdateState): XY {
     const {destination} = state.level
 
-    if (!destination || destination.state() === DestinationMarker.State.HIDDEN)
-      return this.origin().copy()
+    if (!destination || destination.state === DestinationMarker.State.HIDDEN)
+      return this.origin.copy()
 
-    const {x, y} = destination.origin()
+    const {x, y} = destination.origin
     const objective = new XY(
       NumberUtil.clamp(x, 0, state.level.size.w - this.bounds.size.w),
       NumberUtil.clamp(y, 0, state.level.size.h - this.bounds.size.h)
@@ -175,8 +175,8 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
 
     // If not already moving, don't pursue objectives practically underfoot.
     const stopped = !this.velocity.magnitude()
-    if (stopped && objective.sub(this.origin()).magnitude() < 4)
-      return this.origin().copy()
+    if (stopped && objective.sub(this.origin).magnitude() < 4)
+      return this.origin.copy()
 
     return objective
   }

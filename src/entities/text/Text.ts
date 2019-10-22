@@ -39,10 +39,10 @@ export class Text extends Entity<Text.Variant, Text.State> {
       this._text,
       this._textScale,
       {
-        position: this.bounds.position.copy(),
+        position: this.origin.copy(),
         size: this._textMaxSize
       },
-      this.constituentID()
+      this.constituentID
     )
     if (props?.textLayer)
       for (const sprite of textSprites) sprite.layer = this._textLayer

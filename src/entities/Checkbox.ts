@@ -57,7 +57,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
   }
 
   setText(text: string, layerOffset: number): void {
-    const position = new XY(this.bounds.position.x + 1, this.bounds.position.y)
+    const position = new XY(this.origin.x + 1, this.origin.y)
     const child = new Text({
       textLayer: this._textLayer,
       textScale: this._textScale,
@@ -66,8 +66,8 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
       text,
       position
     })
-    child.elevate(layerOffset)
-    const constituentID = this.children[0]?.constituentID()
+    child.elevateBy(layerOffset)
+    const constituentID = this.children[0]?.constituentID
     if (constituentID) child.setConstituentID(constituentID)
     this.removeChild(this.children[0])
     this.addChildren(child)
@@ -75,7 +75,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
   }
 
   checked(): boolean {
-    return this.state() === Checkbox.State.CHECKED
+    return this.state === Checkbox.State.CHECKED
   }
 
   getText(): string {
@@ -101,9 +101,7 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
       const sprites = newBackgroundSprites(state, layerOffset, size)
       this.replaceSprites(state, ...sprites)
     }
-    this.moveSpritesTo(
-      new XY(text.bounds.position.x - 1, this.bounds.position.y)
-    )
+    this.moveSpritesTo(new XY(text.origin.x - 1, text.origin.y))
   }
 }
 

@@ -25,13 +25,13 @@ export namespace EntitySerializer {
     if (entity.velocity.x !== defaults.velocity.x) diff.vx = entity.velocity.x
     if (entity.velocity.y !== defaults.velocity.y) diff.vy = entity.velocity.y
     if (
-      entity.constituentID() !== undefined &&
-      entity.constituentID() !== defaults.constituentID
+      entity.constituentID !== undefined &&
+      entity.constituentID !== defaults.constituentID
     )
-      diff.constituentID = entity.constituentID()
-    if (entity.scale().x !== defaults.scale.x) diff.sx = entity.scale().x
-    if (entity.scale().y !== defaults.scale.y) diff.sy = entity.scale().y
-    if (entity.state() !== defaults.state) diff.state = entity.state()
+      diff.constituentID = entity.constituentID
+    if (entity.scale.x !== defaults.scale.x) diff.sx = entity.scale.x
+    if (entity.scale.y !== defaults.scale.y) diff.sy = entity.scale.y
+    if (entity.state !== defaults.state) diff.state = entity.state
     if (entity.updatePredicate !== defaults.updatePredicate)
       diff.updatePredicate = entity.updatePredicate
     if (entity.collisionType !== defaults.collisionType)

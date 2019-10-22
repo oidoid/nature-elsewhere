@@ -262,7 +262,7 @@ export class LevelEditorPanel extends Entity<
     this._load = true
 
     // the panel background needs to be higher so raise everything.
-    this.elevate(Layer.UI_PICKER_OFFSET)
+    this.elevateBy(Layer.UI_PICKER_OFFSET)
   }
 
   update(state: UpdateState): UpdateStatus {
@@ -316,7 +316,7 @@ export class LevelEditorPanel extends Entity<
         )
         let entity = EntityFactory.produce(state.level.atlas, {
           type: child.type,
-          state: child.state(),
+          state: child.state,
           variant: child.variant,
           position
         })
@@ -336,7 +336,7 @@ export class LevelEditorPanel extends Entity<
     if (
       marquee &&
       marquee.selection &&
-      marquee.state() === Marquee.State.VISIBLE
+      marquee.state === Marquee.State.VISIBLE
     ) {
       const {selection} = marquee
       const {sandbox} = state.level
@@ -372,7 +372,7 @@ export class LevelEditorPanel extends Entity<
           const index = this._pickerIndexOf(selection)
           if (index !== undefined) this._setEntityCheckboxIndex(atlas, index)
           this._setVariantCheckbox(atlas, selection.variant)
-          this._setStateCheckbox(selection.state())
+          this._setStateCheckbox(selection.state)
         }
         status |= UpdateStatus.UPDATED
       }
@@ -413,7 +413,7 @@ export class LevelEditorPanel extends Entity<
   private _offsetStateCheckbox(offset: number): void {
     this._entityPicker.offsetActiveChildStateIndex(offset)
     const child = this._entityPicker.getActiveChild()
-    if (child) this._setRadioCheckboxText(this._stateCheckbox, child.state())
+    if (child) this._setRadioCheckboxText(this._stateCheckbox, child.state)
   }
 
   private _setStateCheckbox(state: string): void {
@@ -462,7 +462,7 @@ function parseIntCheckbox(checkbox: Checkbox): number {
 function toggleGrid(state: UpdateState): void {
   const grid = Entity.findAnyByID(state.level.planes, EntityID.UI_GRID)
   const toggle =
-    grid?.state() === Plane.State.HIDDEN
+    grid?.state === Plane.State.HIDDEN
       ? Plane.State.VISIBLE
       : Plane.State.HIDDEN
   grid?.transition(toggle)

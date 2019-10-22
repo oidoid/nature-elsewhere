@@ -14,7 +14,6 @@ import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
-import {XY} from '../math/XY'
 
 const pickerSize: Readonly<WH> = Object.freeze(new WH(33, 25))
 const entityWindowSize: Readonly<WH> = Object.freeze(
@@ -39,7 +38,7 @@ export class EntityPicker extends Entity<
       ...props
     })
     for (const child of this.children)
-      child.elevate(-2 * Layer.UI_PICKER_OFFSET)
+      child.elevateTo(this.elevation - 2 * Layer.UI_PICKER_OFFSET)
     this._activeChildIndex = 0
     this._showActiveChild()
   }
@@ -72,9 +71,9 @@ export class EntityPicker extends Entity<
   offsetActiveChildStateIndex(offset: number): void {
     const child = this.getActiveChild()
     if (!child) return
-    const states = child.states()
+    const states = child.states
     const index = NumberUtil.wrap(
-      states.indexOf(child.state()) + offset,
+      states.indexOf(child.state) + offset,
       0,
       states.length
     )
@@ -85,13 +84,13 @@ export class EntityPicker extends Entity<
   offsetActiveChildVariantIndex(atlas: Atlas, offset: number): void {
     const oldChild = this.getActiveChild()
     if (!oldChild) return
-    const variants = oldChild.variants()
+    const variants = oldChild.variants
     const index = NumberUtil.wrap(
       variants.indexOf(oldChild.variant) + offset,
       0,
       variants.length
     )
-    const variant = oldChild.variants()[index]
+    const variant = oldChild.variants[index]
     this.setActiveChildVariant(atlas, variant)
   }
 
@@ -101,10 +100,10 @@ export class EntityPicker extends Entity<
     const newChild = EntityFactory.produce(atlas, {
       type: oldChild.type,
       variant,
-      state: oldChild.state()
+      state: oldChild.state
     })
     this._centerChild(newChild)
-    newChild.elevate(2 * Layer.UI_PICKER_OFFSET)
+    newChild.elevateTo(this.elevation + 2 * Layer.UI_PICKER_OFFSET)
     this.replaceChild(oldChild, newChild)
   }
 
@@ -114,7 +113,7 @@ export class EntityPicker extends Entity<
 
   private _entityWindowBounds(): ReadonlyRect {
     return {
-      position: new XY(this.origin().x, this.origin().y),
+      position: this.origin.copy(),
       size: entityWindowSize
     }
   }
@@ -122,7 +121,7 @@ export class EntityPicker extends Entity<
   private _hideActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
-    child.elevate(-2 * Layer.UI_PICKER_OFFSET)
+    child.elevateTo(this.elevation - 2 * Layer.UI_PICKER_OFFSET)
   }
 
   private _showActiveChild(): void {
@@ -130,7 +129,7 @@ export class EntityPicker extends Entity<
     const child = this.getActiveChild()
     if (!child) return
     this._centerChild(child)
-    child.elevate(2 * Layer.UI_PICKER_OFFSET)
+    child.elevateTo(this.elevation + 2 * Layer.UI_PICKER_OFFSET)
   }
 
   private _centerChild(child: Entity): void {

@@ -42,7 +42,7 @@ export class DestinationMarker extends Entity<
     if (!pick?.active) return status
     status |= this.transition(DestinationMarker.State.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
-    status |= this.moveTo(state.level.cursor.origin())
+    status |= this.moveTo(state.level.cursor.origin)
 
     return status
   }

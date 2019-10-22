@@ -157,7 +157,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
 
   /** These sprites are only present in the visible state. */
   private _resize(destination: XY, sandboxEntity: Entity): void {
-    const marqueeSprites = this.sprites()
+    const marqueeSprites = this.sprites
 
     marqueeSprites[Sprites.TOP].moveTo(destination)
     marqueeSprites[Sprites.TOP].sizeTo(
@@ -190,7 +190,6 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     )
 
     this.invalidateSpriteBounds()
-    this.invalidateBounds()
   }
 }
 

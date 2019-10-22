@@ -25,6 +25,8 @@ export abstract class Entity<
 > {
   private readonly _id: EntityID
 
+  /** Type is used by the EntitySerializer and EntityParser to identify the
+      appropriate Entity subclass constructor. */
   private readonly _type: EntityType
   /** Variants allow multiple forms of the same type. For example, two different
       representations of an apple tree. All variants must support all states.
@@ -42,16 +44,14 @@ export abstract class Entity<
   protected readonly _bounds: Rect
 
   private readonly _velocity: XY
-
   private readonly _velocityFraction: FloatXY
 
   private readonly _machine: SpriteStateMachine<State>
 
   private readonly _updatePredicate: UpdatePredicate
+
   private _collisionType: CollisionType
-
   private _collisionPredicate: CollisionPredicate
-
   /** Collision bodies in level coordinates. Check for bounds intersection
       before testing each body. Sprites should not be considered directly for
       collision tests. */
@@ -103,7 +103,7 @@ export abstract class Entity<
     if (scale !== undefined) this.scaleTo(scale)
 
     // EntityParser doesn't have access to the array of variants.
-    if (!this.variants().includes(props.variant))
+    if (!this.variants.includes(props.variant))
       throw new Error(`Unknown variant "${props.variant}".`)
   }
   get id(): EntityID {
@@ -118,7 +118,7 @@ export abstract class Entity<
     return this._variant
   }
 
-  variants(): Variant[] {
+  get variants(): Variant[] {
     if ('Variant' in this.constructor)
       return Object.values(this.constructor['Variant'])
     return [this.variant]
@@ -128,100 +128,19 @@ export abstract class Entity<
     return this._bounds
   }
 
-  /** This is a shallow invalidation. If a child changes state, or is added, the
-      parents' bounds should be updated. */
-  invalidateBounds(): void {
-    const bounds = Rect.unionAll([
-      this.spriteBounds(),
-      ...this.collisionBodies,
-      ...this.children.map(child => child.bounds)
-    ])
-    if (!bounds) return
-    this._bounds.position.x = bounds.position.x
-    this._bounds.position.y = bounds.position.y
-    this._bounds.size.w = bounds.size.w
-    this._bounds.size.h = bounds.size.h
-  }
-  get velocity(): XY {
-    return this._velocity
+  /** See SpriteRect._origin. */
+  get origin(): Readonly<XY> {
+    return this._machine.origin
   }
 
-  get updatePredicate(): UpdatePredicate {
-    return this._updatePredicate
-  }
-
-  get collisionType(): CollisionType {
-    return this._collisionType
-  }
-
-  setCollisionType(type: CollisionType): void {
-    this._collisionType = type
-  }
-
-  get collisionPredicate(): CollisionPredicate {
-    return this._collisionPredicate
-  }
-
-  set collisionPredicate(predicate: CollisionPredicate) {
-    this._collisionPredicate = predicate
-  }
-
-  get collisionBodies(): readonly ReadonlyRect[] {
-    return this._collisionBodies
-  }
-
-  get children(): readonly Entity[] {
-    return this._children
-  }
-
-  addChildren(...entities: readonly Entity[]): void {
-    this._children.push(...entities)
-    this.invalidateBounds()
-  }
-
-  removeChild(child: Readonly<Entity>): boolean {
-    for (let i = 0; i < this.children.length; ++i) {
-      if (this.children[i] === child) {
-        this._children.splice(i, 1)
-        this.invalidateBounds()
-        return true
-      }
-      if (
-        this.children[i].children.some(grandchild =>
-          grandchild.removeChild(child)
-        )
-      ) {
-        this.invalidateBounds()
-        return true
-      }
-    }
-    return false
-  }
-
-  clearChildren(): void {
-    this._children.length = 0
-  }
-
-  replaceChild(child: Readonly<Entity>, entity: Entity): void {
-    const index = this.children.findIndex(entity => child === entity)
-    if (index === -1) return
-    this._children[index] = entity
-    this.invalidateBounds()
-  }
-
-  addSprites(...sprites: readonly Sprite[]): void {
-    this._machine.addSprites(...sprites)
-    this.invalidateBounds()
-  }
-
-  /** The sprite bounds for the current entity (children and collision
-      rectangles are not considered). */
-  spriteBounds(): ReadonlyRect {
-    return this._machine.bounds()
+  /** The bounds of all the sprites only (children and collision rectangles are
+      not considered). */
+  get spriteBounds(): ReadonlyRect {
+    return this._machine.bounds
   }
 
   moveTo(to: Readonly<XY>): UpdateStatus {
-    return this.moveBy(to.sub(this.origin()))
+    return this.moveBy(to.sub(this.origin))
   }
 
   moveBoundsTo(to: Readonly<XY>): UpdateStatus {
@@ -241,50 +160,181 @@ export abstract class Entity<
     return status | UpdateStatus.UPDATED
   }
 
-  scale(): Readonly<XY> {
-    return this._machine.getScale()
+  /** This is a shallow invalidation. If a child changes state, or is added, the
+      parents' bounds should be updated. */
+  invalidateBounds(): void {
+    const bounds = Rect.unionAll([
+      this.spriteBounds,
+      ...this.collisionBodies,
+      ...this.children.map(child => child.bounds)
+    ])
+    if (!bounds) return
+    this._bounds.position.x = bounds.position.x
+    this._bounds.position.y = bounds.position.y
+    this._bounds.size.w = bounds.size.w
+    this._bounds.size.h = bounds.size.h
+  }
+
+  get scale(): Readonly<XY> {
+    return this._machine.scale
   }
 
   scaleTo(to: Readonly<XY>): UpdateStatus {
-    if (!to.x || !to.y)
-      throw new Error(`Scale must be nonzero (x=${to.x}, y=${to.y}).`)
-    if (this.scale().equal(to)) return UpdateStatus.UNCHANGED
-    const collisionScale = to.div(this.scale())
-    const status = this._machine.scaleTo(to)
-    if (status & UpdateStatus.UPDATED) {
+    return this.scaleBy(to.div(this.scale))
+  }
+
+  scaleBy(by: Readonly<XY>): UpdateStatus {
+    if (by.x === 1 && by.y === 1) return UpdateStatus.UNCHANGED
+    Sprite.validateScale(by)
+    const status = this._machine.scaleBy(by)
+    if (status & UpdateStatus.UPDATED)
       for (const body of this._collisionBodies) {
-        body.size.w *= Math.abs(collisionScale.x)
-        body.size.h *= Math.abs(collisionScale.y)
+        body.size.w *= Math.abs(by.x)
+        body.size.h *= Math.abs(by.y)
       }
-    }
     this.invalidateBounds()
     return status
   }
 
-  constituentID(): Maybe<AtlasID> {
-    return this._machine.constituentID()
+  get constituentID(): Maybe<AtlasID> {
+    return this._machine.constituentID
   }
 
   setConstituentID(id?: AtlasID): UpdateStatus {
     return this._machine.setConstituentID(id)
   }
 
-  sprites(): readonly Readonly<Sprite>[] {
-    return this._machine.sprites()
+  get elevation(): Layer {
+    return this._machine.elevation
   }
 
-  invalidateSpriteBounds(): void {
-    this._machine.invalidate()
+  elevateTo(to: Layer): UpdateStatus {
+    return this.elevateBy(to - this.elevation)
   }
 
-  replaceSprites(state: State, ...sprites: readonly Sprite[]): UpdateStatus {
-    return this._machine.replaceSprites(state, ...sprites)
+  /** Raise or lower an entity's sprites and its descendants' sprites for all
+      states. */
+  elevateBy(by: Layer): UpdateStatus {
+    if (!by) return UpdateStatus.UNCHANGED
+    const status = this._machine.elevateBy(by)
+    if (status & UpdateStatus.UPDATED)
+      for (const child of this.children) child.elevateBy(by)
+    return status
   }
 
-  moveSpritesBy(by: Readonly<XY>): UpdateStatus {
-    const status = this._machine.moveBy(by)
+  get velocity(): XY {
+    return this._velocity
+  }
+
+  get updatePredicate(): UpdatePredicate {
+    return this._updatePredicate
+  }
+
+  get collisionType(): CollisionType {
+    return this._collisionType
+  }
+
+  set collisionType(type: CollisionType) {
+    this._collisionType = type
+  }
+
+  get collisionPredicate(): CollisionPredicate {
+    return this._collisionPredicate
+  }
+
+  set collisionPredicate(predicate: CollisionPredicate) {
+    this._collisionPredicate = predicate
+  }
+
+  get collisionBodies(): readonly ReadonlyRect[] {
+    return this._collisionBodies
+  }
+
+  get children(): readonly Entity[] {
+    return this._children
+  }
+
+  find(predicate: (entity: Entity) => boolean): Maybe<Entity> {
+    if (predicate(this)) return this
+    for (const child of this.children) {
+      const descendant = child.find(predicate)
+      if (descendant) return descendant
+    }
+    return
+  }
+
+  findByID(id: EntityID): Maybe<Entity> {
+    return this.find(entity => entity.id === id)
+  }
+
+  descends(entity: Readonly<Entity>): boolean {
+    return (
+      this === entity || this.children.some(child => child.descends(entity))
+    )
+  }
+
+  addChildren(...entities: readonly Entity[]): void {
+    this._children.push(...entities)
+    this.invalidateBounds()
+  }
+
+  removeChild(child: Readonly<Entity>): boolean {
+    const index = this.children.findIndex(entity => child === entity)
+    if (index > -1) this._children.splice(index, 1)
+    if (
+      index !== -1 ||
+      this.children.some(parent => parent.removeChild(child))
+    ) {
+      this.invalidateBounds()
+      return true
+    }
+    return false
+  }
+
+  clearChildren(): void {
+    this._children.length = 0
+    this.invalidateBounds()
+  }
+
+  replaceChild(child: Readonly<Entity>, entity: Entity): boolean {
+    const index = this.children.findIndex(entity => child === entity)
+    if (index > -1) this._children[index] = entity
+    if (
+      index !== -1 ||
+      this.children.some(parent => parent.replaceChild(child, entity))
+    ) {
+      this.invalidateBounds()
+      return true
+    }
+    return false
+  }
+
+  get state(): State {
+    return this._machine.state
+  }
+
+  get states(): State[] {
+    return this._machine.states
+  }
+
+  transition(state: State): UpdateStatus {
+    const status = this._machine.transition(state)
     if (status & UpdateStatus.UPDATED) this.invalidateBounds()
     return status
+  }
+
+  get sprites(): readonly Readonly<Sprite>[] {
+    return this._machine.sprites
+  }
+
+  addSprites(...sprites: readonly Sprite[]): void {
+    this._machine.addSprites(...sprites)
+    this.invalidateBounds()
+  }
+
+  replaceSprites(state: State, ...sprites: readonly Sprite[]): void {
+    this._machine.replaceSprites(state, ...sprites)
+    this.invalidateBounds()
   }
 
   moveSpritesTo(to: Readonly<XY>): UpdateStatus {
@@ -293,9 +343,43 @@ export abstract class Entity<
     return status
   }
 
-  /** See SpriteRect._origin. */
-  origin(): Readonly<XY> {
-    return this._machine.origin()
+  moveSpritesBy(by: Readonly<XY>): UpdateStatus {
+    const status = this._machine.moveBy(by)
+    if (status & UpdateStatus.UPDATED) this.invalidateBounds()
+    return status
+  }
+
+  invalidateSpriteBounds(): void {
+    this._machine.invalidate()
+    this.invalidateBounds()
+  }
+
+  /** See UpdatePredicate. Actually this is going to go ahead and go into children so updte the docs */
+  update(
+    state: UpdateState,
+    processChildren: ProcessChildren = ProcessChildren.INCLUDE
+  ): UpdateStatus {
+    if (!this.active(state.level.cam.bounds)) return UpdateStatus.UNCHANGED
+
+    let status = this._updatePosition(state)
+
+    if (processChildren === ProcessChildren.SKIP) return status
+
+    for (const child of this.children) {
+      status |= child.update(state)
+      if (UpdateStatus.terminate(status)) return status
+    }
+
+    return status
+  }
+
+  /** Returns whether the current entity is in the viewport or should always be
+      updated. Children are not considered. */
+  active(viewport: ReadonlyRect): boolean {
+    return (
+      this.updatePredicate === UpdatePredicate.ALWAYS ||
+      Rect.intersects(this.bounds, viewport)
+    )
   }
 
   /** Recursively animate the entity and its children. Only visible entities are
@@ -311,48 +395,6 @@ export abstract class Entity<
 
   resetAnimation(): void {
     this._machine.resetAnimation()
-  }
-
-  /** Returns whether the current entity is in the viewport or should always be
-      updated. Children are not considered. */
-  active(viewport: ReadonlyRect): boolean {
-    return (
-      this.updatePredicate === UpdatePredicate.ALWAYS ||
-      Rect.intersects(this.bounds, viewport)
-    )
-  }
-
-  state(): State {
-    return this._machine.state
-  }
-
-  states(): State[] {
-    return this._machine.states()
-  }
-
-  transition(state: State): UpdateStatus {
-    const status = this._machine.transition(state)
-    if (status & UpdateStatus.UPDATED) this.invalidateBounds()
-    return status
-  }
-
-  /** See UpdatePredicate. Actually this is going to go ahead and go into children so updte the docs */
-  update(
-    state: UpdateState,
-    skipChildren: ProcessChildren = ProcessChildren.INCLUDE
-  ): UpdateStatus {
-    if (!this.active(state.level.cam.bounds)) return UpdateStatus.UNCHANGED
-
-    let status = this._updatePosition(state)
-
-    if (skipChildren === ProcessChildren.SKIP) return status
-
-    for (const child of this.children) {
-      status |= child.update(state)
-      if (UpdateStatus.terminate(status)) return status
-    }
-
-    return status
   }
 
   collidesRect(rect: ReadonlyRect): Entity[] {
@@ -373,8 +415,8 @@ export abstract class Entity<
     ) {
       // Test if any sprite collides.
       if (
-        Rect.intersects(this.spriteBounds(), rect) &&
-        this.sprites().some(sprite => Rect.intersects(rect, sprite.bounds))
+        Rect.intersects(this.spriteBounds, rect) &&
+        this.sprites.some(sprite => Rect.intersects(rect, sprite.bounds))
       )
         collisions.push(this)
     }
@@ -397,33 +439,13 @@ export abstract class Entity<
     return collisions
   }
 
-  findByID(id: EntityID): Maybe<Entity> {
-    return this.find(entity => entity.id === id)
-  }
-
-  find(predicate: (entity: Entity) => boolean): Maybe<Entity> {
-    if (predicate(this)) return this
-    for (const child of this.children) {
-      const descendant = child.find(predicate)
-      if (descendant) return descendant
-    }
-    return
-  }
-
-  /** Raise or lower an entity's sprites and its descendants' sprites for all
-      states. */
-  elevate(offset: Layer): void {
-    this._machine.elevate(offset)
-    for (const child of this.children) child.elevate(offset)
-  }
-
   collides(_entities: readonly Entity[], _state: UpdateState): void {}
 
   abstract toJSON(): JSONValue
 
   private _updatePosition(state: UpdateState): UpdateStatus {
     // [todo] level bounds checking
-    const from: Readonly<XY> = this.origin().copy()
+    const from: Readonly<XY> = this.origin.copy()
 
     const diagonal = this.velocity.x && this.velocity.y
 
@@ -448,7 +470,7 @@ export abstract class Entity<
     this._velocityFraction.x -= translate.x * 10_000
     this._velocityFraction.y -= translate.y * 10_000
 
-    const to: Readonly<XY> = this.origin().add(translate)
+    const to: Readonly<XY> = this.origin.add(translate)
     let status = this.moveTo(to)
     if (!(status & UpdateStatus.UPDATED)) return UpdateStatus.UNCHANGED
 
@@ -488,35 +510,52 @@ export abstract class Entity<
 }
 
 export namespace Entity {
+  /** Outermost references have precedence over destructured properties when
+      specified. E.g., velocity > vx. Callers can mutate the referenced objects
+      at their own peril. */
   export interface Props<
     Variant extends string = string,
     State extends string = string
   > {
     /** Defaults to EntityID.UNDEFINED. */
     readonly id?: EntityID
+    /** Required to be passed by subclass. */
     readonly type: EntityType
+    /** Required to be passed by subclass. */
     readonly variant: Variant
-    /** Defaults to (0, 0). */
+
+    /** Defaults to (0, 0). Not used by reference. */
+    readonly position?: Readonly<XY>
     readonly x?: Integer
     readonly y?: Integer
-    readonly position?: Readonly<XY> // This isn't used as a reference.
+
+    /** Defaults to (1, 1). Not used by reference. */
+    readonly scale?: Readonly<XY>
     readonly sx?: Integer
     readonly sy?: Integer
-    readonly scale?: Readonly<XY> // This isn't used as a reference.
+
     readonly constituentID?: AtlasID
+
+    /** Defaults to (0, 0). */
+    readonly velocity?: XY
     readonly vx?: Integer
     readonly vy?: Integer
-    readonly velocity?: XY
-    /** Defaults to {}. */
+
+    /** Required to be passed by subclass. */
     readonly state: State
+    /** Required to be passed by subclass. */
     readonly map: Record<State, SpriteRect>
+
     /** Defaults to BehaviorPredicate.NEVER. */
     readonly updatePredicate?: UpdatePredicate
-    /** Defaults to CollisionPredicate.NEVER. */
+
+    /** Defaults to CollisionType.INERT. */
     readonly collisionType?: CollisionType
+    /** Defaults to CollisionPredicate.NEVER. */
     readonly collisionPredicate?: CollisionPredicate
-    /** Defaults to []. In local coordinates (converted to level by parser). */
+    /** Defaults to []. */
     readonly collisionBodies?: Rect[]
+
     /** Defaults to []. */
     readonly children?: Entity[]
   }
@@ -574,12 +613,10 @@ export namespace Entity {
     return
   }
 
-  export function member(
+  export function descendsAny(
     entities: readonly Readonly<Entity>[],
-    sought: Readonly<Entity>
+    entity: Readonly<Entity>
   ): boolean {
-    for (const member of entities)
-      if (member.find(entity => entity === sought)) return true
-    return false
+    return entities.some(member => member.descends(entity))
   }
 }

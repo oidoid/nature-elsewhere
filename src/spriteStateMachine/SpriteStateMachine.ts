@@ -10,6 +10,9 @@ export type SpriteStateMap<State extends string = string> = Readonly<
   Record<State, SpriteRect>
 >
 
+/** Reconciles SpriteRect mutations on transition. I.e., applies SpriteRect
+    changes to the current state and, whenever a transition is made, applies any
+    differences from the preceding state to the next. */
 export class SpriteStateMachine<State extends string = string> {
   private _state: State
   private readonly _map: SpriteStateMap<State>
@@ -24,96 +27,106 @@ export class SpriteStateMachine<State extends string = string> {
     return this._state
   }
 
-  states(): State[] {
+  get states(): State[] {
     return <State[]>Object.keys(this._map)
-  }
-
-  sprites(): readonly Readonly<Sprite>[] {
-    return this._spriteRect().sprites
-  }
-
-  invalidate(): void {
-    this._spriteRect().invalidate()
-  }
-
-  bounds(): ReadonlyRect {
-    return this._spriteRect().bounds
-  }
-
-  /** See SpriteRect._origin. */
-  origin(): Readonly<XY> {
-    return this._spriteRect().origin
-  }
-
-  moveBy(by: Readonly<XY>): UpdateStatus {
-    return this._spriteRect().moveBy(by)
-  }
-
-  moveTo(to: Readonly<XY>): UpdateStatus {
-    return this._spriteRect().moveTo(to)
-  }
-
-  addSprites(...sprites: readonly Sprite[]): void {
-    this._spriteRect().add(...sprites)
-  }
-
-  setConstituentID(id?: AtlasID): UpdateStatus {
-    let status = UpdateStatus.UNCHANGED
-    for (const state in this._map)
-      status |= this._map[state].setConstituentID(id)
-    return status
   }
 
   transition(state: State): UpdateStatus {
     if (this.state === state) return UpdateStatus.UNCHANGED
     this._validateState(state)
-    const {origin, scale} = this._spriteRect()
+    const {origin, scale, constituentID, elevation} = this._spriteRect
     this._state = state
-    this._spriteRect().moveTo(origin)
+    this._spriteRect.moveTo(origin)
     this.resetAnimation()
     this.scaleTo(scale)
+    this.setConstituentID(constituentID)
+    this.elevateTo(elevation)
     return UpdateStatus.UPDATED
   }
 
-  replaceSprites(state: State, ...sprites: readonly Sprite[]): UpdateStatus {
-    this._map[state].replace(...sprites)
-    return UpdateStatus.UPDATED
+  get bounds(): ReadonlyRect {
+    return this._spriteRect.bounds
   }
 
-  getScale(): Readonly<XY> {
-    return this._spriteRect().scale
+  /** See SpriteRect._origin. */
+  get origin(): Readonly<XY> {
+    return this._spriteRect.origin
   }
 
-  constituentID(): Maybe<AtlasID> {
-    return this._spriteRect().constituentID
+  moveTo(to: Readonly<XY>): UpdateStatus {
+    return this._spriteRect.moveTo(to)
   }
 
-  intersects(bounds: ReadonlyRect): Readonly<Sprite>[] {
-    return this._spriteRect().intersects(bounds)
+  moveBy(by: Readonly<XY>): UpdateStatus {
+    return this._spriteRect.moveBy(by)
+  }
+
+  get scale(): Readonly<XY> {
+    return this._spriteRect.scale
   }
 
   scaleTo(to: Readonly<XY>): UpdateStatus {
-    if (!to.x || !to.y)
-      throw new Error(`Scale must be nonzero (x=${to.x}, y=${to.y}).`)
-    return this._spriteRect().scaleTo(to)
+    Sprite.validateScale(to)
+    return this._spriteRect.scaleTo(to)
   }
 
-  /** Raise or lower all sprites for all states. */
-  elevate(offset: Layer): void {
-    for (const state in this._map) this._map[state].elevate(offset)
+  scaleBy(by: Readonly<XY>): UpdateStatus {
+    Sprite.validateScale(by)
+    return this._spriteRect.scaleBy(by)
   }
 
-  /** Reset the animations of all sprites in the current state. */
+  get constituentID(): Maybe<AtlasID> {
+    return this._spriteRect.constituentID
+  }
+
+  setConstituentID(id: Maybe<AtlasID>): UpdateStatus {
+    return this._spriteRect.setConstituentID(id)
+  }
+
+  get elevation(): Layer {
+    return this._spriteRect.elevation
+  }
+
+  elevateTo(to: Layer): UpdateStatus {
+    return this._spriteRect.elevateTo(to)
+  }
+
+  elevateBy(by: Layer): UpdateStatus {
+    return this._spriteRect.elevateBy(by)
+  }
+
+  get sprites(): readonly Readonly<Sprite>[] {
+    return this._spriteRect.sprites
+  }
+
+  addSprites(...sprites: readonly Sprite[]): void {
+    this._spriteRect.add(...sprites)
+    this.invalidate()
+  }
+
+  replaceSprites(state: State, ...sprites: readonly Sprite[]): void {
+    this._map[state].replace(...sprites)
+    this.invalidate()
+  }
+
+  intersects(bounds: ReadonlyRect): Readonly<Sprite>[] {
+    return this._spriteRect.intersects(bounds)
+  }
+
+  invalidate(): void {
+    this._spriteRect.invalidate()
+  }
+
   resetAnimation(): void {
-    for (const sprite of this.sprites()) sprite.resetAnimation()
+    this._spriteRect.resetAnimation()
   }
 
-  private _spriteRect(): SpriteRect {
+  get _spriteRect(): SpriteRect {
     return this._map[this.state]
   }
 
   private _validateState(state: State): void {
-    if (!this.states().includes(state))
+    if (!this.states.includes(state))
       throw new Error(`Unknown state "${state}".`)
   }
 }
