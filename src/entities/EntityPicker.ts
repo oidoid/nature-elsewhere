@@ -31,14 +31,20 @@ export class EntityPicker extends Entity<
   ) {
     super({
       ...defaults,
+      elevation: Layer.UI_PICKER_OFFSET,
       map: {
         [EntityPicker.State.VISIBLE]: new SpriteRect()
       },
       children: makeChildren(atlas),
       ...props
     })
-    for (const child of this.children)
-      child.elevateTo(this.elevation - 2 * Layer.UI_PICKER_OFFSET)
+
+    for (const child of this.children) {
+      child.elevateTo(0)
+      // Hiding the child means lowering the elevation. However, the child still
+      // has to be centered to ensure the picker covers it.
+      this._centerChild(child)
+    }
     this._activeChildIndex = 0
     this._showActiveChild()
   }
@@ -103,7 +109,7 @@ export class EntityPicker extends Entity<
       state: oldChild.state
     })
     this._centerChild(newChild)
-    newChild.elevateTo(this.elevation + 2 * Layer.UI_PICKER_OFFSET)
+    newChild.elevateTo(this.elevation)
     this.replaceChild(oldChild, newChild)
   }
 
@@ -121,7 +127,7 @@ export class EntityPicker extends Entity<
   private _hideActiveChild(): void {
     const child = this.getActiveChild()
     if (!child) return
-    child.elevateTo(this.elevation - 2 * Layer.UI_PICKER_OFFSET)
+    child.elevateTo(0)
   }
 
   private _showActiveChild(): void {
@@ -129,7 +135,7 @@ export class EntityPicker extends Entity<
     const child = this.getActiveChild()
     if (!child) return
     this._centerChild(child)
-    child.elevateTo(this.elevation + 2 * Layer.UI_PICKER_OFFSET)
+    child.elevateTo(this.elevation)
   }
 
   private _centerChild(child: Entity): void {

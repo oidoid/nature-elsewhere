@@ -57,6 +57,7 @@ function parseProps(
     props.velocity = XYParser.parse(config.velocity)
   if (config.constituentID !== undefined)
     props.constituentID = AtlasIDParser.parse(config.constituentID)
+  if (config.elevation !== undefined) props.elevation = config.elevation
   if (config.state !== undefined) props.state = config.state
   if (config.map !== undefined)
     props.map = SpriteStateMachineParser.parseMap(atlas, config.map)

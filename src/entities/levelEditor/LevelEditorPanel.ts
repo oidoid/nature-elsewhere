@@ -260,9 +260,6 @@ export class LevelEditorPanel extends Entity<
     this._offsetEntityCheckboxIndex(atlas, 0)
 
     this._load = true
-
-    // the panel background needs to be higher so raise everything.
-    this.elevateBy(Layer.UI_PICKER_OFFSET)
   }
 
   update(state: UpdateState): UpdateStatus {

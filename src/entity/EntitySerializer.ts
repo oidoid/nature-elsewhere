@@ -29,6 +29,8 @@ export namespace EntitySerializer {
       entity.constituentID !== defaults.constituentID
     )
       diff.constituentID = entity.constituentID
+    if (entity.elevation !== defaults.elevation)
+      diff.elevation = entity.elevation
     if (entity.scale.x !== defaults.scale.x) diff.sx = entity.scale.x
     if (entity.scale.y !== defaults.scale.y) diff.sy = entity.scale.y
     if (entity.state !== defaults.state) diff.state = entity.state

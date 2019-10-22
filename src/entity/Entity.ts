@@ -85,6 +85,8 @@ export abstract class Entity<
     this._children = props.children ?? []
     this.setConstituentID(props.constituentID)
 
+    if (props.elevation) this.elevateTo(props.elevation)
+
     // Calculate the bounds of the entity's sprites, collision bodies, and all
     // children. Children themselves are not invalidated by this call.
     this.invalidateBounds()
@@ -534,7 +536,11 @@ export namespace Entity {
     readonly sx?: Integer
     readonly sy?: Integer
 
+    /** Defaults to undefined. */
     readonly constituentID?: AtlasID
+
+    /** Defaults to 0. */
+    readonly elevation?: Layer
 
     /** Defaults to (0, 0). */
     readonly velocity?: XY
@@ -579,13 +585,14 @@ export namespace Entity {
   export const defaults = Object.freeze({
     id: EntityID.ANONYMOUS,
     position: Object.freeze(new XY(0, 0)),
+    scale: Object.freeze(new XY(1, 1)),
     velocity: Object.freeze(new XY(0, 0)),
     updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
     collisionType: CollisionType.INERT,
     collisionPredicate: CollisionPredicate.NEVER,
     collisionBodies: Object.freeze([]),
     constituentID: undefined,
-    scale: Object.freeze(new XY(1, 1))
+    elevation: 0
   })
 
   export function removeAny(

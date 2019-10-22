@@ -11,16 +11,17 @@ export interface EntityConfig {
   readonly id?: string
   readonly type: string
   readonly variant?: string
+  readonly position?: XYConfig
   readonly x?: Integer
   readonly y?: Integer
-  readonly position?: XYConfig
+  readonly scale?: XYConfig
+  readonly sx?: Integer
+  readonly velocity?: XYConfig
+  readonly sy?: Integer
   readonly vx?: Integer
   readonly vy?: Integer
-  readonly velocity?: XYConfig
   readonly constituentID?: string
-  readonly sx?: Integer
-  readonly sy?: Integer
-  readonly scale?: XYConfig
+  readonly elevation?: number
   readonly state?: string
   readonly map?: SpriteStateMapConfig
   readonly updatePredicate?: UpdatePredicateConfig
