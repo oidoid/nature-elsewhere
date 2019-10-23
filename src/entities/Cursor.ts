@@ -30,7 +30,8 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
           : [Rect.make(-1, 0, 3, 3)],
       map: {
         [Cursor.State.HIDDEN]: new SpriteRect(),
-        [Cursor.State.VISIBLE]: variantRect(atlas, props)
+        [Cursor.State.POINT]: variantRect(atlas, Cursor.State.POINT, props),
+        [Cursor.State.PICK]: variantRect(atlas, Cursor.State.PICK, props)
       },
       ...props
     })
@@ -42,7 +43,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
     const {point, pick} = state.inputs
     if (pick && pick.active) {
       // it would be good to throttle this so precise picking is easier
-      nextState = Cursor.State.VISIBLE
+      nextState = Cursor.State.PICK
       const position = Input.levelXY(
         pick,
         state.canvasSize,
@@ -50,7 +51,7 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
       )
       status |= this.moveTo(position)
     } else if (point && point.active) {
-      nextState = Cursor.State.VISIBLE
+      nextState = Cursor.State.POINT
       const position = Input.levelXY(
         point,
         state.canvasSize,
@@ -77,7 +78,8 @@ export namespace Cursor {
 
   export enum State {
     HIDDEN = 'hidden',
-    VISIBLE = 'visible'
+    POINT = 'point',
+    PICK = 'pick'
   }
 }
 
@@ -93,6 +95,7 @@ const defaults = Object.freeze({
 
 function variantRect(
   atlas: Atlas,
+  state: Cursor.State,
   props?: Entity.SubProps<Cursor.Variant, Cursor.State>
 ): SpriteRect {
   const variant = props?.variant ?? defaults.variant
@@ -122,7 +125,10 @@ function variantRect(
         origin: new XY(3, 0),
         sprites: [
           Sprite.withAtlasSize(atlas, {
-            id: AtlasID.UI_CURSOR_HAND,
+            id:
+              state === Cursor.State.POINT
+                ? AtlasID.UI_CURSOR_HAND_POINT
+                : AtlasID.UI_CURSOR_HAND_PICK,
             layer: Layer.UI_CURSOR
           })
         ]
