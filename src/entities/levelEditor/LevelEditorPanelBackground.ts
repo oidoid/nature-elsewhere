@@ -53,7 +53,7 @@ function newBackgroundSprites(): Sprite[] {
       y: 21,
       w: 55,
       h: 11,
-      layer: Layer.ABOVE_PLANE
+      layer: Layer.UI_LO
     },
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
