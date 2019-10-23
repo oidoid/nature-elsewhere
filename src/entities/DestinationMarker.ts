@@ -2,6 +2,7 @@ import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityCollider} from '../collision/EntityCollider'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {JSONValue} from '../utils/JSON'
@@ -52,6 +53,13 @@ export class DestinationMarker extends Entity<
 
     const {pick} = state.inputs
     if (!pick?.active) return status
+
+    const hudCollision = !!EntityCollider.collidesEntities(
+      state.level.cursor,
+      state.level.hud
+    ).length
+    if (hudCollision) return status
+
     status |= this.transition(DestinationMarker.State.VISIBLE)
     if (!(status & UpdateStatus.UPDATED)) this.resetAnimation()
     status |= this.moveTo(state.level.cursor.origin)

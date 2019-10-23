@@ -1,7 +1,7 @@
 import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/Backpacker'
 import {Camera} from './Camera'
-import {Cursor} from '../entities/Cursor'
+import {Cursor} from '../entities/cursor/Cursor'
 import {DestinationMarker} from '../entities/DestinationMarker'
 import {Entity} from '../entity/Entity'
 import {EntityCollider} from '../collision/EntityCollider'
@@ -55,6 +55,7 @@ export namespace Level {
     const entities = []
     if (level.player) entities.push(level.player)
     entities.push(
+      level.cursor,
       ...level.parentEntities.filter(entity => entity.active(level.cam.bounds)),
       ...level.hud
     )

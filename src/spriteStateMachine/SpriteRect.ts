@@ -29,7 +29,7 @@ export class SpriteRect {
 
   /** For sprites that require an additional offset to be included move
       computations. */
-  private readonly _origin: Readonly<XY>
+  private readonly _origin: XY
 
   /** Collision bodies and sprite rectangles include absolute scaling in their
       dimensions. Nonzero scaling is enforced so that operations are reversible.
@@ -71,6 +71,11 @@ export class SpriteRect {
   /** See SpriteRect._origin. */
   get origin(): Readonly<XY> {
     return this.bounds.position.add(this._origin)
+  }
+
+  set origin(origin: Readonly<XY>) {
+    this._origin.x = origin.x - this.bounds.position.x
+    this._origin.y = origin.y - this.bounds.position.y
   }
 
   moveTo(to: Readonly<XY>): UpdateStatus {
@@ -170,7 +175,7 @@ export class SpriteRect {
 export namespace SpriteRect {
   export interface Props {
     readonly position?: XY
-    readonly origin?: Readonly<XY>
+    readonly origin?: XY
     readonly scale?: XY
     readonly constituentID?: AtlasID
     readonly elevation?: Layer

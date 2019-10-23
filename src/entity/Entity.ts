@@ -135,6 +135,10 @@ export abstract class Entity<
     return this._machine.origin
   }
 
+  set origin(origin: Readonly<XY>) {
+    this._machine.origin = origin
+  }
+
   /** The bounds of all the sprites only (children and collision rectangles are
       not considered). */
   get spriteBounds(): ReadonlyRect {
@@ -158,7 +162,7 @@ export abstract class Entity<
     this._bounds.position.y += by.y
     status |= this._machine.moveBy(by)
     Rect.moveAllBy(this._collisionBodies, by)
-    for (const child of this.children) child.moveBy(by)
+    for (const child of this.children) status |= child.moveBy(by)
     return status | UpdateStatus.UPDATED
   }
 
@@ -298,12 +302,12 @@ export abstract class Entity<
     this.invalidateBounds()
   }
 
-  replaceChild(child: Readonly<Entity>, entity: Entity): boolean {
-    const index = this.children.findIndex(entity => child === entity)
-    if (index > -1) this._children[index] = entity
+  replaceChild(from: Readonly<Entity>, to: Entity): boolean {
+    const index = this.children.findIndex(entity => from === entity)
+    if (index > -1) this._children[index] = to
     if (
       index !== -1 ||
-      this.children.some(parent => parent.replaceChild(child, entity))
+      this.children.some(parent => parent.replaceChild(from, to))
     ) {
       this.invalidateBounds()
       return true
@@ -363,7 +367,7 @@ export abstract class Entity<
   ): UpdateStatus {
     if (!this.active(state.level.cam.bounds)) return UpdateStatus.UNCHANGED
 
-    let status = this._updatePosition(state)
+    let status = this._updatePositionForVelocity(state)
 
     if (processChildren === ProcessChildren.SKIP) return status
 
@@ -441,11 +445,18 @@ export abstract class Entity<
     return collisions
   }
 
-  collides(_entities: readonly Entity[], _state: UpdateState): void {}
+  /** Only entities with velocity are tested for collisions unless update() is
+      overridden. */
+  collides(_entities: readonly Entity[], _state: UpdateState): UpdateStatus {
+    return UpdateStatus.UNCHANGED
+  }
 
   abstract toJSON(): JSONValue
 
-  private _updatePosition(state: UpdateState): UpdateStatus {
+  private _updatePositionForVelocity(state: UpdateState): UpdateStatus {
+    const stopped = !this.velocity.x && !this.velocity.y
+    if (stopped) return UpdateStatus.UNCHANGED
+
     // [todo] level bounds checking
     const from: Readonly<XY> = this.origin.copy()
 
@@ -505,7 +516,7 @@ export abstract class Entity<
     )
       status |= this.moveTo(new XY(from.x, from.y))
 
-    this.collides(collidesWith, state)
+    status |= this.collides(collidesWith, state)
 
     return status
   }

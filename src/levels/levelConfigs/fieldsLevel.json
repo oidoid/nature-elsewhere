@@ -42,9 +42,9 @@
       }
     }
   ],
-  "cursor": {"type": "uiCursor", "variant": "reticle"},
+  "cursor": {"type": "uiCursor", "icon": "reticle"},
   "destination": {"type": "uiDestinationMarker"},
-  "hud": [{"type": "uiToolbar", "x": 1, "y": 123, "layer": "UI_LO"}],
+  "hud": [{"type": "uiToolbar"}],
   "player": {"id": "uiPlayer", "type": "backpacker", "x": 128, "y": 196},
   "parentEntities": [
     {

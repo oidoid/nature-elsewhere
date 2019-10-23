@@ -27,9 +27,7 @@ export class Group extends Entity<Group.Variant, Group.State> {
   }
 
   update(state: UpdateState): UpdateStatus {
-    let status =
-      super.update(state) | FollowCam.update(this._followCam, this, state)
-    return status
+    return super.update(state) | FollowCam.update(this._followCam, this, state)
   }
 
   toJSON(): JSONValue {

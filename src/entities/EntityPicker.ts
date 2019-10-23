@@ -178,6 +178,7 @@ const defaults = Object.freeze({
 const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
   EntityType.LEVEL_EDITOR_SANDBOX,
+  EntityType.COMPARTMENT,
   EntityType.PLANE,
   ...Object.keys(EntityType)
     .filter(typeKey => typeKey.startsWith(UI_KEY_PREFIX))

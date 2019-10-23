@@ -53,6 +53,10 @@ export class SpriteStateMachine<State extends string = string> {
     return this._spriteRect.origin
   }
 
+  set origin(origin: Readonly<XY>) {
+    this._spriteRect.origin = origin
+  }
+
   moveTo(to: Readonly<XY>): UpdateStatus {
     return this._spriteRect.moveTo(to)
   }

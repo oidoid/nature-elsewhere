@@ -10,10 +10,12 @@ import {Cattails} from '../entities/Cattails'
 import {Checkbox} from '../entities/Checkbox'
 import {Cloud} from '../entities/Cloud'
 import {Clover} from '../entities/Clover'
+import {Compartment} from '../entities/Compartment'
 import {Conifer} from '../entities/Conifer'
-import {Cursor} from '../entities/Cursor'
+import {Cursor} from '../entities/cursor/Cursor'
 import {DateVersionHash} from '../entities/DateVersionHash'
 import {DestinationMarker} from '../entities/DestinationMarker'
+import {DotCursor} from '../entities/cursor/DotCursor'
 import {Entity} from './Entity'
 import {EntityPicker} from '../entities/EntityPicker'
 import {EntityType} from './EntityType'
@@ -22,6 +24,7 @@ import {Fly} from '../entities/Fly'
 import {Frog} from '../entities/Frog'
 import {Grass} from '../entities/Grass'
 import {Group} from '../entities/group/Group'
+import {HandCursor} from '../entities/cursor/HandCursor'
 import {LevelEditorMenu} from '../entities/levelEditor/LevelEditorMenu'
 import {LevelEditorPanel} from '../entities/levelEditor/LevelEditorPanel'
 import {LevelEditorPanelBackground} from '../entities/levelEditor/LevelEditorPanelBackground'
@@ -35,6 +38,7 @@ import {Pig} from '../entities/Pig'
 import {Plane} from '../entities/Plane'
 import {Pond} from '../entities/Pond'
 import {RadioCheckboxGroup} from '../entities/RadioCheckboxGroup'
+import {ReticleCursor} from '../entities/cursor/ReticleCursor'
 import {Snake} from '../entities/Snake'
 import {Subshrub} from '../entities/Subshrub'
 import {Text} from '../entities/text/Text'
@@ -57,6 +61,8 @@ export namespace EntityFactory {
         return new Bee(atlas, props)
       case EntityType.BUNNY:
         return new Bunny(atlas, props)
+      case EntityType.COMPARTMENT:
+        return new Compartment(atlas, props)
       case EntityType.FLY:
         return new Fly(atlas, props)
       case EntityType.FROG:
@@ -103,6 +109,12 @@ export namespace EntityFactory {
         return new Checkbox(props)
       case EntityType.UI_CURSOR:
         return new Cursor(atlas, props)
+      case EntityType.UI_CURSOR_DOT:
+        return new DotCursor(atlas, props)
+      case EntityType.UI_CURSOR_RETICLE:
+        return new ReticleCursor(atlas, props)
+      case EntityType.UI_CURSOR_HAND:
+        return new HandCursor(atlas, props)
       case EntityType.UI_DATE_VERSION_HASH:
         return new DateVersionHash(props)
       case EntityType.UI_DESTINATION_MARKER:

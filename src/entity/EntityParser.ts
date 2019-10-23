@@ -2,6 +2,7 @@ import {Atlas} from 'aseprite-atlas'
 import {AtlasIDParser} from '../atlas/AtlasIDParser'
 import {CollisionPredicateParser} from '../collision/CollisionPredicateParser'
 import {CollisionTypeParser} from '../collision/CollisionTypeParser'
+import {CursorParser} from '../entities/cursor/CursorParser'
 import {Entity} from './Entity'
 import {EntityConfig} from './EntityConfig'
 import {EntityFactory} from './EntityFactory'
@@ -82,6 +83,9 @@ function parseTypeProps(
 ): Entity.Props | Entity.SubProps {
   let typeProps: Maybe<Entity.Props | Entity.SubProps> = undefined
   switch (props.type) {
+    case EntityType.UI_CURSOR:
+      typeProps = CursorParser.parseProps(config)
+      break
     case EntityType.GROUP:
       typeProps = GroupParser.parseProps(config)
       break

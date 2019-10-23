@@ -17,7 +17,7 @@
       }
     }
   ],
-  "cursor": {"type": "uiCursor", "variant": "hand"},
+  "cursor": {"type": "uiCursor", "icon": "hand"},
   "parentEntities": [
     {
       "type": "group",

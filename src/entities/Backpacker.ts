@@ -130,8 +130,8 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     return status
   }
 
-  collides(entities: readonly Entity[], state: UpdateState): void {
-    super.collides(entities, state)
+  collides(entities: readonly Entity[], state: UpdateState): UpdateStatus {
+    let status = super.collides(entities, state)
     let collisionType = CollisionType.INERT
     for (const entity of entities) {
       collisionType |= entity.collisionType
@@ -143,13 +143,15 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     if (collisionType & CollisionType.OBSTACLE) {
       const idle = idleStateFor[this.state]
       if (!state.inputs.pick || !state.inputs.pick.active) {
-        this.transition(idle)
+        status |= this.transition(idle)
         state.level.destination?.hide()
         state.win.navigator.vibrate(1)
       }
     }
 
     this._submerge(!!(collisionType & CollisionType.DEEP_WATER))
+
+    return status
   }
 
   toJSON(): JSONValue {

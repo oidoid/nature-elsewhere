@@ -28,11 +28,11 @@ export namespace Store {
 
     sprites.push(
       ...updateAndAnimate([state.level.cursor], state),
+      ...updateAndAnimate(state.level.hud, state),
       ...updateAndAnimate(
         state.level.destination ? [state.level.destination] : [],
         state
       ),
-      ...updateAndAnimate(state.level.hud, state),
       ...updateAndAnimate(state.level.planes, state),
       ...updateAndAnimate(
         state.level.sandbox ? [state.level.sandbox] : [],

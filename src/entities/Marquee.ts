@@ -1,5 +1,5 @@
 import {AtlasID} from '../atlas/AtlasID'
-import {Cursor} from './Cursor'
+import {Cursor} from './cursor/Cursor'
 import {Entity} from '../entity/Entity'
 import {EntityCollider} from '../collision/EntityCollider'
 import {EntitySerializer} from '../entity/EntitySerializer'
