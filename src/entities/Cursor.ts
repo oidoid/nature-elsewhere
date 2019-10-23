@@ -25,7 +25,9 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
       collisionBodies:
         (props?.variant ?? defaults.variant) === Cursor.Variant.DOT
           ? [Rect.make(-1, -1, 3, 3)]
-          : [Rect.make(0, 0, 9, 7)],
+          : (props?.variant ?? defaults.variant) === Cursor.Variant.RETICLE
+          ? [Rect.make(0, 0, 9, 7)]
+          : [Rect.make(-1, 0, 3, 3)],
       map: {
         [Cursor.State.HIDDEN]: new SpriteRect(),
         [Cursor.State.VISIBLE]: variantRect(atlas, props)
@@ -69,7 +71,8 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
 export namespace Cursor {
   export enum Variant {
     DOT = 'dot',
-    RETICLE = 'reticle'
+    RETICLE = 'reticle',
+    HAND = 'hand'
   }
 
   export enum State {
@@ -92,14 +95,37 @@ function variantRect(
   atlas: Atlas,
   props?: Entity.SubProps<Cursor.Variant, Cursor.State>
 ): SpriteRect {
-  const dot = (props?.variant ?? defaults.variant) === Cursor.Variant.DOT
-  return new SpriteRect({
-    origin: dot ? new XY(1, 1) : new XY(4, 3),
-    sprites: [
-      Sprite.withAtlasSize(atlas, {
-        id: dot ? AtlasID.PALETTE_BLACK : AtlasID.UI_CURSOR_RETICLE,
-        layer: Layer.UI_CURSOR
+  const variant = props?.variant ?? defaults.variant
+  switch (variant) {
+    case Cursor.Variant.DOT:
+      return new SpriteRect({
+        origin: new XY(1, 1),
+        sprites: [
+          Sprite.withAtlasSize(atlas, {
+            id: AtlasID.PALETTE_BLACK,
+            layer: Layer.UI_CURSOR
+          })
+        ]
       })
-    ]
-  })
+    case Cursor.Variant.RETICLE:
+      return new SpriteRect({
+        origin: new XY(4, 3),
+        sprites: [
+          Sprite.withAtlasSize(atlas, {
+            id: AtlasID.UI_CURSOR_RETICLE,
+            layer: Layer.UI_CURSOR
+          })
+        ]
+      })
+    case Cursor.Variant.HAND:
+      return new SpriteRect({
+        origin: new XY(3, 0),
+        sprites: [
+          Sprite.withAtlasSize(atlas, {
+            id: AtlasID.UI_CURSOR_HAND,
+            layer: Layer.UI_CURSOR
+          })
+        ]
+      })
+  }
 }

@@ -255,6 +255,7 @@ export enum AtlasID {
   UI_DESTINATION_MARKER = 'uiDestinationMarker',
   UI_GRID = 'uiGrid',
   UI_CURSOR_RETICLE = 'uiReticle',
+  UI_CURSOR_HAND = 'uiCursor-hand',
   UI_SWITCH = 'uiSwitch',
   UI_WINDOW_MODE_CHART = 'uiWindowModeChart',
   UI_ZOOM_MULTIPLIER_CHART = 'uiZoomMultiplierChart',
