@@ -1,10 +1,12 @@
-Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, simple, detailed, finely built game with tremendous colors.
+Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, simple, detailed, finely built game with tremendous colors and perfect clarity.
   Make large, lavish, content-rich levels.
-    Complete one level. The goal is to identify and solve any infrastructure requirements and architectural complexities, and eliminate ambiguities that require deep consideration. The idea is that if one level is technically feasible and fun, the whole game is a worthwhile inevitability, not just a possibility, given hard work.
+    Complete one level. The goal is to identify and solve any infrastructure requirements and architectural complexities, and eliminate ambiguities that require deep consideration. The idea is that if one level is technically feasible and fun, the whole game is a worthwhile inevitability, not just a possibility, given hard work. For instance, given a good understanding of the constraints wanted, all of the art work and entity system can be entirely redone from scratch in short order. Even the language could be changed, maybe. It's the guesswork and prototyping back and forth in endless iteration that takes so long, not writing something polished to a spec. The system is also designed to be easily migratable in some parts so replacing components is hopefully easy.
       Seeing the game with new eyes, what are the biggest obstacles to maximal enjoyment? What would I change if I rewrote it from scratch? How can it be simpler, more delightful, polished, toothy and pixely, tight.
       Add options UI.
       Add pause level.
-      Improve the title screen and Nature Elsewhere logo. The opening needs to pop.
+      Improve the title screen and Nature Elsewhere logo. The opening needs to pop. Maybe show the earth instead of the moon to indicate you're elsewhere.
+      Add licensing and open source rationale.
+        This is an experiment. Theft would be flattering but also devastating. I hope that I can retain full ownership of the project without competition. If it doesn't pan out, future games will likely be conventionally closed sourced and licensed.
       Make the level editor more featureful.
         Add scale and velocity fields. I think I need to expose a generic property bag. Maybe remove x and y fields--these seem less useful.
         Allow state and variant changes of selected entity.
@@ -38,6 +40,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Can I use the old inverse kinematic JS code?
         UI should be easy to use on mobile.
         What would a Myst / Diablo crossover look like?
+      Add floating stats over entities like life bars. Is there a way to style these so they actually fit into the UI? Maybe a tiny little glass wedge behind each? Or a blue panel-y outline?
       Add inventory management.
         Start with a highly detailed mock.
         Move collected items to inventory instead of just deleting them from the level.
@@ -46,8 +49,67 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Consider minimap.
         Can encumber code be used? What about other projects?
         I think collecting, XP, and HP, could be major parts of the game. I love the Diablo II horadric cube, and RE4 and Symphony of the Night inventory management. Maybe Diablo meets Solar Jetman meets Earthbound.
+        Add backpack inventory button. Maybe like Commandos (see commandos.jpg).
+        HUD / inven / bauble ideas:
+          Baubles should be very simple. Mostly all content (animation). Small modifier to backpacker. Minimal interactions supported. Maybe a few types (always on, on/off, percentage based).
+          Shrimp zoo or aerator.
+          Goldfish tank or bowl.
+          Bug jar or farm. Fruit fly rotten apple jar.
+          Moths flame jar. Maybe moths can fly around instruments too.
+          Ice cube.
+          Mouse cage.
+          Bubble factory.
+          Soda / slushie fountain.
+          Pill bottle.
+          Tiny monkey bauble carts. Monkey does chinups.
+          Cricket or firefly cage makes noises or light when happy.
+          Tap the right amount of times to help bauble thrive (improve health beyond 100%) or slightly recover. If you tap too much, e.g. a plant, it floods with water and diminishes health slightly.
+          Compost heap or garbage dump purifier.
+          Gas and fire exchange system.
+          Maybe O2 meter is fueled by algae or plankton tank or cartridge cores.
+          Bauble with clouds, rain, thundercloud, hurricane, water typhoon, and other weather systems. A really fancy terrarium.
+            In general, a tiny local ecosystem would be amazing.
+            Maybe a minature Earth or other worlds or solar system.
+            Maybe a mini island.
+            Duck pond miniature.
+            Maybe a great ancient bonsai tree that flowers or loses leaves.
+            Maybe the evolution of an ocean, to a volcano, to an island, to vegetation, to land dwellers, to tribes.
+            Maybe it forecasts nearby weather systems OR just has its own relative your health flourishing or otherwise.
+          Fire and electricity baubles sound neat but are probably overdone. Maybe even oscilloscope and CRT type baubles are overdone. Maybe nixie but that's a little overdone too.
+          Baubles can have buttons, LEDs, and gauges. CRT / LED / Total Annihilation type control panel and toggle switches. Big LED switches like the rocker switch on the old Toshiba but with a big crimson or amber LED mode / status indicator.
+          The glass should crack if ever damaged.
+          If I go flower route, it would be cool to have an ash or falling petals animation.
+          Monkey paw for life counter.
+          Worm or snake or garbage snake you feed that outputs something useful.
+          Color purifier processor.
+          Some kind of shapeless genies you worship.
+          It should be possible for baubles (which occupy lots of screen space) to be always on, off, or auto show (show on event, significant change, or very low health). The popup mechanism can be like a bug piston or use gears to open a panel.
+          It would be neat to have a fuse you have to manually replace or re-spark by tapping it.
+          It would be awesome to make lots of extendable and optional baubles like pop out cartridges and drawers and replaceable and upgradeable components. Replacing components and maintenance helps or upgrades abilities.
+          Rotisserie compartment / bauble for improving food or just for looks.
+          Blood or slime or algae IV bag.
+          Ant or nematode farm.
+          Harvest bauble.
+          CPU or tiny robot.
+          Tamagotchi AI snake / worm program / virus sample.
+          Springy shock absorber to stop bouncing when moving.
+          Sludge to water distillation, algae to O2 purifier transference system processors.
+          Lots of panels, baubles, and instruments improve backpacker efficiency.
+          Lots of compartments and panels to reveal cages, farms, drawers, and containers. Inven can too and can interact with HUD. Fully manual inventory management. Put arbitrary things in each slot.
+          Growing flowers and clovers in little plantbeds and pots and urns. Mushroom or winter cactus flower pot.
+          Collecting certain classes of items should require certain special collection containers like fridge for body parts like the bee stinger arrows or tongues and ears, gem specimen book for crystals, dung case for poo samples, box of boxes or pocket of pockets or chest of chests for more storage in general, killing jar for moths, dead specimen journal (a summary of you), barometric chamber, fishtank, binder.
+          It is possible to combine certain items with each other like grouping apples, or goldfish and fish tank, or eye and skull to make a living head.
+            Horadric cube like thing and RE4 inven management.
+          For baubles that don't do anything but look pretty "This instrument doesn't enhance the function of my suit but pleases me to see it."
+          Items with small effects like the Symphony of the Night pixel boost boots, bionics, gothic relics, charms like four-leaf clover, finger bone, dog leg, tongue, eye, old book, melange, abacus, and instruments.
+          Maybe there's a ship or base or just a portable tent and field housing like old library. There are  buildings now. Unsure if you dump things at a homebase or always carry them with you OR set up a base for things.
 ----> Add gameplay. How codes combat and inventory work?
-        Something like Diablo with immunity on diagonal attacks. Tap on the enemy for improved damage. Automatically melee if in range _and_ hostile? How does one not attack? It's unclear what the melee weapon should be. Arrows should be fired automatically at enemies if equipped and not moving?
+        Add Accessory component to Backpacker children.
+          The sword sizes should be exported separately from Backpacker. This will allow un/equipping the accessory.
+          A future Accessory (plural) might be a scarf or something.
+        Something like Diablo with immunity on diagonal attacks. Tap on the enemy for improved damage. Automatically melee if in range _and_ hostile? How does one not attack? It's unclear what the melee weapon should be. Arrows should be fired automatically at enemies if equipped and not moving? I should really study D1.
+        What are the enemies in general? Two types maybe: enemies for resources (bee + stinger, bird + eggs, etc) and aggressive hostile entities like bears, monsters, swamp creatures, mutant bugs, blobs, frozen brains, nymphs, these kind of things. There is a wealth of possibilities but themeing is important. The enemies in Diablo make a ton of sense like skeletons and wraiths.
+        Double tap to attack is a possibility and different modes (ranged, melee, explore) are also possible. What's fun though? Maybe ranged mode is the only one that needs double tap, if that? I like the idea of auto-attacking when near too and not taking damage if on the diagonal.
         Gameplay AND art constraints inform structure of code, Aseprite files, etc.
         Mock out some bee hunting and interactions in great detail. Review past mocks, inspirado, and the old notes. What's a fun design?
           Review materials, synthesize and write tiny plans, do each plan.
@@ -59,11 +121,20 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Are there ranged attacks like bow and arrows?
           It would be neat if arrows stuck in the ground or scattered and emitted a little cloud of dust on impact. Arrows should make a dumb little sound when shot.
         Maybe hover text for hit points.
-        Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator. Escape and Android back support are needed, and editor and debug shortcuts might be nice.
+        Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator. Escape and Android back support are needed, and editor and debug shortcuts might be nice. Can I improve the input system? It feels clunky. Maybe a class. should be easy to test for double click, for example.
         Do I need A*?
+      Update menus to match HUD style, whatever that ends up being.
+      Rename Toolbar to HUD or something.
+      Maybe you just collect specimens and that's the objective of the game.
+      Certain entities should be hostile towards each other. For example, hawks could circle and attack rabbits. Maybe bees could attack flies.
+      [docs][dev] Add early and recent screenshots to readme timeline.
+      Can I grab the collision data from Aseprite slices like before? How can this be done in a nice way?
+      The entity construction lifecycle kind of sucks. Everything has to happen before calling super and that's really clumsy by delegating to a bunch of helper functions.
+      After resizing or changing levels, there's a frame or two where everything is jumbled and out of place. This shouldn't happen. Set the debugger and investigate the entity processing order WRT camera. For example, the level editor toolbar seemed misplaced.
+      I wish The whole update / collision / draw loop lifecycle thingy should be clearer. The parser lifecycle should be clearer too (and documented). Idioms are pretty impromptu presently.
       Make many wonderful entities.
         Add tornados.
-        Add grasshopper.
+        Add grasshopper. Lots of giant mutant bug enemies maybe? Giant Beelzebub house fly angel boss.
         Add lightning to the cloud entity.
         Add cactus.
         Add more clouds.
@@ -99,7 +170,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Add well. See rubbish.aseprite.
         Add Storymaker bubble egg.
         Improve the level boundaries. Maybe leaves or trees.
-        Decide on clovers or reduce their size. Can I add more of the micro-flowers like in the old old mocks instead?
+        Decide on clovers or reduce their size. Can I add more of the micro-flowers like in the old old mocks instead? Some purple ones would be nice.
         Do I want to better distinguish the backpacker from the background? For example, in front of water the colors are identical.
         Add more flowers but try to put them in perspective.
         Fade out the destination maker and allow a few instances. Maybe reverse the animation.
@@ -170,6 +241,8 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
     If I drop WebGL v2, drop @types/webgl2.
   What examples are there for making 9png like UI?
     Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
+    Check out Android.
+    I would use it for landscape items like ponds, paths, etc. Pretty much all tileable scenery.
   Research videos and articles by the experts like GDC.
   Extract the natural engine to a distributable package
   Enums are serializing their keys or their bits: 1) the mechanism should probably be consistent 2) either the keys or the bits can't change; with string enums it felt more flexible since the value string was a more abstract thing than a specific power of two, for example.
