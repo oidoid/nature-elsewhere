@@ -1,5 +1,6 @@
 import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
+import {Button} from './Button'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Compartment} from './Compartment'
@@ -12,6 +13,7 @@ import {FollowCam} from '../updaters/FollowCam'
 import {Group} from './group/Group'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
+import {LifeCounter} from './LifeCounter'
 import {Limits} from '../math/Limits'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
@@ -19,7 +21,6 @@ import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
-import {Button} from './Button'
 
 // This entity is fixed at (0,0) and has the width and height from there to
 // wherever the child groups are rendererd, which is usually a significant
@@ -64,7 +65,8 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
         }),
         new Group({
           positionRelativeToCam: FollowCam.Orientation.SOUTH_WEST,
-          collisionPredicate: CollisionPredicate.SPRITES,
+          collisionPredicate:
+            CollisionPredicate.CHILDREN | CollisionPredicate.SPRITES,
           map: {
             [Group.State.VISIBLE]: new SpriteRect({
               sprites: [
@@ -79,7 +81,8 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
                 })
               ]
             })
-          }
+          },
+          children: [new LifeCounter(atlas, {x: 18, y: 20})]
         })
       ],
       ...props

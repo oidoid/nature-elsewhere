@@ -154,6 +154,10 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     return status
   }
 
+  get idle(): boolean {
+    return idleState[this.state]
+  }
+
   toJSON(): JSONValue {
     return EntitySerializer.serialize(this, defaults)
   }
@@ -231,6 +235,18 @@ const idleStateFor: Readonly<Record<
   [Backpacker.State.WALK_LEFT]: Backpacker.State.IDLE_LEFT,
   [Backpacker.State.WALK_RIGHT]: Backpacker.State.IDLE_RIGHT,
   [Backpacker.State.WALK_DOWN]: Backpacker.State.IDLE_DOWN
+})
+
+const idleState: Readonly<Record<Backpacker.State, boolean>> = Object.freeze({
+  [Backpacker.State.IDLE_UP]: true,
+  [Backpacker.State.IDLE_LEFT]: true,
+  [Backpacker.State.MELEE_RIGHT]: false,
+  [Backpacker.State.IDLE_RIGHT]: true,
+  [Backpacker.State.IDLE_DOWN]: true,
+  [Backpacker.State.WALK_UP]: false,
+  [Backpacker.State.WALK_LEFT]: false,
+  [Backpacker.State.WALK_RIGHT]: false,
+  [Backpacker.State.WALK_DOWN]: false
 })
 
 const defaults = Object.freeze({

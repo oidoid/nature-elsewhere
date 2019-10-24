@@ -35,23 +35,26 @@ export class Text extends Entity<Text.Variant, Text.State> {
     this._textScale = props?.textScale ?? defaults.textScale.copy()
     this._textMaxSize = props?.textMaxSize ?? defaults.textMaxSize.copy()
 
+    this.text = props?.text ?? defaults.text
+  }
+
+  get text(): string {
+    return this._text
+  }
+
+  set text(text: string) {
+    this._text = text
     const textSprites = toSprites(
-      this._text,
+      text,
       this._textScale,
       {
         position: this.origin.copy(),
         size: this._textMaxSize
       },
-      this.constituentID
+      this.constituentID,
+      this._textLayer
     )
-    if (props?.textLayer)
-      for (const sprite of textSprites) sprite.layer = this._textLayer
-
-    this.addSprites(...textSprites)
-  }
-
-  get text(): string {
-    return this._text
+    this.replaceSprites(this.state, ...textSprites)
   }
 
   toJSON(): JSONObject {
@@ -103,7 +106,8 @@ function toSprites(
   string: string,
   scale: XY,
   bounds: Rect,
-  constituentID?: AtlasID,
+  constituentID: Maybe<AtlasID>,
+  layer: Maybe<Layer>,
   y: number = 0
 ): readonly Sprite[] {
   const sprites = []
@@ -126,7 +130,8 @@ function toSprites(
       // character like an exclamation mark.)
       char.size,
       scale,
-      constituentID
+      constituentID,
+      layer
     )
     sprites.push(sprite)
   }
@@ -138,11 +143,21 @@ function newCharacterSprite(
   position: XY,
   {w, h}: WH,
   scale: XY,
-  constituentID: Maybe<AtlasID>
+  constituentID: Maybe<AtlasID>,
+  layer: Maybe<Layer>
 ): Sprite {
   const id = <AtlasID>(MEM_FONT_PREFIX + char.toString().padStart(3, '0'))
   const composition = SpriteComposition.SOURCE_MASK
-  return new Sprite({id, constituentID, composition, position, w, h, scale})
+  return new Sprite({
+    id,
+    constituentID,
+    composition,
+    position,
+    w,
+    h,
+    scale,
+    layer
+  })
 }
 
 const defaults = Object.freeze({

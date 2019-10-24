@@ -251,6 +251,8 @@ general, the following faculties have been valuable:
   C++ or Java toolchains, but I couldn't be happier to not be using a Java
   powered IDE or build tools, or a makefile.
 - Great JSON support.
+- Easy to integrate with untyped JavaScript. Reminds me a little of
+  `extern "C"`.
 
 I dislike the Webpack craziness, and the fast, immature, and sprawling nature of
 the entire stack. I think my code is verbose and not so nice but it can be easy

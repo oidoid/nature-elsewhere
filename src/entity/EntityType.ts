@@ -28,6 +28,8 @@ export enum EntityType {
   SUBSHRUB = 'subshrub',
   TREE = 'tree',
   UI_BUTTON = 'uiButton',
+  LIFE_COUNTER = 'lifeCounter',
+  BACKPACKER_ICON = 'backpackerIcon',
   UI_CHECKBOX = 'uiCheckbox',
   UI_CURSOR = 'uiCursor',
   UI_CURSOR_DOT = 'uiCursorDot',
