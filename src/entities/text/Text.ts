@@ -59,15 +59,15 @@ export class Text extends Entity<Text.Variant, Text.State> {
     if (this._text !== defaults.text) diff.text = this._text
     if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
     if (!this._textScale.equal(defaults.textScale)) {
-      const textScale: Writable<XYConfig> = {}
+      const textScale: NonNullable<Writable<XYConfig>> = {}
       if (this._textScale.x !== defaults.textScale.x)
         textScale.x = this._textScale.x
       if (this._textScale.y !== defaults.textScale.y)
         textScale.y = this._textScale.y
-      diff.textScale = textScale
+      diff.textScale = <JSONObject>textScale
     }
     if (!this._textMaxSize.equal(defaults.textMaxSize))
-      diff.textMaxSize = {
+      diff.textMaxSize = <JSONObject>{
         ...(this._textMaxSize.w !== defaults.textMaxSize.w && {
           w: this._textMaxSize.w
         }),
