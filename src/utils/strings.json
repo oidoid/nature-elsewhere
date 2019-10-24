@@ -1,13 +1,13 @@
 {
   "//": "[strings]",
-  "levelEditor/import": "import level",
-  "levelEditor/export": "export level",
-  "levelEditor/reset": "reset level",
-  "levelEditor/restore": "restore backup",
-  "levelEditor/backToEditor": "back to level editor",
+  "levelEditor/import": "Import Level",
+  "levelEditor/export": "Export Level",
+  "levelEditor/reset": "Reset Level",
+  "levelEditor/restore": "Restore Backup",
+  "levelEditor/backToEditor": "Back to Level Editor",
   "levelEditor/variant": "var",
   "levelEditor/state": "st",
   "levelEditor/x": "x",
   "levelEditor/y": "y",
-  "backToTitle": "back to title"
+  "backToTitle": "Back to Title"
 }

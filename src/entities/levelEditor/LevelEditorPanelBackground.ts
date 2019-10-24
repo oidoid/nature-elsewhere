@@ -47,17 +47,10 @@ export namespace LevelEditorPanelBackground {
 
 function newBackgroundSprites(): Sprite[] {
   return [
-    {
-      id: AtlasID.PALETTE_WHITE,
-      x: 1,
-      y: 21,
-      w: 55,
-      h: 11,
-      layer: Layer.UI_LO
-    },
+    {id: AtlasID.PALETTE_WHITE, x: 1, y: 26, w: 55, h: 11, layer: Layer.UI_LO},
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
-      y: 21,
+      y: 26,
       w: 1,
       h: 11,
       layer: Layer.UI_MID
@@ -65,18 +58,18 @@ function newBackgroundSprites(): Sprite[] {
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 1,
-      y: 20,
+      y: 25,
       w: 55,
       h: 1,
       layer: Layer.UI_MID
     },
-    {id: AtlasID.PALETTE_WHITE, x: 56, y: 13, w: 50, h: 19, layer: Layer.UI_LO},
+    {id: AtlasID.PALETTE_WHITE, x: 56, y: 13, w: 50, h: 24, layer: Layer.UI_LO},
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 55,
       y: 13,
       w: 1,
-      h: 7,
+      h: 12,
       layer: Layer.UI_MID
     },
     {
@@ -87,13 +80,13 @@ function newBackgroundSprites(): Sprite[] {
       h: 1,
       layer: Layer.UI_MID
     },
-    {id: AtlasID.PALETTE_WHITE, x: 100, y: 1, w: 34, h: 31, layer: Layer.UI_LO},
+    {id: AtlasID.PALETTE_WHITE, x: 100, y: 1, w: 34, h: 36, layer: Layer.UI_LO},
     {
       id: AtlasID.UI_CHECKERBOARD_BLUE_GREY,
       x: 100,
       y: 1,
       w: 1,
-      h: 11,
+      h: 12,
       wy: 1,
       layer: Layer.UI_MID
     },

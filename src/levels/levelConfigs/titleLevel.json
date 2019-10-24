@@ -33,7 +33,7 @@
       "camMargin": {"h": 40},
       "map": {
         "visible": {
-          "sprites": [{"id": "palette-lightGreen", "y": 44, "w": 136, "h": 2}]
+          "sprites": [{"id": "palette-lightGreen", "y": 52, "w": 136, "h": 2}]
         }
       },
       "updatePredicate": "always",
@@ -48,14 +48,14 @@
         },
         {
           "type": "group",
-          "y": 54,
+          "y": 62,
           "updatePredicate": "always",
           "collisionPredicate": 8,
           "children": [
             {
               "type": "uiLevelLink",
               "//": "[strings]",
-              "text": "play",
+              "text": "Play",
               "textScale": {"x": 2, "y": 2},
               "link": "fields"
             },
@@ -63,7 +63,7 @@
               "type": "uiLevelLink",
               "position": {"y": 16},
               "//": "[strings]",
-              "text": "options",
+              "text": "Options",
               "textScale": {"x": 2, "y": 2},
               "link": "options"
             },
@@ -71,7 +71,7 @@
               "type": "uiLevelLink",
               "position": {"y": 32},
               "//": "[strings]",
-              "text": "level editor",
+              "text": "Level Editor",
               "textScale": {"x": 2, "y": 2},
               "link": "levelEditor"
             },
@@ -79,7 +79,7 @@
               "type": "uiLevelLink",
               "position": {"y": 48},
               "//": "[strings]",
-              "text": "exit",
+              "text": "Exit",
               "textScale": {"x": 2, "y": 2},
               "link": "exit"
             }

@@ -1,3 +1,4 @@
+import * as memFont from '../../text/memFont.json'
 import * as strings from '../../utils/strings.json'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {CollisionType} from '../../collision/CollisionType'
@@ -50,37 +51,37 @@ export class LevelEditorMenu extends Entity<
     })
     this._export = newLink(
       EntityID.UI_LEVEL_EDITOR_MENU_EXPORT,
-      new XY(0, 0),
+      new XY(0, 0 * memFont.lineHeight),
       strings['levelEditor/export'],
       LevelType.BACK
     )
     this._import = newLink(
       EntityID.UI_LEVEL_EDITOR_MENU_IMPORT,
-      new XY(0, 6),
+      new XY(0, 1 * memFont.lineHeight),
       strings['levelEditor/import'],
       LevelType.BACK
     )
     this._reset = newLink(
       EntityID.UI_LEVEL_EDITOR_MENU_RESET,
-      new XY(0, 12),
+      new XY(0, 2 * memFont.lineHeight),
       strings['levelEditor/reset'],
       LevelType.BACK
     )
     this._restore = newLink(
       EntityID.UI_LEVEL_EDITOR_MENU_RESTORE_BACKUP,
-      new XY(0, 18),
+      new XY(0, 3 * memFont.lineHeight),
       strings['levelEditor/restore'],
       LevelType.BACK
     )
     this._backToTitle = newLink(
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_TITLE,
-      new XY(0, 30),
+      new XY(0, 5 * memFont.lineHeight),
       strings['backToTitle'],
       LevelType.TITLE
     )
     this._backToEditor = newLink(
       EntityID.UI_LEVEL_EDITOR_MENU_BACK_TO_EDITOR,
-      new XY(0, 36),
+      new XY(0, 6 * memFont.lineHeight),
       strings['levelEditor/backToEditor'],
       LevelType.BACK
     )

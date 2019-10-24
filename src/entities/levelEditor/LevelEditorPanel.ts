@@ -77,27 +77,27 @@ export class LevelEditorPanel extends Entity<
     this._stateCheckbox = new Checkbox({
       textMaxSize: new WH(34, 5),
       x: 10,
-      y: 18,
+      y: 20,
       constituentID: AtlasID.PALETTE_BLACK
     })
     this._xCheckbox = new Checkbox({
       text: '0',
       textLayer: Layer.UI_HI,
-      x: 4,
-      y: 24,
+      x: 6,
+      y: 28,
       constituentID: AtlasID.PALETTE_BLACK
     })
     this._yCheckbox = new Checkbox({
       text: '0',
       textLayer: Layer.UI_HI,
-      x: 26,
-      y: 24,
+      x: 28,
+      y: 28,
       constituentID: AtlasID.PALETTE_BLACK
     })
     this._entityCheckbox = new Checkbox({
       state: Checkbox.State.CHECKED,
-      textMaxSize: new WH(32, 5),
-      x: 46,
+      textMaxSize: new WH(29, 5),
+      x: 47,
       constituentID: AtlasID.PALETTE_BLACK
     })
     this._radioGroup = new RadioCheckboxGroup({
@@ -115,20 +115,21 @@ export class LevelEditorPanel extends Entity<
           text: strings['levelEditor/state'],
           textLayer: Layer.UI_HI,
           x: 2,
-          y: 18
+          y: 20
         }),
         this._stateCheckbox,
         new Text({
           text: strings['levelEditor/x'],
           textLayer: Layer.UI_HI,
-          y: 24
+          x: 2,
+          y: 28
         }),
         this._xCheckbox,
         new Text({
           text: strings['levelEditor/y'],
           textLayer: Layer.UI_HI,
-          x: 22,
-          y: 24
+          x: 24,
+          y: 28
         }),
         this._yCheckbox,
         this._entityCheckbox
@@ -136,7 +137,7 @@ export class LevelEditorPanel extends Entity<
     })
     this._menuButton = new Button(atlas, {
       x: 2,
-      y: 22,
+      y: 27,
       children: [
         new Group({
           map: {
@@ -154,7 +155,7 @@ export class LevelEditorPanel extends Entity<
     })
     this._decrementButton = new Button(atlas, {
       x: 11,
-      y: 22,
+      y: 27,
       children: [
         new Group({
           map: {
@@ -172,7 +173,7 @@ export class LevelEditorPanel extends Entity<
     })
     this._incrementButton = new Button(atlas, {
       x: 20,
-      y: 22,
+      y: 27,
       children: [
         new Group({
           map: {
@@ -190,7 +191,7 @@ export class LevelEditorPanel extends Entity<
     })
     this._destroyButton = new Button(atlas, {
       x: 29,
-      y: 22,
+      y: 27,
       children: [
         new Group({
           map: {
@@ -208,7 +209,7 @@ export class LevelEditorPanel extends Entity<
     })
     this._createButton = new Button(atlas, {
       x: 38,
-      y: 22,
+      y: 27,
       children: [
         new Group({
           map: {
@@ -226,7 +227,7 @@ export class LevelEditorPanel extends Entity<
     })
     this._toggleGridButton = new Button(atlas, {
       x: 47,
-      y: 22,
+      y: 27,
       children: [
         new Group({
           map: {

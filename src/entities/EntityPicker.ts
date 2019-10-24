@@ -15,7 +15,7 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
 
-const pickerSize: Readonly<WH> = Object.freeze(new WH(33, 25))
+const pickerSize: Readonly<WH> = Object.freeze(new WH(33, 29))
 const entityWindowSize: Readonly<WH> = Object.freeze(
   new WH(pickerSize.w, pickerSize.h)
 )
