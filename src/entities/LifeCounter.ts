@@ -32,7 +32,7 @@ export class LifeCounter extends Entity<
       children: [
         new Text({
           x: 3,
-          y: 3,
+          y: 2,
           text: (props?.lives ?? defaults.lives).toString(),
           textLayer: Layer.UI_HI
         }),
