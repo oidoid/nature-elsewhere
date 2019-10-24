@@ -19,6 +19,7 @@ import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
+import {Button} from './Button'
 
 // This entity is fixed at (0,0) and has the width and height from there to
 // wherever the child groups are rendererd, which is usually a significant
@@ -36,7 +37,30 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
           positionRelativeToCam: FollowCam.Orientation.NORTH_EAST,
           camMargin: new WH(0, 3),
           collisionPredicate: CollisionPredicate.CHILDREN,
-          children: [new Compartment(atlas)]
+          children: [
+            new Compartment(atlas),
+            new Button(atlas, {
+              y: 40,
+              map: {
+                [Button.State.UNCLICKED]: new SpriteRect({
+                  sprites: [
+                    Sprite.withAtlasSize(atlas, {
+                      id: AtlasID.MELEE_BUTTON_DISABLED,
+                      layer: Layer.UI_MID
+                    })
+                  ]
+                }),
+                [Button.State.CLICKED]: new SpriteRect({
+                  sprites: [
+                    Sprite.withAtlasSize(atlas, {
+                      id: AtlasID.MELEE_BUTTON_ENABLED,
+                      layer: Layer.UI_HI
+                    })
+                  ]
+                })
+              }
+            })
+          ]
         }),
         new Group({
           positionRelativeToCam: FollowCam.Orientation.SOUTH_WEST,

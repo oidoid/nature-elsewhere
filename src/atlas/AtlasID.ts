@@ -90,6 +90,8 @@ export enum AtlasID {
   ROSE_BAUBLE = 'roseBauble',
   EGG_COMPARTMENT_UNIT = 'egg-compartment-unit',
   EGG_COMPARTMENT_DRAWER = 'egg-compartment-drawer',
+  MELEE_BUTTON_DISABLED = 'meleeButton-disabled',
+  MELEE_BUTTON_ENABLED = 'meleeButton-enabled',
   SUBSHRUB = 'subshrub',
   SUBSHRUB_SHADOW = 'subshrub-shadow',
   TREE_SMALL = 'tree-small',
