@@ -41,7 +41,7 @@ export class Compartment extends Entity<
     const from = this.sprites[SpriteIndex.DRAWER].bounds.position.x
     const to =
       this.origin.x + (this.opened ? -1 : 0) * (drawerProtrusion + drawerWidth)
-    const interpolation = NumberUtil.lerpInt(from, to, 0.1)
+    const interpolation = NumberUtil.lerpInt(from, to, 0.2)
     this.sprites[SpriteIndex.DRAWER].moveTo(
       new XY(interpolation, this.origin.y)
     )

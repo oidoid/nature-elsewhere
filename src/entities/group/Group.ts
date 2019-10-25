@@ -14,9 +14,7 @@ export class Group extends Entity<Group.Variant, Group.State> {
   constructor(props?: Group.Props) {
     super({
       ...defaults,
-      map: {
-        [Group.State.VISIBLE]: new SpriteRect()
-      },
+      map: {[Group.State.VISIBLE]: new SpriteRect()},
       ...props
     })
     this._followCam = {

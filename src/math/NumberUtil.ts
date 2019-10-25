@@ -28,13 +28,10 @@ export namespace NumberUtil {
   /** @return Monotonically increasing or decreasing integer towards to or
               to. */
   export function lerpInt(from: Integer, to: Integer, ratio: number): Integer {
-    const interpolation = Math.trunc(lerp(from, to, ratio))
-    return (
-      interpolation +
-      // Nonzero when not to, zero when to.
-      Math.sign(to - interpolation) -
-      // Nonzero when progressing towards to, zero when not progressing or at to.
-      Math.sign(interpolation - from)
-    )
+    // Lerp, truncate and drop negative / positive zero.
+    const interpolation = ~~lerp(from, to, ratio)
+    if (interpolation === from)
+      return interpolation + Math.sign(to - interpolation)
+    return interpolation
   }
 }
