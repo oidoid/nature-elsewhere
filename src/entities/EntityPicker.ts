@@ -10,6 +10,7 @@ import {NumberUtil} from '../math/NumberUtil'
 import {ProcessChildren} from '../entity/ProcessChildren'
 import {ReadonlyRect, Rect} from '../math/Rect'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
+import {StringUtil} from '../utils/StringUtil'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
 import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
@@ -159,7 +160,7 @@ export namespace EntityPicker {
 
 function makeChildren(atlas: Atlas): Entity[] {
   const children = []
-  for (const type of Object.values(EntityType)) {
+  for (const type of Object.values(EntityType).sort(StringUtil.localeCompare)) {
     if (typeBlacklist.includes(type)) continue
     const entity = EntityFactory.produce(atlas, {type})
     children.push(entity)
