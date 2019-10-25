@@ -17,7 +17,7 @@ export class Subshrub extends Entity<Subshrub.Variant, Subshrub.State> {
     super({
       ...defaults,
       map: {
-        [Subshrub.State.VISIBLE]: new SpriteRect({
+        [Subshrub.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.SUBSHRUB}),
             Sprite.withAtlasSize(atlas, {
@@ -42,13 +42,13 @@ export namespace Subshrub {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.SUBSHRUB,
   variant: Subshrub.Variant.NONE,
-  state: Subshrub.State.VISIBLE,
+  state: Subshrub.State.NONE,
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.IMPEDIMENT
 })

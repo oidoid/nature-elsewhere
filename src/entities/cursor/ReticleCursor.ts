@@ -24,7 +24,7 @@ export class ReticleCursor extends Entity<
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [ReticleCursor.State.STATELESS]: new SpriteRect({
+        [ReticleCursor.State.NONE]: new SpriteRect({
           origin: new XY(4, 3),
           sprites: [
             Sprite.withAtlasSize(atlas, {
@@ -45,18 +45,18 @@ export class ReticleCursor extends Entity<
 
 export namespace ReticleCursor {
   export enum Variant {
-    INVARIANT = 'invariant'
+    NONE = 'none'
   }
 
   export enum State {
-    STATELESS = 'stateless'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.UI_CURSOR_RETICLE,
-  variant: ReticleCursor.Variant.INVARIANT,
-  state: ReticleCursor.State.STATELESS,
+  variant: ReticleCursor.Variant.NONE,
+  state: ReticleCursor.State.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: Object.freeze([Object.freeze(Rect.make(3, 2, 3, 3))]) // All the cursor have to match sizes to avoid oscillating between cursor icon types.

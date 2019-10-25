@@ -17,7 +17,7 @@ export class Flower extends Entity<Flower.Variant, Flower.State> {
     super({
       ...defaults,
       map: {
-        [Flower.State.STATELESS]: new SpriteRect({
+        [Flower.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.FLOWER}),
             Sprite.withAtlasSize(atlas, {
@@ -38,17 +38,17 @@ export class Flower extends Entity<Flower.Variant, Flower.State> {
 
 export namespace Flower {
   export enum Variant {
-    INVARIANT = 'invariant'
+    NONE = 'none'
   }
 
   export enum State {
-    STATELESS = 'stateless'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.FLOWER,
-  variant: Flower.Variant.INVARIANT,
-  state: Flower.State.STATELESS,
+  variant: Flower.Variant.NONE,
+  state: Flower.State.NONE,
   collisionType: CollisionType.TYPE_SCENERY
 })

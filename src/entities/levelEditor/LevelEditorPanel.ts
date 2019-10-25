@@ -59,7 +59,7 @@ export class LevelEditorPanel extends Entity<
     super({
       ...defaults,
       map: {
-        [LevelEditorPanel.State.VISIBLE]: new SpriteRect()
+        [LevelEditorPanel.State.NONE]: new SpriteRect()
       },
       ...props
     })
@@ -141,7 +141,7 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Group.State.VISIBLE]: new SpriteRect({
+            [Group.State.NONE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_MENU,
@@ -159,7 +159,7 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Group.State.VISIBLE]: new SpriteRect({
+            [Group.State.NONE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_DECREMENT,
@@ -177,7 +177,7 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Group.State.VISIBLE]: new SpriteRect({
+            [Group.State.NONE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_INCREMENT,
@@ -195,7 +195,7 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Group.State.VISIBLE]: new SpriteRect({
+            [Group.State.NONE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_DESTROY,
@@ -213,7 +213,7 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Group.State.VISIBLE]: new SpriteRect({
+            [Group.State.NONE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_CREATE,
@@ -231,7 +231,7 @@ export class LevelEditorPanel extends Entity<
       children: [
         new Group({
           map: {
-            [Group.State.VISIBLE]: new SpriteRect({
+            [Group.State.NONE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
                   id: AtlasID.UI_BUTTON_TOGGLE_GRID,
@@ -449,7 +449,7 @@ export namespace LevelEditorPanel {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -472,5 +472,5 @@ const defaults = Object.freeze({
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionType: CollisionType.TYPE_UI,
   collisionPredicate: CollisionPredicate.CHILDREN,
-  state: LevelEditorPanel.State.VISIBLE
+  state: LevelEditorPanel.State.NONE
 })

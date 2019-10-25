@@ -15,7 +15,7 @@ export class Flag extends Entity<Flag.Variant, Flag.State> {
     super({
       ...defaults,
       map: {
-        [Flag.State.VISIBLE]: new SpriteRect({
+        [Flag.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.FLAG}),
             Sprite.withAtlasSize(atlas, {
@@ -42,14 +42,14 @@ export namespace Flag {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.FLAG,
   variant: Flag.Variant.NONE,
-  state: Flag.State.VISIBLE,
+  state: Flag.State.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
   collisionType: CollisionType.TYPE_SCENERY
 })

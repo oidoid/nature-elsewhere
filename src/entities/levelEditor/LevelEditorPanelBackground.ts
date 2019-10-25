@@ -23,7 +23,7 @@ export class LevelEditorPanelBackground extends Entity<
     super({
       ...defaults,
       map: {
-        [LevelEditorPanelBackground.State.VISIBLE]: new SpriteRect({
+        [LevelEditorPanelBackground.State.NONE]: new SpriteRect({
           sprites: newBackgroundSprites()
         })
       },
@@ -41,7 +41,7 @@ export namespace LevelEditorPanelBackground {
     NONE = 'none'
   }
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -115,5 +115,5 @@ const defaults = Object.freeze({
   collisionType: CollisionType.TYPE_UI,
   collisionPredicate: CollisionPredicate.SPRITES,
   updatePredicate: UpdatePredicate.ALWAYS,
-  state: LevelEditorPanelBackground.State.VISIBLE
+  state: LevelEditorPanelBackground.State.NONE
 })

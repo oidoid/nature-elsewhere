@@ -21,7 +21,7 @@ export class Tree extends Entity<Tree.Variant, Tree.State> {
           : AtlasID.TREE_LARGE
       ].cels[0].slices.map(({x, y, w, h}) => Rect.make(x, y, w, h)),
       map: {
-        [Tree.State.VISIBLE]: new SpriteRect({
+        [Tree.State.NONE]: new SpriteRect({
           sprites: variantSprites(
             atlas,
             (props && props.variant) || defaults.variant
@@ -45,7 +45,7 @@ export namespace Tree {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -78,7 +78,7 @@ function variantSprites(atlas: Atlas, variant: Tree.Variant): Sprite[] {
 const defaults = Object.freeze({
   type: EntityType.TREE,
   variant: Tree.Variant.SMALL,
-  state: Tree.State.VISIBLE,
+  state: Tree.State.NONE,
   collisionPredicate: CollisionPredicate.BODIES,
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE
 })

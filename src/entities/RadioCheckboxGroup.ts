@@ -25,7 +25,7 @@ export class RadioCheckboxGroup extends Entity<
     super({
       ...defaults,
       map: {
-        [RadioCheckboxGroup.State.VISIBLE]: new SpriteRect()
+        [RadioCheckboxGroup.State.NONE]: new SpriteRect()
       },
       ...props
     })
@@ -72,7 +72,7 @@ export namespace RadioCheckboxGroup {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -82,5 +82,5 @@ const defaults = Object.freeze({
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.CHILDREN,
   collisionType: CollisionType.TYPE_UI,
-  state: RadioCheckboxGroup.State.VISIBLE
+  state: RadioCheckboxGroup.State.NONE
 })

@@ -22,7 +22,7 @@ export class Monument extends Entity<Monument.Variant, Monument.State> {
         props?.variant ?? defaults.variant
       ].map(Rect.copy),
       map: {
-        [Monument.State.VISIBLE]: new SpriteRect({
+        [Monument.State.NONE]: new SpriteRect({
           sprites: variantSprites(atlas, props?.variant ?? defaults.variant)
         })
       },
@@ -42,14 +42,14 @@ export namespace Monument {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.MONUMENT,
   variant: Monument.Variant.SMALL,
-  state: Monument.State.VISIBLE,
+  state: Monument.State.NONE,
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: Object.freeze({
     [Monument.Variant.SMALL]: Object.freeze([

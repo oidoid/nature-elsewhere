@@ -50,7 +50,7 @@ export namespace LevelLink {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 
   export interface Props
@@ -62,6 +62,6 @@ export namespace LevelLink {
 const defaults = Object.freeze({
   type: EntityType.UI_LEVEL_LINK,
   variant: LevelLink.Variant.NONE,
-  state: LevelLink.State.VISIBLE,
+  state: LevelLink.State.NONE,
   collisionPredicate: CollisionPredicate.BOUNDS
 })

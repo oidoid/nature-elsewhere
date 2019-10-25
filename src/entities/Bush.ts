@@ -16,7 +16,7 @@ export class Bush extends Entity<Bush.Variant, Bush.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Bush.State.VISIBLE]: new SpriteRect({
+        [Bush.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.BUSH}),
             Sprite.withAtlasSize(atlas, {
@@ -42,14 +42,14 @@ export namespace Bush {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.BUSH,
   variant: Bush.Variant.NONE,
-  state: Bush.State.VISIBLE,
+  state: Bush.State.NONE,
   collisionBodies: Object.freeze([Object.freeze(Rect.make(2, 5, 3, 2))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.IMPEDIMENT
 })

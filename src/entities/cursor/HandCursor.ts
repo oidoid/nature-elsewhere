@@ -36,7 +36,7 @@ export class HandCursor extends Entity<HandCursor.Variant, HandCursor.State> {
 
 export namespace HandCursor {
   export enum Variant {
-    INVARIANT = 'invariant'
+    NONE = 'none'
   }
 
   // Must match Cursor.State.POINT and Cursor.State.PICK.
@@ -48,7 +48,7 @@ export namespace HandCursor {
 
 const defaults = Object.freeze({
   type: EntityType.UI_CURSOR_HAND,
-  variant: HandCursor.Variant.INVARIANT,
+  variant: HandCursor.Variant.NONE,
   state: HandCursor.State.POINT,
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.BODIES,

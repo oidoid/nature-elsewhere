@@ -16,7 +16,7 @@ export class Cattails extends Entity<Cattails.Variant, Cattails.State> {
     super({
       ...defaults,
       map: {
-        [Cattails.State.VISIBLE]: new SpriteRect({
+        [Cattails.State.NONE]: new SpriteRect({
           sprites: [Sprite.withAtlasSize(atlas, {id: AtlasID.CATTAILS})]
         })
       },
@@ -35,13 +35,13 @@ export namespace Cattails {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.CATTAILS,
   variant: Cattails.Variant.NONE,
-  state: Cattails.State.VISIBLE,
+  state: Cattails.State.NONE,
   collisionType: CollisionType.TYPE_SCENERY
 })

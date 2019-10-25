@@ -9,7 +9,7 @@
     {
       "type": "group",
       "map": {
-        "visible": {
+        "none": {
           "sprites": [
             {
               "id": "palette-orange",

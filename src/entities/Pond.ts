@@ -17,7 +17,7 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Pond.State.VISIBLE]: new SpriteRect({
+        [Pond.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {
               id: AtlasID.POND,
@@ -45,14 +45,14 @@ export namespace Pond {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.POND,
   variant: Pond.Variant.NONE,
-  state: Pond.State.VISIBLE,
+  state: Pond.State.NONE,
   collisionType:
     CollisionType.TYPE_SCENERY |
     CollisionType.DEEP_WATER |

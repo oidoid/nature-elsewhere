@@ -14,7 +14,7 @@ export class Path extends Entity<Path.Variant, Path.State> {
     super({
       ...defaults,
       map: {
-        [Path.State.VISIBLE]: new SpriteRect({
+        [Path.State.NONE]: new SpriteRect({
           sprites: variantSprites(
             atlas,
             props?.variant ?? Path.Variant.STRAIGHT_NE
@@ -40,7 +40,7 @@ export namespace Path {
     CORNER_W = '<'
   }
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -97,6 +97,6 @@ function variantSprites(atlas: Atlas, variant: Path.Variant): Sprite[] {
 const defaults = Object.freeze({
   type: EntityType.PATH,
   variant: Path.Variant.STRAIGHT_NE,
-  state: Path.State.VISIBLE,
+  state: Path.State.NONE,
   collisionType: CollisionType.TYPE_SCENERY
 })

@@ -40,7 +40,7 @@ export class LevelEditorMenu extends Entity<
     super({
       ...defaults,
       map: {
-        [LevelEditorMenu.State.VISIBLE]: new SpriteRect()
+        [LevelEditorMenu.State.NONE]: new SpriteRect()
       },
       ...props
     })
@@ -192,7 +192,7 @@ export namespace LevelEditorMenu {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -202,7 +202,7 @@ const defaults = Object.freeze({
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.CHILDREN,
   collisionType: CollisionType.TYPE_UI,
-  state: LevelEditorMenu.State.VISIBLE
+  state: LevelEditorMenu.State.NONE
 })
 
 function newLink(

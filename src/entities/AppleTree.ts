@@ -21,7 +21,7 @@ export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [AppleTree.State.VISIBLE]: new SpriteRect({
+        [AppleTree.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.APPLE_TREE}),
             Sprite.withAtlasSize(atlas, {
@@ -52,14 +52,14 @@ export namespace AppleTree {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.APPLE_TREE,
   variant: AppleTree.Variant.NONE,
-  state: AppleTree.State.VISIBLE,
+  state: AppleTree.State.NONE,
   collisionPredicate: CollisionPredicate.BODIES | CollisionPredicate.CHILDREN,
   collisionBodies: Object.freeze([Object.freeze(Rect.make(3, 10, 7, 1))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE

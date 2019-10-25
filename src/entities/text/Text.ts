@@ -25,7 +25,7 @@ export class Text extends Entity<Text.Variant, Text.State> {
     super({
       ...defaults,
       map: {
-        [Text.State.VISIBLE]: new SpriteRect()
+        [Text.State.NONE]: new SpriteRect()
       },
       ...props
     })
@@ -87,7 +87,7 @@ export namespace Text {
     NONE = 'none'
   }
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 
   export interface Props<
@@ -163,7 +163,7 @@ function newCharacterSprite(
 const defaults = Object.freeze({
   type: EntityType.UI_TEXT,
   variant: Text.Variant.NONE,
-  state: Text.State.VISIBLE,
+  state: Text.State.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
   text: '',
   textLayer: Layer.UI_LO,

@@ -20,7 +20,7 @@ export class Mountain extends Entity<Mountain.Variant, Mountain.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Mountain.State.VISIBLE]: new SpriteRect({
+        [Mountain.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.MOUNTAIN}),
             Sprite.withAtlasSize(atlas, {
@@ -47,14 +47,14 @@ export namespace Mountain {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.MOUNTAIN,
   variant: Mountain.Variant.NONE,
-  state: Mountain.State.VISIBLE,
+  state: Mountain.State.NONE,
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: Object.freeze([Object.freeze(Rect.make(0, 5, 13, 4))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE

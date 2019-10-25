@@ -22,7 +22,7 @@ export class LevelEditorSandbox extends Entity<
     super({
       ...defaults,
       map: {
-        [LevelEditorSandbox.State.VISIBLE]: new SpriteRect()
+        [LevelEditorSandbox.State.NONE]: new SpriteRect()
       },
       ...props
     })
@@ -54,14 +54,14 @@ export namespace LevelEditorSandbox {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.LEVEL_EDITOR_SANDBOX,
   variant: LevelEditorSandbox.Variant.NONE,
-  state: LevelEditorSandbox.State.VISIBLE,
+  state: LevelEditorSandbox.State.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.CHILDREN
 })

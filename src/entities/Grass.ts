@@ -17,7 +17,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
     super({
       ...defaults,
       map: {
-        [Grass.State.VISIBLE]: new SpriteRect({
+        [Grass.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {
               id:
@@ -64,13 +64,13 @@ export namespace Grass {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.GRASS,
   variant: Grass.Variant.N00,
-  state: Grass.State.VISIBLE,
+  state: Grass.State.NONE,
   collisionType: CollisionType.TYPE_SCENERY
 })

@@ -17,7 +17,7 @@ export class Apple extends Entity<Apple.Variant, Apple.State> {
     super({
       ...defaults,
       map: {
-        [Apple.State.VISIBLE]: new SpriteRect({
+        [Apple.State.NONE]: new SpriteRect({
           sprites: [Sprite.withAtlasSize(atlas, {id: AtlasID.PALETTE_RED})]
         })
       },
@@ -36,14 +36,14 @@ export namespace Apple {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.APPLE,
   variant: Apple.Variant.NONE,
-  state: Apple.State.VISIBLE,
+  state: Apple.State.NONE,
   collisionPredicate: CollisionPredicate.SPRITES,
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.TYPE_ITEM
 })

@@ -14,7 +14,7 @@ export class Group extends Entity<Group.Variant, Group.State> {
   constructor(props?: Group.Props) {
     super({
       ...defaults,
-      map: {[Group.State.VISIBLE]: new SpriteRect()},
+      map: {[Group.State.NONE]: new SpriteRect()},
       ...props
     })
     this._followCam = {
@@ -39,7 +39,7 @@ export namespace Group {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 
   export interface Props
@@ -50,7 +50,7 @@ export namespace Group {
 const defaults = Object.freeze({
   type: EntityType.GROUP,
   variant: Group.Variant.NONE,
-  state: Group.State.VISIBLE,
+  state: Group.State.NONE,
   positionRelativeToCam: undefined,
   camMargin: Object.freeze(new WH(0, 0))
 })

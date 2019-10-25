@@ -17,7 +17,7 @@ export class Clover extends Entity<Clover.Variant, Clover.State> {
     super({
       ...defaults,
       map: {
-        [Clover.State.VISIBLE]: new SpriteRect({
+        [Clover.State.NONE]: new SpriteRect({
           sprites: variantSprites(atlas, props?.variant ?? Clover.Variant.SMALL)
         })
       },
@@ -37,7 +37,7 @@ export namespace Clover {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -78,6 +78,6 @@ function variantSprites(atlas: Atlas, variant: Clover.Variant): Sprite[] {
 const defaults = Object.freeze({
   type: EntityType.CLOVER,
   variant: Clover.Variant.SMALL,
-  state: Clover.State.VISIBLE,
+  state: Clover.State.NONE,
   collisionType: CollisionType.TYPE_SCENERY
 })

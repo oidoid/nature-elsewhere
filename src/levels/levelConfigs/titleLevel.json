@@ -8,7 +8,7 @@
     {
       "type": "group",
       "map": {
-        "visible": {
+        "none": {
           "sprites": [
             {"id": "wave", "y": 24, "w": 32767, "wvx": 32},
             {"id": "lattice", "x": 24, "h": 32767, "wvy": 200}
@@ -23,7 +23,7 @@
       "type": "group",
       "positionRelativeToCam": "northEast",
       "map": {
-        "visible": {"sprites": [{"id": "moon", "sx": 3, "sy": 3}]}
+        "none": {"sprites": [{"id": "moon", "sx": 3, "sy": 3}]}
       },
       "updatePredicate": "always"
     },
@@ -32,7 +32,7 @@
       "positionRelativeToCam": "north",
       "camMargin": {"h": 40},
       "map": {
-        "visible": {
+        "none": {
           "sprites": [{"id": "palette-lightGreen", "y": 52, "w": 136, "h": 2}]
         }
       },
@@ -102,7 +102,7 @@
       "updatePredicate": "always",
       "collisionPredicate": 8,
       "//": "[strings]",
-      "map": {"visible": {"sprites": [{"id": "oddoid"}]}}
+      "map": {"none": {"sprites": [{"id": "oddoid"}]}}
     }
   ]
 }

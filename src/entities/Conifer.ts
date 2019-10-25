@@ -20,7 +20,7 @@ export class Conifer extends Entity<Conifer.Variant, Conifer.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [Conifer.State.VISIBLE]: new SpriteRect({
+        [Conifer.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {id: AtlasID.CONIFER}),
             Sprite.withAtlasSize(atlas, {
@@ -46,14 +46,14 @@ export namespace Conifer {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.CONIFER,
   variant: Conifer.Variant.NONE,
-  state: Conifer.State.VISIBLE,
+  state: Conifer.State.NONE,
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: Object.freeze([Object.freeze(Rect.make(2, 9, 3, 3))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.OBSTACLE

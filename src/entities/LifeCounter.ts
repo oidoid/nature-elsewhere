@@ -20,7 +20,7 @@ export class LifeCounter extends Entity<
     super({
       ...defaults,
       map: {
-        [LifeCounter.State.STATELESS]: new SpriteRect({
+        [LifeCounter.State.NONE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {
               id: AtlasID.LIFE_COUNTER,
@@ -59,11 +59,11 @@ export class LifeCounter extends Entity<
 
 export namespace LifeCounter {
   export enum Variant {
-    INVARIANT = 'invariant'
+    NONE = 'none'
   }
 
   export enum State {
-    STATELESS = 'stateless'
+    NONE = 'none'
   }
 
   export interface Props
@@ -79,8 +79,8 @@ enum Children {
 
 const defaults = Object.freeze({
   type: EntityType.LIFE_COUNTER,
-  variant: LifeCounter.Variant.INVARIANT,
-  state: LifeCounter.State.STATELESS,
+  variant: LifeCounter.Variant.NONE,
+  state: LifeCounter.State.NONE,
   collisionType: CollisionType.TYPE_UI,
   collisionPredicate: CollisionPredicate.BOUNDS,
   lives: 1

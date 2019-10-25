@@ -33,7 +33,7 @@ export class EntityPicker extends Entity<
       ...defaults,
       elevation: Layer.UI_PICKER_OFFSET,
       map: {
-        [EntityPicker.State.VISIBLE]: new SpriteRect()
+        [EntityPicker.State.NONE]: new SpriteRect()
       },
       children: makeChildren(atlas),
       ...props
@@ -153,7 +153,7 @@ export namespace EntityPicker {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
@@ -171,7 +171,7 @@ const defaults = Object.freeze({
   type: EntityType.UI_ENTITY_PICKER,
   variant: EntityPicker.Variant.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
-  state: EntityPicker.State.VISIBLE,
+  state: EntityPicker.State.NONE,
   collisionType: CollisionType.TYPE_UI
 })
 

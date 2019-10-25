@@ -21,7 +21,7 @@ export class DotCursor extends Entity<DotCursor.Variant, DotCursor.State> {
       ...defaults,
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
-        [DotCursor.State.STATELESS]: new SpriteRect({
+        [DotCursor.State.NONE]: new SpriteRect({
           origin: new XY(1, 1),
           sprites: [
             Sprite.withAtlasSize(atlas, {
@@ -42,18 +42,18 @@ export class DotCursor extends Entity<DotCursor.Variant, DotCursor.State> {
 
 export namespace DotCursor {
   export enum Variant {
-    INVARIANT = 'invariant'
+    NONE = 'none'
   }
 
   export enum State {
-    STATELESS = 'stateless'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.UI_CURSOR_DOT,
-  variant: DotCursor.Variant.INVARIANT,
-  state: DotCursor.State.STATELESS,
+  variant: DotCursor.Variant.NONE,
+  state: DotCursor.State.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.BODIES,
   collisionBodies: Object.freeze([Object.freeze(Rect.make(-1, -1, 3, 3))])

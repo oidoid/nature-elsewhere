@@ -32,7 +32,7 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
   ) {
     super({
       ...defaults,
-      map: {[Toolbar.State.VISIBLE]: new SpriteRect()},
+      map: {[Toolbar.State.NONE]: new SpriteRect()},
       children: [
         new Group({
           positionRelativeToCam: FollowCam.Orientation.NORTH_EAST,
@@ -68,7 +68,7 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
           collisionPredicate:
             CollisionPredicate.CHILDREN | CollisionPredicate.SPRITES,
           map: {
-            [Group.State.VISIBLE]: new SpriteRect({
+            [Group.State.NONE]: new SpriteRect({
               sprites: [
                 Sprite.withAtlasSize(atlas, {
                   id: AtlasID.ROSE_BAUBLE,
@@ -119,14 +119,14 @@ export namespace Toolbar {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.UI_TOOLBAR,
   variant: Toolbar.Variant.NONE,
-  state: Toolbar.State.VISIBLE,
+  state: Toolbar.State.NONE,
   updatePredicate: UpdatePredicate.ALWAYS,
   collisionPredicate: CollisionPredicate.CHILDREN,
   collisionType: CollisionType.TYPE_UI

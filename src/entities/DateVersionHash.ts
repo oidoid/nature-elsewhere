@@ -17,7 +17,7 @@ export class DateVersionHash extends Entity<
     super({
       ...defaults,
       map: {
-        [DateVersionHash.State.VISIBLE]: new SpriteRect()
+        [DateVersionHash.State.NONE]: new SpriteRect()
       },
       children: [
         new Text({
@@ -40,13 +40,13 @@ export namespace DateVersionHash {
   }
 
   export enum State {
-    VISIBLE = 'visible'
+    NONE = 'none'
   }
 }
 
 const defaults = Object.freeze({
   type: EntityType.UI_DATE_VERSION_HASH,
   variant: DateVersionHash.Variant.NONE,
-  state: DateVersionHash.State.VISIBLE,
+  state: DateVersionHash.State.NONE,
   updatePredicate: UpdatePredicate.ALWAYS
 })
