@@ -30,7 +30,7 @@ export namespace NumberUtil {
   export function lerpInt(from: Integer, to: Integer, ratio: number): Integer {
     // Lerp, truncate and drop negative / positive zero.
     const interpolation = ~~lerp(from, to, ratio)
-    if (interpolation === from)
+    if (interpolation === from && ratio !== 0)
       return interpolation + Math.sign(to - interpolation)
     return interpolation
   }
