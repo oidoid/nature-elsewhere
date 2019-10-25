@@ -21,7 +21,7 @@ export class Cloud extends Entity<Cloud.Variant, Cloud.State> {
     super({
       ...defaults,
       map: {
-        [Cloud.State.NONE]: new SpriteRect({
+        [Cloud.State.DRY]: new SpriteRect({
           sprites: variantSprites(atlas, props?.variant ?? Cloud.Variant.MEDIUM)
         }),
         [Cloud.State.DRIZZLE]: new SpriteRect({
@@ -155,7 +155,7 @@ export namespace Cloud {
   }
 
   export enum State {
-    NONE = 'none',
+    DRY = 'dry',
     DRIZZLE = 'drizzle',
     SHOWER = 'shower',
     DOWNPOUR = 'downpour'
@@ -189,7 +189,7 @@ function variantSprites(atlas: Atlas, variant: Cloud.Variant): Sprite[] {
 const defaults = Object.freeze({
   type: EntityType.CLOUD,
   variant: Cloud.Variant.MEDIUM,
-  state: Cloud.State.NONE,
+  state: Cloud.State.DRY,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
   collisionType: CollisionType.TYPE_SCENERY
 })
