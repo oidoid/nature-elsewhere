@@ -27,21 +27,21 @@ describe('layout()', () =>
           undefined,
           Rect.make(14, 0 * lineHeight, 3, letterHeight),
           Rect.make(18, 0 * lineHeight, 3, letterHeight),
-          Rect.make(22, 0 * lineHeight, 2, letterHeight),
+          Rect.make(22, 0 * lineHeight, 3, letterHeight),
           undefined,
-          Rect.make(27, 0 * lineHeight, 3, letterHeight),
-          Rect.make(31, 0 * lineHeight, 3, letterHeight),
-          Rect.make(35, 0 * lineHeight, 1, letterHeight),
+          Rect.make(28, 0 * lineHeight, 3, letterHeight),
+          Rect.make(32, 0 * lineHeight, 3, letterHeight),
+          Rect.make(36, 0 * lineHeight, 1, letterHeight),
           undefined,
-          Rect.make(39, 0 * lineHeight, 3, letterHeight),
-          Rect.make(43, 0 * lineHeight, 3, letterHeight),
-          Rect.make(47, 0 * lineHeight, 1, letterHeight),
+          Rect.make(40, 0 * lineHeight, 3, letterHeight),
+          Rect.make(44, 0 * lineHeight, 3, letterHeight),
+          Rect.make(48, 0 * lineHeight, 1, letterHeight),
           undefined,
-          Rect.make(51, 0 * lineHeight, 5, letterHeight),
-          Rect.make(57, 0 * lineHeight, 3, letterHeight),
-          Rect.make(61, 0 * lineHeight, 3, letterHeight)
+          Rect.make(52, 0 * lineHeight, 5, letterHeight),
+          Rect.make(58, 0 * lineHeight, 3, letterHeight),
+          Rect.make(62, 0 * lineHeight, 3, letterHeight)
         ],
-        cursor: new XY(64, 0 * lineHeight)
+        cursor: new XY(65, 0 * lineHeight)
       }
     ],
 
@@ -54,9 +54,9 @@ describe('layout()', () =>
           Rect.make(4, 0 * lineHeight, 3, letterHeight),
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           undefined,
+          Rect.make(6, 1 * lineHeight, 3, letterHeight),
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(4, 2 * lineHeight, 3, letterHeight),
-          Rect.make(8, 2 * lineHeight, 2, letterHeight),
           undefined,
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(4, 3 * lineHeight, 3, letterHeight),
@@ -84,7 +84,7 @@ describe('layout()', () =>
           undefined,
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           Rect.make(4, 1 * lineHeight, 3, letterHeight),
-          Rect.make(8, 1 * lineHeight, 2, letterHeight),
+          Rect.make(8, 1 * lineHeight, 3, letterHeight),
           undefined,
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(4, 2 * lineHeight, 3, letterHeight),
@@ -112,7 +112,7 @@ describe('layout()', () =>
           undefined,
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           Rect.make(4, 1 * lineHeight, 3, letterHeight),
-          Rect.make(8, 1 * lineHeight, 2, letterHeight),
+          Rect.make(8, 1 * lineHeight, 3, letterHeight),
           undefined,
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(4, 2 * lineHeight, 3, letterHeight),
@@ -310,11 +310,11 @@ describe('layoutWord()', () =>
           Rect.make(8, 0 * lineHeight, 3, letterHeight),
           Rect.make(12, 0 * lineHeight, 3, letterHeight),
           Rect.make(16, 0 * lineHeight, 3, letterHeight),
-          Rect.make(20, 0 * lineHeight, 2, letterHeight),
-          Rect.make(23, 0 * lineHeight, 3, letterHeight),
-          Rect.make(27, 0 * lineHeight, 3, letterHeight)
+          Rect.make(20, 0 * lineHeight, 3, letterHeight),
+          Rect.make(24, 0 * lineHeight, 3, letterHeight),
+          Rect.make(28, 0 * lineHeight, 3, letterHeight)
         ],
-        cursor: new XY(30, 0 * lineHeight)
+        cursor: new XY(31, 0 * lineHeight)
       }
     ],
 
@@ -329,11 +329,11 @@ describe('layoutWord()', () =>
           Rect.make(4, 0 * lineHeight, 3, letterHeight),
           Rect.make(8, 0 * lineHeight, 3, letterHeight),
           Rect.make(12, 0 * lineHeight, 3, letterHeight),
-          Rect.make(16, 0 * lineHeight, 2, letterHeight),
-          Rect.make(19, 0 * lineHeight, 3, letterHeight),
-          Rect.make(23, 0 * lineHeight, 3, letterHeight)
+          Rect.make(16, 0 * lineHeight, 3, letterHeight),
+          Rect.make(20, 0 * lineHeight, 3, letterHeight),
+          Rect.make(24, 0 * lineHeight, 3, letterHeight)
         ],
-        cursor: new XY(26, 0 * lineHeight)
+        cursor: new XY(27, 0 * lineHeight)
       }
     ],
     [
@@ -356,7 +356,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
-          Rect.make(0, 5 * lineHeight, 2, letterHeight),
+          Rect.make(0, 5 * lineHeight, 3, letterHeight),
           Rect.make(0, 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 7 * lineHeight, 3, letterHeight)
         ],
@@ -375,7 +375,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
-          Rect.make(0, 5 * lineHeight, 2, letterHeight),
+          Rect.make(0, 5 * lineHeight, 3, letterHeight),
           Rect.make(0, 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 7 * lineHeight, 3, letterHeight)
         ],
@@ -394,7 +394,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
-          Rect.make(0, 5 * lineHeight, 2, letterHeight),
+          Rect.make(0, 5 * lineHeight, 3, letterHeight),
           Rect.make(0, 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 7 * lineHeight, 3, letterHeight)
         ],
@@ -413,7 +413,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
-          Rect.make(0, 5 * lineHeight, 2, letterHeight),
+          Rect.make(0, 5 * lineHeight, 3, letterHeight),
           Rect.make(0, 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 7 * lineHeight, 3, letterHeight)
         ],
@@ -432,7 +432,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
-          Rect.make(0, 5 * lineHeight, 2, letterHeight),
+          Rect.make(0, 5 * lineHeight, 3, letterHeight),
           Rect.make(0, 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 7 * lineHeight, 3, letterHeight)
         ],
@@ -451,11 +451,11 @@ describe('layoutWord()', () =>
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
-          Rect.make(4, 4 * lineHeight, 2, letterHeight),
           Rect.make(0, 5 * lineHeight, 3, letterHeight),
-          Rect.make(4, 5 * lineHeight, 3, letterHeight)
+          Rect.make(0, 6 * lineHeight, 3, letterHeight),
+          Rect.make(4, 6 * lineHeight, 3, letterHeight)
         ],
-        cursor: new XY(7, 5 * lineHeight)
+        cursor: new XY(7, 6 * lineHeight)
       }
     ],
     [
@@ -470,7 +470,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           Rect.make(4, 1 * lineHeight, 3, letterHeight),
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
-          Rect.make(4, 2 * lineHeight, 2, letterHeight),
+          Rect.make(4, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(4, 3 * lineHeight, 3, letterHeight)
         ],
@@ -489,7 +489,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           Rect.make(4, 1 * lineHeight, 3, letterHeight),
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
-          Rect.make(4, 2 * lineHeight, 2, letterHeight),
+          Rect.make(4, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(4, 3 * lineHeight, 3, letterHeight)
         ],
@@ -508,7 +508,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           Rect.make(4, 1 * lineHeight, 3, letterHeight),
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
-          Rect.make(4, 2 * lineHeight, 2, letterHeight),
+          Rect.make(4, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(4, 3 * lineHeight, 3, letterHeight)
         ],
@@ -527,11 +527,11 @@ describe('layoutWord()', () =>
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           Rect.make(4, 1 * lineHeight, 3, letterHeight),
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
-          Rect.make(4, 2 * lineHeight, 2, letterHeight),
-          Rect.make(7, 2 * lineHeight, 3, letterHeight),
-          Rect.make(0, 3 * lineHeight, 3, letterHeight)
+          Rect.make(4, 2 * lineHeight, 3, letterHeight),
+          Rect.make(0, 3 * lineHeight, 3, letterHeight),
+          Rect.make(4, 3 * lineHeight, 3, letterHeight)
         ],
-        cursor: new XY(3, 3 * lineHeight)
+        cursor: new XY(7, 3 * lineHeight)
       }
     ],
     [
@@ -546,7 +546,7 @@ describe('layoutWord()', () =>
           Rect.make(8, 0 * lineHeight, 3, letterHeight),
           Rect.make(0, 1 * lineHeight, 3, letterHeight),
           Rect.make(4, 1 * lineHeight, 3, letterHeight),
-          Rect.make(8, 1 * lineHeight, 2, letterHeight),
+          Rect.make(8, 1 * lineHeight, 3, letterHeight),
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(4, 2 * lineHeight, 3, letterHeight)
         ],
@@ -566,7 +566,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 2 * lineHeight, 3, letterHeight),
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
-          Rect.make(0, 5 * lineHeight, 2, letterHeight),
+          Rect.make(0, 5 * lineHeight, 3, letterHeight),
           Rect.make(0, 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 7 * lineHeight, 3, letterHeight)
         ],
@@ -585,7 +585,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 4 * lineHeight, 3, letterHeight),
           Rect.make(0, 5 * lineHeight, 3, letterHeight),
-          Rect.make(0, 6 * lineHeight, 2, letterHeight),
+          Rect.make(0, 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 7 * lineHeight, 3, letterHeight),
           Rect.make(0, 8 * lineHeight, 3, letterHeight)
         ],
@@ -605,7 +605,7 @@ describe('layoutWord()', () =>
           Rect.make(0, 1 + 3 * lineHeight, 3, letterHeight),
           Rect.make(0, 1 + 4 * lineHeight, 3, letterHeight),
           Rect.make(0, 1 + 5 * lineHeight, 3, letterHeight),
-          Rect.make(0, 1 + 6 * lineHeight, 2, letterHeight),
+          Rect.make(0, 1 + 6 * lineHeight, 3, letterHeight),
           Rect.make(0, 1 + 7 * lineHeight, 3, letterHeight),
           Rect.make(0, 1 + 8 * lineHeight, 3, letterHeight)
         ],
