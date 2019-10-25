@@ -9,6 +9,7 @@ import {EntityType} from '../entity/EntityType'
 import {Input} from '../inputs/Input'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
+import {NumberUtil} from '../math/NumberUtil'
 import {Rect} from '../math/Rect'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
@@ -36,8 +37,18 @@ export class Compartment extends Entity<
 
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
+
+    const from = this.sprites[SpriteIndex.DRAWER].bounds.position.x
+    const to =
+      this.origin.x + (this.opened ? -1 : 0) * (drawerProtrusion + drawerWidth)
+    const interpolation = NumberUtil.lerpInt(from, to, 0.1)
+    this.sprites[SpriteIndex.DRAWER].moveTo(
+      new XY(interpolation, this.origin.y)
+    )
+
     const collision = EntityCollider.collidesEntity(state.level.cursor, this)
     if (collision.length) status |= this.collides(collision, state)
+
     return status
   }
 
@@ -47,26 +58,11 @@ export class Compartment extends Entity<
     const triggered = Input.activeTriggered(state.inputs.pick)
     if (!triggered) return status
 
-    const nextState =
-      this.state === Compartment.State.CLOSED
-        ? Compartment.State.OPENED
-        : Compartment.State.CLOSED
+    const nextState = this.opened
+      ? Compartment.State.CLOSED
+      : Compartment.State.OPENED
 
     status |= this.transition(nextState) | UpdateStatus.TERMINATE
-    return status
-  }
-
-  transition(state: Compartment.State): UpdateStatus {
-    const status = super.transition(state)
-    if (status & UpdateStatus.UPDATED) {
-      const open = state === Compartment.State.OPENED
-      this.sprites[SpriteIndex.DRAWER].moveTo(
-        new XY(
-          this.origin.x + (open ? -1 : 0) * (drawerProtrusion + drawerWidth),
-          this.origin.y
-        )
-      )
-    }
     return status
   }
 
@@ -77,6 +73,10 @@ export class Compartment extends Entity<
 
   toJSON(): JSONValue {
     return EntitySerializer.serialize(this, defaults)
+  }
+
+  get opened(): boolean {
+    return this.state === Compartment.State.OPENED
   }
 }
 

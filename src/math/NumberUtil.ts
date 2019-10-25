@@ -1,3 +1,5 @@
+import {Integer} from 'aseprite-atlas'
+
 export namespace NumberUtil {
   /** @arg min An integer < max
       @arg max An integer > min
@@ -17,5 +19,22 @@ export namespace NumberUtil {
   export function ceilMultiple(multiple: number, val: number): number {
     // n / 0 * 0 = NaN
     return multiple ? Math.ceil(val / multiple) * multiple : 0
+  }
+
+  export function lerp(from: number, to: number, ratio: number): number {
+    return from * (1 - ratio) + to * ratio
+  }
+
+  /** @return Monotonically increasing or decreasing integer towards to or
+              to. */
+  export function lerpInt(from: Integer, to: Integer, ratio: number): Integer {
+    const interpolation = Math.trunc(lerp(from, to, ratio))
+    return (
+      interpolation +
+      // Nonzero when not to, zero when to.
+      Math.sign(to - interpolation) -
+      // Nonzero when progressing towards to, zero when not progressing or at to.
+      Math.sign(interpolation - from)
+    )
   }
 }

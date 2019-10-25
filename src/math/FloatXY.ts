@@ -93,8 +93,8 @@ export namespace FloatXY {
     to: Readonly<FloatXY>,
     ratio: number
   ): FloatXY {
-    const x = from.x * (1 - ratio) + to.x * ratio
-    const y = from.y * (1 - ratio) + to.y * ratio
+    const x = NumberUtil.lerp(from.x, to.x, ratio)
+    const y = NumberUtil.lerp(from.y, to.y, ratio)
     return {x, y}
   }
 
