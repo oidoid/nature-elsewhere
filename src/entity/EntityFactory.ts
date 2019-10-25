@@ -20,6 +20,7 @@ import {Entity} from './Entity'
 import {EntityPicker} from '../entities/EntityPicker'
 import {EntityType} from './EntityType'
 import {Flag} from '../entities/Flag'
+import {Flower} from '../entities/Flower'
 import {Fly} from '../entities/Fly'
 import {Frog} from '../entities/Frog'
 import {Grass} from '../entities/Grass'
@@ -65,6 +66,8 @@ export namespace EntityFactory {
         return new Bunny(atlas, props)
       case EntityType.COMPARTMENT:
         return new Compartment(atlas, props)
+      case EntityType.FLOWER:
+        return new Flower(atlas, props)
       case EntityType.FLY:
         return new Fly(atlas, props)
       case EntityType.FROG:

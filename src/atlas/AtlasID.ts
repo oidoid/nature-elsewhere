@@ -63,6 +63,8 @@ export enum AtlasID {
   CONIFER_SHADOW = 'conifer-shadow',
   FLAG = 'flag',
   FLAG_SHADOW = 'flag-shadow',
+  FLOWER = 'flower',
+  FLOWER_SHADOW = 'flower-shadow',
   GRASS_00 = 'grass-00',
   GRASS_01 = 'grass-01',
   GRASS_02 = 'grass-02',

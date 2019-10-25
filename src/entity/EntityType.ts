@@ -7,6 +7,7 @@ export enum EntityType {
   BEE = 'bee',
   BUNNY = 'bunny',
   FLY = 'fly',
+  FLOWER = 'flower',
   FROG = 'frog',
   PIG = 'pig',
   SNAKE = 'snake',
