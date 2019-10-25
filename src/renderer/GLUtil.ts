@@ -1,10 +1,11 @@
 import {ShaderLayout} from './ShaderLayout'
 
-const GL = WebGL2RenderingContext
+const GL = WebGLRenderingContext
 
 export namespace GLUtil {
   export const initAttribute = (
     gl: GL,
+    instancedArrays: ANGLE_instanced_arrays,
     stride: number,
     divisor: number,
     buffer: GLBuffer,
@@ -13,8 +14,8 @@ export namespace GLUtil {
   ): void => {
     gl.enableVertexAttribArray(location)
     gl.bindBuffer(GL.ARRAY_BUFFER, buffer)
-    gl.vertexAttribIPointer(location, len, GL[type], stride, offset)
-    gl.vertexAttribDivisor(location, divisor)
+    gl.vertexAttribPointer(location, len, GL[type], false, stride, offset)
+    instancedArrays.vertexAttribDivisorANGLE(location, divisor)
     gl.bindBuffer(GL.ARRAY_BUFFER, null)
   }
 

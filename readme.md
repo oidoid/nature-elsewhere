@@ -608,10 +608,10 @@ The cache for each can be busted by incrementing the version.
 
 ### WebGL
 
-WebGL v2 is used because it supports instancing, which seemed very convenient.
-v1 also supports instancing but only when the ANGLE_instanced_arrays extension
-is available. I may need to readdress this decision as I was surprised to
-discover that [iOS only supports v1](#known-issues).
+WebGL v2 was used because it supports instancing, which seemed very convenient.
+v1 also supports instancing but only when the ANGLE_instanced_arrays and
+OES_vertex_array_object extensions are available. I had to readdress this
+decision as I was surprised to discover that iOS only supports v1.
 
 I think Impact uses the Canvas API for rendering. Since their premier (now
 dated, I believe) [demo](https://playbiolab.com/) does not run well on my Linux
@@ -968,12 +968,6 @@ The following abbreviations are only used for function parameters and locals:
 
 ## Known Issues
 
-- iOS devices are unsupported presently as they cannot run WebGL v2 without
-  enabling an experimental setting. I don't think it would be too difficult to
-  downgrade Nature Elsewhere to v1 with the ANGLE_instanced_arrays extension but
-  who knows so I'm going to race Apple. If everything else in Nature Elsewhere
-  is done, or I just want to procrastinate, I'll do the downgrade. If I do it
-  before Apple releases default support for v2, I win the race.
 - [Switching apps on Android may show a big white bar on the bottom of the
   screen](https://crbug.com/1013888). If this is still an issue when Nature
   Elsewhere is otherwise complete, I'll consider removing the landscape request

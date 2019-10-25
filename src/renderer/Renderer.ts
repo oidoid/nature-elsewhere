@@ -9,6 +9,8 @@ import vertexGLSL from './vertex.glsl'
 
 export interface Renderer {
   readonly gl: GL
+  readonly instancedArrays: ANGLE_instanced_arrays
+  readonly vertexArrayObject: OES_vertex_array_object
   readonly layout: ShaderLayout
   readonly uniforms: Readonly<Record<string, GLUniformLocation>>
   readonly attributes: Readonly<Record<string, number>>
@@ -17,7 +19,7 @@ export interface Renderer {
   readonly loseContext: GLLoseContext
 }
 
-const GL = WebGL2RenderingContext
+const GL = WebGLRenderingContext
 const uv: Int16Array = new Int16Array(Object.freeze([1, 1, 0, 1, 1, 0, 0, 0]))
 const uvLen: number = uv.length / 2 // dimensions
 
@@ -27,14 +29,20 @@ export namespace Renderer {
     atlas: HTMLImageElement,
     layout: ShaderLayout
   ): Renderer {
-    const gl = canvas.getContext('webgl2', {
+    const gl = canvas.getContext('webgl', {
       alpha: false,
       depth: false,
       antialias: false,
       // https://www.chromestatus.com/feature/6360971442388992
       lowLatency: true
     })
-    if (!(gl instanceof GL)) throw new Error('WebGL 2 unsupported.')
+    if (!(gl instanceof GL)) throw new Error('WebGL unsupported.')
+
+    const instancedArrays = gl.getExtension('ANGLE_instanced_arrays')
+    if (!instancedArrays) throw new Error('ANGLE_instanced_arrays unsupported.')
+    const vertexArrayObject = gl.getExtension('OES_vertex_array_object')
+    if (!vertexArrayObject)
+      throw new Error('OES_vertex_array_object unsupported.')
 
     // Avoid initial color flash by matching the background. [palette]
     gl.clearColor(0xf2 / 0xff, 0xf5 / 0xff, 0xf5 / 0xff, 1)
@@ -59,25 +67,27 @@ export namespace Renderer {
 
     const attributes = GLUtil.attributeLocations(gl, program)
 
-    const vertexArray = gl.createVertexArray()
-    gl.bindVertexArray(vertexArray)
+    const vertexArray = vertexArrayObject.createVertexArrayOES()
+    vertexArrayObject.bindVertexArrayOES(vertexArray)
 
     const perVertexBuffer = gl.createBuffer()
     for (const attr of layout.perVertex.attributes)
       GLUtil.initAttribute(
         gl,
+        instancedArrays,
         layout.perVertex.stride,
         layout.perVertex.divisor,
         perVertexBuffer,
         attributes[attr.name],
         attr
       )
-    GLUtil.bufferData(gl, perVertexBuffer, uv, GL.STATIC_READ)
+    GLUtil.bufferData(gl, perVertexBuffer, uv, GL.STATIC_DRAW)
 
     const perInstanceBuffer = gl.createBuffer()
     for (const attr of layout.perInstance.attributes)
       GLUtil.initAttribute(
         gl,
+        instancedArrays,
         layout.perInstance.stride,
         layout.perInstance.divisor,
         perInstanceBuffer,
@@ -92,6 +102,8 @@ export namespace Renderer {
 
     return {
       gl,
+      instancedArrays,
+      vertexArrayObject,
       layout,
       uniforms,
       attributes,
@@ -115,13 +127,18 @@ export namespace Renderer {
     {dat, len}: Store
   ): void {
     resize(renderer, canvasWH, scale, cam)
-    renderer.gl.uniform1ui(
+    renderer.gl.uniform1i(
       renderer.uniforms[renderer.layout.uniforms.time],
       time
     )
     const perInstanceBuffer = renderer.perInstanceBuffer
-    GLUtil.bufferData(renderer.gl, perInstanceBuffer, dat, GL.DYNAMIC_READ)
-    renderer.gl.drawArraysInstanced(GL.TRIANGLE_STRIP, 0, uvLen, len)
+    GLUtil.bufferData(renderer.gl, perInstanceBuffer, dat, GL.DYNAMIC_DRAW)
+    renderer.instancedArrays.drawArraysInstancedANGLE(
+      GL.TRIANGLE_STRIP,
+      0,
+      uvLen,
+      len
+    )
   }
 
   /** @arg canvasWH The desired resolution of the canvas in CSS pixels. E.g.,

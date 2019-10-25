@@ -1,4 +1,4 @@
-interface GL extends WebGL2RenderingContext {}
+interface GL extends WebGLRenderingContext {}
 type GLBuffer = WebGLBuffer | null
 type GLBufferData = Parameters<GL['bufferData']>[1]
 type GLDataType =

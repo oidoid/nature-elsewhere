@@ -238,7 +238,6 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
   Set up natureelsewhere.com GitHub page. Point to demo at ne.netlify.com.
   Set up oddoid.com GitHub page. Point to natureelsewhere.com and other projects.
   Evaluate fixing known issues in readme.
-    If I drop WebGL v2, drop @types/webgl2.
   What examples are there for making 9png like UI?
     Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264  https://thebookofshaders.com/09/
     Check out Android.
