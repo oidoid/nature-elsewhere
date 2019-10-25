@@ -1,4 +1,4 @@
-import {Apple} from './Apple'
+import {Fruit} from './Fruit'
 import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
@@ -33,9 +33,9 @@ export class AppleTree extends Entity<AppleTree.Variant, AppleTree.State> {
         })
       },
       children: [
-        new Apple(atlas, {x: 2, y: 9}),
-        new Apple(atlas, {x: 10, y: 9}),
-        new Apple(atlas, {x: 12, y: 8})
+        new Fruit(atlas, {variant: Fruit.Variant.APPLE, x: 2, y: 9}),
+        new Fruit(atlas, {variant: Fruit.Variant.APPLE, x: 10, y: 9}),
+        new Fruit(atlas, {variant: Fruit.Variant.APPLE, x: 12, y: 8})
       ],
       ...props
     })

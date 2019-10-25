@@ -1,4 +1,4 @@
-import {Apple} from '../entities/Apple'
+import {Fruit} from '../entities/Fruit'
 import {AppleTree} from '../entities/AppleTree'
 import {Atlas} from 'aseprite-atlas'
 import {Backpacker} from '../entities/Backpacker'
@@ -54,8 +54,8 @@ export namespace EntityFactory {
     props: Entity.SubProps<any, any>
   ): Entity {
     switch (props.type) {
-      case EntityType.APPLE:
-        return new Apple(atlas, props)
+      case EntityType.FRUIT:
+        return new Fruit(atlas, props)
       case EntityType.APPLE_TREE:
         return new AppleTree(atlas, props)
       case EntityType.BACKPACKER:

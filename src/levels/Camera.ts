@@ -10,7 +10,7 @@ export class Camera {
   followID: EntityID
 
   constructor(
-    position: XY | FloatXY = new XY(0, 0),
+    position: Readonly<XY> | Readonly<FloatXY> = {x: 0, y: 0},
     followID: EntityID = EntityID.ANONYMOUS
   ) {
     this._bounds = {

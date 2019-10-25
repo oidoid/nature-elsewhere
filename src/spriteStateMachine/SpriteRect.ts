@@ -1,3 +1,4 @@
+import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {Layer} from '../sprite/Layer'
 import {ReadonlyRect, Rect} from '../math/Rect'
@@ -169,6 +170,14 @@ export class SpriteRect {
 
   resetAnimation(): void {
     for (const sprite of this.sprites) sprite.resetAnimation()
+  }
+
+  bodies(atlas: Atlas): Rect[] {
+    return Sprite.bodies(atlas, ...this.sprites)
+  }
+
+  allBodies(atlas: Atlas): Rect[] {
+    return Sprite.allBodies(atlas, ...this.sprites)
   }
 }
 

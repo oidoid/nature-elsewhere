@@ -7,29 +7,12 @@ import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
-import {Rect} from '../math/Rect'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 
 export class Tree extends Entity<Tree.Variant, Tree.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Tree.Variant, Tree.State>) {
-    super({
-      ...defaults,
-      collisionBodies: atlas.animations[
-        (props?.variant ?? defaults.variant) === Tree.Variant.SMALL
-          ? AtlasID.TREE_SMALL
-          : AtlasID.TREE_LARGE
-      ].cels[0].slices.map(({x, y, w, h}) => Rect.make(x, y, w, h)),
-      map: {
-        [Tree.State.NONE]: new SpriteRect({
-          sprites: variantSprites(
-            atlas,
-            (props && props.variant) || defaults.variant
-          )
-        })
-      },
-      ...props
-    })
+    super(assemble(atlas, props))
   }
 
   toJSON(): JSONValue {
@@ -46,6 +29,23 @@ export namespace Tree {
 
   export enum State {
     NONE = 'none'
+  }
+}
+
+function assemble(
+  atlas: Atlas,
+  props?: Entity.SubProps<Tree.Variant, Tree.State>
+): Entity.Props<Tree.Variant, Tree.State> {
+  const variant = props?.variant ?? defaults.variant
+  const rect = new SpriteRect({
+    sprites: variantSprites(atlas, variant)
+  })
+  return {
+    ...defaults,
+    variant,
+    collisionBodies: rect.allBodies(atlas),
+    map: {[Tree.State.NONE]: rect},
+    ...props
   }
 }
 

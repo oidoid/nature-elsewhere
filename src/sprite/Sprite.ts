@@ -191,6 +191,12 @@ export class Sprite {
     return this.cel(atlas).slices.map(({x, y, w, h}) => Rect.make(x, y, w, h))
   }
 
+  allBodies(atlas: Atlas): Rect[] {
+    const slices = []
+    for (const cel of this.animation(atlas).cels) slices.push(...cel.slices)
+    return slices.map(({x, y, w, h}) => Rect.make(x, y, w, h))
+  }
+
   celIndex(atlas: Atlas): Integer {
     return Animator.index(this.animator.period, this.animation(atlas).cels)
   }
@@ -275,5 +281,23 @@ export namespace Sprite {
 
   export function validateScale({x, y}: Readonly<XY>): void {
     if (!x || !y) throw new Error(`Scale must be nonzero (${x}, ${y}).`)
+  }
+
+  export function bodies(
+    atlas: Atlas,
+    ...sprites: readonly Readonly<Sprite>[]
+  ): Rect[] {
+    const bodies = []
+    for (const sprite of sprites) bodies.push(...sprite.bodies(atlas))
+    return bodies
+  }
+
+  export function allBodies(
+    atlas: Atlas,
+    ...sprites: readonly Readonly<Sprite>[]
+  ): Rect[] {
+    const bodies = []
+    for (const sprite of sprites) bodies.push(...sprite.allBodies(atlas))
+    return bodies
   }
 }

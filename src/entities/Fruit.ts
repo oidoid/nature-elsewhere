@@ -9,16 +9,20 @@ import {JSONValue} from '../utils/JSON'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 
-export class Apple extends Entity<Apple.Variant, Apple.State> {
+export class Fruit extends Entity<Fruit.Variant, Fruit.State> {
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<Apple.Variant, Apple.State>
+    props?: Entity.SubProps<Fruit.Variant, Fruit.State>
   ) {
     super({
       ...defaults,
       map: {
-        [Apple.State.NONE]: new SpriteRect({
-          sprites: [Sprite.withAtlasSize(atlas, {id: AtlasID.PALETTE_RED})]
+        [Fruit.State.NONE]: new SpriteRect({
+          sprites: [
+            Sprite.withAtlasSize(atlas, {
+              id: variantToAtlasID[props?.variant ?? defaults.variant]
+            })
+          ]
         })
       },
       ...props
@@ -30,9 +34,12 @@ export class Apple extends Entity<Apple.Variant, Apple.State> {
   }
 }
 
-export namespace Apple {
+export namespace Fruit {
   export enum Variant {
-    NONE = 'none'
+    APPLE = 'apple',
+    BANANA = 'banana',
+    BLUEBERRY = 'blueberry',
+    GRAPE = 'grape'
   }
 
   export enum State {
@@ -41,9 +48,19 @@ export namespace Apple {
 }
 
 const defaults = Object.freeze({
-  type: EntityType.APPLE,
-  variant: Apple.Variant.NONE,
-  state: Apple.State.NONE,
+  type: EntityType.FRUIT,
+  variant: Fruit.Variant.APPLE,
+  state: Fruit.State.NONE,
   collisionPredicate: CollisionPredicate.SPRITES,
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.TYPE_ITEM
+})
+
+const variantToAtlasID: Readonly<Record<
+  Fruit.Variant,
+  AtlasID
+>> = Object.freeze({
+  [Fruit.Variant.APPLE]: AtlasID.PALETTE_RED,
+  [Fruit.Variant.BANANA]: AtlasID.PALETTE_ORANGE,
+  [Fruit.Variant.BLUEBERRY]: AtlasID.PALETTE_LIGHT_BLUE,
+  [Fruit.Variant.GRAPE]: AtlasID.PALETTE_BLUE
 })

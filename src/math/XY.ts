@@ -1,6 +1,7 @@
 import {Build} from '../utils/Build'
 import {FloatXY} from './FloatXY'
 import {Integer} from 'aseprite-atlas'
+import {NumberUtil} from './NumberUtil'
 import {ReadonlyRect} from './Rect'
 
 /** Integral XY in 1/10000 of a pixel. */
@@ -99,6 +100,12 @@ export class XY implements FloatXY {
 
   clamp(min: Readonly<FloatXY>, max: Readonly<FloatXY>): XY {
     return fromFloatXY(FloatXY.clamp(this, min, max))
+  }
+
+  lerp(to: Readonly<XY>, ratio: number): XY {
+    const x = NumberUtil.lerpInt(this.x, to.x, ratio)
+    const y = NumberUtil.lerpInt(this.y, to.y, ratio)
+    return new XY(x, y)
   }
 
   intersects(rect: ReadonlyRect): boolean {
