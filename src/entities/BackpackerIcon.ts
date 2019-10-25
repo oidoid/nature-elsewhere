@@ -50,9 +50,11 @@ export class BackpackerIcon extends Entity<
     const nextState = state.level.player?.idle
       ? BackpackerIcon.State.IDLE
       : BackpackerIcon.State.WALK
-    if (!state.level.player?.idle)
+    // Avoid direction changes. Limit updates to non-idle states when there's
+    // horizontal velocity.
+    if (!state.level.player?.idle && state.level.player?.velocity.x)
       status |= this.scaleTo(
-        new XY((state.level.player?.velocity.x ?? 0) < 0 ? -1 : 1, 1)
+        new XY(state.level.player.velocity.x < 0 ? -1 : 1, 1)
       )
     status |= this.transition(nextState)
     return status
