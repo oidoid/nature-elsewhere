@@ -133,7 +133,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
         this._cursorOffset
       )
       status |= this.moveTo(destination.sub(new XY(1, 1)))
-      status |= selection.moveTo(destination)
+      status |= selection.moveBoundsTo(destination)
       sandbox.invalidateBounds()
       return status | UpdateStatus.UPDATED
     }

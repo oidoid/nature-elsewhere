@@ -9,6 +9,7 @@ import {JSONValue} from '../utils/JSON'
 import {Rect} from '../math/Rect'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
+import {XY} from '../math/XY'
 
 export class Fruit extends Entity<Fruit.Variant, Fruit.State> {
   constructor(
@@ -20,6 +21,7 @@ export class Fruit extends Entity<Fruit.Variant, Fruit.State> {
       collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Fruit.State.NONE]: new SpriteRect({
+          origin: new XY(1, 1),
           sprites: [
             Sprite.withAtlasSize(atlas, {
               id: variantToAtlasID[props?.variant ?? defaults.variant]
