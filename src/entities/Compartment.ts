@@ -62,7 +62,8 @@ export class Compartment extends Entity<
       ? Compartment.State.CLOSED
       : Compartment.State.OPENED
 
-    status |= this.transition(nextState) | UpdateStatus.TERMINATE
+    // Don't return TERMINATE. The rest of the HUD needs to update.
+    status |= this.transition(nextState)
     return status
   }
 
