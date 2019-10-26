@@ -35,14 +35,19 @@ export namespace RendererStateMachine {
 }
 
 function pause(machine: RendererStateMachine): void {
-  if (machine.frameID) machine.win.cancelAnimationFrame(machine.frameID)
+  if (machine.frameID !== undefined)
+    machine.win.cancelAnimationFrame(machine.frameID)
   machine.frameID = undefined
   machine.onPause()
 }
 
 function resume(machine: RendererStateMachine): void {
   const focused = machine.win.document.hasFocus()
-  if (focused && !machine.renderer.gl.isContextLost() && !machine.frameID)
+  if (
+    focused &&
+    !machine.renderer.gl.isContextLost() &&
+    machine.frameID === undefined
+  )
     loop(machine)
 }
 
@@ -61,7 +66,9 @@ function loop(machine: RendererStateMachine, then?: number): void {
     // second.
     const time = Math.min(now - (then ?? now), 1000)
     machine.onFrame(time)
-    loop(machine, now)
+
+    // If not paused by client, request a new frame.
+    if (machine.frameID !== undefined) loop(machine, now)
   })
 }
 
