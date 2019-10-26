@@ -46,7 +46,7 @@ import {Text} from '../entities/text/Text'
 import {Toolbar} from '../entities/Toolbar'
 import {Tree} from '../entities/Tree'
 import {LifeCounter} from '../entities/LifeCounter'
-import {BackpackerIcon} from '../entities/BackpackerIcon'
+import {PlayerStatus} from '../entities/BackpackerIcon'
 
 export namespace EntityFactory {
   export function produce(
@@ -128,8 +128,8 @@ export namespace EntityFactory {
         return new EntityPicker(atlas, props)
       case EntityType.LIFE_COUNTER:
         return new LifeCounter(atlas, props)
-      case EntityType.BACKPACKER_ICON:
-        return new BackpackerIcon(atlas, props)
+      case EntityType.PLAYER_STATUS:
+        return new PlayerStatus(atlas, props)
       case EntityType.UI_LEVEL_EDITOR_MENU:
         return new LevelEditorMenu(props)
       case EntityType.UI_LEVEL_EDITOR_PANEL:

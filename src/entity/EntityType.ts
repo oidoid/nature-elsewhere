@@ -30,7 +30,7 @@ export enum EntityType {
   TREE = 'tree',
   UI_BUTTON = 'uiButton',
   LIFE_COUNTER = 'lifeCounter',
-  BACKPACKER_ICON = 'backpackerIcon',
+  PLAYER_STATUS = 'backpackerIcon',
   UI_CHECKBOX = 'uiCheckbox',
   UI_CURSOR = 'uiCursor',
   UI_CURSOR_DOT = 'uiCursorDot',

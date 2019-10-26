@@ -62,8 +62,14 @@ export class Compartment extends Entity<
       ? Compartment.State.CLOSED
       : Compartment.State.OPENED
 
+    const {position} = this.sprites[SpriteIndex.DRAWER].bounds
     // Don't return TERMINATE. The rest of the HUD needs to update.
     status |= this.transition(nextState)
+
+    // Copy the last state's drawer position so that the drawer can have an
+    // intermediate position.
+    this.sprites[SpriteIndex.DRAWER].moveTo(position)
+
     return status
   }
 
@@ -93,11 +99,17 @@ export namespace Compartment {
 }
 
 function variantMap(atlas: Atlas): SpriteStateMap<Compartment.State> {
-  const rect = new SpriteRect({sprites: variantSprites(atlas)})
-  return {[Compartment.State.CLOSED]: rect, [Compartment.State.OPENED]: rect}
+  return {
+    [Compartment.State.CLOSED]: new SpriteRect({
+      sprites: variantSprites(atlas, Compartment.State.CLOSED)
+    }),
+    [Compartment.State.OPENED]: new SpriteRect({
+      sprites: variantSprites(atlas, Compartment.State.OPENED)
+    })
+  }
 }
 
-function variantSprites(atlas: Atlas): Sprite[] {
+function variantSprites(atlas: Atlas, state: Compartment.State): Sprite[] {
   const sprites = []
   sprites[SpriteIndex.DRAWER] = Sprite.withAtlasSize(atlas, {
     id: AtlasID.EGG_COMPARTMENT_DRAWER,
@@ -105,7 +117,10 @@ function variantSprites(atlas: Atlas): Sprite[] {
     layer: Layer.UI_HI
   })
   sprites[SpriteIndex.UNIT] = Sprite.withAtlasSize(atlas, {
-    id: AtlasID.EGG_COMPARTMENT_UNIT,
+    id:
+      state === Compartment.State.OPENED
+        ? AtlasID.EGG_COMPARTMENT_UNIT_PRESSED
+        : AtlasID.EGG_COMPARTMENT_UNIT,
     layer: Layer.UI_HIHI
   })
   return sprites

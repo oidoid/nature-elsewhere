@@ -27,8 +27,9 @@ export namespace Store {
     Level.updateCamera(state)
 
     sprites.push(
-      ...updateAndAnimate([state.level.cursor], state),
+      // Process HUD first to avoid melee state flickering.
       ...updateAndAnimate(state.level.hud, state),
+      ...updateAndAnimate([state.level.cursor], state),
       ...updateAndAnimate(
         state.level.destination ? [state.level.destination] : [],
         state

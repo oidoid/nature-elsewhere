@@ -35,9 +35,11 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
       map: {[Toolbar.State.NONE]: new SpriteRect()},
       children: [
         new Group({
+          updatePredicate: UpdatePredicate.ALWAYS,
           positionRelativeToCam: FollowCam.Orientation.NORTH_EAST,
           camMargin: new WH(0, 3),
           collisionPredicate: CollisionPredicate.CHILDREN,
+          collisionType: CollisionType.TYPE_UI,
           children: [
             new Compartment(atlas),
             new Button(atlas, {
@@ -64,9 +66,11 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
           ]
         }),
         new Group({
+          updatePredicate: UpdatePredicate.ALWAYS,
           positionRelativeToCam: FollowCam.Orientation.SOUTH_WEST,
           collisionPredicate:
             CollisionPredicate.CHILDREN | CollisionPredicate.SPRITES,
+          collisionType: CollisionType.TYPE_UI,
           map: {
             [Group.State.NONE]: new SpriteRect({
               sprites: [

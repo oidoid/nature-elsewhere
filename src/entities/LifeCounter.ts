@@ -1,6 +1,6 @@
 import {Atlas, Integer} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
-import {BackpackerIcon} from './BackpackerIcon'
+import {PlayerStatus} from './BackpackerIcon'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
@@ -36,7 +36,7 @@ export class LifeCounter extends Entity<
           text: (props?.lives ?? defaults.lives).toString(),
           textLayer: Layer.UI_HI
         }),
-        new BackpackerIcon(atlas, {x: 7, y: 2})
+        new PlayerStatus(atlas, {x: 7, y: 2})
       ],
       ...props
     })

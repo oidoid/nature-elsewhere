@@ -180,7 +180,7 @@ const typeBlacklist: readonly string[] = Object.freeze([
   EntityType.GROUP,
   EntityType.LEVEL_EDITOR_SANDBOX,
   EntityType.COMPARTMENT,
-  EntityType.BACKPACKER_ICON,
+  EntityType.PLAYER_STATUS,
   EntityType.LIFE_COUNTER,
   EntityType.PLANE,
   ...Object.keys(EntityType)

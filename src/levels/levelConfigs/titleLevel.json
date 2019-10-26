@@ -1,8 +1,8 @@
 {
   "version": "0.0.0",
   "type": "title",
-  "size": {"w": 160, "h": 160},
-  "minViewport": {"w": 160, "h": 160},
+  "size": {"w": 192, "h": 192},
+  "minViewport": {"w": 192, "h": 192},
   "planes": [
     {"type": "plane", "variant": "white"},
     {

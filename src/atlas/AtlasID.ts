@@ -91,6 +91,7 @@ export enum AtlasID {
   HEALTH_BAUBLE = 'healthBauble',
   ROSE_BAUBLE = 'roseBauble',
   EGG_COMPARTMENT_UNIT = 'egg-compartment-unit',
+  EGG_COMPARTMENT_UNIT_PRESSED = 'eggCompartment-unitPressed',
   EGG_COMPARTMENT_DRAWER = 'egg-compartment-drawer',
   MELEE_BUTTON_DISABLED = 'meleeButton-disabled',
   MELEE_BUTTON_ENABLED = 'meleeButton-enabled',

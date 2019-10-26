@@ -13,18 +13,18 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {XY} from '../math/XY'
 
-export class BackpackerIcon extends Entity<
-  BackpackerIcon.Variant,
-  BackpackerIcon.State
+export class PlayerStatus extends Entity<
+  PlayerStatus.Variant,
+  PlayerStatus.State
 > {
   constructor(
     atlas: Atlas,
-    props?: Entity.SubProps<BackpackerIcon.Variant, BackpackerIcon.State>
+    props?: Entity.SubProps<PlayerStatus.Variant, PlayerStatus.State>
   ) {
     super({
       ...defaults,
       map: {
-        [BackpackerIcon.State.IDLE]: new SpriteRect({
+        [PlayerStatus.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {
               id: AtlasID.BAKPACKER_ICON_IDLE,
@@ -32,7 +32,7 @@ export class BackpackerIcon extends Entity<
             })
           ]
         }),
-        [BackpackerIcon.State.WALK]: new SpriteRect({
+        [PlayerStatus.State.WALK]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {
               id: AtlasID.BAKPACKER_ICON_WALK,
@@ -48,8 +48,8 @@ export class BackpackerIcon extends Entity<
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
     const nextState = state.level.player?.idle
-      ? BackpackerIcon.State.IDLE
-      : BackpackerIcon.State.WALK
+      ? PlayerStatus.State.IDLE
+      : PlayerStatus.State.WALK
     // Avoid direction changes. Limit updates to non-idle states when there's
     // horizontal velocity.
     if (!state.level.player?.idle && state.level.player?.velocity.x)
@@ -65,7 +65,7 @@ export class BackpackerIcon extends Entity<
   }
 }
 
-export namespace BackpackerIcon {
+export namespace PlayerStatus {
   export enum Variant {
     NONE = 'none'
   }
@@ -77,9 +77,9 @@ export namespace BackpackerIcon {
 }
 
 const defaults = Object.freeze({
-  type: EntityType.BACKPACKER_ICON,
-  state: BackpackerIcon.State.IDLE,
-  variant: BackpackerIcon.Variant.NONE,
+  type: EntityType.PLAYER_STATUS,
+  state: PlayerStatus.State.IDLE,
+  variant: PlayerStatus.Variant.NONE,
   updatePredicate: UpdatePredicate.INTERSECTS_VIEWPORT,
   collisionType: CollisionType.TYPE_CHARACTER
 })

@@ -53,15 +53,18 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
         state.level.cam.bounds
       )
       status |= this.moveTo(position)
+
+      const collisionType = EntityCollider.collidesEntities(
+        this,
+        Level.activeParentsWithPlayer(state.level)
+      ).reduce(
+        (type, entity) => type | entity.collisionType,
+        CollisionType.INERT
+      )
+
+      if (collisionType & (CollisionType.TYPE_UI | CollisionType.TYPE_ITEM))
+        this.setIcon(state.level.atlas, Cursor.Icon.HAND)
     }
-
-    const collisionType = EntityCollider.collidesEntities(
-      this,
-      Level.activeParentsWithPlayer(state.level)
-    ).reduce((type, entity) => type | entity.collisionType, CollisionType.INERT)
-
-    if (collisionType & (CollisionType.TYPE_UI | CollisionType.TYPE_ITEM))
-      this.setIcon(state.level.atlas, Cursor.Icon.HAND)
 
     status |= this.transition(nextState)
 
