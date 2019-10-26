@@ -71,7 +71,8 @@ export namespace Game {
   export function stop(game: Game): void {
     InputPoller.register(game.inputPoller, game.win, false)
     RendererStateMachine.stop(game.rendererStateMachine)
-    game.win.close()
+    if (game.win.opener) game.win.close()
+    else game.win.history.back()
   }
 }
 
