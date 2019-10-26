@@ -1,12 +1,15 @@
 import {Atlas} from 'aseprite-atlas'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
+import {CollisionType} from '../../collision/CollisionType'
 import {DotCursor} from './DotCursor'
 import {Entity} from '../../entity/Entity'
+import {EntityCollider} from '../../collision/EntityCollider'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {HandCursor} from './HandCursor'
 import {Input} from '../../inputs/Input'
 import {JSONValue} from '../../utils/JSON'
+import {Level} from '../../levels/Level'
 import {ReticleCursor} from './ReticleCursor'
 import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
@@ -51,6 +54,14 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
       )
       status |= this.moveTo(position)
     }
+
+    const collisionType = EntityCollider.collidesEntities(
+      this,
+      Level.activeParentsWithPlayer(state.level)
+    ).reduce((type, entity) => type | entity.collisionType, CollisionType.INERT)
+
+    if (collisionType & (CollisionType.TYPE_UI | CollisionType.TYPE_ITEM))
+      this.setIcon(state.level.atlas, Cursor.Icon.HAND)
 
     status |= this.transition(nextState)
 

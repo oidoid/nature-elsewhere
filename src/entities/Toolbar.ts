@@ -92,10 +92,7 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
   update(state: UpdateState): UpdateStatus {
     let status = super.update(state)
     const collision = EntityCollider.collidesEntity(state.level.cursor, this)
-    if (collision.length) {
-      status |= state.level.cursor.setIcon(state.level.atlas, Cursor.Icon.HAND)
-      status |= this.collides(collision, state)
-    } else
+    if (!collision.length)
       status |= state.level.cursor.setIcon(
         state.level.atlas,
         Cursor.Icon.RETICLE

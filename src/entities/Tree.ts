@@ -37,9 +37,7 @@ function assemble(
   props?: Entity.SubProps<Tree.Variant, Tree.State>
 ): Entity.Props<Tree.Variant, Tree.State> {
   const variant = props?.variant ?? defaults.variant
-  const rect = new SpriteRect({
-    sprites: variantSprites(atlas, variant)
-  })
+  const rect = new SpriteRect({sprites: variantSprites(atlas, variant)})
   return {
     ...defaults,
     variant,

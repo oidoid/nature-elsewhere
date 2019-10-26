@@ -6,6 +6,7 @@ import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {JSONValue} from '../utils/JSON'
+import {Rect} from '../math/Rect'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 
@@ -16,6 +17,7 @@ export class Fruit extends Entity<Fruit.Variant, Fruit.State> {
   ) {
     super({
       ...defaults,
+      collisionBodies: defaults.collisionBodies.map(Rect.copy),
       map: {
         [Fruit.State.NONE]: new SpriteRect({
           sprites: [
@@ -51,7 +53,8 @@ const defaults = Object.freeze({
   type: EntityType.FRUIT,
   variant: Fruit.Variant.APPLE,
   state: Fruit.State.NONE,
-  collisionPredicate: CollisionPredicate.SPRITES,
+  collisionPredicate: CollisionPredicate.BODIES,
+  collisionBodies: Object.freeze([Object.freeze(Rect.make(-1, -1, 3, 3))]),
   collisionType: CollisionType.TYPE_SCENERY | CollisionType.TYPE_ITEM
 })
 
