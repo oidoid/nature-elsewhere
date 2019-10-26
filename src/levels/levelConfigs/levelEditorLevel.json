@@ -2,12 +2,12 @@
   "version": "0.0.0",
   "type": "levelEditor",
   "size": {"w": 32767, "h": 32767},
-  "minViewport": {"w": 160, "h": 96},
+  "minViewport": {"w": 160, "h": 160},
   "planes": [
     {"type": "plane", "variant": "paleGreen"},
     {"id": "uiGrid", "type": "plane", "variant": "grid"}
   ],
-  "cursor": {"type": "uiCursor"},
+  "cursor": {"type": "uiCursor", "icon": "hand"},
   "hud": [{"type": "uiLevelEditorPanel"}],
   "sandbox": {"type": "levelEditorSandbox"},
   "parentEntities": [{"id": "uiMarquee", "type": "uiMarquee"}]
