@@ -74,8 +74,8 @@ export class Button extends Entity<Button.Variant, Button.State> {
     const nextClicked =
       this._engaged && Input.inactiveTriggered(state.inputs.pick)
     const nextLongClicked = this._engaged && Input.activeLong(state.inputs.pick)
-    if (this._clicked !== nextClicked) status |= UpdateStatus.TERMINATE
-    if (this._longClicked !== nextLongClicked) status |= UpdateStatus.TERMINATE
+
+    // Don't return TERMINATE since that halts updates for toolbar UI in play mode.
     this._clicked = nextClicked
     this._longClicked = nextLongClicked
 
