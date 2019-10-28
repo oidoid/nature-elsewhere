@@ -2,8 +2,11 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
   Make large, lavish, content-rich levels.
     Complete one level. The goal is to identify and solve any infrastructure requirements and architectural complexities, and eliminate ambiguities that require deep consideration. The idea is that if one level is technically feasible and fun, the whole game is a worthwhile inevitability, not just a possibility, given hard work. For instance, given a good understanding of the constraints wanted, all of the art work and entity system can be entirely redone from scratch in short order. Even the language could be changed, maybe. It's the guesswork and prototyping back and forth in endless iteration that takes so long, not writing something polished to a spec. The system is also designed to be easily migratable in some parts so replacing components is hopefully easy.
       Seeing the game with new eyes, what are the biggest obstacles to maximal enjoyment? What would I change if I rewrote it from scratch? How can it be simpler, more delightful, polished, toothy and pixely, tight.
+      Experiment with improving the tree tiles using the mountain tree photo references. Particularly the perspective, color, contrast, and clustering.
+      The avatar should be stellar. How can I improve it? The perspective isn't very good, the walk animation is basic, and there's not much in the way of special animations for actions like melee or special events like waiting for a long time.
       Add options UI.
       Add pause level.
+      Figure out iOS issue.
       Improve the title screen and Nature Elsewhere logo. The opening needs to pop. Maybe show the earth instead of the moon to indicate you're elsewhere.
       Add licensing and open source rationale.
         This is an experiment. Theft would be flattering but also devastating. I hope that I can retain full ownership of the project without competition. If it doesn't pan out, future games will likely be conventionally closed sourced and licensed.
@@ -20,6 +23,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
         Is a post-inflation lifecycle useful beyond on the panel? The panel would benefit from it to find the sandbox and load the entities.
         Add a die button for setting a random variant.
         Figure out a way to signal 1) entities offscreen and 2) fully overlapped entities.
+        Double the size of the buttons.
         Add undo and redo buttons.
           Make editor support commands.
         Increase and decrease arrows are confusing. Increase is down and decrease is up, for example.
@@ -34,6 +38,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
       Improve the palette. Tremendous colors!
         I think that shade of blue in particular isn't quite right. I need a deep lake blue and couple extra values. Most probably lots of tweaking is needed.
         The cursor probably needs a unique color like the shadows.
+      Improve the perspective and cohesion of constraints.
       Improve the level editor and toolbelt / toolbar UI. Shift a little more towards ornate or intricate. It should be delightful and intuitive! I love the Diablo globes but maybe with even more saturated colors.
         Start with a highly detailed mock.
         Maybe a big heart bar or health globe.
@@ -97,6 +102,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
           Lots of panels, baubles, and instruments improve backpacker efficiency.
           Lots of compartments and panels to reveal cages, farms, drawers, and containers. Inven can too and can interact with HUD. Fully manual inventory management. Put arbitrary things in each slot.
           Growing flowers and clovers in little plantbeds and pots and urns. Mushroom or winter cactus flower pot.
+          A system of pockets, containers, compartments.
           Collecting certain classes of items should require certain special collection containers like fridge for body parts like the bee stinger arrows or tongues and ears, gem specimen book for crystals, dung case for poo samples, box of boxes or pocket of pockets or chest of chests for more storage in general, killing jar for moths, dead specimen journal (a summary of you), barometric chamber, fishtank, binder.
           It is possible to combine certain items with each other like grouping apples, or goldfish and fish tank, or eye and skull to make a living head.
             Horadric cube like thing and RE4 inven management.
@@ -245,6 +251,7 @@ Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, sim
   Add Nature Elsewhere logo.
   On a multitouch, if you touch left and right sides of the screen at the same time, the player oscillates.
   Experiment with drawing the logo in multiple color and animation passes. The shader can be used or an animation.
+  [fix] compartment automatically closes on mobile devices.
 
 aseprite-atlas
   Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.
