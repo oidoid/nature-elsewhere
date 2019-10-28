@@ -26,17 +26,20 @@ import {Frog} from '../entities/Frog'
 import {Grass} from '../entities/Grass'
 import {Group} from '../entities/group/Group'
 import {HandCursor} from '../entities/cursor/HandCursor'
+import {Item} from '../entities/Item'
 import {LevelEditorMenu} from '../entities/levelEditor/LevelEditorMenu'
 import {LevelEditorPanel} from '../entities/levelEditor/LevelEditorPanel'
 import {LevelEditorPanelBackground} from '../entities/levelEditor/LevelEditorPanelBackground'
 import {LevelEditorSandbox} from '../entities/levelEditor/LevelEditorSandbox'
 import {LevelLink} from '../entities/levelLink/LevelLink'
+import {LifeCounter} from '../entities/LifeCounter'
 import {Marquee} from '../entities/Marquee'
 import {Monument} from '../entities/Monument'
 import {Mountain} from '../entities/Mountain'
 import {Path} from '../entities/Path'
 import {Pig} from '../entities/Pig'
 import {Plane} from '../entities/Plane'
+import {PlayerStatus} from '../entities/BackpackerIcon'
 import {Pond} from '../entities/Pond'
 import {RadioCheckboxGroup} from '../entities/RadioCheckboxGroup'
 import {ReticleCursor} from '../entities/cursor/ReticleCursor'
@@ -45,8 +48,6 @@ import {Subshrub} from '../entities/Subshrub'
 import {Text} from '../entities/text/Text'
 import {Toolbar} from '../entities/Toolbar'
 import {Tree} from '../entities/Tree'
-import {LifeCounter} from '../entities/LifeCounter'
-import {PlayerStatus} from '../entities/BackpackerIcon'
 
 export namespace EntityFactory {
   export function produce(
@@ -94,6 +95,8 @@ export namespace EntityFactory {
         return new Flag(atlas, props)
       case EntityType.GRASS:
         return new Grass(atlas, props)
+      case EntityType.ITEM:
+        return new Item(atlas, props)
       case EntityType.MONUMENT:
         return new Monument(atlas, props)
       case EntityType.MOUNTAIN:
@@ -147,6 +150,6 @@ export namespace EntityFactory {
       case EntityType.UI_TOOLBAR:
         return new Toolbar(atlas, props)
     }
-    throw new Error(`Unknown type "${props.type}."`)
+    throw new Error(`Unknown type "${props.type}".`)
   }
 }

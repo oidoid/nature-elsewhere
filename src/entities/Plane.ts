@@ -51,7 +51,8 @@ export namespace Plane {
     LIGHT_BLUE = 'lightBlue',
     RED = 'red',
     ORANGE = 'orange',
-    LIGHT_GREY = 'lightGrey'
+    LIGHT_GREY = 'lightGrey',
+    DARK_RED = 'darkRed'
   }
 
   export enum State {
@@ -77,7 +78,8 @@ const variantToAtlasID: Readonly<Record<
   [Plane.Variant.LIGHT_BLUE]: AtlasID.PALETTE_LIGHT_BLUE,
   [Plane.Variant.RED]: AtlasID.PALETTE_RED,
   [Plane.Variant.ORANGE]: AtlasID.PALETTE_ORANGE,
-  [Plane.Variant.LIGHT_GREY]: AtlasID.PALETTE_LIGHT_GREY
+  [Plane.Variant.LIGHT_GREY]: AtlasID.PALETTE_LIGHT_GREY,
+  [Plane.Variant.DARK_RED]: AtlasID.PALETTE_DARK_RED
 })
 
 const defaults = Object.freeze({

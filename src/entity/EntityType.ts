@@ -3,6 +3,7 @@
 export enum EntityType {
   FRUIT = 'fruit',
   APPLE_TREE = 'appleTree',
+  ITEM = 'item',
   BACKPACKER = 'backpacker',
   BEE = 'bee',
   BUNNY = 'bunny',

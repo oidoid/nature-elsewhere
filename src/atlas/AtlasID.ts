@@ -253,6 +253,7 @@ export enum AtlasID {
   PALETTE_RED = 'palette-red',
   PALETTE_TRANSPARENT = 'palette-transparent',
   PALETTE_WHITE = 'palette-white',
+  PALETTE_DARK_RED = 'palette-darkRed',
   UI_BUTTON_BASE = 'uiButton-base',
   UI_BUTTON_CREATE = 'uiButton-create',
   UI_BUTTON_DECREMENT = 'uiButton-decrement',
@@ -272,7 +273,9 @@ export enum AtlasID {
   UI_SWITCH = 'uiSwitch',
   UI_WINDOW_MODE_CHART = 'uiWindowModeChart',
   UI_ZOOM_MULTIPLIER_CHART = 'uiZoomMultiplierChart',
-  WAVE = 'wave'
+  WAVE = 'wave',
+  ITEM_APPLE = 'itemApple',
+  ITEM_APPLE_SHADOW = 'itemApple-shadow'
 }
 
 export const MEM_FONT_PREFIX = 'memFont-'
