@@ -3,6 +3,7 @@
     animation duration, from the Atlas. The tag convention used here is
     <file stem>-<state or variant or ancillary image>. */
 export enum AtlasID {
+  WATER = 'water',
   ARROW_DIAGONAL = 'arrow-upRight',
   ARROW_HORIZONTAL = 'arrow-right',
   ARROW_VERTICAL = 'arrow-up',

@@ -27,6 +27,7 @@ varying vec4 vSource;
 varying vec4 vConstituent;
 varying float vComposition;
 varying vec2 vOffset;
+varying vec2 vConstituentOffset;
 
 void main() {
   // Offset flipped images by their width or height.
@@ -36,4 +37,6 @@ void main() {
   vComposition = composition;
   vOffset = (vec2(-translate.xy + uv * target.zw) - vec2(translate.zw) * float(time) / 10000.) / vec2(scale);
   vOffset = vOffset - mod(vOffset, 1. / vec2(abs(scale)));
+  vConstituentOffset = vec2(uv * target.zw) / vec2(scale);
+  vConstituentOffset = vConstituentOffset - mod(vConstituentOffset, 1. / vec2(abs(scale)));
 }

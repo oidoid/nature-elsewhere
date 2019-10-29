@@ -13,7 +13,8 @@ export class Sprite {
       the atlas but may be referenced by multiple sprites. */
   private readonly _id: AtlasID
 
-  /** See SpriteComposition. */
+  /** See SpriteComposition. The constituent shares the source Animator and
+      uses the same cel period. Wrapping is not applied to the constituent. */
   private _constituentID: AtlasID
   private _composition: SpriteComposition
 
@@ -53,17 +54,20 @@ export class Sprite {
       the game clock. */
   private readonly _wrapVelocity: DecamillipixelXY
 
-  /** Optionally, compute the sprite size from the animation source's size and
-      the specified scale. */
+  /** Compute the sprite size from the animation source's size and the specified
+      scale. */
   static withAtlasSize(atlas: Atlas, props: Sprite.Props): Sprite {
     const animation = atlas.animations[props.id]
-    const size =
-      props.size ??
-      new WH(
-        props.w ?? animation.size.w * Math.abs(props.scale?.x ?? props.sx ?? 1),
-        props.h ?? animation.size.h * Math.abs(props.scale?.y ?? props.sy ?? 1)
-      )
-    return new Sprite({...props, size})
+    return new Sprite({...props, size: computeSize(props, animation)})
+  }
+
+  /** Compute the sprite size from the animation constituent's size and the
+      specified scale. */
+  static withConstituentAtlasSize(atlas: Atlas, props: Sprite.Props): Sprite {
+    if (props.constituentID === undefined)
+      throw new Error(`Missing constituentID property.`)
+    const animation = atlas.animations[props.constituentID]
+    return new Sprite({...props, size: computeSize(props, animation)})
   }
 
   constructor(props: Sprite.Props) {
@@ -300,4 +304,14 @@ export namespace Sprite {
     for (const sprite of sprites) bodies.push(...sprite.allBodies(atlas))
     return bodies
   }
+}
+
+function computeSize(props: Sprite.Props, animation: Atlas.Animation): WH {
+  return (
+    props.size ??
+    new WH(
+      props.w ?? animation.size.w * Math.abs(props.scale?.x ?? props.sx ?? 1),
+      props.h ?? animation.size.h * Math.abs(props.scale?.y ?? props.sy ?? 1)
+    )
+  )
 }

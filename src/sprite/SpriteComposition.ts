@@ -6,5 +6,8 @@ export enum SpriteComposition {
   SOURCE_MASK,
   /** The source is rendered where the source AND constituent's alpha are
       nonzero. */
-  SOURCE_IN
+  SOURCE_IN,
+  /** The source is rendered with the constituent's alpha. The distinction from
+      SOURCE_MASK is useful since the source controls animation playback. */
+  CONSTITUENT_MASK
 }

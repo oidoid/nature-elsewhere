@@ -9,6 +9,7 @@ import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 import {Sprite} from '../sprite/Sprite'
+import {SpriteComposition} from '../sprite/SpriteComposition'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 
 export class Pond extends Entity<Pond.Variant, Pond.State> {
@@ -19,9 +20,13 @@ export class Pond extends Entity<Pond.Variant, Pond.State> {
       map: {
         [Pond.State.NONE]: new SpriteRect({
           sprites: [
-            Sprite.withAtlasSize(atlas, {
-              id: AtlasID.POND,
-              layer: Layer.ABOVE_PLANE
+            Sprite.withConstituentAtlasSize(atlas, {
+              id: AtlasID.WATER,
+              constituentID: AtlasID.POND,
+              composition: SpriteComposition.CONSTITUENT_MASK,
+              layer: Layer.ABOVE_PLANE,
+              wvx: 12,
+              wvy: 12
             }),
             Sprite.withAtlasSize(atlas, {id: AtlasID.CATTAILS, x: 10, y: -5}),
             Sprite.withAtlasSize(atlas, {id: AtlasID.GRASS_01, x: -3, y: -6}),
