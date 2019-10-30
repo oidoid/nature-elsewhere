@@ -103,6 +103,18 @@ export namespace Rect {
     return {position: new XY(x, y), size: new WH(w, h)}
   }
 
+  export function upperRight(rect: ReadonlyRect): XY {
+    return rect.position.add({x: rect.size.w, y: 0})
+  }
+
+  export function bottomRight(rect: ReadonlyRect): XY {
+    return rect.position.add({x: rect.size.w, y: rect.size.h})
+  }
+
+  export function bottomLeft(rect: ReadonlyRect): XY {
+    return rect.position.add({x: 0, y: rect.size.h})
+  }
+
   export function centerOn(rect: ReadonlyRect, on: ReadonlyRect): XY {
     const x =
       on.position.x + Math.trunc(on.size.w / 2) - Math.trunc(rect.size.w / 2)

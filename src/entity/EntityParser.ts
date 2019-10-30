@@ -11,6 +11,7 @@ import {EntityType} from '../entity/EntityType'
 import {EntityTypeParser} from './EntityTypeParser'
 import {GroupParser} from '../entities/group/GroupParser'
 import {LevelLinkParser} from '../entities/levelLink/LevelLinkParser'
+import {NinePatchParser} from '../entities/ninePatch/NinePatchParser'
 import {RectParser} from '../math/RectParser'
 import {SpriteParser} from '../sprite/SpriteParser'
 import {SpriteStateMachineParser} from '../spriteStateMachine/SpriteStateMachineParser'
@@ -31,7 +32,7 @@ export namespace EntityParser {
 
   export function parse(config: EntityConfig, atlas: Atlas): Entity {
     let props = parseProps(atlas, config, EntityTypeParser.parse(config.type))
-    props = parseTypeProps(config, props)
+    props = parseTypeProps(atlas, config, props)
     return EntityFactory.produce(atlas, props)
   }
 }
@@ -78,6 +79,7 @@ function parseProps(
 }
 
 function parseTypeProps(
+  atlas: Atlas,
   config: EntityConfig,
   props: Entity.Props | Entity.SubProps
 ): Entity.Props | Entity.SubProps {
@@ -88,6 +90,9 @@ function parseTypeProps(
       break
     case EntityType.GROUP:
       typeProps = GroupParser.parseProps(config)
+      break
+    case EntityType.NINE_PATCH:
+      typeProps = NinePatchParser.parseProps(atlas, config)
       break
     case EntityType.UI_TEXT:
     case EntityType.UI_CHECKBOX:

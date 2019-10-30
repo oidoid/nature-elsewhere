@@ -1,6 +1,6 @@
 import {Atlas, Integer} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
-import {PlayerStatus} from './BackpackerIcon'
+import {PlayerStatus} from './PlayerStatus'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'

@@ -27,7 +27,7 @@ export class PlayerStatus extends Entity<
         [PlayerStatus.State.IDLE]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {
-              id: AtlasID.BAKPACKER_ICON_IDLE,
+              id: AtlasID.PLAYER_STATUS_IDLE,
               layer: Layer.UI_HIHI
             })
           ]
@@ -35,7 +35,7 @@ export class PlayerStatus extends Entity<
         [PlayerStatus.State.WALK]: new SpriteRect({
           sprites: [
             Sprite.withAtlasSize(atlas, {
-              id: AtlasID.BAKPACKER_ICON_WALK,
+              id: AtlasID.PLAYER_STATUS_WALK,
               layer: Layer.UI_HIHI
             })
           ]
