@@ -4,8 +4,8 @@
   "size": {"w": 32767, "h": 32767},
   "minViewport": {"w": 1024, "h": 1024},
   "cam": {"followID": "uiPlayer"},
-  "planes": [{"type": "plane", "variant": "white"}],
+  "planes": [{"type": "Plane", "variant": "white"}],
   "cursor": {"type": "uiCursor"},
-  "player": {"id": "uiPlayer", "type": "backpacker"},
+  "player": {"id": "uiPlayer", "type": "Backpacker"},
   "parentEntities": []
 }

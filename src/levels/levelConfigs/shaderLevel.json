@@ -4,10 +4,10 @@
   "size": {"w": 96, "h": 96},
   "minViewport": {"w": 96, "h": 96},
   "cursor": {"type": "uiCursor"},
-  "planes": [{"type": "plane", "variant": "white"}],
+  "planes": [{"type": "Plane", "variant": "white"}],
   "parentEntities": [
     {
-      "type": "group",
+      "type": "Group",
       "map": {
         "none": {
           "sprites": [

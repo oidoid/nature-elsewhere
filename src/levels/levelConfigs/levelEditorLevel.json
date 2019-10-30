@@ -4,11 +4,11 @@
   "size": {"w": 32767, "h": 32767},
   "minViewport": {"w": 160, "h": 160},
   "planes": [
-    {"type": "plane", "variant": "paleGreen"},
-    {"id": "uiGrid", "type": "plane", "variant": "grid"}
+    {"type": "Plane", "variant": "paleGreen"},
+    {"id": "uiGrid", "type": "Plane", "variant": "grid"}
   ],
   "cursor": {"type": "uiCursor", "icon": "hand"},
   "hud": [{"type": "uiLevelEditorPanel"}],
-  "sandbox": {"type": "levelEditorSandbox"},
+  "sandbox": {"type": "LevelEditorSandbox"},
   "parentEntities": [{"id": "uiMarquee", "type": "uiMarquee"}]
 }

@@ -4,9 +4,9 @@
   "size": {"w": 192, "h": 192},
   "minViewport": {"w": 192, "h": 192},
   "planes": [
-    {"type": "plane", "variant": "white"},
+    {"type": "Plane", "variant": "white"},
     {
-      "type": "group",
+      "type": "Group",
       "map": {
         "none": {
           "sprites": [
@@ -20,7 +20,7 @@
   "cursor": {"type": "uiCursor", "icon": "hand"},
   "parentEntities": [
     {
-      "type": "group",
+      "type": "Group",
       "positionRelativeToCam": "northEast",
       "map": {
         "none": {"sprites": [{"id": "moon", "sx": 3, "sy": 3}]}
@@ -28,7 +28,7 @@
       "updatePredicate": "always"
     },
     {
-      "type": "group",
+      "type": "Group",
       "positionRelativeToCam": "north",
       "camMargin": {"h": 40},
       "map": {
@@ -47,7 +47,7 @@
           "constituentID": "palette-black"
         },
         {
-          "type": "group",
+          "type": "Group",
           "y": 62,
           "updatePredicate": "always",
           "collisionPredicate": 8,
@@ -88,7 +88,7 @@
       ]
     },
     {
-      "type": "group",
+      "type": "Group",
       "positionRelativeToCam": "southWest",
       "camMargin": {"w": 1},
       "updatePredicate": "always",
@@ -96,7 +96,7 @@
       "children": [{"type": "uiDateVersionHash"}]
     },
     {
-      "type": "group",
+      "type": "Group",
       "positionRelativeToCam": "southEast",
       "camMargin": {"w": 1, "h": 1},
       "updatePredicate": "always",
