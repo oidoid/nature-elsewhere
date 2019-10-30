@@ -3,9 +3,9 @@ import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {Rect} from '../math/Rect'
@@ -158,7 +158,7 @@ export class Backpacker extends Entity<Backpacker.Variant, Backpacker.State> {
     return idleState[this.state]
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 

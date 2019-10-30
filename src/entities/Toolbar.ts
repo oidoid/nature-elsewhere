@@ -7,11 +7,11 @@ import {Compartment} from './Compartment'
 import {Cursor} from './cursor/Cursor'
 import {Entity} from '../entity/Entity'
 import {EntityCollider} from '../collision/EntityCollider'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {FollowCam} from '../updaters/FollowCam'
 import {Group} from './group/Group'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {LifeCounter} from './LifeCounter'
 import {Limits} from '../math/Limits'
@@ -109,7 +109,7 @@ export class Toolbar extends Entity<Toolbar.Variant, Toolbar.State> {
     this._bounds.size.h = Limits.maxShort
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 }

@@ -6,6 +6,6 @@ import {EntityType} from './EntityType'
 const atlas: Atlas = Object.freeze(Parser.parse(atlasJSON))
 const types: readonly EntityType[] = Object.values(EntityType)
 
-test.each(types)(`%# type %p is parsable`, type =>
+test.each(types)('%# type %p is parsable', type =>
   expect(EntityParser.parse({type}, atlas)).toBeTruthy()
 )

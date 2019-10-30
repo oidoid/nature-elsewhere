@@ -73,21 +73,45 @@ export class Sprite {
   constructor(props: Sprite.Props) {
     this._id = props.id
     this._constituentID = props.constituentID ?? props.id
-    this._composition = props.composition ?? SpriteComposition.SOURCE
-    this._scale = props.scale ?? new XY(props.sx ?? 1, props.sy ?? 1)
+    this._composition = props.composition ?? Sprite.defaults.composition
+    this._scale =
+      props.scale ??
+      new XY(
+        props.sx ?? Sprite.defaults.scale.x,
+        props.sy ?? Sprite.defaults.scale.y
+      )
     Sprite.validateScale(this._scale)
     this._bounds = props.bounds ?? {
-      position: props.position ?? new XY(props.x ?? 0, props.y ?? 0),
-      size: props.size ?? new WH(props.w ?? 0, props.h ?? 0)
+      position:
+        props.position ??
+        new XY(
+          props.x ?? Sprite.defaults.bounds.position.x,
+          props.y ?? Sprite.defaults.bounds.position.y
+        ),
+      size:
+        props.size ??
+        new WH(
+          props.w ?? Sprite.defaults.bounds.size.w,
+          props.h ?? Sprite.defaults.bounds.size.h
+        )
     }
-    this._layer = props.layer ?? Layer.DEFAULT
+    this._layer = props.layer ?? Sprite.defaults.layer
     this._animator = props.animator ?? {
-      period: props.period ?? 0,
-      exposure: props.exposure ?? 0
+      period: props.period ?? Sprite.defaults.animator.period,
+      exposure: props.exposure ?? Sprite.defaults.animator.exposure
     }
-    this._wrap = props.wrap ?? new XY(props.wx ?? 0, props.wy ?? 0)
+    this._wrap =
+      props.wrap ??
+      new XY(
+        props.wx ?? Sprite.defaults.wrap.x,
+        props.wy ?? Sprite.defaults.wrap.y
+      )
     this._wrapVelocity =
-      props.wrapVelocity ?? new XY(props.wvx ?? 0, props.wvy ?? 0)
+      props.wrapVelocity ??
+      new XY(
+        props.wvx ?? Sprite.defaults.wrapVelocity.x,
+        props.wvy ?? Sprite.defaults.wrapVelocity.y
+      )
   }
 
   get id(): AtlasID {
@@ -304,6 +328,17 @@ export namespace Sprite {
     for (const sprite of sprites) bodies.push(...sprite.allBodies(atlas))
     return bodies
   }
+
+  export const defaults = Object.freeze({
+    // constituentID defaults to props.id.
+    composition: SpriteComposition.SOURCE,
+    scale: Object.freeze(new XY(1, 1)),
+    bounds: Object.freeze(Rect.make(0, 0, 0, 0)),
+    layer: Layer.DEFAULT,
+    animator: Object.freeze({period: 0, exposure: 0}),
+    wrap: Object.freeze(new XY(0, 0)),
+    wrapVelocity: Object.freeze(new XY(0, 0))
+  })
 }
 
 function computeSize(props: Sprite.Props, animation: Atlas.Animation): WH {

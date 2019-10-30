@@ -1,10 +1,10 @@
 import {Atlas} from 'aseprite-atlas'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntityFactory} from '../entity/EntityFactory'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType, UI_KEY_PREFIX} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {ProcessChildren} from '../entity/ProcessChildren'
@@ -114,7 +114,7 @@ export class EntityPicker extends Entity<
     this.replaceChild(oldChild, newChild)
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 

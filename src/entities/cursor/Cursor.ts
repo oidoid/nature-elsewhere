@@ -1,6 +1,7 @@
 import {Atlas} from 'aseprite-atlas'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {CollisionType} from '../../collision/CollisionType'
+import {CursorPropsConfig} from './CursorPropsConfig'
 import {DotCursor} from './DotCursor'
 import {Entity} from '../../entity/Entity'
 import {EntityCollider} from '../../collision/EntityCollider'
@@ -8,7 +9,6 @@ import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {HandCursor} from './HandCursor'
 import {Input} from '../../inputs/Input'
-import {JSONValue} from '../../utils/JSON'
 import {Level} from '../../levels/Level'
 import {ReticleCursor} from './ReticleCursor'
 import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
@@ -91,8 +91,11 @@ export class Cursor extends Entity<Cursor.Variant, Cursor.State> {
     return this._setIcon(atlas, icon)
   }
 
-  toJSON(): JSONValue {
-    const diff = EntitySerializer.serialize(this, defaults)
+  toJSON(): NonNullable<CursorPropsConfig> {
+    const diff: Writable<CursorPropsConfig> = EntitySerializer.serialize(
+      this,
+      defaults
+    )
     if (this.icon !== defaults.icon) diff.icon = this.icon
     return diff
   }

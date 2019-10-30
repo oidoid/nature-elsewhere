@@ -2,7 +2,6 @@ import {AtlasID, MEM_FONT_PREFIX} from '../../atlas/AtlasID'
 import {Entity} from '../../entity/Entity'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {JSONObject} from '../../utils/JSON'
 import {Layer} from '../../sprite/Layer'
 import {Limits} from '../../math/Limits'
 import {Rect} from '../../math/Rect'
@@ -10,6 +9,7 @@ import {Sprite} from '../../sprite/Sprite'
 import {SpriteComposition} from '../../sprite/SpriteComposition'
 import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {TextLayout} from '../../text/TextLayout'
+import {TextPropsConfig} from './TextPropsConfig'
 import {UpdatePredicate} from '../../updaters/UpdatePredicate'
 import {WH} from '../../math/WH'
 import {XY} from '../../math/XY'
@@ -57,20 +57,24 @@ export class Text extends Entity<Text.Variant, Text.State> {
     this.replaceSprites(this.state, ...textSprites)
   }
 
-  toJSON(): JSONObject {
-    const diff = EntitySerializer.serialize(this, defaults)
+  toJSON(): TextPropsConfig {
+    const diff: Writable<TextPropsConfig> = EntitySerializer.serialize(
+      this,
+      defaults
+    )
     if (this._text !== defaults.text) diff.text = this._text
-    if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
+    if (this._textLayer !== defaults.textLayer)
+      diff.textLayer = Layer[this._textLayer]
     if (!this._textScale.equal(defaults.textScale)) {
-      const textScale: NonNullable<Writable<XYConfig>> = {}
+      const textScale: Writable<XYConfig> = {}
       if (this._textScale.x !== defaults.textScale.x)
         textScale.x = this._textScale.x
       if (this._textScale.y !== defaults.textScale.y)
         textScale.y = this._textScale.y
-      diff.textScale = <JSONObject>textScale
+      diff.textScale = textScale
     }
     if (!this._textMaxSize.equal(defaults.textMaxSize))
-      diff.textMaxSize = <JSONObject>{
+      diff.textMaxSize = {
         ...(this._textMaxSize.w !== defaults.textMaxSize.w && {
           w: this._textMaxSize.w
         }),

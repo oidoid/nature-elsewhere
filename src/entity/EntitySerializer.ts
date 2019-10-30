@@ -1,21 +1,20 @@
 import {Entity} from './Entity'
 import {EntityConfig} from './EntityConfig'
-import {JSONObject} from '../utils/JSON'
 
 export namespace EntitySerializer {
   export function serialize<
     Variant extends string = string,
     State extends string = string
   >(
-    entity: Entity<Variant, State>,
+    entity: Readonly<Entity<Variant, State>>,
     subDefaults: Omit<
       Readonly<Entity.SubProps<Variant, State>>,
       'children' | 'map' | 'collisionBodies'
     >
-  ): JSONObject {
+  ): EntityConfig {
     const defaults = {...Entity.defaults, ...subDefaults}
 
-    const diff: Writable<EntityConfig> & JSONObject = {type: entity.type}
+    const diff: Writable<EntityConfig> = {type: entity.type}
     if (entity.id !== defaults.id) diff.id = entity.id
     if (entity.variant !== defaults.variant) diff.variant = entity.variant
     if (entity.bounds.position.x !== defaults.position.x)

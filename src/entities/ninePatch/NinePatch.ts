@@ -4,9 +4,10 @@ import {EntityType} from '../../entity/EntityType'
 import {Rect} from '../../math/Rect'
 import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {WH} from '../../math/WH'
-import {JSONValue} from '../../utils/JSON'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {Sprite} from '../../sprite/Sprite'
+import {NinePatchPropsConfig} from './NinePatchPropsConfig'
+import {WHConfig} from '../../math/WHConfig'
 
 /** A special kind of sprite group. Only origin is sized but the rest behave like sprites.
  * 
@@ -22,6 +23,8 @@ import {Sprite} from '../../sprite/Sprite'
   When the width changes, O, N, and S change size and NE, E, and SE move.
   When the hieght changes, O, W, and E change size and SW, S, and SE move.
   the origin patch has no relation to Entity.origin
+
+  It's best to use a child. This lets you keep track collisioning changes for size changes, for example.
 */
 export class NinePatch extends Entity<NinePatch.Variant, NinePatch.State> {
   constructor(props?: NinePatch.Props) {
@@ -163,14 +166,19 @@ export class NinePatch extends Entity<NinePatch.Variant, NinePatch.State> {
     return this.sizeOriginTo(remainder)
   }
 
-  toJSON(): JSONValue {
-    const diff = EntitySerializer.serialize(this, defaults)
+  toJSON(): NinePatchPropsConfig {
+    const diff: Writable<NinePatchPropsConfig> = EntitySerializer.serialize(
+      this,
+      defaults
+    )
     const size = this.originPatch().size
-    if (size.w || size.h) {
-      diff.size = {}
-      if (size.w) diff.size.w = size.w
-      if (size.h) diff.size.h = size.h
+    if (size.w !== 0 || size.h !== 0) {
+      const size: Writable<WHConfig> = {}
+      if (size.w !== 0) size.w = size.w
+      if (size.h !== 0) size.h = size.h
+      diff.size = size
     }
+    // add patches by using sprite serializer
     return diff
   }
 }
@@ -192,7 +200,7 @@ export namespace NinePatch {
 
   export type PatchesProp = Maybe<Readonly<Partial<Record<Patch, Sprite>>>>
 
-  export enum Patch {
+  export enum Patch { // Can't quite do the sparse array.
     ORIGIN,
     NORTH,
     EAST,

@@ -2,9 +2,9 @@ import {Atlas} from 'aseprite-atlas'
 import {AtlasID} from '../atlas/AtlasID'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
@@ -38,7 +38,7 @@ export class Grass extends Entity<Grass.Variant, Grass.State> {
     })
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 }

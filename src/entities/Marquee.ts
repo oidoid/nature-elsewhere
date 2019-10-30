@@ -2,10 +2,10 @@ import {AtlasID} from '../atlas/AtlasID'
 import {Cursor} from './cursor/Cursor'
 import {Entity} from '../entity/Entity'
 import {EntityCollider} from '../collision/EntityCollider'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {Input} from '../inputs/Input'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {Rect} from '../math/Rect'
@@ -141,7 +141,7 @@ export class Marquee extends Entity<Marquee.Variant, Marquee.State> {
     return status
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 

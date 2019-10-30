@@ -6,7 +6,7 @@ import {LocalStorage} from '../../storage/LocalStorage'
 
 export namespace LevelEditorSandboxFileUtil {
   export function autoSave(sandbox: LevelEditorSandbox): void {
-    const data = JSON.stringify(sandbox.toJSON(), null, 2)
+    const data = JSON.stringify(sandbox.toJSON().children, null, 2)
     LocalStorage.put(LocalStorage.Key.LEVEL_EDITOR_SANDBOX_AUTO_SAVE, data)
   }
 

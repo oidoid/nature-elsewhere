@@ -4,10 +4,10 @@ import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntityCollider} from '../collision/EntityCollider'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {Input} from '../inputs/Input'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {NumberUtil} from '../math/NumberUtil'
 import {Rect} from '../math/Rect'
@@ -78,7 +78,7 @@ export class Compartment extends Entity<
     this._bounds.size.h = unitSize.h
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 

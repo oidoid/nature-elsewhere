@@ -2,11 +2,11 @@ import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {EntityCollider} from '../collision/EntityCollider'
+import {EntityConfig} from './EntityConfig'
 import {EntityID} from './EntityID'
 import {EntityType} from './EntityType'
 import {FloatXY} from '../math/FloatXY'
 import {Integer} from 'aseprite-atlas'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {Level} from '../levels/Level'
 import {ProcessChildren} from './ProcessChildren'
@@ -451,7 +451,7 @@ export abstract class Entity<
     return UpdateStatus.UNCHANGED
   }
 
-  abstract toJSON(): JSONValue
+  abstract toJSON(): EntityConfig
 
   private _updatePositionForVelocity(state: UpdateState): UpdateStatus {
     const stopped = !this.velocity.x && !this.velocity.y

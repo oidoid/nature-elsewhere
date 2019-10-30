@@ -1,8 +1,8 @@
 import {Entity} from '../../entity/Entity'
+import {EntityConfig} from '../../entity/EntityConfig'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {FollowCam} from '../../updaters/FollowCam'
-import {JSONValue} from '../../utils/JSON'
 import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
 import {UpdateState} from '../../updaters/UpdateState'
 import {UpdateStatus} from '../../updaters/UpdateStatus'
@@ -28,7 +28,7 @@ export class Group extends Entity<Group.Variant, Group.State> {
     return super.update(state) | FollowCam.update(this._followCam, this, state)
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 }

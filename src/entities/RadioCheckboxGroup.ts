@@ -2,9 +2,9 @@ import {Checkbox} from './Checkbox'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {ProcessChildren} from '../entity/ProcessChildren'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -61,7 +61,7 @@ export class RadioCheckboxGroup extends Entity<
     return status
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 }

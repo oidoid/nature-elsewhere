@@ -3,9 +3,9 @@ import {AtlasID} from '../atlas/AtlasID'
 import {CollisionPredicate} from '../collision/CollisionPredicate'
 import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {Rect} from '../math/Rect'
 import {Sprite} from '../sprite/Sprite'
@@ -49,7 +49,7 @@ export class Bee extends Entity<Bee.Variant, Bee.State> {
     return status
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, {
       ...defaults,
       collisionType: defaults.collisionType[this.state]

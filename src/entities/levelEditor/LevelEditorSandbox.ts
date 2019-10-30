@@ -1,7 +1,8 @@
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {Entity} from '../../entity/Entity'
+import {EntityConfig} from '../../entity/EntityConfig'
+import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
-import {JSONArray} from '../../utils/JSON'
 import {ProcessChildren} from '../../entity/ProcessChildren'
 import {ReadonlyRect, Rect} from '../../math/Rect'
 import {SpriteRect} from '../../spriteStateMachine/SpriteRect'
@@ -43,8 +44,10 @@ export class LevelEditorSandbox extends Entity<
     return collisions
   }
 
-  toJSON(): JSONArray {
-    return this.children.map(child => child.toJSON())
+  toJSON(): EntityConfig {
+    const diff = EntitySerializer.serialize(this, defaults)
+    const children = this.children.map(child => child.toJSON())
+    return {...diff, children}
   }
 }
 

@@ -3,7 +3,7 @@ import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {Input} from '../../inputs/Input'
-import {JSONObject} from '../../utils/JSON'
+import {LevelLinkPropsConfig} from './LevelLinkPropsConfig'
 import {Level} from '../../levels/Level'
 import {LevelAdvance} from '../../levels/LevelAdvance'
 import {LevelType} from '../../levels/LevelType'
@@ -37,8 +37,11 @@ export class LevelLink extends Text {
     return status | UpdateStatus.UPDATED | UpdateStatus.TERMINATE
   }
 
-  toJSON(): JSONObject {
-    const diff = EntitySerializer.serialize(this, defaults)
+  toJSON(): LevelLinkPropsConfig {
+    const diff: Writable<LevelLinkPropsConfig> = EntitySerializer.serialize(
+      this,
+      defaults
+    )
     if (this._link) diff.link = this._link
     return diff
   }

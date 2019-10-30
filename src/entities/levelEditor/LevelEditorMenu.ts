@@ -3,12 +3,12 @@ import * as strings from '../../utils/strings.json'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {CollisionType} from '../../collision/CollisionType'
 import {Entity} from '../../entity/Entity'
+import {EntityConfig} from '../../entity/EntityConfig.js'
 import {EntityID} from '../../entity/EntityID'
 import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {FilePrompt} from '../../storage/FilePrompt'
 import {FollowCam, ReadonlyFollowCam} from '../../updaters/FollowCam'
-import {JSONValue} from '../../utils/JSON'
 import {LevelEditorSandbox} from './LevelEditorSandbox'
 import {LevelEditorSandboxFileUtil} from './LevelEditorSandboxFileUtil'
 import {LevelLink} from '../levelLink/LevelLink'
@@ -124,7 +124,7 @@ export class LevelEditorMenu extends Entity<
     return status
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 }

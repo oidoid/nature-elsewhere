@@ -18,6 +18,7 @@ import {SpriteStateMachineParser} from '../spriteStateMachine/SpriteStateMachine
 import {TextParser} from '../entities/text/TextParser'
 import {UpdatePredicateParser} from '../updaters/UpdatePredicateParser'
 import {XYParser} from '../math/XYParser'
+import {LifeCounterParser} from '../entities/LifeCounterParser'
 
 export type VariantConfig = Maybe<string>
 export type EntityStateConfig = string
@@ -90,6 +91,9 @@ function parseTypeProps(
       break
     case EntityType.GROUP:
       typeProps = GroupParser.parseProps(config)
+      break
+    case EntityType.LIFE_COUNTER:
+      typeProps = LifeCounterParser.parseProps(config)
       break
     case EntityType.NINE_PATCH:
       typeProps = NinePatchParser.parseProps(atlas, config)

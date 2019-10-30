@@ -1,8 +1,8 @@
 import {Build} from '../utils/Build'
 import {Entity} from '../entity/Entity'
+import {EntityConfig} from '../entity/EntityConfig'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {Text} from './text/Text'
 import {UpdatePredicate} from '../updaters/UpdatePredicate'
@@ -29,7 +29,7 @@ export class DateVersionHash extends Entity<
     })
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 }

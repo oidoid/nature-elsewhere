@@ -1,3 +1,3 @@
 import {Animator} from 'aseprite-atlas'
 
-export type AnimatorConfig = Readonly<Partial<Animator>>
+export type AnimatorConfig = Maybe<Readonly<Partial<Animator>>>

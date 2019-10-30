@@ -6,8 +6,8 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
+import {LifeCounterPropsConfig} from './LifeCounterPropsConfig'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
 import {Text} from './text/Text'
@@ -50,8 +50,11 @@ export class LifeCounter extends Entity<
     ;(<Text>this.children[Children.TEXT]).text = lives.toString()
   }
 
-  toJSON(): JSONValue {
-    const diff = EntitySerializer.serialize(this, defaults)
+  toJSON(): LifeCounterPropsConfig {
+    const diff: Writable<LifeCounterPropsConfig> = EntitySerializer.serialize(
+      this,
+      defaults
+    )
     if (this.lives !== defaults.lives) diff.lives = this.lives
     return diff
   }

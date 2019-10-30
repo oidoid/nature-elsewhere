@@ -7,6 +7,7 @@ import {Checkbox} from '../Checkbox'
 import {CollisionPredicate} from '../../collision/CollisionPredicate'
 import {CollisionType} from '../../collision/CollisionType'
 import {Entity} from '../../entity/Entity'
+import {EntityConfig} from '../../entity/EntityConfig.js'
 import {EntityFactory} from '../../entity/EntityFactory'
 import {EntityID} from '../../entity/EntityID'
 import {EntityPicker} from '../EntityPicker'
@@ -14,7 +15,6 @@ import {EntitySerializer} from '../../entity/EntitySerializer'
 import {EntityType} from '../../entity/EntityType'
 import {FollowCam, ReadonlyFollowCam} from '../../updaters/FollowCam'
 import {Group} from '../group/Group'
-import {JSONValue} from '../../utils/JSON'
 import {Layer} from '../../sprite/Layer'
 import {Level} from '../../levels/Level'
 import {LevelEditorPanelBackground} from './LevelEditorPanelBackground'
@@ -384,7 +384,7 @@ export class LevelEditorPanel extends Entity<
     return status
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 

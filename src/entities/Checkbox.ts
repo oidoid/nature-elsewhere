@@ -5,7 +5,6 @@ import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
 import {Input} from '../inputs/Input'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {Level} from '../levels/Level'
 import {Limits} from '../math/Limits'
@@ -17,8 +16,10 @@ import {UpdateState} from '../updaters/UpdateState'
 import {UpdateStatus} from '../updaters/UpdateStatus'
 import {WH} from '../math/WH'
 import {XY} from '../math/XY'
+import {TextPropsConfig} from './text/TextPropsConfig'
 
 export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
+  // [todo] can all this stuff be in Text? Lots of redundancy here.
   private _textLayer: Layer
   private _textScale: XY
   private _textMaxSize: WH
@@ -82,15 +83,25 @@ export class Checkbox extends Entity<Checkbox.Variant, Checkbox.State> {
     return (<Maybe<Text>>this.children[0])?.text ?? ''
   }
 
-  toJSON(): JSONValue {
-    const diff = EntitySerializer.serialize(this, defaults)
-    if (this._textLayer !== defaults.textLayer) diff.textLayer = this._textLayer
+  // [todo] would it be better to subclass Text? Seems very similar.
+  toJSON(): TextPropsConfig {
+    const diff: Writable<TextPropsConfig> = EntitySerializer.serialize(
+      this,
+      defaults
+    )
+    if (this._textLayer !== defaults.textLayer)
+      diff.textLayer = Layer[this._textLayer]
     if (!this._textScale.equal(defaults.textScale))
       diff.textScale = {x: this._textScale.x, y: this._textScale.y}
     if (!this._textMaxSize.equal(defaults.textMaxSize))
       diff.textMaxSize = {w: this._textMaxSize.w, h: this._textMaxSize.h}
-    if (this._textConstituentID !== defaults.textConstituentID)
-      diff.textConstituentID = this._textConstituentID
+    // This will disappear if either 1) subclass Text 2) add textConstituentID
+    // to Props.
+    if (
+      this._textConstituentID !== undefined &&
+      this._textConstituentID !== defaults.textConstituentID
+    )
+      (<any>diff).textConstituentID = this._textConstituentID
     return diff
   }
 

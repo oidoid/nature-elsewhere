@@ -5,10 +5,10 @@ import {CollisionType} from '../collision/CollisionType'
 import {Entity} from '../entity/Entity'
 import {EntitySerializer} from '../entity/EntitySerializer'
 import {EntityType} from '../entity/EntityType'
-import {JSONValue} from '../utils/JSON'
 import {Layer} from '../sprite/Layer'
 import {Sprite} from '../sprite/Sprite'
 import {SpriteRect} from '../spriteStateMachine/SpriteRect'
+import {EntityConfig} from '../entity/EntityConfig'
 
 export class Item extends Entity<Item.Variant, Item.State> {
   constructor(atlas: Atlas, props?: Entity.SubProps<Item.Variant, Item.State>) {
@@ -29,7 +29,7 @@ export class Item extends Entity<Item.Variant, Item.State> {
     })
   }
 
-  toJSON(): JSONValue {
+  toJSON(): EntityConfig {
     return EntitySerializer.serialize(this, defaults)
   }
 }
