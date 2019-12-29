@@ -1,0 +1,29 @@
+body {
+  /* Make the body flush with the window. */
+  margin: 0;
+
+  /* The background color can be shown during quick resizes and context loss.
+     [palette] */
+  background: #f2f5f5;
+
+  /* document.documentElement.clientWidth/Height seems to give the most accurate
+     dimensions, as opposed to window.innerWidth/Height, but overflow is still
+     possible. Hide the scrollbars and disable scrolling. */
+  overflow: hidden;
+
+  /* Hide the cursor. */
+  cursor: none;
+
+  /* Update for every pointermove *touch* Event like *mouse* Events. */
+  touch-action: none;
+}
+
+canvas {
+  /* Prevent additional line height spacing by changing display type from inline
+     to block. */
+  display: block;
+
+  /* When the user scales, use nearest-neighbor to prevent blurriness and
+     changes to color. */
+  image-rendering: pixelated;
+}

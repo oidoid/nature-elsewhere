@@ -1,0 +1,43 @@
+{
+  "name": "nature-elsewhere",
+  "//": "[strings]",
+  "description": "An isometric adventure in an idealized state of nature.",
+  "version": "0.0.0",
+  "keywords": [
+    "game",
+    "webgl",
+    "isometric",
+    "adventure",
+    "pixel-art",
+    "aseprite"
+  ],
+  "homepage": "https://github.com/oddoid/nature-elsewhere",
+  "repository": "github:oddoid/nature-elsewhere",
+  "bugs": "https://github.com/oddoid/nature-elsewhere/issues",
+  "license": "GPL-3.0-only AND CC-BY-SA-4.0",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "test": "npm -s run test:format:rust && npm -s run test:lint:rust && npm -s run test:rust && npm -s run test:node && npm -s run doc:rust && npm -s run test:format:web && npm -s run build",
+    "build": "webpack -p",
+    "doc:rust": "cargo -q --locked doc",
+    "test:node": "wasm-pack test --node",
+    "test:rust": "cargo -q --locked t",
+    "test:lint:rust": "cargo -q --locked clippy",
+    "test:format:web": "npm -s run formatter:web -- -l",
+    "format:web": "npm -s run formatter:web -- --write",
+    "formatter:web": "prettier './**/*.{css,js,json,html,md}'",
+    "test:format:rust": "npm -s run format:rust -- -- --check -l",
+    "format:rust": "cargo -q --locked fmt"
+  },
+  "devDependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^0",
+    "clean-webpack-plugin": "^3",
+    "copy-webpack-plugin": "^5",
+    "pre-commit": "^1",
+    "prettier": "^1",
+    "webpack": "^4",
+    "webpack-cli": "^3",
+    "webpack-dev-server": "^3"
+  },
+  "author": "oddoid"
+}

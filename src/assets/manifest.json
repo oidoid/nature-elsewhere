@@ -1,0 +1,22 @@
+{
+  "//": "[strings] [version] [palette] Don't forget to update the favicon palette.",
+  "name": "nature elsewhere",
+  "description": "An isometric adventure in an idealized state of nature.",
+  "icons": [
+    {
+      "src": "/favicon/favicon192x192.png?v=0.0.0",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/favicon512x512.png?v=0.0.0",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#f2f5f5",
+  "background_color": "#f2f5f5",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "start_url": "/"
+}
