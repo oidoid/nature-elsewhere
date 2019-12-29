@@ -21,6 +21,7 @@ module.exports = (_, argv) => {
   return {
     stats: 'errors-warnings',
     devServer: {clientLogLevel: 'warning', stats: 'errors-warnings'},
+    output: {filename: 'index.js'},
     plugins: [
       new CleanWebpackPlugin({
         cleanOnceBeforeBuildPatterns: [
@@ -30,7 +31,9 @@ module.exports = (_, argv) => {
           path.resolve(__dirname, 'pkg/**/*')
         ]
       }),
-      new CopyPlugin([{context: 'src', from: 'assets'}]),
+      new CopyPlugin([
+        {context: 'src', from: '{**/*.{css,html,png},manifest.json}'}
+      ]),
       new webpack.DefinePlugin({
         'process.env': {
           date: JSON.stringify(date),
