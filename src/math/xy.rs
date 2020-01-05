@@ -1,3 +1,4 @@
+use num_traits::cast::NumCast;
 use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Debug, Eq, PartialEq)]
@@ -7,8 +8,19 @@ pub struct XY<T> {
 }
 pub type XY16 = XY<i16>;
 
-impl<T: Copy> XY<T> {
-  // [todo] cast.
+impl<T: Copy + NumCast> XY<T> {
+  /// Cast each component passed and returns a new XY.
+  pub fn from<Component: NumCast>(x: Component, y: Component) -> Self {
+    XY { x: T::from(x).unwrap(), y: T::from(y).unwrap() }
+  }
+
+  /// Cast each component of self and returns a new XY.
+  pub fn into<Component: NumCast>(self) -> XY<Component> {
+    XY {
+      x: Component::from(self.x).unwrap(),
+      y: Component::from(self.y).unwrap(),
+    }
+  }
 
   /// Returns a new XY with equal x and y components.
   pub fn diagonal(component: T) -> Self {
@@ -47,6 +59,16 @@ impl<T: Div<Output = T>> Div<XY<T>> for XY<T> {
 #[cfg(test)]
 mod test {
   use super::*;
+
+  #[test]
+  fn from() {
+    assert_eq!(XY::from(-1.2, -3.4), XY16 { x: -1, y: -3 });
+  }
+
+  #[test]
+  fn into() {
+    assert_eq!(XY { x: -1.2, y: -3.4 }.into(), XY16 { x: -1, y: -3 });
+  }
 
   #[test]
   fn diagonal() {
