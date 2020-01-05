@@ -26,14 +26,17 @@ opt-level = 'z' # Optimize for size.
 lto = true
 
 [dependencies]
-glow = '0'
 image = {version = '0', default-features = false, features = ['png_codec']}
+num-traits = '0'
 serde = '1'
 serde_derive = '1'
 serde_json = '1'
 wasm-bindgen = '0'
 web-sys = {version = '0', features = [
-  'console', 'HtmlElement', 'HtmlImageElement'
+  'AngleInstancedArrays', 'console', 'Document', 'Element', 'HtmlCanvasElement',
+  'HtmlElement', 'HtmlImageElement', 'WebGlActiveInfo', 'WebGlBuffer',
+  'WebGlProgram', 'WebGlRenderingContext', 'WebGlShader', 'WebGlTexture',
+  'WebGlUniformLocation', 'Window'
 ]}
 
 [target.'cfg(debug_assertions)'.dependencies]
