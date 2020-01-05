@@ -3,12 +3,14 @@ extern crate serde_derive;
 #[macro_use]
 mod utils;
 
+mod aseprite_atlas;
 mod game;
 mod graphics;
-mod image_loader;
+mod loaders;
 mod math;
 use game::Game;
 use image::GenericImageView;
+use loaders::image_loader;
 use wasm_bindgen::{
   prelude::{wasm_bindgen, JsValue},
   JsCast,

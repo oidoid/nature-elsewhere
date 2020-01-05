@@ -1,7 +1,7 @@
 use num_traits::cast::NumCast;
 use std::ops::{Add, Div, Mul, Sub};
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Deserialize, Eq, PartialEq)]
 pub struct XY<T> {
   pub x: T,
   pub y: T,

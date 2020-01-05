@@ -1,7 +1,7 @@
 use super::wh::WH;
 use super::xy::XY;
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Deserialize, Eq, PartialEq)]
 pub struct Rect<T, V> {
   pub xy: XY<T>,
   pub wh: WH<V>, // x: i32, // Center X position relative sprite bounds in pixels
