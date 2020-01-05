@@ -13,6 +13,17 @@ pub trait CeilMultiple {
   fn ceil_multiple(self, multiple: Self) -> Self;
 }
 
+macro_rules! impl_CeilMultiple_float {
+  ($($t:ty)*) => ($(
+    impl CeilMultiple for $t {
+      fn ceil_multiple(self, multiple: Self) -> Self {
+        ceil_multiple(self, multiple)
+      }
+    }
+  )*)
+}
+impl_CeilMultiple_float!(f32 f64);
+
 macro_rules! impl_CeilMultiple_f32 {
   ($($t:ty)*) => ($(
     impl CeilMultiple for $t {
@@ -22,7 +33,7 @@ macro_rules! impl_CeilMultiple_f32 {
     }
   )*)
 }
-impl_CeilMultiple_f32!(u8 u16 i8 i16 f32);
+impl_CeilMultiple_f32!(u8 u16 i8 i16);
 
 macro_rules! impl_CeilMultiple_f64 {
   ($($t:ty)*) => ($(
@@ -33,7 +44,7 @@ macro_rules! impl_CeilMultiple_f64 {
     }
   )*)
 }
-impl_CeilMultiple_f64!(u32 i32 f64);
+impl_CeilMultiple_f64!(u32 i32);
 
 #[cfg(test)]
 mod test {
