@@ -17,10 +17,9 @@
   "license": "GPL-3.0-only AND CC-BY-SA-4.0",
   "scripts": {
     "start": "webpack-dev-server",
-    "test": "npm -s run test:format:rust && npm -s run test:lint:rust && npm -s run test:rust && npm -s run test:node && npm -s run doc:rust && npm -s run test:format:web && npm -s run build",
+    "test": "npm -s run test:format:rust && npm -s run test:lint:rust && npm -s run test:rust && npm -s run doc:rust && npm -s run test:format:web && npm -s run build",
     "build": "webpack -p",
     "doc:rust": "cargo -q --locked doc",
-    "test:node": "wasm-pack test --node",
     "test:rust": "cargo -q --locked t",
     "test:lint:rust": "cargo -q --locked clippy",
     "test:format:web": "npm -s run formatter:web -- -l",
