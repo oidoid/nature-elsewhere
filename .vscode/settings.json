@@ -1,8 +1,8 @@
 {
   "files.exclude": {
+    "target": true,
     "dist": true,
-    "pkg": true,
-    "target": true
+    "pkg": true
   },
-  "cSpell.words": ["aseprite", "oddoid"]
+  "cSpell.words": ["aseprite", "oddoid", "rrggbbaa"]
 }

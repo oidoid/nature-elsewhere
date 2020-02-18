@@ -1,98 +1,95 @@
-use super::super::math::ceil::CeilMultiple;
 use super::gl_data_type::GlDataType;
+use crate::math::ceil::CeilMultiple;
 use std::collections::HashMap;
+
+// consider converting the json to a structur here.
 
 #[derive(Clone, Debug)]
 pub struct ShaderLayout {
+  // used to avoid constants elsewhree. maybe th econfig can just be an array of strings though?
   pub uniforms: HashMap<String, String>,
-  pub per_vertex: AttributeBuffer,
-  pub per_instance: AttributeBuffer,
+  pub per_vert: AttrBuffer,
+  pub per_instance: AttrBuffer,
 }
 
 #[derive(Clone, Debug)]
-pub struct AttributeBuffer {
-  pub length: i32,
+pub struct AttrBuffer {
+  pub len: i32,
   pub stride: i32,
   pub divisor: u32,
-  pub attributes: Vec<Attribute>,
+  pub attrs: Vec<Attr>,
 }
 
 #[derive(Clone, Debug)]
-pub struct Attribute {
+pub struct Attr {
   pub data_type: GlDataType,
   pub name: String,
-  pub length: i32,
+  pub len: i32,
   pub offset: i32,
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct ShaderLayoutConfig {
   pub uniforms: HashMap<String, String>,
-  pub per_vertex: Vec<AttributeConfig>,
-  pub per_instance: Vec<AttributeConfig>,
+  pub per_vert: Vec<AttrConfig>,
+  pub per_instance: Vec<AttrConfig>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct AttributeConfig {
+pub struct AttrConfig {
   pub data_type: GlDataType,
   pub name: String,
-  pub length: i32,
+  pub len: i32,
 }
 
 impl ShaderLayout {
-  pub fn parse(config: ShaderLayoutConfig) -> ShaderLayout {
-    ShaderLayout {
+  pub fn parse(json: &str) -> Self {
+    let config: Box<ShaderLayoutConfig> = serde_json::from_str(&json)
+      .expect("ShaderLayoutConfig JSON parsing failed.");
+    Self {
       uniforms: config.uniforms,
-      per_vertex: parse_attributes(0, config.per_vertex),
-      per_instance: parse_attributes(1, config.per_instance),
+      per_vert: parse_attrs(0, &config.per_vert),
+      per_instance: parse_attrs(1, &config.per_instance),
     }
   }
 }
 
-fn parse_attributes(
-  divisor: u32,
-  configs: Vec<AttributeConfig>,
-) -> AttributeBuffer {
-  let attributes = configs.iter().fold(vec![], fold_attribute);
-  let max_data_type_size = attributes
+fn parse_attrs(divisor: u32, configs: &Vec<AttrConfig>) -> AttrBuffer {
+  let attrs = configs.iter().fold(vec![], fold_attr);
+  let max_data_type_size = attrs
     .iter()
-    .map(|Attribute { data_type, .. }| data_type.size())
+    .map(|Attr { data_type, .. }| data_type.size())
     .fold(0, |max, val| max.max(val));
-  let size = if attributes.is_empty() {
+  let size = if attrs.is_empty() {
     0
   } else {
-    next_attribute_offset(attributes[attributes.len() - 1].clone())
+    next_attr_offset(attrs[attrs.len() - 1].clone())
   };
-  AttributeBuffer {
-    length: attributes
-      .iter()
-      .fold(0, |sum, Attribute { length, .. }| sum + length),
+  AttrBuffer {
+    len: attrs.iter().fold(0, |sum, Attr { len, .. }| sum + len),
     stride: max_data_type_size.ceil_multiple(size),
     divisor,
-    attributes,
+    attrs,
   }
 }
 
-fn fold_attribute(
-  mut layouts: Vec<Attribute>,
-  attribute: &AttributeConfig,
-) -> Vec<Attribute> {
+fn fold_attr(mut layouts: Vec<Attr>, attr: &AttrConfig) -> Vec<Attr> {
   let offset = if layouts.is_empty() {
     0
   } else {
-    next_attribute_offset(layouts[layouts.len() - 1].clone())
+    next_attr_offset(layouts[layouts.len() - 1].clone())
   };
-  layouts.push(Attribute {
-    data_type: attribute.data_type,
-    name: attribute.name.clone(),
-    length: attribute.length,
+  layouts.push(Attr {
+    data_type: attr.data_type,
+    name: attr.name.clone(),
+    len: attr.len,
     offset,
   });
   layouts
 }
 
-fn next_attribute_offset(attribute: Attribute) -> i32 {
-  attribute.offset + attribute.data_type.size() * attribute.length
+fn next_attr_offset(attr: Attr) -> i32 {
+  attr.offset + attr.data_type.size() * attr.len
 }
 
 #[cfg(test)]
@@ -101,11 +98,10 @@ mod test {
 
   #[test]
   fn parse() {
-    let json = include_str!("shader_layout_config.json");
-    let config: ShaderLayoutConfig = serde_json::from_str(&json).unwrap();
+    let config = include_str!("shader_layout.json");
     let layout = ShaderLayout::parse(config);
     assert_ne!(layout.uniforms.len(), 0);
-    assert_ne!(layout.per_vertex.length, 0);
-    assert_ne!(layout.per_instance.length, 0);
+    assert_ne!(layout.per_vert.len, 0);
+    assert_ne!(layout.per_instance.len, 0);
   }
 }

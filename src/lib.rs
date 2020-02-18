@@ -1,40 +1,49 @@
 #[macro_use]
+extern crate failure;
+#[macro_use]
 extern crate serde_derive;
 #[macro_use]
 mod utils;
 
-mod aseprite_atlas;
+mod atlas;
 mod game;
 mod graphics;
-mod loaders;
 mod math;
 use game::Game;
-use image::GenericImageView;
-use loaders::image_loader;
-use wasm_bindgen::{
-  prelude::{wasm_bindgen, JsValue},
-  JsCast,
-};
-use web_sys::{console, HtmlCanvasElement};
+mod wasm;
+use graphics::shader_layout::ShaderLayout;
+use wasm_bindgen::{prelude::wasm_bindgen, JsCast};
 
 #[wasm_bindgen(start)]
 pub fn main_wasm() {
   #[cfg(debug_assertions)]
   console_error_panic_hook::set_once();
 
-  let canvas = web_sys::window()
-    .unwrap()
+  let shader_layout =
+    ShaderLayout::parse(include_str!("graphics/shader_layout.json"));
+  let vert_glsl = include_str!("graphics/vert.glsl");
+  let frag_glsl = include_str!("graphics/frag.glsl");
+
+  let win = web_sys::window().expect("Missing Window.");
+  let canvas = win
     .document()
-    .unwrap()
+    .expect("Missing Document.")
     .query_selector("canvas")
-    .unwrap()
-    .unwrap()
-    .dyn_into::<HtmlCanvasElement>()
-    .unwrap();
+    .expect("Query failed.")
+    .expect("Canvas missing.")
+    .dyn_into()
+    .expect("HtmlCanvasElement expected.");
 
-  let atlas_image = image_loader::load(include_bytes!("atlas/atlas.png"));
-  let (width, height) = atlas_image.dimensions();
-  console::log_2(&JsValue::from(width), &JsValue::from(height));
+  let atlas_img = image::load_from_memory(include_bytes!("atlas/atlas.png"))
+    .expect("Image loading failed.");
 
-  let game = Game::new(canvas, atlas_image);
+  let mut game = Game::new(
+    shader_layout,
+    vert_glsl.to_string(),
+    frag_glsl.to_string(),
+    win,
+    canvas,
+    atlas_img,
+  );
+  game.start();
 }

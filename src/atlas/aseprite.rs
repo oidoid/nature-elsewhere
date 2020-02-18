@@ -8,41 +8,40 @@
 //!
 //! [binary format]: https://github.com/aseprite/aseprite/blob/master/docs/ase-file-specs.md
 
-use super::super::math::rect::Rect16;
-use super::super::math::wh::WH16;
 use std::collections::HashMap;
 
-pub type Milliseconds = u16;
-
-/// The topmost data type for JSON exported from Aseprite. This format
-/// contains all the image and animation information for every file packed in
-/// the atlas. **By convention**, every file has one or more animations. Every
-/// animation has a Frame sequence, a Tag, and zero or more Slices.
+/// The topmost data type for JSON exported from Aseprite. This format contains
+/// all the image and animation information for every file packed in the atlas.
+/// **By convention**, every file has one or more animations. Every animation
+/// has a Frame sequence, a Tag, and zero or more Slices.
+#[derive(Debug, Deserialize)]
 pub struct File {
-  meta: Meta,
+  pub meta: Meta,
   /// All Frames for all files packed.
-  frames: FrameMap,
+  pub frames: FrameMap,
 }
 
 pub type FrameMap = HashMap<TagFrameNumber, Frame>;
 
+#[derive(Debug, Deserialize)]
 pub struct Meta {
-  /// E.g., 'http://www.aseprite.org/'.
-  app: String,
-  /// E.g., '1.2.8.1'.
-  version: String,
-  /// The associated output basename. E.g., 'atlas.png'.
-  image: String,
-  /// E.g., 'RGBA8888' or 'I8'.
-  format: String,
+  /// E.g., "http://www.aseprite.org/".
+  pub app: String,
+  /// E.g., "1.2.8.1".
+  pub version: String,
+  /// The associated output basename. E.g., "atlas.png".
+  pub image: String,
+  /// E.g., "RGBA8888" or "I8".
+  pub format: String,
   /// Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2.
-  size: WH16,
-  /// E.g., '1'.
-  scale: String,
+  pub size: WH,
+  /// E.g., "1".
+  pub scale: String,
   /// All FrameTags for all files packed **via CLI** `--list-tags`.
-  frameTags: Vec<FrameTag>,
+  #[serde(rename(deserialize = "frameTags"))]
+  pub frame_tags: Vec<FrameTag>,
   /// All slices for all files packed **via CLI** `--list-slices`.
-  slices: Vec<Slice>,
+  pub slices: Vec<Slice>,
 }
 
 /// A Tag followed by a space followed by a frame number **via CLI**
@@ -59,65 +58,46 @@ pub struct Frame {
   /// **via CLI** `--inner-padding n`. The padding dimensions may also be
   /// calculated by subtracting member's WH dimensions from sourceSize and
   /// dividing by 2.
-  frame: Rect16,
-  rotated: bool,
-  trimmed: bool,
+  pub frame: Rect,
+  pub rotated: bool,
+  pub trimmed: bool,
   /// The Frame's bounds within the file packed, not including padding.
-  spriteSourceSize: Rect16,
+  #[serde(rename(deserialize = "spriteSourceSize"))]
+  pub sprite_source_size: Rect,
   /// The width and height components of spriteSourceSize.
-  sourceSize: WH16,
-  duration: Duration,
+  #[serde(rename(deserialize = "sourceSize"))]
+  pub source_size: WH,
+  pub duration: Duration,
 }
 
 /// A label and animation behavior for one or more Frames. When combined with
 /// the referenced Frames, an animation is represented.
+#[derive(Debug, Deserialize)]
 pub struct FrameTag {
   /// **By convention**, the associated Frame's Tag.
-  name: Tag,
+  pub name: Tag,
   /// The inclusive starting Frame index.
-  from: u16,
+  pub from: u16,
   /// The inclusive ending Frame index, possibly identical to the starting frame
   /// index.
-  to: u16,
-  direction: AnimationDirection,
+  pub to: u16,
+  pub direction: String,
 }
 
 /// Positive animation length in milliseconds. **By convention**, animations
 /// that should pause use the special INFINITE value.
-pub type Duration = Milliseconds;
+pub type Duration = u16;
 
 /// **By convention**, a reserved value to indicate a value without
 /// termination.
 pub const INFINITE: Duration = !0;
 
-pub enum AnimationDirection {
-  /// Animate from start to end; when looping, return to start.
-  Forward,
-  /// Animate from end to start; when looping, return to end.
-  Reverse,
-  /// Animate from start to end - 1 or start, whichever is greater; when
-  /// looping, change direction (initially, end to start + 1 or end, whichever
-  /// is lesser. A traversal from start to end - 1 then end to start + 1 is
-  /// considered a complete loop.
-  PingPong,
-}
-
-// impl AnimationDirection {
-//   fn parse(str: String) -> AnimationDirection {
-//     match str {
-//       "forward" => AnimationDirection::Forward,
-//       "reverse" => AnimationDirection::Reverse,
-//       "pingpong" => AnimationDirection::PingPong,
-//     }
-//   }
-// }
-
 #[derive(Debug, Deserialize)]
 pub struct Slice {
-  name: Tag,
-  /// Color in #rrggbbaa format. E.g., blue is '#0000ffff'.
-  color: String,
-  keys: Vec<Key>,
+  pub name: Tag,
+  /// Color in #rrggbbaa format. E.g., blue is "#0000ffff".
+  pub color: String,
+  pub keys: Vec<Key>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -126,7 +106,27 @@ pub struct Key {
   /// Frame's end offset. **By convention,** the exclusive end offset is the
   /// next higher Key.frame if it exists or the animation's end if not. A
   /// Key's Frame index may be calculated from FrameTag.index + Key.frame.
-  frame: u32,
+  pub frame: u32,
   /// The slice dimensions.
-  bounds: Rect16,
+  pub bounds: Rect,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Rect {
+  /// Distance from the top in pixels.
+  pub x: i16,
+  /// Distance from the left in pixels.
+  pub y: i16,
+  /// Width in pixels.
+  pub w: u16,
+  /// Height in pixels.
+  pub h: u16,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WH {
+  /// Width in pixels.
+  pub w: u16,
+  /// Height in pixels.
+  pub h: u16,
 }

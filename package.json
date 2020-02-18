@@ -19,6 +19,7 @@
     "start": "webpack-dev-server",
     "test": "npm -s run test:format:rust && npm -s run test:lint:rust && npm -s run test:rust && npm -s run doc:rust && npm -s run test:format:web && npm -s run build",
     "build": "webpack -p",
+    "thing": "aseprite -b \"$@\" --filename-format '{tag} {frame}' --list-tags --list-slices --sheet-pack",
     "doc:rust": "cargo -q --locked doc",
     "test:rust": "cargo -q --locked t",
     "test:lint:rust": "cargo -q --locked clippy",
@@ -29,14 +30,14 @@
     "format:rust": "cargo -q --locked fmt"
   },
   "devDependencies": {
-    "@wasm-tool/wasm-pack-plugin": "^0",
-    "clean-webpack-plugin": "^3",
-    "copy-webpack-plugin": "^5",
-    "pre-commit": "^1",
-    "prettier": "^1",
-    "webpack": "^4",
-    "webpack-cli": "^3",
-    "webpack-dev-server": "^3"
+    "@wasm-tool/wasm-pack-plugin": "1.1.0",
+    "clean-webpack-plugin": "3.0.0",
+    "copy-webpack-plugin": "5.1.1",
+    "pre-commit": "1.2.2",
+    "prettier": "1.19.1",
+    "webpack": "4.41.5",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.10.2"
   },
   "author": "oddoid"
 }

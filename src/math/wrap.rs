@@ -3,11 +3,16 @@ use std::ops::{Add, Rem, Sub};
 /// from is inclusive.
 /// to is exclusive except when equal to from.
 /// Returns a value wrapped to the domain [from, to).
-pub fn wrap<T: Add<Output = T> + Sub<Output = T> + Rem<Output = T> + Copy>(
+pub fn wrap<
+  T: Add<Output = T> + Sub<Output = T> + Rem<Output = T> + PartialEq + Copy,
+>(
   val: T,
   from: T,
   to: T,
 ) -> T {
+  if from == to {
+    return from;
+  }
   let range = to - from; // range ∈ [0, +∞).
   let x = (val - from) % range; // Subtract min and wrap to x ∈ (-range, range).
   let y = x + range; // Translate to y ∈ (0, 2 * range).
@@ -19,12 +24,9 @@ pub fn wrap<T: Add<Output = T> + Sub<Output = T> + Rem<Output = T> + Copy>(
 mod test {
   use super::*;
 
-  // [todo] What's the best way to test a table of inputs and expected outputs?
-  //        At the very least, I think a macro could be used here.
-
   #[test]
   fn int() {
-    vec![
+    [
       // Negative to zero range.
       (-5, -1, 0, -1),
       (-4, -1, 0, -1),
@@ -94,6 +96,18 @@ mod test {
       (3, -3, -1, -3),
       (4, -3, -1, -2),
       (5, -3, -1, -3),
+      // Zero range.
+      (-5, 1, 1, 1),
+      (-4, 1, 1, 1),
+      (-3, 1, 1, 1),
+      (-2, 1, 1, 1),
+      (-1, 1, 1, 1),
+      (0, 1, 1, 1),
+      (1, 1, 1, 1),
+      (2, 1, 1, 1),
+      (3, 1, 1, 1),
+      (4, 1, 1, 1),
+      (5, 1, 1, 1),
       // Positive range.
       (-5, 1, 3, 1),
       (-4, 1, 3, 2),
@@ -178,16 +192,22 @@ mod test {
       (19, -3, 3, 1),
       (20, -3, 3, 2),
     ]
-    .into_iter()
+    .iter()
     .enumerate()
-    .for_each(|(i, (val, min, max, expected))| {
-      assert_eq!(wrap(val, min, max), expected, "Case {} failed.", i);
+    .for_each(|(i, &(val, min, max, expected))| {
+      assert_eq!(
+        wrap(val, min, max),
+        expected,
+        "Case {} failed: {:?}.",
+        i,
+        (val, min, max, expected)
+      );
     });
   }
 
   #[test]
   fn float() {
-    vec![
+    [
       // Negative to zero range.
       (-5., -1., 0., -1.),
       (-4.5, -1., 0., -0.5),
@@ -269,6 +289,18 @@ mod test {
       (3.5, -3., -1., -2.5),
       (4.5, -3., -1., -1.5),
       (5., -3., -1., -3.),
+      // Zero range.
+      (-5., 1., 1., 1.),
+      (-4., 1., 1., 1.),
+      (-3., 1., 1., 1.),
+      (-2., 1., 1., 1.),
+      (-1., 1., 1., 1.),
+      (0., 1., 1., 1.),
+      (1., 1., 1., 1.),
+      (2., 1., 1., 1.),
+      (3., 1., 1., 1.),
+      (4., 1., 1., 1.),
+      (5., 1., 1., 1.),
       // Positive range.
       (-5., 1., 3., 1.),
       (-4.5, 1., 3., 1.5),
@@ -360,10 +392,16 @@ mod test {
       (19.5, -3., 3., 1.5),
       (20., -3., 3., 2.),
     ]
-    .into_iter()
+    .iter()
     .enumerate()
-    .for_each(|(i, (val, min, max, expected))| {
-      assert_eq!(wrap(val, min, max), expected, "Case {} failed.", i);
+    .for_each(|(i, &(val, min, max, expected))| {
+      assert_eq!(
+        wrap(val, min, max),
+        expected,
+        "Case {} failed: {:?}.",
+        i,
+        (val, min, max, expected)
+      );
     });
   }
 }

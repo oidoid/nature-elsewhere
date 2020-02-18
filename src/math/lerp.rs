@@ -1,7 +1,7 @@
-use num_traits::{cast::FromPrimitive, Float};
+use num::traits::{cast::FromPrimitive, real::Real};
 
 /// If self == to, returns self. Otherwise, returns lerp != self.
-pub fn lerp<T: Float>(from: T, to: T, ratio: T) -> T {
+pub fn lerp<T: Real>(from: T, to: T, ratio: T) -> T {
   from + (to - from) * ratio
 }
 
@@ -24,32 +24,30 @@ macro_rules! impl_Lerp_f32 {
   ($($t:ty)*) => ($(
     impl Lerp<f32> for $t {
       fn lerp(self, to: Self, ratio: f32) -> Self {
-        let interpolation = Self::from_f32(lerp(self.into(), to.into(), ratio)).unwrap();
+        let interpolation = Self::from_f32(lerp(self.into(), to.into(), ratio)).expect(&format!("Conversion from f32 to {} failed.", stringify!($t)));
         if self == to || self != interpolation || ratio == 0. {
-          interpolation
-        } else {
-          // Guarantee that integer T accumulations always progress.
-          let delta: f32 = (to - interpolation).into();
-          interpolation + Self::from_f32(delta.signum()).unwrap()
+          return interpolation;
         }
+        // Guarantee that integer T accumulations always progress.
+        let delta: f32 = (to - interpolation).into();
+        interpolation + Self::from_f32(delta.signum()).expect(&format!("Conversion from f32 to {} failed.", stringify!($t)))
       }
     }
   )*)
 }
-impl_Lerp_f32!(u8 u16 i8 i16);
+impl_Lerp_f32!(u8 i8 u16 i16);
 
 macro_rules! impl_Lerp_f64 {
   ($($t:ty)*) => ($(
     impl Lerp<f64> for $t {
       fn lerp(self, to: Self, ratio: f64) -> Self {
-        let interpolation = Self::from_f64(lerp(self.into(), to.into(), ratio)).unwrap();
+        let interpolation = Self::from_f64(lerp(self.into(), to.into(), ratio)).expect(&format!("Conversion from f64 to {} failed.", stringify!($t)));
         if self == to || self != interpolation || ratio == 0. {
-          interpolation
-        } else {
-          // Guarantee that integer T accumulations always progress.
-          let delta: f64 = (to - interpolation).into();
-          interpolation + Self::from_f64(delta.signum()).unwrap()
+          return interpolation;
         }
+        // Guarantee that integer T accumulations always progress.
+        let delta: f64 = (to - interpolation).into();
+        interpolation + Self::from_f64(delta.signum()).expect(&format!("Conversion from f64 to {} failed.", stringify!($t)))
       }
     }
   )*)
@@ -62,7 +60,7 @@ mod test {
 
   #[test]
   fn lerp_float() {
-    vec![
+    [
       // Negative to.
       (-5., -10., 0.1, -5.5),
       (-1., -10., 0.1, -1.9),
@@ -124,9 +122,9 @@ mod test {
       (11., 10., 0., 11.),
       (15., 10., 0., 15.),
     ]
-    .into_iter()
+    .iter()
     .enumerate()
-    .for_each(|(i, (val, to, ratio, expected))| {
+    .for_each(|(i, &(val, to, ratio, expected))| {
       assert_approx!(
         lerp(val, to, ratio),
         expected,
@@ -146,7 +144,7 @@ mod test {
 
   #[test]
   fn lerp_int() {
-    vec![
+    [
       // Negative to.
       (-5, -10, 0.1, -6),
       (-1, -10, 0.1, -2),
@@ -208,9 +206,9 @@ mod test {
       (11, 10, 0., 11),
       (15, 10, 0., 15),
     ]
-    .into_iter()
+    .iter()
     .enumerate()
-    .for_each(|(i, (val, to, ratio, expected))| {
+    .for_each(|(i, &(val, to, ratio, expected))| {
       assert_eq!(
         val.lerp(to, ratio),
         expected,

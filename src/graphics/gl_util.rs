@@ -1,33 +1,44 @@
-use super::shader_layout::Attribute;
-use num_traits::cast::FromPrimitive;
+use super::shader_layout::Attr;
+use image::{DynamicImage, GenericImageView};
+use num::traits::cast::FromPrimitive;
+use num::traits::{cast::ToPrimitive, real::Real};
 use std::collections::HashMap;
-use wasm_bindgen::prelude::JsValue;
-use wasm_bindgen::JsCast;
+use std::convert::From;
+use wasm_bindgen::{prelude::JsValue, JsCast};
 use web_sys::{
   console, AngleInstancedArrays, HtmlCanvasElement, HtmlImageElement,
-  WebGlBuffer as GlBuffer, WebGlProgram as GlProgram,
-  WebGlRenderingContext as Gl, WebGlShader as GlShader,
-  WebGlTexture as GlTexture, WebGlUniformLocation as GlUniformLocation,
+  WebGlBuffer as GlBuffer, WebGlContextAttributes as GlContextAttributes,
+  WebGlProgram as GlProgram, WebGlRenderingContext as Gl,
+  WebGlShader as GlShader, WebGlTexture as GlTexture,
+  WebGlUniformLocation as GlUniformLocation,
 };
 
-pub fn get_context(canvas: &HtmlCanvasElement) -> Gl {
-  canvas.get_context("webgl").unwrap().unwrap().dyn_into::<Gl>().unwrap()
+pub fn get_context(
+  canvas: &HtmlCanvasElement,
+  options: &GlContextAttributes,
+) -> Result<Gl, JsValue> {
+  Ok(
+    canvas
+      .get_context_with_context_options("webgl", options.as_ref())?
+      .unwrap()
+      .dyn_into()?,
+  )
 }
 
 pub fn init_attr(
   gl: &Gl,
-  instanced_arrays: AngleInstancedArrays,
+  instanced_arrays: &AngleInstancedArrays,
   stride: i32,
   divisor: u32,
   buffer: Option<&GlBuffer>,
   location: u32,
-  Attribute { data_type, length, offset, .. }: Attribute,
+  &Attr { data_type, len, offset, .. }: &Attr,
 ) {
   gl.enable_vertex_attrib_array(location);
   gl.bind_buffer(Gl::ARRAY_BUFFER, buffer);
   gl.vertex_attrib_pointer_with_i32(
     location,
-    length,
+    len,
     data_type as u32,
     false,
     stride,
@@ -39,24 +50,25 @@ pub fn init_attr(
 
 pub fn load_program(
   gl: &Gl,
-  vertex_glsl: String,
-  fragment_glsl: String,
+  vert_glsl: &str,
+  frag_glsl: &str,
 ) -> Option<GlProgram> {
-  let pgm = match gl.create_program() {
-    None => return None,
-    Some(pgm) => pgm,
-  };
+  let pgm = gl.create_program()?;
+  let vertex_shader = compile_shader(gl, Gl::VERTEX_SHADER, vert_glsl);
+  let fragment_shader = compile_shader(gl, Gl::FRAGMENT_SHADER, frag_glsl);
 
-  let vertex_shader = compile_shader(gl, Gl::VERTEX_SHADER, vertex_glsl);
-  let fragment_shader = compile_shader(gl, Gl::FRAGMENT_SHADER, fragment_glsl);
+  if let Some(log) = gl.get_program_info_log(&pgm) {
+    if !log.is_empty() {
+      console::log_1(&JsValue::from(log));
+    }
+  }
+
+  let vertex_shader = vertex_shader?;
+  let fragment_shader = fragment_shader?;
   gl.attach_shader(&pgm, &vertex_shader);
   gl.attach_shader(&pgm, &fragment_shader);
   gl.link_program(&pgm);
   gl.use_program(Some(&pgm));
-
-  if let Some(log) = gl.get_program_info_log(&pgm) {
-    console::log_1(&JsValue::from(log));
-  }
 
   // Mark shaders for deletion when unused.
   gl.detach_shader(&pgm, &fragment_shader);
@@ -67,19 +79,30 @@ pub fn load_program(
   Some(pgm)
 }
 
-pub fn compile_shader(gl: &Gl, glsl_type: u32, source: String) -> GlShader {
-  let shader = gl.create_shader(glsl_type).expect("Shader creation failed.");
+pub fn compile_shader(
+  gl: &Gl,
+  glsl_type: u32,
+  source: &str,
+) -> Option<GlShader> {
+  let shader = gl.create_shader(glsl_type)?;
   gl.shader_source(&shader, source.trim());
   gl.compile_shader(&shader);
 
   if let Some(log) = gl.get_shader_info_log(&shader) {
-    console::log_1(&JsValue::from(log));
+    if !log.is_empty() {
+      console::log_1(&JsValue::from(log));
+    }
   }
 
-  shader
+  Some(shader)
 }
 
-pub fn buffer_data(gl: Gl, buffer: Option<&GlBuffer>, data: &[u8], usage: u32) {
+pub fn buffer_data(
+  gl: &Gl,
+  buffer: Option<&GlBuffer>,
+  data: &[u8],
+  usage: u32,
+) {
   gl.bind_buffer(Gl::ARRAY_BUFFER, buffer);
   gl.buffer_data_with_u8_array(Gl::ARRAY_BUFFER, data, usage);
   gl.bind_buffer(Gl::ARRAY_BUFFER, None);
@@ -88,22 +111,27 @@ pub fn buffer_data(gl: Gl, buffer: Option<&GlBuffer>, data: &[u8], usage: u32) {
 pub fn load_texture(
   gl: &Gl,
   texture_unit: u32,
-  image: &HtmlImageElement,
+  image: &DynamicImage,
 ) -> Option<GlTexture> {
   gl.active_texture(texture_unit);
   let texture = gl.create_texture();
   gl.bind_texture(Gl::TEXTURE_2D, texture.as_ref());
   gl.tex_parameteri(Gl::TEXTURE_2D, Gl::TEXTURE_MIN_FILTER, Gl::NEAREST as i32);
   gl.tex_parameteri(Gl::TEXTURE_2D, Gl::TEXTURE_MAG_FILTER, Gl::NEAREST as i32);
-  if let Err(err) = gl.tex_image_2d_with_u32_and_u32_and_image(
-    Gl::TEXTURE_2D,
-    0,
-    Gl::RGBA as i32,
-    Gl::RGBA,
-    Gl::UNSIGNED_BYTE,
-    image,
-  ) {
-    println!("Failed to load image. Error code {}.", err.as_f64().unwrap())
+  if let Err(err) = gl
+    .tex_image_2d_with_i32_and_i32_and_i32_and_format_and_type_and_opt_u8_array(
+      Gl::TEXTURE_2D,
+      0,
+      Gl::RGBA as i32,
+      image.width().to_i32().expect("Width u32 to i32 conversion failed."),
+      image.height().to_i32().expect("Height u32 to i32 conversion failed."),
+      0,
+      Gl::RGBA,
+      Gl::UNSIGNED_BYTE,
+      Some(image.raw_pixels().as_ref()),
+    )
+  {
+    println!("Failed to load image. Error code {}.", err.as_f64()?)
   }
   gl.bind_texture(Gl::TEXTURE_2D, None);
   texture
@@ -111,49 +139,36 @@ pub fn load_texture(
 
 pub fn uniform_locations(
   gl: &Gl,
-  pgm: Option<&GlProgram>,
-) -> HashMap<String, GlUniformLocation> {
-  let pgm = match pgm {
-    None => return HashMap::new(),
-    Some(pgm) => pgm,
-  };
+  pgm: &GlProgram,
+) -> Option<HashMap<String, GlUniformLocation>> {
   let len = u32::from_f64(
-    gl.get_program_parameter(pgm, Gl::ACTIVE_UNIFORMS).as_f64().unwrap_or(0.),
-  )
-  .unwrap();
+    gl.get_program_parameter(pgm, Gl::ACTIVE_UNIFORMS).as_f64()?,
+  )?;
   let mut locations = HashMap::new();
   for i in 0..len {
-    if let Some(uniform) = gl.get_active_uniform(pgm, i) {
-      let name = uniform.name();
-      if let Some(location) = gl.get_uniform_location(pgm, &name) {
-        locations.insert(name, location);
-      }
-    }
+    let uniform = gl.get_active_uniform(pgm, i)?;
+    let name = uniform.name();
+    let location = gl.get_uniform_location(pgm, &name)?;
+    locations.insert(name, location);
   }
-  locations
+  Some(locations)
 }
 
 pub fn attr_locations(
   gl: &Gl,
-  pgm: Option<&GlProgram>,
-) -> HashMap<String, u32> {
-  let pgm = match pgm {
-    None => return HashMap::new(),
-    Some(pgm) => pgm,
-  };
+  pgm: &GlProgram,
+) -> Option<HashMap<String, u32>> {
   let len = u32::from_f64(
-    gl.get_program_parameter(pgm, Gl::ACTIVE_ATTRIBUTES).as_f64().unwrap_or(0.),
-  )
-  .unwrap();
+    gl.get_program_parameter(pgm, Gl::ACTIVE_ATTRIBUTES).as_f64()?,
+  )?;
   let mut locations = HashMap::new();
   for i in 0..len {
-    if let Some(attr) = gl.get_active_attrib(pgm, i) {
-      let name = attr.name();
-      let location = gl.get_attrib_location(pgm, &name);
-      if location != -1 {
-        locations.insert(name, location as u32);
-      }
+    let attr = gl.get_active_attrib(pgm, i)?;
+    let name = attr.name();
+    let location = gl.get_attrib_location(pgm, &name);
+    if location != -1 {
+      locations.insert(name, location as u32);
     }
   }
-  locations
+  Some(locations)
 }

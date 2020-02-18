@@ -14,15 +14,16 @@ pub enum GlDataType {
 }
 
 impl GlDataType {
+  /// Returns the size in bytes of the type.
   pub fn size(self) -> i32 {
     match self {
-      GlDataType::Byte => 1,
-      GlDataType::UnsignedByte => 1,
-      GlDataType::Short => 2,
-      GlDataType::UnsignedShort => 2,
-      GlDataType::Int => 4,
-      GlDataType::UnsignedInt => 4,
-      GlDataType::Float => 4,
+      Self::Byte => 1,
+      Self::UnsignedByte => 1,
+      Self::Short => 2,
+      Self::UnsignedShort => 2,
+      Self::Int => 4,
+      Self::UnsignedInt => 4,
+      Self::Float => 4,
     }
   }
 }
