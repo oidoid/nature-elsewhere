@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
-use web_sys::{Event, EventTarget, Window};
+use web_sys::Window;
 
 /// Wraps a repeating Window.request_animation_frame() request. Return true from
 /// on_frame() to continue, false to break.

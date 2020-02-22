@@ -1,16 +1,20 @@
 #[macro_use]
 extern crate failure;
 #[macro_use]
-extern crate serde_derive;
+extern crate serde;
+#[macro_use]
+extern crate specs;
 #[macro_use]
 mod utils;
 
 mod atlas;
+mod ecs;
 mod game;
 mod graphics;
 mod math;
-use game::Game;
 mod wasm;
+
+use game::Game;
 use graphics::shader_layout::ShaderLayout;
 use wasm_bindgen::{prelude::wasm_bindgen, JsCast};
 

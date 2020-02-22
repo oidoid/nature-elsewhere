@@ -11,9 +11,6 @@ use image::{DynamicImage, GenericImageView};
 use num::traits::cast::ToPrimitive;
 use std::cell::RefCell;
 use std::rc::Rc;
-use wasm_bindgen::prelude::JsValue;
-use wasm_bindgen::{closure::Closure, JsCast};
-use web_sys::WebGlRenderingContext as Gl;
 use web_sys::{console, Document, Event, HtmlCanvasElement, Window};
 
 #[derive(Serialize)]
@@ -179,7 +176,7 @@ impl RendererStateMachine {
     let bytes = bincode::config().native_endian().serialize(&bytes).unwrap();
 
     self.renderer.borrow_mut().render(
-      now.to_i32().expect("Time f64 to f32 conversion failed."),
+      now.to_i32().unwrap(), // https://github.com/rust-lang/rust/issues/10184
       &canvas_wh,
       scale,
       &Rect::cast(0, 0, cam_wh.w, cam_wh.h),

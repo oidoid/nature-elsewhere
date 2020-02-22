@@ -3,14 +3,13 @@ use num::{
   integer::Roots,
   traits::{cast::NumCast, clamp, Signed},
 };
-use std::marker::Sized;
-use std::mem;
+use serde::{Deserialize, Serialize};
 use std::{
   fmt,
   ops::{Add, Div, Mul, Sub},
 };
 
-#[derive(Clone, Copy, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
 pub struct XY<T> {
   pub x: T,
   pub y: T,
@@ -25,6 +24,17 @@ pub type XY16 = XY<i16>;
 // impl NumCast's from and return an option self?
 
 impl<T> XY<T> {
+  pub fn new(x: T, y: T) -> Self {
+    Self { x, y }
+  }
+
+  pub fn add(&self, rhs: &XY<T>) -> XY<T>
+  where
+    T: Add<Output = T> + Copy,
+  {
+    Self { x: self.x + rhs.x, y: self.y + rhs.y }
+  }
+
   /// Cast each component passed and returns a new XY. Cast::from() differs from
   /// From::from() in that it may fail.
   pub fn cast<From>(x: From, y: From) -> Self
@@ -152,11 +162,11 @@ impl<T: Mul<Output = T>> Mul<XY<T>> for XY<T> {
   }
 }
 
-impl<T: Mul<Output = T> + Copy> Mul<T> for XY<T> {
+impl<T: Mul<Output = T> + Clone> Mul<T> for XY<T> {
   type Output = XY<T>;
 
   fn mul(self, rhs: T) -> Self {
-    Self { x: self.x * rhs, y: self.y * rhs }
+    Self { x: self.x * rhs.clone(), y: self.y * rhs }
   }
 }
 

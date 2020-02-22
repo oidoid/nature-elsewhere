@@ -3,21 +3,15 @@ use super::rgba::RGBA;
 use super::shader_layout::ShaderLayout;
 use crate::math::rect::R16;
 use crate::math::wh::WH16;
-use crate::utils::Millis;
 use image::{DynamicImage, GenericImageView};
 use num::traits::cast::ToPrimitive;
 use std::collections::HashMap;
 use std::convert::From;
-use std::convert::TryFrom;
-use std::convert::TryInto;
-use std::mem;
 use wasm_bindgen::JsCast;
 use web_sys::{
-  console, AngleInstancedArrays, HtmlCanvasElement, HtmlImageElement,
-  OesVertexArrayObject, WebGlBuffer as GlBuffer,
-  WebGlContextAttributes as GlContextAttributes, WebGlProgram as GlProgram,
-  WebGlRenderingContext as Gl, WebGlShader as GlShader,
-  WebGlTexture as GlTexture, WebGlUniformLocation as GlUniformLocation,
+  AngleInstancedArrays, HtmlCanvasElement, OesVertexArrayObject,
+  WebGlBuffer as GlBuffer, WebGlContextAttributes as GlContextAttributes,
+  WebGlRenderingContext as Gl, WebGlUniformLocation as GlUniformLocation,
   WebglLoseContext as GlLoseContext,
 };
 pub struct Renderer {
@@ -272,9 +266,9 @@ impl Renderer {
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
     // is downward, and translating to -1 to 1 and again by the camera position.
     let w = 2. / f32::from(cam.width());
-    let h = 2. / cam.height().to_f32().expect("Cam height i16 to f32 conversion failed.");
-    self.projection[ 0] = w;  self.projection[ 1] =  0.; self.projection[ 2] = 0.; self.projection[ 3] = -1. - cam.from.x.to_f32().expect("Cam x i16 to f32 conversion failed.") * w;
-    self.projection[ 4] = 0.; self.projection[ 5] = -h;  self.projection[ 6] = 0.; self.projection[ 7] =  1. + cam.from.y.to_f32().expect("Cam y i16 to f32 conversion failed.") * h;
+    let h = 2. / f32::from(cam.height());
+    self.projection[ 0] = w;  self.projection[ 1] =  0.; self.projection[ 2] = 0.; self.projection[ 3] = -1. - f32::from(cam.from.x) * w;
+    self.projection[ 4] = 0.; self.projection[ 5] = -h;  self.projection[ 6] = 0.; self.projection[ 7] =  1. + f32::from(cam.from.y) * h;
     self.projection[ 8] = 0.; self.projection[ 9] =  0.; self.projection[10] = 1.; self.projection[11] =  0.;
     self.projection[12] = 0.; self.projection[13] =  0.; self.projection[14] = 0.; self.projection[15] =  1.;
   }

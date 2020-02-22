@@ -25,5 +25,6 @@ canvas {
 
   /* When the user scales, use nearest-neighbor to prevent blurriness and
      changes to color. */
+  image-rendering: optimizeSpeed;
   image-rendering: pixelated;
 }
