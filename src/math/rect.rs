@@ -1,6 +1,5 @@
 use super::xy::XY;
-use num::integer::Integer;
-use num::traits::{cast::NumCast, Num, Zero};
+use num::traits::{cast::NumCast, Zero};
 use std::any::Any;
 use std::{
   fmt,

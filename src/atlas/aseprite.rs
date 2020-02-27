@@ -38,7 +38,7 @@ pub struct Meta {
   /// E.g., "1".
   pub scale: String,
   /// All FrameTags for all files packed **via CLI** `--list-tags`.
-  #[serde(rename(deserialize = "frameTags"))]
+  #[serde(rename = "frameTags")]
   pub frame_tags: Vec<FrameTag>,
   /// All slices for all files packed **via CLI** `--list-slices`.
   pub slices: Vec<Slice>,
@@ -62,10 +62,10 @@ pub struct Frame {
   pub rotated: bool,
   pub trimmed: bool,
   /// The Frame's bounds within the file packed, not including padding.
-  #[serde(rename(deserialize = "spriteSourceSize"))]
+  #[serde(rename = "spriteSourceSize")]
   pub sprite_source_size: Rect,
   /// The width and height components of spriteSourceSize.
-  #[serde(rename(deserialize = "sourceSize"))]
+  #[serde(rename = "sourceSize")]
   pub source_size: WH,
   pub duration: Duration,
 }

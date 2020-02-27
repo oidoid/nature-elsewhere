@@ -39,15 +39,21 @@ pub fn cam_wh(WH { w, h }: &WH16, scale: i16) -> WH16 {
   }
 }
 
-/** @arg {x, y} The viewport coordinates of the input in window pixels,
-            usually new XY(event.clientX, event.clientY).
-@arg {w, h} The viewport dimensions in window pixels (canvasWH).
-@arg cam The coordinates and dimensions of the camera the input was made
-          through in level pixels.
-@return The fractional position in level coordinates. */
-pub fn to_level_xy(XY { x, y }: &XY16, WH { w, h }: &WH16, cam: &R16) -> XY16 {
+/// {x, y} The viewport coordinates of the input in window pixels,
+///        usually new XY(event.clientX, event.clientY).
+/// {w, h} The viewport dimensions in window pixels (canvasWH).
+/// cam The coordinates and dimensions of the camera the input was made
+///     through in level pixels.
+/// Returns the fractional position in level coordinates.
+pub fn to_level_xy(
+  &XY { x, y }: &XY<i32>,
+  &WH { w, h }: &WH16,
+  cam: &R16,
+) -> XY16 {
   XY {
-    x: cam.from.x + (x * cam.width()) / w,
-    y: cam.from.y + (y * cam.height()) / h,
+    x: cam.from.x
+      + ((x * i32::from(cam.width())) / i32::from(w)).to_i16().unwrap(),
+    y: cam.from.y
+      + ((y * i32::from(cam.height())) / i32::from(h)).to_i16().unwrap(),
   }
 }

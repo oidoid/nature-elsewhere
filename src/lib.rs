@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate failure;
 #[macro_use]
+extern crate lazy_static;
+#[macro_use]
 extern crate serde;
 #[macro_use]
 extern crate specs;
@@ -11,7 +13,9 @@ mod atlas;
 mod ecs;
 mod game;
 mod graphics;
+mod inputs;
 mod math;
+mod text;
 mod wasm;
 
 use game::Game;
@@ -39,7 +43,10 @@ pub fn main_wasm() {
     .expect("HtmlCanvasElement expected.");
 
   let atlas_img = image::load_from_memory(include_bytes!("atlas/atlas.png"))
-    .expect("Image loading failed.");
+    .expect("Atlas image loading failed.");
+
+  let atlas = atlas::parser::parse(include_str!("atlas/atlas.json"))
+    .expect("Atlas parsing failed.");
 
   let mut game = Game::new(
     shader_layout,
@@ -48,6 +55,7 @@ pub fn main_wasm() {
     win,
     canvas,
     atlas_img,
+    atlas,
   );
   game.start();
 }

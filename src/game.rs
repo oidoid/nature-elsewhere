@@ -2,7 +2,9 @@ use super::ecs::bounds::Bounds;
 use super::ecs::operator::Operator;
 use super::graphics::renderer_state_machine::RendererStateMachine;
 use super::math::xy::{XY, XY16};
+use crate::atlas::atlas::Atlas;
 use crate::graphics::shader_layout::ShaderLayout;
+use crate::inputs::input_poller::InputPoller;
 use image::DynamicImage;
 use specs::{
   Builder, Component, ReadStorage, RunNow, System, VecStorage, World, WorldExt,
@@ -28,6 +30,7 @@ pub struct Game {
   canvas: HtmlCanvasElement,
   world: World,
   renderer_state_machine: RendererStateMachine,
+  input_poller: InputPoller,
 }
 
 impl Game {
@@ -38,6 +41,7 @@ impl Game {
     win: Window,
     canvas: HtmlCanvasElement,
     atlas_img: DynamicImage,
+    atlas: Atlas,
   ) -> Self {
     let mut world = World::new();
     world.register::<Bounds>();
@@ -56,14 +60,22 @@ impl Game {
       win.clone(),
       canvas.clone(),
     );
-    Game { win, canvas, world, renderer_state_machine }
+    Game {
+      win: win.clone(),
+      canvas,
+      world,
+      renderer_state_machine,
+      input_poller: InputPoller::new(&win),
+    }
   }
 
   pub fn start(&mut self) {
     self.renderer_state_machine.start();
+    self.input_poller.register();
   }
 
   pub fn stop(&mut self) {
+    self.input_poller.deregister();
     self.renderer_state_machine.stop();
   }
 

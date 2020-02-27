@@ -36,6 +36,7 @@ module.exports = (_, argv) => {
       ]),
       new webpack.DefinePlugin({
         'process.env': {
+          dev: JSON.stringify(argv.mode !== 'production'),
           version: JSON.stringify(version),
           date: JSON.stringify(date),
           hash: JSON.stringify(hash)

@@ -185,6 +185,10 @@ impl RendererStateMachine {
   }
 
   fn register(&mut self) {
+    if !self.listeners.borrow().is_empty() {
+      return;
+    }
+
     let rc = Rc::new(RefCell::new(self.clone()));
     Self::add_win_on_event_listener(&rc, "focus");
     Self::add_win_on_event_listener(&rc, "blur");

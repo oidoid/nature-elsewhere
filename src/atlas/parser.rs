@@ -11,7 +11,11 @@ use std::collections::HashMap;
 use std::convert::From;
 use std::{convert::TryInto, f32};
 
-pub fn parse(file: &aseprite::File) -> Result<atlas::Atlas, Error> {
+pub fn parse(json: &str) -> Result<atlas::Atlas, Error> {
+  parse_file(&serde_json::from_str(json)?)
+}
+
+pub fn parse_file(file: &aseprite::File) -> Result<atlas::Atlas, Error> {
   let aseprite::WH { w, h } = file.meta.size;
   Ok(atlas::Atlas {
     version: file.meta.version.clone(),
@@ -685,20 +689,12 @@ mod test {
 
   #[test]
   fn parse_slices_none() {
-    // let frame_tag = aseprite::FrameTag {
-    //   name: "stem ".to_string(),
-    //   from: 0,
-    //   to: 0,
-    //   direction: "forward".to_string(),
-    // };
-    let frame_tag: aseprite::FrameTag =
-      serde_json::from_value(serde_json::json!({
-        "name": "stem ",
-        "from": 0,
-        "to": 0,
-        "direction": "forward",
-      }))
-      .unwrap();
+    let frame_tag = aseprite::FrameTag {
+      name: "stem ".to_string(),
+      from: 0,
+      to: 0,
+      direction: "forward".to_string(),
+    };
     assert_eq!(parse_slices(&frame_tag, 0, &[]).unwrap(), vec![]);
   }
 

@@ -1,4 +1,3 @@
-use super::aseprite;
 use crate::{
   math::{rect::R16, wh::WH16, xy::XY16},
   utils::Millis,
@@ -18,7 +17,14 @@ pub struct Atlas {
   pub anims: AnimMap,
 }
 
-pub type AnimMap = HashMap<aseprite::Tag, Anim>;
+impl Atlas {
+  pub fn is_atlas_id(&self, id: &AtlasID) -> bool {
+    self.anims.get(id).is_some()
+  }
+}
+
+pub type AtlasID = String; // &str
+pub type AnimMap = HashMap<AtlasID, Anim>;
 
 /// A sequence of animation cels.
 #[derive(Debug, PartialEq)]
