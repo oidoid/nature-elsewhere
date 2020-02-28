@@ -18,12 +18,12 @@ pub struct Atlas {
 }
 
 impl Atlas {
-  pub fn is_atlas_id(&self, id: &AtlasID) -> bool {
+  pub fn is_id(&self, id: &AtlasID) -> bool {
     self.anims.get(id).is_some()
   }
 }
 
-pub type AtlasID = String; // &str
+pub type AtlasID = String;
 pub type AnimMap = HashMap<AtlasID, Anim>;
 
 /// A sequence of animation cels.

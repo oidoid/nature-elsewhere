@@ -1,3 +1,4 @@
+use super::assets::Assets;
 use super::ecs::bounds::Bounds;
 use super::ecs::operator::Operator;
 use super::graphics::renderer_state_machine::RendererStateMachine;
@@ -34,15 +35,7 @@ pub struct Game {
 }
 
 impl Game {
-  pub fn new(
-    shader_layout: ShaderLayout,
-    vert_glsl: String,
-    frag_glsl: String,
-    win: Window,
-    canvas: HtmlCanvasElement,
-    atlas_img: DynamicImage,
-    atlas: Atlas,
-  ) -> Self {
+  pub fn new(win: Window, canvas: HtmlCanvasElement, assets: Assets) -> Self {
     let mut world = World::new();
     world.register::<Bounds>();
     world.register::<Operator>();
@@ -52,14 +45,8 @@ impl Game {
     let mut hello_world = HelloWorld;
     hello_world.run_now(&world);
     world.maintain();
-    let renderer_state_machine = RendererStateMachine::new(
-      shader_layout,
-      vert_glsl,
-      frag_glsl,
-      atlas_img,
-      win.clone(),
-      canvas.clone(),
-    );
+    let renderer_state_machine =
+      RendererStateMachine::new(win.clone(), canvas.clone(), assets);
     Game {
       win: win.clone(),
       canvas,

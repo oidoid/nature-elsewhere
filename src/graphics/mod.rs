@@ -1,6 +1,7 @@
 pub mod anim_looper;
 pub mod gl_data_type;
 pub mod gl_util;
+pub mod render_instance;
 pub mod renderer;
 pub mod renderer_state_machine;
 pub mod rgba;

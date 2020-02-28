@@ -1,0 +1,264 @@
+Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, simple, detailed, finely built game with tremendous colors and perfect clarity.
+
+- Make large, lavish, content-rich levels.
+  - Complete one level. The goal is to identify and solve any infrastructure requirements and architectural complexities, and eliminate ambiguities that require deep consideration. The idea is that if one level is technically feasible and fun, the whole game is a worthwhile inevitability, not just a possibility, given hard work. For instance, given a good understanding of the constraints wanted, all of the art work and entity system can be entirely redone from scratch in short order. Even the language could be changed, maybe. It's the guesswork and prototyping back and forth in endless iteration that takes so long, not writing something polished to a spec. The system is also designed to be easily migratable in some parts so replacing components is hopefully easy.
+  - Seeing the game with new eyes, what are the biggest obstacles to maximal enjoyment? What would I change if I rewrote it from scratch? How can it be simpler, more delightful, polished, toothy and pixely, tight.
+  - Experiment with improving the tree tiles using the mountain tree photo references. Particularly the perspective, color, contrast, and clustering.
+  - The avatar should be stellar. How can I improve it? The perspective isn't very good, the walk animation is basic, and there's not much in the way of special animations for actions like melee or special events like waiting for a long time.
+  - Add options UI.
+  - Add pause level.
+  - Figure out iOS issue.
+  - Improve the title screen and Nature Elsewhere logo. The opening needs to pop. Maybe show the earth instead of the moon to indicate you're elsewhere.
+  - Add licensing and open source rationale.
+    - This is an experiment. Theft would be flattering but also devastating. I hope that I can retain full ownership of the project without competition. If it doesn't pan out, future games will likely be conventionally closed sourced and licensed.
+  - Make the level editor more featureful.
+    - Add scale and velocity fields. I think I need to expose a generic property bag. Maybe remove x and y fields--these seem less useful.
+    - Allow state and variant changes of selected entity.
+    - Improve the level editor menu.
+    - Pan on click and "dragging the plane" rather than clicking outside the deadzone.
+    - Allow the editor to jump in and out of play mode (must reset state when going back to edit mode).
+    - Encapsulate the marquee API / sandbox / panel API in general.
+    - Import and export entire levels, not just the entities.
+    - Allow changing level properties like minViewport, cam position, player position, and plane.
+    - Always drop entities in the center of screen or, better, make some kind of drag and drop interface.
+    - Is a post-inflation lifecycle useful beyond on the panel? The panel would benefit from it to find the sandbox and load the entities.
+    - Add a die button for setting a random variant.
+    - Figure out a way to signal 1) entities offscreen and 2) fully overlapped entities.
+    - Double the size of the buttons.
+    - Add undo and redo buttons.
+      - Make editor support commands.
+    - Increase and decrease arrows are confusing. Increase is down and decrease is up, for example.
+    - The buttons are pretty far away from their selector knobs. How can this be improved?
+  - Add game over / continue screen / loop.
+  - Add next level portal.
+  - Improve the backpacker.
+    - How can the contrast with water be improved? Will water traversal be permitted?
+    - How can the animations be improved? They were made pretty haphazardly but now maybe that can be reevaluated.
+    - How can the sprite be improved? What other visuals can be considered? Does it fit the theme? Is it compelling enough for an avatar?
+    - Can it be made accessorizable? At least coloring?
+  - Improve the palette. Tremendous colors!
+    - I think that shade of blue in particular isn't quite right. I need a deep lake blue and couple extra values. Most probably lots of tweaking is needed.
+    - The cursor probably needs a unique color like the shadows.
+  - Improve the perspective and cohesion of constraints.
+  - Improve the level editor and toolbelt / toolbar UI. Shift a little more towards ornate or intricate. It should be delightful and intuitive! I love the Diablo globes but maybe with even more saturated colors.
+    - Start with a highly detailed mock.
+    - Maybe a big heart bar or health globe.
+    - Can I use the old inverse kinematic JS code?
+    - UI should be easy to use on mobile.
+    - What would a Myst / Diablo crossover look like?
+  - Add floating stats over entities like life bars. Is there a way to style these so they actually fit into the UI? Maybe a tiny little glass wedge behind each? Or a blue panel-y outline?
+  - Add inventory management.
+    - Start with a highly detailed mock.
+    - Move collected items to inventory instead of just deleting them from the level.
+    - Add "a summary of you" / inven / journal screen level.
+    - Add more items to gather like artifacts and animal byproducts like bee stingers.
+    - Consider minimap.
+    - Can encumber code be used? What about other projects?
+    - I think collecting, XP, and HP, could be major parts of the game. I love the Diablo II horadric cube, and RE4 and Symphony of the Night inventory management. Maybe Diablo meets Solar Jetman meets Earthbound.
+    - Add backpack inventory button. Maybe like Commandos (see commandos.jpg).
+    - HUD / inven / bauble ideas:
+      - Baubles should be very simple. Mostly all content (animation). Small modifier to backpacker. Minimal interactions supported. Maybe a few types (always on, on/off, percentage based).
+      - Shrimp zoo or aerator.
+      - Goldfish tank or bowl.
+      - Bug jar or farm. Fruit fly rotten apple jar.
+      - Moths flame jar. Maybe moths can fly around instruments too.
+      - Ice cube.
+      - Mouse cage.
+      - Bubble factory.
+      - Soda / slushie fountain.
+      - Pill bottle.
+      - Tiny monkey bauble carts. Monkey does chinups.
+      - Cricket or firefly cage makes noises or light when happy.
+      - Tap the right amount of times to help bauble thrive (improve health beyond 100%) or slightly recover. If you tap too much, e.g. a plant, it floods with water and diminishes health slightly.
+      - Compost heap or garbage dump purifier.
+      - Gas and fire exchange system.
+      - Maybe O2 meter is fueled by algae or plankton tank or cartridge cores.
+      - Bauble with clouds, rain, thundercloud, hurricane, water typhoon, and other weather systems. A really fancy terrarium.
+        - In general, a tiny local ecosystem would be amazing.
+        - Maybe a minature Earth or other worlds or solar system.
+        - Maybe a mini island.
+        - Duck pond miniature.
+        - Maybe a great ancient bonsai tree that flowers or loses leaves.
+        - Maybe the evolution of an ocean, to a volcano, to an island, to vegetation, to land dwellers, to tribes.
+        - Maybe it forecasts nearby weather systems OR just has its own relative your health flourishing or otherwise.
+      - Fire and electricity baubles sound neat but are probably overdone. Maybe even oscilloscope and CRT type baubles are overdone. Maybe nixie but that's a little overdone too.
+      - Baubles can have buttons, LEDs, and gauges. CRT / LED / Total Annihilation type control panel and toggle switches. Big LED switches like the rocker switch on the old Toshiba but with a big crimson or amber LED mode / status indicator.
+      - The glass should crack if ever damaged.
+      - If I go flower route, it would be cool to have an ash or falling petals animation.
+      - Monkey paw for life counter.
+      - Worm or snake or garbage snake you feed that outputs something useful.
+      - Color purifier processor.
+      - Some kind of shapeless genies you worship.
+      - It should be possible for baubles (which occupy lots of screen space) to be always on, off, or auto show (show on event, significant change, or very low health). The popup mechanism can be like a bug piston or use gears to open a panel.
+      - It would be neat to have a fuse you have to manually replace or re-spark by tapping it.
+      - It would be awesome to make lots of extendable and optional baubles like pop out cartridges and drawers and replaceable and upgradeable components. Replacing components and maintenance helps or upgrades abilities.
+      - Rotisserie compartment / bauble for improving food or just for looks.
+      - Blood or slime or algae IV bag.
+      - Ant or nematode farm.
+      - Harvest bauble.
+      - CPU or tiny robot.
+      - Tamagotchi AI snake / worm program / virus sample.
+      - Springy shock absorber to stop bouncing when moving.
+      - Sludge to water distillation, algae to O2 purifier transference system processors.
+      - Lots of panels, baubles, and instruments improve backpacker efficiency.
+      - Lots of compartments and panels to reveal cages, farms, drawers, and containers. Inven can too and can interact with HUD. Fully manual inventory management. Put arbitrary things in each slot.
+      - Growing flowers and clovers in little plantbeds and pots and urns. Mushroom or winter cactus flower pot.
+      - A system of pockets, containers, compartments.
+      - Collecting certain classes of items should require certain special collection containers like fridge for body parts like the bee stinger arrows or tongues and ears, gem specimen book for crystals, dung case for poo samples, box of boxes or pocket of pockets or chest of chests for more storage in general, killing jar for moths, dead specimen journal (a summary of you), barometric chamber, fishtank, binder.
+      - It is possible to combine certain items with each other like grouping apples, or goldfish and fish tank, or eye and skull to make a living head.
+        - Horadric cube like thing and RE4 inven management.
+      - For baubles that don't do anything but look pretty "This instrument doesn't enhance the function of my suit but pleases me to see it."
+      - Items with small effects like the Symphony of the Night pixel boost boots, bionics, gothic relics, charms like four-leaf clover, finger bone, dog leg, tongue, eye, old book, melange, abacus, and instruments.
+      - Maybe there's a ship or base or just a portable tent and field housing like old library. There are- buildings now. Unsure if you dump things at a homebase or always carry them with you OR set up a base for things.
+    - Add gameplay. How codes combat and inventory work? <---
+    - Add Accessory component to Backpacker children.
+      - The sword sizes should be exported separately from Backpacker. This will allow un/equipping the accessory.
+      - A future Accessory (plural) might be a scarf or something.
+    - Something like Diablo with immunity on diagonal attacks. Tap on the enemy for improved damage. Automatically melee if in range _and_ hostile? How does one not attack? It's unclear what the melee weapon should be. Arrows should be fired automatically at enemies if equipped and not moving? I should really study D1.
+    - What are the enemies in general? Two types maybe: enemies for resources (bee + stinger, bird + eggs, etc) and aggressive hostile entities like bears, monsters, swamp creatures, mutant bugs, blobs, frozen brains, nymphs, these kind of things. There is a wealth of possibilities but themeing is important. The enemies in Diablo make a ton of sense like skeletons and wraiths.
+    - Double tap to attack is a possibility and different modes (ranged, melee, explore) are also possible. What's fun though? Maybe ranged mode is the only one that needs double tap, if that? I like the idea of auto-attacking when near too and not taking damage if on the diagonal.
+    - Gameplay AND art constraints inform structure of code, Aseprite files, etc.
+    - Mock out some bee hunting and interactions in great detail. Review past mocks, inspirado, and the old notes. What's a fun design?
+      - Review materials, synthesize and write tiny plans, do each plan.
+      - What would mocking out a whole scene from scratch now look like?
+    - What should the enemies be?
+    - Maybe favor straight line moving.
+    - I like the idea of auto-attacking but also ammo conservation. If auto-range attacks exist, they should be opt-in.
+    - Maybe you attack by touching enemies at diagonally. Does it work on mobile?
+    - Are there ranged attacks like bow and arrows?
+      - It would be neat if arrows stuck in the ground or scattered and emitted a little cloud of dust on impact. Arrows should make a dumb little sound when shot.
+    - Maybe hover text for hit points.
+    - Consider restoring parts of old input system, including virtual joystick, as needed but keep in mind the lowest common denominator. Escape and Android back support are needed, and editor and debug shortcuts might be nice. Can I improve the input system? It feels clunky. Maybe a class. should be easy to test for double click, for example.
+    - Do I need A\*?
+  - Update menus to match HUD style, whatever that ends up being.
+  - Rename Toolbar to HUD or something.
+  - Maybe you just collect specimens and that's the objective of the game.
+  - Certain entities should be hostile towards each other. For example, hawks could circle and attack rabbits. Maybe bees could attack flies.
+  - [docs][dev] Add early and recent screenshots to readme timeline.
+  - Can I grab the collision data from Aseprite slices like before? How can this be done in a nice way?
+  - The entity construction lifecycle kind of sucks. Everything has to happen before calling super and that's really clumsy by delegating to a bunch of helper functions.
+  - After resizing or changing levels, there's a frame or two where everything is jumbled and out of place. This shouldn't happen. Set the debugger and investigate the entity processing order WRT camera. For example, the level editor toolbar seemed misplaced.
+  - I wish The whole update / collision / draw loop lifecycle thingy should be clearer. The parser lifecycle should be clearer too (and documented). Idioms are pretty impromptu presently.
+  - Make many wonderful entities.
+    - Add tornados.
+    - Add grasshopper. Lots of giant mutant bug enemies maybe? Giant Beelzebub house fly angel boss.
+    - Add lightning to the cloud entity.
+    - Add cactus.
+    - Add more clouds.
+      - Should the clouds dump long sloppy streams of water or pitter-patter? Some mocks on this in mock-encounter.aseprite and garfbage.aseprite and probably elsewhere.
+    - Add pond shader.
+    - Add rainbow.
+    - Add fire. See tileset-big.ase.
+    - Add multi-eyed beast.
+    - Add cemetary.
+    - Add waterfall.
+    - Add birds that can float over the landscape like clouds. Example in mock.aseprite.
+    - Add streams. Example in mock.aseprite.
+    - Add warning monuments. Examples in mock.aseprite and tileset-big.ase.
+    - Add more water.
+      - Improve pond water effect.
+    - Add quicksand.
+    - Add more trees.
+      - Starting with the tree skeleton is great and may help parametrize content later
+      - Draw the large tree in perspective. There's a shadow demo in garfbage.aseprite.
+    - Maybe draw sandtraps as obstacles.
+    - Add dead logs.
+    - Add lighthouse or windmill?
+    - Add tree stumps.
+    - Add some super saturated and connected clumps of grass. Some examples in grassss.aseprite.
+    - Add teleport.
+    - Add more "errant" textures to each image like little single pixels of grass.
+    - Try a baseline grass texture again just to see what it adds. Example in map5.aseprite.
+    - Review stained glass (there are at least two big circles) in tileset-big.ase.
+    - Add brain and frozen brain. See tileset-big.ase.
+    - Add duck? See mock-utility-belt.aseprite.
+    - Add skeleton? See mock-utility-belt.aseprite.
+    - Add ooz tube and gore fountain. See rubbish.aseprite.
+    - Add well. See rubbish.aseprite.
+    - Add Storymaker bubble egg.
+    - Improve the level boundaries. Maybe leaves or trees.
+    - Decide on clovers or reduce their size. Can I add more of the micro-flowers like in the old old mocks instead? Some purple ones would be nice.
+    - Do I want to better distinguish the backpacker from the background? For example, in front of water the colors are identical.
+    - Add more flowers but try to put them in perspective.
+    - Fade out the destination maker and allow a few instances. Maybe reverse the animation.
+    - Improve grass patches. These are currently path hacks and should be nicer.
+    - Check that the entities have strong, even, isometric perspectives.
+      - Correct the path perspective. There's one that links up properly in mock-path.aseprite.
+      - There's some really nice golf course and level box perspectives in garfbage.aseprite. General perspective nots in rubbish.aseprite.
+    - I need a better way to manage states and transitions.
+      - ImageStateMachine doesn't really do anything. It has a state and then then the images for each state. Maybe this should move back to entity to limit all the invalidation walking.
+      - There's some great examples of how to do player states, FSMs, and collision detection / gravity in https://script-8.github.io/?id=a3b40a159db3c794c1024fba73f4eb99.
+      - There's some good examples in Underrun too. E.g., the Entity class: https://github.com/phoboslab/underrun/blob/master/source/entity-sentry.js, kontra.js, impact.js.
+    - I need a better way to manage inter-entity and inter-level communication.
+      - What are my current needs? There are currently lots of communications with cursor, marquee, and panel. What about some common interactions like collision or parent to child or the update termination? These all kind of suck right now.
+    - How can I make the entity serializer / differ thing a less clunky? Can I expose defaults instead of toJSON() and the let the serializer pull that?
+    - Entities need to respect level boundaries better.
+    - Add versions to configs.
+    - Do I need different collision body states? It seems like a good deal of the time I don't want this with the notable exception of maybe on death but hopefully I can just change the collision type. For example, DEAD_BODY.
+    - Do I want to support elevations the explorer can ascend like little dirt mounds, mountains, plateaus, and even buildings? What are the implications for htings like clouds, mount / dismount, gameplay and pathfinding, and others?
+    - Is there a bug when an active entity on the screen boundary collides with an inactive entity just off screen? Maybe any entity that is active, recursively activates all other entities they touch? I'm not quite sure how htat works.
+    - How can the entity type be simplified technically and in presentation?
+      - The entities are quite complex at the moment. They have a ton of state, rectangles especially. Each entity can have multiple collision bodies, images, variants, states, and children recursively.
+      - Should I pursue simpler, possibly fixed size, tiles rather than entity and layered image compositions? Maybe this could help the art?
+      - How can I improve rectangle / recursive coordinate system management?
+      - Statically defining variants and states doesn't seem ideal.
+      - What constraints can we set? Max images? Max size? Max children?
+    - Adding collision bodies is back to manual now. Is it easy to set them for all cels?
+    - Review notes.txt
+    - Can collisions test and resolve within update? I think the testing is, it's just kind of convoluted.
+    - Reevaluate recursive collision and movement system.
+      - How should notifications work? I could also use a notify ID system for collision resolution instead but then IDs have to be unique which isn't bad. Might be nice instead of the hierarchy which is a little strange. Do I want this lookup over recursion? I could present and size by single entity only then!
+    - This decamillipixel nonsense is confusing. It's like .1px/s but everything is .6px/s or more. Is the half pixel needed? Millipixel would be a lot nicer. This would be more forgiving for the shader shorts. What's going on in vertex.glsl?
+    - Maybe base Entity should support targeting. Entities often have a destination.
+    - Consider alternative rain shader patterns.
+    - Develop entity behaviors (AI) more. The circle bee behavior might be a good starting point.
+    - Add some kind of unstoppable giant monster / colossus / death entity.
+    - The s/getter syntax is terser but isn't very flexible compared to functions: 1) no support for multiple parameters 2) types must match 3) creates ambiguity with functions 4) for better and worse, allows implicit conversions via duck typing 5) abstracts properties as functions which can work well for otherwise plain data types but similarly creates confusion for fixed mutation / copy methods. Should I change them to functions?
+- Synthesize fantastic sounds.
+  - Understand the basics: https://news.ycombinator.com/item?id=20272346
+  - Rename audio player to speaker or something.
+  - Flesh out the audio system.
+    - Synthesize crickets, wind, rain, thunder, and birds.
+  - Survey all the demos in Super Collider.
+  - Probably pursue lofi.
+- Improve the structure. Write little, clearly.
+  - What TypeScript and other open source examples should I consider?
+  - Re-review WebGL implementations.
+- Add windy grass displacement shader to make the fields pop.
+  - Can I do large fields of windy grass either with a shader or an animation or both? I think this would be invaluable to the atmosphere quality of the game. Some examples in map3.aseprite.
+  - Improve the foreground and background coloring of grass clumps. Some nice examples in map5.aseprite.
+  - Maybe look through shader toys and displacement shader 101s.
+    - https://forums.tigsource.com/index.php?topic=40539.20
+    - https://www.austinobrien.me/blog/shader-study/slime-rancher-pixel-display
+  - Add shadow distortion shader too.
+  - Do I need a shader for better types of water? What does it look like?
+- How can I move my planning materials into the VCS?
+- Review Diablo tile IDs: https://www.boristhebrave.com/2019/07/14/dungeon-generation-in-diablo-1/
+- Improve favicon.
+- Add performance test level.
+- Add test for newing each entity variant.
+- Set up natureelsewhere.com GitHub page. Point to demo at ne.netlify.com.
+- Set up oddoid.com GitHub page. Point to natureelsewhere.com and other projects.
+- Evaluate fixing known issues in readme.
+- What examples are there for making 9png like UI?
+  - Check out 9pngs / 9patch and svgs like https://twitter.com/rchrdnsh/status/1155163594264203264- https://thebookofshaders.com/09/
+  - Check out Android.
+  - I would use it for landscape items like ponds, paths, etc. Pretty much all tileable scenery.
+- Research videos and articles by the experts like GDC.
+- Extract the natural engine to a distributable package
+- Enums are serializing their keys or their bits: 1) the mechanism should probably be consistent 2) either the keys or the bits can't change; with string enums it felt more flexible since the value string was a more abstract thing than a specific power of two, for example.
+- Do I want to support sublevels like caves, pits, and houses?
+- Add moon level. See moon, satellite, and castle ruin from tileset-big.ase.
+- Add Nature Elsewhere logo.
+- On a multitouch, if you touch left and right sides of the screen at the same time, the player oscillates.
+- Experiment with drawing the logo in multiple color and animation passes. The shader can be used or an animation.
+- [fix] compartment automatically closes on mobile devices.
+
+aseprite-atlas
+
+- Reconsider JSON serialization of infinite duration. If a special value like null or not present is used, either a parser for the parsed output or conditionals all over is needed.
+- Keep thinking on OO tradeoffs.
+  mem-font
+- Push mem-font changes upstream and rework project.
+  oddoid
+- Keep thinking on names.

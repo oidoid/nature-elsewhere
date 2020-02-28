@@ -5,12 +5,14 @@ use num::{
 };
 use std::{
   fmt,
-  ops::{Add, Div, Mul, Sub},
+  ops::{Add, AddAssign, Div, Mul, Sub},
 };
 
-#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
-pub struct XY<T> {
+#[derive(Clone, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct XY<T: Default> {
+  #[serde(default)]
   pub x: T,
+  #[serde(default)]
   pub y: T,
 }
 pub type XY16 = XY<i16>;
@@ -22,7 +24,7 @@ pub type XY16 = XY<i16>;
 // }
 // impl NumCast's from and return an option self?
 
-impl<T> XY<T> {
+impl<T: Default> XY<T> {
   pub fn new(x: T, y: T) -> Self {
     Self { x, y }
   }
@@ -45,7 +47,7 @@ impl<T> XY<T> {
   }
 
   /// Cast each component of self and returns a new XY.
-  pub fn into<Into: NumCast>(self) -> XY<Into>
+  pub fn into<Into: NumCast + Default>(self) -> XY<Into>
   where
     T: NumCast,
     Into: NumCast,
@@ -125,19 +127,19 @@ macro_rules! impl_lerp {
 impl_lerp!(f32, u8 i8 u16 i16 f32);
 impl_lerp!(f64, u32 i32 f64);
 
-impl<T: fmt::Debug> fmt::Debug for XY<T> {
+impl<T: fmt::Debug + Default> fmt::Debug for XY<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(formatter, "({:?}, {:?})", self.x, self.y)
   }
 }
 
-impl<T: fmt::Display> fmt::Display for XY<T> {
+impl<T: fmt::Display + Default> fmt::Display for XY<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(formatter, "({}, {})", self.x, self.y)
   }
 }
 
-impl<T: Add<Output = T>> Add<XY<T>> for XY<T> {
+impl<T: Add<Output = T> + Default> Add<XY<T>> for XY<T> {
   type Output = XY<T>;
 
   fn add(self, rhs: XY<T>) -> Self {
@@ -145,7 +147,14 @@ impl<T: Add<Output = T>> Add<XY<T>> for XY<T> {
   }
 }
 
-impl<T: Sub<Output = T>> Sub<XY<T>> for XY<T> {
+impl<T: AddAssign + Default + Clone> AddAssign<&XY<T>> for XY<T> {
+  fn add_assign(&mut self, rhs: &XY<T>) {
+    self.x += rhs.x.clone();
+    self.y += rhs.y.clone();
+  }
+}
+
+impl<T: Sub<Output = T> + Default> Sub<XY<T>> for XY<T> {
   type Output = XY<T>;
 
   fn sub(self, rhs: XY<T>) -> Self {
@@ -153,7 +162,7 @@ impl<T: Sub<Output = T>> Sub<XY<T>> for XY<T> {
   }
 }
 
-impl<T: Mul<Output = T>> Mul<XY<T>> for XY<T> {
+impl<T: Mul<Output = T> + Default> Mul<XY<T>> for XY<T> {
   type Output = XY<T>;
 
   fn mul(self, rhs: XY<T>) -> Self {
@@ -161,7 +170,7 @@ impl<T: Mul<Output = T>> Mul<XY<T>> for XY<T> {
   }
 }
 
-impl<T: Mul<Output = T> + Clone> Mul<T> for XY<T> {
+impl<T: Mul<Output = T> + Clone + Default> Mul<T> for XY<T> {
   type Output = XY<T>;
 
   fn mul(self, rhs: T) -> Self {
@@ -169,7 +178,7 @@ impl<T: Mul<Output = T> + Clone> Mul<T> for XY<T> {
   }
 }
 
-impl<T: Div<Output = T>> Div<XY<T>> for XY<T> {
+impl<T: Div<Output = T> + Default> Div<XY<T>> for XY<T> {
   type Output = XY<T>;
 
   fn div(self, rhs: XY<T>) -> Self {
@@ -177,7 +186,7 @@ impl<T: Div<Output = T>> Div<XY<T>> for XY<T> {
   }
 }
 
-impl<T: Div<Output = T> + Copy> Div<T> for XY<T> {
+impl<T: Div<Output = T> + Copy + Default> Div<T> for XY<T> {
   type Output = XY<T>;
 
   fn div(self, rhs: T) -> Self {

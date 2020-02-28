@@ -182,12 +182,19 @@ mod test {
   #[test]
   fn parse_anim_map() {
     let frame_tags = vec![
-      aseprite::FrameTag {
-        name: "sceneryCloud".to_string(),
-        from: 0,
-        to: 0,
-        direction: "forward".to_string(),
-      },
+      // aseprite::FrameTag {
+      //   name: "sceneryCloud".to_string(),
+      //   from: 0,
+      //   to: 0,
+      //   direction: "forward".to_string(),
+      // },
+      serde_json::from_value(serde_json::json!({
+        "name": "sceneryCloud",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+      }))
+      .unwrap(),
       aseprite::FrameTag {
         name: "palette-red".to_string(),
         from: 1,

@@ -20,7 +20,11 @@ module.exports = (_, argv) => {
 
   return {
     stats: 'errors-warnings',
-    devServer: {clientLogLevel: 'warning', stats: 'errors-warnings'},
+    devServer: {
+      clientLogLevel: 'warning',
+      overlay: {warnings: true, errors: true},
+      stats: 'errors-warnings'
+    },
     output: {filename: 'index.js'},
     plugins: [
       new CleanWebpackPlugin({
@@ -46,6 +50,7 @@ module.exports = (_, argv) => {
         crateDirectory: __dirname
         // extraArgs: '--log-level warn'
       })
-    ]
+    ],
+    performance: {maxAssetSize: 512 * 1024, maxEntrypointSize: 512 * 1024}
   }
 }

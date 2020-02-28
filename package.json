@@ -1,5 +1,6 @@
 {
   "name": "nature-elsewhere",
+  "author": "oddoid",
   "//": "[strings]",
   "description": "An isometric adventure in an idealized state of nature.",
   "version": "0.0.0",
@@ -11,7 +12,7 @@
     "pixel-art",
     "aseprite"
   ],
-  "homepage": "https://github.com/oddoid/nature-elsewhere",
+  "homepage": "https://natureelsewhere.com",
   "repository": "github:oddoid/nature-elsewhere",
   "bugs": "https://github.com/oddoid/nature-elsewhere/issues",
   "license": "GPL-3.0-only AND CC-BY-SA-4.0",
@@ -27,7 +28,9 @@
     "format:web": "npm -s run formatter:web -- --write",
     "formatter:web": "prettier './**/*.{css,js,json,html,md}'",
     "test:format:rust": "npm -s run format:rust -- -- --check -l",
-    "format:rust": "cargo -q --locked fmt"
+    "format:rust": "cargo -q --locked fmt",
+    "build:atlas": "aseprite-atlas-pack --sheet src/atlas/atlas.png --data src/atlas/atlas.json assets/atlas/*.aseprite",
+    "palettize": "cd assets/atlas && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {
     "@wasm-tool/wasm-pack-plugin": "1.1.0",
@@ -38,6 +41,5 @@
     "webpack": "4.41.5",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.10.2"
-  },
-  "author": "oddoid"
+  }
 }

@@ -9,7 +9,9 @@ use std::{
 /// just an area is needed.
 #[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
 pub struct WH<T> {
+  #[serde(default)]
   pub w: T,
+  #[serde(default)]
   pub h: T,
 }
 pub type WH16 = WH<i16>;

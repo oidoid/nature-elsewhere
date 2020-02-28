@@ -1,62 +1,24 @@
 use super::anim_looper::AnimLooper;
+use super::render_instance::RenderInstance;
 use super::renderer::Renderer;
-use super::shader_layout::ShaderLayout;
 use super::viewport;
+use crate::assets::Assets;
 use crate::math::rect::{Rect, R16};
 use crate::math::wh::WH16;
 use crate::math::xy::XY16;
 use crate::utils::Millis;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
-use image::{DynamicImage, GenericImageView};
 use num::traits::cast::ToPrimitive;
 use std::cell::RefCell;
 use std::rc::Rc;
 use web_sys::{console, Document, Event, HtmlCanvasElement, Window};
 
-#[derive(Serialize)]
-struct Instance {
-  pub src: R16,
-  pub constituent: R16,
-  pub composition: u8,
-  pad: u8,
-  pub dst: R16,
-  pub scale: XY16,
-  pub wrap_xy: XY16,
-  pub wrap_velocity_xy: XY16,
-}
-
-impl Instance {
-  pub fn new(
-    src: R16,
-    constituent: R16,
-    composition: u8,
-    dst: R16,
-    scale: XY16,
-    wrap_xy: XY16,
-    wrap_velocity_xy: XY16,
-  ) -> Self {
-    Instance {
-      src,
-      constituent,
-      composition,
-      pad: 0,
-      dst,
-      scale,
-      wrap_xy,
-      wrap_velocity_xy,
-    }
-  }
-}
-
 #[derive(Clone)]
 pub struct RendererStateMachine {
-  shader_layout: Rc<ShaderLayout>,
-  vert_glsl: Rc<String>,
-  frag_glsl: Rc<String>,
-  atlas_img: Rc<DynamicImage>,
   win: Window,
   doc: Document,
   canvas: HtmlCanvasElement,
+  assets: Rc<Assets>,
   renderer: Rc<RefCell<Renderer>>,
   looper: AnimLooper,
   listeners: Rc<RefCell<Vec<EventListener>>>,
@@ -64,28 +26,18 @@ pub struct RendererStateMachine {
 }
 
 impl RendererStateMachine {
-  pub fn new(
-    shader_layout: ShaderLayout,
-    vert_glsl: String,
-    frag_glsl: String,
-    atlas_img: DynamicImage,
-    win: Window,
-    canvas: HtmlCanvasElement,
-  ) -> Self {
+  pub fn new(win: Window, canvas: HtmlCanvasElement, assets: Assets) -> Self {
     let renderer = Rc::new(RefCell::new(Renderer::new(
-      &shader_layout,
-      &vert_glsl,
-      &frag_glsl,
-      &atlas_img,
+      &assets.shader_layout,
+      &assets.vert_glsl,
+      &assets.frag_glsl,
+      &assets.atlas_img,
       canvas.clone(),
     )));
     Self {
-      shader_layout: Rc::new(shader_layout),
-      vert_glsl: Rc::new(vert_glsl),
-      frag_glsl: Rc::new(frag_glsl),
-      atlas_img: Rc::new(atlas_img),
       doc: win.document().expect("Document missing."),
       win: win.clone(),
+      assets: Rc::new(assets),
       canvas,
       renderer,
       looper: AnimLooper::new(win),
@@ -138,14 +90,12 @@ impl RendererStateMachine {
 
   fn on_event(&mut self, ev: Event) {
     if ev.type_() == "webglcontextrestored" {
-      let vert_glsl: &String = std::borrow::Borrow::borrow(&self.vert_glsl);
-      let frag_glsl: &String = std::borrow::Borrow::borrow(&self.frag_glsl);
-      let atlas_img = std::borrow::Borrow::borrow(&self.atlas_img);
+      let assets: &Assets = std::borrow::Borrow::borrow(&self.assets);
       *self.renderer.borrow_mut() = Renderer::new(
-        std::borrow::Borrow::borrow(&self.shader_layout),
-        vert_glsl,
-        frag_glsl,
-        atlas_img,
+        &assets.shader_layout,
+        &assets.vert_glsl,
+        &assets.frag_glsl,
+        &assets.atlas_img,
         self.canvas.clone(),
       );
       self.resume();
@@ -164,7 +114,7 @@ impl RendererStateMachine {
     let canvas_wh = viewport::canvas_wh(&self.doc);
     let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
     let cam_wh = viewport::cam_wh(&canvas_wh, scale);
-    let bytes = Instance::new(
+    let bytes = RenderInstance::new(
       R16::cast_wh(80, 150, 11, 13),
       R16::cast_wh(80, 150, 11, 13),
       0,
