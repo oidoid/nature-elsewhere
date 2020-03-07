@@ -1,40 +1,23 @@
-// use std::ops::FnOnce;
-// trait Foo {
-//   fn call(self, trigger: bool) -> Self;
-// }
+// https://specs.amethyst.rs/docs/tutorials/11_advanced_component.html
+// https://docs.rs/specs/0.16.1/specs/trait.Component.html
+// https://github.com/rust-lang-nursery/lazy-static.rs
+// https://docs.serde.rs/serde_json/macro.json.html
+// https://serde.rs/field-attrs.html
 
-// struct Bar {
-//   f: Option<dyn Fn() + 'static>,
-// }
+struct FnTimes {
+  fnc: fn(),
+  times: usize,
+}
 
-// impl Foo for Bar {
-//   fn call(mut self, trigger: bool) -> Self {
-//     if trigger && self.f.is_some() {
-//       self.f.replace()();
-//     }
-//   }
-// }
+impl FnTimes {
+  pub fn new(fnc: fn(), times: usize) -> Self {
+    Self { fnc, times }
+  }
 
-// pub fn never(trigger: bool) -> this {
-//   never
-// }
-
-// pub fn once(f: fn()) {
-//   let retry = |trigger: bool| {
-//     if trigger {
-//       f();
-//       never
-//     } else {
-//       retry
-//     }
-//   }
-// }
-
-// fn retry(f: fn(), trigger: boolean) -> Fn(bool) {
-//   if trigger {
-//     f();
-//     never
-//   } else {
-//     |trigger| retry(f, trigger)
-//   }
-// }
+  pub fn call(&mut self) {
+    if self.times > 0 {
+      self.times -= 1;
+      (self.fnc)();
+    }
+  }
+}

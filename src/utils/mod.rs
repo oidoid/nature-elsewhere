@@ -1,5 +1,6 @@
 #[macro_use]
 pub mod assert;
+pub mod array_util;
 pub mod fn_util;
 
 /// Although Aseprite milliseconds are a u16, actual time is fractional.
