@@ -14,21 +14,21 @@ pub struct Atlas {
   pub format: String,
   /// Atlas image dimensions (power of 2).
   pub wh: WH16,
-  pub anims: AnimMap,
+  pub animations: AnimationLookup,
 }
 
 impl Atlas {
   pub fn is_id(&self, id: &AtlasID) -> bool {
-    self.anims.get(id).is_some()
+    self.animations.get(id).is_some()
   }
 }
 
 pub type AtlasID = String;
-pub type AnimMap = HashMap<AtlasID, Anim>;
+pub type AnimationLookup = HashMap<AtlasID, Animation>;
 
-/// A sequence of animation cels.
+/// A sequence of cels.
 #[derive(Debug, PartialEq)]
-pub struct Anim {
+pub struct Animation {
   /// Width and height within the source atlas image in integral pixels.
   /// Dimensions are identical for every cel.
   pub wh: WH16,
@@ -39,11 +39,11 @@ pub struct Anim {
   /// animation, the total duration would be the sum of the individual durations
   /// for the initial five frames and the middle three frames.
   pub duration: Millis,
-  pub direction: AnimDirection,
+  pub direction: Playback,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
-pub enum AnimDirection {
+pub enum Playback {
   /// Animate from start to end; when looping, return to start.
   Forward,
   /// Animate from end to start; when looping, return to end.

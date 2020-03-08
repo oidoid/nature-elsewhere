@@ -1,5 +1,5 @@
 use crate::atlas::animator::Animator;
-use crate::atlas::atlas_id::AtlasID;
+use crate::atlas::atlas::AtlasID;
 use crate::math::rect::R16;
 use crate::math::wh::WH16;
 use crate::math::xy::XY16;

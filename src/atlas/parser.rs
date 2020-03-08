@@ -1,5 +1,5 @@
 use super::aseprite;
-use super::atlas;
+use super::atlas::{Animation, AnimationLookup, Atlas, Cel, Playback};
 use crate::{
   math::rect::R16,
   math::wh::{WH, WH16},
@@ -11,24 +11,24 @@ use std::collections::HashMap;
 use std::convert::From;
 use std::{convert::TryInto, f32};
 
-pub fn parse(json: &str) -> Result<atlas::Atlas, Error> {
+pub fn parse(json: &str) -> Result<Atlas, Error> {
   parse_file(&serde_json::from_str(json)?)
 }
 
-pub fn parse_file(file: &aseprite::File) -> Result<atlas::Atlas, Error> {
+pub fn parse_file(file: &aseprite::File) -> Result<Atlas, Error> {
   let aseprite::WH { w, h } = file.meta.size;
-  Ok(atlas::Atlas {
+  Ok(Atlas {
     version: file.meta.version.clone(),
     filename: file.meta.image.clone(),
     format: file.meta.format.clone(),
     wh: WH { w: w.try_into()?, h: h.try_into()? },
-    anims: parse_anim_map(file)?,
+    animations: parse_animation_lookup(file)?,
   })
 }
 
-pub fn parse_anim_map(
+pub fn parse_animation_lookup(
   aseprite::File { meta, frames }: &aseprite::File,
-) -> Result<atlas::AnimMap, Error> {
+) -> Result<AnimationLookup, Error> {
   let aseprite::Meta { frame_tags, slices, .. } = meta;
   let mut record = HashMap::new();
   for frame_tag in frame_tags {
@@ -37,18 +37,20 @@ pub fn parse_anim_map(
       let msg = format!("Duplicate tag {}.", frame_tag.name);
       return Err(failure::err_msg(msg));
     }
-    record
-      .insert(frame_tag.name.clone(), parse_anim(frame_tag, frames, slices)?);
+    record.insert(
+      frame_tag.name.clone(),
+      parse_animation(frame_tag, frames, slices)?,
+    );
   }
   Ok(record)
 }
 
-pub fn parse_anim(
+pub fn parse_animation(
   frame_tag: &aseprite::FrameTag,
   frame_map: &aseprite::FrameMap,
   slices: &[aseprite::Slice],
-) -> Result<atlas::Anim, Error> {
-  let direction = atlas::AnimDirection::parse(&frame_tag.direction)?;
+) -> Result<Animation, Error> {
+  let direction = Playback::parse(&frame_tag.direction)?;
   let frames = parse_tag_frames(frame_tag, frame_map);
   if frames.is_empty() {
     let msg = format!("No cels in {} animation.", frame_tag.name);
@@ -61,8 +63,8 @@ pub fn parse_anim(
   }
 
   let mut duration =
-    cels.iter().fold(0., |time, atlas::Cel { duration, .. }| time + duration);
-  if direction == atlas::AnimDirection::PingPong && cels.len() > 2 {
+    cels.iter().fold(0., |time, Cel { duration, .. }| time + duration);
+  if direction == Playback::PingPong && cels.len() > 2 {
     duration += duration - cels[0].duration + cels[cels.len() - 1].duration;
   }
 
@@ -74,7 +76,7 @@ pub fn parse_anim(
   if cels.len() > 2 {
     if let Some(i) = cels[1..cels.len() - 1]
       .iter()
-      .position(|atlas::Cel { duration, .. }| duration.is_infinite())
+      .position(|Cel { duration, .. }| duration.is_infinite())
     {
       let msg = format!(
         "Infinite duration for intermediate cel {} of {} animation.",
@@ -85,7 +87,7 @@ pub fn parse_anim(
   }
 
   let aseprite::WH { w, h } = frames[0].source_size;
-  Ok(atlas::Anim {
+  Ok(Animation {
     wh: WH { w: w.try_into()?, h: h.try_into()? },
     cels,
     duration,
@@ -105,16 +107,13 @@ pub fn parse_tag_frames<'a>(
   return frames;
 }
 
-impl atlas::AnimDirection {
+impl Playback {
   fn parse(str: &str) -> Result<Self, Error> {
     match str {
       "forward" => Ok(Self::Forward),
       "reverse" => Ok(Self::Reverse),
       "pingpong" => Ok(Self::PingPong),
-      _ => Err(failure::err_msg(format!(
-        "AnimationDirection invalid: \"{}\".",
-        str
-      ))),
+      _ => Err(failure::err_msg(format!("Playback invalid: \"{}\".", str))),
     }
   }
 }
@@ -124,8 +123,8 @@ pub fn parse_cel(
   frame: &aseprite::Frame,
   frame_number: u32,
   slices: &[aseprite::Slice],
-) -> Result<atlas::Cel, Error> {
-  Ok(atlas::Cel {
+) -> Result<Cel, Error> {
+  Ok(Cel {
     xy: parse_xy(frame)?,
     duration: parse_duration(frame.duration)?,
     slices: parse_slices(frame_tag, frame_number, slices)?,
@@ -180,136 +179,103 @@ mod test {
   use super::*;
 
   #[test]
-  fn parse_anim_map() {
-    let frame_tags = vec![
-      // aseprite::FrameTag {
-      //   name: "sceneryCloud".to_string(),
-      //   from: 0,
-      //   to: 0,
-      //   direction: "forward".to_string(),
-      // },
-      serde_json::from_value(serde_json::json!({
-        "name": "sceneryCloud",
-        "from": 0,
-        "to": 0,
-        "direction": "forward",
-      }))
-      .unwrap(),
-      aseprite::FrameTag {
-        name: "palette-red".to_string(),
-        from: 1,
-        to: 1,
-        direction: "forward".to_string(),
+  fn parse_animation_lookup() {
+    let file: aseprite::File = from_json!( {
+      "meta": {
+        "app": "http://www.aseprite.org/",
+        "version": "1.2.8.1",
+        "image": "atlas.png",
+        "format": "I8",
+        "size": { "w": 1024, "h": 1024 },
+        "scale": "1",
+        "frameTags": [
+          {
+            "name": "sceneryCloud", "from": 0, "to": 0, "direction": "forward"
+          },
+          { "name": "palette-red", "from": 1, "to": 1, "direction": "forward" },
+          {
+            "name": "sceneryConifer", "from": 2, "to": 2, "direction": "forward"
+          },
+          {
+            "name": "sceneryConifer-shadow",
+            "from": 3,
+            "to": 3,
+            "direction": "forward"
+          }
+        ],
+        "slices": [
+          {
+            "name": "sceneryCloud",
+            "color": "#0000ffff",
+            "keys": [{
+              "frame": 0, "bounds": { "x": 8, "y": 12, "w": 2, "h": 3 }
+            }]
+          },
+          {
+            "name": "palette-red",
+            "color": "#0000ffff",
+            "keys": [{
+              "frame": 0, "bounds": { "x": 7, "y": 11, "w": 3, "h": 4 }
+            }]
+          },
+          {
+            "name": "sceneryConifer",
+            "color": "#0000ffff",
+            "keys": [{
+              "frame": 0, "bounds": { "x": 7, "y": 10, "w": 3, "h": 5 }
+            }]
+          },
+          {
+            "name": "sceneryConifer-shadow",
+            "color": "#0000ffff",
+            "keys": [{
+              "frame": 0, "bounds": { "x": 7, "y": 9, "w": 3, "h": 6 }
+            }]
+          }
+        ]
       },
-      aseprite::FrameTag {
-        name: "sceneryConifer".to_string(),
-        from: 2,
-        to: 2,
-        direction: "forward".to_string(),
-      },
-      aseprite::FrameTag {
-        name: "sceneryConifer-shadow".to_string(),
-        from: 3,
-        to: 3,
-        direction: "forward".to_string(),
-      },
-    ];
-    let mut frames = HashMap::new();
-    frames.insert(
-      "sceneryCloud 0".to_string(),
-      aseprite::Frame {
-        frame: aseprite::Rect { x: 220, y: 18, w: 18, h: 18 },
-        rotated: false,
-        trimmed: false,
-        sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 16, h: 16 },
-        source_size: aseprite::WH { w: 16, h: 16 },
-        duration: 1,
-      },
-    );
-    frames.insert(
-      "palette-red 1".to_string(),
-      aseprite::Frame {
-        frame: aseprite::Rect { x: 90, y: 54, w: 18, h: 18 },
-        rotated: false,
-        trimmed: false,
-        sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 16, h: 16 },
-        source_size: aseprite::WH { w: 16, h: 16 },
-        duration: 65535,
-      },
-    );
-    frames.insert(
-      "sceneryConifer 2".to_string(),
-      aseprite::Frame {
-        frame: aseprite::Rect { x: 72, y: 54, w: 18, h: 18 },
-        rotated: false,
-        trimmed: false,
-        sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 16, h: 16 },
-        source_size: aseprite::WH { w: 16, h: 16 },
-        duration: 65535,
-      },
-    );
-    frames.insert(
-      "sceneryConifer-shadow 3".to_string(),
-      aseprite::Frame {
-        frame: aseprite::Rect { x: 54, y: 54, w: 18, h: 18 },
-        rotated: false,
-        trimmed: false,
-        sprite_source_size: aseprite::Rect { x: 54, y: 54, w: 18, h: 18 },
-        source_size: aseprite::WH { w: 16, h: 16 },
-        duration: 65535,
-      },
-    );
-    let slices = vec![
-      aseprite::Slice {
-        name: "sceneryCloud".to_string(),
-        color: "#0000ffff".to_string(),
-        keys: vec![aseprite::Key {
-          frame: 0,
-          bounds: aseprite::Rect { x: 8, y: 12, w: 2, h: 3 },
-        }],
-      },
-      aseprite::Slice {
-        name: "palette-red".to_string(),
-        color: "#0000ffff".to_string(),
-        keys: vec![aseprite::Key {
-          frame: 0,
-          bounds: aseprite::Rect { x: 7, y: 11, w: 3, h: 4 },
-        }],
-      },
-      aseprite::Slice {
-        name: "sceneryConifer".to_string(),
-        color: "#0000ffff".to_string(),
-        keys: vec![aseprite::Key {
-          frame: 0,
-          bounds: aseprite::Rect { x: 7, y: 10, w: 3, h: 5 },
-        }],
-      },
-      aseprite::Slice {
-        name: "sceneryConifer-shadow".to_string(),
-        color: "#0000ffff".to_string(),
-        keys: vec![aseprite::Key {
-          frame: 0,
-          bounds: aseprite::Rect { x: 7, y: 9, w: 3, h: 6 },
-        }],
-      },
-    ];
-    let meta = aseprite::Meta {
-      app: "http://www.aseprite.org/".to_string(),
-      version: "1.2.8.1".to_string(),
-      image: "atlas.png".to_string(),
-      format: "I8".to_string(),
-      size: aseprite::WH { w: 1024, h: 1024 },
-      scale: "1".to_string(),
-      frame_tags,
-      slices,
-    };
-    let file = aseprite::File { meta, frames };
-    let mut expected = atlas::AnimMap::new();
+      "frames": {
+        "sceneryCloud 0": {
+          "frame": { "x": 220, "y": 18, "w": 18, "h": 18 },
+          "rotated": false,
+          "trimmed": false,
+          "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
+          "sourceSize": { "w": 16, "h": 16 },
+          "duration": 1
+        },
+        "palette-red 1": {
+          "frame": { "x": 90, "y": 54, "w": 18, "h": 18 },
+          "rotated": false,
+          "trimmed": false,
+          "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
+          "sourceSize": { "w": 16, "h": 16 },
+          "duration": 65535
+        },
+        "sceneryConifer 2": {
+          "frame": { "x": 72, "y": 54, "w": 18, "h": 18 },
+          "rotated": false,
+          "trimmed": false,
+          "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
+          "sourceSize": { "w": 16, "h": 16 },
+          "duration": 65535
+        },
+        "sceneryConifer-shadow 3": {
+          "frame": { "x": 54, "y": 54, "w": 18, "h": 18 },
+          "rotated": false,
+          "trimmed": false,
+          "spriteSourceSize": { "x": 54, "y": 54, "w": 18, "h": 18 },
+          "sourceSize": { "w": 16, "h": 16 },
+          "duration": 65535
+        }
+      }
+    })
+    .unwrap();
+    let mut expected = AnimationLookup::new();
     expected.insert(
       "sceneryCloud".to_string(),
-      atlas::Anim {
+      Animation {
         wh: WH { w: 16, h: 16 },
-        cels: vec![atlas::Cel {
+        cels: vec![Cel {
           xy: XY { x: 221, y: 19 },
           duration: 1.,
           slices: vec![R16 {
@@ -318,14 +284,14 @@ mod test {
           }],
         }],
         duration: 1.,
-        direction: atlas::AnimDirection::Forward,
+        direction: Playback::Forward,
       },
     );
     expected.insert(
       "palette-red".to_string(),
-      atlas::Anim {
+      Animation {
         wh: WH { w: 16, h: 16 },
-        cels: vec![atlas::Cel {
+        cels: vec![Cel {
           xy: XY { x: 91, y: 55 },
           duration: f32::INFINITY,
           slices: vec![R16 {
@@ -334,14 +300,14 @@ mod test {
           }],
         }],
         duration: f32::INFINITY,
-        direction: atlas::AnimDirection::Forward,
+        direction: Playback::Forward,
       },
     );
     expected.insert(
       "sceneryConifer".to_string(),
-      atlas::Anim {
+      Animation {
         wh: WH { w: 16, h: 16 },
-        cels: vec![atlas::Cel {
+        cels: vec![Cel {
           xy: XY { x: 73, y: 55 },
           duration: f32::INFINITY,
           slices: vec![R16 {
@@ -350,14 +316,14 @@ mod test {
           }],
         }],
         duration: f32::INFINITY,
-        direction: atlas::AnimDirection::Forward,
+        direction: Playback::Forward,
       },
     );
     expected.insert(
       "sceneryConifer-shadow".to_string(),
-      atlas::Anim {
+      Animation {
         wh: WH { w: 16, h: 16 },
-        cels: vec![atlas::Cel {
+        cels: vec![Cel {
           xy: XY { x: 55, y: 55 },
           duration: f32::INFINITY,
           slices: vec![R16 {
@@ -366,14 +332,14 @@ mod test {
           }],
         }],
         duration: f32::INFINITY,
-        direction: atlas::AnimDirection::Forward,
+        direction: Playback::Forward,
       },
     );
-    assert_eq!(super::parse_anim_map(&file).unwrap(), expected);
+    assert_eq!(super::parse_animation_lookup(&file).unwrap(), expected);
   }
 
   #[test]
-  fn parse_anim() {
+  fn parse_animation() {
     let frame_tag = aseprite::FrameTag {
       name: "cloud s".to_string(),
       from: 1,
@@ -441,10 +407,10 @@ mod test {
       },
     ];
     assert_eq!(
-      super::parse_anim(&frame_tag, &frames, &slices).unwrap(),
-      atlas::Anim {
+      super::parse_animation(&frame_tag, &frames, &slices).unwrap(),
+      Animation {
         wh: WH { w: 16, h: 16 },
-        cels: vec![atlas::Cel {
+        cels: vec![Cel {
           xy: XY { x: 185, y: 37 },
           duration: f32::INFINITY,
           slices: vec![R16 {
@@ -453,22 +419,19 @@ mod test {
           }]
         }],
         duration: f32::INFINITY,
-        direction: atlas::AnimDirection::Forward
+        direction: Playback::Forward
       }
     );
   }
 
   #[test]
   fn parse_direction_valid() {
-    assert_eq!(
-      atlas::AnimDirection::parse("forward").unwrap(),
-      atlas::AnimDirection::Forward
-    );
+    assert_eq!(Playback::parse("forward").unwrap(), Playback::Forward);
   }
 
   #[test]
   fn parse_direction_invalid() {
-    assert_eq!(atlas::AnimDirection::parse("invalid").is_err(), true);
+    assert_eq!(Playback::parse("invalid").is_err(), true);
   }
 
   #[test]
@@ -497,7 +460,7 @@ mod test {
     }];
     assert_eq!(
       super::parse_cel(&frame_tag, &frame, 0, &slices).unwrap(),
-      atlas::Cel {
+      Cel {
         xy: XY { x: 131, y: 19 },
         duration: f32::INFINITY,
         slices: vec![R16 { from: XY { x: 4, y: 4 }, to: XY { x: 12, y: 16 } }]
