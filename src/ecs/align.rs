@@ -4,7 +4,7 @@ use specs::prelude::DenseVecStorage;
 use specs::Component;
 
 /// Relative position within a rectangle.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub enum Alignment {
   /// Top-center.
   North,

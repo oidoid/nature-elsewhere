@@ -2,7 +2,7 @@ use specs::prelude::DenseVecStorage;
 use specs::Component;
 
 #[derive(Component, Clone)]
-pub enum Operator {
+pub enum EntityOperator {
   Computer,
   Player,
 }

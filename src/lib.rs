@@ -17,6 +17,7 @@ mod graphics;
 mod inputs;
 mod math;
 mod settings;
+mod sprites;
 mod text;
 mod wasm;
 

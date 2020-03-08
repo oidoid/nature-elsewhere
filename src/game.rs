@@ -1,15 +1,9 @@
 use super::assets::Assets;
 use super::ecs::bounds::Bounds;
-use super::ecs::operator::Operator;
+use super::ecs::entity_operator::EntityOperator;
 use super::graphics::renderer_state_machine::RendererStateMachine;
-use super::math::xy::{XY, XY16};
-use crate::atlas::atlas::Atlas;
-use crate::graphics::shader_layout::ShaderLayout;
 use crate::inputs::input_poller::InputPoller;
-use image::DynamicImage;
-use specs::{
-  Builder, Component, ReadStorage, RunNow, System, VecStorage, World, WorldExt,
-};
+use specs::{Builder, ReadStorage, RunNow, System, World, WorldExt};
 use web_sys::{console, HtmlCanvasElement, Window};
 
 struct HelloWorld;
@@ -38,9 +32,9 @@ impl Game {
   pub fn new(win: Window, canvas: HtmlCanvasElement, assets: Assets) -> Self {
     let mut world = World::new();
     world.register::<Bounds>();
-    world.register::<Operator>();
+    world.register::<EntityOperator>();
     world.create_entity().with(Bounds::new(1, 2, 3, 4)).build();
-    world.create_entity().with(Operator::Player).build();
+    world.create_entity().with(EntityOperator::Player).build();
     world.create_entity().with(Bounds::new(5, 6, 7, 8)).build();
     let mut hello_world = HelloWorld;
     hello_world.run_now(&world);
