@@ -1,12 +1,12 @@
-use super::anim_looper::AnimLooper;
-use super::render_instance::RenderInstance;
 use super::renderer::Renderer;
 use super::viewport;
+use super::window_animation_frame_looper::WindowAnimationFrameLooper;
 use crate::assets::Assets;
 use crate::math::rect::{Rect, R16};
 use crate::math::wh::WH16;
 use crate::math::xy::XY16;
-use crate::utils::Millis;
+use crate::sprites::sprite::Sprite;
+use crate::sprites::sprite_composition::SpriteComposition;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
 use num::traits::cast::ToPrimitive;
 use std::cell::RefCell;
@@ -20,7 +20,7 @@ pub struct RendererStateMachine {
   canvas: HtmlCanvasElement,
   assets: Rc<Assets>,
   renderer: Rc<RefCell<Renderer>>,
-  looper: AnimLooper,
+  looper: WindowAnimationFrameLooper,
   listeners: Rc<RefCell<Vec<EventListener>>>,
   now: Rc<RefCell<f64>>,
 }
@@ -40,7 +40,7 @@ impl RendererStateMachine {
       assets: Rc::new(assets),
       canvas,
       renderer,
-      looper: AnimLooper::new(win),
+      looper: WindowAnimationFrameLooper::new(win),
       listeners: Rc::new(RefCell::new(Vec::new())),
       now: Rc::new(RefCell::new(0.)),
     }
@@ -114,10 +114,10 @@ impl RendererStateMachine {
     let canvas_wh = viewport::canvas_wh(&self.doc);
     let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
     let cam_wh = viewport::cam_wh(&canvas_wh, scale);
-    let bytes = RenderInstance::new(
+    let bytes = Sprite::new(
       R16::cast_wh(80, 150, 11, 13),
       R16::cast_wh(80, 150, 11, 13),
-      0,
+      SpriteComposition::Source,
       R16::cast_wh(32, 32, 11, 13),
       XY16 { x: 1, y: 1 },
       XY16 { x: 0, y: 0 },
