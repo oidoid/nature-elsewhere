@@ -127,8 +127,7 @@ pub fn load_texture(
       0,
       Gl::RGBA,
       Gl::UNSIGNED_BYTE,
-      Some(image.raw_pixels().as_ref()),
-      // Some(&image.to_rgba().to_vec()),
+      Some(&image.to_rgba().to_vec()),
     )
   {
     println!("Failed to load image. Error code {}.", err.as_f64()?)
