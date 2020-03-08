@@ -1,6 +1,8 @@
+use serde_repr::Serialize_repr;
+
 // See https://developer.android.com/reference/android/graphics/PorterDuff.Mode.
 #[repr(u8)]
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize_repr)]
 pub enum SpriteComposition {
   /// The constituent is unused. The source is rendered unaltered.
   Source,

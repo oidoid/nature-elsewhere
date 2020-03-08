@@ -6,7 +6,7 @@ use crate::math::xy::XY16;
 pub struct Sprite {
   pub source: R16,
   pub constituent: R16,
-  pub composition: u8, //SpriteComposition,
+  pub composition: SpriteComposition,
   pad: u8,
   /// flip can be used to determine scale butttttt not collision then. world+render... mostly render since entities may have multiple of these
   pub destination: R16,
@@ -28,7 +28,7 @@ impl Sprite {
     Self {
       source,
       constituent,
-      composition: 0,
+      composition,
       pad: 0,
       destination,
       scale,
