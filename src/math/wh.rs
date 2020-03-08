@@ -1,5 +1,4 @@
 use num::traits::cast::NumCast;
-use num::traits::Zero;
 use std::{
   fmt,
   ops::{Add, Div, Mul, Sub},

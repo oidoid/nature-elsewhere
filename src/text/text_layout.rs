@@ -81,7 +81,7 @@ fn layout_word(
     // width of five pixels and a one pixel kerning for a given pair of
     // letters, it will have a span of six pixels which is greater than the
     // maximal five pixel sprite that can be rendered.
-    let w = scale.x * font.letter_width_cool(chars[index]);
+    let w = scale.x * font.letter_width(chars[index]);
     let h = scale.y * font.letter_height;
     letters.push(Some(R16::cast_wh(x, y, w, h)));
     x += span;
@@ -123,7 +123,7 @@ fn layout_space(
 
 /// Returns the distance in pixels from the start of lhs to the start of rhs.
 fn tracking(font: &Font, lhs: char, scale: &XY16, rhs: Option<&char>) -> i16 {
-  scale.x * (font.letter_width_cool(lhs) + font.kerning(lhs, rhs))
+  scale.x * (font.letter_width(lhs) + font.kerning(lhs, rhs))
 }
 
 mod test {

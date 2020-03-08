@@ -12,14 +12,14 @@ pub struct Font {
   pub line_height: i16,
 
   /// Distance between letters in pixels.
-  pub kerning: HashMap<String, i16>,
-  pub default_kerning: i16,
-  pub whitespace_kerning: i16,
-  pub end_of_line_kerning: i16,
+  kerning: HashMap<String, i16>,
+  default_kerning: i16,
+  whitespace_kerning: i16,
+  end_of_line_kerning: i16,
 
   /// Character width in pixels.
-  pub letter_width: HashMap<char, i16>,
-  pub default_letter_width: i16,
+  letter_width: HashMap<char, i16>,
+  default_letter_width: i16,
 }
 
 impl Font {
@@ -36,7 +36,7 @@ impl Font {
     *self.kerning.get(&lhs_rhs).unwrap_or(&self.default_kerning)
   }
 
-  pub fn letter_width_cool(&self, letter: char) -> i16 {
+  pub fn letter_width(&self, letter: char) -> i16 {
     *self.letter_width.get(&letter).unwrap_or(&self.default_letter_width)
   }
 }

@@ -4,7 +4,7 @@ use crate::math::wh::WH16;
 use crate::math::xy::{XY, XY16};
 use crate::utils::Millis;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Input {
   /// True if input is on.
   pub active: bool,

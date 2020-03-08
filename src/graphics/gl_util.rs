@@ -1,16 +1,15 @@
 use super::shader_layout::Attr;
 use image::{DynamicImage, GenericImageView};
 use num::traits::cast::FromPrimitive;
-use num::traits::{cast::ToPrimitive, real::Real};
+use num::traits::cast::ToPrimitive;
 use std::collections::HashMap;
 use std::convert::From;
 use wasm_bindgen::{prelude::JsValue, JsCast};
 use web_sys::{
-  console, AngleInstancedArrays, HtmlCanvasElement, HtmlImageElement,
-  WebGlBuffer as GlBuffer, WebGlContextAttributes as GlContextAttributes,
-  WebGlProgram as GlProgram, WebGlRenderingContext as Gl,
-  WebGlShader as GlShader, WebGlTexture as GlTexture,
-  WebGlUniformLocation as GlUniformLocation,
+  console, AngleInstancedArrays, HtmlCanvasElement, WebGlBuffer as GlBuffer,
+  WebGlContextAttributes as GlContextAttributes, WebGlProgram as GlProgram,
+  WebGlRenderingContext as Gl, WebGlShader as GlShader,
+  WebGlTexture as GlTexture, WebGlUniformLocation as GlUniformLocation,
 };
 
 pub fn get_context(
@@ -129,6 +128,7 @@ pub fn load_texture(
       Gl::RGBA,
       Gl::UNSIGNED_BYTE,
       Some(image.raw_pixels().as_ref()),
+      // Some(&image.to_rgba().to_vec()),
     )
   {
     println!("Failed to load image. Error code {}.", err.as_f64()?)

@@ -46,10 +46,7 @@ module.exports = (_, argv) => {
           hash: JSON.stringify(hash)
         }
       }),
-      new WasmPackPlugin({
-        crateDirectory: __dirname
-        // extraArgs: '--log-level warn'
-      })
+      new WasmPackPlugin({crateDirectory: __dirname, args: '--log-level warn'})
     ],
     performance: {maxAssetSize: 512 * 1024, maxEntrypointSize: 512 * 1024}
   }
