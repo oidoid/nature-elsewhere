@@ -4,6 +4,8 @@ use crate::math::wh::WH16;
 use crate::math::xy::{XY, XY16};
 use crate::utils::Millis;
 
+static LONG_DURATION: Millis = 500.;
+
 #[derive(Clone, Debug)]
 pub struct Input {
   /// True if input is on.
@@ -23,7 +25,7 @@ impl Input {
   }
 
   pub fn active_long(&self) -> bool {
-    self.active && self.timer > 500.
+    self.active && self.timer > LONG_DURATION
   }
 
   pub fn inactive_triggered(&self) -> bool {

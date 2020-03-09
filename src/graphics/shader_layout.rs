@@ -8,20 +8,20 @@ use std::collections::HashMap;
 pub struct ShaderLayout {
   // used to avoid constants elsewhree. maybe th econfig can just be an array of strings though?
   pub uniforms: HashMap<String, String>,
-  pub per_vert: AttrBuffer,
-  pub per_instance: AttrBuffer,
+  pub per_vertex: AttributeBuffer,
+  pub per_instance: AttributeBuffer,
 }
 
 #[derive(Clone, Debug)]
-pub struct AttrBuffer {
+pub struct AttributeBuffer {
   pub len: i32,
   pub stride: i32,
   pub divisor: u32,
-  pub attrs: Vec<Attr>,
+  pub attributes: Vec<Attribute>,
 }
 
 #[derive(Clone, Debug)]
-pub struct Attr {
+pub struct Attribute {
   pub data_type: GlDataType,
   pub name: String,
   pub len: i32,
@@ -31,12 +31,12 @@ pub struct Attr {
 #[derive(Clone, Debug, Deserialize)]
 pub struct ShaderLayoutConfig {
   pub uniforms: HashMap<String, String>,
-  pub per_vert: Vec<AttrConfig>,
-  pub per_instance: Vec<AttrConfig>,
+  pub per_vertex: Vec<AttributeConfig>,
+  pub per_instance: Vec<AttributeConfig>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct AttrConfig {
+pub struct AttributeConfig {
   pub data_type: GlDataType,
   pub name: String,
   pub len: i32,
@@ -48,48 +48,54 @@ impl ShaderLayout {
       .expect("ShaderLayoutConfig JSON parsing failed.");
     Self {
       uniforms: config.uniforms,
-      per_vert: parse_attrs(0, &config.per_vert),
-      per_instance: parse_attrs(1, &config.per_instance),
+      per_vertex: parse_attributes(0, &config.per_vertex),
+      per_instance: parse_attributes(1, &config.per_instance),
     }
   }
 }
 
-fn parse_attrs(divisor: u32, configs: &Vec<AttrConfig>) -> AttrBuffer {
-  let attrs = configs.iter().fold(vec![], fold_attr);
-  let max_data_type_size = attrs
+fn parse_attributes(
+  divisor: u32,
+  configs: &Vec<AttributeConfig>,
+) -> AttributeBuffer {
+  let attributes = configs.iter().fold(vec![], fold_attribute);
+  let max_data_type_size = attributes
     .iter()
-    .map(|Attr { data_type, .. }| data_type.size())
+    .map(|Attribute { data_type, .. }| data_type.size())
     .fold(0, |max, val| max.max(val));
-  let size = if attrs.is_empty() {
+  let size = if attributes.is_empty() {
     0
   } else {
-    next_attr_offset(attrs[attrs.len() - 1].clone())
+    next_attribute_offset(attributes[attributes.len() - 1].clone())
   };
-  AttrBuffer {
-    len: attrs.iter().fold(0, |sum, Attr { len, .. }| sum + len),
+  AttributeBuffer {
+    len: attributes.iter().fold(0, |sum, Attribute { len, .. }| sum + len),
     stride: max_data_type_size.ceil_multiple(size),
     divisor,
-    attrs,
+    attributes,
   }
 }
 
-fn fold_attr(mut layouts: Vec<Attr>, attr: &AttrConfig) -> Vec<Attr> {
+fn fold_attribute(
+  mut layouts: Vec<Attribute>,
+  attribute: &AttributeConfig,
+) -> Vec<Attribute> {
   let offset = if layouts.is_empty() {
     0
   } else {
-    next_attr_offset(layouts[layouts.len() - 1].clone())
+    next_attribute_offset(layouts[layouts.len() - 1].clone())
   };
-  layouts.push(Attr {
-    data_type: attr.data_type,
-    name: attr.name.clone(),
-    len: attr.len,
+  layouts.push(Attribute {
+    data_type: attribute.data_type,
+    name: attribute.name.clone(),
+    len: attribute.len,
     offset,
   });
   layouts
 }
 
-fn next_attr_offset(attr: Attr) -> i32 {
-  attr.offset + attr.data_type.size() * attr.len
+fn next_attribute_offset(attribute: Attribute) -> i32 {
+  attribute.offset + attribute.data_type.size() * attribute.len
 }
 
 #[cfg(test)]
@@ -101,7 +107,7 @@ mod test {
     let config = include_str!("shader_layout.json");
     let layout = ShaderLayout::parse(config);
     assert_ne!(layout.uniforms.len(), 0);
-    assert_ne!(layout.per_vert.len, 0);
+    assert_ne!(layout.per_vertex.len, 0);
     assert_ne!(layout.per_instance.len, 0);
   }
 }

@@ -5,7 +5,7 @@
     "projection": "projection",
     "time": "time"
   },
-  "per_vert": [{"name": "uv", "data_type": "Short", "len": 2}],
+  "per_vertex": [{"name": "uv", "data_type": "Short", "len": 2}],
   "per_instance": [
     {"name": "source", "data_type": "Short", "len": 4},
     {"name": "constituent", "data_type": "Short", "len": 4},

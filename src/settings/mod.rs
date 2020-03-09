@@ -3,12 +3,14 @@ pub struct Settings {
   pub window_mode: WindowMode,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub enum ZoomMultiplier {
   Max,
   Half,
   Min,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub enum WindowMode {
   Fullscreen,
   Window,

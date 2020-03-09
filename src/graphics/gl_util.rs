@@ -1,4 +1,4 @@
-use super::shader_layout::Attr;
+use super::shader_layout::Attribute;
 use image::{DynamicImage, GenericImageView};
 use num::traits::cast::FromPrimitive;
 use num::traits::cast::ToPrimitive;
@@ -31,7 +31,7 @@ pub fn init_attr(
   divisor: u32,
   buffer: Option<&GlBuffer>,
   location: u32,
-  &Attr { data_type, len, offset, .. }: &Attr,
+  &Attribute { data_type, len, offset, .. }: &Attribute,
 ) {
   gl.enable_vertex_attrib_array(location);
   gl.bind_buffer(Gl::ARRAY_BUFFER, buffer);

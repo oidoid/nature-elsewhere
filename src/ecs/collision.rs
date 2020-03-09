@@ -6,6 +6,7 @@ use specs::Component;
 /// both deep and harm (drowning) collision types. This pond may not need to
 /// check for collision with other entities but the backpacker and bunny should
 /// probably check for collision with it.
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub enum CollidesWith {
   /// Collision detection with the owner is possible but collisions have no
   /// default effect on the owner or initiator.

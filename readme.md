@@ -2,6 +2,7 @@
 
 config
 utils
+len
 
 revisit other abbreviations. maybe rust-like but hard to follow
 
@@ -12,6 +13,8 @@ cargo install wasm-pack
 # Useful derivations for enums
 
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+
+I tend not to use the expect since it's so verbose.
 
 Roadmap
 

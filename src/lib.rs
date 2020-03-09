@@ -23,6 +23,7 @@ mod wasm;
 
 use assets::Assets;
 use game::Game;
+use wasm::util::expect_document;
 use wasm_bindgen::{prelude::wasm_bindgen, JsCast};
 use web_sys::{Document, HtmlCanvasElement, Window};
 
@@ -40,10 +41,6 @@ pub fn main_wasm() {
 
 fn expect_window() -> Window {
   web_sys::window().expect("Missing Window.")
-}
-
-fn expect_document(win: &Window) -> Document {
-  win.document().expect("Missing Document.")
 }
 
 fn expect_canvas(document: &Document) -> HtmlCanvasElement {

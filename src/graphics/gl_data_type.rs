@@ -2,7 +2,7 @@ use web_sys::WebGlRenderingContext as Gl;
 
 /// An enumeration of WebGL primitives.
 #[repr(u32)]
-#[derive(Clone, Copy, Debug, Deserialize)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub enum GlDataType {
   Byte = Gl::BYTE,
   UnsignedByte = Gl::UNSIGNED_BYTE,

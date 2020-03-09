@@ -29,9 +29,9 @@ impl RendererStateMachine {
   pub fn new(win: Window, canvas: HtmlCanvasElement, assets: Assets) -> Self {
     let renderer = Rc::new(RefCell::new(Renderer::new(
       &assets.shader_layout,
-      &assets.vert_glsl,
-      &assets.frag_glsl,
-      &assets.atlas_img,
+      &assets.vertex_glsl,
+      &assets.fragment_glsl,
+      &assets.atlas_image,
       canvas.clone(),
     )));
     Self {
@@ -67,7 +67,7 @@ impl RendererStateMachine {
       return;
     }
     // This isn't great but go ahead and one run loop regardless of focus so
-    // that the game appears ready. Theoretically, a zero time should meean
+    // that the game appears ready. Theoretically, a zero time should mean
     // nothing changes but not everything is fully loop independent like input
     // sampling.
     let now = *self.now.borrow();
@@ -93,9 +93,9 @@ impl RendererStateMachine {
       let assets: &Assets = std::borrow::Borrow::borrow(&self.assets);
       *self.renderer.borrow_mut() = Renderer::new(
         &assets.shader_layout,
-        &assets.vert_glsl,
-        &assets.frag_glsl,
-        &assets.atlas_img,
+        &assets.vertex_glsl,
+        &assets.fragment_glsl,
+        &assets.atlas_image,
         self.canvas.clone(),
       );
       self.resume();

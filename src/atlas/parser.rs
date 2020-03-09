@@ -7,7 +7,6 @@ use crate::{
   utils::Millis,
 };
 use failure::Error;
-use std::collections::HashMap;
 use std::convert::From;
 use std::{convert::TryInto, f32};
 
@@ -30,19 +29,19 @@ pub fn parse_animation_lookup(
   aseprite::File { meta, frames }: &aseprite::File,
 ) -> Result<AnimationLookup, Error> {
   let aseprite::Meta { frame_tags, slices, .. } = meta;
-  let mut record = HashMap::new();
+  let mut animations = AnimationLookup::new();
   for frame_tag in frame_tags {
     // Every tag should be unique within the sheet.
-    if record.contains_key(&frame_tag.name) {
+    if animations.contains_key(&frame_tag.name) {
       let msg = format!("Duplicate tag {}.", frame_tag.name);
       return Err(failure::err_msg(msg));
     }
-    record.insert(
+    animations.insert(
       frame_tag.name.clone(),
       parse_animation(frame_tag, frames, slices)?,
     );
   }
-  Ok(record)
+  Ok(animations)
 }
 
 pub fn parse_animation(
@@ -177,6 +176,7 @@ pub fn parse_slices(
 #[cfg(test)]
 mod test {
   use super::*;
+  use std::collections::HashMap;
 
   #[test]
   fn parse_animation_lookup() {

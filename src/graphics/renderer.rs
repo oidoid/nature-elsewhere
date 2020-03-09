@@ -17,12 +17,12 @@ use web_sys::{
 pub struct Renderer {
   canvas: HtmlCanvasElement,
   gl: Gl,
-  instanced_arrs: AngleInstancedArrays,
-  vert_arr_obj: OesVertexArrayObject,
+  instanced_arrays: AngleInstancedArrays,
+  vertex_array_object: OesVertexArrayObject,
   layout: ShaderLayout,
   uniforms: HashMap<String, GlUniformLocation>,
-  attrs: HashMap<String, u32>,
-  projection: [f32; 16],
+  attributes: HashMap<String, u32>,
+  projection: [f32; 4 * 4],
   per_instance_buffer: Option<GlBuffer>,
   lose_context: GlLoseContext,
 }
@@ -32,8 +32,8 @@ static UV: [i16; 8] = [1, 1, 0, 1, 1, 0, 0, 0];
 impl Renderer {
   pub fn new(
     layout: &ShaderLayout,
-    vert_glsl: &str,
-    frag_glsl: &str,
+    vertex_glsl: &str,
+    fragment_glsl: &str,
     atlas: &DynamicImage,
     canvas: HtmlCanvasElement,
   ) -> Self {
@@ -48,13 +48,13 @@ impl Renderer {
     )
     .expect("WebGL context unavailable.");
 
-    let instanced_arrs: AngleInstancedArrays = gl
+    let instanced_arrays: AngleInstancedArrays = gl
       .get_extension("ANGLE_instanced_arrays")
       .expect("WebGL extensions unavailable.")
       .expect("WebGL ANGLE_instanced_arrays unavailable.")
       .unchecked_into();
 
-    let vert_arr_obj: OesVertexArrayObject = gl
+    let vertex_array_object: OesVertexArrayObject = gl
       .get_extension("OES_vertex_array_object")
       .expect("WebGL extensions unavailable.")
       .expect("WebGL OES_vertex_array_object unavailable.")
@@ -78,7 +78,7 @@ impl Renderer {
     // Disable image colorspace conversions. The default is browser dependent.
     gl.pixel_storei(Gl::UNPACK_COLORSPACE_CONVERSION_WEBGL, 0);
 
-    let program = gl_util::load_program(&gl, vert_glsl, frag_glsl)
+    let program = gl_util::load_program(&gl, vertex_glsl, fragment_glsl)
       .expect("WebGL shaders unable to load.");
     let uniforms = gl_util::uniform_locations(&gl, &program)
       .expect("WebGL uniforms unavailable.");
@@ -98,21 +98,21 @@ impl Renderer {
       atlas.height().to_i32().expect("Atlas height u32 to i32 failed."),
     );
 
-    let attrs = gl_util::attr_locations(&gl, &program)
+    let attributes = gl_util::attr_locations(&gl, &program)
       .expect("WebGL attributes unavailable.");
 
-    let vert_arr = vert_arr_obj.create_vertex_array_oes();
-    vert_arr_obj.bind_vertex_array_oes(vert_arr.as_ref());
+    let vertex_array = vertex_array_object.create_vertex_array_oes();
+    vertex_array_object.bind_vertex_array_oes(vertex_array.as_ref());
 
-    let per_vert_buffer = gl.create_buffer();
-    for attr in layout.per_vert.attrs.iter() {
+    let per_vertex_buffer = gl.create_buffer();
+    for attr in layout.per_vertex.attributes.iter() {
       gl_util::init_attr(
         &gl,
-        &instanced_arrs,
-        layout.per_vert.stride,
-        layout.per_vert.divisor,
-        per_vert_buffer.as_ref(),
-        *attrs
+        &instanced_arrays,
+        layout.per_vertex.stride,
+        layout.per_vertex.divisor,
+        per_vertex_buffer.as_ref(),
+        *attributes
           .get(&attr.name)
           .expect(&format!("Missing attribute \"{}\".", attr.name)),
         &attr,
@@ -124,24 +124,24 @@ impl Renderer {
       bincode::config().native_endian().serialize(&UV).unwrap();
     gl_util::buffer_data(
       &gl,
-      per_vert_buffer.as_ref(),
+      per_vertex_buffer.as_ref(),
       // &uv.try_into().expect("UV [i16] to [u8] conversion failed."),
       &bytes,
       Gl::STATIC_DRAW,
     );
 
     let per_instance_buffer = gl.create_buffer();
-    for attr in layout.per_instance.attrs.iter() {
+    for attribute in layout.per_instance.attributes.iter() {
       gl_util::init_attr(
         &gl,
-        &instanced_arrs,
+        &instanced_arrays,
         layout.per_instance.stride,
         layout.per_instance.divisor,
         per_instance_buffer.as_ref(),
-        *attrs
-          .get(&attr.name)
-          .expect(&format!("Missing attribute \"{}\".", attr.name)),
-        &attr,
+        *attributes
+          .get(&attribute.name)
+          .expect(&format!("Missing attribute \"{}\".", attribute.name)),
+        &attribute,
       );
     }
 
@@ -156,11 +156,11 @@ impl Renderer {
     Self {
       canvas,
       gl,
-      instanced_arrs,
-      vert_arr_obj,
+      instanced_arrays,
+      vertex_array_object,
       layout: layout.clone(),
       uniforms,
-      attrs,
+      attributes,
       projection: [0.; 16],
       per_instance_buffer,
       lose_context,
@@ -207,7 +207,7 @@ impl Renderer {
     let len =
       dat.len().to_i32().expect("Data length usize to i32 conversion failed.")
         / self.layout.per_instance.stride;
-    self.instanced_arrs.draw_arrays_instanced_angle(
+    self.instanced_arrays.draw_arrays_instanced_angle(
       Gl::TRIANGLE_STRIP,
       0,
       (UV.len() / 2) // dimensions

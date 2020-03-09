@@ -4,7 +4,7 @@
 /// mechanism but the lowest possible Layer may be used where necessary. Layer
 /// is like a z-coordinate.
 #[repr(u8)]
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub enum SpriteLayer {
   /// Terrain.
   Plane,

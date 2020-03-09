@@ -28,6 +28,9 @@ pub struct Animator<'a> {
 impl<'a> Animator<'a> {
   pub fn new(animation: &'a Animation) -> Option<Self> {
     if animation.cels.len() < 2 {
+      // A zero-length animation would require special-casing elsewhere. Handle
+      // it here only instead. Also, since an animation with only one cell
+      // cannot change frames, do not provide an Animator for it either.
       return None;
     }
     Some(Animator { animation, period: 0, exposure: 0. })
