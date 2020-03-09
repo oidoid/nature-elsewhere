@@ -1,5 +1,5 @@
 use super::aseprite;
-use super::atlas::{Animation, AnimationLookup, Atlas, Cel, Playback};
+use super::{Animation, AnimationLookup, Atlas, Cel, Playback};
 use crate::{
   math::rect::R16,
   math::wh::{WH, WH16},

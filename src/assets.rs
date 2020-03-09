@@ -1,5 +1,5 @@
 use super::atlas;
-use super::atlas::atlas::Atlas;
+use super::atlas::Atlas;
 use super::graphics::shader_layout::ShaderLayout;
 use image::DynamicImage;
 

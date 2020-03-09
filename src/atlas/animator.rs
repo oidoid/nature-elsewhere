@@ -1,4 +1,4 @@
-use super::atlas::{Animation, Cel, Playback};
+use super::{Animation, Cel, Playback};
 use crate::{math::wrap::wrap, utils::Millis};
 use std::convert::TryInto;
 

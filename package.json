@@ -20,7 +20,6 @@
     "start": "webpack-dev-server",
     "test": "npm -s run test:format:rust && npm -s run test:lint:rust && npm -s run test:rust && npm -s run doc:rust && npm -s run test:format:web && npm -s run build",
     "build": "webpack -p",
-    "thing": "aseprite -b \"$@\" --filename-format '{tag} {frame}' --list-tags --list-slices --sheet-pack",
     "doc:rust": "cargo -q --locked doc",
     "test:rust": "cargo -q --locked t",
     "test:lint:rust": "cargo -q --locked clippy",
@@ -29,7 +28,7 @@
     "formatter:web": "prettier './**/*.{css,js,json,html,md}'",
     "test:format:rust": "npm -s run format:rust -- -- --check -l",
     "format:rust": "cargo -q --locked fmt",
-    "build:atlas": "aseprite-atlas-pack --sheet src/atlas/atlas.png --data src/atlas/atlas.json assets/atlas/*.aseprite",
+    "build:atlas": "aseprite -b --filename-format '{tag} {frame}' --list-tags --list-slices --sheet-pack --sheet src/atlas/atlas.png --data src/atlas/atlas.json assets/atlas/*.aseprite",
     "palettize": "cd assets/atlas && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {

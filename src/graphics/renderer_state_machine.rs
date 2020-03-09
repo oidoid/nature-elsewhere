@@ -102,7 +102,7 @@ impl RendererStateMachine {
     } else if ev.type_() == "focus" {
       self.resume();
     } else {
-      self.pause()
+      self.pause();
     }
     ev.prevent_default();
   }

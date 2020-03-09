@@ -27,8 +27,7 @@ pub struct Renderer {
   lose_context: GlLoseContext,
 }
 
-// static little_endian: bool = 1u16.to_ne_bytes()[0] == 0;
-static uv: [i16; 8] = [1, 1, 0, 1, 1, 0, 0, 0];
+static UV: [i16; 8] = [1, 1, 0, 1, 1, 0, 0, 0];
 
 impl Renderer {
   pub fn new(
@@ -122,7 +121,7 @@ impl Renderer {
     // let bytes = [u8; uv.len() * 2];
     // let bytes = uv.into_iter().fold(|val| val.to_ne_bytes(), bytes);
     let bytes: Vec<u8> =
-      bincode::config().native_endian().serialize(&uv).unwrap();
+      bincode::config().native_endian().serialize(&UV).unwrap();
     gl_util::buffer_data(
       &gl,
       per_vert_buffer.as_ref(),
@@ -211,7 +210,7 @@ impl Renderer {
     self.instanced_arrs.draw_arrays_instanced_angle(
       Gl::TRIANGLE_STRIP,
       0,
-      (uv.len() / 2) // dimensions
+      (UV.len() / 2) // dimensions
         .to_i32()
         .expect("uv length usize to i32 conversion failed."),
       len,
