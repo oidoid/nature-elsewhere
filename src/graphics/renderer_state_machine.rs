@@ -8,6 +8,7 @@ use crate::math::xy::XY16;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
+use crate::wasm::util::expect_document;
 use num::traits::cast::ToPrimitive;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -15,8 +16,8 @@ use web_sys::{console, Document, Event, HtmlCanvasElement, Window};
 
 #[derive(Clone)]
 pub struct RendererStateMachine {
-  win: Window,
-  doc: Document,
+  window: Window,
+  document: Document,
   canvas: HtmlCanvasElement,
   assets: Rc<Assets>,
   renderer: Rc<RefCell<Renderer>>,
@@ -26,7 +27,11 @@ pub struct RendererStateMachine {
 }
 
 impl RendererStateMachine {
-  pub fn new(win: Window, canvas: HtmlCanvasElement, assets: Assets) -> Self {
+  pub fn new(
+    window: Window,
+    canvas: HtmlCanvasElement,
+    assets: Assets,
+  ) -> Self {
     let renderer = Rc::new(RefCell::new(Renderer::new(
       &assets.shader_layout,
       &assets.vertex_glsl,
@@ -35,12 +40,12 @@ impl RendererStateMachine {
       canvas.clone(),
     )));
     Self {
-      doc: win.document().expect("Document missing."),
-      win: win.clone(),
+      window: window.clone(),
+      document: expect_document(&window),
       assets: Rc::new(assets),
       canvas,
       renderer,
-      looper: WindowAnimationFrameLooper::new(win),
+      looper: WindowAnimationFrameLooper::new(window),
       listeners: Rc::new(RefCell::new(Vec::new())),
       now: Rc::new(RefCell::new(0.)),
     }
@@ -81,15 +86,15 @@ impl RendererStateMachine {
   }
 
   fn is_focused(&self) -> bool {
-    self.doc.has_focus().unwrap_or(false)
+    self.document.has_focus().unwrap_or(false)
   }
 
   fn pause(&mut self) {
     self.looper.stop();
   }
 
-  fn on_event(&mut self, ev: Event) {
-    if ev.type_() == "webglcontextrestored" {
+  fn on_event(&mut self, event: Event) {
+    if event.type_() == "webglcontextrestored" {
       let assets: &Assets = std::borrow::Borrow::borrow(&self.assets);
       *self.renderer.borrow_mut() = Renderer::new(
         &assets.shader_layout,
@@ -99,19 +104,19 @@ impl RendererStateMachine {
         self.canvas.clone(),
       );
       self.resume();
-    } else if ev.type_() == "focus" {
+    } else if event.type_() == "focus" {
       self.resume();
     } else {
       self.pause();
     }
-    ev.prevent_default();
+    event.prevent_default();
   }
 
   fn on_loop(&mut self, then: f64, now: f64) {
     *self.now.borrow_mut() = now;
     let elapsed = (now - then).to_f32().unwrap_or(0.);
     console::log_3(&then.into(), &now.into(), &elapsed.into());
-    let canvas_wh = viewport::canvas_wh(&self.doc);
+    let canvas_wh = viewport::canvas_wh(&self.document);
     let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
     let cam_wh = viewport::cam_wh(&canvas_wh, scale);
     let bytes = Sprite::new(
@@ -154,18 +159,18 @@ impl RendererStateMachine {
   fn add_win_on_event_listener(rc: &Rc<RefCell<Self>>, event: &'static str) {
     let rc1 = rc.clone();
     rc.borrow().listeners.borrow_mut().push(
-      rc.borrow()
-        .win
-        .add_event_listener(event, move |ev| rc1.borrow_mut().on_event(ev)),
+      rc.borrow().window.add_event_listener(event, move |event| {
+        rc1.borrow_mut().on_event(event)
+      }),
     );
   }
 
   fn add_canvas_on_event_listener(rc: &Rc<RefCell<Self>>, event: &'static str) {
     let rc1 = rc.clone();
     rc.borrow().listeners.borrow_mut().push(
-      rc.borrow()
-        .canvas
-        .add_event_listener(event, move |ev| rc1.borrow_mut().on_event(ev)),
+      rc.borrow().canvas.add_event_listener(event, move |event| {
+        rc1.borrow_mut().on_event(event)
+      }),
     );
   }
 }

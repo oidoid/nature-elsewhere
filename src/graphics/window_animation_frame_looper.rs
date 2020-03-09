@@ -6,9 +6,9 @@ use web_sys::Window;
 
 /// Wraps a repeating Window.request_animation_frame() request. Clone is
 /// provided to enable references across closures.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct WindowAnimationFrameLooper {
-  win: Window,
+  window: Window,
 
   /// A mutable reference to a frame request ID. Some when an outstanding frame
   /// is requested, None when stopped. When AnimLooper is cloned, the underlying
@@ -17,8 +17,8 @@ pub struct WindowAnimationFrameLooper {
 }
 
 impl WindowAnimationFrameLooper {
-  pub fn new(win: Window) -> Self {
-    Self { win, frame_id: Rc::new(RefCell::new(None)) }
+  pub fn new(window: Window) -> Self {
+    Self { window, frame_id: Rc::new(RefCell::new(None)) }
   }
 
   pub fn start<T>(&self, mut on_loop: T)
@@ -62,7 +62,7 @@ impl WindowAnimationFrameLooper {
 
   pub fn stop(&mut self) {
     if let Some(frame_id) = *(*self.frame_id).borrow() {
-      self.win.cancel_animation_frame(frame_id).unwrap_or(());
+      self.window.cancel_animation_frame(frame_id).unwrap_or(());
     } // Else already stopped.
     *(*self.frame_id).borrow_mut() = None;
   }
@@ -71,7 +71,7 @@ impl WindowAnimationFrameLooper {
     &self,
     closure: &Rc<RefCell<Option<Closure<dyn FnMut(f64)>>>>,
   ) -> Result<i32, wasm_bindgen::JsValue> {
-    self.win.request_animation_frame(
+    self.window.request_animation_frame(
       closure
         .borrow()
         .as_ref()
