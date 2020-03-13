@@ -8,7 +8,7 @@ use crate::{
 };
 use failure::Error;
 use std::convert::From;
-use std::{convert::TryInto, f32};
+use std::{convert::TryInto, f64};
 
 pub fn parse(json: &str) -> Result<Atlas, Error> {
   parse_file(&serde_json::from_str(json)?)
@@ -149,8 +149,8 @@ pub fn parse_padding(
 pub fn parse_duration(duration: aseprite::Duration) -> Result<Millis, Error> {
   match duration {
     0 => Err(failure::err_msg("Duration is zero.")),
-    aseprite::INFINITE => Ok(f32::INFINITY),
-    _ => Ok(f32::from(duration)),
+    aseprite::INFINITE => Ok(f64::INFINITY),
+    _ => Ok(Millis::from(duration)),
   }
 }
 
@@ -293,13 +293,13 @@ mod test {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
           xy: XY { x: 91, y: 55 },
-          duration: f32::INFINITY,
+          duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 11 },
             to: XY { x: 10, y: 15 },
           }],
         }],
-        duration: f32::INFINITY,
+        duration: f64::INFINITY,
         direction: Playback::Forward,
       },
     );
@@ -309,13 +309,13 @@ mod test {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
           xy: XY { x: 73, y: 55 },
-          duration: f32::INFINITY,
+          duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 10 },
             to: XY { x: 10, y: 15 },
           }],
         }],
-        duration: f32::INFINITY,
+        duration: f64::INFINITY,
         direction: Playback::Forward,
       },
     );
@@ -325,13 +325,13 @@ mod test {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
           xy: XY { x: 55, y: 55 },
-          duration: f32::INFINITY,
+          duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 9 },
             to: XY { x: 10, y: 15 },
           }],
         }],
-        duration: f32::INFINITY,
+        duration: f64::INFINITY,
         direction: Playback::Forward,
       },
     );
@@ -412,25 +412,27 @@ mod test {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
           xy: XY { x: 185, y: 37 },
-          duration: f32::INFINITY,
+          duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 4, y: 11 },
             to: XY { x: 13, y: 15 }
           }]
         }],
-        duration: f32::INFINITY,
+        duration: f64::INFINITY,
         direction: Playback::Forward
       }
     );
   }
 
   #[test]
-  fn parse_direction_valid() {
+  fn parse_playback_valid() {
     assert_eq!(Playback::parse("forward").unwrap(), Playback::Forward);
+    assert_eq!(Playback::parse("reverse").unwrap(), Playback::Reverse);
+    assert_eq!(Playback::parse("pingpong").unwrap(), Playback::PingPong);
   }
 
   #[test]
-  fn parse_direction_invalid() {
+  fn parse_playback_invalid() {
     assert_eq!(Playback::parse("invalid").is_err(), true);
   }
 
@@ -462,7 +464,7 @@ mod test {
       super::parse_cel(&frame_tag, &frame, 0, &slices).unwrap(),
       Cel {
         xy: XY { x: 131, y: 19 },
-        duration: f32::INFINITY,
+        duration: f64::INFINITY,
         slices: vec![R16 { from: XY { x: 4, y: 4 }, to: XY { x: 12, y: 16 } }]
       }
     );
@@ -553,7 +555,7 @@ mod test {
 
   #[test]
   fn parse_duration_infinite() {
-    assert_eq!(parse_duration(65535).unwrap(), f32::INFINITY)
+    assert_eq!(parse_duration(65535).unwrap(), f64::INFINITY)
   }
 
   #[test]

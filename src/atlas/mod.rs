@@ -1,12 +1,12 @@
+pub mod animator;
+pub mod aseprite;
+pub mod parser;
+
 use crate::{
   math::{rect::R16, wh::WH16, xy::XY16},
   utils::Millis,
 };
 use std::collections::HashMap;
-
-pub mod animator;
-pub mod aseprite;
-pub mod parser;
 
 #[derive(Debug)]
 pub struct Atlas {
@@ -65,7 +65,7 @@ pub struct Cel {
   /// Location within the source atlas image in integral pixels from the
   /// top-left.
   pub xy: XY16,
-  /// Positive cel exposure in integral milliseconds, None if infinite.
+  /// Positive cel exposure, possibly infinite.
   pub duration: Millis,
   /// Slices within the cel in local pixels.
   pub slices: Vec<R16>,

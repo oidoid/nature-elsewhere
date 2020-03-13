@@ -34,7 +34,7 @@ num = '=0.2.1'
 serde = {version = '=1.0.104', features = ['derive']}
 serde_json = '=1.0.48'
 serde_repr = '=0.1.5'
-specs = {version = '=0.16.1', features = ['serde', 'specs-derive']}
+specs = {version = '=0.16.1', default-features = false, features = ['serde', 'specs-derive']}
 wasm-bindgen = '=0.2.59'
 web-sys = {version = '=0.3.36', features = [
   'AddEventListenerOptions', 'AngleInstancedArrays', 'console', 'Document',

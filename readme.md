@@ -29,7 +29,7 @@ Roadmap
 # nature elsewhere
 
 An isometric adventure in an idealized state of nature. Play at
-[ne.netlify.com](https://ne.netlify.com/).
+[ne.netlify.com](https://natureelsewhere.com).
 
 ## Table of Contents
 

@@ -119,15 +119,53 @@ impl RendererStateMachine {
     let canvas_wh = viewport::canvas_wh(&self.document);
     let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
     let cam_wh = viewport::cam_wh(&canvas_wh, scale);
-    let bytes = Sprite::new(
-      R16::cast_wh(80, 150, 11, 13),
-      R16::cast_wh(80, 150, 11, 13),
-      SpriteComposition::Source,
-      R16::cast_wh(32, 32, 11, 13),
-      XY16 { x: 1, y: 1 },
-      XY16 { x: 0, y: 0 },
-      XY16 { x: 0, y: 0 },
-    );
+    let bytes = [
+      Sprite::new(
+        R16::cast_wh(80, 150, 11, 13),
+        R16::cast_wh(80, 150, 11, 13),
+        SpriteComposition::Source,
+        R16::cast_wh(32, 32, 11, 13),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: 0, y: 0 },
+        XY16 { x: 1, y: 1 },
+      ),
+      Sprite::new(
+        R16::cast_wh(80, 240, 16, 16),
+        R16::cast_wh(80, 240, 16, 16),
+        SpriteComposition::Source,
+        R16::cast_wh(32, 32, 160, 160),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: 0, y: 0 },
+        XY16 { x: 0, y: 0 },
+      ),
+      // Sprite::new(
+      //   R16::cast_wh(64, 240, 16, 16),
+      //   R16::cast_wh(64, 240, 16, 16),
+      //   SpriteComposition::SourceIn,
+      //   R16::cast_wh(32, 32, 60, 60),
+      //   XY16 { x: 1, y: 1 },
+      //   XY16 { x: 0, y: 0 },
+      //   XY16 { x: -64, y: -48 },
+      // ),
+      Sprite::new(
+        R16::cast_wh(48, 240, 32, 16),
+        R16::cast_wh(16, 240, 32, 16),
+        SpriteComposition::SourceIn,
+        R16::cast_wh(48, 48, 32, 16),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: 0, y: 0 },
+        XY16 { x: -64, y: 32 },
+      ),
+      Sprite::new(
+        R16::cast_wh(48, 240, 24, 16),
+        R16::cast_wh(16, 240, 24, 16),
+        SpriteComposition::SourceIn,
+        R16::cast_wh(55, 40, 24, 16),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: -64, y: 32 },
+        XY16 { x: -64, y: 32 },
+      ),
+    ];
     let bytes = bincode::config().native_endian().serialize(&bytes).unwrap();
 
     self.renderer.borrow_mut().render(

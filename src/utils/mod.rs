@@ -5,8 +5,7 @@ pub mod assert;
 pub mod array_util;
 pub mod fn_util;
 
-/// Although Aseprite milliseconds are a u16, actual time is fractional.
-pub type Millis = f32;
+pub type Millis = f64;
 
 pub fn rc<T>(value: T) -> Rc<T> {
   Rc::new(value)

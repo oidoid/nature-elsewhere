@@ -3,19 +3,24 @@ use super::ecs::bounds::Bounds;
 use super::ecs::entity_operator::EntityOperator;
 use super::graphics::renderer_state_machine::RendererStateMachine;
 use crate::inputs::input_poller::InputPoller;
-use specs::{Builder, ReadStorage, RunNow, System, World, WorldExt};
+use specs::DispatcherBuilder;
+use specs::Join;
+use specs::{Builder, Read, ReadStorage, RunNow, System, World, WorldExt};
 use web_sys::{console, HtmlCanvasElement, Window};
 
-struct HelloWorld;
+#[derive(Default)]
+struct DurationResource(f64);
 
-impl<'a> System<'a> for HelloWorld {
-  type SystemData = ReadStorage<'a, Bounds>;
+struct RenderSystem;
 
-  fn run(&mut self, boundses: Self::SystemData) {
-    use specs::Join;
+impl<'a> System<'a> for RenderSystem {
+  type SystemData = (Read<'a, DurationResource>, ReadStorage<'a, Bounds>);
 
-    for bounds in boundses.join() {
-      console::log_1(&format!("Hello {:?}", &bounds).into());
+  fn run(&mut self, data: Self::SystemData) {
+    let (duration, bounds) = data;
+    let duration = duration.0;
+    for (bounds) in (&bounds).join() {
+      console::log_1(&format!("Hello {:?} {}", &bounds, duration).into());
     }
   }
 }
@@ -36,8 +41,14 @@ impl Game {
     world.create_entity().with(Bounds::new(1, 2, 3, 4)).build();
     world.create_entity().with(EntityOperator::Player).build();
     world.create_entity().with(Bounds::new(5, 6, 7, 8)).build();
-    let mut hello_world = HelloWorld;
-    hello_world.run_now(&world);
+    world.insert(DurationResource(0.));
+    {
+      let mut delta = world.write_resource::<DurationResource>();
+      *delta = DurationResource(16.67);
+    }
+    let mut dispatcher =
+      DispatcherBuilder::new().with(RenderSystem, "render_system", &[]).build();
+    dispatcher.dispatch(&mut world);
     world.maintain();
     let renderer_state_machine =
       RendererStateMachine::new(win.clone(), canvas.clone(), assets);

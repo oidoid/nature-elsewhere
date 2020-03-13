@@ -94,7 +94,7 @@ impl Playback {
 mod test {
   use super::*;
   use crate::math::{wh::WH, xy::XY};
-  use std::f32;
+  use std::f64;
 
   #[test]
   fn new() {
@@ -214,11 +214,11 @@ mod test {
   #[test]
   fn animate_infinite_duration() {
     let cel =
-      Cel { xy: XY { x: 0, y: 0 }, duration: f32::INFINITY, slices: vec![] };
+      Cel { xy: XY { x: 0, y: 0 }, duration: f64::INFINITY, slices: vec![] };
     let animation = Animation {
       wh: WH { w: 0, h: 0 },
       cels: vec![cel.clone(), cel.clone()],
-      duration: f32::INFINITY,
+      duration: f64::INFINITY,
       direction: Playback::Forward,
     };
     let mut animator = Animator::new(&animation).unwrap();
