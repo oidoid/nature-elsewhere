@@ -5,7 +5,9 @@ use super::graphics::renderer_state_machine::RendererStateMachine;
 use crate::inputs::input_poller::InputPoller;
 use specs::DispatcherBuilder;
 use specs::Join;
-use specs::{Builder, Read, ReadStorage, RunNow, System, World, WorldExt};
+use specs::{
+  Builder, ReadExpect, ReadStorage, RunNow, System, World, WorldExt,
+};
 use web_sys::{console, HtmlCanvasElement, Window};
 
 #[derive(Default)]
@@ -14,7 +16,7 @@ struct DurationResource(f64);
 struct RenderSystem;
 
 impl<'a> System<'a> for RenderSystem {
-  type SystemData = (Read<'a, DurationResource>, ReadStorage<'a, Bounds>);
+  type SystemData = (ReadExpect<'a, DurationResource>, ReadStorage<'a, Bounds>);
 
   fn run(&mut self, data: Self::SystemData) {
     let (duration, bounds) = data;
