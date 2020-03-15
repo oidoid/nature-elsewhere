@@ -183,7 +183,7 @@ impl Renderer {
 
   /// canvas_wh The desired resolution of the canvas in CSS pixels. E.g.,
   ///           {w: window.innerWidth, h: window.innerHeight}.
-  /// time actual time.n ot elapsed
+  /// time elapsed game time
   /// scale Positive integer zoom.
   pub fn render(
     &mut self,

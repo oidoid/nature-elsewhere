@@ -6,6 +6,7 @@ use crate::math::wh::WH16;
 use crate::math::xy::XY16;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
+use crate::utils::Millis;
 use crate::wasm;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
 use crate::wasm::frame_looper::FrameLooper;
@@ -23,7 +24,9 @@ pub struct RendererStateMachine {
   renderer: Rc<RefCell<Renderer>>,
   looper: FrameLooper,
   listeners: Rc<RefCell<Vec<EventListener>>>,
-  now: Rc<RefCell<f64>>,
+  now: Rc<RefCell<Millis>>,
+  /// Total game time elapsed.
+  time: Rc<RefCell<Millis>>,
 }
 
 impl RendererStateMachine {
@@ -45,9 +48,10 @@ impl RendererStateMachine {
       assets: Rc::new(assets),
       canvas,
       renderer,
+      now: Rc::new(RefCell::new(wasm::expect_performance(&window).now())),
       looper: FrameLooper::new(window),
       listeners: Rc::new(RefCell::new(Vec::new())),
-      now: Rc::new(RefCell::new(0.)),
+      time: Rc::new(RefCell::new(0.)),
     }
   }
 
@@ -115,6 +119,8 @@ impl RendererStateMachine {
   fn on_loop(&mut self, then: f64, now: f64) {
     *self.now.borrow_mut() = now;
     let elapsed = (now - then).to_f32().unwrap_or(0.);
+    let time = *self.time.borrow() + now - then;
+    *self.time.borrow_mut() = time;
     console::log_3(&then.into(), &now.into(), &elapsed.into());
     let canvas_wh = viewport::canvas_wh(&self.document);
     let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
@@ -169,7 +175,7 @@ impl RendererStateMachine {
     let bytes = bincode::config().native_endian().serialize(&bytes).unwrap();
 
     self.renderer.borrow_mut().render(
-      now.to_i32().unwrap(), // https://github.com/rust-lang/rust/issues/10184
+      self.time.borrow().to_i32().unwrap(), // https://github.com/rust-lang/rust/issues/10184
       &canvas_wh,
       scale,
       &Rect::cast(0, 0, cam_wh.w, cam_wh.h),

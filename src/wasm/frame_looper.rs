@@ -27,14 +27,14 @@ impl FrameLooper {
     // Clone the reference for the closure.
     let frame_listener = self.frame_listener.clone();
     let mut then = super::expect_performance(&self.window).now();
-    let fnc = Box::new(move |now: f64| {
+    let fnc = move |now: f64| {
       on_loop(then, now);
       then = now;
 
       if frame_listener.borrow().is_issued() {
         frame_listener.borrow_mut().request();
       }
-    });
+    };
 
     *self.frame_listener.borrow_mut() =
       FrameListener::new(self.window.clone(), fnc);
