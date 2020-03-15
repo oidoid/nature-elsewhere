@@ -61,10 +61,10 @@ impl WindowAnimationFrameLooper {
   }
 
   pub fn stop(&mut self) {
-    if let Some(frame_id) = *(*self.frame_id).borrow() {
+    if let Some(frame_id) = *self.frame_id.borrow() {
       self.window.cancel_animation_frame(frame_id).unwrap_or(());
     } // Else already stopped.
-    *(*self.frame_id).borrow_mut() = None;
+    *self.frame_id.borrow_mut() = None;
   }
 
   fn req_frame(

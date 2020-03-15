@@ -2,10 +2,21 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
-use web_sys::{Document, Window};
+use web_sys::{Document, Element, Window};
 
-pub fn expect_document(win: &Window) -> Document {
-  win.document().expect("Missing Document.")
+pub fn expect_window() -> Window {
+  web_sys::window().expect("Missing Window.")
+}
+
+pub fn expect_document(window: &Window) -> Document {
+  window.document().expect("Missing Document.")
+}
+
+pub fn expect_selector(document: &Document, selector: &str) -> Element {
+  document
+    .query_selector(selector)
+    .expect("Query selector failed.")
+    .expect(&format!("Element with selector \"{}\" missing.", selector))
 }
 
 /// Wraps a repeating Window.request_animation_frame() request. Return true from

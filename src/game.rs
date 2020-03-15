@@ -28,7 +28,7 @@ impl<'a> System<'a> for RenderSystem {
 }
 
 pub struct Game {
-  win: Window,
+  window: Window,
   canvas: HtmlCanvasElement,
   world: World,
   renderer_state_machine: RendererStateMachine,
@@ -36,7 +36,11 @@ pub struct Game {
 }
 
 impl Game {
-  pub fn new(win: Window, canvas: HtmlCanvasElement, assets: Assets) -> Self {
+  pub fn new(
+    window: Window,
+    canvas: HtmlCanvasElement,
+    assets: Assets,
+  ) -> Self {
     let mut world = World::new();
     world.register::<Bounds>();
     world.register::<EntityOperator>();
@@ -53,13 +57,13 @@ impl Game {
     dispatcher.dispatch(&mut world);
     world.maintain();
     let renderer_state_machine =
-      RendererStateMachine::new(win.clone(), canvas.clone(), assets);
+      RendererStateMachine::new(window.clone(), canvas.clone(), assets);
     Game {
-      win: win.clone(),
+      window: window.clone(),
       canvas,
       world,
       renderer_state_machine,
-      input_poller: InputPoller::new(&win),
+      input_poller: InputPoller::new(&window),
     }
   }
 
