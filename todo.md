@@ -1,3 +1,6 @@
+- Update GitHub tags for Rust, WASM, 🦀.
+- Make nature elsewhere casing consistent.
+
 Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, simple, detailed, finely built game with tremendous colors and perfect clarity.
 
 - Make large, lavish, content-rich levels.

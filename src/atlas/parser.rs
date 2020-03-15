@@ -1,13 +1,12 @@
 use super::aseprite;
 use super::{Animation, AnimationLookup, Atlas, Cel, Playback};
+use crate::math::Millis;
 use crate::{
   math::rect::R16,
   math::wh::{WH, WH16},
   math::xy::{XY, XY16},
-  utils::Millis,
 };
 use failure::Error;
-use std::convert::From;
 use std::{convert::TryInto, f64};
 
 pub fn parse(json: &str) -> Result<Atlas, Error> {

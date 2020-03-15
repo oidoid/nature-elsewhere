@@ -2,10 +2,8 @@ pub mod animator;
 pub mod aseprite;
 pub mod parser;
 
-use crate::{
-  math::{rect::R16, wh::WH16, xy::XY16},
-  utils::Millis,
-};
+use crate::math::Millis;
+use crate::math::{rect::R16, wh::WH16, xy::XY16};
 use std::collections::HashMap;
 
 #[derive(Debug)]

@@ -1,5 +1,6 @@
 use super::{Animation, Cel, Playback};
-use crate::{math::wrap::wrap, utils::Millis};
+use crate::math::wrap::wrap;
+use crate::math::Millis;
 use std::convert::TryInto;
 
 /// Cel index oscillation state. This integer may fall outside of animation

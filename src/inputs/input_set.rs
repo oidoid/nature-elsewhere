@@ -1,5 +1,5 @@
 use super::input::Input;
-use crate::utils::Millis;
+use crate::math::Millis;
 
 #[derive(Clone)]
 pub struct InputSet {

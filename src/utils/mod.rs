@@ -3,8 +3,7 @@ pub mod assert;
 pub mod array_util;
 pub mod fn_util;
 
-pub type Millis = f64;
-
+#[cfg(test)]
 macro_rules! from_json {
   ($($json:tt)+) => {
     serde_json::from_value(serde_json::json!($($json)+))

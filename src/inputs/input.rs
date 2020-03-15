@@ -2,7 +2,7 @@ use crate::graphics::viewport;
 use crate::math::rect::R16;
 use crate::math::wh::WH16;
 use crate::math::xy::{XY, XY16};
-use crate::utils::Millis;
+use crate::math::Millis;
 
 static LONG_DURATION: Millis = 500.;
 
