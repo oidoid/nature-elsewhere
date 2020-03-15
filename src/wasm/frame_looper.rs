@@ -1,18 +1,17 @@
-use crate::wasm;
-use crate::wasm::frame_listener::FrameListener;
+use super::frame_listener::FrameListener;
 use std::cell::RefCell;
 use std::rc::Rc;
 use web_sys::Window;
 
 #[derive(Clone)]
-pub struct WindowAnimationFrameLooper {
+pub struct FrameLooper {
   window: Window,
   /// A mutable reference to a FrameListener. The reference is shared between
   /// the call to start() and then the looping closure.
   frame_listener: Rc<RefCell<FrameListener>>,
 }
 
-impl WindowAnimationFrameLooper {
+impl FrameLooper {
   pub fn new(window: Window) -> Self {
     Self {
       window: window.clone(),
@@ -27,7 +26,7 @@ impl WindowAnimationFrameLooper {
 
     // Clone the reference for the closure.
     let frame_listener = self.frame_listener.clone();
-    let mut then = wasm::expect_performance(&self.window).now();
+    let mut then = super::expect_performance(&self.window).now();
     let fnc = Box::new(move |now: f64| {
       on_loop(then, now);
       then = now;

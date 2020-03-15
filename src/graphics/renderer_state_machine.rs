@@ -1,6 +1,5 @@
 use super::renderer::Renderer;
 use super::viewport;
-use super::window_animation_frame_looper::WindowAnimationFrameLooper;
 use crate::assets::Assets;
 use crate::math::rect::{Rect, R16};
 use crate::math::wh::WH16;
@@ -9,6 +8,7 @@ use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
 use crate::wasm;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
+use crate::wasm::frame_looper::FrameLooper;
 use num::traits::cast::ToPrimitive;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -21,7 +21,7 @@ pub struct RendererStateMachine {
   canvas: HtmlCanvasElement,
   assets: Rc<Assets>,
   renderer: Rc<RefCell<Renderer>>,
-  looper: WindowAnimationFrameLooper,
+  looper: FrameLooper,
   listeners: Rc<RefCell<Vec<EventListener>>>,
   now: Rc<RefCell<f64>>,
 }
@@ -45,7 +45,7 @@ impl RendererStateMachine {
       assets: Rc::new(assets),
       canvas,
       renderer,
-      looper: WindowAnimationFrameLooper::new(window),
+      looper: FrameLooper::new(window),
       listeners: Rc::new(RefCell::new(Vec::new())),
       now: Rc::new(RefCell::new(0.)),
     }

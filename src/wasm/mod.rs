@@ -1,5 +1,6 @@
 pub mod event_listener;
 pub mod frame_listener;
+pub mod frame_looper;
 
 use web_sys::{Document, Element, Performance, Window};
 
