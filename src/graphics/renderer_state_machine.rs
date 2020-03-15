@@ -7,8 +7,8 @@ use crate::math::wh::WH16;
 use crate::math::xy::XY16;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
+use crate::wasm;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
-use crate::wasm::util::expect_document;
 use num::traits::cast::ToPrimitive;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -41,7 +41,7 @@ impl RendererStateMachine {
     )));
     Self {
       window: window.clone(),
-      document: expect_document(&window),
+      document: wasm::expect_document(&window),
       assets: Rc::new(assets),
       canvas,
       renderer,

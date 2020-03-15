@@ -52,6 +52,6 @@ module.exports = (_, argv) => {
         pluginLogLevel: 'error'
       })
     ],
-    performance: {maxAssetSize: 512 * 1024, maxEntrypointSize: 512 * 1024}
+    performance: {maxAssetSize: 1024 * 1024, maxEntrypointSize: 1024 * 1024}
   }
 }

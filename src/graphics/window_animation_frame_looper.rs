@@ -1,7 +1,6 @@
 use std::cell::RefCell;
 use std::rc::Rc;
-use wasm_bindgen::closure::Closure;
-use wasm_bindgen::JsCast;
+use wasm_bindgen::{closure::Closure, JsCast, JsValue};
 use web_sys::Window;
 
 /// Wraps a repeating Window.request_animation_frame() request. Clone is
@@ -43,7 +42,7 @@ impl WindowAnimationFrameLooper {
       on_loop(then.unwrap_or(now), now);
       then = Some(now);
       if clone.is_looping() {
-        let frame_id = clone.req_frame(&closure_rc0).ok();
+        let frame_id = clone.request_animation_frame(&closure_rc0).ok();
         *(*clone.frame_id).borrow_mut() = frame_id;
       } else {
         // Drop.
@@ -52,7 +51,7 @@ impl WindowAnimationFrameLooper {
     });
     *closure_rc1.borrow_mut() = Some(Closure::wrap(fnc));
 
-    let frame_id = self.req_frame(&closure_rc1).ok();
+    let frame_id = self.request_animation_frame(&closure_rc1).ok();
     *(*self.frame_id).borrow_mut() = frame_id;
   }
 
@@ -67,10 +66,10 @@ impl WindowAnimationFrameLooper {
     *self.frame_id.borrow_mut() = None;
   }
 
-  fn req_frame(
+  fn request_animation_frame(
     &self,
     closure: &Rc<RefCell<Option<Closure<dyn FnMut(f64)>>>>,
-  ) -> Result<i32, wasm_bindgen::JsValue> {
+  ) -> Result<i32, JsValue> {
     self.window.request_animation_frame(
       closure
         .borrow()

@@ -29,15 +29,15 @@ pub fn main_wasm() {
   #[cfg(debug_assertions)]
   console_error_panic_hook::set_once();
 
-  let window = wasm::util::expect_window();
-  let document = wasm::util::expect_document(&window);
+  let window = wasm::expect_window();
+  let document = wasm::expect_document(&window);
   let canvas = expect_canvas(&document);
   let mut game = Game::new(window, canvas, Assets::load());
   game.start();
 }
 
 fn expect_canvas(document: &Document) -> HtmlCanvasElement {
-  wasm::util::expect_selector(document, "canvas")
+  wasm::expect_selector(document, "canvas")
     .dyn_into()
     .expect("HtmlCanvasElement expected.")
 }
