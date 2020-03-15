@@ -16,13 +16,15 @@ impl FrameListener {
   }
 
   pub fn start(&mut self) {
-    self.frame_id = self
-      .window
-      .request_animation_frame(self.closure.as_ref().unchecked_ref())
-      .ok();
+    if self.frame_id.is_none() {
+      self.frame_id = self
+        .window
+        .request_animation_frame(self.closure.as_ref().unchecked_ref())
+        .ok();
+    }
   }
 
-  pub fn pending(&self) -> bool {
+  pub fn is_pending(&self) -> bool {
     self.frame_id.is_some()
   }
 
