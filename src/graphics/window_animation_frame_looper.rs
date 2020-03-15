@@ -1,82 +1,53 @@
+use crate::wasm;
+use crate::wasm::frame_listener::FrameListener;
 use std::cell::RefCell;
 use std::rc::Rc;
-use wasm_bindgen::{closure::Closure, JsCast, JsValue};
 use web_sys::Window;
 
-/// Wraps a repeating Window.request_animation_frame() request. Clone is
-/// provided to enable references across closures.
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct WindowAnimationFrameLooper {
   window: Window,
-
-  /// A mutable reference to a frame request ID. Some when an outstanding frame
-  /// is requested, None when stopped. When AnimLooper is cloned, the underlying
-  /// data is shared allowing the clone to read or mutate the ID.
-  frame_id: Rc<RefCell<Option<i32>>>,
+  /// A mutable reference to a FrameListener. The reference is shared between
+  /// the call to start() and then the looping closure.
+  frame_listener: Rc<RefCell<FrameListener>>,
 }
 
 impl WindowAnimationFrameLooper {
   pub fn new(window: Window) -> Self {
-    Self { window, frame_id: Rc::new(RefCell::new(None)) }
+    Self {
+      window: window.clone(),
+      frame_listener: Rc::new(RefCell::new(FrameListener::new(window, |_| ()))),
+    }
   }
 
-  pub fn start<T>(&self, mut on_loop: T)
-  where
-    T: 'static + FnMut(f64, f64),
-  {
+  pub fn start<T: 'static + FnMut(f64, f64)>(&self, mut on_loop: T) {
     if self.is_looping() {
       return;
     }
 
-    // Give the clone of self to the closure.
-    let clone = self.clone();
-    let mut then = None;
-
-    // A shared mutable reference to an optional closure. The closure is None
-    // initially to avoid a circular reference at declaration which is forbidden
-    // by the borrow checker. The reference is then cloned to properly
-    // initialize the shared value once the the function has been declared.
-    let closure_rc0 = Rc::new(RefCell::new(None));
-    let closure_rc1 = closure_rc0.clone();
+    // Clone the reference for the closure.
+    let frame_listener = self.frame_listener.clone();
+    let mut then = wasm::expect_performance(&self.window).now();
     let fnc = Box::new(move |now: f64| {
-      on_loop(then.unwrap_or(now), now);
-      then = Some(now);
-      if clone.is_looping() {
-        let frame_id = clone.request_animation_frame(&closure_rc0).ok();
-        *(*clone.frame_id).borrow_mut() = frame_id;
-      } else {
-        // Drop.
-        let _ = closure_rc0.borrow_mut().take();
+      on_loop(then, now);
+      then = now;
+
+      if frame_listener.borrow().is_issued() {
+        frame_listener.borrow_mut().request();
       }
     });
-    *closure_rc1.borrow_mut() = Some(Closure::wrap(fnc));
 
-    let frame_id = self.request_animation_frame(&closure_rc1).ok();
-    *(*self.frame_id).borrow_mut() = frame_id;
+    *self.frame_listener.borrow_mut() =
+      FrameListener::new(self.window.clone(), fnc);
+
+    self.frame_listener.borrow_mut().request();
   }
 
   pub fn is_looping(&self) -> bool {
-    (*self.frame_id).borrow().is_some()
+    self.frame_listener.borrow().is_issued()
   }
 
   pub fn stop(&mut self) {
-    if let Some(frame_id) = *self.frame_id.borrow() {
-      self.window.cancel_animation_frame(frame_id).unwrap_or(());
-    } // Else already stopped.
-    *self.frame_id.borrow_mut() = None;
-  }
-
-  fn request_animation_frame(
-    &self,
-    closure: &Rc<RefCell<Option<Closure<dyn FnMut(f64)>>>>,
-  ) -> Result<i32, JsValue> {
-    self.window.request_animation_frame(
-      closure
-        .borrow()
-        .as_ref()
-        .expect("Closure unavailable.")
-        .as_ref()
-        .unchecked_ref(),
-    )
+    self.frame_listener.borrow_mut().cancel();
   }
 }

@@ -40,8 +40,9 @@ wasm-bindgen = '=0.2.59'
 web-sys = {version = '=0.3.36', features = [
   'AddEventListenerOptions', 'AngleInstancedArrays', 'console', 'Document',
   'Element', 'Event', 'EventListener', 'HtmlCanvasElement', 'HtmlElement',
-  'HtmlImageElement', 'KeyboardEvent', 'WebGlActiveInfo', 'WebGlBuffer', 'WebGlProgram',
-  'WebGlRenderingContext', 'WebGlContextAttributes', 'WebGlShader', 'WebGlTexture',
-  'WebGlUniformLocation', 'Window', 'MouseEvent', 'EventTarget', 'OesVertexArrayObject',
-  'WebglLoseContext', 'WebGlVertexArrayObject', 'PointerEvent'
+  'HtmlImageElement', 'KeyboardEvent', 'Performance', 'PointerEvent',
+  'WebGlActiveInfo', 'WebGlBuffer', 'WebGlProgram', 'WebGlRenderingContext',
+  'WebGlContextAttributes', 'WebGlShader', 'WebGlTexture',
+  'WebGlUniformLocation', 'Window', 'MouseEvent', 'EventTarget',
+  'OesVertexArrayObject', 'WebglLoseContext', 'WebGlVertexArrayObject'
 ]}
