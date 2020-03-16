@@ -32,6 +32,7 @@ pub struct RendererStateMachine {
 impl RendererStateMachine {
   pub fn new(
     window: Window,
+    document: Document,
     canvas: HtmlCanvasElement,
     assets: Assets,
   ) -> Self {
@@ -44,7 +45,7 @@ impl RendererStateMachine {
     )));
     Self {
       window: window.clone(),
-      document: wasm::expect_document(&window),
+      document,
       assets: Rc::new(assets),
       canvas,
       renderer,

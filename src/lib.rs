@@ -22,24 +22,20 @@ mod wasm;
 use assets::Assets;
 use game::Game;
 use wasm_bindgen::{prelude::wasm_bindgen, JsCast, JsValue};
-use web_sys::{Document, HtmlCanvasElement};
 
 #[wasm_bindgen(start)]
 pub async fn main_wasm() -> Result<(), JsValue> {
   #[cfg(debug_assertions)]
   console_error_panic_hook::set_once();
 
-  let window = wasm::expect_window();
-  let document = wasm::expect_document(&window);
-  let canvas = expect_canvas(&document);
-  let mut game =
-    Game::new(window.clone(), canvas, Assets::load(&window).await?);
+  let window = web_sys::window().ok_or("Missing Window.")?;
+  let document = window.document().ok_or("Missing Document.")?;
+  let canvas = document
+    .get_element_by_id("game_canvas")
+    .ok_or("Missing #game_canvas.")?
+    .dyn_into()?;
+  let assets = Assets::load(&window, &document).await?;
+  let mut game = Game::new(window, document, canvas, assets);
   game.start();
   Ok(())
-}
-
-fn expect_canvas(document: &Document) -> HtmlCanvasElement {
-  wasm::expect_id(document, "game_canvas")
-    .dyn_into()
-    .expect("HtmlCanvasElement expected.")
 }

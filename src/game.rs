@@ -8,7 +8,7 @@ use specs::Join;
 use specs::{
   Builder, ReadExpect, ReadStorage, RunNow, System, World, WorldExt,
 };
-use web_sys::{console, HtmlCanvasElement, Window};
+use web_sys::{console, Document, HtmlCanvasElement, Window};
 
 #[derive(Default)]
 struct DurationResource(f64);
@@ -38,6 +38,7 @@ pub struct Game {
 impl Game {
   pub fn new(
     window: Window,
+    document: Document,
     canvas: HtmlCanvasElement,
     assets: Assets,
   ) -> Self {
@@ -56,8 +57,12 @@ impl Game {
       DispatcherBuilder::new().with(RenderSystem, "render_system", &[]).build();
     dispatcher.dispatch(&mut world);
     world.maintain();
-    let renderer_state_machine =
-      RendererStateMachine::new(window.clone(), canvas.clone(), assets);
+    let renderer_state_machine = RendererStateMachine::new(
+      window.clone(),
+      document,
+      canvas.clone(),
+      assets,
+    );
     Game {
       window: window.clone(),
       canvas,
