@@ -18,7 +18,7 @@ body {
   touch-action: none;
 }
 
-canvas {
+#game_canvas {
   /* Prevent additional line height spacing by changing display type from inline
      to block. */
   display: block;
@@ -27,4 +27,8 @@ canvas {
      changes to color. */
   image-rendering: optimizeSpeed;
   image-rendering: pixelated;
+}
+
+#atlas {
+  display: none;
 }

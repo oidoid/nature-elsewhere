@@ -6,10 +6,11 @@ use std::collections::HashMap;
 use std::convert::From;
 use wasm_bindgen::{prelude::JsValue, JsCast};
 use web_sys::{
-  console, AngleInstancedArrays, HtmlCanvasElement, WebGlBuffer as GlBuffer,
-  WebGlContextAttributes as GlContextAttributes, WebGlProgram as GlProgram,
-  WebGlRenderingContext as Gl, WebGlShader as GlShader,
-  WebGlTexture as GlTexture, WebGlUniformLocation as GlUniformLocation,
+  console, AngleInstancedArrays, HtmlCanvasElement, HtmlImageElement,
+  WebGlBuffer as GlBuffer, WebGlContextAttributes as GlContextAttributes,
+  WebGlProgram as GlProgram, WebGlRenderingContext as Gl,
+  WebGlShader as GlShader, WebGlTexture as GlTexture,
+  WebGlUniformLocation as GlUniformLocation,
 };
 
 pub fn get_context(
@@ -110,26 +111,21 @@ pub fn buffer_data(
 pub fn load_texture(
   gl: &Gl,
   texture_unit: u32,
-  image: &DynamicImage,
+  image: &HtmlImageElement,
 ) -> Option<GlTexture> {
   gl.active_texture(texture_unit);
   let texture = gl.create_texture();
   gl.bind_texture(Gl::TEXTURE_2D, texture.as_ref());
   gl.tex_parameteri(Gl::TEXTURE_2D, Gl::TEXTURE_MIN_FILTER, Gl::NEAREST as i32);
   gl.tex_parameteri(Gl::TEXTURE_2D, Gl::TEXTURE_MAG_FILTER, Gl::NEAREST as i32);
-  if let Err(err) = gl
-    .tex_image_2d_with_i32_and_i32_and_i32_and_format_and_type_and_opt_u8_array(
-      Gl::TEXTURE_2D,
-      0,
-      Gl::RGBA as i32,
-      image.width().to_i32().expect("Width u32 to i32 conversion failed."),
-      image.height().to_i32().expect("Height u32 to i32 conversion failed."),
-      0,
-      Gl::RGBA,
-      Gl::UNSIGNED_BYTE,
-      Some(&image.to_rgba().to_vec()),
-    )
-  {
+  if let Err(err) = gl.tex_image_2d_with_u32_and_u32_and_image(
+    Gl::TEXTURE_2D,
+    0,
+    Gl::RGBA as i32,
+    Gl::RGBA,
+    Gl::UNSIGNED_BYTE,
+    image,
+  ) {
     println!("Failed to load image. Error code {}.", err.as_f64()?)
   }
   gl.bind_texture(Gl::TEXTURE_2D, None);

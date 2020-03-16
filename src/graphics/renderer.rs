@@ -9,10 +9,10 @@ use std::collections::HashMap;
 use std::convert::From;
 use wasm_bindgen::JsCast;
 use web_sys::{
-  AngleInstancedArrays, HtmlCanvasElement, OesVertexArrayObject,
-  WebGlBuffer as GlBuffer, WebGlContextAttributes as GlContextAttributes,
-  WebGlRenderingContext as Gl, WebGlUniformLocation as GlUniformLocation,
-  WebglLoseContext as GlLoseContext,
+  AngleInstancedArrays, HtmlCanvasElement, HtmlImageElement,
+  OesVertexArrayObject, WebGlBuffer as GlBuffer,
+  WebGlContextAttributes as GlContextAttributes, WebGlRenderingContext as Gl,
+  WebGlUniformLocation as GlUniformLocation, WebglLoseContext as GlLoseContext,
 };
 
 #[derive(Debug)]
@@ -36,7 +36,7 @@ impl Renderer {
     layout: &ShaderLayout,
     vertex_glsl: &str,
     fragment_glsl: &str,
-    atlas: &DynamicImage,
+    atlas: &HtmlImageElement,
     canvas: HtmlCanvasElement,
   ) -> Self {
     let gl = gl_util::get_context(

@@ -3,6 +3,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use web_sys::Window;
 
+/// A FrameListener wrapper that re-requests on each frame.
 #[derive(Clone)]
 pub struct FrameLooper {
   window: Window,

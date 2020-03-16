@@ -43,9 +43,7 @@ pub struct AttributeConfig {
 }
 
 impl ShaderLayout {
-  pub fn parse(json: &str) -> Self {
-    let config: Box<ShaderLayoutConfig> = serde_json::from_str(&json)
-      .expect("ShaderLayoutConfig JSON parsing failed.");
+  pub fn parse(config: ShaderLayoutConfig) -> Self {
     Self {
       uniforms: config.uniforms,
       per_vertex: parse_attributes(0, &config.per_vertex),
@@ -104,7 +102,8 @@ mod test {
 
   #[test]
   fn parse() {
-    let config = include_str!("shader_layout.json");
+    let config =
+      serde_json::from_str(include_str!("shader_layout.json")).unwrap();
     let layout = ShaderLayout::parse(config);
     assert_ne!(layout.uniforms.len(), 0);
     assert_ne!(layout.per_vertex.len, 0);

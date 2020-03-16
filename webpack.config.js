@@ -35,9 +35,7 @@ module.exports = (_, argv) => {
           path.resolve(__dirname, 'pkg/**/*')
         ]
       }),
-      new CopyPlugin([
-        {context: 'src', from: '{**/*.{css,html,png},manifest.json}'}
-      ]),
+      new CopyPlugin([{context: 'src', from: '**/*.{css,glsl,html,json,png}'}]),
       new webpack.DefinePlugin({
         'process.env': {
           dev: JSON.stringify(argv.mode !== 'production'),

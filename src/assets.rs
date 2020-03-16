@@ -1,30 +1,40 @@
 use super::atlas;
 use super::atlas::Atlas;
 use super::graphics::shader_layout::ShaderLayout;
-use image::DynamicImage;
+use crate::wasm;
+use crate::wasm::fetch;
+use wasm_bindgen::{prelude::wasm_bindgen, JsCast, JsValue};
+use web_sys::{HtmlImageElement, Window};
 
 pub struct Assets {
   pub shader_layout: ShaderLayout,
   pub vertex_glsl: String,
   pub fragment_glsl: String,
   pub atlas: Atlas,
-  pub atlas_image: DynamicImage,
+  pub atlas_image: HtmlImageElement,
 }
 
 impl Assets {
-  pub fn load() -> Self {
+  pub async fn load(window: &Window) -> Result<Self, JsValue> {
     let shader_layout =
-      ShaderLayout::parse(include_str!("graphics/shader_layout.json"));
-    let vertex_glsl = include_str!("graphics/vertex_shader.glsl").to_string();
-    let fragment_glsl =
-      include_str!("graphics/fragment_shader.glsl").to_string();
+      fetch::json(window, "/graphics/shader_layout.json").await?;
 
-    let atlas = atlas::parser::parse(include_str!("atlas/atlas.json"))
-      .expect("Atlas parsing failed.");
-    let atlas_image =
-      image::load_from_memory(include_bytes!("atlas/atlas.png"))
-        .expect("Atlas image loading failed.");
+    let shader_layout = ShaderLayout::parse(shader_layout);
+    let vertex_glsl =
+      fetch::text(window, "/graphics/vertex_shader.glsl", "text/x-vertex-glsl")
+        .await?;
+    let fragment_glsl = fetch::text(
+      window,
+      "/graphics/fragment_shader.glsl",
+      "text/x-fragment-glsl",
+    )
+    .await?;
 
-    Self { shader_layout, vertex_glsl, fragment_glsl, atlas, atlas_image }
+    let atlas = &fetch::json(window, "/atlas/atlas.json").await?;
+    let atlas = atlas::parser::parse(atlas).expect("Atlas parsing failed.");
+    let atlas_image: HtmlImageElement =
+      wasm::expect_id(&wasm::expect_document(window), "atlas").dyn_into()?;
+
+    Ok(Self { shader_layout, vertex_glsl, fragment_glsl, atlas, atlas_image })
   }
 }

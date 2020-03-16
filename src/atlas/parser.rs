@@ -9,11 +9,7 @@ use crate::{
 use failure::Error;
 use std::{convert::TryInto, f64};
 
-pub fn parse(json: &str) -> Result<Atlas, Error> {
-  parse_file(&serde_json::from_str(json)?)
-}
-
-pub fn parse_file(file: &aseprite::File) -> Result<Atlas, Error> {
+pub fn parse(file: &aseprite::File) -> Result<Atlas, Error> {
   let aseprite::WH { w, h } = file.meta.size;
   Ok(Atlas {
     version: file.meta.version.clone(),
