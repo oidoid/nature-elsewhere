@@ -21,7 +21,6 @@ impl Assets {
   ) -> Result<Self, JsValue> {
     let shader_layout =
       fetch::json(window, "/graphics/shader_layout.json").await?;
-
     let shader_layout = ShaderLayout::parse(shader_layout);
     let vertex_glsl =
       fetch::text(window, "/graphics/vertex_shader.glsl", "text/x-vertex-glsl")

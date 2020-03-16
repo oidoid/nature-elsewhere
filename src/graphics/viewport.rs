@@ -12,8 +12,9 @@ pub fn scale(canvas_wh: &WH16, min_size: &WH16, zoom_out: i16) -> i16 {
   1.max((x.min(y)) - zoom_out)
 }
 
-pub fn canvas_wh(doc: &Document) -> WH16 {
-  let root = doc.document_element().expect("Document root element missing.");
+pub fn canvas_wh(document: &Document) -> WH16 {
+  let root =
+    document.document_element().expect("Document root element missing.");
   let w = root
     .client_width()
     .to_i16()

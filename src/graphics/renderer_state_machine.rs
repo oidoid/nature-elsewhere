@@ -1,19 +1,13 @@
 use super::renderer::Renderer;
-use super::viewport;
 use crate::assets::Assets;
-use crate::math::rect::{Rect, R16};
-use crate::math::wh::WH16;
-use crate::math::xy::XY16;
 use crate::math::Millis;
-use crate::sprites::sprite::Sprite;
-use crate::sprites::sprite_composition::SpriteComposition;
 use crate::wasm;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
 use crate::wasm::frame_looper::FrameLooper;
-use num::traits::cast::ToPrimitive;
 use std::cell::RefCell;
+use std::ops::DerefMut;
 use std::rc::Rc;
-use web_sys::{console, Document, Event, HtmlCanvasElement, Window};
+use web_sys::{Document, Event, HtmlCanvasElement, Window};
 
 #[derive(Clone)]
 pub struct RendererStateMachine {
@@ -27,14 +21,16 @@ pub struct RendererStateMachine {
   now: Rc<RefCell<Millis>>,
   /// Total game time elapsed.
   time: Rc<RefCell<Millis>>,
+  on_loop_callback: Rc<RefCell<dyn FnMut(&mut Renderer, f64, f64, f64)>>,
 }
 
 impl RendererStateMachine {
-  pub fn new(
+  pub fn new<T: 'static + FnMut(&mut Renderer, f64, f64, f64)>(
     window: Window,
     document: Document,
     canvas: HtmlCanvasElement,
     assets: Assets,
+    on_loop: T,
   ) -> Self {
     let renderer = Rc::new(RefCell::new(Renderer::new(
       &assets.shader_layout,
@@ -53,6 +49,7 @@ impl RendererStateMachine {
       looper: FrameLooper::new(window),
       listeners: Rc::new(RefCell::new(Vec::new())),
       time: Rc::new(RefCell::new(0.)),
+      on_loop_callback: Rc::new(RefCell::new(on_loop)),
     }
   }
 
@@ -76,17 +73,15 @@ impl RendererStateMachine {
     if self.renderer.borrow().is_context_lost() {
       return;
     }
-    // This isn't great but go ahead and one run loop regardless of focus so
-    // that the game appears ready. Theoretically, a zero time should mean
-    // nothing changes but not everything is fully loop independent like input
-    // sampling.
+    // Run one loop regardless of focus so that the game appears. A zero time
+    // delta should mostly cause no updates but not everything is fully loop
+    // independent like input sampling.
     let now = *self.now.borrow();
     self.on_loop(now, now);
 
     if self.is_focused() {
-      let looper = self.looper.clone();
       let rc = Rc::new(RefCell::new(self.clone()));
-      looper.start(move |then, now| rc.borrow_mut().on_loop(then, now));
+      self.looper.start(move |then, now| rc.borrow_mut().on_loop(then, now));
     }
   }
 
@@ -119,68 +114,13 @@ impl RendererStateMachine {
 
   fn on_loop(&mut self, then: f64, now: f64) {
     *self.now.borrow_mut() = now;
-    let elapsed = (now - then).to_f32().unwrap_or(0.);
     let time = *self.time.borrow() + now - then;
     *self.time.borrow_mut() = time;
-    console::log_3(&then.into(), &now.into(), &elapsed.into());
-    let canvas_wh = viewport::canvas_wh(&self.document);
-    let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
-    let cam_wh = viewport::cam_wh(&canvas_wh, scale);
-    let bytes = [
-      Sprite::new(
-        R16::cast_wh(80, 150, 11, 13),
-        R16::cast_wh(80, 150, 11, 13),
-        SpriteComposition::Source,
-        R16::cast_wh(32, 32, 11, 13),
-        XY16 { x: 1, y: 1 },
-        XY16 { x: 0, y: 0 },
-        XY16 { x: 1, y: 1 },
-      ),
-      Sprite::new(
-        R16::cast_wh(80, 240, 16, 16),
-        R16::cast_wh(80, 240, 16, 16),
-        SpriteComposition::Source,
-        R16::cast_wh(32, 32, 160, 160),
-        XY16 { x: 1, y: 1 },
-        XY16 { x: 0, y: 0 },
-        XY16 { x: 0, y: 0 },
-      ),
-      // Sprite::new(
-      //   R16::cast_wh(64, 240, 16, 16),
-      //   R16::cast_wh(64, 240, 16, 16),
-      //   SpriteComposition::SourceIn,
-      //   R16::cast_wh(32, 32, 60, 60),
-      //   XY16 { x: 1, y: 1 },
-      //   XY16 { x: 0, y: 0 },
-      //   XY16 { x: -64, y: -48 },
-      // ),
-      Sprite::new(
-        R16::cast_wh(48, 240, 32, 16),
-        R16::cast_wh(16, 240, 32, 16),
-        SpriteComposition::SourceIn,
-        R16::cast_wh(48, 48, 32, 16),
-        XY16 { x: 1, y: 1 },
-        XY16 { x: 0, y: 0 },
-        XY16 { x: -64, y: 32 },
-      ),
-      Sprite::new(
-        R16::cast_wh(48, 240, 24, 16),
-        R16::cast_wh(16, 240, 24, 16),
-        SpriteComposition::SourceIn,
-        R16::cast_wh(55, 40, 24, 16),
-        XY16 { x: 1, y: 1 },
-        XY16 { x: -64, y: 32 },
-        XY16 { x: -64, y: 32 },
-      ),
-    ];
-    let bytes = bincode::config().native_endian().serialize(&bytes).unwrap();
-
-    self.renderer.borrow_mut().render(
-      self.time.borrow().to_i32().unwrap(), // https://github.com/rust-lang/rust/issues/10184
-      &canvas_wh,
-      scale,
-      &Rect::cast(0, 0, cam_wh.w, cam_wh.h),
-      &bytes,
+    self.on_loop_callback.borrow_mut().deref_mut()(
+      self.renderer.borrow_mut().deref_mut(),
+      time,
+      then,
+      now,
     );
   }
 

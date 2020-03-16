@@ -2,11 +2,9 @@ use super::gl_data_type::GlDataType;
 use crate::math::ceil::CeilMultiple;
 use std::collections::HashMap;
 
-// consider converting the json to a structur here.
-
 #[derive(Clone, Debug)]
 pub struct ShaderLayout {
-  // used to avoid constants elsewhree. maybe th econfig can just be an array of strings though?
+  /// Uniform name to uniform name. Kind of silly because these are identical.
   pub uniforms: HashMap<String, String>,
   pub per_vertex: AttributeBuffer,
   pub per_instance: AttributeBuffer,

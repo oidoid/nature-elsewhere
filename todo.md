@@ -1,5 +1,7 @@
 - Update GitHub tags for Rust, WASM, 🦀.
 - Make nature elsewhere casing consistent.
+- Add "games inspired by" section to GDD. Maybe something like: Diablo I/II (PC),
+  TMNT (NES).
 
 Develop Nature Elsewhere into a complete, beautiful, iconic, fun, intuitive, simple, detailed, finely built game with tremendous colors and perfect clarity.
 

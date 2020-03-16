@@ -37,6 +37,7 @@ impl FrameLooper {
       }
     };
 
+    // Dereference the FrameListener reference and replace its contents.
     *self.frame_listener.borrow_mut() =
       FrameListener::new(self.window.clone(), fnc);
 
