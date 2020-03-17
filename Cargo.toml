@@ -28,27 +28,33 @@ lto = true
 [dependencies]
 bincode = '=1.2.1'
 console_error_panic_hook = '=0.1.6'
-failure = '=0.1.7'
 num = '=0.2.1'
-serde = {version = '=1.0.104', features = ['derive']}
-serde_json = '=1.0.48'
+serde = '=1.0.104'
+# For Serialize_repr.
 serde_repr = '=0.1.5'
-wasm-bindgen = {version = '=0.2.59', features = ["serde-serialize"]}
+# serde-serialize enables JsFuture.into_serde() trait.
+wasm-bindgen = {version = '=0.2.59', features = ['serde-serialize']}
+# For fetch.
 wasm-bindgen-futures = '=0.4.9'
 
 [dependencies.specs]
 version = '=0.16.1'
 # Disable parallelization which is unsupported for Wasm.
 default-features = false
-features = ['serde', 'specs-derive']
+# serde enables World de/serialization. See
+# https://specs.amethyst.rs/docs/tutorials/13_saveload.html?highlight=serde#saveload.
+# specs-derive enables Component derive macros. See
+# https://specs.amethyst.rs/docs/tutorials/02_hello_world.html?highlight=specs-derive#components.
+# shred-derive enables structs for SystemData. See
+# https://specs.amethyst.rs/docs/tutorials/06_system_data.html#specifying-systemdata.
+features = ['serde', 'specs-derive', 'shred-derive']
 
 [dependencies.web-sys]
 version = '=0.3.36'
+# Derived by compilation.
 features = [
-  'AddEventListenerOptions', 'AngleInstancedArrays', 'console', 'Document',
-  'Element', 'Event', 'EventListener', 'EventTarget', 'Headers',
-  'HtmlCanvasElement', 'HtmlElement', 'HtmlImageElement', 'KeyboardEvent',
-  'MouseEvent', 'OesVertexArrayObject', 'Performance', 'PointerEvent',
+  'AngleInstancedArrays', 'console', 'Document', 'Headers', 'HtmlCanvasElement',
+  'HtmlImageElement', 'OesVertexArrayObject', 'Performance', 'PointerEvent',
   'Response', 'Request', 'WebGlActiveInfo', 'WebGlBuffer',
   'WebGlContextAttributes', 'WebglLoseContext', 'WebGlProgram',
   'WebGlRenderingContext', 'WebGlShader', 'WebGlTexture',
@@ -56,4 +62,7 @@ features = [
 ]
 
 [dev-dependencies]
+# Used by one test.
 lazy_static = '=1.4.0'
+# For from_json! macro.
+serde_json = '=1.0.48'

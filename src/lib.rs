@@ -1,5 +1,3 @@
-#[macro_use]
-extern crate failure;
 #[cfg(test)]
 #[macro_use]
 extern crate lazy_static;
@@ -35,5 +33,6 @@ pub async fn main_wasm() -> Result<(), JsValue> {
   let assets = Assets::load(&window, &document).await?;
   let mut game = Game::new(window, document, canvas, assets);
   game.start();
+
   Ok(())
 }

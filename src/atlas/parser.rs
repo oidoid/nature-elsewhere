@@ -6,10 +6,10 @@ use crate::{
   math::wh::{WH, WH16},
   math::xy::{XY, XY16},
 };
-use failure::Error;
+use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
 
-pub fn parse(file: &aseprite::File) -> Result<Atlas, Error> {
+pub fn parse(file: &aseprite::File) -> Result<Atlas, ParseError> {
   let aseprite::WH { w, h } = file.meta.size;
   Ok(Atlas {
     version: file.meta.version.clone(),
@@ -22,14 +22,13 @@ pub fn parse(file: &aseprite::File) -> Result<Atlas, Error> {
 
 pub fn parse_animation_lookup(
   aseprite::File { meta, frames }: &aseprite::File,
-) -> Result<AnimationLookup, Error> {
+) -> Result<AnimationLookup, ParseError> {
   let aseprite::Meta { frame_tags, slices, .. } = meta;
   let mut animations = AnimationLookup::new();
   for frame_tag in frame_tags {
     // Every tag should be unique within the sheet.
     if animations.contains_key(&frame_tag.name) {
-      let msg = format!("Duplicate tag {}.", frame_tag.name);
-      return Err(failure::err_msg(msg));
+      return Err(format!("Duplicate tag {}.", frame_tag.name).into());
     }
     animations.insert(
       frame_tag.name.clone(),
@@ -43,12 +42,11 @@ pub fn parse_animation(
   frame_tag: &aseprite::FrameTag,
   frame_map: &aseprite::FrameMap,
   slices: &[aseprite::Slice],
-) -> Result<Animation, Error> {
+) -> Result<Animation, ParseError> {
   let direction = Playback::parse(&frame_tag.direction)?;
   let frames = parse_tag_frames(frame_tag, frame_map);
   if frames.is_empty() {
-    let msg = format!("No cels in {} animation.", frame_tag.name);
-    return Err(failure::err_msg(msg));
+    return Err(format!("No cels in {} animation.", frame_tag.name).into());
   }
 
   let mut cels = Vec::new();
@@ -63,8 +61,9 @@ pub fn parse_animation(
   }
 
   if duration == 0. {
-    let msg = format!("Zero duration for {} animation.", frame_tag.name);
-    return Err(failure::err_msg(msg));
+    return Err(
+      format!("Zero duration for {} animation.", frame_tag.name).into(),
+    );
   }
 
   if cels.len() > 2 {
@@ -72,11 +71,13 @@ pub fn parse_animation(
       .iter()
       .position(|Cel { duration, .. }| duration.is_infinite())
     {
-      let msg = format!(
-        "Infinite duration for intermediate cel {} of {} animation.",
-        i, frame_tag.name
+      return Err(
+        format!(
+          "Infinite duration for intermediate cel {} of {} animation.",
+          i, frame_tag.name
+        )
+        .into(),
       );
-      return Err(failure::err_msg(msg));
     }
   }
 
@@ -98,16 +99,18 @@ pub fn parse_tag_frames<'a>(
     let tag_frame_number = format!("{} {}", name, i);
     frames.push(&frame_map[&tag_frame_number]);
   }
-  return frames;
+  frames
 }
 
 impl Playback {
-  fn parse(str: &str) -> Result<Self, Error> {
-    match str {
+  fn parse(direction: &str) -> Result<Self, ParseError> {
+    match direction {
       "forward" => Ok(Self::Forward),
       "reverse" => Ok(Self::Reverse),
       "pingpong" => Ok(Self::PingPong),
-      _ => Err(failure::err_msg(format!("Playback invalid: \"{}\".", str))),
+      _ => {
+        Err(format!("Playback direction invalid: \"{}\".", direction).into())
+      }
     }
   }
 }
@@ -117,33 +120,35 @@ pub fn parse_cel(
   frame: &aseprite::Frame,
   frame_number: u32,
   slices: &[aseprite::Slice],
-) -> Result<Cel, Error> {
+) -> Result<Cel, ParseError> {
   Ok(Cel {
     xy: parse_xy(frame)?,
     duration: parse_duration(frame.duration)?,
-    slices: parse_slices(frame_tag, frame_number, slices)?,
+    slices: parse_slices(frame_tag, frame_number, slices),
   })
 }
 
-pub fn parse_xy(frame: &aseprite::Frame) -> Result<XY16, Error> {
+pub fn parse_xy(frame: &aseprite::Frame) -> Result<XY16, ParseError> {
   let WH { w, h } = parse_padding(frame)?;
   Ok(XY { x: (frame.frame.x + w / 2), y: (frame.frame.y + h / 2) })
 }
 
 pub fn parse_padding(
   aseprite::Frame { frame, source_size, .. }: &aseprite::Frame,
-) -> Result<WH16, Error> {
+) -> Result<WH16, ParseError> {
   let w = (frame.w - source_size.w).try_into()?;
   let h = (frame.h - source_size.h).try_into()?;
   if w & 1 == 1 || h & 1 == 1 {
-    return Err(failure::err_msg("Padding is not evenly divisible."));
+    return Err("Padding is not evenly divisible.".into());
   }
   Ok(WH { w, h })
 }
 
-pub fn parse_duration(duration: aseprite::Duration) -> Result<Millis, Error> {
+pub fn parse_duration(
+  duration: aseprite::Duration,
+) -> Result<Millis, ParseError> {
   match duration {
-    0 => Err(failure::err_msg("Duration is zero.")),
+    0 => Err("Duration is zero.".into()),
     aseprite::INFINITE => Ok(f64::INFINITY),
     _ => Ok(Millis::from(duration)),
   }
@@ -153,7 +158,7 @@ pub fn parse_slices(
   aseprite::FrameTag { name, .. }: &aseprite::FrameTag,
   index: u32,
   slices: &[aseprite::Slice],
-) -> Result<Vec<R16>, Error> {
+) -> Vec<R16> {
   let mut rects = Vec::new();
   for slice in slices {
     if slice.name != *name {
@@ -165,7 +170,7 @@ pub fn parse_slices(
     let aseprite::Key { bounds, .. } = key;
     rects.push(R16::cast_wh(bounds.x, bounds.y, bounds.w, bounds.h));
   }
-  Ok(rects)
+  rects
 }
 
 #[cfg(test)]
@@ -570,7 +575,7 @@ mod test {
       }],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 0, &slices).unwrap(),
+      parse_slices(&frame_tag, 0, &slices),
       vec![R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } },]
     )
   }
@@ -591,7 +596,7 @@ mod test {
         bounds: aseprite::Rect { x: 0, y: 1, w: 2, h: 3 },
       }],
     }];
-    assert_eq!(parse_slices(&frame_tag, 0, &slices).unwrap(), vec![])
+    assert_eq!(parse_slices(&frame_tag, 0, &slices), vec![])
   }
 
   #[test]
@@ -621,7 +626,7 @@ mod test {
       ],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 1, &slices).unwrap(),
+      parse_slices(&frame_tag, 1, &slices),
       vec![R16 { from: XY { x: 4, y: 5 }, to: XY { x: 10, y: 12 } }]
     )
   }
@@ -649,7 +654,7 @@ mod test {
       ],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 0, &slices).unwrap(),
+      parse_slices(&frame_tag, 0, &slices),
       vec![R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } }]
     )
   }
@@ -662,7 +667,7 @@ mod test {
       to: 0,
       direction: "forward".to_string(),
     };
-    assert_eq!(parse_slices(&frame_tag, 0, &[]).unwrap(), vec![]);
+    assert_eq!(parse_slices(&frame_tag, 0, &[]), vec![]);
   }
 
   #[test]
@@ -682,7 +687,7 @@ mod test {
       }],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 1, &slices).unwrap(),
+      parse_slices(&frame_tag, 1, &slices),
       vec![R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } },]
     );
   }
@@ -740,12 +745,35 @@ mod test {
       },
     ];
     assert_eq!(
-      parse_slices(&frame_tag, 1, &slices).unwrap(),
+      parse_slices(&frame_tag, 1, &slices),
       vec![
         R16 { from: XY { x: 4, y: 5 }, to: XY { x: 10, y: 12 } },
         R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } },
         R16 { from: XY { x: 8, y: 9 }, to: XY { x: 18, y: 20 } }
       ]
     );
+  }
+}
+
+#[derive(Debug)]
+pub enum ParseError {
+  Error(String),
+}
+
+impl From<TryFromIntError> for ParseError {
+  fn from(error: TryFromIntError) -> Self {
+    ParseError::Error(error.to_string())
+  }
+}
+
+impl From<String> for ParseError {
+  fn from(error: String) -> Self {
+    ParseError::Error(error)
+  }
+}
+
+impl From<&str> for ParseError {
+  fn from(error: &str) -> Self {
+    ParseError::Error(error.to_string())
   }
 }

@@ -1,6 +1,7 @@
 use super::assets::Assets;
-use super::ecs::bounds::Bounds;
 use super::ecs::entity_operator::EntityOperator;
+use super::ecs::resources::TimeStep;
+use super::ecs::{bounds::Bounds, max_wh::MaxWH, text::Text};
 use super::graphics::renderer_state_machine::RendererStateMachine;
 use crate::graphics::renderer::Renderer;
 use crate::graphics::viewport;
@@ -11,6 +12,7 @@ use crate::math::xy::XY16;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
 use num::traits::cast::ToPrimitive;
+use specs::prelude::{ResourceId, SystemData};
 use specs::DispatcherBuilder;
 use specs::Join;
 use specs::{
@@ -19,20 +21,32 @@ use specs::{
 use std::cell::RefCell;
 use std::rc::Rc;
 use web_sys::{console, Document, HtmlCanvasElement, Window};
-
-#[derive(Default)]
-struct DurationResource(f64);
-
 struct RenderSystem;
 
+#[derive(SystemData)]
+pub struct RenderData<'a> {
+  time_step: ReadExpect<'a, TimeStep>,
+  bounds: ReadStorage<'a, Bounds>,
+  text: ReadStorage<'a, Text>,
+  max_wh: ReadStorage<'a, MaxWH>,
+}
+
 impl<'a> System<'a> for RenderSystem {
-  type SystemData = (ReadExpect<'a, DurationResource>, ReadStorage<'a, Bounds>);
+  type SystemData = RenderData<'a>;
 
   fn run(&mut self, data: Self::SystemData) {
-    let (duration, bounds) = data;
-    let duration = duration.0;
-    for (bounds) in (&bounds).join() {
-      console::log_1(&format!("Hello {:?} {}", &bounds, duration).into());
+    let RenderData { time_step, bounds, text, max_wh } = data;
+    for (bounds, text, max_wh) in (&bounds, &text, (&max_wh).maybe()).join() {
+      console::log_1(
+        &format!(
+          "Hello {:?} {} {} {:?}",
+          &bounds,
+          time_step.0,
+          text.0,
+          max_wh.unwrap_or(&MaxWH(WH16::from(255, 255))).0
+        )
+        .into(),
+      );
     }
   }
 }
@@ -48,45 +62,55 @@ pub struct Game {
 }
 
 impl Game {
+  fn create_entities(&mut self) {
+    let mut world = self.world.borrow_mut();
+    world.register::<Bounds>();
+    world.register::<EntityOperator>();
+    world.register::<Text>();
+    world.register::<MaxWH>();
+    world.create_entity().with(Bounds::new(1, 2, 3, 4)).build();
+    world.create_entity().with(EntityOperator::Player).build();
+    world
+      .create_entity()
+      .with(Bounds::new(5, 6, 7, 8))
+      .with(Text("hello\nw\no\nr\nl\nd".to_string()))
+      .with(MaxWH(WH16::from(5, 5)))
+      .build();
+    world.insert(TimeStep(0.));
+    {
+      let mut delta = world.write_resource::<TimeStep>();
+      *delta = TimeStep(16.67);
+    }
+    let mut dispatcher =
+      DispatcherBuilder::new().with(RenderSystem, "render_system", &[]).build();
+    dispatcher.dispatch(&world);
+  }
+
   pub fn new(
     window: Window,
     document: Document,
     canvas: HtmlCanvasElement,
     assets: Assets,
   ) -> Self {
-    let mut world = World::new();
-    world.register::<Bounds>();
-    world.register::<EntityOperator>();
-    world.create_entity().with(Bounds::new(1, 2, 3, 4)).build();
-    world.create_entity().with(EntityOperator::Player).build();
-    world.create_entity().with(Bounds::new(5, 6, 7, 8)).build();
-    world.insert(DurationResource(0.));
-    {
-      let mut delta = world.write_resource::<DurationResource>();
-      *delta = DurationResource(16.67);
-    }
-    let mut dispatcher =
-      DispatcherBuilder::new().with(RenderSystem, "render_system", &[]).build();
-    dispatcher.dispatch(&mut world);
-    world.maintain();
-
-    let game = Game {
+    let mut game = Game {
       window: window.clone(),
       document: document.clone(),
       canvas: canvas.clone(),
-      world: Rc::new(RefCell::new(world)),
+      world: Rc::new(RefCell::new(World::new())),
       renderer_state_machine: Rc::new(RefCell::new(None)),
       input_poller: Rc::new(RefCell::new(InputPoller::new(&window))),
     };
-    let mut clone = game.clone();
-    let renderer_state_machine = RendererStateMachine::new(
-      window,
-      document,
-      canvas,
-      assets,
-      move |renderer, time, then, now| clone.on_loop(renderer, time, then, now),
-    );
+
+    let renderer_state_machine =
+      RendererStateMachine::new(window, document, canvas, assets, {
+        let mut clone = game.clone();
+        move |renderer, time, then, now| {
+          clone.on_loop(renderer, time, then, now)
+        }
+      });
     *game.renderer_state_machine.borrow_mut() = Some(renderer_state_machine);
+
+    game.create_entities();
 
     game
   }
@@ -113,6 +137,9 @@ impl Game {
     then: f64,
     now: f64,
   ) {
+    *self.world.borrow().write_resource::<TimeStep>() = TimeStep(now - then);
+
+    self.world.borrow_mut().maintain();
     let canvas_wh = viewport::canvas_wh(&self.document);
     let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
     let cam_wh = viewport::cam_wh(&canvas_wh, scale);
