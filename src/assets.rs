@@ -1,7 +1,6 @@
 use super::atlas;
 use super::atlas::Atlas;
 use super::graphics::shader_layout::ShaderLayout;
-use crate::atlas::parser::ParseError;
 use crate::text::font::Font;
 use crate::wasm;
 use crate::wasm::fetch;
@@ -36,10 +35,7 @@ impl Assets {
     .await?;
 
     let atlas = &fetch::json(window, "/atlas/atlas.json").await?;
-    let atlas = atlas::parser::parse(atlas).map_err(|error| {
-      let ParseError::Error(msg) = error;
-      msg
-    })?;
+    let atlas = atlas::parser::parse(atlas).map_err(|error| error.0)?;
     let atlas_image: HtmlImageElement =
       wasm::get_element_by_id(document, "atlas")?;
 

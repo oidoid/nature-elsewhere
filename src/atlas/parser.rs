@@ -26,7 +26,9 @@ pub fn parse_animation_lookup(
   for frame_tag in frame_tags {
     // Every tag should be unique within the sheet.
     if animations.contains_key(&frame_tag.name) {
-      return Err(format!("Duplicate tag {}.", frame_tag.name).into());
+      return Err(
+        format!("Duplicate animation tag {}.", frame_tag.name).into(),
+      );
     }
     animations.insert(
       frame_tag.name.clone(),
@@ -106,9 +108,10 @@ impl Playback {
       "forward" => Ok(Self::Forward),
       "reverse" => Ok(Self::Reverse),
       "pingpong" => Ok(Self::PingPong),
-      _ => {
-        Err(format!("Playback direction invalid: \"{}\".", direction).into())
-      }
+      _ => Err(
+        format!("Animation playback direction invalid: \"{}\".", direction)
+          .into(),
+      ),
     }
   }
 }
@@ -137,7 +140,7 @@ pub fn parse_padding(
   let w = (frame.w - source_size.w).try_into()?;
   let h = (frame.h - source_size.h).try_into()?;
   if w & 1 == 1 || h & 1 == 1 {
-    return Err("Padding is not evenly divisible.".into());
+    return Err("Cel padding is not evenly divisible.".into());
   }
   Ok(WH { w, h })
 }
@@ -146,7 +149,7 @@ pub fn parse_duration(
   duration: aseprite::Duration,
 ) -> Result<Millis, ParseError> {
   match duration {
-    0 => Err("Duration is zero.".into()),
+    0 => Err("Cel duration is zero.".into()),
     aseprite::INFINITE => Ok(f64::INFINITY),
     _ => Ok(Millis::from(duration)),
   }
@@ -172,25 +175,23 @@ pub fn parse_slices(
 }
 
 #[derive(Debug)]
-pub enum ParseError {
-  Error(String),
-}
+pub struct ParseError(pub String);
 
-impl From<TryFromIntError> for ParseError {
-  fn from(error: TryFromIntError) -> Self {
-    ParseError::Error(error.to_string())
+impl From<&str> for ParseError {
+  fn from(error: &str) -> Self {
+    Self(error.to_string())
   }
 }
 
 impl From<String> for ParseError {
   fn from(error: String) -> Self {
-    ParseError::Error(error)
+    Self(error)
   }
 }
 
-impl From<&str> for ParseError {
-  fn from(error: &str) -> Self {
-    ParseError::Error(error.to_string())
+impl From<TryFromIntError> for ParseError {
+  fn from(error: TryFromIntError) -> Self {
+    Self(error.to_string())
   }
 }
 
