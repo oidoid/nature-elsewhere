@@ -1,11 +1,9 @@
 use super::aseprite;
 use super::{Animation, AnimationLookup, Atlas, Cel, Playback};
+use crate::math::rect::R16;
+use crate::math::wh::{WH, WH16};
+use crate::math::xy::{XY, XY16};
 use crate::math::Millis;
-use crate::{
-  math::rect::R16,
-  math::wh::{WH, WH16},
-  math::xy::{XY, XY16},
-};
 use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
 
@@ -171,6 +169,29 @@ pub fn parse_slices(
     rects.push(R16::cast_wh(bounds.x, bounds.y, bounds.w, bounds.h));
   }
   rects
+}
+
+#[derive(Debug)]
+pub enum ParseError {
+  Error(String),
+}
+
+impl From<TryFromIntError> for ParseError {
+  fn from(error: TryFromIntError) -> Self {
+    ParseError::Error(error.to_string())
+  }
+}
+
+impl From<String> for ParseError {
+  fn from(error: String) -> Self {
+    ParseError::Error(error)
+  }
+}
+
+impl From<&str> for ParseError {
+  fn from(error: &str) -> Self {
+    ParseError::Error(error.to_string())
+  }
 }
 
 #[cfg(test)]
@@ -752,28 +773,5 @@ mod test {
         R16 { from: XY { x: 8, y: 9 }, to: XY { x: 18, y: 20 } }
       ]
     );
-  }
-}
-
-#[derive(Debug)]
-pub enum ParseError {
-  Error(String),
-}
-
-impl From<TryFromIntError> for ParseError {
-  fn from(error: TryFromIntError) -> Self {
-    ParseError::Error(error.to_string())
-  }
-}
-
-impl From<String> for ParseError {
-  fn from(error: String) -> Self {
-    ParseError::Error(error)
-  }
-}
-
-impl From<&str> for ParseError {
-  fn from(error: &str) -> Self {
-    ParseError::Error(error.to_string())
   }
 }

@@ -14,7 +14,7 @@ use std::collections::HashMap;
 /// all the image and animation information for every file packed in the atlas.
 /// **By convention**, every file has one or more animations. Every animation
 /// has a Frame sequence, a Tag, and zero or more Slices.
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct File {
   pub meta: Meta,
   /// All Frames for all files packed.
@@ -23,7 +23,7 @@ pub struct File {
 
 pub type FrameMap = HashMap<TagFrameNumber, Frame>;
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Meta {
   /// E.g., "http://www.aseprite.org/".
   pub app: String,
@@ -52,7 +52,7 @@ pub type Tag = String;
 
 /// A single animation frame and most primitive unit. Each file packed always a
 /// has at least one Frame.
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Frame {
   /// The Frame's bounds within the atlas, including a any border padding
   /// **via CLI** `--inner-padding n`. The padding dimensions may also be
@@ -72,7 +72,7 @@ pub struct Frame {
 
 /// A label and animation behavior for one or more Frames. When combined with
 /// the referenced Frames, an animation is represented.
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct FrameTag {
   /// **By convention**, the associated Frame's Tag.
   pub name: Tag,
@@ -92,7 +92,7 @@ pub type Duration = u16;
 /// termination.
 pub const INFINITE: Duration = !0;
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Slice {
   pub name: Tag,
   /// Color in #rrggbbaa format. E.g., blue is "#0000ffff".
@@ -100,7 +100,7 @@ pub struct Slice {
   pub keys: Vec<Key>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Key {
   /// The inclusive associated Frame's start offset, the exclusive previous
   /// Frame's end offset. **By convention,** the exclusive end offset is the
@@ -111,7 +111,7 @@ pub struct Key {
   pub bounds: Rect,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Rect {
   /// Distance from the top in pixels.
   pub x: i16,
@@ -123,7 +123,7 @@ pub struct Rect {
   pub h: u16,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct WH {
   /// Width in pixels.
   pub w: u16,
