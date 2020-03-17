@@ -28,12 +28,9 @@ pub async fn main_wasm() -> Result<(), JsValue> {
   #[cfg(debug_assertions)]
   console_error_panic_hook::set_once();
 
-  let window = web_sys::window().ok_or("Missing Window.")?;
-  let document = window.document().ok_or("Missing Document.")?;
-  let canvas = document
-    .get_element_by_id("game_canvas")
-    .ok_or("Missing #game_canvas.")?
-    .dyn_into()?;
+  let window = web_sys::window().ok_or("Window missing.")?;
+  let document = window.document().ok_or("Document missing.")?;
+  let canvas = wasm::get_element_by_id(&document, "game_canvas")?;
   let assets = Assets::load(&window, &document).await?;
   let mut game = Game::new(window, document, canvas, assets);
   game.start();

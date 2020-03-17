@@ -1,0 +1,11 @@
+[
+  {
+    "source": {"x": 48, "y": 240, "w": 24, "h": 16},
+    "constituent": {"x": 16, "y": 240, "w": 24, "h": 16},
+    "composition": "SourceIn",
+    "destination": {"x": 55, "y": 40, "w": 24, "h": 16},
+    "scale": {"x": 1, "y": 1},
+    "wrap": {"x": -64, "y": 32},
+    "wrap_velocity": {"x": -64, "y": 32}
+  }
+]

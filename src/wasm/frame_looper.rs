@@ -8,7 +8,20 @@ use web_sys::Window;
 pub struct FrameLooper {
   window: Window,
   /// A mutable reference to a FrameListener. The reference is shared between
-  /// the call to start() and then the looping closure.
+  /// the call to start() and then the looping closure. Cloning frame_listener's
+  /// reference directly or the entire FrameLooper structure causes its state to
+  /// be shared between held references.
+  ///
+  /// The FrameListener is initialized with an empty callback. It's possible to
+  /// interact with this state via is_looping() and stop() but there's nothing
+  /// surprising about it. The FrameListener is fully replaced on every call to
+  /// start() in order to reinitialize its then variable. This could be moved to
+  /// a property but it's not a clear improvement.
+  ///
+  /// The on_loop() callback is initialized properly in start() for the sake of
+  /// client which would have to hold a reference to Self with a FrameListener
+  /// Option instead of simply a FrameListener since the callback creates a
+  /// circular reference at constructor time if FrameListener property is used.
   frame_listener: Rc<RefCell<FrameListener>>,
 }
 
@@ -33,6 +46,7 @@ impl FrameLooper {
       then = now;
 
       if frame_listener.borrow().is_issued() {
+        // Not canceled in on_loop(). Request another frame.
         frame_listener.borrow_mut().request();
       }
     };

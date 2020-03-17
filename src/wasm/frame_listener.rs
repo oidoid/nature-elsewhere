@@ -31,7 +31,7 @@ impl FrameListener {
 
   pub fn cancel(&mut self) {
     if let Some(frame_id) = self.frame_id {
-      self.window.cancel_animation_frame(frame_id).unwrap_or(());
+      self.window.cancel_animation_frame(frame_id).ok();
     }
     self.frame_id = None;
   }

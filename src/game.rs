@@ -8,12 +8,8 @@ use crate::inputs::input_poller::InputPoller;
 use crate::math::rect::{Rect, R16};
 use crate::math::wh::WH16;
 use crate::math::xy::XY16;
-use crate::math::Millis;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
-use crate::wasm;
-use crate::wasm::event_listener::{AddEventListener, EventListener};
-use crate::wasm::frame_looper::FrameLooper;
 use num::traits::cast::ToPrimitive;
 use specs::DispatcherBuilder;
 use specs::Join;
@@ -21,8 +17,6 @@ use specs::{
   Builder, ReadExpect, ReadStorage, RunNow, System, World, WorldExt,
 };
 use std::cell::RefCell;
-use std::convert::AsMut;
-use std::ops::DerefMut;
 use std::rc::Rc;
 use web_sys::{console, Document, HtmlCanvasElement, Window};
 

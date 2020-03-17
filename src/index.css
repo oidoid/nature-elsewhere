@@ -30,5 +30,7 @@ body {
 }
 
 #atlas {
+  /* The atlas is an asset image used by WebGL. It is not to presented as an
+     element. */
   display: none;
 }

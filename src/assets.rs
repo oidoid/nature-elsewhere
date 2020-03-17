@@ -3,7 +3,7 @@ use super::atlas::Atlas;
 use super::graphics::shader_layout::ShaderLayout;
 use crate::wasm;
 use crate::wasm::fetch;
-use wasm_bindgen::{JsCast, JsValue};
+use wasm_bindgen::JsValue;
 use web_sys::{Document, HtmlImageElement, Window};
 
 pub struct Assets {
@@ -33,9 +33,9 @@ impl Assets {
     .await?;
 
     let atlas = &fetch::json(window, "/atlas/atlas.json").await?;
-    let atlas = atlas::parser::parse(atlas).expect("Atlas parsing failed.");
+    let atlas = atlas::parser::parse(atlas).map_err(|err| err.to_string())?;
     let atlas_image: HtmlImageElement =
-      wasm::get_element_by_id(document, "atlas")?.dyn_into()?;
+      wasm::get_element_by_id(document, "atlas")?;
 
     Ok(Self { shader_layout, vertex_glsl, fragment_glsl, atlas, atlas_image })
   }
