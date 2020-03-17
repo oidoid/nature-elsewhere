@@ -1,8 +1,8 @@
 use super::assets::Assets;
-use super::ecs::entity_operator::EntityOperator;
-use super::ecs::resources::TimeStep;
-use super::ecs::{bounds::Bounds, max_wh::MaxWH, text::Text};
 use super::graphics::renderer_state_machine::RendererStateMachine;
+use crate::components::entity_operator::EntityOperator;
+use crate::components::resources::TimeStep;
+use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
 use crate::graphics::renderer::Renderer;
 use crate::graphics::viewport;
 use crate::inputs::input_poller::InputPoller;
@@ -11,45 +11,13 @@ use crate::math::wh::WH16;
 use crate::math::xy::XY16;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
+use crate::systems::render::RenderSystem;
 use num::traits::cast::ToPrimitive;
-use specs::prelude::{ResourceId, SystemData};
 use specs::DispatcherBuilder;
-use specs::Join;
-use specs::{
-  Builder, ReadExpect, ReadStorage, RunNow, System, World, WorldExt,
-};
+use specs::{Builder, RunNow, System, World, WorldExt};
 use std::cell::RefCell;
 use std::rc::Rc;
 use web_sys::{console, Document, HtmlCanvasElement, Window};
-struct RenderSystem;
-
-#[derive(SystemData)]
-pub struct RenderData<'a> {
-  time_step: ReadExpect<'a, TimeStep>,
-  bounds: ReadStorage<'a, Bounds>,
-  text: ReadStorage<'a, Text>,
-  max_wh: ReadStorage<'a, MaxWH>,
-}
-
-impl<'a> System<'a> for RenderSystem {
-  type SystemData = RenderData<'a>;
-
-  fn run(&mut self, data: Self::SystemData) {
-    let RenderData { time_step, bounds, text, max_wh } = data;
-    for (bounds, text, max_wh) in (&bounds, &text, (&max_wh).maybe()).join() {
-      console::log_1(
-        &format!(
-          "Hello {:?} {} {} {:?}",
-          &bounds,
-          time_step.0,
-          text.0,
-          max_wh.unwrap_or(&MaxWH(WH16::from(255, 255))).0
-        )
-        .into(),
-      );
-    }
-  }
-}
 
 #[derive(Clone)]
 pub struct Game {

@@ -8,13 +8,14 @@ extern crate serde;
 mod utils;
 mod assets;
 mod atlas;
-mod ecs;
+mod components;
 mod game;
 mod graphics;
 mod inputs;
 mod math;
 mod settings;
 mod sprites;
+mod systems;
 mod text;
 mod wasm;
 
