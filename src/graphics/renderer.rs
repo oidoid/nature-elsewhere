@@ -3,7 +3,6 @@ use super::rgba::RGBA;
 use super::shader_layout::ShaderLayout;
 use crate::math::rect::R16;
 use crate::math::wh::WH16;
-use image::{DynamicImage, GenericImageView};
 use num::traits::cast::ToPrimitive;
 use std::collections::HashMap;
 use std::convert::From;

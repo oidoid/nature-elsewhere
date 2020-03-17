@@ -29,7 +29,6 @@ lto = true
 bincode = '=1.2.1'
 console_error_panic_hook = '=0.1.6'
 failure = '=0.1.7'
-image = '=0.23.1'
 lazy_static = '=1.4.0'
 num = '=0.2.1'
 serde = {version = '=1.0.104', features = ['derive']}

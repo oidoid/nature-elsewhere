@@ -1,7 +1,5 @@
 use super::shader_layout::Attribute;
-use image::{DynamicImage, GenericImageView};
 use num::traits::cast::FromPrimitive;
-use num::traits::cast::ToPrimitive;
 use std::collections::HashMap;
 use std::convert::From;
 use wasm_bindgen::{prelude::JsValue, JsCast};
