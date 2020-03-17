@@ -126,6 +126,7 @@ fn tracking(font: &Font, lhs: char, scale: &XY16, rhs: Option<&char>) -> i16 {
   scale.x * (font.letter_width(lhs) + font.kerning(lhs, rhs))
 }
 
+#[cfg(test)]
 mod test {
   use super::*;
 

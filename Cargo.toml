@@ -29,20 +29,31 @@ lto = true
 bincode = '=1.2.1'
 console_error_panic_hook = '=0.1.6'
 failure = '=0.1.7'
-lazy_static = '=1.4.0'
 num = '=0.2.1'
 serde = {version = '=1.0.104', features = ['derive']}
 serde_json = '=1.0.48'
 serde_repr = '=0.1.5'
-specs = {version = '=0.16.1', default-features = false, features = ['serde', 'specs-derive']}
 wasm-bindgen = {version = '=0.2.59', features = ["serde-serialize"]}
 wasm-bindgen-futures = '=0.4.9'
-web-sys = {version = '=0.3.36', features = [
+
+[dependencies.specs]
+version = '=0.16.1'
+# Disable parallelization which is unsupported for Wasm.
+default-features = false
+features = ['serde', 'specs-derive']
+
+[dependencies.web-sys]
+version = '=0.3.36'
+features = [
   'AddEventListenerOptions', 'AngleInstancedArrays', 'console', 'Document',
-  'Element', 'Event', 'EventListener', 'EventTarget', 'HtmlCanvasElement', 'HtmlElement',
-  'HtmlImageElement', 'KeyboardEvent', 'Performance', 'PointerEvent',
-  'WebGlActiveInfo', 'WebGlBuffer', 'WebGlProgram', 'WebGlRenderingContext',
-  'WebGlContextAttributes', 'WebGlShader', 'WebGlTexture',
-  'WebGlUniformLocation', 'Window', 'MouseEvent',
-  'OesVertexArrayObject', 'WebglLoseContext', 'WebGlVertexArrayObject', 'Request', 'Headers','Response'
-]}
+  'Element', 'Event', 'EventListener', 'EventTarget', 'Headers',
+  'HtmlCanvasElement', 'HtmlElement', 'HtmlImageElement', 'KeyboardEvent',
+  'MouseEvent', 'OesVertexArrayObject', 'Performance', 'PointerEvent',
+  'Response', 'Request', 'WebGlActiveInfo', 'WebGlBuffer',
+  'WebGlContextAttributes', 'WebglLoseContext', 'WebGlProgram',
+  'WebGlRenderingContext', 'WebGlShader', 'WebGlTexture',
+  'WebGlUniformLocation', 'WebGlVertexArrayObject', 'Window'
+]
+
+[dev-dependencies]
+lazy_static = '=1.4.0'
