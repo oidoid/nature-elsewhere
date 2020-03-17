@@ -1,4 +1,3 @@
-pub mod gl_data_type;
 pub mod gl_util;
 pub mod renderer;
 pub mod renderer_state_machine;

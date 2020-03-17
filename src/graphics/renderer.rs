@@ -14,7 +14,6 @@ use web_sys::{
   WebGlUniformLocation as GlUniformLocation, WebglLoseContext as GlLoseContext,
 };
 
-#[derive(Debug)]
 pub struct Renderer {
   canvas: HtmlCanvasElement,
   gl: Gl,

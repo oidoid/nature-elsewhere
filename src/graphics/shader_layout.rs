@@ -1,8 +1,8 @@
-use super::gl_data_type::GlDataType;
 use crate::math::ceil::CeilMultiple;
 use std::collections::HashMap;
+use web_sys::WebGlRenderingContext as Gl;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct ShaderLayout {
   /// Uniform name to uniform name. Kind of silly because these are identical.
   pub uniforms: HashMap<String, String>,
@@ -10,7 +10,7 @@ pub struct ShaderLayout {
   pub per_instance: AttributeBuffer,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct AttributeBuffer {
   pub len: i32,
   pub stride: i32,
@@ -18,7 +18,7 @@ pub struct AttributeBuffer {
   pub attributes: Vec<Attribute>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Attribute {
   pub data_type: GlDataType,
   pub name: String,
@@ -26,18 +26,31 @@ pub struct Attribute {
   pub offset: i32,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct ShaderLayoutConfig {
   pub uniforms: HashMap<String, String>,
   pub per_vertex: Vec<AttributeConfig>,
   pub per_instance: Vec<AttributeConfig>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct AttributeConfig {
   pub data_type: GlDataType,
   pub name: String,
   pub len: i32,
+}
+
+/// An enumeration of WebGL primitives.
+#[repr(u32)]
+#[derive(Clone, Copy, Deserialize)]
+pub enum GlDataType {
+  Byte = Gl::BYTE,
+  UnsignedByte = Gl::UNSIGNED_BYTE,
+  Short = Gl::SHORT,
+  UnsignedShort = Gl::UNSIGNED_SHORT,
+  Int = Gl::INT,
+  UnsignedInt = Gl::UNSIGNED_INT,
+  Float = Gl::FLOAT,
 }
 
 impl ShaderLayout {
@@ -92,6 +105,21 @@ fn fold_attribute(
 
 fn next_attribute_offset(attribute: Attribute) -> i32 {
   attribute.offset + attribute.data_type.size() * attribute.len
+}
+
+impl GlDataType {
+  /// Returns the size in bytes of the type.
+  pub fn size(self) -> i32 {
+    match self {
+      Self::Byte => 1,
+      Self::UnsignedByte => 1,
+      Self::Short => 2,
+      Self::UnsignedShort => 2,
+      Self::Int => 4,
+      Self::UnsignedInt => 4,
+      Self::Float => 4,
+    }
+  }
 }
 
 #[cfg(test)]
