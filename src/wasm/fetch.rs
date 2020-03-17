@@ -12,8 +12,10 @@ pub async fn json<T: for<'a> Deserialize<'a>>(
   request.headers().set("Accept", "application/json")?;
   let response: Response =
     JsFuture::from(window.fetch_with_request(&request)).await?.dyn_into()?;
-  let json: JsValue = JsFuture::from(response.json()?).await?;
-  json.into_serde().map_err(|err| err.to_string().into())
+  JsFuture::from(response.json()?)
+    .await?
+    .into_serde()
+    .map_err(|error| error.to_string().into())
 }
 
 pub async fn text(
@@ -23,8 +25,8 @@ pub async fn text(
 ) -> Result<String, JsValue> {
   let request = Request::new_with_str(path)?;
   request.headers().set("Accept", mime_type)?;
-  let response = JsFuture::from(window.fetch_with_request(&request)).await?;
-  let response: Response = response.dyn_into().unwrap();
+  let response: Response =
+    JsFuture::from(window.fetch_with_request(&request)).await?.dyn_into()?;
   JsFuture::from(response.text()?)
     .await?
     .as_string()

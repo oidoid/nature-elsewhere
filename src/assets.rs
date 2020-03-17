@@ -1,6 +1,7 @@
 use super::atlas;
 use super::atlas::Atlas;
 use super::graphics::shader_layout::ShaderLayout;
+use crate::text::font::Font;
 use crate::wasm;
 use crate::wasm::fetch;
 use wasm_bindgen::JsValue;
@@ -12,6 +13,7 @@ pub struct Assets {
   pub fragment_glsl: String,
   pub atlas: Atlas,
   pub atlas_image: HtmlImageElement,
+  pub font: Font,
 }
 
 impl Assets {
@@ -37,6 +39,15 @@ impl Assets {
     let atlas_image: HtmlImageElement =
       wasm::get_element_by_id(document, "atlas")?;
 
-    Ok(Self { shader_layout, vertex_glsl, fragment_glsl, atlas, atlas_image })
+    let font: Font = fetch::json(window, "/text/mem_font.json").await?;
+
+    Ok(Self {
+      shader_layout,
+      vertex_glsl,
+      fragment_glsl,
+      atlas,
+      atlas_image,
+      font,
+    })
   }
 }

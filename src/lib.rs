@@ -21,7 +21,7 @@ mod wasm;
 
 use assets::Assets;
 use game::Game;
-use wasm_bindgen::{prelude::wasm_bindgen, JsCast, JsValue};
+use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
 #[wasm_bindgen(start)]
 pub async fn main_wasm() -> Result<(), JsValue> {

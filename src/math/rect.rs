@@ -71,6 +71,11 @@ use std::{
 // - Should GDD be a separate repo? Will I have many images? I can't put
 //   copyrighted sources in it so maybe that needs to be a separate document
 //   just for inspirado.
+// https://specs.amethyst.rs/docs/tutorials/11_advanced_component.html
+// https://docs.rs/specs/0.16.1/specs/trait.Component.html
+// https://github.com/rust-lang-nursery/lazy-static.rs
+// https://docs.serde.rs/serde_json/macro.json.html
+// https://serde.rs/field-attrs.html
 
 /// Axis-aligned rectangle. Rectangles are considered front-facing when both
 /// components of `from` are less-than or equal to `to` and back-facing
