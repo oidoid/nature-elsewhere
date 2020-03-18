@@ -7,12 +7,10 @@ use crate::math::xy::XY16;
 use crate::resources::Timing;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
-use num::traits::cast::ToPrimitive;
 use specs::prelude::{ResourceId, SystemData};
 use specs::Join;
-use specs::{Read, ReadExpect, ReadStorage, System, World};
+use specs::{ReadExpect, ReadStorage, System, World};
 use std::cell::RefCell;
-use std::ops::DerefMut;
 use std::rc::Rc;
 use web_sys::console;
 
@@ -89,7 +87,7 @@ impl<'a> System<'a> for RendererSystem {
         &format!(
           "Hello {:?} {} {} {:?}",
           &bounds,
-          timing.step,
+          timing.delta,
           text.0,
           max_wh.unwrap_or(&MaxWH(WH16::from(255, 255))).0
         )

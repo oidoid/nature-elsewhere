@@ -19,17 +19,15 @@ pub struct RendererStateMachine {
   looper: FrameLooper,
   listeners: Rc<RefCell<Vec<EventListener>>>,
   /// The last recorded render timestamp.
-  now: Rc<RefCell<Millis>>,
+  last_rendered_at: Rc<RefCell<Option<Millis>>>,
   /// Total elapsed game time rendered. Excludes time spent paused.
   play_time: Rc<RefCell<Duration>>,
   on_loop_callback:
-    Rc<RefCell<dyn FnMut(Rc<RefCell<Renderer>>, Duration, Millis, Millis)>>,
+    Rc<RefCell<dyn FnMut(Rc<RefCell<Renderer>>, Duration, Millis)>>,
 }
 
 impl RendererStateMachine {
-  pub fn new<
-    T: 'static + FnMut(Rc<RefCell<Renderer>>, Duration, Millis, Millis),
-  >(
+  pub fn new<T: 'static + FnMut(Rc<RefCell<Renderer>>, Duration, Millis)>(
     window: Window,
     document: Document,
     canvas: HtmlCanvasElement,
@@ -49,7 +47,7 @@ impl RendererStateMachine {
       assets: Rc::new(assets),
       canvas,
       renderer,
-      now: Rc::new(RefCell::new(0.)),
+      last_rendered_at: Rc::new(RefCell::new(None)),
       looper: FrameLooper::new(window),
       listeners: Rc::new(RefCell::new(Vec::new())),
       play_time: Rc::new(RefCell::new(Duration::from_millis(0))),
@@ -80,12 +78,12 @@ impl RendererStateMachine {
     // Run one loop regardless of focus so that the game appears. A zero time
     // delta should mostly cause no updates but not everything is fully loop
     // independent like input sampling.
-    let now = *self.now.borrow();
-    self.on_loop(now, now);
+    let delta = self.last_rendered_at.borrow().unwrap_or(0.);
+    self.on_loop(delta);
 
     if self.is_focused() {
       let rc = Rc::new(RefCell::new(self.clone()));
-      self.looper.start(move |then, now| rc.borrow_mut().on_loop(then, now));
+      self.looper.start(move |time| rc.borrow_mut().on_loop(time));
     }
   }
 
@@ -116,16 +114,17 @@ impl RendererStateMachine {
     event.prevent_default();
   }
 
-  fn on_loop(&mut self, then: f64, now: f64) {
-    *self.now.borrow_mut() = now;
+  fn on_loop(&mut self, now: f64) {
+    let then = self.last_rendered_at.borrow().unwrap_or(now);
+    *self.last_rendered_at.borrow_mut() = Some(now);
+    let delta = now - then;
     let play_time =
-      *self.play_time.borrow() + Duration::from_secs_f64((now - then) / 1000.);
+      *self.play_time.borrow() + Duration::from_secs_f64(delta / 1000.);
     *self.play_time.borrow_mut() = play_time;
     self.on_loop_callback.borrow_mut().deref_mut()(
       self.renderer.clone(),
       play_time,
-      then,
-      now,
+      delta,
     );
   }
 

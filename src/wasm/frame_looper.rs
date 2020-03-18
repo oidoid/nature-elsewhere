@@ -15,10 +15,7 @@ pub struct FrameLooper {
   /// The FrameListener is initialized with an empty callback. It's possible to
   /// interact with this state via is_looping() and stop() but there's nothing
   /// surprising about it. The FrameListener is fully replaced on every call to
-  /// start() in order to reinitialize its then variable. This could be moved to
-  /// a property but it's not a clear improvement.
-  ///
-  /// The on_loop() callback is initialized properly in start() for the sake of
+  /// start() in order to reinitialize its on_loop variable for the sake of the
   /// client which would have to hold a reference to Self with a FrameListener
   /// Option instead of simply a FrameListener since the callback creates a
   /// circular reference at constructor time if FrameListener property is used.
@@ -33,17 +30,15 @@ impl FrameLooper {
     }
   }
 
-  pub fn start<T: 'static + FnMut(f64, f64)>(&self, mut on_loop: T) {
+  pub fn start<T: 'static + FnMut(f64)>(&self, mut on_loop: T) {
     if self.is_looping() {
       return;
     }
 
     // Clone the reference for the closure.
     let frame_listener = self.frame_listener.clone();
-    let mut then = None;
-    let fnc = move |now: f64| {
-      on_loop(then.unwrap_or(now), now);
-      then = Some(now);
+    let fnc = move |time: f64| {
+      on_loop(time);
 
       if frame_listener.borrow().is_issued() {
         // Not canceled in on_loop(). Request another frame.

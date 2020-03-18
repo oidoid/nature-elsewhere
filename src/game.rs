@@ -70,8 +70,8 @@ impl Game {
     let renderer_state_machine =
       RendererStateMachine::new(window, document, canvas, assets, {
         let mut clone = game.clone();
-        move |renderer, time, then, now| {
-          clone.on_loop(renderer, time, then, now)
+        move |renderer, play_time, delta| {
+          clone.on_loop(renderer, play_time, delta)
         }
       });
     *game.renderer_state_machine.borrow_mut() = Some(renderer_state_machine);
@@ -98,10 +98,9 @@ impl Game {
     &mut self,
     renderer: Rc<RefCell<Renderer>>,
     play_time: Duration,
-    then: Millis,
-    now: Millis,
+    delta: Millis,
   ) {
-    self.ecs.borrow_mut().insert(Timing { play_time, step: now - then });
+    self.ecs.borrow_mut().insert(Timing { play_time, delta });
     self.ecs.borrow_mut().insert(renderer);
     self.ecs.borrow_mut().insert(Viewport::new(&self.document));
     self.dispatcher.borrow_mut().dispatch(&self.ecs.borrow_mut());
