@@ -1,20 +1,16 @@
 use super::assets::Assets;
 use super::graphics::renderer_state_machine::RendererStateMachine;
 use crate::components::entity_operator::EntityOperator;
-use crate::components::resources::TimeStep;
 use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
 use crate::graphics::renderer::Renderer;
-use crate::graphics::viewport;
+use crate::graphics::viewport::Viewport;
 use crate::inputs::input_poller::InputPoller;
-use crate::math::rect::{Rect, R16};
 use crate::math::wh::WH16;
-use crate::math::xy::XY16;
-use crate::sprites::sprite::Sprite;
-use crate::sprites::sprite_composition::SpriteComposition;
-use crate::systems::render::RenderSystem;
-use num::traits::cast::ToPrimitive;
-use specs::DispatcherBuilder;
-use specs::{Builder, RunNow, System, World, WorldExt};
+use crate::math::Millis;
+use crate::resources::Timing;
+use crate::systems::renderer::RendererSystem;
+use specs::{Builder, RunNow, World, WorldExt};
+use specs::{Dispatcher, DispatcherBuilder};
 use std::cell::RefCell;
 use std::rc::Rc;
 use web_sys::{console, Document, HtmlCanvasElement, Window};
@@ -25,6 +21,7 @@ pub struct Game {
   document: Document,
   canvas: HtmlCanvasElement,
   world: Rc<RefCell<World>>,
+  dispatcher: Rc<RefCell<Dispatcher<'static, 'static>>>,
   renderer_state_machine: Rc<RefCell<Option<RendererStateMachine>>>,
   input_poller: Rc<RefCell<InputPoller>>,
 }
@@ -32,26 +29,20 @@ pub struct Game {
 impl Game {
   fn create_entities(&mut self) {
     let mut world = self.world.borrow_mut();
-    world.register::<Bounds>();
-    world.register::<EntityOperator>();
-    world.register::<Text>();
-    world.register::<MaxWH>();
-    world.create_entity().with(Bounds::new(1, 2, 3, 4)).build();
-    world.create_entity().with(EntityOperator::Player).build();
+    self.dispatcher.borrow_mut().setup(&mut world);
+
+    world
+      .create_entity()
+      // .with(EntityOperator::Player)
+      .with(Bounds::new(1, 2, 3, 4))
+      .build();
     world
       .create_entity()
       .with(Bounds::new(5, 6, 7, 8))
       .with(Text("hello\nw\no\nr\nl\nd".to_string()))
       .with(MaxWH(WH16::from(5, 5)))
       .build();
-    world.insert(TimeStep(0.));
-    {
-      let mut delta = world.write_resource::<TimeStep>();
-      *delta = TimeStep(16.67);
-    }
-    let mut dispatcher =
-      DispatcherBuilder::new().with(RenderSystem, "render_system", &[]).build();
-    dispatcher.dispatch(&world);
+    // world.insert(Renderer);
   }
 
   pub fn new(
@@ -60,15 +51,21 @@ impl Game {
     canvas: HtmlCanvasElement,
     assets: Assets,
   ) -> Self {
+    let dispatcher = DispatcherBuilder::new()
+      .with(RendererSystem, "render_system", &[])
+      .build();
+
     let mut game = Game {
       window: window.clone(),
       document: document.clone(),
       canvas: canvas.clone(),
       world: Rc::new(RefCell::new(World::new())),
+      dispatcher: Rc::new(RefCell::new(dispatcher)),
       renderer_state_machine: Rc::new(RefCell::new(None)),
       input_poller: Rc::new(RefCell::new(InputPoller::new(&window))),
     };
 
+    game.create_entities();
     let renderer_state_machine =
       RendererStateMachine::new(window, document, canvas, assets, {
         let mut clone = game.clone();
@@ -77,8 +74,6 @@ impl Game {
         }
       });
     *game.renderer_state_machine.borrow_mut() = Some(renderer_state_machine);
-
-    game.create_entities();
 
     game
   }
@@ -100,64 +95,15 @@ impl Game {
 
   fn on_loop(
     &mut self,
-    renderer: &mut Renderer,
-    time: f64,
-    then: f64,
-    now: f64,
+    renderer: Rc<RefCell<Renderer>>,
+    age: Millis,
+    then: Millis,
+    now: Millis,
   ) {
-    *self.world.borrow().write_resource::<TimeStep>() = TimeStep(now - then);
-
+    self.world.borrow_mut().insert(Timing { age, step: now - then });
+    self.world.borrow_mut().insert(renderer);
+    self.world.borrow_mut().insert(Viewport::new(&self.document));
+    self.dispatcher.borrow_mut().dispatch(&self.world.borrow_mut());
     self.world.borrow_mut().maintain();
-    let canvas_wh = viewport::canvas_wh(&self.document);
-    let scale = viewport::scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
-    let cam_wh = viewport::cam_wh(&canvas_wh, scale);
-    let bytes = [
-      Sprite::new(
-        R16::cast_wh(80, 150, 11, 13),
-        R16::cast_wh(80, 150, 11, 13),
-        SpriteComposition::Source,
-        R16::cast_wh(32, 32, 11, 13),
-        XY16 { x: 1, y: 1 },
-        XY16 { x: 0, y: 0 },
-        XY16 { x: 0, y: 0 },
-      ),
-      // Cool grass shader
-      // Sprite::new(
-      //   R16::cast_wh(80, 240, 16, 16),
-      //   R16::cast_wh(80, 240, 16, 16),
-      //   SpriteComposition::Source,
-      //   R16::cast_wh(32, 32, 160, 160),
-      //   XY16 { x: 1, y: 1 },
-      //   XY16 { x: 0, y: 0 },
-      //   XY16 { x: 0, y: 0 },
-      // ),
-      // Sprite::new(
-      //   R16::cast_wh(48, 240, 32, 16),
-      //   R16::cast_wh(16, 240, 32, 16),
-      //   SpriteComposition::SourceIn,
-      //   R16::cast_wh(48, 48, 32, 16),
-      //   XY16 { x: 1, y: 1 },
-      //   XY16 { x: 0, y: 0 },
-      //   XY16 { x: -64, y: 32 },
-      // ),
-      // Sprite::new(
-      //   R16::cast_wh(48, 240, 24, 16),
-      //   R16::cast_wh(16, 240, 24, 16),
-      //   SpriteComposition::SourceIn,
-      //   R16::cast_wh(55, 40, 24, 16),
-      //   XY16 { x: 1, y: 1 },
-      //   XY16 { x: -64, y: 32 },
-      //   XY16 { x: -64, y: 32 },
-      // ),
-    ];
-    let bytes = bincode::config().native_endian().serialize(&bytes).unwrap();
-
-    renderer.render(
-      time.to_i32().unwrap(), // https://github.com/rust-lang/rust/issues/10184
-      &canvas_wh,
-      scale,
-      &Rect::cast(0, 0, cam_wh.w, cam_wh.h),
-      &bytes,
-    );
   }
 }

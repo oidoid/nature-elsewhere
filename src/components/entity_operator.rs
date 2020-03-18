@@ -1,7 +1,7 @@
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 
-#[derive(Component, Clone, Copy, Debug, Deserialize, PartialEq)]
+#[derive(Component)]
 pub enum EntityOperator {
   Computer,
   Player,

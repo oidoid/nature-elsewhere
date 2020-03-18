@@ -20,12 +20,15 @@ pub struct RendererStateMachine {
   listeners: Rc<RefCell<Vec<EventListener>>>,
   now: Rc<RefCell<Millis>>,
   /// Total game time elapsed.
-  time: Rc<RefCell<Millis>>,
-  on_loop_callback: Rc<RefCell<dyn FnMut(&mut Renderer, f64, f64, f64)>>,
+  age: Rc<RefCell<Millis>>,
+  on_loop_callback:
+    Rc<RefCell<dyn FnMut(Rc<RefCell<Renderer>>, Millis, Millis, Millis)>>,
 }
 
 impl RendererStateMachine {
-  pub fn new<T: 'static + FnMut(&mut Renderer, f64, f64, f64)>(
+  pub fn new<
+    T: 'static + FnMut(Rc<RefCell<Renderer>>, Millis, Millis, Millis),
+  >(
     window: Window,
     document: Document,
     canvas: HtmlCanvasElement,
@@ -48,7 +51,7 @@ impl RendererStateMachine {
       now: Rc::new(RefCell::new(wasm::expect_performance(&window).now())),
       looper: FrameLooper::new(window),
       listeners: Rc::new(RefCell::new(Vec::new())),
-      time: Rc::new(RefCell::new(0.)),
+      age: Rc::new(RefCell::new(0.)),
       on_loop_callback: Rc::new(RefCell::new(on_loop)),
     }
   }
@@ -114,11 +117,11 @@ impl RendererStateMachine {
 
   fn on_loop(&mut self, then: f64, now: f64) {
     *self.now.borrow_mut() = now;
-    let time = *self.time.borrow() + now - then;
-    *self.time.borrow_mut() = time;
+    let age = *self.age.borrow() + now - then;
+    *self.age.borrow_mut() = age;
     self.on_loop_callback.borrow_mut().deref_mut()(
-      self.renderer.borrow_mut().deref_mut(),
-      time,
+      self.renderer.clone(),
+      age,
       then,
       now,
     );

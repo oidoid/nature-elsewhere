@@ -5,7 +5,6 @@ pub mod entity_operator;
 pub mod max_wh;
 pub mod render_source;
 pub mod renderable;
-pub mod resources;
 pub mod text;
 pub mod velocity;
 pub mod wraparound;

@@ -13,6 +13,7 @@ mod game;
 mod graphics;
 mod inputs;
 mod math;
+mod resources;
 mod settings;
 mod sprites;
 mod systems;

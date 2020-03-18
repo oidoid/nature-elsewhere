@@ -185,7 +185,7 @@ impl Renderer {
   /// scale Positive integer zoom.
   pub fn render(
     &mut self,
-    time: i32,
+    age: i32,
     canvas_wh: &WH16,
     scale: i16,
     cam: &R16,
@@ -196,7 +196,7 @@ impl Renderer {
       self.uniforms.get(
         self.layout.uniforms.get("time").expect("Missing \"time\" uniform."),
       ),
-      time,
+      age,
     );
     gl_util::buffer_data(
       &self.gl,
