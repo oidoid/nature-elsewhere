@@ -20,7 +20,7 @@ pub struct Game {
   window: Window,
   document: Document,
   canvas: HtmlCanvasElement,
-  world: Rc<RefCell<World>>,
+  ecs: Rc<RefCell<World>>,
   dispatcher: Rc<RefCell<Dispatcher<'static, 'static>>>,
   renderer_state_machine: Rc<RefCell<Option<RendererStateMachine>>>,
   input_poller: Rc<RefCell<InputPoller>>,
@@ -28,21 +28,21 @@ pub struct Game {
 
 impl Game {
   fn create_entities(&mut self) {
-    let mut world = self.world.borrow_mut();
-    self.dispatcher.borrow_mut().setup(&mut world);
+    let mut ecs = self.ecs.borrow_mut();
+    self.dispatcher.borrow_mut().setup(&mut ecs);
 
-    world
+    ecs
       .create_entity()
       // .with(EntityOperator::Player)
       .with(Bounds::new(1, 2, 3, 4))
       .build();
-    world
+    ecs
       .create_entity()
       .with(Bounds::new(5, 6, 7, 8))
       .with(Text("hello\nw\no\nr\nl\nd".to_string()))
       .with(MaxWH(WH16::from(5, 5)))
       .build();
-    // world.insert(Renderer);
+    // ecs.insert(Renderer);
   }
 
   pub fn new(
@@ -59,7 +59,7 @@ impl Game {
       window: window.clone(),
       document: document.clone(),
       canvas: canvas.clone(),
-      world: Rc::new(RefCell::new(World::new())),
+      ecs: Rc::new(RefCell::new(World::new())),
       dispatcher: Rc::new(RefCell::new(dispatcher)),
       renderer_state_machine: Rc::new(RefCell::new(None)),
       input_poller: Rc::new(RefCell::new(InputPoller::new(&window))),
@@ -100,10 +100,10 @@ impl Game {
     then: Millis,
     now: Millis,
   ) {
-    self.world.borrow_mut().insert(Timing { age, step: now - then });
-    self.world.borrow_mut().insert(renderer);
-    self.world.borrow_mut().insert(Viewport::new(&self.document));
-    self.dispatcher.borrow_mut().dispatch(&self.world.borrow_mut());
-    self.world.borrow_mut().maintain();
+    self.ecs.borrow_mut().insert(Timing { age, step: now - then });
+    self.ecs.borrow_mut().insert(renderer);
+    self.ecs.borrow_mut().insert(Viewport::new(&self.document));
+    self.dispatcher.borrow_mut().dispatch(&self.ecs.borrow_mut());
+    self.ecs.borrow_mut().maintain();
   }
 }

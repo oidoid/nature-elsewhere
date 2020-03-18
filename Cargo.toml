@@ -19,10 +19,14 @@ is-it-maintained-open-issues = { repository = 'https://github.com/oddoid/nature-
 maintenance = { status = 'experimental' }
 
 [lib]
+# No need to include "Rust specific stuff." See
+# https://doc.rust-lang.org/stable/edition-guide/rust-2018/platform-and-target-support/cdylib-crates-for-c-interoperability.html.
 crate-type = ['cdylib']
 
 [profile.release]
 opt-level = 'z' # Optimize for size.
+# Enable Link-Time Optimiziation. See
+# https://stackoverflow.com/questions/52291006/why-does-using-lto-increase-the-size-of-my-rust-binary.
 lto = true
 
 [dependencies]
