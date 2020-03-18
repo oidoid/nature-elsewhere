@@ -11,7 +11,6 @@ precision mediump sampler2D;
 
 uniform sampler2D atlas;
 uniform ivec2 atlas_size; // width (x), height (y) in pixels.
-uniform int time;
 
 varying vec4 v_source;
 varying vec4 v_constituent;

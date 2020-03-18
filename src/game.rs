@@ -13,6 +13,7 @@ use specs::{Builder, RunNow, World, WorldExt};
 use specs::{Dispatcher, DispatcherBuilder};
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::time::Duration;
 use web_sys::{console, Document, HtmlCanvasElement, Window};
 
 #[derive(Clone)]
@@ -96,11 +97,11 @@ impl Game {
   fn on_loop(
     &mut self,
     renderer: Rc<RefCell<Renderer>>,
-    age: Millis,
+    play_time: Duration,
     then: Millis,
     now: Millis,
   ) {
-    self.ecs.borrow_mut().insert(Timing { age, step: now - then });
+    self.ecs.borrow_mut().insert(Timing { play_time, step: now - then });
     self.ecs.borrow_mut().insert(renderer);
     self.ecs.borrow_mut().insert(Viewport::new(&self.document));
     self.dispatcher.borrow_mut().dispatch(&self.ecs.borrow_mut());

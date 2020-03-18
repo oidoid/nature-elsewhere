@@ -1,7 +1,6 @@
 use wasm_bindgen::{closure::Closure, JsCast};
 use web_sys::{Element, Event, EventTarget, Window};
 
-#[derive(Debug)]
 pub struct EventListener {
   target: EventTarget,
   event: &'static str,

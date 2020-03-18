@@ -1,12 +1,12 @@
 use super::renderer::Renderer;
 use crate::assets::Assets;
 use crate::math::Millis;
-use crate::wasm;
 use crate::wasm::event_listener::{AddEventListener, EventListener};
 use crate::wasm::frame_looper::FrameLooper;
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
+use std::time::Duration;
 use web_sys::{Document, Event, HtmlCanvasElement, Window};
 
 #[derive(Clone)]
@@ -18,16 +18,17 @@ pub struct RendererStateMachine {
   renderer: Rc<RefCell<Renderer>>,
   looper: FrameLooper,
   listeners: Rc<RefCell<Vec<EventListener>>>,
+  /// The last recorded render timestamp.
   now: Rc<RefCell<Millis>>,
-  /// Total game time elapsed.
-  age: Rc<RefCell<Millis>>,
+  /// Total elapsed game time rendered. Excludes time spent paused.
+  play_time: Rc<RefCell<Duration>>,
   on_loop_callback:
-    Rc<RefCell<dyn FnMut(Rc<RefCell<Renderer>>, Millis, Millis, Millis)>>,
+    Rc<RefCell<dyn FnMut(Rc<RefCell<Renderer>>, Duration, Millis, Millis)>>,
 }
 
 impl RendererStateMachine {
   pub fn new<
-    T: 'static + FnMut(Rc<RefCell<Renderer>>, Millis, Millis, Millis),
+    T: 'static + FnMut(Rc<RefCell<Renderer>>, Duration, Millis, Millis),
   >(
     window: Window,
     document: Document,
@@ -48,10 +49,10 @@ impl RendererStateMachine {
       assets: Rc::new(assets),
       canvas,
       renderer,
-      now: Rc::new(RefCell::new(wasm::expect_performance(&window).now())),
+      now: Rc::new(RefCell::new(0.)),
       looper: FrameLooper::new(window),
       listeners: Rc::new(RefCell::new(Vec::new())),
-      age: Rc::new(RefCell::new(0.)),
+      play_time: Rc::new(RefCell::new(Duration::from_millis(0))),
       on_loop_callback: Rc::new(RefCell::new(on_loop)),
     }
   }
@@ -117,11 +118,12 @@ impl RendererStateMachine {
 
   fn on_loop(&mut self, then: f64, now: f64) {
     *self.now.borrow_mut() = now;
-    let age = *self.age.borrow() + now - then;
-    *self.age.borrow_mut() = age;
+    let play_time =
+      *self.play_time.borrow() + Duration::from_secs_f64((now - then) / 1000.);
+    *self.play_time.borrow_mut() = play_time;
     self.on_loop_callback.borrow_mut().deref_mut()(
       self.renderer.clone(),
-      age,
+      play_time,
       then,
       now,
     );

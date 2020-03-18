@@ -4,7 +4,7 @@ pub mod frame_listener;
 pub mod frame_looper;
 
 use wasm_bindgen::JsCast;
-use web_sys::{Document, Performance, Window};
+use web_sys::Document;
 
 pub fn get_element_by_id<T: JsCast>(
   document: &Document,
@@ -17,10 +17,4 @@ pub fn get_element_by_id<T: JsCast>(
     .map_err(|element| {
       format!("Element cast from tag {} failed.", element.tag_name())
     })
-}
-
-pub fn expect_performance(window: &Window) -> Performance {
-  window
-    .performance()
-    .expect("Missing High Resolution Time (Performance) in Window.")
 }

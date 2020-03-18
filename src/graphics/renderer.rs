@@ -181,22 +181,22 @@ impl Renderer {
 
   /// canvas_wh The desired resolution of the canvas in CSS pixels. E.g.,
   ///           {w: window.innerWidth, h: window.innerHeight}.
-  /// time elapsed game time
+  /// play_time Total elapsed play time in seconds. Excludes pauses.
   /// scale Positive integer zoom.
   pub fn render(
     &mut self,
-    age: i32,
+    play_time: f32,
     canvas_wh: &WH16,
     scale: i16,
     cam: &R16,
     dat: &[u8],
   ) {
     self.resize(canvas_wh, scale, cam);
-    self.gl.uniform1i(
+    self.gl.uniform1f(
       self.uniforms.get(
         self.layout.uniforms.get("time").expect("Missing \"time\" uniform."),
       ),
-      age,
+      play_time,
     );
     gl_util::buffer_data(
       &self.gl,

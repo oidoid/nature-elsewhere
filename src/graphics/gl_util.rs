@@ -51,30 +51,29 @@ pub fn load_program(
   vert_glsl: &str,
   frag_glsl: &str,
 ) -> Option<GlProgram> {
-  let pgm = gl.create_program()?;
-  let vertex_shader = compile_shader(gl, Gl::VERTEX_SHADER, vert_glsl);
-  let fragment_shader = compile_shader(gl, Gl::FRAGMENT_SHADER, frag_glsl);
+  let program = gl.create_program()?;
+  let vertex_shader = compile_shader(gl, Gl::VERTEX_SHADER, vert_glsl)?;
+  let fragment_shader = compile_shader(gl, Gl::FRAGMENT_SHADER, frag_glsl)?;
 
-  if let Some(log) = gl.get_program_info_log(&pgm) {
+  gl.attach_shader(&program, &vertex_shader);
+  gl.attach_shader(&program, &fragment_shader);
+  gl.link_program(&program);
+
+  if let Some(log) = gl.get_program_info_log(&program) {
     if !log.is_empty() {
       console::log_1(&JsValue::from(log));
     }
   }
 
-  let vertex_shader = vertex_shader?;
-  let fragment_shader = fragment_shader?;
-  gl.attach_shader(&pgm, &vertex_shader);
-  gl.attach_shader(&pgm, &fragment_shader);
-  gl.link_program(&pgm);
-  gl.use_program(Some(&pgm));
+  gl.use_program(Some(&program));
 
   // Mark shaders for deletion when unused.
-  gl.detach_shader(&pgm, &fragment_shader);
-  gl.detach_shader(&pgm, &vertex_shader);
+  gl.detach_shader(&program, &fragment_shader);
+  gl.detach_shader(&program, &vertex_shader);
   gl.delete_shader(Some(&fragment_shader));
   gl.delete_shader(Some(&vertex_shader));
 
-  Some(pgm)
+  Some(program)
 }
 
 pub fn compile_shader(
@@ -132,16 +131,16 @@ pub fn load_texture(
 
 pub fn uniform_locations(
   gl: &Gl,
-  pgm: &GlProgram,
+  program: &GlProgram,
 ) -> Option<HashMap<String, GlUniformLocation>> {
   let len = u32::from_f64(
-    gl.get_program_parameter(pgm, Gl::ACTIVE_UNIFORMS).as_f64()?,
+    gl.get_program_parameter(program, Gl::ACTIVE_UNIFORMS).as_f64()?,
   )?;
   let mut locations = HashMap::new();
   for i in 0..len {
-    let uniform = gl.get_active_uniform(pgm, i)?;
+    let uniform = gl.get_active_uniform(program, i)?;
     let name = uniform.name();
-    let location = gl.get_uniform_location(pgm, &name)?;
+    let location = gl.get_uniform_location(program, &name)?;
     locations.insert(name, location);
   }
   Some(locations)
@@ -149,16 +148,16 @@ pub fn uniform_locations(
 
 pub fn attr_locations(
   gl: &Gl,
-  pgm: &GlProgram,
+  program: &GlProgram,
 ) -> Option<HashMap<String, u32>> {
   let len = u32::from_f64(
-    gl.get_program_parameter(pgm, Gl::ACTIVE_ATTRIBUTES).as_f64()?,
+    gl.get_program_parameter(program, Gl::ACTIVE_ATTRIBUTES).as_f64()?,
   )?;
   let mut locations = HashMap::new();
   for i in 0..len {
-    let attr = gl.get_active_attrib(pgm, i)?;
+    let attr = gl.get_active_attrib(program, i)?;
     let name = attr.name();
-    let location = gl.get_attrib_location(pgm, &name);
+    let location = gl.get_attrib_location(program, &name);
     if location != -1 {
       locations.insert(name, location as u32);
     }

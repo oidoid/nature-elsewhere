@@ -40,10 +40,10 @@ impl FrameLooper {
 
     // Clone the reference for the closure.
     let frame_listener = self.frame_listener.clone();
-    let mut then = super::expect_performance(&self.window).now();
+    let mut then = None;
     let fnc = move |now: f64| {
-      on_loop(then, now);
-      then = now;
+      on_loop(then.unwrap_or(now), now);
+      then = Some(now);
 
       if frame_listener.borrow().is_issued() {
         // Not canceled in on_loop(). Request another frame.
