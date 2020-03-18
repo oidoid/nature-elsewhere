@@ -1,9 +1,0 @@
-{
-  "version": "0.0.0",
-  "type": "levelEditorMenu",
-  "size": {"w": 96, "h": 96},
-  "minViewport": {"w": 96, "h": 96},
-  "planes": [{"type": "Plane", "variant": "white"}],
-  "cursor": {"type": "uiCursor", "icon": "hand"},
-  "parentEntities": [{"type": "uiLevelEditorMenu"}]
-}

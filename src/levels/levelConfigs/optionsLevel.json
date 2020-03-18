@@ -1,9 +1,0 @@
-{
-  "version": "0.0.0",
-  "type": "options",
-  "size": {"w": 128, "h": 96},
-  "minViewport": {"w": 128, "h": 96},
-  "planes": [{"type": "Plane", "variant": "white"}],
-  "cursor": {"type": "uiCursor", "scale": {"x": 2, "y": 2}},
-  "parentEntities": []
-}
