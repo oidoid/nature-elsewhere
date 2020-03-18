@@ -62,7 +62,5 @@ features = [
 ]
 
 [dev-dependencies]
-# Used by one test.
-lazy_static = '=1.4.0'
 # For from_json! macro.
 serde_json = '=1.0.48'
