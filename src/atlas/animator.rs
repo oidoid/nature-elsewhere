@@ -7,7 +7,7 @@ use std::convert::TryInto;
 /// bounds (even negative) depending on the animation interval selected by
 /// direction. Any integer in [0, length) is always valid. Aseprite indices are
 /// u16s but a period can be negative.
-pub type Period = i32;
+pub type AnimatorPeriod = i32;
 
 /// Record and update an Animation's state.
 #[derive(Debug)]
@@ -17,7 +17,7 @@ pub struct Animator<'a> {
 
   /// The current cycle offset used to track oscillation state and calculate
   /// index.
-  pub period: Period,
+  pub period: AnimatorPeriod,
 
   /// Current cel exposure in milliseconds. When the fractional value meets or
   /// exceeds the cel exposure duration, the cel is advanced according to
@@ -44,7 +44,7 @@ impl<'a> Animator<'a> {
   }
 
   /// Change the animation cel period and reset the period.
-  pub fn set(&mut self, period: Period) {
+  pub fn set(&mut self, period: AnimatorPeriod) {
     self.period = period;
     self.exposure = 0.;
   }
@@ -56,7 +56,7 @@ impl<'a> Animator<'a> {
 
   /// Returns the current animation cel index for the Animator's period.
   pub fn index(&self) -> usize {
-    let len: Period = self.animation.cels.len().try_into().unwrap();
+    let len: AnimatorPeriod = self.animation.cels.len().try_into().unwrap();
     (self.period % len).abs().try_into().unwrap()
   }
 
@@ -78,13 +78,13 @@ impl<'a> Animator<'a> {
 
 impl Playback {
   /// Returns the next period.
-  fn advance(self, period: Period, len: usize) -> Period {
+  fn advance(self, period: AnimatorPeriod, len: usize) -> AnimatorPeriod {
     let len = len.try_into().unwrap();
     match self {
       // An integer in the domain [0, +∞).
-      Self::Forward => (period % Period::max_value()) + 1,
+      Self::Forward => (period % AnimatorPeriod::max_value()) + 1,
       // An integer in the domain (-∞, len - 1].
-      Self::Reverse => (period % Period::min_value()) - 1 + len,
+      Self::Reverse => (period % AnimatorPeriod::min_value()) - 1 + len,
       // An integer in the domain [2 - len, len - 1].
       Self::PingPong => wrap(period - 1, 2 - len, len),
     }
@@ -277,12 +277,12 @@ mod test {
       ),
       (
         Playback::Forward,
-        Period::max_value(),
+        AnimatorPeriod::max_value(),
         [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
       ),
       (
         Playback::Reverse,
-        Period::min_value(),
+        AnimatorPeriod::min_value(),
         [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0],
       ),
       (

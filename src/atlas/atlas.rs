@@ -2,7 +2,6 @@ use crate::math::Millis;
 use crate::math::{rect::R16, wh::WH16, xy::XY16};
 use std::collections::HashMap;
 
-#[derive(Debug)]
 pub struct Atlas {
   /// The Aseprite version of the parsed file. E.g., '1.2.8.1'.
   pub version: String,
@@ -40,7 +39,7 @@ pub struct Animation {
   pub direction: Playback,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Playback {
   /// Animate from start to end; when looping, return to start.
   Forward,
