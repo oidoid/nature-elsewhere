@@ -16,7 +16,7 @@ pub struct RendererStateMachine {
   canvas: HtmlCanvasElement,
   assets: Rc<Assets>,
   renderer: Rc<RefCell<Renderer>>,
-  looper: FrameLooper,
+  looper: Rc<RefCell<FrameLooper>>,
   listeners: Rc<RefCell<Vec<EventListener>>>,
   /// The last recorded render timestamp.
   last_rendered_at: Rc<RefCell<Option<Millis>>>,
@@ -48,7 +48,7 @@ impl RendererStateMachine {
       canvas,
       renderer,
       last_rendered_at: Rc::new(RefCell::new(None)),
-      looper: FrameLooper::new(window),
+      looper: Rc::new(RefCell::new(FrameLooper::new(window))),
       listeners: Rc::new(RefCell::new(Vec::new())),
       play_time: Rc::new(RefCell::new(Duration::from_millis(0))),
       on_loop_callback: Rc::new(RefCell::new(on_loop)),
@@ -83,7 +83,7 @@ impl RendererStateMachine {
 
     if self.is_focused() {
       let rc = Rc::new(RefCell::new(self.clone()));
-      self.looper.start(move |time| rc.borrow_mut().on_loop(time));
+      self.looper.borrow_mut().start(move |time| rc.borrow_mut().on_loop(time));
     }
   }
 
@@ -92,7 +92,7 @@ impl RendererStateMachine {
   }
 
   fn pause(&mut self) {
-    self.looper.stop();
+    self.looper.borrow_mut().stop();
   }
 
   fn on_event(&mut self, event: Event) {
