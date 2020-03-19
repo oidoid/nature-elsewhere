@@ -82,6 +82,10 @@ impl RendererStateMachine {
     self.on_loop(delta);
 
     if self.is_focused() {
+      // Starting a new loop cycle. Clear the last rendered time so that the
+      // initial delta is zero.
+      *self.last_rendered_at.borrow_mut() = None;
+
       let rc = Rc::new(RefCell::new(self.clone()));
       self.looper.borrow_mut().start(move |time| rc.borrow_mut().on_loop(time));
     }
