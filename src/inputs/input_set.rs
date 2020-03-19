@@ -1,7 +1,7 @@
 use super::input::Input;
 use crate::math::Millis;
 
-#[derive(Clone)]
+#[derive(Debug)]
 pub struct InputSet {
   pub point: Option<Input>,
   pub pick: Option<Input>,
@@ -12,9 +12,9 @@ impl InputSet {
     Self { point: None, pick: None }
   }
 
-  pub fn update(&mut self, elapsed: Millis) {
-    self.point.as_mut().map(|input| input.update(elapsed));
-    self.pick.as_mut().map(|input| input.update(elapsed));
+  pub fn update(&mut self, delta: Millis) {
+    self.point.as_mut().map(|input| input.update(delta));
+    self.pick.as_mut().map(|input| input.update(delta));
   }
 
   pub fn any_active(&self) -> bool {

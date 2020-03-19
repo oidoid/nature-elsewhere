@@ -1,14 +1,14 @@
 use super::assets::Assets;
 use super::graphics::RendererStateMachine;
-use crate::components::entity_operator::EntityOperator;
+use crate::components::player::Player;
 use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
-use crate::inputs::input_poller::InputPoller;
+use crate::inputs::InputPoller;
 use crate::math::wh::WH16;
 use crate::math::Millis;
 use crate::resources::Timing;
-use crate::systems::renderer::RendererSystem;
+use crate::systems::{InputProcessorSystem, RendererSystem};
 use specs::{Builder, RunNow, World, WorldExt};
 use specs::{Dispatcher, DispatcherBuilder};
 use std::cell::RefCell;
@@ -32,18 +32,13 @@ impl Game {
     let mut ecs = self.ecs.borrow_mut();
     self.dispatcher.borrow_mut().setup(&mut ecs);
 
-    ecs
-      .create_entity()
-      // .with(EntityOperator::Player)
-      .with(Bounds::new(1, 2, 3, 4))
-      .build();
+    ecs.create_entity().with(Player {}).with(Bounds::new(1, 2, 3, 4)).build();
     ecs
       .create_entity()
       .with(Bounds::new(5, 6, 7, 8))
       .with(Text("hello\nw\no\nr\nl\nd".to_string()))
       .with(MaxWH(WH16::from(5, 5)))
       .build();
-    // ecs.insert(Renderer);
   }
 
   pub fn new(
@@ -53,7 +48,8 @@ impl Game {
     assets: Assets,
   ) -> Self {
     let dispatcher = DispatcherBuilder::new()
-      .with(RendererSystem, "render_system", &[])
+      .with(InputProcessorSystem, "input_processor_system", &[])
+      .with(RendererSystem, "render_system", &["input_processor_system"])
       .build();
 
     let mut game = Game {
@@ -100,10 +96,12 @@ impl Game {
     play_time: Duration,
     delta: Millis,
   ) {
-    self.ecs.borrow_mut().insert(Timing { play_time, delta });
-    self.ecs.borrow_mut().insert(renderer);
-    self.ecs.borrow_mut().insert(Viewport::new(&self.document));
-    self.dispatcher.borrow_mut().dispatch(&self.ecs.borrow_mut());
-    self.ecs.borrow_mut().maintain();
+    let mut ecs = self.ecs.borrow_mut();
+    ecs.insert(Timing { play_time, delta });
+    ecs.insert(self.input_poller.borrow().read());
+    ecs.insert(renderer);
+    ecs.insert(Viewport::new(&self.document));
+    self.dispatcher.borrow_mut().dispatch(&ecs);
+    ecs.maintain();
   }
 }

@@ -39,8 +39,11 @@ impl InputPoller {
     self.listeners.borrow_mut().clear();
   }
 
+  pub fn read(&self) -> Rc<RefCell<InputSet>> {
+    self.inputs.clone()
+  }
+
   fn on_event(&mut self, event: &PointerEvent) {
-    web_sys::console::log_1(&event.type_().into());
     self.inputs.borrow_mut().point = self.event_to_point(event);
     self.inputs.borrow_mut().pick = self.event_to_pick(event);
     event.prevent_default();
