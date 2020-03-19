@@ -4,7 +4,7 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, Response, Window};
 
-pub async fn json<T: for<'a> Deserialize<'a>>(
+pub async fn fetch_json<T: for<'a> Deserialize<'a>>(
   window: &Window,
   path: &str,
 ) -> Result<T, JsValue> {
@@ -18,7 +18,7 @@ pub async fn json<T: for<'a> Deserialize<'a>>(
     .map_err(|error| error.to_string().into())
 }
 
-pub async fn text(
+pub async fn fetch_text(
   window: &Window,
   path: &str,
   mime_type: &str,

@@ -1,7 +1,7 @@
 use crate::components::align::AlignTo;
 use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
-use crate::graphics::renderer::Renderer;
-use crate::graphics::viewport::Viewport;
+use crate::graphics::Renderer;
+use crate::graphics::Viewport;
 use crate::math::rect::{Rect, R16};
 use crate::math::wh::WH16;
 use crate::math::xy::XY16;

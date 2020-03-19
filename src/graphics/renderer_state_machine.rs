@@ -1,8 +1,8 @@
 use super::renderer::Renderer;
 use crate::assets::Assets;
 use crate::math::Millis;
-use crate::wasm::event_listener::{AddEventListener, EventListener};
-use crate::wasm::frame_looper::FrameLooper;
+use crate::wasm::FrameLooper;
+use crate::wasm::{AddEventListener, EventListener};
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;

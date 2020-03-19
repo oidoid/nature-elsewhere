@@ -1,9 +1,9 @@
 use super::assets::Assets;
-use super::graphics::renderer_state_machine::RendererStateMachine;
+use super::graphics::RendererStateMachine;
 use crate::components::entity_operator::EntityOperator;
 use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
-use crate::graphics::renderer::Renderer;
-use crate::graphics::viewport::Viewport;
+use crate::graphics::Renderer;
+use crate::graphics::Viewport;
 use crate::inputs::input_poller::InputPoller;
 use crate::math::wh::WH16;
 use crate::math::Millis;

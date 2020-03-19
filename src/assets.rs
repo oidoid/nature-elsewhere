@@ -1,9 +1,8 @@
 use super::atlas;
 use super::atlas::Atlas;
-use super::graphics::shader_layout::ShaderLayout;
-use crate::text::font::Font;
+use super::graphics::ShaderLayout;
+use crate::text::Font;
 use crate::wasm;
-use crate::wasm::fetch;
 use wasm_bindgen::JsValue;
 use web_sys::{Document, HtmlImageElement, Window};
 
@@ -22,24 +21,27 @@ impl Assets {
     document: &Document,
   ) -> Result<Self, JsValue> {
     let shader_layout =
-      fetch::json(window, "/graphics/shader_layout.json").await?;
+      wasm::fetch_json(window, "/graphics/shader_layout.json").await?;
     let shader_layout = ShaderLayout::parse(shader_layout);
-    let vertex_glsl =
-      fetch::text(window, "/graphics/vertex_shader.glsl", "text/x-vertex-glsl")
-        .await?;
-    let fragment_glsl = fetch::text(
+    let vertex_glsl = wasm::fetch_text(
+      window,
+      "/graphics/vertex_shader.glsl",
+      "text/x-vertex-glsl",
+    )
+    .await?;
+    let fragment_glsl = wasm::fetch_text(
       window,
       "/graphics/fragment_shader.glsl",
       "text/x-fragment-glsl",
     )
     .await?;
 
-    let atlas = &fetch::json(window, "/atlas/atlas.json").await?;
-    let atlas = atlas::parser::parse(atlas).map_err(|error| error.0)?;
+    let atlas = &wasm::fetch_json(window, "/atlas/atlas.json").await?;
+    let atlas = atlas::parse(atlas).map_err(|error| error.0)?;
     let atlas_image: HtmlImageElement =
       wasm::get_element_by_id(document, "atlas")?;
 
-    let font: Font = fetch::json(window, "/text/mem_font.json").await?;
+    let font: Font = wasm::fetch_json(window, "/text/mem_font.json").await?;
 
     Ok(Self {
       shader_layout,

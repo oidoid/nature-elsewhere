@@ -1,6 +1,10 @@
-pub mod event_listener;
-pub mod fetch;
-pub mod frame_looper;
+mod event_listener;
+mod fetch;
+mod frame_looper;
+
+pub use event_listener::*;
+pub use fetch::*;
+pub use frame_looper::*;
 
 use wasm_bindgen::JsCast;
 use web_sys::Document;

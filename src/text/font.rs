@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(Deserialize)]
 pub struct Font {
   /// Height of lines, including descenders, in pixels.
   pub letter_height: i16,

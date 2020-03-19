@@ -21,7 +21,7 @@ attribute float composition;
 attribute vec4 target;
 attribute vec2 scale;
 // Translation (x, y) in units of .1 pixels and translation velocity (z, w) and
-// .1 pixels per second or (px / 10 000 ms).
+// .1 pixels per second (or 1 px / 10 000 ms or 1 px / 10 s).
 attribute vec4 translate;
 
 varying vec4 v_source;

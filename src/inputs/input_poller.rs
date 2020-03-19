@@ -1,6 +1,6 @@
 use super::{input::Input, input_set::InputSet};
 use crate::math::xy::XY;
-use crate::wasm::event_listener::{AddEventListener, EventListener};
+use crate::wasm::{AddEventListener, EventListener};
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::JsCast;
@@ -8,15 +8,15 @@ use web_sys::{PointerEvent, Window};
 
 #[derive(Clone)]
 pub struct InputPoller {
-  win: Window,
+  window: Window,
   listeners: Rc<RefCell<Vec<EventListener>>>,
   inputs: Rc<RefCell<InputSet>>,
 }
 
 impl InputPoller {
-  pub fn new(win: &Window) -> Self {
+  pub fn new(window: &Window) -> Self {
     Self {
-      win: win.clone(),
+      window: window.clone(),
       listeners: Rc::new(RefCell::new(vec![])),
       inputs: Rc::new(RefCell::new(InputSet::new())),
     }
@@ -84,7 +84,7 @@ impl InputPoller {
   fn add_on_event_listener(rc: &Rc<RefCell<Self>>, event: &'static str) {
     let rc1 = rc.clone();
     rc.borrow().listeners.borrow_mut().push(
-      rc.borrow().win.add_event_listener(event, move |ev| {
+      rc.borrow().window.add_event_listener(event, move |ev| {
         rc1.borrow_mut().on_event(&ev.dyn_into().unwrap())
       }),
     );
