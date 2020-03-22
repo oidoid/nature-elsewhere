@@ -1,5 +1,5 @@
-use crate::math::rect::R16;
-use crate::math::xy::XY16;
+use crate::math::R16;
+use crate::math::XY16;
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 

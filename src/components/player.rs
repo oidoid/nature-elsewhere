@@ -1,5 +1,5 @@
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 
-#[derive(Component, Default)]
+#[derive(Component)]
 pub struct Player;

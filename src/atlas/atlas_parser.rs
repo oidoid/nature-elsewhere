@@ -1,9 +1,9 @@
 use super::aseprite;
 use super::{Animation, AnimationLookup, Atlas, Cel, Playback};
-use crate::math::rect::R16;
-use crate::math::wh::{WH, WH16};
-use crate::math::xy::{XY, XY16};
 use crate::math::Millis;
+use crate::math::R16;
+use crate::math::{WH, WH16};
+use crate::math::{XY, XY16};
 use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
 

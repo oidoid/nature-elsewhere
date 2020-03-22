@@ -1,13 +1,11 @@
-use crate::math::rect::R16;
-use crate::math::wh::{WH, WH16};
-use crate::math::xy::{XY, XY16};
+use crate::math::{R16, WH, WH16, XY, XY16};
 use num::traits::cast::ToPrimitive;
 use web_sys::Document;
 
 pub struct Viewport {
   pub canvas_wh: WH16,
   pub scale: i16,
-  pub cam_wh: WH16,
+  pub cam: R16,
 }
 
 impl Viewport {
@@ -15,7 +13,7 @@ impl Viewport {
     let canvas_wh = canvas_wh(document);
     let scale = scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
     let cam_wh = cam_wh(&canvas_wh, scale);
-    Self { canvas_wh, scale, cam_wh }
+    Self { canvas_wh, scale, cam: R16::cast(0, 0, cam_wh.w, cam_wh.h) }
   }
 }
 

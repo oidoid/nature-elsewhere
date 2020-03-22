@@ -1,6 +1,6 @@
 use super::font::Font;
-use crate::math::rect::R16;
-use crate::math::xy::{XY, XY16};
+use crate::math::R16;
+use crate::math::{XY, XY16};
 
 #[derive(Debug, PartialEq)]
 pub struct TextLayout {

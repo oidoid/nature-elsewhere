@@ -1,5 +1,5 @@
 use super::{Animation, Cel, Playback};
-use crate::math::wrap::wrap;
+use crate::math::wrap;
 use crate::math::Millis;
 use std::convert::TryInto;
 
@@ -94,7 +94,7 @@ impl Playback {
 #[cfg(test)]
 mod test {
   use super::*;
-  use crate::math::{wh::WH, xy::XY};
+  use crate::math::{WH, XY};
   use std::f64;
 
   #[test]

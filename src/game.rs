@@ -2,12 +2,16 @@ use super::assets::Assets;
 use super::graphics::RendererStateMachine;
 use crate::components::player::Player;
 use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
+use crate::components::{cursor::Cursor, FollowMouse, Position};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::inputs::InputPoller;
-use crate::math::wh::WH16;
 use crate::math::Millis;
+use crate::math::{Rect, R16};
+use crate::math::{WH16, XY, XY16};
 use crate::resources::Timing;
+use crate::sprites::sprite::Sprite;
+use crate::sprites::sprite_composition::SpriteComposition;
 use crate::systems::{InputProcessorSystem, RendererSystem};
 use specs::{Builder, RunNow, World, WorldExt};
 use specs::{Dispatcher, DispatcherBuilder};
@@ -32,12 +36,68 @@ impl Game {
     let mut ecs = self.ecs.borrow_mut();
     self.dispatcher.borrow_mut().setup(&mut ecs);
 
-    ecs.create_entity().with(Player {}).with(Bounds::new(1, 2, 3, 4)).build();
+    // i can get the entity ID at construction time of composed in entities
+    // with(Cursor::new()).
+    // with(Player {}).
     ecs
       .create_entity()
-      .with(Bounds::new(5, 6, 7, 8))
-      .with(Text("hello\nw\no\nr\nl\nd".to_string()))
-      .with(MaxWH(WH16::from(5, 5)))
+      .with(FollowMouse)
+      .with(Position(XY { x: 10, y: 20 })) // see how this don't work. what about when there are multiple sprites in an entity's component thingy
+      .with(Sprite::new(
+        R16::cast_wh(80, 150, 11, 13),
+        R16::cast_wh(80, 150, 11, 13),
+        SpriteComposition::Source,
+        R16::cast_wh(32, 32, 11, 13),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: 0, y: 0 },
+        XY16 { x: 0, y: 0 },
+      ))
+      .build();
+    // ecs.create_entity().with(Bounds::new(1, 2, 3, 4)).build();
+    // ecs
+    //   .create_entity()
+    //   .with(Bounds::new(5, 6, 7, 8))
+    //   .with(Position(XY { x: 10, y: 20 }))
+    //   .with(Text("hello\nw\no\nr\nl\nd".to_string()))
+    //   .with(MaxWH(WH16::from(5, 5)))
+    //   .build();
+
+    // Cool grass shader
+    ecs
+      .create_entity()
+      .with(Sprite::new(
+        R16::cast_wh(80, 240, 16, 16),
+        R16::cast_wh(80, 240, 16, 16),
+        SpriteComposition::Source,
+        R16::cast_wh(32, 32, 160, 160),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: 0, y: 0 },
+        XY16 { x: 0, y: 0 },
+      ))
+      .build();
+    ecs
+      .create_entity()
+      .with(Sprite::new(
+        R16::cast_wh(48, 240, 32, 16),
+        R16::cast_wh(16, 240, 32, 16),
+        SpriteComposition::SourceIn,
+        R16::cast_wh(48, 48, 32, 16),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: 0, y: 0 },
+        XY16 { x: -64, y: 32 },
+      ))
+      .build();
+    ecs
+      .create_entity()
+      .with(Sprite::new(
+        R16::cast_wh(48, 240, 24, 16),
+        R16::cast_wh(16, 240, 24, 16),
+        SpriteComposition::SourceIn,
+        R16::cast_wh(55, 40, 24, 16),
+        XY16 { x: 1, y: 1 },
+        XY16 { x: -64, y: 32 },
+        XY16 { x: -64, y: 32 },
+      ))
       .build();
   }
 

@@ -1,4 +1,4 @@
-use crate::math::wh::WH16;
+use crate::math::WH16;
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 

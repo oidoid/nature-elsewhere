@@ -1,4 +1,4 @@
-use crate::math::ceil::CeilMultiple;
+use crate::math::CeilMultiple;
 use std::collections::HashMap;
 use web_sys::WebGlRenderingContext as Gl;
 

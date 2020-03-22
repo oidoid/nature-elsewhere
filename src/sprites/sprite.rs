@@ -1,8 +1,9 @@
 use super::sprite_composition::SpriteComposition;
-use crate::math::rect::R16;
-use crate::math::xy::XY16;
+use crate::math::{R16, XY16};
+use specs::prelude::DenseVecStorage;
+use specs::Component;
 
-#[derive(Debug, Serialize)]
+#[derive(Component, Clone, Debug, Serialize)]
 pub struct Sprite {
   pub source: R16,
   pub constituent: R16,

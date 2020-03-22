@@ -1,5 +1,5 @@
 use super::{input::Input, input_set::InputSet};
-use crate::math::xy::XY;
+use crate::math::XY;
 use crate::wasm::{AddEventListener, EventListener};
 use std::cell::RefCell;
 use std::rc::Rc;

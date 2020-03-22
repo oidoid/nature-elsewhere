@@ -1,5 +1,5 @@
 use crate::math::Millis;
-use crate::math::{rect::R16, wh::WH16, xy::XY16};
+use crate::math::{R16, WH16, XY16};
 use std::collections::HashMap;
 
 pub struct Atlas {
