@@ -67,7 +67,8 @@ pub enum CollidesWith {
   NearFatal = 1 << 15,
 }
 
-#[derive(Component, Clone)]
+#[serde(deny_unknown_fields)]
+#[derive(Component, Clone, Deserialize)]
 pub struct Collision {
   pub bodies: Vec<R16>,
 }

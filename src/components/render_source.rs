@@ -7,7 +7,8 @@ use specs::Component;
 
 // where do animators fit in? separate component? then there's some overlap...
 
-#[derive(Debug, Component)]
+#[serde(deny_unknown_fields)]
+#[derive(Debug, Component, Deserialize)]
 pub struct RenderSource {
   /// The atlas region to draw from.
   pub source: R16, // this is dervied from an atlas id...

@@ -1,0 +1,10 @@
+{
+  "name": "cursor",
+  "components": {
+    "cursor": {"mode": "Hidden", "icon": "Dot"},
+    "sprite_layer": "UICursor",
+    "position": {},
+    "collision": "Image",
+    "input_observer": {}
+  }
+}

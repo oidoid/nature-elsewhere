@@ -26,7 +26,7 @@ Roadmap
 
 ✓?⭐
 
-# nature elsewhere
+# nature elsewhere: beyond living memory (Terra incognita)
 
 An isometric adventure in an idealized state of nature. Play at
 [ne.netlify.com](https://natureelsewhere.com).

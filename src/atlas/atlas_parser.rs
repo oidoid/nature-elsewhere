@@ -1,5 +1,5 @@
 use super::aseprite;
-use super::{Animation, AnimationLookup, Atlas, Cel, Playback};
+use super::{Animation, AnimationMap, Atlas, Cel, Playback};
 use crate::math::Millis;
 use crate::math::R16;
 use crate::math::{WH, WH16};
@@ -14,15 +14,15 @@ pub fn parse(file: &aseprite::File) -> Result<Atlas, ParseError> {
     filename: file.meta.image.clone(),
     format: file.meta.format.clone(),
     wh: WH { w: w.try_into()?, h: h.try_into()? },
-    animations: parse_animation_lookup(file)?,
+    animations: parse_animation_map(file)?,
   })
 }
 
-pub fn parse_animation_lookup(
+pub fn parse_animation_map(
   aseprite::File { meta, frames }: &aseprite::File,
-) -> Result<AnimationLookup, ParseError> {
+) -> Result<AnimationMap, ParseError> {
   let aseprite::Meta { frame_tags, slices, .. } = meta;
-  let mut animations = AnimationLookup::new();
+  let mut animations = AnimationMap::new();
   for frame_tag in frame_tags {
     // Every tag should be unique within the sheet.
     if animations.contains_key(&frame_tag.name) {
@@ -201,7 +201,7 @@ mod test {
   use std::collections::HashMap;
 
   #[test]
-  fn parse_animation_lookup() {
+  fn parse_animation_map() {
     let file: aseprite::File = from_json!( {
       "meta": {
         "app": "http://www.aseprite.org/",
@@ -292,7 +292,7 @@ mod test {
       }
     })
     .unwrap();
-    let mut expected = AnimationLookup::new();
+    let mut expected = AnimationMap::new();
     expected.insert(
       "sceneryCloud".to_string(),
       Animation {
@@ -357,7 +357,7 @@ mod test {
         direction: Playback::Forward,
       },
     );
-    assert_eq!(super::parse_animation_lookup(&file).unwrap(), expected);
+    assert_eq!(super::parse_animation_map(&file).unwrap(), expected);
   }
 
   #[test]

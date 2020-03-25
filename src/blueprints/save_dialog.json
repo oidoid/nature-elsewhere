@@ -1,0 +1,20 @@
+{
+  "id": "SaveDialog",
+  "children": [
+    {
+      "id": "Button",
+      "text": "Cancel",
+      "align_to": {"align": "Center", "margin": {"x": 100}}
+    },
+    {
+      "id": "Button",
+      "text": "Don't Save",
+      "align_to": {"align": "Center", "margin": {"x": 200}}
+    },
+    {
+      "id": "Button",
+      "text": "Save",
+      "align_to": {"align": "Center", "margin": {"x": 300}}
+    }
+  ]
+}

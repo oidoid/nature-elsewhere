@@ -1,10 +1,10 @@
 use crate::math::R16;
 use crate::math::XY16;
 use specs::prelude::DenseVecStorage;
-use specs::Component;
+use specs::{Component, Entity};
 
 /// Relative position within a rectangle.
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
 pub enum Alignment {
   /// Top-center.
   North,
@@ -31,10 +31,13 @@ pub enum Alignment {
 /// camera's position and dimensions are known. Otherwise, the HUD sprite will
 /// be aligned to the camera's previous position causing a highly distracting
 /// wiggle effect.
-#[derive(Component, Clone, Debug)]
+#[serde(deny_unknown_fields)]
+#[derive(Component, Deserialize, Serialize, Clone, Debug)]
 pub struct AlignTo {
   alignment: Alignment,
   margin: XY16,
+  #[serde(skip)]
+  to: Option<Entity>, // how does hte parser know what to set this to? need an enum? dynamic? idlk
 }
 
 impl AlignTo {
@@ -88,8 +91,11 @@ mod test {
     .iter()
     .enumerate()
     .for_each(|(i, (alignment, margin, expected))| {
-      let align_to =
-        AlignTo { alignment: alignment.clone(), margin: margin.clone() };
+      let align_to = AlignTo {
+        alignment: alignment.clone(),
+        margin: margin.clone(),
+        to: None,
+      };
       assert_eq!(
         align_to.plot(&R16::cast_wh(0, 0, 7, 9), &R16::cast_wh(10, 20, 17, 19)),
         *expected,

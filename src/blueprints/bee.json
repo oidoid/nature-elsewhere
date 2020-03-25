@@ -1,0 +1,20 @@
+{
+  "id": "Bee",
+  "components": {
+    "position": {},
+    "state": "Default",
+    "behavior": {
+      "Default": {"id": "GuardPatrol", "target": ""},
+      "Dead": {"id": "Dead", "loot": []}
+    },
+    "collision": {
+      "Default": {"predicate": "Bodies", "kind": ["Character", "Harmful"]},
+      "Dead": {"predicate": "Bodies", "kind": ["Character", "Item"]}
+    },
+    "collision_bodies": {"Default": [{"x": 1, "y": 1, "w": 3, "h": 2}]},
+    "sprite": {
+      "Default": [{"id": "Bee"}, {"id": "BeeShadow", "layer": "Shadow"}],
+      "Dead": [{"id": "BeeDead"}, {"id": "BeeBlood", "layer": "Blood"}]
+    }
+  }
+}

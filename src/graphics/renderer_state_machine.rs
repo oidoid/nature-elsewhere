@@ -78,8 +78,8 @@ impl RendererStateMachine {
     // Run one loop regardless of focus so that the game appears. A zero time
     // delta should mostly cause no updates but not everything is fully loop
     // independent like input sampling.
-    let delta = self.last_rendered_at.borrow().unwrap_or(0.);
-    self.on_loop(delta);
+    let now = self.last_rendered_at.borrow().unwrap_or(0.);
+    self.on_loop(now);
 
     if self.is_focused() {
       // Starting a new loop cycle. Clear the last rendered time so that the

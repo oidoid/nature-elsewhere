@@ -11,7 +11,7 @@ pub struct Atlas {
   pub format: String,
   /// Atlas image dimensions (power of 2).
   pub wh: WH16,
-  pub animations: AnimationLookup,
+  pub animations: AnimationMap,
 }
 
 impl Atlas {
@@ -21,7 +21,7 @@ impl Atlas {
 }
 
 pub type AtlasID = String;
-pub type AnimationLookup = HashMap<AtlasID, Animation>;
+pub type AnimationMap = HashMap<AtlasID, Animation>;
 
 /// A sequence of cels.
 #[derive(Debug, PartialEq)]

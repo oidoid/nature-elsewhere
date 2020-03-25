@@ -1,0 +1,15 @@
+{
+  "id": "Button",
+  "components": {
+    "behaviors": ["Button"],
+    "position": {},
+    "sprites": {
+      "Unpressed": [],
+      "Hovered": [],
+      "Pressed": []
+    },
+    "collisions": {
+      "Default": {}
+    }
+  }
+}

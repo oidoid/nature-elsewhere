@@ -5,6 +5,7 @@ extern crate serde;
 mod utils;
 mod assets;
 mod atlas;
+mod blueprints;
 mod components;
 mod game;
 mod graphics;

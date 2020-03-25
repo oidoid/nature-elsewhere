@@ -1,8 +1,8 @@
 use super::assets::Assets;
 use super::graphics::RendererStateMachine;
-use crate::components::player::Player;
-use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
-use crate::components::{cursor::Cursor, FollowMouse, Position};
+use crate::components::{
+  Bounds, Cursor, FollowMouse, MaxWH, Player, Position, Text,
+};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::inputs::InputPoller;

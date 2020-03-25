@@ -1,0 +1,30 @@
+{
+  "id": "RainCloud",
+  "behaviors": ["Breeze", "Wraparound", "Raincloud"],
+  "velocity": {},
+  "raining": false,
+  "sprites": {
+    "Default": [
+      {"id": "CloudMedium", "layer": "Floats"},
+      {"id": "CloudMediumShadow", "layer": "Shadow"}
+    ]
+  },
+  // sprite spawn factory?
+  "children": ["Cloud"]
+}
+
+// now a rain cloud can become a cloud but not vice-versa by turning on and off the child
+
+// i don't really care if a sprite changes variant after ocnstruction or not and i don't think there's
+// a lot of limits on the system from preventing it
+
+// rain clouds are a superset of clouds. why can't they compose in clouds as a component? can i have components of components
+// compositions in ECS? for example bo DialogPrompt may want to compose in two Buttons and appear in the settings Level
+
+// how to rep variants
+// how does the other guy do it? i need a template factory that makes sense and shows how state trnasitions can work
+// this is solveable
+// what were my big problems?
+// camera system
+
+// how can i take into account the blueprint for states the entity isn't in yet? i don't want to have to preconsturct everything. can i leave it uninitialized?

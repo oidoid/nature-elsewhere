@@ -1,4 +1,4 @@
-use crate::components::{bounds::Bounds, max_wh::MaxWH, text::Text};
+use crate::components::{Bounds, MaxWH, Text};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::math::WH16;

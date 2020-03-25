@@ -6,7 +6,8 @@ use specs::Component;
 
 /// **Warning:** order matters. This component should be processed after all
 /// other translations to wrap when expected.
-#[derive(Component, Clone, Debug)]
+#[serde(deny_unknown_fields)]
+#[derive(Component, Clone, Debug, Deserialize)]
 pub struct Wraparound;
 
 impl Wraparound {
