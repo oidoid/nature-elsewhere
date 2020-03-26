@@ -20,30 +20,6 @@ pub use render_source::*;
 pub use renderable::*;
 pub use wraparound::*;
 
-// #[serde(rename_all = "snake_case")]
-// #[derive(Clone, Deserialize, Serialize)]
-// pub enum AnyComponent {
-//   Cam(Cam),
-//   FollowMouse(FollowMouse),
-//   Position(Position),
-//   Velocity(Velocity),
-//   Text(Text),
-//   MaxWH(MaxWH),
-// }
-
-// impl AnyComponent {
-//   pub fn value<T: Component + Send + Sync>(&self) -> &T {
-//     match self {
-//       Self::Cam(cam) => cam,
-//       Self::FollowMouse(follow_mouse) => follow_mouse,
-//       Self::Position(position) => position,
-//       Self::Velocity(velocity) => velocity,
-//       Self::Text(text) => text,
-//       Self::MaxWH(max_wh) => max_wh,
-//     }
-//   }
-// }
-
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Component, Deserialize, Serialize)]
 pub struct FollowMouse; // Or LockOn + alignment options

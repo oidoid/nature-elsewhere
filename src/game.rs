@@ -1,19 +1,17 @@
 use super::assets::Assets;
 use super::graphics::RendererStateMachine;
-use crate::components::{
-  Bounds, Cursor, FollowMouse, MaxWH, Player, Position, Text,
-};
+use crate::components::{FollowMouse, Position};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::inputs::InputPoller;
 use crate::math::Millis;
-use crate::math::{Rect, R16};
-use crate::math::{WH16, XY, XY16};
+use crate::math::R16;
+use crate::math::{XY, XY16};
 use crate::resources::Timing;
 use crate::sprites::sprite::Sprite;
 use crate::sprites::sprite_composition::SpriteComposition;
 use crate::systems::{InputProcessorSystem, RendererSystem};
-use specs::{Builder, RunNow, World, WorldExt};
+use specs::{Builder, World, WorldExt};
 use specs::{Dispatcher, DispatcherBuilder};
 use std::cell::RefCell;
 use std::rc::Rc;

@@ -10,6 +10,7 @@ pub enum ID {
   Button,
   SaveDialog,
   Cursor,
+  Map,
 }
 
 impl fmt::Display for ID {
@@ -26,6 +27,7 @@ impl ID {
       Button => "button",
       SaveDialog => "save_dialog",
       Cursor => "cursor",
+      Map => "map",
     };
     format!("/blueprints/{}.json", name)
   }
