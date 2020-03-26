@@ -33,13 +33,13 @@ lto = true
 bincode = '=1.2.1'
 console_error_panic_hook = '=0.1.6'
 num = '=0.2.1'
-serde = '=1.0.104'
+serde = '=1.0.105'
 # For Serialize_repr.
 serde_repr = '=0.1.5'
 # serde-serialize enables JsFuture.into_serde() trait.
-wasm-bindgen = {version = '=0.2.59', features = ['serde-serialize']}
+wasm-bindgen = {version = '=0.2.60', features = ['serde-serialize']}
 # For fetch.
-wasm-bindgen-futures = '=0.4.9'
+wasm-bindgen-futures = '=0.4.10'
 
 [dependencies.specs]
 version = '=0.16.1'
@@ -54,7 +54,7 @@ default-features = false
 features = ['serde', 'specs-derive', 'shred-derive']
 
 [dependencies.web-sys]
-version = '=0.3.36'
+version = '=0.3.37'
 # Derived by compilation.
 features = [
   'AngleInstancedArrays', 'console', 'Document', 'Headers', 'HtmlCanvasElement',
