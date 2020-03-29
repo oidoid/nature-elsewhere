@@ -1,4 +1,5 @@
 use crate::math::CeilMultiple;
+use serde::Deserialize;
 use std::collections::HashMap;
 use web_sys::WebGlRenderingContext as Gl;
 

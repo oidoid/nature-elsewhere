@@ -1,10 +1,11 @@
 use crate::math::{R16, WH, WH16, XY, XY16};
 use num::traits::cast::ToPrimitive;
+use std::num::NonZeroI16;
 use web_sys::Document;
 
 pub struct Viewport {
   pub canvas_wh: WH16,
-  pub scale: i16,
+  pub scale: NonZeroI16,
   pub cam: R16,
 }
 
@@ -19,10 +20,10 @@ impl Viewport {
 
 // is this what i want or do i want fixed scaling or osmething else?
 /// Returns the maximum scale possible.
-pub fn scale(canvas_wh: &WH16, min_size: &WH16, zoom_out: i16) -> i16 {
+pub fn scale(canvas_wh: &WH16, min_size: &WH16, zoom_out: i16) -> NonZeroI16 {
   let x = canvas_wh.w / min_size.w;
   let y = canvas_wh.h / min_size.h;
-  1.max((x.min(y)) - zoom_out)
+  NonZeroI16::new(1.max(x.min(y) - zoom_out)).expect("Expected positive scale")
 }
 
 pub fn canvas_wh(document: &Document) -> WH16 {
@@ -39,8 +40,8 @@ pub fn canvas_wh(document: &Document) -> WH16 {
   WH { w, h }
 }
 
-pub fn cam_wh(WH { w, h }: &WH16, scale: i16) -> WH16 {
-  let scale = scale.to_f32().expect("Scale i16 to f32 conversion failed.");
+pub fn cam_wh(WH { w, h }: &WH16, scale: NonZeroI16) -> WH16 {
+  let scale = f32::from(scale.get());
   WH {
     w: (w.to_f32().expect("Cam width i16 to f32 conversion failed.") / scale)
       .ceil()

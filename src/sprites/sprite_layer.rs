@@ -1,3 +1,5 @@
+use serde::Deserialize;
+
 /// The sprite draw order from bottom (lesser) to top (greater). Within a Layer,
 /// sprites are drawn in y-coordinate + height ascending order (lesser to
 /// greater). y-coordinate + height-ordering is the preferred resolution

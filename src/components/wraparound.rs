@@ -1,6 +1,7 @@
 use crate::math::wrap;
 use crate::math::R16;
 use crate::math::XY16;
+use serde::Deserialize;
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 

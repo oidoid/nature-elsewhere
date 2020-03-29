@@ -8,6 +8,7 @@
 //!
 //! [binary format]: https://github.com/aseprite/aseprite/blob/master/docs/ase-file-specs.md
 
+use serde::Deserialize;
 use std::collections::HashMap;
 
 /// The topmost data type for JSON exported from Aseprite. This format contains

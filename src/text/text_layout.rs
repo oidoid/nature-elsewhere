@@ -132,8 +132,7 @@ mod test {
 
   #[test]
   fn layout() {
-    let font: Font =
-      serde_json::from_str(include_str!("mem_font.json")).unwrap();
+    let font: Font = include_json!("mem_font.json").unwrap();
 
     [
       (

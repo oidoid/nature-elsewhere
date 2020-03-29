@@ -36,7 +36,7 @@ impl<'a> System<'a> for InputProcessorSystem {
       .clone();
 
     for (_follower, position) in (&mouse_followers, &mut positions).join() {
-      position.0 = xy.clone();
+      position.xy = xy.clone();
     }
   }
 }

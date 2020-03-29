@@ -1,20 +1,33 @@
 use super::aseprite;
-use super::{Animation, AnimationMap, Atlas, Cel, Playback};
+use super::{Animation, AnimationID, AnimationMap, Atlas, Cel, Playback};
 use crate::math::Millis;
 use crate::math::R16;
 use crate::math::{WH, WH16};
 use crate::math::{XY, XY16};
 use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
+use strum::IntoEnumIterator;
 
 pub fn parse(file: &aseprite::File) -> Result<Atlas, ParseError> {
   let aseprite::WH { w, h } = file.meta.size;
+
+  let animations = parse_animation_map(file)?;
+  // animations can only contain valid (present) AnimationIDs, exactly zero or
+  // one of each, but are all AnimationIDs present in animations?
+  if animations.len() != AnimationID::iter().count() {
+    for id in AnimationID::iter() {
+      if !animations.contains_key(&id) {
+        return Err(format!("Missing ID {} in atlas animations.", id).into());
+      }
+    }
+  }
+
   Ok(Atlas {
     version: file.meta.version.clone(),
     filename: file.meta.image.clone(),
     format: file.meta.format.clone(),
     wh: WH { w: w.try_into()?, h: h.try_into()? },
-    animations: parse_animation_map(file)?,
+    animations,
   })
 }
 
@@ -24,18 +37,302 @@ pub fn parse_animation_map(
   let aseprite::Meta { frame_tags, slices, .. } = meta;
   let mut animations = AnimationMap::new();
   for frame_tag in frame_tags {
+    let id = AnimationID::parse(&frame_tag.name)?;
     // Every tag should be unique within the sheet.
-    if animations.contains_key(&frame_tag.name) {
+    if animations.contains_key(&id) {
       return Err(
         format!("Duplicate animation tag {}.", frame_tag.name).into(),
       );
     }
-    animations.insert(
-      frame_tag.name.clone(),
-      parse_animation(frame_tag, frames, slices)?,
-    );
+    animations.insert(id, parse_animation(frame_tag, frames, slices)?);
   }
   Ok(animations)
+}
+
+impl AnimationID {
+  fn parse(id: &str) -> Result<Self, ParseError> {
+    match id {
+      "appleTree" => Ok(Self::AppleTree),
+      "appleTree-shadow" => Ok(Self::AppleTreeShadow),
+      "arrow-upRight" => Ok(Self::ArrowDiagonal),
+      "arrow-right" => Ok(Self::ArrowHorizontal),
+      "arrow-up" => Ok(Self::ArrowVertical),
+      "backpacker-idleDown" => Ok(Self::BackpackerIdleDown),
+      "backpacker-idleLeft" => Ok(Self::BackpackerIdleLeft),
+      "backpacker-idleRight" => Ok(Self::BackpackerIdleRight),
+      "backpacker-idleUp" => Ok(Self::BackpackerIdleUp),
+      "backpacker-meleeRight" => Ok(Self::BackpackerMeleeRight),
+      "backpacker-walkDown" => Ok(Self::BackpackerWalkDown),
+      "backpacker-walkHorizontalShadow" => {
+        Ok(Self::BackpackerWalkHorizontalShadow)
+      }
+      "backpacker-walkLeft" => Ok(Self::BackpackerWalkLeft),
+      "backpacker-walkRight" => Ok(Self::BackpackerWalkRight),
+      "backpacker-walkUp" => Ok(Self::BackpackerWalkUp),
+      "backpacker-walkVerticalShadow" => Ok(Self::BackpackerWalkVerticalShadow),
+      "bee" => Ok(Self::Bee),
+      "bee-blood" => Ok(Self::BeeBlood),
+      "bee-dead" => Ok(Self::BeeDead),
+      "bee-shadow" => Ok(Self::BeeShadow),
+      "bird-fly" => Ok(Self::BirdFly),
+      "bird-rest" => Ok(Self::BirdRest),
+      "bird-rise" => Ok(Self::BirdRise),
+      "bunny-blood" => Ok(Self::BunnyBlood),
+      "bunny" => Ok(Self::Bunny),
+      "bunny-dead" => Ok(Self::BunnyDead),
+      "bunny-shadow" => Ok(Self::BunnyShadow),
+      "bush" => Ok(Self::Bush),
+      "bush-shadow" => Ok(Self::BushShadow),
+      "cattails" => Ok(Self::Cattails),
+      "cloud-large" => Ok(Self::CloudLarge),
+      "cloud-largeShadow" => Ok(Self::CloudLargeShadow),
+      "cloud-medium" => Ok(Self::CloudMedium),
+      "cloud-mediumShadow" => Ok(Self::CloudMediumShadow),
+      "cloudRain" => Ok(Self::CloudRain),
+      "cloudRain-puddle" => Ok(Self::CloudRainPuddle),
+      "cloudRainSplash" => Ok(Self::CloudRainSplash),
+      "cloudRain-sprinkle" => Ok(Self::CloudRainSprinkle),
+      "clover-0x0" => Ok(Self::Clover0x0),
+      "clover-0x1" => Ok(Self::Clover0x1),
+      "clover-0x2" => Ok(Self::Clover0x2),
+      "clover-0x3" => Ok(Self::Clover0x3),
+      "clover-0x4" => Ok(Self::Clover0x4),
+      "clover-1x0" => Ok(Self::Clover1x0),
+      "clover-1x1" => Ok(Self::Clover1x1),
+      "clover-1x2" => Ok(Self::Clover1x2),
+      "clover-1x3" => Ok(Self::Clover1x3),
+      "clover-1x4" => Ok(Self::Clover1x4),
+      "conifer" => Ok(Self::Conifer),
+      "conifer-shadow" => Ok(Self::ConiferShadow),
+      "egg-compartment-drawer" => Ok(Self::EggCompartmentDrawer),
+      "egg-compartment-unit" => Ok(Self::EggCompartmentUnit),
+      "eggCompartment-unitPressed" => Ok(Self::EggCompartmentUnitPressed),
+      "flag" => Ok(Self::Flag),
+      "flag-shadow" => Ok(Self::FlagShadow),
+      "flower" => Ok(Self::Flower),
+      "flower-shadow" => Ok(Self::FlowerShadow),
+      "frog-eat" => Ok(Self::FrogEat),
+      "frog-idle" => Ok(Self::FrogIdle),
+      "frog-idleShadow" => Ok(Self::FrogIdleShadow),
+      "frog-leap" => Ok(Self::FrogLeap),
+      "grass-00" => Ok(Self::Grass00),
+      "grass-01" => Ok(Self::Grass01),
+      "grass-02" => Ok(Self::Grass02),
+      "grass-03" => Ok(Self::Grass03),
+      "grass-04" => Ok(Self::Grass04),
+      "grass-05" => Ok(Self::Grass05),
+      "grass-06" => Ok(Self::Grass06),
+      "grass-07" => Ok(Self::Grass07),
+      "grass-08" => Ok(Self::Grass08),
+      "grass-09" => Ok(Self::Grass09),
+      "grass-10" => Ok(Self::Grass10),
+      "grass-11" => Ok(Self::Grass11),
+      "grass-12" => Ok(Self::Grass12),
+      "grass-13" => Ok(Self::Grass13),
+      "grass-14" => Ok(Self::Grass14),
+      "grass-15" => Ok(Self::Grass15),
+      "grass-shadow" => Ok(Self::GrassShadow),
+      "healthBauble" => Ok(Self::HealthBauble),
+      "itemApple" => Ok(Self::ItemApple),
+      "itemApple-shadow" => Ok(Self::ItemAppleShadow),
+      "lattice" => Ok(Self::Lattice),
+      "lifeCounter" => Ok(Self::LifeCounter),
+      "meleeButton-disabled" => Ok(Self::MeleeButtonDisabled),
+      "meleeButton-enabled" => Ok(Self::MeleeButtonEnabled),
+      "memFont-000" => Ok(Self::MemFont000),
+      "memFont-001" => Ok(Self::MemFont001),
+      "memFont-002" => Ok(Self::MemFont002),
+      "memFont-003" => Ok(Self::MemFont003),
+      "memFont-004" => Ok(Self::MemFont004),
+      "memFont-005" => Ok(Self::MemFont005),
+      "memFont-006" => Ok(Self::MemFont006),
+      "memFont-007" => Ok(Self::MemFont007),
+      "memFont-008" => Ok(Self::MemFont008),
+      "memFont-009" => Ok(Self::MemFont009),
+      "memFont-010" => Ok(Self::MemFont010),
+      "memFont-011" => Ok(Self::MemFont011),
+      "memFont-012" => Ok(Self::MemFont012),
+      "memFont-013" => Ok(Self::MemFont013),
+      "memFont-014" => Ok(Self::MemFont014),
+      "memFont-015" => Ok(Self::MemFont015),
+      "memFont-016" => Ok(Self::MemFont016),
+      "memFont-017" => Ok(Self::MemFont017),
+      "memFont-018" => Ok(Self::MemFont018),
+      "memFont-019" => Ok(Self::MemFont019),
+      "memFont-020" => Ok(Self::MemFont020),
+      "memFont-021" => Ok(Self::MemFont021),
+      "memFont-022" => Ok(Self::MemFont022),
+      "memFont-023" => Ok(Self::MemFont023),
+      "memFont-024" => Ok(Self::MemFont024),
+      "memFont-025" => Ok(Self::MemFont025),
+      "memFont-026" => Ok(Self::MemFont026),
+      "memFont-027" => Ok(Self::MemFont027),
+      "memFont-028" => Ok(Self::MemFont028),
+      "memFont-029" => Ok(Self::MemFont029),
+      "memFont-030" => Ok(Self::MemFont030),
+      "memFont-031" => Ok(Self::MemFont031),
+      "memFont-032" => Ok(Self::MemFont032),
+      "memFont-033" => Ok(Self::MemFont033),
+      "memFont-034" => Ok(Self::MemFont034),
+      "memFont-035" => Ok(Self::MemFont035),
+      "memFont-036" => Ok(Self::MemFont036),
+      "memFont-037" => Ok(Self::MemFont037),
+      "memFont-038" => Ok(Self::MemFont038),
+      "memFont-039" => Ok(Self::MemFont039),
+      "memFont-040" => Ok(Self::MemFont040),
+      "memFont-041" => Ok(Self::MemFont041),
+      "memFont-042" => Ok(Self::MemFont042),
+      "memFont-043" => Ok(Self::MemFont043),
+      "memFont-044" => Ok(Self::MemFont044),
+      "memFont-045" => Ok(Self::MemFont045),
+      "memFont-046" => Ok(Self::MemFont046),
+      "memFont-047" => Ok(Self::MemFont047),
+      "memFont-048" => Ok(Self::MemFont048),
+      "memFont-049" => Ok(Self::MemFont049),
+      "memFont-050" => Ok(Self::MemFont050),
+      "memFont-051" => Ok(Self::MemFont051),
+      "memFont-052" => Ok(Self::MemFont052),
+      "memFont-053" => Ok(Self::MemFont053),
+      "memFont-054" => Ok(Self::MemFont054),
+      "memFont-055" => Ok(Self::MemFont055),
+      "memFont-056" => Ok(Self::MemFont056),
+      "memFont-057" => Ok(Self::MemFont057),
+      "memFont-058" => Ok(Self::MemFont058),
+      "memFont-059" => Ok(Self::MemFont059),
+      "memFont-060" => Ok(Self::MemFont060),
+      "memFont-061" => Ok(Self::MemFont061),
+      "memFont-062" => Ok(Self::MemFont062),
+      "memFont-063" => Ok(Self::MemFont063),
+      "memFont-064" => Ok(Self::MemFont064),
+      "memFont-065" => Ok(Self::MemFont065),
+      "memFont-066" => Ok(Self::MemFont066),
+      "memFont-067" => Ok(Self::MemFont067),
+      "memFont-068" => Ok(Self::MemFont068),
+      "memFont-069" => Ok(Self::MemFont069),
+      "memFont-070" => Ok(Self::MemFont070),
+      "memFont-071" => Ok(Self::MemFont071),
+      "memFont-072" => Ok(Self::MemFont072),
+      "memFont-073" => Ok(Self::MemFont073),
+      "memFont-074" => Ok(Self::MemFont074),
+      "memFont-075" => Ok(Self::MemFont075),
+      "memFont-076" => Ok(Self::MemFont076),
+      "memFont-077" => Ok(Self::MemFont077),
+      "memFont-078" => Ok(Self::MemFont078),
+      "memFont-079" => Ok(Self::MemFont079),
+      "memFont-080" => Ok(Self::MemFont080),
+      "memFont-081" => Ok(Self::MemFont081),
+      "memFont-082" => Ok(Self::MemFont082),
+      "memFont-083" => Ok(Self::MemFont083),
+      "memFont-084" => Ok(Self::MemFont084),
+      "memFont-085" => Ok(Self::MemFont085),
+      "memFont-086" => Ok(Self::MemFont086),
+      "memFont-087" => Ok(Self::MemFont087),
+      "memFont-088" => Ok(Self::MemFont088),
+      "memFont-089" => Ok(Self::MemFont089),
+      "memFont-090" => Ok(Self::MemFont090),
+      "memFont-091" => Ok(Self::MemFont091),
+      "memFont-092" => Ok(Self::MemFont092),
+      "memFont-093" => Ok(Self::MemFont093),
+      "memFont-094" => Ok(Self::MemFont094),
+      "memFont-095" => Ok(Self::MemFont095),
+      "memFont-096" => Ok(Self::MemFont096),
+      "memFont-097" => Ok(Self::MemFont097),
+      "memFont-098" => Ok(Self::MemFont098),
+      "memFont-099" => Ok(Self::MemFont099),
+      "memFont-100" => Ok(Self::MemFont100),
+      "memFont-101" => Ok(Self::MemFont101),
+      "memFont-102" => Ok(Self::MemFont102),
+      "memFont-103" => Ok(Self::MemFont103),
+      "memFont-104" => Ok(Self::MemFont104),
+      "memFont-105" => Ok(Self::MemFont105),
+      "memFont-106" => Ok(Self::MemFont106),
+      "memFont-107" => Ok(Self::MemFont107),
+      "memFont-108" => Ok(Self::MemFont108),
+      "memFont-109" => Ok(Self::MemFont109),
+      "memFont-110" => Ok(Self::MemFont110),
+      "memFont-111" => Ok(Self::MemFont111),
+      "memFont-112" => Ok(Self::MemFont112),
+      "memFont-113" => Ok(Self::MemFont113),
+      "memFont-114" => Ok(Self::MemFont114),
+      "memFont-115" => Ok(Self::MemFont115),
+      "memFont-116" => Ok(Self::MemFont116),
+      "memFont-117" => Ok(Self::MemFont117),
+      "memFont-118" => Ok(Self::MemFont118),
+      "memFont-119" => Ok(Self::MemFont119),
+      "memFont-120" => Ok(Self::MemFont120),
+      "memFont-121" => Ok(Self::MemFont121),
+      "memFont-122" => Ok(Self::MemFont122),
+      "memFont-123" => Ok(Self::MemFont123),
+      "memFont-124" => Ok(Self::MemFont124),
+      "memFont-125" => Ok(Self::MemFont125),
+      "memFont-126" => Ok(Self::MemFont126),
+      "memFont-127" => Ok(Self::MemFont127),
+      "monument-medium" => Ok(Self::MonumentMedium),
+      "monument-mediumShadow" => Ok(Self::MonumentMediumShadow),
+      "monument-small" => Ok(Self::MonumentSmall),
+      "monument-smallShadow" => Ok(Self::MonumentSmallShadow),
+      "moon" => Ok(Self::Moon),
+      "mountain" => Ok(Self::Mountain),
+      "mountain-shadow" => Ok(Self::MountainShadow),
+      "oddoid" => Ok(Self::Oddoid),
+      "palette-black" => Ok(Self::PaletteBlack),
+      "palette-blue" => Ok(Self::PaletteBlue),
+      "palette-darkGreen" => Ok(Self::PaletteDarkGreen),
+      "palette-darkRed" => Ok(Self::PaletteDarkRed),
+      "palette-green" => Ok(Self::PaletteGreen),
+      "palette-grey" => Ok(Self::PaletteGrey),
+      "palette-lightBlue" => Ok(Self::PaletteLightBlue),
+      "palette-lightGreen" => Ok(Self::PaletteLightGreen),
+      "palette-lightGrey" => Ok(Self::PaletteLightGrey),
+      "palette-orange" => Ok(Self::PaletteOrange),
+      "palette-paleGreen" => Ok(Self::PalettePaleGreen),
+      "palette-red" => Ok(Self::PaletteRed),
+      "palette-transparent" => Ok(Self::PaletteTransparent),
+      "palette-white" => Ok(Self::PaletteWhite),
+      "path->" => Ok(Self::PathCornerE),
+      "path-^" => Ok(Self::PathCornerN),
+      "path-/" => Ok(Self::PathNe),
+      "pig" => Ok(Self::Pig),
+      "pig-shadow" => Ok(Self::PigShadow),
+      "backpackerIcon-idle" => Ok(Self::PlayerStatusIdle),
+      "backpackerIcon-walk" => Ok(Self::PlayerStatusWalk),
+      "pond" => Ok(Self::Pond),
+      "roseBauble" => Ok(Self::RoseBauble),
+      "snake-shadow" => Ok(Self::SnakeShadow),
+      "snake" => Ok(Self::Snake),
+      "subshrub-shadow" => Ok(Self::SubshrubShadow),
+      "subshrub" => Ok(Self::Subshrub),
+      "tree-largeBare" => Ok(Self::TreeLargeBare),
+      "tree-largeShadow" => Ok(Self::TreeLargeShadow),
+      "tree-large" => Ok(Self::TreeLarge),
+      "tree-smallShadow" => Ok(Self::TreeSmallShadow),
+      "tree-small" => Ok(Self::TreeSmall),
+      "uiButton-base" => Ok(Self::UiButtonBase),
+      "uiButton-create" => Ok(Self::UiButtonCreate),
+      "uiButton-decrement" => Ok(Self::UiButtonDecrement),
+      "uiButton-destroy" => Ok(Self::UiButtonDestroy),
+      "uiButton-increment" => Ok(Self::UiButtonIncrement),
+      "uiButton-menu" => Ok(Self::UiButtonMenu),
+      "uiButton-pressed" => Ok(Self::UiButtonPressed),
+      "uiButton-toggleGrid" => Ok(Self::UiButtonToggleGrid),
+      "uiCheckerboard-blackTransparent" => {
+        Ok(Self::UiCheckerboardBlackTransparent)
+      }
+      "uiCheckerboard-blackWhite" => Ok(Self::UiCheckerboardBlackWhite),
+      "uiCheckerboard-blueGrey" => Ok(Self::UiCheckerboardBlueGrey),
+      "uiCursor-hand-pick" => Ok(Self::UiCursorHandPick),
+      "uiCursor-hand-point" => Ok(Self::UiCursorHandPoint),
+      "uiReticle" => Ok(Self::UiCursorReticle),
+      "uiDestinationMarker" => Ok(Self::UiDestinationMarker),
+      "uiGrid" => Ok(Self::UiGrid),
+      "uiSwitch" => Ok(Self::UiSwitch),
+      "uiWindowModeChart" => Ok(Self::UiWindowModeChart),
+      "uiZoomMultiplierChart" => Ok(Self::UiZoomMultiplierChart),
+      "water" => Ok(Self::Water),
+      "wave" => Ok(Self::Wave),
+      _ => Err(format!("Animation ID invalid: \"{}\".", id).into()),
+    }
+  }
 }
 
 pub fn parse_animation(
@@ -212,14 +509,14 @@ mod test {
         "scale": "1",
         "frameTags": [
           {
-            "name": "sceneryCloud", "from": 0, "to": 0, "direction": "forward"
+            "name": "cloud-large", "from": 0, "to": 0, "direction": "forward"
           },
           { "name": "palette-red", "from": 1, "to": 1, "direction": "forward" },
           {
-            "name": "sceneryConifer", "from": 2, "to": 2, "direction": "forward"
+            "name": "conifer", "from": 2, "to": 2, "direction": "forward"
           },
           {
-            "name": "sceneryConifer-shadow",
+            "name": "conifer-shadow",
             "from": 3,
             "to": 3,
             "direction": "forward"
@@ -227,7 +524,7 @@ mod test {
         ],
         "slices": [
           {
-            "name": "sceneryCloud",
+            "name": "cloud-large",
             "color": "#0000ffff",
             "keys": [{
               "frame": 0, "bounds": { "x": 8, "y": 12, "w": 2, "h": 3 }
@@ -241,14 +538,14 @@ mod test {
             }]
           },
           {
-            "name": "sceneryConifer",
+            "name": "conifer",
             "color": "#0000ffff",
             "keys": [{
               "frame": 0, "bounds": { "x": 7, "y": 10, "w": 3, "h": 5 }
             }]
           },
           {
-            "name": "sceneryConifer-shadow",
+            "name": "conifer-shadow",
             "color": "#0000ffff",
             "keys": [{
               "frame": 0, "bounds": { "x": 7, "y": 9, "w": 3, "h": 6 }
@@ -257,7 +554,7 @@ mod test {
         ]
       },
       "frames": {
-        "sceneryCloud 0": {
+        "cloud-large 0": {
           "frame": { "x": 220, "y": 18, "w": 18, "h": 18 },
           "rotated": false,
           "trimmed": false,
@@ -273,7 +570,7 @@ mod test {
           "sourceSize": { "w": 16, "h": 16 },
           "duration": 65535
         },
-        "sceneryConifer 2": {
+        "conifer 2": {
           "frame": { "x": 72, "y": 54, "w": 18, "h": 18 },
           "rotated": false,
           "trimmed": false,
@@ -281,7 +578,7 @@ mod test {
           "sourceSize": { "w": 16, "h": 16 },
           "duration": 65535
         },
-        "sceneryConifer-shadow 3": {
+        "conifer-shadow 3": {
           "frame": { "x": 54, "y": 54, "w": 18, "h": 18 },
           "rotated": false,
           "trimmed": false,
@@ -294,7 +591,7 @@ mod test {
     .unwrap();
     let mut expected = AnimationMap::new();
     expected.insert(
-      "sceneryCloud".to_string(),
+      AnimationID::CloudLarge,
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
@@ -310,7 +607,7 @@ mod test {
       },
     );
     expected.insert(
-      "palette-red".to_string(),
+      AnimationID::PaletteRed,
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
@@ -326,7 +623,7 @@ mod test {
       },
     );
     expected.insert(
-      "sceneryConifer".to_string(),
+      AnimationID::Conifer,
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
@@ -342,7 +639,7 @@ mod test {
       },
     );
     expected.insert(
-      "sceneryConifer-shadow".to_string(),
+      AnimationID::ConiferShadow,
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
@@ -358,6 +655,16 @@ mod test {
       },
     );
     assert_eq!(super::parse_animation_map(&file).unwrap(), expected);
+  }
+
+  #[test]
+  fn parse_animation_id_valid() {
+    assert_eq!(AnimationID::parse("bee").unwrap(), AnimationID::Bee);
+  }
+
+  #[test]
+  fn parse_animation_id_invalid() {
+    assert_eq!(AnimationID::parse("invalid").is_err(), true);
   }
 
   #[test]

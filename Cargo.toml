@@ -36,6 +36,8 @@ num = '=0.2.1'
 serde = '=1.0.105'
 # For Serialize_repr.
 serde_repr = '=0.1.5'
+strum = '=0.18.0'
+strum_macros = '=0.18.0'
 # serde-serialize enables JsFuture.into_serde() trait.
 wasm-bindgen = {version = '=0.2.60', features = ['serde-serialize']}
 # For fetch.

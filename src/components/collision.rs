@@ -1,4 +1,5 @@
 use crate::math::R16;
+use serde::Deserialize;
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 

@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use serde_repr::Serialize_repr;
 
 // See https://developer.android.com/reference/android/graphics/PorterDuff.Mode.

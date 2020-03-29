@@ -1,5 +1,6 @@
 use super::assets::Assets;
 use super::graphics::RendererStateMachine;
+use crate::blueprints::Manufacturer;
 use crate::components::{FollowMouse, Position};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
@@ -27,6 +28,7 @@ pub struct Game {
   dispatcher: Rc<RefCell<Dispatcher<'static, 'static>>>,
   renderer_state_machine: Rc<RefCell<Option<RendererStateMachine>>>,
   input_poller: Rc<RefCell<InputPoller>>,
+  manufacturer: Rc<Manufacturer>,
 }
 
 impl Game {
@@ -39,8 +41,8 @@ impl Game {
     // with(Player {}).
     ecs
       .create_entity()
-      .with(FollowMouse)
-      .with(Position(XY { x: 10, y: 20 })) // see how this don't work. what about when there are multiple sprites in an entity's component thingy
+      .with(FollowMouse{})
+      .with(Position::new(XY { x: 10, y: 20 })) // see how this don't work. what about when there are multiple sprites in an entity's component thingy
       .with(Sprite::new(
         R16::cast_wh(80, 150, 11, 13),
         R16::cast_wh(80, 150, 11, 13),
@@ -105,6 +107,7 @@ impl Game {
     canvas: HtmlCanvasElement,
     assets: Assets,
   ) -> Self {
+    let manufacturer = Rc::new(Manufacturer::new(assets.blueprints));
     let dispatcher = DispatcherBuilder::new()
       .with(InputProcessorSystem, "input_processor_system", &[])
       .with(RendererSystem, "render_system", &["input_processor_system"])
@@ -118,16 +121,22 @@ impl Game {
       dispatcher: Rc::new(RefCell::new(dispatcher)),
       renderer_state_machine: Rc::new(RefCell::new(None)),
       input_poller: Rc::new(RefCell::new(InputPoller::new(&window))),
+      manufacturer,
     };
 
     game.create_entities();
-    let renderer_state_machine =
-      RendererStateMachine::new(window, document, canvas, assets, {
+    let renderer_state_machine = RendererStateMachine::new(
+      window,
+      document,
+      canvas,
+      assets.renderer_assets,
+      {
         let mut clone = game.clone();
         move |renderer, play_time, delta| {
           clone.on_loop(renderer, play_time, delta)
         }
-      });
+      },
+    );
     *game.renderer_state_machine.borrow_mut() = Some(renderer_state_machine);
 
     game

@@ -9,3 +9,10 @@ macro_rules! from_json {
     serde_json::from_value(serde_json::json!($($json)+))
   };
 }
+
+#[cfg(test)]
+macro_rules! include_json {
+  ($filename:expr) => {
+    serde_json::from_str(include_str!($filename))
+  };
+}

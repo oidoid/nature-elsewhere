@@ -6,6 +6,7 @@ use crate::math::WH16;
 use num::traits::cast::ToPrimitive;
 use std::collections::HashMap;
 use std::convert::From;
+use std::num::NonZeroI16;
 use wasm_bindgen::JsCast;
 use web_sys::{
   AngleInstancedArrays, HtmlCanvasElement, HtmlImageElement,
@@ -187,7 +188,7 @@ impl Renderer {
     &mut self,
     play_time: f32,
     canvas_wh: &WH16,
-    scale: i16,
+    scale: NonZeroI16,
     cam: &R16,
     dat: &[u8],
   ) {
@@ -217,7 +218,7 @@ impl Renderer {
     );
   }
 
-  fn resize(&mut self, canvas_wh: &WH16, scale: i16, cam: &R16) {
+  fn resize(&mut self, canvas_wh: &WH16, scale: NonZeroI16, cam: &R16) {
     self.canvas.set_width(
       canvas_wh.w.to_u32().expect("Canvas width i16 to u32 conversion failed."),
     );
@@ -250,10 +251,10 @@ impl Renderer {
     self.gl.viewport(
       0,
       0,
-      (scale * cam.width())
+      (scale.get() * cam.width())
         .to_i32()
         .expect("Cam width i16 to i32 conversion failed."),
-      (scale * cam.height())
+      (scale.get() * cam.height())
         .to_i32()
         .expect("Cam height i16 to i32 conversion failed."),
     );

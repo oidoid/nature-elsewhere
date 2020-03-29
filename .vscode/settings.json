@@ -4,5 +4,13 @@
     "dist": true,
     "pkg": true
   },
-  "cSpell.words": ["aseprite", "oddoid", "rrggbbaa"]
+  "cSpell.words": [
+    "aseprite",
+    "bindgen",
+    "glsl",
+    "oddoid",
+    "rects",
+    "rrggbbaa",
+    "wasm"
+  ]
 }

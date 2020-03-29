@@ -1,4 +1,5 @@
 use num::traits::cast::NumCast;
+use serde::{Deserialize, Serialize};
 use std::{
   fmt,
   ops::{Add, Div, Mul, Sub},

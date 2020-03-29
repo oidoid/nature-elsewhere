@@ -1,5 +1,5 @@
 use super::renderer::Renderer;
-use crate::assets::Assets;
+use crate::assets::RendererAssets;
 use crate::math::Millis;
 use crate::wasm::FrameLooper;
 use crate::wasm::{AddEventListener, EventListener};
@@ -14,7 +14,7 @@ pub struct RendererStateMachine {
   window: Window,
   document: Document,
   canvas: HtmlCanvasElement,
-  assets: Rc<Assets>,
+  assets: Rc<RendererAssets>,
   renderer: Rc<RefCell<Renderer>>,
   looper: Rc<RefCell<FrameLooper>>,
   listeners: Rc<RefCell<Vec<EventListener>>>,
@@ -31,7 +31,7 @@ impl RendererStateMachine {
     window: Window,
     document: Document,
     canvas: HtmlCanvasElement,
-    assets: Assets,
+    assets: RendererAssets,
     on_loop: T,
   ) -> Self {
     let renderer = Rc::new(RefCell::new(Renderer::new(
@@ -101,7 +101,7 @@ impl RendererStateMachine {
 
   fn on_event(&mut self, event: Event) {
     if event.type_() == "webglcontextrestored" {
-      let assets: &Assets = std::borrow::Borrow::borrow(&self.assets);
+      let assets: &RendererAssets = std::borrow::Borrow::borrow(&self.assets);
       *self.renderer.borrow_mut() = Renderer::new(
         &assets.shader_layout,
         &assets.vertex_glsl,

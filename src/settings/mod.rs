@@ -1,3 +1,5 @@
+use serde::Deserialize;
+
 pub struct Settings {
   pub zoom: ZoomMultiplier,
   pub window_mode: WindowMode,

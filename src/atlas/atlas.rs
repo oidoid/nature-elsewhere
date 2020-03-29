@@ -1,3 +1,4 @@
+use super::AnimationID;
 use crate::math::Millis;
 use crate::math::{R16, WH16, XY16};
 use std::collections::HashMap;
@@ -14,14 +15,7 @@ pub struct Atlas {
   pub animations: AnimationMap,
 }
 
-impl Atlas {
-  pub fn is_id(&self, id: &AtlasID) -> bool {
-    self.animations.get(id).is_some()
-  }
-}
-
-pub type AtlasID = String;
-pub type AnimationMap = HashMap<AtlasID, Animation>;
+pub type AnimationMap = HashMap<AnimationID, Animation>;
 
 /// A sequence of cels.
 #[derive(Debug, PartialEq)]

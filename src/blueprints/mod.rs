@@ -1,7 +1,7 @@
 mod blueprint;
-mod id;
+mod blueprint_id;
 mod manufacturer;
 
-use blueprint::*;
-pub use id::*;
+pub use blueprint::*;
+pub use blueprint_id::*;
 pub use manufacturer::*;

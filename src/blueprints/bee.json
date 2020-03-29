@@ -2,19 +2,27 @@
   "id": "Bee",
   "components": {
     "position": {},
-    "state": "Default",
     "behavior": {
-      "Default": {"id": "GuardPatrol", "target": ""},
-      "Dead": {"id": "Dead", "loot": []}
+      "//": "or bee_state or is there an implied bee brain instead of a rule system",
+      "state": "Default",
+      "states": {
+        "Default": {"id": "Patrol", "target": ""},
+        "Attack": {"id": "AttackBeeline", "max_target_distance": "30"},
+        "Dead": {"id": "Dead", "loot": []}
+      }
     },
-    "collision": {
+    "collisions": {
       "Default": {"predicate": "Bodies", "kind": ["Character", "Harmful"]},
-      "Dead": {"predicate": "Bodies", "kind": ["Character", "Item"]}
+      "Dead": {"predicate": "Bodies", "kind": ["DeadCharacter"]}
     },
     "collision_bodies": {"Default": [{"x": 1, "y": 1, "w": 3, "h": 2}]},
-    "sprite": {
+    "sprites": {
+      "//": "I think these should be generated on the fly and cached. The Component can hold the cached data once constructed. Maybe only cache the current state though.",
       "Default": [{"id": "Bee"}, {"id": "BeeShadow", "layer": "Shadow"}],
-      "Dead": [{"id": "BeeDead"}, {"id": "BeeBlood", "layer": "Blood"}]
+      "Dead": [
+        {"id": "BeeDead", "layer": "Dead"},
+        {"id": "BeeBlood", "layer": "Blood"}
+      ]
     }
   }
 }

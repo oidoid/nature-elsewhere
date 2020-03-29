@@ -1,17 +1,36 @@
-[
-  {
-    "source": {"x": 48, "y": 240, "w": 24, "h": 16},
-    "constituent": {"x": 16, "y": 240, "w": 24, "h": 16},
-    "composition": "SourceIn",
-    "destination": {"x": 55, "y": 40, "w": 24, "h": 16},
-    "scale": {"x": 1, "y": 1},
-    "wrap": {"x": -64, "y": 32},
-    "wrap_velocity": {"x": -64, "y": 32}
+{
+  "id": "Title",
+  "components": {
+    "cam": {"follow": "Player", "w": 128, "h": 128},
+    "bounds": {"x": 0, "y": 0, "w": 512, "h": 256}
   },
-  {
-    "id": "friendly message",
-    "position": {"x": 10},
-    "max_wh": {"w": 1},
-    "text": "hello\nw\no\nr\nl\nd"
-  }
-]
+  "children": [
+    {"id": "Plane", "w": 512, "h": 256, "kind": "Grass"},
+    {"id": "Cursor", "icon": "Reticle"},
+    {"id": "Bee", "position": {"x": 20, "y": 50}},
+    {
+      "id": "Group",
+      "components": {
+        "sprites": {
+          "Default": {
+            "source": {"x": 48, "y": 240, "w": 24, "h": 16},
+            "constituent": {"x": 16, "y": 240, "w": 24, "h": 16},
+            "composition": "SourceIn",
+            "destination": {"x": 55, "y": 40, "w": 24, "h": 16},
+            "scale": {"x": 1, "y": 1},
+            "wrap": {"x": -64, "y": 32},
+            "wrap_velocity": {"x": -64, "y": 32}
+          }
+        }
+      }
+    },
+    {
+      "id": "Text",
+      "components": {
+        "position": {"x": 10},
+        "max_wh": {"w": 1},
+        "text": "hello\nw\no\nr\nl\nd"
+      }
+    }
+  ]
+}

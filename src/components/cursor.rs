@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 

@@ -1,8 +1,8 @@
-use super::ID;
+use super::BlueprintID;
 use crate::components::{
   AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, Text, Velocity,
 };
-use specs::Entity;
+use serde::{Deserialize, Serialize};
 
 /// Blueprints define the Entity and its Components to be injected into the
 /// World. They're unprocessed though. This means that the root Blueprint
@@ -13,7 +13,7 @@ use specs::Entity;
 pub struct Blueprint {
   /// Either the identity of the definition Blueprint (root, non-child) or the
   /// identity of the definition Blueprint to look up as a baseline to patch.
-  pub id: ID,
+  pub id: BlueprintID,
   /// A vector is all that would be needed if each component had distinct fields
   /// but that doesn't work well for marker or tuple structs. A map from
   /// component name to component props would then be used but then the
@@ -59,8 +59,7 @@ pub struct ComponentMap {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub max_wh: Option<MaxWH>,
 
-  /// These linkages are established at during manufacturing.
-  // todo: explore Saveload macro and trait. https://docs.rs/specs/0.16.1/specs/derive.ConvertSaveload.html
+  /// These linkages are established during manufacturing only.
   #[serde(skip)]
   pub parent: Option<Parent>,
   #[serde(skip)]
