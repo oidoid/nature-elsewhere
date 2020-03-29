@@ -14,7 +14,7 @@ impl TextLayout {
   /// width The allowed layout width in pixels.
   pub fn layout(font: &Font, string: &str, width: i16, scale: &XY16) -> Self {
     let chars: Vec<_> = string.chars().collect();
-    let mut letters: Vec<Option<R16>> = vec![];
+    let mut letters = vec![];
     let mut cursor = XY::new(0, 0);
     let mut i = 0;
     while i < chars.len() {
