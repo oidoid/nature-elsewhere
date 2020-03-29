@@ -7,16 +7,18 @@ use std::{
 
 /// Width and height (size or area). Rects and XY are generally preferred unless
 /// just an area is needed.
-#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct WH<T> {
-  #[serde(default)]
   pub w: T,
-  #[serde(default)]
   pub h: T,
 }
 pub type WH16 = WH<i16>;
 
 impl<T> WH<T> {
+  pub fn new(w: T, h: T) -> Self {
+    Self { w, h }
+  }
+
   /// Cast each component passed and returns a new WH.
   pub fn from<From>(w: From, h: From) -> Self
   where

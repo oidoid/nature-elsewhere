@@ -35,8 +35,8 @@ impl<'a> System<'a> for InputProcessorSystem {
       .to_level_xy(&viewport.canvas_wh, &viewport.cam)
       .clone();
 
-    for (_follower, position) in (&mouse_followers, &mut positions).join() {
-      position.xy = xy.clone();
+    for follower in (&mouse_followers, &mut positions).join() {
+      follower.1.position = xy.clone();
     }
   }
 }

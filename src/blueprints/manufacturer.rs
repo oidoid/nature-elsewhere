@@ -1,6 +1,9 @@
 use super::Blueprint;
 use super::BlueprintID;
-use crate::components::{Children, Parent};
+use crate::components::{
+  Cam, Children, FollowMouse, MaxWH, Parent, Position, Text, Velocity,
+};
+use crate::math::{WH, XY};
 use specs::world::Builder;
 use specs::world::Entity;
 use specs::world::WorldExt;
@@ -33,33 +36,44 @@ impl Manufacturer {
     blueprint: &Blueprint,
   ) -> Entity {
     let mut entity = ecs.create_entity();
+    let components = &blueprint.components;
 
-    macro_rules! entity_with_some_components {
+    macro_rules! entity_with_cloneable_components {
       ( $($component:ident),* ) => {$(
-        if let Some(component) = &blueprint.components.$component {
+        if let Some(component) = &components.$component {
           entity = entity.with(component.clone());
         }
       )*}
     }
-    // todo: there's no checking when adding new components to ComponentMap that
-    // they're added here as well.
-    entity_with_some_components!(
-      cam,
-      follow_mouse,
-      position,
-      velocity,
-      text,
-      max_wh,
-      parent,
-      children
-    );
+    entity_with_cloneable_components!(parent, children);
+
+    if let Some(_component) = &components.follow_mouse {
+      entity = entity.with(FollowMouse {});
+    }
+    if let Some(component) = &components.cam {
+      entity = entity.with(Cam { area: WH::new(component.w, component.h) });
+    }
+    if let Some(component) = &components.max_wh {
+      entity = entity.with(MaxWH { area: WH::new(component.w, component.h) });
+    }
+    if let Some(component) = &components.position {
+      entity =
+        entity.with(Position { position: XY::new(component.x, component.y) });
+    }
+    if let Some(component) = &components.velocity {
+      entity =
+        entity.with(Velocity { velocity: XY::new(component.x, component.y) });
+    }
+    if let Some(component) = &components.text {
+      entity = entity.with(Text { text: component.clone() });
+    }
 
     let entity = entity.build();
 
     let mut children = vec![];
     for child in &blueprint.children {
       let mut patched = self.blueprints[&child.id].patch(child);
-      patched.components.parent = Some(Parent::new(entity.clone()));
+      patched.components.parent = Some(Parent { parent: entity.clone() });
       let child = self.manufacture_blueprint(ecs, &patched);
       children.push(child);
     }
@@ -67,7 +81,7 @@ impl Manufacturer {
     if children.len() > 0 {
       ecs
         .write_storage::<Children>()
-        .insert(entity, Children::new(children))
+        .insert(entity, Children { children })
         .expect("Children component not inserted.");
     }
 
@@ -104,7 +118,7 @@ mod test {
       from_json!({
         "id": "Bee",
         "components": {
-          "position": {"xy":{"x": 1, "y": 2}},
+          "position": {"x": 1, "y": 2},
           "velocity": {"x": 3, "y": 4}
         }
       })
@@ -119,9 +133,9 @@ mod test {
 
     let position = ecs.read_storage::<Position>();
     let position = position.get(entity).unwrap();
-    assert_eq!(position.xy, XY::new(1, 2));
+    assert_eq!(position.position, XY::new(1, 2));
     let velocity = ecs.read_storage::<Velocity>();
-    let velocity: XY16 = velocity.get(entity).unwrap().into();
+    let velocity: XY16 = velocity.get(entity).unwrap().velocity.clone();
     assert_eq!(velocity, XY::new(3, 4));
   }
 
@@ -155,9 +169,9 @@ mod test {
       BlueprintID::SaveDialog,
       from_json!({
         "id": "SaveDialog",
-        "components": {"position": {"xy": {"x": 1, "y": 2}}},
+        "components": {"position": {"x": 1, "y": 2}},
         "children": [
-          {"id": "Button", "components": {"position": {"xy": {"x": 3, "y": 4}}}},
+          {"id": "Button", "components": {"position": {"x": 3, "y": 4}}},
           {"id": "Button", "components": {"velocity": {"x": 5, "y": 6}}},
           {"id": "Button"}
         ]
@@ -169,7 +183,7 @@ mod test {
       from_json!({
         "id": "Button",
         "components": {
-          "position": {"xy":{"x": 7, "y": 8}},
+          "position": {"x": 7, "y": 8},
           "velocity": {"x": 9, "y": 10}
         }
       })
@@ -197,24 +211,21 @@ mod test {
         let save_dialog: Vec<(&Position, &Children)> =
           (&positions, &children).join().collect();
         assert_eq!(save_dialog.len(), 1);
-        assert_eq!((save_dialog[0].0).xy, XY::new(1, 2));
+        assert_eq!((save_dialog[0].0).position, XY::new(1, 2));
         assert_eq!((save_dialog[0].1).children.len(), 3);
 
         let buttons: Vec<(&Position, &Velocity, &Parent)> =
           (&positions, &velocities, &parents).join().collect();
         assert_eq!(buttons.len(), 3);
-        assert_eq!((buttons[0].0).xy, XY::new(3, 4));
-        assert_eq!((buttons[0].1).x, 9);
-        assert_eq!((buttons[0].1).y, 10);
-        assert_eq!((buttons[0].2).parent, entity);
-        assert_eq!((buttons[1].0).xy, XY::new(7, 8));
-        assert_eq!((buttons[1].1).x, 5);
-        assert_eq!((buttons[1].1).y, 6);
-        assert_eq!((buttons[1].2).parent, entity);
-        assert_eq!((buttons[2].0).xy, XY::new(7, 8));
-        assert_eq!((buttons[2].1).x, 9);
-        assert_eq!((buttons[2].1).y, 10);
-        assert_eq!((buttons[2].2).parent, entity);
+        assert_eq!(buttons[0].0.position, XY::new(3, 4));
+        assert_eq!(buttons[0].1.velocity, XY::new(9, 10));
+        assert_eq!(buttons[0].2.parent, entity);
+        assert_eq!(buttons[1].0.position, XY::new(7, 8));
+        assert_eq!(buttons[1].1.velocity, XY::new(5, 6));
+        assert_eq!(buttons[1].2.parent, entity);
+        assert_eq!(buttons[2].0.position, XY::new(7, 8));
+        assert_eq!(buttons[2].1.velocity, XY::new(9, 10));
+        assert_eq!(buttons[2].2.parent, entity);
       },
     );
   }
@@ -226,9 +237,9 @@ mod test {
       BlueprintID::SaveDialog,
       from_json!({
         "id": "SaveDialog",
-        "components": {"position": {"xy": {"x": 1, "y": 2}}},
+        "components": {"position": {"x": 1, "y": 2}},
         "children": [
-          {"id": "Button", "components": {"position": {"xy": {"x": 3, "y": 4}}}}
+          {"id": "Button", "components": {"position": {"x": 3, "y": 4}}}
         ]
       })
       .unwrap(),
@@ -239,7 +250,7 @@ mod test {
         "id": "Map",
         "components": {"velocity": {"y": 6}},
         "children": [
-          {"id": "Button", "components": {"position": {"xy": {"x": 7, "y": 8}}}}
+         {"id": "Button", "components": {"position": {"x": 7, "y": 8}}}
         ]
       })
       .unwrap(),
@@ -271,23 +282,22 @@ mod test {
         let save_dialog: Vec<(&Position, &Children)> =
           (&positions, &children).join().collect();
         assert_eq!(save_dialog.len(), 1);
-        assert_eq!((save_dialog[0].0).xy, XY::new(1, 2));
-        assert_eq!((save_dialog[0].1).children.len(), 1);
+        assert_eq!(save_dialog[0].0.position, XY::new(1, 2));
+        assert_eq!(save_dialog[0].1.children.len(), 1);
 
         let map: Vec<(&Velocity, &Children)> =
           (&velocities, &children).join().collect();
         assert_eq!(map.len(), 1);
-        assert_eq!((map[0].0).x, 0);
-        assert_eq!((map[0].0).y, 6);
-        assert_eq!((map[0].1).children.len(), 1);
+        assert_eq!(map[0].0.velocity, XY::new(0, 6));
+        assert_eq!(map[0].1.children.len(), 1);
 
         let buttons: Vec<(&Position, &Parent)> =
           (&positions, &parents).join().collect();
         assert_eq!(buttons.len(), 2);
-        assert_eq!((buttons[0].0).xy, XY::new(3, 4));
-        assert_eq!((buttons[0].1).parent, save_dialog_entity);
-        assert_eq!((buttons[1].0).xy, XY::new(7, 8));
-        assert_eq!((buttons[1].1).parent, map_entity);
+        assert_eq!(buttons[0].0.position, XY::new(3, 4));
+        assert_eq!(buttons[0].1.parent, save_dialog_entity);
+        assert_eq!(buttons[1].0.position, XY::new(7, 8));
+        assert_eq!(buttons[1].1.parent, map_entity);
       },
     );
   }

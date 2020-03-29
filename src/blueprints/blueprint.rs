@@ -1,7 +1,6 @@
 use super::BlueprintID;
-use crate::components::{
-  AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, Text, Velocity,
-};
+use crate::components::{AlignTo, Children, FollowMouse, Parent};
+use num::traits::identities::Zero;
 use serde::{Deserialize, Serialize};
 
 /// Blueprints define the Entity and its Components to be injected into the
@@ -47,17 +46,17 @@ pub struct ComponentMap {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub align_to: Option<AlignTo>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub cam: Option<Cam>,
+  pub cam: Option<WH16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub follow_mouse: Option<FollowMouse>,
+  pub follow_mouse: Option<MarkerBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub position: Option<Position>,
+  pub position: Option<XY16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub velocity: Option<Velocity>,
+  pub velocity: Option<XY16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub text: Option<Text>,
+  pub text: Option<String>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub max_wh: Option<MaxWH>,
+  pub max_wh: Option<WH16Blueprint>,
 
   /// These linkages are established during manufacturing only.
   #[serde(skip)]
@@ -65,6 +64,32 @@ pub struct ComponentMap {
   #[serde(skip)]
   pub children: Option<Children>,
 }
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct XY16Blueprint {
+  #[serde(skip_serializing_if = "i16::is_zero")]
+  #[serde(default)]
+  pub x: i16,
+  #[serde(skip_serializing_if = "i16::is_zero")]
+  #[serde(default)]
+  pub y: i16,
+}
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct WH16Blueprint {
+  #[serde(skip_serializing_if = "i16::is_zero")]
+  #[serde(default)]
+  pub w: i16,
+  #[serde(skip_serializing_if = "i16::is_zero")]
+  #[serde(default)]
+  pub h: i16,
+}
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct MarkerBlueprint {}
 
 impl Blueprint {
   /// Create a copy of self, replace any components present in patch, and append

@@ -13,67 +13,41 @@ pub use wraparound::*;
 use crate::atlas::{AnimationID, Animator};
 use crate::math::{R16, WH16, XY16};
 use crate::sprites::{SpriteComposition, SpriteLayer};
-use num::traits::identities::Zero;
 use serde::{Deserialize, Serialize};
 use specs::prelude::DenseVecStorage;
 use specs::{Component, Entity};
 use std::any::Any;
 use std::collections::HashMap;
 
-#[serde(deny_unknown_fields)]
-#[derive(Component, Deserialize)]
+#[derive(Component)]
 pub struct Player {}
 
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Component, Deserialize, Serialize)]
+#[derive(Component)]
 pub struct FollowMouse {} // Or LockOn + alignment options
 
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Component, Deserialize, Serialize)]
+#[derive(Component)]
 pub struct Position {
-  #[serde(default)]
-  pub xy: XY16,
+  pub position: XY16,
 }
 
-impl Position {
-  pub fn new(xy: XY16) -> Self {
-    Self { xy }
-  }
-}
-
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Component, Deserialize, Serialize, PartialEq, Debug)]
+#[derive(Component)]
 pub struct Velocity {
-  #[serde(skip_serializing_if = "i16::is_zero")]
-  #[serde(default)]
-  pub x: i16,
-  #[serde(skip_serializing_if = "i16::is_zero")]
-  #[serde(default)]
-  pub y: i16,
+  pub velocity: XY16,
 }
 
-impl From<&Velocity> for XY16 {
-  fn from(velocity: &Velocity) -> Self {
-    Self { x: velocity.x, y: velocity.y }
-  }
-}
-
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Component, Deserialize, Serialize)]
+#[derive(Component)]
 pub struct Text {
   pub text: String,
 }
 
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Component, Deserialize, Serialize)]
+#[derive(Component)]
 pub struct MaxWH {
-  pub wh: WH16,
+  pub area: WH16,
 }
 
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Component, Deserialize, Serialize)]
+#[derive(Component)]
 pub struct Cam {
-  pub wh: WH16,
+  pub area: WH16,
 }
 
 #[derive(Clone, Component)]
@@ -81,21 +55,9 @@ pub struct Parent {
   pub parent: Entity,
 }
 
-impl Parent {
-  pub fn new(parent: Entity) -> Self {
-    Self { parent }
-  }
-}
-
 #[derive(Clone, Component)]
 pub struct Children {
   pub children: Vec<Entity>,
-}
-
-impl Children {
-  pub fn new(children: Vec<Entity>) -> Self {
-    Self { children }
-  }
 }
 
 #[derive(Component)]

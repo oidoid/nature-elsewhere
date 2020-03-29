@@ -43,7 +43,7 @@ impl Game {
     ecs
       .create_entity()
       .with(FollowMouse{})
-      .with(Position::new(XY { x: 10, y: 20 })) // see how this don't work. what about when there are multiple sprites in an entity's component thingy
+      .with(Position{position: XY { x: 10, y: 20 }}) // see how this don't work. what about when there are multiple sprites in an entity's component thingy
       .with(Sprite::new(
         R16::cast_wh(80, 150, 11, 13),
         R16::cast_wh(80, 150, 11, 13),
