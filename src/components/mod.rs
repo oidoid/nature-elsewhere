@@ -134,4 +134,3 @@ pub struct RenderBuddy {
                        // readonly wvx?: Integer // Decamillipixel
                        // readonly wvy?: Integer // Decamillipixel
 }
-// where do animators fit in? separate component? then there's some overlap...

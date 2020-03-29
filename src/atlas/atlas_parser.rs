@@ -8,7 +8,7 @@ use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
 use strum::IntoEnumIterator;
 
-pub fn parse(file: &aseprite::File) -> Result<Atlas, ParseError> {
+pub fn parse(file: &aseprite::File) -> Result<Atlas, AtlasParseError> {
   let aseprite::WH { w, h } = file.meta.size;
 
   let animations = parse_animation_map(file)?;
@@ -33,7 +33,7 @@ pub fn parse(file: &aseprite::File) -> Result<Atlas, ParseError> {
 
 pub fn parse_animation_map(
   aseprite::File { meta, frames }: &aseprite::File,
-) -> Result<AnimationMap, ParseError> {
+) -> Result<AnimationMap, AtlasParseError> {
   let aseprite::Meta { frame_tags, slices, .. } = meta;
   let mut animations = AnimationMap::new();
   for frame_tag in frame_tags {
@@ -50,7 +50,7 @@ pub fn parse_animation_map(
 }
 
 impl AnimationID {
-  fn parse(id: &str) -> Result<Self, ParseError> {
+  fn parse(id: &str) -> Result<Self, AtlasParseError> {
     match id {
       "appleTree" => Ok(Self::AppleTree),
       "appleTree-shadow" => Ok(Self::AppleTreeShadow),
@@ -339,7 +339,7 @@ pub fn parse_animation(
   frame_tag: &aseprite::FrameTag,
   frame_map: &aseprite::FrameMap,
   slices: &[aseprite::Slice],
-) -> Result<Animation, ParseError> {
+) -> Result<Animation, AtlasParseError> {
   let direction = Playback::parse(&frame_tag.direction)?;
   let frames = parse_tag_frames(frame_tag, frame_map);
   if frames.is_empty() {
@@ -400,7 +400,7 @@ pub fn parse_tag_frames<'a>(
 }
 
 impl Playback {
-  fn parse(direction: &str) -> Result<Self, ParseError> {
+  fn parse(direction: &str) -> Result<Self, AtlasParseError> {
     match direction {
       "forward" => Ok(Self::Forward),
       "reverse" => Ok(Self::Reverse),
@@ -418,7 +418,7 @@ pub fn parse_cel(
   frame: &aseprite::Frame,
   frame_number: u32,
   slices: &[aseprite::Slice],
-) -> Result<Cel, ParseError> {
+) -> Result<Cel, AtlasParseError> {
   Ok(Cel {
     xy: parse_xy(frame)?,
     duration: parse_duration(frame.duration)?,
@@ -426,14 +426,14 @@ pub fn parse_cel(
   })
 }
 
-pub fn parse_xy(frame: &aseprite::Frame) -> Result<XY16, ParseError> {
+pub fn parse_xy(frame: &aseprite::Frame) -> Result<XY16, AtlasParseError> {
   let WH { w, h } = parse_padding(frame)?;
   Ok(XY { x: (frame.frame.x + w / 2), y: (frame.frame.y + h / 2) })
 }
 
 pub fn parse_padding(
   aseprite::Frame { frame, source_size, .. }: &aseprite::Frame,
-) -> Result<WH16, ParseError> {
+) -> Result<WH16, AtlasParseError> {
   let w = (frame.w - source_size.w).try_into()?;
   let h = (frame.h - source_size.h).try_into()?;
   if w & 1 == 1 || h & 1 == 1 {
@@ -444,7 +444,7 @@ pub fn parse_padding(
 
 pub fn parse_duration(
   duration: aseprite::Duration,
-) -> Result<Millis, ParseError> {
+) -> Result<Millis, AtlasParseError> {
   match duration {
     0 => Err("Cel duration is zero.".into()),
     aseprite::INFINITE => Ok(f64::INFINITY),
@@ -472,21 +472,21 @@ pub fn parse_slices(
 }
 
 #[derive(Debug)]
-pub struct ParseError(pub String);
+pub struct AtlasParseError(pub String);
 
-impl From<&str> for ParseError {
+impl From<&str> for AtlasParseError {
   fn from(error: &str) -> Self {
     Self(error.to_string())
   }
 }
 
-impl From<String> for ParseError {
+impl From<String> for AtlasParseError {
   fn from(error: String) -> Self {
     Self(error)
   }
 }
 
-impl From<TryFromIntError> for ParseError {
+impl From<TryFromIntError> for AtlasParseError {
   fn from(error: TryFromIntError) -> Self {
     Self(error.to_string())
   }

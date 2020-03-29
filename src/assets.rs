@@ -34,12 +34,73 @@ impl Assets {
 
     let mut blueprints = HashMap::new();
     for id in BlueprintID::iter() {
-      let blueprint =
-        wasm::fetch_json(window, &id.blueprint_filename()).await?;
+      let blueprint = wasm::fetch_json(window, &id.filename()).await?;
       blueprints.insert(id, blueprint);
     }
 
     Ok(Self { renderer_assets, font, blueprints })
+  }
+}
+
+impl BlueprintID {
+  pub fn filename(&self) -> String {
+    let name = match self {
+      Self::Bee => "bee",
+      Self::RainCloud => "rain_cloud",
+      Self::Button => "button",
+      Self::SaveDialog => "save_dialog",
+      Self::Cursor => "cursor",
+      Self::Map => "map",
+      Self::Fruit => "fruit",
+      Self::AppleTree => "apple_tree",
+      Self::Item => "item",
+      Self::Backpacker => "backpacker",
+      Self::Bunny => "bunny",
+      Self::Fly => "fly",
+      Self::Flower => "flower",
+      Self::Frog => "frog",
+      Self::Pig => "pig",
+      Self::Snake => "snake",
+      Self::Group => "group",
+      Self::LevelEditorSandbox => "level_editor_sandbox",
+      Self::Bush => "bush",
+      Self::Cattails => "cattails",
+      Self::Cloud => "cloud",
+      Self::Clover => "clover",
+      Self::Compartment => "compartment",
+      Self::Conifer => "conifer",
+      Self::Flag => "flag",
+      Self::Grass => "grass",
+      Self::Monument => "monument",
+      Self::Mountain => "mountain",
+      Self::Path => "path",
+      Self::Plane => "plane",
+      Self::Pond => "pond",
+      Self::Subshrub => "subshrub",
+      Self::Tree => "tree",
+      Self::UIButton => "ui_button",
+      Self::LifeCounter => "life_counter",
+      Self::NinePatch => "nine_patch",
+      Self::PlayerStatus => "player_status",
+      Self::UICheckbox => "ui_checkbox",
+      Self::UICursor => "ui_cursor",
+      Self::UICursorDot => "ui_cursor_dot",
+      Self::UICursorHand => "ui_cursor_hand",
+      Self::UICursorReticle => "ui_cursor_reticle",
+      Self::UIDateVersionHash => "ui_date_version_hash",
+      Self::UIDestinationMarker => "ui_destination_marker",
+      Self::UIEntityPicker => "ui_entity_picker",
+      Self::UILevelEditorPanelMenu => "ui_level_editor_panel_menu",
+      Self::UILevelEditorPanel => "ui_level_editor_panel",
+      Self::UILevelEditorPanelBackground => "ui_level_editor_panel_background",
+      Self::UILevelLink => "ui_level_link",
+      Self::UIMarquee => "ui_marquee",
+      Self::UIRadioCheckboxGroup => "ui_radio_checkbox_group",
+      Self::UIText => "ui_text",
+      Self::UIToolbar => "ui_toolbar",
+    };
+    // format!("/blueprints/{}.json", name)
+    "/blueprints/foo.json".to_string()
   }
 }
 
