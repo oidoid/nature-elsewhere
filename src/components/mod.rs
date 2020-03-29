@@ -12,8 +12,7 @@ pub use wraparound::*;
 
 use crate::atlas::{AnimationID, Animator};
 use crate::math::{R16, WH16, XY16};
-use crate::sprites::sprite_composition::SpriteComposition;
-use crate::sprites::sprite_layer::SpriteLayer;
+use crate::sprites::{SpriteComposition, SpriteLayer};
 use num::traits::identities::Zero;
 use serde::{Deserialize, Serialize};
 use specs::prelude::DenseVecStorage;
@@ -134,3 +133,12 @@ pub struct RenderBuddy {
                        // readonly wvx?: Integer // Decamillipixel
                        // readonly wvy?: Integer // Decamillipixel
 }
+
+// todo: establish relationship components (anything with Entity ID target or parent / child relationship)
+// enum Relation {
+//   Parent,
+//   Child,
+//   TargetPlayer(Player),
+//   Camera
+// }
+// there are cases where non-i16 xy are useful.

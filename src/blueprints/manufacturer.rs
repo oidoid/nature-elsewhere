@@ -61,14 +61,6 @@ impl Manufacturer {
       let mut patched = self.blueprints[&child.id].patch(child);
       patched.components.parent = Some(Parent::new(entity.clone()));
       let child = self.manufacture_blueprint(ecs, &patched);
-      // todo: establish relationship components (anything with Entity ID target or parent / child relationship)
-      // enum Relation {
-      //   Parent,
-      //   Child,
-      //   TargetPlayer(Player),
-      //   Camera
-      // }
-      // there are cases where non-i16 xy are useful.
       children.push(child);
     }
 

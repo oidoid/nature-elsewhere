@@ -3,7 +3,7 @@ use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::math::WH16;
 use crate::resources::Timing;
-use crate::sprites::sprite::Sprite;
+use crate::sprites::Sprite;
 use specs::prelude::{ResourceId, SystemData};
 use specs::Join;
 use specs::{ReadExpect, ReadStorage, System, World};

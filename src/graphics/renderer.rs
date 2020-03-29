@@ -44,7 +44,7 @@ impl Renderer {
         .alpha(false)
         .depth(false)
         .antialias(false)
-     // https://www.chromestatus.com/feature/6360971442388992
+        // https://www.chromestatus.com/feature/6360971442388992
         // .low_latency(true),
     )
     .expect("WebGL context unavailable.");
@@ -119,14 +119,10 @@ impl Renderer {
         &attr,
       );
     }
-    // let bytes = [u8; uv.len() * 2];
-    // let bytes = uv.into_iter().fold(|val| val.to_ne_bytes(), bytes);
-    let bytes: Vec<u8> =
-      bincode::config().native_endian().serialize(&UV).unwrap();
+    let bytes = bincode::config().native_endian().serialize(&UV).unwrap();
     gl_util::buffer_data(
       &gl,
       per_vertex_buffer.as_ref(),
-      // &uv.try_into().expect("UV [i16] to [u8] conversion failed."),
       &bytes,
       Gl::STATIC_DRAW,
     );

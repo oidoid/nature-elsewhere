@@ -1,6 +1,6 @@
 use super::assets::Assets;
 use super::graphics::RendererStateMachine;
-use crate::blueprints::Manufacturer;
+use crate::blueprints::{BlueprintID, Manufacturer};
 use crate::components::{FollowMouse, Position};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
@@ -9,8 +9,7 @@ use crate::math::Millis;
 use crate::math::R16;
 use crate::math::{XY, XY16};
 use crate::resources::Timing;
-use crate::sprites::sprite::Sprite;
-use crate::sprites::sprite_composition::SpriteComposition;
+use crate::sprites::{Sprite, SpriteComposition};
 use crate::systems::{InputProcessorSystem, RendererSystem};
 use specs::{Builder, World, WorldExt};
 use specs::{Dispatcher, DispatcherBuilder};
@@ -35,6 +34,8 @@ impl Game {
   fn create_entities(&mut self) {
     let mut ecs = self.ecs.borrow_mut();
     self.dispatcher.borrow_mut().setup(&mut ecs);
+
+    self.manufacturer.manufacture(&mut ecs, BlueprintID::Bee);
 
     // i can get the entity ID at construction time of composed in entities
     // with(Cursor::new()).
