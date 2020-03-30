@@ -1,4 +1,4 @@
-use crate::components::{Bounds, MaxWH, Text};
+use crate::components::{Bounds, MaxWH, Renderable, Text};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::math::WH16;
@@ -21,7 +21,7 @@ pub struct RenderData<'a> {
   // bounds: ReadStorage<'a, Bounds>,
   // text: ReadStorage<'a, Text>,
   // max_wh: ReadStorage<'a, MaxWH>,
-  sprites: ReadStorage<'a, Sprite>,
+  sprites: ReadStorage<'a, Renderable<String>>,
 }
 
 impl<'a> System<'a> for RendererSystem {
@@ -40,10 +40,14 @@ impl<'a> System<'a> for RendererSystem {
 
     let bytes: Vec<u8> = (&sprites).join().fold(vec![], |mut bytes, sprite| {
       bytes.append(
-        &mut bincode::config().native_endian().serialize(sprite).unwrap(),
+        &mut bincode::config()
+          .native_endian()
+          .serialize(&sprite.sprites["Default"][0])
+          .unwrap(),
       );
       bytes
     });
+    web_sys::console::log_1(&format!("{:?}", bytes).into());
 
     let mut renderer = renderer.borrow_mut();
     renderer.render(

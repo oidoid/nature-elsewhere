@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::fmt::{Display, Formatter};
 use strum_macros::EnumIter;
@@ -6,7 +7,9 @@ use strum_macros::EnumIter;
 /// to reference immutable image source properties, such as dimensions and
 /// animation duration, from the Atlas. The tag convention used here is
 /// <file stem>-<state or variant or ancillary image>.
-#[derive(Debug, PartialEq, Eq, Hash, EnumIter)]
+#[derive(
+  Debug, PartialEq, Eq, Hash, EnumIter, Serialize, Deserialize, Clone, Copy,
+)]
 pub enum AnimationID {
   AppleTree,
   AppleTreeShadow,

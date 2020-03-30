@@ -1,6 +1,6 @@
 use super::xy::XY;
 use num::traits::{cast::NumCast, Zero};
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::any::Any;
 use std::{
   fmt,
@@ -86,11 +86,9 @@ use std::{
 /// makes no distinction between back- and front-facing rectangles except for
 /// `Rect.flipped()`. A back-facing rectangle can be recomputed to a
 /// front-facing rectangle by calling order().
-#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Eq, PartialEq, Serialize)]
 pub struct Rect<T: Any + Send + Sync + Default> {
-  #[serde(default)]
   pub from: XY<T>,
-  #[serde(default)]
   pub to: XY<T>,
 }
 pub type R16 = Rect<i16>;

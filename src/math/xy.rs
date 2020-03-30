@@ -3,17 +3,15 @@ use num::{
   integer::Roots,
   traits::{cast::NumCast, clamp, Signed},
 };
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::{
   fmt,
   ops::{Add, AddAssign, Div, Mul, Sub},
 };
 
-#[derive(Clone, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Eq, PartialEq, Serialize)]
 pub struct XY<T: Default> {
-  #[serde(default)]
   pub x: T,
-  #[serde(default)]
   pub y: T,
 }
 pub type XY16 = XY<i16>;

@@ -11,6 +11,7 @@ use web_sys::{Document, HtmlImageElement, Window};
 
 pub struct Assets {
   pub renderer_assets: RendererAssets,
+  pub atlas: Atlas,
   pub font: Font,
   pub blueprints: HashMap<BlueprintID, Blueprint>,
 }
@@ -19,7 +20,6 @@ pub struct RendererAssets {
   pub shader_layout: ShaderLayout,
   pub vertex_glsl: String,
   pub fragment_glsl: String,
-  pub atlas: Atlas,
   pub atlas_image: HtmlImageElement,
 }
 
@@ -30,6 +30,9 @@ impl Assets {
   ) -> Result<Self, JsValue> {
     let renderer_assets = RendererAssets::load(window, document).await?;
 
+    let atlas = &wasm::fetch_json(window, "/atlas/atlas.json").await?;
+    let atlas = atlas::parse(atlas).map_err(|error| error.0)?;
+
     let font: Font = wasm::fetch_json(window, "/text/mem_font.json").await?;
 
     let mut blueprints = HashMap::new();
@@ -38,7 +41,7 @@ impl Assets {
       blueprints.insert(id, blueprint);
     }
 
-    Ok(Self { renderer_assets, font, blueprints })
+    Ok(Self { renderer_assets, atlas, font, blueprints })
   }
 }
 
@@ -125,11 +128,9 @@ impl RendererAssets {
     )
     .await?;
 
-    let atlas = &wasm::fetch_json(window, "/atlas/atlas.json").await?;
-    let atlas = atlas::parse(atlas).map_err(|error| error.0)?;
     let atlas_image: HtmlImageElement =
       wasm::get_element_by_id(document, "atlas")?;
 
-    Ok(Self { shader_layout, vertex_glsl, fragment_glsl, atlas, atlas_image })
+    Ok(Self { shader_layout, vertex_glsl, fragment_glsl, atlas_image })
   }
 }

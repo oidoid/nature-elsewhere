@@ -12,7 +12,7 @@ pub use wraparound::*;
 
 use crate::atlas::{AnimationID, Animator};
 use crate::math::{R16, WH16, XY16};
-use crate::sprites::{SpriteComposition, SpriteLayer};
+use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
 use serde::{Deserialize, Serialize};
 use specs::prelude::DenseVecStorage;
 use specs::{Component, Entity};
@@ -67,33 +67,22 @@ pub struct StateBestFriend<T: Any + Send + Sync + Default> {
 
 #[derive(Component)]
 pub struct Renderable<T: Any + Send + Sync + Default> {
-  pub sprites: HashMap<T, Vec<RenderBuddy>>,
+  pub sprites: HashMap<T, Vec<Sprite>>,
 }
 
+// it sucks that this requires full sprite inflation for every state of everything whether it is in use or not. manufacturing anything is super expensive
+// the state machine should have to consult the blueprint to change states instead.
 pub struct RenderBuddy {
-  id: AnimationID,
-  constituent_id: AnimationID,
-  composition: SpriteComposition,
-  bounds: R16,
-  // readonly position?: XYConfig
-  // readonly x?: Integer
-  // readonly y?: Integer
-  // readonly size?: WHConfig
-  // readonly w?: Integer
-  // readonly h?: Integer
-  layer: SpriteLayer,
-  scale: XY16,
-  // readonly sx?: Integer
-  // readonly sy?: Integer
-  animator: Animator<'static>,
-  // readonly period?: Integer
-  // readonly exposure?: Milliseconds
-  wrap: XY16,
-  // readonly wx?: Integer // Decamillipixel
-  // readonly wy?: Integer // Decamillipixel
-  wrap_velocity: XY16, // Decamillipixel
-                       // readonly wvx?: Integer // Decamillipixel
-                       // readonly wvy?: Integer // Decamillipixel
+  // sprite
+  pub id: AnimationID,
+  pub constituent_id: AnimationID,
+  pub composition: SpriteComposition,
+  pub bounds: R16,
+  pub layer: SpriteLayer,
+  pub scale: XY16,
+  pub wrap: XY16,
+  pub wrap_velocity: XY16, // Decamillipixel
+                           // animator
 }
 
 // todo: establish relationship components (anything with Entity ID target or parent / child relationship)

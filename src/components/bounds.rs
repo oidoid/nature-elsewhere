@@ -1,10 +1,8 @@
 use crate::math::R16;
-use serde::Deserialize;
 use specs::prelude::DenseVecStorage;
 use specs::Component;
 
-#[serde(deny_unknown_fields)]
-#[derive(Component, Deserialize, Clone, Debug)]
+#[derive(Component, Clone, Debug)]
 pub struct Bounds {
   pub bounds: R16,
 }

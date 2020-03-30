@@ -7,7 +7,7 @@ use specs::Component;
 /// The lowest level drawing primitive. The inputs are derived from an Atlas
 /// identifier and parameters. The outputs map to a shader input.
 /// Alt name: render source. This is assumed to be ordered properly as it does not have a layer.
-#[derive(Component, Clone, Debug, Serialize)]
+#[derive(Serialize, Debug)]
 pub struct Sprite {
   /// The atlas region to draw from.
   pub source: R16,

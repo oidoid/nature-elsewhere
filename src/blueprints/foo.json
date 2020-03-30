@@ -1,6 +1,8 @@
 {
   "id": "Bee",
   "components": {
-    "position": {}
+    "follow_mouse": {},
+    "position": {"x": 32, "y": 32},
+    "sprites": {"Default": [{"id": "BackpackerMeleeRight"}]}
   }
 }

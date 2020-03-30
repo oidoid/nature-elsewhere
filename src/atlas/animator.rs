@@ -27,14 +27,18 @@ pub struct Animator<'a> {
 }
 
 impl<'a> Animator<'a> {
-  pub fn new(animation: &'a Animation) -> Option<Self> {
+  pub fn new(
+    animation: &'a Animation,
+    period: AnimatorPeriod,
+    exposure: Millis,
+  ) -> Option<Self> {
     if animation.cels.len() < 2 {
       // A zero-length animation would require special-casing elsewhere. Handle
       // it here only instead. Also, since an animation with only one cell
       // cannot change frames, do not provide an Animator for it either.
       return None;
     }
-    Some(Animator { animation, period: 0, exposure: 0. })
+    Some(Animator { animation, period, exposure })
   }
 
   /// Reset the animation and exposure.
@@ -114,7 +118,7 @@ mod test {
         duration: 0.,
         direction: Playback::Forward,
       };
-      let animator = Animator::new(&animation);
+      let animator = Animator::new(&animation, 0, 0.);
       assert_eq!(
         animator.is_some(),
         *expected,
@@ -134,7 +138,7 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation).unwrap();
+    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
     animator.animate(1.5);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.5);
@@ -158,7 +162,7 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation).unwrap();
+    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
     animator.animate(1.5);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.5);
@@ -176,7 +180,7 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation).unwrap();
+    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
     animator.animate(0.5);
     assert_eq!(animator.period, 0);
     assert_eq!(animator.exposure, 0.5);
@@ -191,7 +195,7 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation).unwrap();
+    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
     animator.animate(1.);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.);
@@ -206,7 +210,7 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation).unwrap();
+    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
     animator.animate(1.5);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.5);
@@ -222,7 +226,7 @@ mod test {
       duration: f64::INFINITY,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation).unwrap();
+    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
     animator.animate(1.5);
     assert_eq!(animator.period, 0);
     assert_eq!(animator.exposure, 1.5);
@@ -241,7 +245,7 @@ mod test {
           duration: 2.,
           direction,
         };
-        let mut animator = Animator::new(&animation).unwrap();
+        let mut animator = Animator::new(&animation, 0, 0.).unwrap();
         animator.animate(1.);
         assert_eq!(animator.index(), 1, "Case {} failed: {:?}.", i, direction);
       });
@@ -260,7 +264,7 @@ mod test {
           duration: 2.,
           direction,
         };
-        let mut animator = Animator::new(&animation).unwrap();
+        let mut animator = Animator::new(&animation, 0, 0.).unwrap();
         animator.period = 1;
         animator.animate(1.);
         assert_eq!(animator.index(), 0, "Case {} failed: {:?}.", i, direction);
@@ -316,7 +320,7 @@ mod test {
         duration: 4.,
         direction,
       };
-      let mut animator = Animator::new(&animation).unwrap();
+      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
       animator.period = period;
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 5 {
@@ -356,7 +360,7 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation).unwrap();
+      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 3 {
         animator.animate(1.);
@@ -395,7 +399,7 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation).unwrap();
+      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 3 {
         animator.animate(6.);
@@ -452,7 +456,7 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation).unwrap();
+      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 6 {
         animator.animate(0.9);
@@ -509,7 +513,7 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation).unwrap();
+      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 6 {
         animator.animate(0.5);
@@ -566,7 +570,7 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation).unwrap();
+      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 6 {
         animator.animate(5.5);

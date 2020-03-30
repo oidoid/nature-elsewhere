@@ -1,9 +1,12 @@
 use super::Blueprint;
 use super::BlueprintID;
+use crate::atlas::{Animator, Atlas};
 use crate::components::{
-  Cam, Children, FollowMouse, MaxWH, Parent, Position, Text, Velocity,
+  AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, RenderBuddy,
+  Renderable, Text, Velocity,
 };
-use crate::math::{WH, XY};
+use crate::math::{R16, WH, XY};
+use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
 use specs::world::Builder;
 use specs::world::Entity;
 use specs::world::WorldExt;
@@ -12,11 +15,15 @@ use std::collections::HashMap;
 
 pub struct Manufacturer {
   blueprints: HashMap<BlueprintID, Blueprint>,
+  atlas: Atlas,
 }
 
-impl Manufacturer {
-  pub fn new(blueprints: HashMap<BlueprintID, Blueprint>) -> Self {
-    Self { blueprints }
+impl<'a> Manufacturer {
+  pub fn new(
+    blueprints: HashMap<BlueprintID, Blueprint>,
+    atlas: Atlas,
+  ) -> Self {
+    Self { blueprints, atlas }
   }
 
   /// Returns the root Entity.
@@ -47,6 +54,17 @@ impl Manufacturer {
     }
     entity_with_cloneable_components!(parent, children);
 
+    if let Some(component) = &components.align_to {
+      let margin = component
+        .margin
+        .clone()
+        .map_or(XY::new(0, 0), |margin| XY::new(margin.x, margin.y));
+      entity = entity.with(AlignTo::new(
+        component.alignment,
+        margin,
+        component.to.clone(),
+      ));
+    }
     if let Some(_component) = &components.follow_mouse {
       entity = entity.with(FollowMouse {});
     }
@@ -66,6 +84,91 @@ impl Manufacturer {
     }
     if let Some(component) = &components.text {
       entity = entity.with(Text { text: component.clone() });
+    }
+    if let Some(component) = &components.sprites {
+      let mut sprites = HashMap::new();
+      for (state, sprite_components) in component.iter() {
+        // this is inflating all the states which seems bad
+        let spriteology: Vec<_> = sprite_components
+          .iter()
+          .map(|component| {
+            //another name is props
+            let id = component.id;
+            let constituent_id = component.constituent_id.unwrap_or(id);
+            let composition =
+              component.composition.unwrap_or(SpriteComposition::Source);
+            let scale = component.scale.clone().map_or(
+              XY::new(component.sx.unwrap_or(1), component.sy.unwrap_or(1)),
+              |scale| XY::new(scale.x, scale.y),
+            );
+            // valid ate scale is nonzero or enforce it with templatized XY<nonzero thingy>
+            let position = component.position.clone().map_or(
+              XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
+              |position| XY::new(position.x, position.y),
+            );
+            let animation = &self.atlas.animations[&id];
+            // do i need to validate area too?
+            let area = component.area.clone().map_or(
+              WH::new(
+                component.w.unwrap_or(animation.wh.w),
+                component.h.unwrap_or(animation.wh.h),
+              ),
+              |area| WH::new(area.w, area.h),
+            ); //use atlas, review ts
+            let bounds = component.bounds.clone().map_or(
+              R16::cast_wh(position.x, position.y, area.w, area.h),
+              |bounds| R16::cast_wh(bounds.x, bounds.y, bounds.w, bounds.h),
+            );
+
+            let layer = component.layer.unwrap_or(SpriteLayer::Default);
+            let animator = component.animator.clone().map_or(
+              Animator::new(
+                animation,
+                component.period.unwrap_or(0),
+                component.exposure.unwrap_or(0.),
+              ),
+              |animator| {
+                Animator::new(animation, animator.period, animator.exposure)
+              },
+            );
+            let wrap = component.wrap.clone().map_or(
+              XY::new(component.wx.unwrap_or(0), component.wy.unwrap_or(0)),
+              |wrap| XY::new(wrap.x, wrap.y),
+            );
+            let wrap_velocity = component.wrap_velocity.clone().map_or(
+              XY::new(component.wvx.unwrap_or(0), component.wvy.unwrap_or(0)),
+              |wrap_velocity| XY::new(wrap_velocity.x, wrap_velocity.y),
+            );
+            let source = R16::cast_wh(
+              animation.cels[0].xy.x,
+              animation.cels[0].xy.y,
+              animation.wh.w,
+              animation.wh.h,
+            );
+            let constituent = R16::cast_wh(
+              self.atlas.animations[&constituent_id].cels[0].xy.x,
+              self.atlas.animations[&constituent_id].cels[0].xy.y,
+              self.atlas.animations[&constituent_id].wh.w,
+              self.atlas.animations[&constituent_id].wh.h,
+            );
+            // how does this work with animations? offsets are applied to everything.
+            let ret = Sprite::new(
+              source,
+              constituent,
+              composition,
+              bounds,
+              scale,
+              wrap,
+              wrap_velocity,
+            );
+            web_sys::console::log_1(&format!("{:?}", ret).into());
+            ret
+          })
+          .collect();
+        sprites.insert(state.clone(), spriteology);
+      }
+
+      entity = entity.with(Renderable { sprites });
     }
 
     let entity = entity.build();
@@ -93,7 +196,7 @@ impl Manufacturer {
 mod test {
   use super::*;
   use crate::components::{FollowMouse, Position, Velocity};
-  use crate::math::{XY, XY16};
+  use crate::math::{WH, XY, XY16};
   use specs::join::Join;
   use specs::ReadStorage;
 
@@ -101,7 +204,14 @@ mod test {
   fn manufacture_empty() {
     let mut blueprints = HashMap::new();
     blueprints.insert(BlueprintID::Bee, from_json!({"id": "Bee"}).unwrap());
-    let manufacturer = Manufacturer::new(blueprints);
+    let atlas = Atlas {
+      version: String::new(),
+      filename: String::new(),
+      format: String::new(),
+      wh: WH::new(0, 0),
+      animations: HashMap::new(),
+    };
+    let manufacturer = Manufacturer::new(blueprints, atlas);
     let mut ecs = World::new();
 
     manufacturer.manufacture(&mut ecs, BlueprintID::Bee);
@@ -124,7 +234,14 @@ mod test {
       })
       .unwrap(),
     );
-    let manufacturer = Manufacturer::new(blueprints);
+    let atlas = Atlas {
+      version: String::new(),
+      filename: String::new(),
+      format: String::new(),
+      wh: WH::new(0, 0),
+      animations: HashMap::new(),
+    };
+    let manufacturer = Manufacturer::new(blueprints, atlas);
     let mut ecs = World::new();
     ecs.register::<Position>();
     ecs.register::<Velocity>();
@@ -152,7 +269,14 @@ mod test {
     let f = blueprints.get(&BlueprintID::Bee).unwrap();
     assert_eq!(f.components.follow_mouse.is_some(), true);
 
-    let manufacturer = Manufacturer::new(blueprints);
+    let atlas = Atlas {
+      version: String::new(),
+      filename: String::new(),
+      format: String::new(),
+      wh: WH::new(0, 0),
+      animations: HashMap::new(),
+    };
+    let manufacturer = Manufacturer::new(blueprints, atlas);
     let mut ecs = World::new();
     ecs.register::<FollowMouse>();
 
@@ -189,7 +313,15 @@ mod test {
       })
       .unwrap(),
     );
-    let manufacturer = Manufacturer::new(blueprints);
+
+    let atlas = Atlas {
+      version: String::new(),
+      filename: String::new(),
+      format: String::new(),
+      wh: WH::new(0, 0),
+      animations: HashMap::new(),
+    };
+    let manufacturer = Manufacturer::new(blueprints, atlas);
     let mut ecs = World::new();
     ecs.register::<Parent>();
     ecs.register::<Children>();
@@ -257,7 +389,21 @@ mod test {
     );
     blueprints
       .insert(BlueprintID::Button, from_json!({"id": "Button"}).unwrap());
-    let manufacturer = Manufacturer::new(blueprints);
+    let atlas = Atlas {
+      version: String::new(),
+      filename: String::new(),
+      format: String::new(),
+      wh: WH::new(0, 0),
+      animations: HashMap::new(),
+    };
+    let atlas = Atlas {
+      version: String::new(),
+      filename: String::new(),
+      format: String::new(),
+      wh: WH::new(0, 0),
+      animations: HashMap::new(),
+    };
+    let manufacturer = Manufacturer::new(blueprints, atlas);
     let mut ecs = World::new();
     ecs.register::<Parent>();
     ecs.register::<Children>();

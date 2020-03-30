@@ -32,16 +32,18 @@ pub enum Alignment {
 /// camera's position and dimensions are known. Otherwise, the HUD sprite will
 /// be aligned to the camera's previous position causing a highly distracting
 /// wiggle effect.
-#[serde(deny_unknown_fields)]
-#[derive(Component, Deserialize, Serialize, Clone, Debug)]
+#[derive(Component, Clone, Debug)]
 pub struct AlignTo {
   alignment: Alignment,
   margin: XY16,
-  #[serde(skip)]
   to: Option<Entity>, // how does hte parser know what to set this to? need an enum? dynamic? idlk
 }
 
 impl AlignTo {
+  pub fn new(alignment: Alignment, margin: XY16, to: Option<Entity>) -> Self {
+    Self { alignment, margin, to }
+  }
+
   pub fn plot(&self, bounds: &R16, to: &R16) -> XY16 {
     XY16 {
       x: to.from.x

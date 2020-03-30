@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 /// The sprite draw order from bottom (lesser) to top (greater). Within a Layer,
 /// sprites are drawn in y-coordinate + height ascending order (lesser to
@@ -6,7 +6,7 @@ use serde::Deserialize;
 /// mechanism but the lowest possible Layer may be used where necessary. Layer
 /// is like a z-coordinate.
 #[repr(u8)]
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Serialize)]
 pub enum SpriteLayer {
   /// Terrain.
   Plane,

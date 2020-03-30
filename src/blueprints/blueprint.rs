@@ -1,12 +1,33 @@
 use super::BlueprintID;
-use crate::components::{AlignTo, Children, FollowMouse, Parent};
+use crate::atlas::{AnimationID, AnimatorPeriod};
+use crate::components::{Alignment, Children, Parent};
+use crate::math::Millis;
+use crate::sprites::{SpriteComposition, SpriteLayer};
 use num::traits::identities::Zero;
 use serde::{Deserialize, Serialize};
+use specs::Entity;
+use std::collections::HashMap;
 
 /// Blueprints define the Entity and its Components to be injected into the
 /// World. They're unprocessed though. This means that the root Blueprint
-/// definition and any children have to be manufactured (patched and injected
-/// into the World).
+/// definition and any children have to be processed (patched and injected into
+/// the World) every time.
+///
+/// Manufacturing is the process of assembling Components and populating the
+/// world with them. Blueprint JSON files give some perspective of all the
+/// Components that make up (are associated with) a given Entity but it's
+/// incomplete:
+///
+/// - ComponentBlueprints use default values by serde and often have an
+///   intermediate representation for deserialization.
+///
+/// - Children use default values by serde _and_ their definition Blueprint.
+///
+/// This means that everything that truly makes up an Entity can be difficult to
+/// grasp (conceptualize). However, the Blueprint JSON files are usually enough
+/// and debugging involves inspecting the JSON files, intermediate
+/// representations in ComponentBlueprints, default values in serde, and
+/// assembly in the Manufacturer. It's a little loose but practical.
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Blueprint {
@@ -27,8 +48,8 @@ pub struct Blueprint {
   /// linkage is a _m_-ary tree.
   ///
   /// [tagging]: https://serde.rs/enum-representations.html#externally-tagged
-  #[serde(default)]
-  pub components: ComponentMap,
+  #[serde(default, skip_serializing_if = "ComponentBlueprints::is_empty")]
+  pub components: ComponentBlueprints,
   /// These are kind of "Blueprint specifications" or "Blueprint properties."
   /// They're true Blueprints just like the root but they're manufactured by
   /// using their ID to obtain the root Blueprint as a baseline and then the
@@ -36,15 +57,15 @@ pub struct Blueprint {
   /// a cycle. The child ID always refers to a Manufacturer cached ID, not a new
   /// definition. Because it's not a definition, it's not possible to reference
   /// a child Blueprint by ID.
-  #[serde(default)]
+  #[serde(default, skip_serializing_if = "Vec::is_empty")]
   pub children: Vec<Blueprint>,
 }
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Default, Deserialize, Serialize)]
-pub struct ComponentMap {
+pub struct ComponentBlueprints {
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub align_to: Option<AlignTo>,
+  pub align_to: Option<AlignToBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub cam: Option<WH16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -57,6 +78,8 @@ pub struct ComponentMap {
   pub text: Option<String>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub max_wh: Option<WH16Blueprint>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub sprites: Option<HashMap<String, Vec<SpriteBlueprint>>>,
 
   /// These linkages are established during manufacturing only.
   #[serde(skip)]
@@ -68,28 +91,109 @@ pub struct ComponentMap {
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct XY16Blueprint {
-  #[serde(skip_serializing_if = "i16::is_zero")]
-  #[serde(default)]
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
   pub x: i16,
-  #[serde(skip_serializing_if = "i16::is_zero")]
-  #[serde(default)]
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
   pub y: i16,
 }
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct WH16Blueprint {
-  #[serde(skip_serializing_if = "i16::is_zero")]
-  #[serde(default)]
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
   pub w: i16,
-  #[serde(skip_serializing_if = "i16::is_zero")]
-  #[serde(default)]
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
+  pub h: i16,
+}
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct R16Blueprint {
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
+  pub x: i16,
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
+  pub y: i16,
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
+  pub w: i16,
+  #[serde(default, skip_serializing_if = "i16::is_zero")]
   pub h: i16,
 }
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct MarkerBlueprint {}
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct AlignToBlueprint {
+  pub alignment: Alignment,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub margin: Option<XY16Blueprint>,
+  // todo: how does the Manufacturer link this? It describes some Relationship,
+  // so maybe a Relationship enum Component? Or maybe it's dynamic and set by
+  // some kind of Behavior, like a "FindNearestEntityInitialization" behavior?
+  #[serde(skip)]
+  pub to: Option<Entity>,
+}
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct SpriteBlueprint {
+  pub id: AnimationID,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub constituent_id: Option<AnimationID>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub composition: Option<SpriteComposition>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub bounds: Option<R16Blueprint>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub position: Option<XY16Blueprint>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub x: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub y: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub area: Option<WH16Blueprint>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub w: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub h: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub layer: Option<SpriteLayer>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub scale: Option<XY16Blueprint>, // watch out for zero scale
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub sx: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub sy: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub wrap: Option<XY16Blueprint>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub wx: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub wy: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub wrap_velocity: Option<XY16Blueprint>, // Decamillipixel
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub wvx: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub wvy: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub animator: Option<AnimatorBlueprint>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub period: Option<AnimatorPeriod>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub exposure: Option<Millis>,
+}
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct AnimatorBlueprint {
+  #[serde(default, skip_serializing_if = "i32::is_zero")]
+  pub period: AnimatorPeriod,
+  #[serde(default, skip_serializing_if = "f64::is_zero")]
+  pub exposure: Millis,
+}
 
 impl Blueprint {
   /// Create a copy of self, replace any components present in patch, and append
@@ -106,9 +210,20 @@ impl Blueprint {
   }
 }
 
-impl ComponentMap {
+impl ComponentBlueprints {
+  pub fn is_empty(blueprints: &ComponentBlueprints) -> bool {
+    blueprints.align_to.is_none()
+      && blueprints.cam.is_none()
+      && blueprints.follow_mouse.is_none()
+      && blueprints.position.is_none()
+      && blueprints.velocity.is_none()
+      && blueprints.text.is_none()
+      && blueprints.max_wh.is_none()
+      && blueprints.sprites.is_none()
+  }
+
   /// Create a copy of self and replace any components present in patch.
-  pub fn patch(&self, patch: &ComponentMap) -> ComponentMap {
+  pub fn patch(&self, patch: &ComponentBlueprints) -> ComponentBlueprints {
     macro_rules! patch_component {
       ($component:ident) => {
         if patch.$component.is_some() {
@@ -129,6 +244,7 @@ impl ComponentMap {
       max_wh: patch_component!(max_wh),
       parent: patch_component!(parent),
       children: patch_component!(children),
+      sprites: patch_component!(sprites),
     }
   }
 }
