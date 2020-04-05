@@ -78,8 +78,8 @@ pub struct ComponentBlueprints {
   pub text: Option<String>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub max_wh: Option<WH16Blueprint>,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub sprites: Option<HashMap<String, Vec<SpriteBlueprint>>>,
+  #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+  pub sprites: HashMap<String, Vec<SpriteBlueprint>>,
 
   /// These linkages are established during manufacturing only.
   #[serde(skip)]
@@ -169,19 +169,11 @@ impl Patchy<Option<String>> for Option<String> {
   }
 }
 
-impl<T: Clone> Patchy<Option<HashMap<String, Vec<T>>>>
-  for Option<HashMap<String, Vec<T>>>
-{
+impl<T: Clone> Patchy<HashMap<String, Vec<T>>> for HashMap<String, Vec<T>> {
   fn patch(&self, patch: &Self) -> Self {
-    match (self, patch) {
-      (_, None) => self.clone(),
-      (None, _) => patch.clone(),
-      (Some(base), Some(patch)) => {
-        let mut meld = base.clone();
-        meld.extend(patch.into_iter().map(|(k, v)| (k.clone(), v.clone())));
-        Some(meld)
-      }
-    }
+    let mut meld = self.clone();
+    meld.extend(patch.into_iter().map(|(k, v)| (k.clone(), v.clone())));
+    meld
   }
 }
 
@@ -379,7 +371,7 @@ impl ComponentBlueprints {
       && blueprints.velocity.is_none()
       && blueprints.text.is_none()
       && blueprints.max_wh.is_none()
-      && blueprints.sprites.is_none()
+      && blueprints.sprites.is_empty()
   }
 
   //   /// Create a copy of self and replace any components present in patch.

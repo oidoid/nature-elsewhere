@@ -90,104 +90,104 @@ impl<'a> Manufacturer {
     if let Some(component) = &components.text {
       entity = entity.with(Text { text: component.clone() });
     }
-    if let Some(component) = &components.sprites {
-      let mut sprites = HashMap::new();
-      for (state, sprite_components) in component.iter() {
-        // this is inflating all the states which seems bad
-        let spriteology: Vec<_> = sprite_components
-          .iter()
-          .map(|component| {
-            //another name is props
-            let id = component.id;
-            let constituent_id = component.constituent_id.unwrap_or(id);
-            let composition =
-              component.composition.unwrap_or(SpriteComposition::Source);
-            let scale = component.scale.clone().map_or(
-              XY::new(component.sx.unwrap_or(1), component.sy.unwrap_or(1)),
-              |scale| XY::new(scale.x.unwrap_or(1), scale.y.unwrap_or(1)),
-            );
-            // valid ate scale is nonzero or enforce it with templatized XY<nonzero thingy>
-            let position = component.position.clone().map_or(
-              XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
-              |position| {
-                XY::new(position.x.unwrap_or(0), position.y.unwrap_or(0))
-              },
-            );
-            let animation = &self.atlas.animations[&id];
-            // do i need to validate area too?
-            let area = component.area.clone().map_or(
-              WH::new(
-                component.w.unwrap_or(animation.wh.w),
-                component.h.unwrap_or(animation.wh.h),
-              ),
-              |area| WH::new(area.w.unwrap_or(0), area.h.unwrap_or(0)),
-            ); //use atlas, review ts
-            let bounds = component.bounds.clone().map_or(
-              R16::cast_wh(position.x, position.y, area.w, area.h),
-              |bounds| {
-                R16::cast_wh(
-                  bounds.x.unwrap_or(0),
-                  bounds.y.unwrap_or(0),
-                  bounds.w.unwrap_or(0),
-                  bounds.h.unwrap_or(0),
-                )
-              },
-            );
+    let mut sprites = HashMap::new();
+    for (state, sprite_components) in components.sprites.iter() {
+      // this is inflating all the states which seems bad
+      let spriteology: Vec<_> = sprite_components
+        .iter()
+        .map(|component| {
+          //another name is props
+          let id = component.id;
+          let constituent_id = component.constituent_id.unwrap_or(id);
+          let composition =
+            component.composition.unwrap_or(SpriteComposition::Source);
+          let scale = component.scale.clone().map_or(
+            XY::new(component.sx.unwrap_or(1), component.sy.unwrap_or(1)),
+            |scale| XY::new(scale.x.unwrap_or(1), scale.y.unwrap_or(1)),
+          );
+          // valid ate scale is nonzero or enforce it with templatized XY<nonzero thingy>
+          let position = component.position.clone().map_or(
+            XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
+            |position| {
+              XY::new(position.x.unwrap_or(0), position.y.unwrap_or(0))
+            },
+          );
+          let animation = &self.atlas.animations[&id];
+          // do i need to validate area too?
+          let area = component.area.clone().map_or(
+            WH::new(
+              component.w.unwrap_or(animation.wh.w),
+              component.h.unwrap_or(animation.wh.h),
+            ),
+            |area| WH::new(area.w.unwrap_or(0), area.h.unwrap_or(0)),
+          ); //use atlas, review ts
+          let bounds = component.bounds.clone().map_or(
+            R16::cast_wh(position.x, position.y, area.w, area.h),
+            |bounds| {
+              R16::cast_wh(
+                bounds.x.unwrap_or(0),
+                bounds.y.unwrap_or(0),
+                bounds.w.unwrap_or(0),
+                bounds.h.unwrap_or(0),
+              )
+            },
+          );
 
-            let layer = component.layer.unwrap_or(SpriteLayer::Default);
-            let animator = component.animator.clone().map_or(
+          let layer = component.layer.unwrap_or(SpriteLayer::Default);
+          let animator = component.animator.clone().map_or(
+            Animator::new(
+              animation,
+              component.period.unwrap_or(0),
+              component.exposure.unwrap_or(0.),
+            ),
+            |animator| {
               Animator::new(
                 animation,
-                component.period.unwrap_or(0),
-                component.exposure.unwrap_or(0.),
-              ),
-              |animator| {
-                Animator::new(
-                  animation,
-                  animator.period.unwrap_or(0),
-                  animator.exposure.unwrap_or(0.),
-                )
-              },
-            );
-            let wrap = component.wrap.clone().map_or(
-              XY::new(component.wx.unwrap_or(0), component.wy.unwrap_or(0)),
-              |wrap| XY::new(wrap.x.unwrap_or(0), wrap.y.unwrap_or(0)),
-            );
-            let wrap_velocity = component.wrap_velocity.clone().map_or(
-              XY::new(component.wvx.unwrap_or(0), component.wvy.unwrap_or(0)),
-              |wrap_velocity| {
-                XY::new(
-                  wrap_velocity.x.unwrap_or(0),
-                  wrap_velocity.y.unwrap_or(0),
-                )
-              },
-            );
-            let source = R16::cast_wh(
-              animation.cels[0].xy.x,
-              animation.cels[0].xy.y,
-              animation.wh.w,
-              animation.wh.h,
-            );
-            let constituent = R16::cast_wh(
-              self.atlas.animations[&constituent_id].cels[0].xy.x,
-              self.atlas.animations[&constituent_id].cels[0].xy.y,
-              self.atlas.animations[&constituent_id].wh.w,
-              self.atlas.animations[&constituent_id].wh.h,
-            );
-            // how does this work with animations? offsets are applied to everything.
-            Sprite::new(
-              source,
-              constituent,
-              composition,
-              bounds,
-              scale,
-              wrap,
-              wrap_velocity,
-            )
-          })
-          .collect();
-        sprites.insert(state.clone(), spriteology);
-      }
+                animator.period.unwrap_or(0),
+                animator.exposure.unwrap_or(0.),
+              )
+            },
+          );
+          let wrap = component.wrap.clone().map_or(
+            XY::new(component.wx.unwrap_or(0), component.wy.unwrap_or(0)),
+            |wrap| XY::new(wrap.x.unwrap_or(0), wrap.y.unwrap_or(0)),
+          );
+          let wrap_velocity = component.wrap_velocity.clone().map_or(
+            XY::new(component.wvx.unwrap_or(0), component.wvy.unwrap_or(0)),
+            |wrap_velocity| {
+              XY::new(
+                wrap_velocity.x.unwrap_or(0),
+                wrap_velocity.y.unwrap_or(0),
+              )
+            },
+          );
+          let source = R16::cast_wh(
+            animation.cels[0].xy.x,
+            animation.cels[0].xy.y,
+            animation.wh.w,
+            animation.wh.h,
+          );
+          let constituent = R16::cast_wh(
+            self.atlas.animations[&constituent_id].cels[0].xy.x,
+            self.atlas.animations[&constituent_id].cels[0].xy.y,
+            self.atlas.animations[&constituent_id].wh.w,
+            self.atlas.animations[&constituent_id].wh.h,
+          );
+          // how does this work with animations? offsets are applied to everything.
+          Sprite::new(
+            source,
+            constituent,
+            composition,
+            bounds,
+            scale,
+            wrap,
+            wrap_velocity,
+          )
+        })
+        .collect();
+      sprites.insert(state.clone(), spriteology);
+    }
+    if !sprites.is_empty() {
       entity = entity.with(Renderable { sprites });
     }
 

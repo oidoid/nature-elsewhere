@@ -28,7 +28,7 @@
     "formatter:web": "prettier './**/*.{css,js,json,html,md}'",
     "test:format:rust": "npm -s run format:rust -- -- --check -l",
     "format:rust": "cargo -q --locked fmt",
-    "build:atlas": "aseprite -b --filename-format '{tag} {frame}' --list-tags --list-slices --sheet-pack --sheet src/atlas/atlas.png --data src/atlas/atlas.json assets/atlas/*.aseprite",
+    "build:atlas": "aseprite -b --filename-format '{tag} {frame}' --list-tags --list-slices --merge-duplicates --ignore-empty --trim --sheet-pack --sheet src/atlas/atlas.png --data src/atlas/atlas.json assets/atlas/*.aseprite",
     "palettize": "cd assets/atlas && find -name \\*.aseprite -exec aseprite '{}' -b --palette palette.aseprite --save-as '{}' \\;"
   },
   "devDependencies": {
