@@ -33,7 +33,7 @@ lto = true
 bincode = '=1.2.1'
 console_error_panic_hook = '=0.1.6'
 num = '=0.2.1'
-serde = '=1.0.105'
+serde = '=1.0.106'
 # For Serialize_repr.
 serde_repr = '=0.1.5'
 strum = '=0.18.0'
@@ -68,4 +68,4 @@ features = [
 
 [dev-dependencies]
 # For from_json! macro.
-serde_json = '=1.0.50'
+serde_json = '=1.0.51'
