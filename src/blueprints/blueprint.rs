@@ -136,7 +136,9 @@ impl Patch<ComponentBlueprints> for ComponentBlueprints {
   }
 }
 
-// Marker is used for unit de/serialization too since those don't work for roundtrips when wrapped in option https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
+// Markers are used for unit de/serialization too since those don't work for
+// roundtrips when wrapped in an Option.
+// https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct MarkerBlueprint {}
@@ -254,8 +256,8 @@ impl<K: Clone + Eq + Hash, V: Clone> Patch<HashMap<K, Vec<V>>>
   for HashMap<K, Vec<V>>
 {
   fn patch(&self, patch: &Self) -> Self {
-    let mut meld: HashMap<K, Vec<V>> = self.clone();
-    meld.extend(patch.into_iter().map(|(key, val)| (key.clone(), val.clone())));
+    let mut meld = self.clone();
+    meld.extend(patch.clone());
     meld
   }
 }
