@@ -55,13 +55,26 @@ impl<'a> Animator<'a> {
 
   /// Returns the current animation cel.
   pub fn cel(&self) -> &Cel {
-    &self.animation.cels[self.index()]
+    self.cel_for_animation(&self.animation).unwrap()
+  }
+
+  /// Returns the current animation cel index for the Animator's period.
+  pub fn cel_for_animation(&self, animation: &Animation) -> Option<&Cel> {
+    Some(&self.animation.cels[self.index_for_animation(animation)?])
   }
 
   /// Returns the current animation cel index for the Animator's period.
   pub fn index(&self) -> usize {
-    let len: AnimatorPeriod = self.animation.cels.len().try_into().unwrap();
-    (self.period % len).abs().try_into().unwrap()
+    self.index_for_animation(self.animation).unwrap()
+  }
+
+  /// Returns the current animation cel index for the Animator's period.
+  pub fn index_for_animation(&self, animation: &Animation) -> Option<usize> {
+    if animation.cels.is_empty() {
+      return None;
+    }
+    let len: AnimatorPeriod = animation.cels.len().try_into().unwrap();
+    Some((self.period % len).abs().try_into().unwrap())
   }
 
   /// Apply the time since last frame was shown, possibly advancing the

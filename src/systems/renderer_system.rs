@@ -39,12 +39,15 @@ impl<'a> System<'a> for RendererSystem {
     } = data;
 
     let bytes: Vec<u8> = (&sprites).join().fold(vec![], |mut bytes, sprite| {
-      bytes.append(
-        &mut bincode::config()
-          .native_endian()
-          .serialize(&sprite.sprites["Default"][0])
-          .unwrap(),
-      );
+      let mut more_bytes = bincode::config()
+        .native_endian()
+        .serialize(&sprite.sprites["Default"])
+        .unwrap();
+      // Drop the size in the header.
+      for _ in 0..8 {
+        more_bytes.remove(0);
+      }
+      bytes.append(&mut more_bytes);
       bytes
     });
     web_sys::console::log_1(&format!("{:?}", bytes).into());

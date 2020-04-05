@@ -1,9 +1,9 @@
-use super::Blueprint;
 use super::BlueprintID;
+use super::{Blueprint, Patchy};
 use crate::atlas::{Animator, Atlas};
 use crate::components::{
-  AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, RenderBuddy,
-  Renderable, Text, Velocity,
+  AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, Renderable,
+  Text, Velocity,
 };
 use crate::math::{R16, WH, XY};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
@@ -55,10 +55,9 @@ impl<'a> Manufacturer {
     entity_with_cloneable_components!(parent, children);
 
     if let Some(component) = &components.align_to {
-      let margin = component
-        .margin
-        .clone()
-        .map_or(XY::new(0, 0), |margin| XY::new(margin.x, margin.y));
+      let margin = component.margin.clone().map_or(XY::new(0, 0), |margin| {
+        XY::new(margin.x.unwrap_or(0), margin.y.unwrap_or(0))
+      });
       entity = entity.with(AlignTo::new(
         component.alignment,
         margin,
@@ -69,18 +68,24 @@ impl<'a> Manufacturer {
       entity = entity.with(FollowMouse {});
     }
     if let Some(component) = &components.cam {
-      entity = entity.with(Cam { area: WH::new(component.w, component.h) });
+      entity = entity.with(Cam {
+        area: WH::new(component.w.unwrap_or(0), component.h.unwrap_or(0)),
+      });
     }
     if let Some(component) = &components.max_wh {
-      entity = entity.with(MaxWH { area: WH::new(component.w, component.h) });
+      entity = entity.with(MaxWH {
+        area: WH::new(component.w.unwrap_or(0), component.h.unwrap_or(0)),
+      });
     }
     if let Some(component) = &components.position {
-      entity =
-        entity.with(Position { position: XY::new(component.x, component.y) });
+      entity = entity.with(Position {
+        position: XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
+      });
     }
     if let Some(component) = &components.velocity {
-      entity =
-        entity.with(Velocity { velocity: XY::new(component.x, component.y) });
+      entity = entity.with(Velocity {
+        velocity: XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
+      });
     }
     if let Some(component) = &components.text {
       entity = entity.with(Text { text: component.clone() });
@@ -99,12 +104,14 @@ impl<'a> Manufacturer {
               component.composition.unwrap_or(SpriteComposition::Source);
             let scale = component.scale.clone().map_or(
               XY::new(component.sx.unwrap_or(1), component.sy.unwrap_or(1)),
-              |scale| XY::new(scale.x, scale.y),
+              |scale| XY::new(scale.x.unwrap_or(1), scale.y.unwrap_or(1)),
             );
             // valid ate scale is nonzero or enforce it with templatized XY<nonzero thingy>
             let position = component.position.clone().map_or(
               XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
-              |position| XY::new(position.x, position.y),
+              |position| {
+                XY::new(position.x.unwrap_or(0), position.y.unwrap_or(0))
+              },
             );
             let animation = &self.atlas.animations[&id];
             // do i need to validate area too?
@@ -113,11 +120,18 @@ impl<'a> Manufacturer {
                 component.w.unwrap_or(animation.wh.w),
                 component.h.unwrap_or(animation.wh.h),
               ),
-              |area| WH::new(area.w, area.h),
+              |area| WH::new(area.w.unwrap_or(0), area.h.unwrap_or(0)),
             ); //use atlas, review ts
             let bounds = component.bounds.clone().map_or(
               R16::cast_wh(position.x, position.y, area.w, area.h),
-              |bounds| R16::cast_wh(bounds.x, bounds.y, bounds.w, bounds.h),
+              |bounds| {
+                R16::cast_wh(
+                  bounds.x.unwrap_or(0),
+                  bounds.y.unwrap_or(0),
+                  bounds.w.unwrap_or(0),
+                  bounds.h.unwrap_or(0),
+                )
+              },
             );
 
             let layer = component.layer.unwrap_or(SpriteLayer::Default);
@@ -128,16 +142,25 @@ impl<'a> Manufacturer {
                 component.exposure.unwrap_or(0.),
               ),
               |animator| {
-                Animator::new(animation, animator.period, animator.exposure)
+                Animator::new(
+                  animation,
+                  animator.period.unwrap_or(0),
+                  animator.exposure.unwrap_or(0.),
+                )
               },
             );
             let wrap = component.wrap.clone().map_or(
               XY::new(component.wx.unwrap_or(0), component.wy.unwrap_or(0)),
-              |wrap| XY::new(wrap.x, wrap.y),
+              |wrap| XY::new(wrap.x.unwrap_or(0), wrap.y.unwrap_or(0)),
             );
             let wrap_velocity = component.wrap_velocity.clone().map_or(
               XY::new(component.wvx.unwrap_or(0), component.wvy.unwrap_or(0)),
-              |wrap_velocity| XY::new(wrap_velocity.x, wrap_velocity.y),
+              |wrap_velocity| {
+                XY::new(
+                  wrap_velocity.x.unwrap_or(0),
+                  wrap_velocity.y.unwrap_or(0),
+                )
+              },
             );
             let source = R16::cast_wh(
               animation.cels[0].xy.x,
@@ -152,7 +175,7 @@ impl<'a> Manufacturer {
               self.atlas.animations[&constituent_id].wh.h,
             );
             // how does this work with animations? offsets are applied to everything.
-            let ret = Sprite::new(
+            Sprite::new(
               source,
               constituent,
               composition,
@@ -160,14 +183,11 @@ impl<'a> Manufacturer {
               scale,
               wrap,
               wrap_velocity,
-            );
-            web_sys::console::log_1(&format!("{:?}", ret).into());
-            ret
+            )
           })
           .collect();
         sprites.insert(state.clone(), spriteology);
       }
-
       entity = entity.with(Renderable { sprites });
     }
 
@@ -295,7 +315,7 @@ mod test {
         "id": "SaveDialog",
         "components": {"position": {"x": 1, "y": 2}},
         "children": [
-          {"id": "Button", "components": {"position": {"x": 3, "y": 4}}},
+          {"id": "Button", "components": {"position": {"x": 3}}},
           {"id": "Button", "components": {"velocity": {"x": 5, "y": 6}}},
           {"id": "Button"}
         ]
@@ -349,7 +369,7 @@ mod test {
         let buttons: Vec<(&Position, &Velocity, &Parent)> =
           (&positions, &velocities, &parents).join().collect();
         assert_eq!(buttons.len(), 3);
-        assert_eq!(buttons[0].0.position, XY::new(3, 4));
+        assert_eq!(buttons[0].0.position, XY::new(3, 8));
         assert_eq!(buttons[0].1.velocity, XY::new(9, 10));
         assert_eq!(buttons[0].2.parent, entity);
         assert_eq!(buttons[1].0.position, XY::new(7, 8));

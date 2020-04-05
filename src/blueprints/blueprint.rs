@@ -3,7 +3,6 @@ use crate::atlas::{AnimationID, AnimatorPeriod};
 use crate::components::{Alignment, Children, Parent};
 use crate::math::Millis;
 use crate::sprites::{SpriteComposition, SpriteLayer};
-use num::traits::identities::Zero;
 use serde::{Deserialize, Serialize};
 use specs::Entity;
 use std::collections::HashMap;
@@ -28,6 +27,7 @@ use std::collections::HashMap;
 /// and debugging involves inspecting the JSON files, intermediate
 /// representations in ComponentBlueprints, default values in serde, and
 /// assembly in the Manufacturer. It's a little loose but practical.
+/// defaults aren't used since htey harm the patching beahvior. options everywhere
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Blueprint {
@@ -88,37 +88,174 @@ pub struct ComponentBlueprints {
   pub children: Option<Children>,
 }
 
+pub trait Patchy<T: Clone> {
+  fn patch(&self, patch: &T) -> T;
+}
+
+impl Patchy<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
+  fn patch(&self, patch: &Self) -> Self {
+    match patch {
+      None => self.clone(),
+      _ => patch.clone(),
+    }
+  }
+}
+
+impl Patchy<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
+  fn patch(&self, patch: &Self) -> Self {
+    match (self, patch) {
+      (_, None) => self.clone(),
+      (None, _) => patch.clone(),
+      (Some(base), Some(patch)) => Some(AlignToBlueprint {
+        alignment: patch.alignment,
+        margin: base.margin.patch(&patch.margin),
+        to: base.to.or(patch.to),
+      }),
+    }
+  }
+}
+
+impl Patchy<Option<WH16Blueprint>> for Option<WH16Blueprint> {
+  fn patch(&self, patch: &Self) -> Self {
+    match (self, patch) {
+      (_, None) => self.clone(),
+      (None, _) => patch.clone(),
+      (Some(base), Some(patch)) => {
+        Some(WH16Blueprint { w: patch.w.or(base.w), h: patch.h.or(base.h) })
+      }
+    }
+  }
+}
+
+impl Patchy<Option<Children>> for Option<Children> {
+  fn patch(&self, patch: &Self) -> Self {
+    match (self, patch) {
+      (_, None) => self.clone(),
+      (None, _) => patch.clone(),
+      (Some(base), Some(patch)) => {
+        Some(Children { children: base.children.patch(&patch.children) })
+      }
+    }
+  }
+}
+
+impl Patchy<Option<Parent>> for Option<Parent> {
+  fn patch(&self, patch: &Self) -> Self {
+    match patch {
+      None => self.clone(),
+      _ => patch.clone(),
+    }
+  }
+}
+
+impl Patchy<Option<XY16Blueprint>> for Option<XY16Blueprint> {
+  fn patch(&self, patch: &Self) -> Self {
+    match (self, patch) {
+      (_, None) => self.clone(),
+      (None, _) => patch.clone(),
+      (Some(base), Some(patch)) => {
+        Some(XY16Blueprint { x: patch.x.or(base.x), y: patch.y.or(base.y) })
+      }
+    }
+  }
+}
+
+impl Patchy<Option<String>> for Option<String> {
+  fn patch(&self, patch: &Self) -> Self {
+    match patch {
+      None => self.clone(),
+      _ => patch.clone(),
+    }
+  }
+}
+
+impl<T: Clone> Patchy<Option<HashMap<String, Vec<T>>>>
+  for Option<HashMap<String, Vec<T>>>
+{
+  fn patch(&self, patch: &Self) -> Self {
+    match (self, patch) {
+      (_, None) => self.clone(),
+      (None, _) => patch.clone(),
+      (Some(base), Some(patch)) => {
+        let mut meld = base.clone();
+        meld.extend(patch.into_iter().map(|(k, v)| (k.clone(), v.clone())));
+        Some(meld)
+      }
+    }
+  }
+}
+
+// #[derive(Clone)]
+// enum Patchable<T> {
+//   AlignToBlueprint(AlignToBlueprint),
+//   WH16Blueprint(WH16Blueprint),
+//   MarkerBlueprint(MarkerBlueprint),
+//   XY16Blueprint(XY16Blueprint),
+//   String(String),
+//   Map(HashMap<String, Vec<T>>),
+// }
+
+// impl<T> Patchable<T> {
+//   pub fn patch(base: &Option<Self>, patch: &Option<Self>) -> Option<Self>
+//   where
+//     T: Clone,
+//   {
+//     if base.is_none() {
+//       return patch.clone();
+//     }
+//     if patch.is_none() {
+//       return base.clone();
+//     }
+//     match (base.unwrap(), patch.unwrap()) {
+//       (Self::AlignToBlueprint(base), Self::AlignToBlueprint(patch)) => {
+//         Some(Self::AlignToBlueprint(AlignToBlueprint {
+//           alignment: patch.alignment.clone(),
+//           margin: Self::patch(&base.margin, &patch.margin).0,
+//           to: base.to.or(patch.to).clone(),
+//         }))
+//       }
+//       _ => panic!("foo"), // Self::WH16Blueprint(patch) => {}
+//                           // Self::MarkerBlueprint(patch) => {}
+//                           // Self::XY16Blueprint(patch) => {}
+//                           // Self::String(patch) => {}
+//                           // Self::Map(patch) => {}
+//     }
+//   }
+// }
+
+// Serialization is going to have to test against default values. I have to use optionals here too in order for patching to work correctly.
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct XY16Blueprint {
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub x: i16,
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub y: i16,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub x: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub y: Option<i16>,
 }
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct WH16Blueprint {
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub w: i16,
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub h: i16,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub w: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub h: Option<i16>,
 }
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct R16Blueprint {
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub x: i16,
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub y: i16,
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub w: i16,
-  #[serde(default, skip_serializing_if = "i16::is_zero")]
-  pub h: i16,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub x: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub y: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub w: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub h: Option<i16>,
 }
 
+// Marker is used for unit de/serialization too since those don't work for roundtrips when wrapped in option https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct MarkerBlueprint {}
@@ -189,23 +326,46 @@ pub struct SpriteBlueprint {
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct AnimatorBlueprint {
-  #[serde(default, skip_serializing_if = "i32::is_zero")]
-  pub period: AnimatorPeriod,
-  #[serde(default, skip_serializing_if = "f64::is_zero")]
-  pub exposure: Millis,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub period: Option<AnimatorPeriod>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub exposure: Option<Millis>,
 }
 
-impl Blueprint {
+impl Patchy<Blueprint> for Blueprint {
   /// Create a copy of self, replace any components present in patch, and append
   /// any children in patch. Blueprint children themselves are not patched as
   /// its the Manufacturer's responsibility.
-  pub fn patch(&self, patch: &Blueprint) -> Blueprint {
-    let mut children = self.children.clone();
-    children.extend(patch.children.clone());
+  fn patch(&self, patch: &Blueprint) -> Blueprint {
     Self {
       id: patch.id,
       components: self.components.patch(&patch.components),
-      children,
+      children: self.children.patch(&patch.children),
+    }
+  }
+}
+
+impl<T: Clone> Patchy<Vec<T>> for Vec<T> {
+  fn patch(&self, patch: &Self) -> Self {
+    let mut meld = self.clone();
+    meld.extend(patch.clone());
+    meld
+  }
+}
+
+impl Patchy<ComponentBlueprints> for ComponentBlueprints {
+  fn patch(&self, patch: &Self) -> Self {
+    Self {
+      align_to: self.align_to.patch(&patch.align_to),
+      cam: self.cam.patch(&patch.cam),
+      follow_mouse: self.follow_mouse.patch(&patch.follow_mouse),
+      position: self.position.patch(&patch.position),
+      velocity: self.velocity.patch(&patch.velocity),
+      text: self.text.patch(&patch.text),
+      max_wh: self.max_wh.patch(&patch.max_wh),
+      parent: self.parent.patch(&patch.parent),
+      children: self.children.patch(&patch.children),
+      sprites: self.sprites.patch(&patch.sprites),
     }
   }
 }
@@ -222,29 +382,29 @@ impl ComponentBlueprints {
       && blueprints.sprites.is_none()
   }
 
-  /// Create a copy of self and replace any components present in patch.
-  pub fn patch(&self, patch: &ComponentBlueprints) -> ComponentBlueprints {
-    macro_rules! patch_component {
-      ($component:ident) => {
-        if patch.$component.is_some() {
-          &patch.$component
-        } else {
-          &self.$component
-        }
-        .clone()
-      };
-    }
-    Self {
-      align_to: patch_component!(align_to),
-      cam: patch_component!(cam),
-      follow_mouse: patch_component!(follow_mouse),
-      position: patch_component!(position),
-      velocity: patch_component!(velocity),
-      text: patch_component!(text),
-      max_wh: patch_component!(max_wh),
-      parent: patch_component!(parent),
-      children: patch_component!(children),
-      sprites: patch_component!(sprites),
-    }
-  }
+  //   /// Create a copy of self and replace any components present in patch.
+  //   pub fn patch(&self, patch: &ComponentBlueprints) -> ComponentBlueprints {
+  //     macro_rules! patch_component {
+  //       ($component:ident) => {
+  //         // if patch.$component.is_some() {
+  //         //   &patch.$component
+  //         // } else {
+  //         // }
+  //         // .clone()
+  //         &self.$component.patch(patch)
+  //       };
+  //     }
+  //     Self {
+  //       align_to: patch_component!(align_to),
+  //       cam: patch_component!(cam),
+  //       follow_mouse: patch_component!(follow_mouse),
+  //       position: patch_component!(position),
+  //       velocity: patch_component!(velocity),
+  //       text: patch_component!(text),
+  //       max_wh: patch_component!(max_wh),
+  //       parent: patch_component!(parent),
+  //       children: patch_component!(children),
+  //       sprites: patch_component!(sprites),
+  //     }
+  //   }
 }

@@ -2,11 +2,12 @@ use super::font::Font;
 use crate::math::R16;
 use crate::math::{XY, XY16};
 
+// todo: any opportunity for collaboration with sprite_layout?
 #[derive(Debug, PartialEq)]
 pub struct TextLayout {
   /// The length of this array matches the string length.
   letters: Vec<Option<R16>>,
-  /// The offset in pixels.
+  /// The offset in pixels. todo: should this be passed in?
   cursor: XY16,
 }
 

@@ -1,11 +1,9 @@
 mod align;
-mod bounds;
 mod collision;
 mod cursor;
 mod wraparound;
 
 pub use align::*;
-pub use bounds::*;
 pub use collision::*;
 pub use cursor::*;
 pub use wraparound::*;
@@ -13,17 +11,16 @@ pub use wraparound::*;
 use crate::atlas::{AnimationID, Animator};
 use crate::math::{R16, WH16, XY16};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
-use serde::{Deserialize, Serialize};
 use specs::prelude::DenseVecStorage;
 use specs::{Component, Entity};
 use std::any::Any;
 use std::collections::HashMap;
 
 #[derive(Component)]
-pub struct Player {}
+pub struct Player;
 
 #[derive(Component)]
-pub struct FollowMouse {} // Or LockOn + alignment options
+pub struct FollowMouse; // Or LockOn + alignment options
 
 #[derive(Component)]
 pub struct Position {
@@ -65,9 +62,16 @@ pub struct StateBestFriend<T: Any + Send + Sync + Default> {
   pub state: T,
 }
 
+// this could have the state in it but then how does behavior line up? it'd be like i'd have to stick behavior and collision in every renderable. i could do that but not everything has behavior.
+// another approach is to make BeeState, AppleTreeState, etc but querying all those different types wouldn't work.
 #[derive(Component)]
 pub struct Renderable<T: Any + Send + Sync + Default> {
   pub sprites: HashMap<T, Vec<Sprite>>,
+}
+
+#[derive(Component)]
+pub struct Bounds {
+  pub bounds: R16,
 }
 
 // it sucks that this requires full sprite inflation for every state of everything whether it is in use or not. manufacturing anything is super expensive
