@@ -6,6 +6,7 @@ use crate::sprites::{SpriteComposition, SpriteLayer};
 use serde::{Deserialize, Serialize};
 use specs::Entity;
 use std::collections::HashMap;
+use std::hash::Hash;
 
 /// Blueprints define the Entity and its Components to be injected into the
 /// World. They're unprocessed though. This means that the root Blueprint
@@ -61,6 +62,10 @@ pub struct Blueprint {
   pub children: Vec<Blueprint>,
 }
 
+pub trait Patch<T: Clone> {
+  fn patch(&self, patch: &T) -> T;
+}
+
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Default, Deserialize, Serialize)]
 pub struct ComponentBlueprints {
@@ -88,11 +93,55 @@ pub struct ComponentBlueprints {
   pub children: Option<Children>,
 }
 
-pub trait Patchy<T: Clone> {
-  fn patch(&self, patch: &T) -> T;
+impl ComponentBlueprints {
+  pub fn is_empty(blueprints: &ComponentBlueprints) -> bool {
+    blueprints.align_to.is_none()
+      && blueprints.cam.is_none()
+      && blueprints.follow_mouse.is_none()
+      && blueprints.position.is_none()
+      && blueprints.velocity.is_none()
+      && blueprints.text.is_none()
+      && blueprints.max_wh.is_none()
+      && blueprints.sprites.is_empty()
+  }
 }
 
-impl Patchy<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
+impl Patch<Blueprint> for Blueprint {
+  /// Create a copy of self, replace any components present in patch, and append
+  /// any children in patch. Blueprint children themselves are not patched as
+  /// its the Manufacturer's responsibility.
+  fn patch(&self, patch: &Blueprint) -> Blueprint {
+    Self {
+      id: patch.id,
+      components: self.components.patch(&patch.components),
+      children: self.children.patch(&patch.children),
+    }
+  }
+}
+
+impl Patch<ComponentBlueprints> for ComponentBlueprints {
+  fn patch(&self, patch: &Self) -> Self {
+    Self {
+      align_to: self.align_to.patch(&patch.align_to),
+      cam: self.cam.patch(&patch.cam),
+      follow_mouse: self.follow_mouse.patch(&patch.follow_mouse),
+      position: self.position.patch(&patch.position),
+      velocity: self.velocity.patch(&patch.velocity),
+      text: self.text.patch(&patch.text),
+      max_wh: self.max_wh.patch(&patch.max_wh),
+      parent: self.parent.patch(&patch.parent),
+      children: self.children.patch(&patch.children),
+      sprites: self.sprites.patch(&patch.sprites),
+    }
+  }
+}
+
+// Marker is used for unit de/serialization too since those don't work for roundtrips when wrapped in option https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct MarkerBlueprint {}
+
+impl Patch<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
   fn patch(&self, patch: &Self) -> Self {
     match patch {
       None => self.clone(),
@@ -101,7 +150,20 @@ impl Patchy<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
   }
 }
 
-impl Patchy<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct AlignToBlueprint {
+  pub alignment: Alignment,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub margin: Option<XY16Blueprint>,
+  // todo: how does the Manufacturer link this? It describes some Relationship,
+  // so maybe a Relationship enum Component? Or maybe it's dynamic and set by
+  // some kind of Behavior, like a "FindNearestEntityInitialization" behavior?
+  #[serde(skip)]
+  pub to: Option<Entity>,
+}
+
+impl Patch<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
   fn patch(&self, patch: &Self) -> Self {
     match (self, patch) {
       (_, None) => self.clone(),
@@ -115,7 +177,16 @@ impl Patchy<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
   }
 }
 
-impl Patchy<Option<WH16Blueprint>> for Option<WH16Blueprint> {
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct WH16Blueprint {
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub w: Option<i16>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub h: Option<i16>,
+}
+
+impl Patch<Option<WH16Blueprint>> for Option<WH16Blueprint> {
   fn patch(&self, patch: &Self) -> Self {
     match (self, patch) {
       (_, None) => self.clone(),
@@ -127,7 +198,7 @@ impl Patchy<Option<WH16Blueprint>> for Option<WH16Blueprint> {
   }
 }
 
-impl Patchy<Option<Children>> for Option<Children> {
+impl Patch<Option<Children>> for Option<Children> {
   fn patch(&self, patch: &Self) -> Self {
     match (self, patch) {
       (_, None) => self.clone(),
@@ -139,7 +210,7 @@ impl Patchy<Option<Children>> for Option<Children> {
   }
 }
 
-impl Patchy<Option<Parent>> for Option<Parent> {
+impl Patch<Option<Parent>> for Option<Parent> {
   fn patch(&self, patch: &Self) -> Self {
     match patch {
       None => self.clone(),
@@ -147,73 +218,6 @@ impl Patchy<Option<Parent>> for Option<Parent> {
     }
   }
 }
-
-impl Patchy<Option<XY16Blueprint>> for Option<XY16Blueprint> {
-  fn patch(&self, patch: &Self) -> Self {
-    match (self, patch) {
-      (_, None) => self.clone(),
-      (None, _) => patch.clone(),
-      (Some(base), Some(patch)) => {
-        Some(XY16Blueprint { x: patch.x.or(base.x), y: patch.y.or(base.y) })
-      }
-    }
-  }
-}
-
-impl Patchy<Option<String>> for Option<String> {
-  fn patch(&self, patch: &Self) -> Self {
-    match patch {
-      None => self.clone(),
-      _ => patch.clone(),
-    }
-  }
-}
-
-impl<T: Clone> Patchy<HashMap<String, Vec<T>>> for HashMap<String, Vec<T>> {
-  fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.into_iter().map(|(k, v)| (k.clone(), v.clone())));
-    meld
-  }
-}
-
-// #[derive(Clone)]
-// enum Patchable<T> {
-//   AlignToBlueprint(AlignToBlueprint),
-//   WH16Blueprint(WH16Blueprint),
-//   MarkerBlueprint(MarkerBlueprint),
-//   XY16Blueprint(XY16Blueprint),
-//   String(String),
-//   Map(HashMap<String, Vec<T>>),
-// }
-
-// impl<T> Patchable<T> {
-//   pub fn patch(base: &Option<Self>, patch: &Option<Self>) -> Option<Self>
-//   where
-//     T: Clone,
-//   {
-//     if base.is_none() {
-//       return patch.clone();
-//     }
-//     if patch.is_none() {
-//       return base.clone();
-//     }
-//     match (base.unwrap(), patch.unwrap()) {
-//       (Self::AlignToBlueprint(base), Self::AlignToBlueprint(patch)) => {
-//         Some(Self::AlignToBlueprint(AlignToBlueprint {
-//           alignment: patch.alignment.clone(),
-//           margin: Self::patch(&base.margin, &patch.margin).0,
-//           to: base.to.or(patch.to).clone(),
-//         }))
-//       }
-//       _ => panic!("foo"), // Self::WH16Blueprint(patch) => {}
-//                           // Self::MarkerBlueprint(patch) => {}
-//                           // Self::XY16Blueprint(patch) => {}
-//                           // Self::String(patch) => {}
-//                           // Self::Map(patch) => {}
-//     }
-//   }
-// }
 
 // Serialization is going to have to test against default values. I have to use optionals here too in order for patching to work correctly.
 #[serde(deny_unknown_fields)]
@@ -225,13 +229,43 @@ pub struct XY16Blueprint {
   pub y: Option<i16>,
 }
 
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct WH16Blueprint {
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub w: Option<i16>,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub h: Option<i16>,
+impl Patch<Option<XY16Blueprint>> for Option<XY16Blueprint> {
+  fn patch(&self, patch: &Self) -> Self {
+    match (self, patch) {
+      (_, None) => self.clone(),
+      (None, _) => patch.clone(),
+      (Some(base), Some(patch)) => {
+        Some(XY16Blueprint { x: patch.x.or(base.x), y: patch.y.or(base.y) })
+      }
+    }
+  }
+}
+
+impl Patch<Option<String>> for Option<String> {
+  fn patch(&self, patch: &Self) -> Self {
+    match patch {
+      None => self.clone(),
+      _ => patch.clone(),
+    }
+  }
+}
+
+impl<K: Clone + Eq + Hash, V: Clone> Patch<HashMap<K, Vec<V>>>
+  for HashMap<K, Vec<V>>
+{
+  fn patch(&self, patch: &Self) -> Self {
+    let mut meld: HashMap<K, Vec<V>> = self.clone();
+    meld.extend(patch.into_iter().map(|(key, val)| (key.clone(), val.clone())));
+    meld
+  }
+}
+
+impl<T: Clone> Patch<Vec<T>> for Vec<T> {
+  fn patch(&self, patch: &Self) -> Self {
+    let mut meld = self.clone();
+    meld.extend(patch.clone());
+    meld
+  }
 }
 
 #[serde(deny_unknown_fields)]
@@ -245,24 +279,6 @@ pub struct R16Blueprint {
   pub w: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub h: Option<i16>,
-}
-
-// Marker is used for unit de/serialization too since those don't work for roundtrips when wrapped in option https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct MarkerBlueprint {}
-
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct AlignToBlueprint {
-  pub alignment: Alignment,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub margin: Option<XY16Blueprint>,
-  // todo: how does the Manufacturer link this? It describes some Relationship,
-  // so maybe a Relationship enum Component? Or maybe it's dynamic and set by
-  // some kind of Behavior, like a "FindNearestEntityInitialization" behavior?
-  #[serde(skip)]
-  pub to: Option<Entity>,
 }
 
 #[serde(deny_unknown_fields)]
@@ -322,81 +338,4 @@ pub struct AnimatorBlueprint {
   pub period: Option<AnimatorPeriod>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub exposure: Option<Millis>,
-}
-
-impl Patchy<Blueprint> for Blueprint {
-  /// Create a copy of self, replace any components present in patch, and append
-  /// any children in patch. Blueprint children themselves are not patched as
-  /// its the Manufacturer's responsibility.
-  fn patch(&self, patch: &Blueprint) -> Blueprint {
-    Self {
-      id: patch.id,
-      components: self.components.patch(&patch.components),
-      children: self.children.patch(&patch.children),
-    }
-  }
-}
-
-impl<T: Clone> Patchy<Vec<T>> for Vec<T> {
-  fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.clone());
-    meld
-  }
-}
-
-impl Patchy<ComponentBlueprints> for ComponentBlueprints {
-  fn patch(&self, patch: &Self) -> Self {
-    Self {
-      align_to: self.align_to.patch(&patch.align_to),
-      cam: self.cam.patch(&patch.cam),
-      follow_mouse: self.follow_mouse.patch(&patch.follow_mouse),
-      position: self.position.patch(&patch.position),
-      velocity: self.velocity.patch(&patch.velocity),
-      text: self.text.patch(&patch.text),
-      max_wh: self.max_wh.patch(&patch.max_wh),
-      parent: self.parent.patch(&patch.parent),
-      children: self.children.patch(&patch.children),
-      sprites: self.sprites.patch(&patch.sprites),
-    }
-  }
-}
-
-impl ComponentBlueprints {
-  pub fn is_empty(blueprints: &ComponentBlueprints) -> bool {
-    blueprints.align_to.is_none()
-      && blueprints.cam.is_none()
-      && blueprints.follow_mouse.is_none()
-      && blueprints.position.is_none()
-      && blueprints.velocity.is_none()
-      && blueprints.text.is_none()
-      && blueprints.max_wh.is_none()
-      && blueprints.sprites.is_empty()
-  }
-
-  //   /// Create a copy of self and replace any components present in patch.
-  //   pub fn patch(&self, patch: &ComponentBlueprints) -> ComponentBlueprints {
-  //     macro_rules! patch_component {
-  //       ($component:ident) => {
-  //         // if patch.$component.is_some() {
-  //         //   &patch.$component
-  //         // } else {
-  //         // }
-  //         // .clone()
-  //         &self.$component.patch(patch)
-  //       };
-  //     }
-  //     Self {
-  //       align_to: patch_component!(align_to),
-  //       cam: patch_component!(cam),
-  //       follow_mouse: patch_component!(follow_mouse),
-  //       position: patch_component!(position),
-  //       velocity: patch_component!(velocity),
-  //       text: patch_component!(text),
-  //       max_wh: patch_component!(max_wh),
-  //       parent: patch_component!(parent),
-  //       children: patch_component!(children),
-  //       sprites: patch_component!(sprites),
-  //     }
-  //   }
 }
