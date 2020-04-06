@@ -1,7 +1,7 @@
 use super::BlueprintID;
 use crate::atlas::{AnimationID, AnimatorPeriod};
-use crate::components::{AlignTo, Alignment, Children, Parent};
-use crate::math::{Millis, WH, WH16, XY, XY16};
+use crate::components::{Alignment, Children, Parent};
+use crate::math::Millis;
 use crate::sprites::{SpriteComposition, SpriteLayer};
 use serde::{Deserialize, Serialize};
 use specs::Entity;
@@ -105,13 +105,6 @@ impl ComponentBlueprints {
   }
 }
 
-// Markers are used for unit de/serialization too since those don't work for
-// roundtrips when wrapped in an Option.
-// https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct MarkerBlueprint {}
-
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct AlignToBlueprint {
@@ -125,23 +118,12 @@ pub struct AlignToBlueprint {
   pub to: Option<Entity>,
 }
 
+// Markers are used for unit de/serialization too since those don't work for
+// roundtrips when wrapped in an Option.
+// https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
-pub struct WH16Blueprint {
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub w: Option<i16>,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub h: Option<i16>,
-}
-
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct XY16Blueprint {
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub x: Option<i16>,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub y: Option<i16>,
-}
+pub struct MarkerBlueprint {}
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
@@ -155,6 +137,26 @@ pub struct R16Blueprint {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub h: Option<i16>,
 }
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct XYBlueprint<T> {
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub x: Option<T>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub y: Option<T>,
+}
+pub type XY16Blueprint = XYBlueprint<i16>;
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct WHBlueprint<T> {
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub w: Option<T>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub h: Option<T>,
+}
+pub type WH16Blueprint = WHBlueprint<i16>;
 
 /// This Blueprint is special. It's prevalent and so provides shorthands for
 /// most properties, even composed objects. Precedence is given to the highest

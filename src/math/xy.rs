@@ -10,7 +10,7 @@ use std::{
 };
 
 #[derive(Clone, Eq, PartialEq, Serialize)]
-pub struct XY<T: Default> {
+pub struct XY<T> {
   pub x: T,
   pub y: T,
 }

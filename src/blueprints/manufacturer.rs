@@ -1,5 +1,5 @@
 use super::BlueprintID;
-use super::{Blueprint, Manufacture, PatchBlueprint};
+use super::{Blueprint, ManufactureBlueprint, PatchBlueprint};
 use crate::atlas::{Animator, Atlas};
 use crate::components::{
   AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, Renderable,
