@@ -64,6 +64,8 @@ impl Sprite {
     wrap: XY16,
     wrap_velocity: XY16,
   ) -> Self {
+    // Only non-zero scales make sense.
+    assert!(scale.area() > 0);
     Self {
       source,
       constituent,

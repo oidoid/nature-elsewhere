@@ -62,9 +62,9 @@ impl<T: Default> XY<T> {
     Self { x: component, y: component }
   }
 
-  pub fn area(self) -> T
+  pub fn area(&self) -> T
   where
-    T: Mul<Output = T>,
+    T: Copy + Mul<Output = T>,
   {
     self.x * self.y
   }

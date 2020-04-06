@@ -1,5 +1,5 @@
 use super::BlueprintID;
-use super::{Blueprint, Patch};
+use super::{Blueprint, Manufacture, Patch};
 use crate::atlas::{Animator, Atlas};
 use crate::components::{
   AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, Renderable,
@@ -54,15 +54,8 @@ impl<'a> Manufacturer {
     }
     entity_with_cloneable_components!(parent, children);
 
-    if let Some(component) = &components.align_to {
-      let margin = component.margin.clone().map_or(XY::new(0, 0), |margin| {
-        XY::new(margin.x.unwrap_or(0), margin.y.unwrap_or(0))
-      });
-      entity = entity.with(AlignTo::new(
-        component.alignment,
-        margin,
-        component.to.clone(),
-      ));
+    if let Some(component) = components.align_to.manufacture() {
+      entity = entity.with(component);
     }
     if let Some(_component) = &components.follow_mouse {
       entity = entity.with(FollowMouse {});

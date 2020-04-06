@@ -1,9 +1,9 @@
 use super::BlueprintID;
 use crate::atlas::{AnimationID, AnimatorPeriod};
-use crate::components::{Alignment, Children, Parent};
-use crate::math::Millis;
+use crate::components::{AlignTo, Alignment, Children, Parent};
+use crate::math::{Millis, WH, XY};
 use crate::sprites::{SpriteComposition, SpriteLayer};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 use specs::Entity;
 use std::collections::HashMap;
 use std::hash::Hash;
@@ -29,6 +29,11 @@ use std::hash::Hash;
 /// representations in ComponentBlueprints, default values in serde, and
 /// assembly in the Manufacturer. It's a little loose but practical.
 /// defaults aren't used since htey harm the patching beahvior. options everywhere
+///
+/// `Option`s are used so that patching knows when a value is set or should fall
+/// should fallthrough to the base. Defaults are only used for collection types
+/// that merge by aggregation. Serialization should test against default values
+/// in the Manufacturer.
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Blueprint {
@@ -66,10 +71,15 @@ pub trait Patch<T: Clone> {
   fn patch(&self, patch: &T) -> T;
 }
 
+pub trait Manufacture<T> {
+  fn manufacture(&self) -> Option<T>;
+}
+
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Default, Deserialize, Serialize)]
 pub struct ComponentBlueprints {
-  #[serde(skip_serializing_if = "Option::is_none")]
+  // #[serde(deserialize_with = "de_from_align_to_blueprint")]
+  // pub align_to2: Option<AlignTo>,
   pub align_to: Option<AlignToBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub cam: Option<WH16Blueprint>,
@@ -122,6 +132,7 @@ impl Patch<Blueprint> for Blueprint {
 impl Patch<ComponentBlueprints> for ComponentBlueprints {
   fn patch(&self, patch: &Self) -> Self {
     Self {
+      // align_to2: None,
       align_to: self.align_to.patch(&patch.align_to),
       cam: self.cam.patch(&patch.cam),
       follow_mouse: self.follow_mouse.patch(&patch.follow_mouse),
@@ -163,6 +174,36 @@ pub struct AlignToBlueprint {
   // some kind of Behavior, like a "FindNearestEntityInitialization" behavior?
   #[serde(skip)]
   pub to: Option<Entity>,
+}
+
+fn de_from_align_to_blueprint<'de, D>(
+  deserializer: D,
+) -> Result<Option<AlignTo>, D::Error>
+where
+  D: Deserializer<'de>,
+{
+  let blueprint: Option<AlignToBlueprint> = Option::deserialize(deserializer)?;
+  if let Some(blueprint) = blueprint {
+    let margin = blueprint.margin.clone().map_or(XY::new(0, 0), |margin| {
+      XY::new(margin.x.unwrap_or(0), margin.y.unwrap_or(0))
+    });
+    Ok(Some(AlignTo::new(blueprint.alignment, margin, blueprint.to.clone())))
+  } else {
+    Ok(None)
+  }
+}
+
+impl Manufacture<AlignTo> for Option<AlignToBlueprint> {
+  fn manufacture(&self) -> Option<AlignTo> {
+    if let Some(blueprint) = self {
+      let margin = blueprint.margin.clone().map_or(XY::new(0, 0), |margin| {
+        XY::new(margin.x.unwrap_or(0), margin.y.unwrap_or(0))
+      });
+      Some(AlignTo::new(blueprint.alignment, margin, blueprint.to.clone()))
+    } else {
+      None
+    }
+  }
 }
 
 impl Patch<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
@@ -221,7 +262,6 @@ impl Patch<Option<Parent>> for Option<Parent> {
   }
 }
 
-// Serialization is going to have to test against default values. I have to use optionals here too in order for patching to work correctly.
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct XY16Blueprint {
@@ -283,6 +323,24 @@ pub struct R16Blueprint {
   pub h: Option<i16>,
 }
 
+/// This Blueprint is special. It's prevalent and so provides shorthands for
+/// most properties, even composed objects. Precedence is given to the highest
+/// level object(s) defined (i.e., the greatest composition). E.g., consider:
+///
+/// {
+///   ...,
+///   "bounds": {"x": 1}
+///   "position": {"x": 2, "y": 3},
+///   "x": 4,
+///   "y": 5,
+///   "h": 6
+///   ...
+/// }
+///
+/// The above deserializes to an `R16` with an `x` of 1 and default `y`, `w`,
+/// and `h` values. If `bounds` had been omitted the result would be an `x` of
+/// 2, `y` of 1, `w` of default value, and `h` of 6.
+///
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct SpriteBlueprint {
@@ -291,6 +349,7 @@ pub struct SpriteBlueprint {
   pub constituent_id: Option<AnimationID>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub composition: Option<SpriteComposition>,
+
   #[serde(skip_serializing_if = "Option::is_none")]
   pub bounds: Option<R16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -305,26 +364,31 @@ pub struct SpriteBlueprint {
   pub w: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub h: Option<i16>,
+
   #[serde(skip_serializing_if = "Option::is_none")]
   pub layer: Option<SpriteLayer>,
+
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub scale: Option<XY16Blueprint>, // watch out for zero scale
+  pub scale: Option<XY16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub sx: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub sy: Option<i16>,
+
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wrap: Option<XY16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wx: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wy: Option<i16>,
+
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub wrap_velocity: Option<XY16Blueprint>, // Decamillipixel
+  pub wrap_velocity: Option<XY16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wvx: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wvy: Option<i16>,
+
   #[serde(skip_serializing_if = "Option::is_none")]
   pub animator: Option<AnimatorBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
