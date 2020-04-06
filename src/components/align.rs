@@ -32,11 +32,10 @@ pub enum Alignment {
 /// camera's position and dimensions are known. Otherwise, the HUD sprite will
 /// be aligned to the camera's previous position causing a highly distracting
 /// wiggle effect.
-#[derive(Component, Clone, Debug, Serialize)]
+#[derive(Component, Clone, Debug)]
 pub struct AlignTo {
   alignment: Alignment,
   margin: XY16,
-  #[serde(skip)]
   to: Option<Entity>, // how does hte parser know what to set this to? need an enum? dynamic? idlk
 }
 

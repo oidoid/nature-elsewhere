@@ -1,12 +1,11 @@
 use super::BlueprintID;
 use crate::atlas::{AnimationID, AnimatorPeriod};
 use crate::components::{AlignTo, Alignment, Children, Parent};
-use crate::math::{Millis, WH, XY};
+use crate::math::{Millis, WH, WH16, XY, XY16};
 use crate::sprites::{SpriteComposition, SpriteLayer};
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Serialize};
 use specs::Entity;
 use std::collections::HashMap;
-use std::hash::Hash;
 
 /// Blueprints define the Entity and its Components to be injected into the
 /// World. They're unprocessed though. This means that the root Blueprint
@@ -67,19 +66,9 @@ pub struct Blueprint {
   pub children: Vec<Blueprint>,
 }
 
-pub trait Patch<T: Clone> {
-  fn patch(&self, patch: &T) -> T;
-}
-
-pub trait Manufacture<T> {
-  fn manufacture(&self) -> Option<T>;
-}
-
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Default, Deserialize, Serialize)]
 pub struct ComponentBlueprints {
-  // #[serde(deserialize_with = "de_from_align_to_blueprint")]
-  // pub align_to2: Option<AlignTo>,
   pub align_to: Option<AlignToBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub cam: Option<WH16Blueprint>,
@@ -116,52 +105,12 @@ impl ComponentBlueprints {
   }
 }
 
-impl Patch<Blueprint> for Blueprint {
-  /// Create a copy of self, replace any components present in patch, and append
-  /// any children in patch. Blueprint children themselves are not patched as
-  /// its the Manufacturer's responsibility.
-  fn patch(&self, patch: &Blueprint) -> Blueprint {
-    Self {
-      id: patch.id,
-      components: self.components.patch(&patch.components),
-      children: self.children.patch(&patch.children),
-    }
-  }
-}
-
-impl Patch<ComponentBlueprints> for ComponentBlueprints {
-  fn patch(&self, patch: &Self) -> Self {
-    Self {
-      // align_to2: None,
-      align_to: self.align_to.patch(&patch.align_to),
-      cam: self.cam.patch(&patch.cam),
-      follow_mouse: self.follow_mouse.patch(&patch.follow_mouse),
-      position: self.position.patch(&patch.position),
-      velocity: self.velocity.patch(&patch.velocity),
-      text: self.text.patch(&patch.text),
-      max_wh: self.max_wh.patch(&patch.max_wh),
-      parent: self.parent.patch(&patch.parent),
-      children: self.children.patch(&patch.children),
-      sprites: self.sprites.patch(&patch.sprites),
-    }
-  }
-}
-
 // Markers are used for unit de/serialization too since those don't work for
 // roundtrips when wrapped in an Option.
 // https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct MarkerBlueprint {}
-
-impl Patch<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
-  fn patch(&self, patch: &Self) -> Self {
-    match patch {
-      None => self.clone(),
-      _ => patch.clone(),
-    }
-  }
-}
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
@@ -176,50 +125,6 @@ pub struct AlignToBlueprint {
   pub to: Option<Entity>,
 }
 
-fn de_from_align_to_blueprint<'de, D>(
-  deserializer: D,
-) -> Result<Option<AlignTo>, D::Error>
-where
-  D: Deserializer<'de>,
-{
-  let blueprint: Option<AlignToBlueprint> = Option::deserialize(deserializer)?;
-  if let Some(blueprint) = blueprint {
-    let margin = blueprint.margin.clone().map_or(XY::new(0, 0), |margin| {
-      XY::new(margin.x.unwrap_or(0), margin.y.unwrap_or(0))
-    });
-    Ok(Some(AlignTo::new(blueprint.alignment, margin, blueprint.to.clone())))
-  } else {
-    Ok(None)
-  }
-}
-
-impl Manufacture<AlignTo> for Option<AlignToBlueprint> {
-  fn manufacture(&self) -> Option<AlignTo> {
-    if let Some(blueprint) = self {
-      let margin = blueprint.margin.clone().map_or(XY::new(0, 0), |margin| {
-        XY::new(margin.x.unwrap_or(0), margin.y.unwrap_or(0))
-      });
-      Some(AlignTo::new(blueprint.alignment, margin, blueprint.to.clone()))
-    } else {
-      None
-    }
-  }
-}
-
-impl Patch<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
-  fn patch(&self, patch: &Self) -> Self {
-    match (self, patch) {
-      (_, None) => self.clone(),
-      (None, _) => patch.clone(),
-      (Some(base), Some(patch)) => Some(AlignToBlueprint {
-        alignment: patch.alignment,
-        margin: base.margin.patch(&patch.margin),
-        to: base.to.or(patch.to),
-      }),
-    }
-  }
-}
-
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct WH16Blueprint {
@@ -229,39 +134,6 @@ pub struct WH16Blueprint {
   pub h: Option<i16>,
 }
 
-impl Patch<Option<WH16Blueprint>> for Option<WH16Blueprint> {
-  fn patch(&self, patch: &Self) -> Self {
-    match (self, patch) {
-      (_, None) => self.clone(),
-      (None, _) => patch.clone(),
-      (Some(base), Some(patch)) => {
-        Some(WH16Blueprint { w: patch.w.or(base.w), h: patch.h.or(base.h) })
-      }
-    }
-  }
-}
-
-impl Patch<Option<Children>> for Option<Children> {
-  fn patch(&self, patch: &Self) -> Self {
-    match (self, patch) {
-      (_, None) => self.clone(),
-      (None, _) => patch.clone(),
-      (Some(base), Some(patch)) => {
-        Some(Children { children: base.children.patch(&patch.children) })
-      }
-    }
-  }
-}
-
-impl Patch<Option<Parent>> for Option<Parent> {
-  fn patch(&self, patch: &Self) -> Self {
-    match patch {
-      None => self.clone(),
-      _ => patch.clone(),
-    }
-  }
-}
-
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct XY16Blueprint {
@@ -269,45 +141,6 @@ pub struct XY16Blueprint {
   pub x: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub y: Option<i16>,
-}
-
-impl Patch<Option<XY16Blueprint>> for Option<XY16Blueprint> {
-  fn patch(&self, patch: &Self) -> Self {
-    match (self, patch) {
-      (_, None) => self.clone(),
-      (None, _) => patch.clone(),
-      (Some(base), Some(patch)) => {
-        Some(XY16Blueprint { x: patch.x.or(base.x), y: patch.y.or(base.y) })
-      }
-    }
-  }
-}
-
-impl Patch<Option<String>> for Option<String> {
-  fn patch(&self, patch: &Self) -> Self {
-    match patch {
-      None => self.clone(),
-      _ => patch.clone(),
-    }
-  }
-}
-
-impl<K: Clone + Eq + Hash, V: Clone> Patch<HashMap<K, Vec<V>>>
-  for HashMap<K, Vec<V>>
-{
-  fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.clone());
-    meld
-  }
-}
-
-impl<T: Clone> Patch<Vec<T>> for Vec<T> {
-  fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.clone());
-    meld
-  }
 }
 
 #[serde(deny_unknown_fields)]

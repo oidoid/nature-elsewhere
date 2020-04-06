@@ -1,5 +1,5 @@
 use super::BlueprintID;
-use super::{Blueprint, Manufacture, Patch};
+use super::{Blueprint, Manufacture, PatchBlueprint};
 use crate::atlas::{Animator, Atlas};
 use crate::components::{
   AlignTo, Cam, Children, FollowMouse, MaxWH, Parent, Position, Renderable,
@@ -60,25 +60,17 @@ impl<'a> Manufacturer {
     if let Some(_component) = &components.follow_mouse {
       entity = entity.with(FollowMouse {});
     }
-    if let Some(component) = &components.cam {
-      entity = entity.with(Cam {
-        area: WH::new(component.w.unwrap_or(0), component.h.unwrap_or(0)),
-      });
+    if let Some(component) = components.cam.manufacture() {
+      entity = entity.with(Cam { area: component });
     }
-    if let Some(component) = &components.max_wh {
-      entity = entity.with(MaxWH {
-        area: WH::new(component.w.unwrap_or(0), component.h.unwrap_or(0)),
-      });
+    if let Some(component) = components.max_wh.manufacture() {
+      entity = entity.with(MaxWH { area: component });
     }
-    if let Some(component) = &components.position {
-      entity = entity.with(Position {
-        position: XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
-      });
+    if let Some(component) = components.position.manufacture() {
+      entity = entity.with(Position { position: component });
     }
-    if let Some(component) = &components.velocity {
-      entity = entity.with(Velocity {
-        velocity: XY::new(component.x.unwrap_or(0), component.y.unwrap_or(0)),
-      });
+    if let Some(component) = components.velocity.manufacture() {
+      entity = entity.with(Velocity { velocity: component });
     }
     if let Some(component) = &components.text {
       entity = entity.with(Text { text: component.clone() });
