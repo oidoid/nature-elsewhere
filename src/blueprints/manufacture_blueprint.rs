@@ -1,17 +1,25 @@
-use super::{AlignToBlueprint, SpriteBlueprint, WHBlueprint, XYBlueprint};
+use super::{
+  AlignToBlueprint, MarkerBlueprint, SpriteBlueprint, WHBlueprint, XYBlueprint,
+};
 use crate::atlas::{Animator, Atlas};
 use crate::components::AlignTo;
 use crate::math::{R16, WH, XY};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
+use std::collections::HashMap;
+use std::hash::Hash;
 
 /// Unfortunately, due to the deep patching of components, type mapping with
 /// `deserialize_with` is not possible. Thus, component blueprints are patches
 /// and retained until manufacture time.
 pub trait ManufactureBlueprint<T> {
-  fn manufacture(&self) -> Option<T>;
+  fn manufacture(&self) -> T;
 }
 
-impl ManufactureBlueprint<AlignTo> for Option<AlignToBlueprint> {
+pub trait ManufactureAtlasBlueprint<T> {
+  fn manufacture(&self, atlas: &Atlas) -> T;
+}
+
+impl ManufactureBlueprint<Option<AlignTo>> for Option<AlignToBlueprint> {
   fn manufacture(&self) -> Option<AlignTo> {
     if let Some(blueprint) = self {
       let margin = blueprint.margin.manufacture().unwrap_or(XY::new(0, 0));
@@ -22,8 +30,40 @@ impl ManufactureBlueprint<AlignTo> for Option<AlignToBlueprint> {
   }
 }
 
-impl SpriteBlueprint {
-  pub fn manufacture(&self, atlas: &Atlas) -> Sprite {
+impl ManufactureBlueprint<Option<()>> for Option<MarkerBlueprint> {
+  fn manufacture(&self) -> Option<()> {
+    if self.is_some() {
+      Some(())
+    } else {
+      None
+    }
+  }
+}
+
+impl<T: Hash + Eq + Clone>
+  ManufactureAtlasBlueprint<Option<HashMap<T, Vec<Sprite>>>>
+  for HashMap<T, Vec<SpriteBlueprint>>
+{
+  fn manufacture(&self, atlas: &Atlas) -> Option<HashMap<T, Vec<Sprite>>> {
+    let mut sprites = HashMap::new();
+    for (state, sprite_components) in self.iter() {
+      // this is inflating all the states which seems bad
+      let spriteology: Vec<_> = sprite_components
+        .iter()
+        .map(|component| component.manufacture(atlas))
+        .collect();
+      sprites.insert(state.clone(), spriteology);
+    }
+    if sprites.is_empty() {
+      None
+    } else {
+      Some(sprites)
+    }
+  }
+}
+
+impl ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
+  fn manufacture(&self, atlas: &Atlas) -> Sprite {
     //another name is props
     let id = self.id;
     let constituent_id = self.constituent_id.unwrap_or(id);
@@ -113,7 +153,17 @@ impl SpriteBlueprint {
   }
 }
 
-impl<T: Clone + Default> ManufactureBlueprint<WH<T>>
+impl ManufactureBlueprint<Option<String>> for Option<String> {
+  fn manufacture(&self) -> Option<String> {
+    if let Some(blueprint) = self {
+      Some(blueprint.clone())
+    } else {
+      None
+    }
+  }
+}
+
+impl<T: Clone + Default> ManufactureBlueprint<Option<WH<T>>>
   for Option<WHBlueprint<T>>
 {
   fn manufacture(&self) -> Option<WH<T>> {
@@ -128,7 +178,7 @@ impl<T: Clone + Default> ManufactureBlueprint<WH<T>>
   }
 }
 
-impl<T: Clone + Default> ManufactureBlueprint<XY<T>>
+impl<T: Clone + Default> ManufactureBlueprint<Option<XY<T>>>
   for Option<XYBlueprint<T>>
 {
   fn manufacture(&self) -> Option<XY<T>> {

@@ -1,5 +1,7 @@
 use super::BlueprintID;
-use super::{Blueprint, ManufactureBlueprint, PatchBlueprint};
+use super::{
+  Blueprint, ManufactureAtlasBlueprint, ManufactureBlueprint, PatchBlueprint,
+};
 use crate::atlas::Atlas;
 use crate::components::{
   Cam, Children, FollowMouse, MaxWH, Parent, Position, Renderable, Text,
@@ -43,19 +45,16 @@ impl<'a> Manufacturer {
     let mut entity = ecs.create_entity();
     let components = &blueprint.components;
 
-    macro_rules! entity_with_cloneable_components {
-      ( $($component:ident),* ) => {$(
-        if let Some(component) = &components.$component {
-          entity = entity.with(component.clone());
-        }
-      )*}
+    if let Some(component) = &components.parent {
+      entity = entity.with(component.clone());
     }
-    entity_with_cloneable_components!(parent, children);
-
+    if let Some(component) = &components.children {
+      entity = entity.with(component.clone());
+    }
     if let Some(component) = components.align_to.manufacture() {
       entity = entity.with(component);
     }
-    if let Some(_component) = &components.follow_mouse {
+    if let Some(_component) = components.follow_mouse.manufacture() {
       entity = entity.with(FollowMouse {});
     }
     if let Some(component) = components.cam.manufacture() {
@@ -70,20 +69,11 @@ impl<'a> Manufacturer {
     if let Some(component) = components.velocity.manufacture() {
       entity = entity.with(Velocity { velocity: component });
     }
-    if let Some(component) = &components.text {
-      entity = entity.with(Text { text: component.clone() });
+    if let Some(component) = components.text.manufacture() {
+      entity = entity.with(Text { text: component });
     }
-    let mut sprites = HashMap::new();
-    for (state, sprite_components) in components.sprites.iter() {
-      // this is inflating all the states which seems bad
-      let spriteology: Vec<_> = sprite_components
-        .iter()
-        .map(|component| component.manufacture(&self.atlas))
-        .collect();
-      sprites.insert(state.clone(), spriteology);
-    }
-    if !sprites.is_empty() {
-      entity = entity.with(Renderable { sprites });
+    if let Some(component) = components.sprites.manufacture(&self.atlas) {
+      entity = entity.with(Renderable { sprites: component });
     }
 
     let entity = entity.build();

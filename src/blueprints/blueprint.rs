@@ -31,8 +31,10 @@ use std::collections::HashMap;
 ///
 /// `Option`s are used so that patching knows when a value is set or should fall
 /// should fallthrough to the base. Defaults are only used for collection types
-/// that merge by aggregation. Serialization should test against default values
-/// in the Manufacturer.
+/// that merge by aggregation (the consequence is that it's impossible to remove
+/// the base value with an empty override but is similarly impossibly with a
+/// nonempty override to remove base values). Serialization should test against
+/// default values in the Manufacturer.
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Blueprint {
