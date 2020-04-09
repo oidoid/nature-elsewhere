@@ -6,7 +6,8 @@ use crate::sprites::{SpriteComposition, SpriteLayer};
 use serde::{Deserialize, Serialize};
 use specs::Entity;
 use std::collections::HashMap;
-
+// Decamillipixel
+// watch out for zero image scale
 /// Blueprints define the Entity and its Components to be injected into the
 /// World. They're unprocessed though. This means that the root Blueprint
 /// definition and any children have to be processed (patched and injected into

@@ -11,7 +11,7 @@ pub trait PatchBlueprint<T: Clone> {
 }
 
 impl PatchBlueprint<Blueprint> for Blueprint {
-  /// Create a copy of self, replace any components present in patch, and append
+  /// Create a copy of self, merge any components present in patch, and append
   /// any children in patch. Blueprint children themselves are not patched as
   /// its the Manufacturer's responsibility.
   fn patch(&self, patch: &Blueprint) -> Blueprint {
@@ -40,15 +40,6 @@ impl PatchBlueprint<ComponentBlueprints> for ComponentBlueprints {
   }
 }
 
-impl PatchBlueprint<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
-  fn patch(&self, patch: &Self) -> Self {
-    match patch {
-      None => self.clone(),
-      _ => patch.clone(),
-    }
-  }
-}
-
 impl PatchBlueprint<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
   fn patch(&self, patch: &Self) -> Self {
     match (self, patch) {
@@ -59,18 +50,6 @@ impl PatchBlueprint<Option<AlignToBlueprint>> for Option<AlignToBlueprint> {
         margin: base.margin.patch(&patch.margin),
         to: base.to.or(patch.to),
       }),
-    }
-  }
-}
-
-impl PatchBlueprint<Option<WH16Blueprint>> for Option<WH16Blueprint> {
-  fn patch(&self, patch: &Self) -> Self {
-    match (self, patch) {
-      (_, None) => self.clone(),
-      (None, _) => patch.clone(),
-      (Some(base), Some(patch)) => {
-        Some(WH16Blueprint { w: patch.w.or(base.w), h: patch.h.or(base.h) })
-      }
     }
   }
 }
@@ -87,12 +66,60 @@ impl PatchBlueprint<Option<Children>> for Option<Children> {
   }
 }
 
+impl<K: Clone + Eq + Hash, V: Clone> PatchBlueprint<HashMap<K, Vec<V>>>
+  for HashMap<K, Vec<V>>
+{
+  fn patch(&self, patch: &Self) -> Self {
+    let mut meld = self.clone();
+    meld.extend(patch.clone());
+    meld
+  }
+}
+
+impl PatchBlueprint<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
+  fn patch(&self, patch: &Self) -> Self {
+    match patch {
+      None => self.clone(),
+      _ => patch.clone(),
+    }
+  }
+}
+
+impl PatchBlueprint<Option<WH16Blueprint>> for Option<WH16Blueprint> {
+  fn patch(&self, patch: &Self) -> Self {
+    match (self, patch) {
+      (_, None) => self.clone(),
+      (None, _) => patch.clone(),
+      (Some(base), Some(patch)) => {
+        Some(WH16Blueprint { w: patch.w.or(base.w), h: patch.h.or(base.h) })
+      }
+    }
+  }
+}
+
 impl PatchBlueprint<Option<Parent>> for Option<Parent> {
   fn patch(&self, patch: &Self) -> Self {
     match patch {
       None => self.clone(),
       _ => patch.clone(),
     }
+  }
+}
+
+impl PatchBlueprint<Option<String>> for Option<String> {
+  fn patch(&self, patch: &Self) -> Self {
+    match patch {
+      None => self.clone(),
+      _ => patch.clone(),
+    }
+  }
+}
+
+impl<T: Clone> PatchBlueprint<Vec<T>> for Vec<T> {
+  fn patch(&self, patch: &Self) -> Self {
+    let mut meld = self.clone();
+    meld.extend(patch.clone());
+    meld
   }
 }
 
@@ -108,32 +135,5 @@ impl<T: Clone> PatchBlueprint<Option<XYBlueprint<T>>>
         y: patch.y.clone().or(base.y.clone()),
       }),
     }
-  }
-}
-
-impl PatchBlueprint<Option<String>> for Option<String> {
-  fn patch(&self, patch: &Self) -> Self {
-    match patch {
-      None => self.clone(),
-      _ => patch.clone(),
-    }
-  }
-}
-
-impl<K: Clone + Eq + Hash, V: Clone> PatchBlueprint<HashMap<K, Vec<V>>>
-  for HashMap<K, Vec<V>>
-{
-  fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.clone());
-    meld
-  }
-}
-
-impl<T: Clone> PatchBlueprint<Vec<T>> for Vec<T> {
-  fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.clone());
-    meld
   }
 }

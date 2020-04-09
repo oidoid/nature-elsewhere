@@ -1,6 +1,5 @@
 <details>
-    <summary>More Concept sketches</summary>
-
+  <summary>More Concept sketches</summary>
 [TOC]
 
     ## More Stuff

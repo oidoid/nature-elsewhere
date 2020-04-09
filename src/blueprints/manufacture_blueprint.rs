@@ -30,16 +30,6 @@ impl ManufactureBlueprint<Option<AlignTo>> for Option<AlignToBlueprint> {
   }
 }
 
-impl ManufactureBlueprint<Option<()>> for Option<MarkerBlueprint> {
-  fn manufacture(&self) -> Option<()> {
-    if self.is_some() {
-      Some(())
-    } else {
-      None
-    }
-  }
-}
-
 impl<T: Hash + Eq + Clone>
   ManufactureAtlasBlueprint<Option<HashMap<T, Vec<Sprite>>>>
   for HashMap<T, Vec<SpriteBlueprint>>
@@ -58,6 +48,16 @@ impl<T: Hash + Eq + Clone>
       None
     } else {
       Some(sprites)
+    }
+  }
+}
+
+impl ManufactureBlueprint<Option<()>> for Option<MarkerBlueprint> {
+  fn manufacture(&self) -> Option<()> {
+    if self.is_some() {
+      Some(())
+    } else {
+      None
     }
   }
 }
