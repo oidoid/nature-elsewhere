@@ -1,3 +1,40 @@
+//! Blueprints define the Entity and its Components to be injected into the
+//! World. They're unprocessed though. This means that the root Blueprint
+//! definition and any children have to be processed (patched and injected into
+//! the World) every time. This might be possible to change if the Manufacturers
+//! can clone an EntityBuilder.
+//!
+//! Manufacturing is the process of assembling Components and populating the
+//! world with them. Blueprint JSON files give some perspective of all the
+//! Components that make up (are associated with) a given Entity but it's
+//! incomplete:
+//!
+//! - Blueprint JSON files are used to create Rust blueprint user types.
+//!
+//! - Serde deserializes all Options as None and collections as empty. This
+//!   allows for blueprints and components to be deeply patched.
+//!
+//! - The Manufacturer replaces Nones with default values at assembly time.
+//!
+//! - Children use default values by serde _and_ their definition Blueprint.
+//!
+//! - The output of manufacturing is injected into the world as an Entity and
+//!   its components. At this point, it's difficult to conceptualize all
+//!   Components that compose an Entity without querying by ID.
+//!
+//! This means that everything that truly makes up an Entity can be difficult to
+//! grasp (conceptualize). However, the Blueprint JSON files are usually enough
+//! and debugging involves inspecting the JSON files, intermediate
+//! representations as a blueprint, default values and assembly in the
+//! Manufacturer. It's a little loose but practical.
+//!
+//! `Option`s are used so that patching knows when a value is set or should fall
+//! should fallthrough to the base. Defaults are only used for collection types
+//! that merge by aggregation (the consequence is that it's impossible to remove
+//! the base value with an empty override but is similarly impossibly with a
+//! nonempty override to remove base values). Serialization should test against
+//! default values in the Manufacturer.
+
 use super::BlueprintID;
 use crate::atlas::{AnimationID, AnimatorPeriod};
 use crate::components::{Alignment, Children, Parent};
@@ -6,36 +43,29 @@ use crate::sprites::{SpriteComposition, SpriteLayer};
 use serde::{Deserialize, Serialize};
 use specs::Entity;
 use std::collections::HashMap;
-// Decamillipixel
-// watch out for zero image scale
-/// Blueprints define the Entity and its Components to be injected into the
-/// World. They're unprocessed though. This means that the root Blueprint
-/// definition and any children have to be processed (patched and injected into
-/// the World) every time.
-///
-/// Manufacturing is the process of assembling Components and populating the
-/// world with them. Blueprint JSON files give some perspective of all the
-/// Components that make up (are associated with) a given Entity but it's
-/// incomplete:
-///
-/// - ComponentBlueprints use default values by serde and often have an
-///   intermediate representation for deserialization.
-///
-/// - Children use default values by serde _and_ their definition Blueprint.
-///
-/// This means that everything that truly makes up an Entity can be difficult to
-/// grasp (conceptualize). However, the Blueprint JSON files are usually enough
-/// and debugging involves inspecting the JSON files, intermediate
-/// representations in ComponentBlueprints, default values in serde, and
-/// assembly in the Manufacturer. It's a little loose but practical.
-/// defaults aren't used since htey harm the patching beahvior. options everywhere
-///
-/// `Option`s are used so that patching knows when a value is set or should fall
-/// should fallthrough to the base. Defaults are only used for collection types
-/// that merge by aggregation (the consequence is that it's impossible to remove
-/// the base value with an empty override but is similarly impossibly with a
-/// nonempty override to remove base values). Serialization should test against
-/// default values in the Manufacturer.
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct AlignToBlueprint {
+  pub alignment: Alignment,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub margin: Option<XY16Blueprint>,
+  // todo: how does the Manufacturer link this? It describes some Relationship,
+  // so maybe a Relationship enum Component? Or maybe it's dynamic and set by
+  // some kind of Behavior, like a "FindNearestEntityInitialization" behavior?
+  #[serde(skip)]
+  pub to: Option<Entity>,
+}
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct AnimatorBlueprint {
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub period: Option<AnimatorPeriod>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub exposure: Option<Millis>,
+}
+
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Blueprint {
@@ -108,19 +138,6 @@ impl ComponentBlueprints {
   }
 }
 
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct AlignToBlueprint {
-  pub alignment: Alignment,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub margin: Option<XY16Blueprint>,
-  // todo: how does the Manufacturer link this? It describes some Relationship,
-  // so maybe a Relationship enum Component? Or maybe it's dynamic and set by
-  // some kind of Behavior, like a "FindNearestEntityInitialization" behavior?
-  #[serde(skip)]
-  pub to: Option<Entity>,
-}
-
 // Markers are used for unit de/serialization too since those don't work for
 // roundtrips when wrapped in an Option.
 // https://github.com/serde-rs/serde/issues/1690#issuecomment-604807038
@@ -140,26 +157,6 @@ pub struct R16Blueprint {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub h: Option<i16>,
 }
-
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct XYBlueprint<T> {
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub x: Option<T>,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub y: Option<T>,
-}
-pub type XY16Blueprint = XYBlueprint<i16>;
-
-#[serde(deny_unknown_fields)]
-#[derive(Clone, Deserialize, Serialize)]
-pub struct WHBlueprint<T> {
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub w: Option<T>,
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub h: Option<T>,
-}
-pub type WH16Blueprint = WHBlueprint<i16>;
 
 /// This Blueprint is special. It's prevalent and so provides shorthands for
 /// most properties, even composed objects. Precedence is given to the highest
@@ -237,9 +234,20 @@ pub struct SpriteBlueprint {
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
-pub struct AnimatorBlueprint {
+pub struct XYBlueprint<T> {
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub period: Option<AnimatorPeriod>,
+  pub x: Option<T>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub exposure: Option<Millis>,
+  pub y: Option<T>,
 }
+pub type XY16Blueprint = XYBlueprint<i16>;
+
+#[serde(deny_unknown_fields)]
+#[derive(Clone, Deserialize, Serialize)]
+pub struct WHBlueprint<T> {
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub w: Option<T>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub h: Option<T>,
+}
+pub type WH16Blueprint = WHBlueprint<i16>;

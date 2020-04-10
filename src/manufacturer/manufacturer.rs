@@ -37,14 +37,14 @@ impl<'a> Manufacturer {
   /// All of these Components and identifiers are injected directly into the
   /// World.
   /// Returns the root Entity.
-  pub fn manufacture_blueprint(
+  fn manufacture_blueprint(
     &self,
     ecs: &mut World,
     blueprint: &Blueprint,
   ) -> Entity {
-    let mut entity = ecs.create_entity();
     let components = &blueprint.components;
 
+    let mut entity = ecs.create_entity();
     if let Some(component) = &components.parent {
       entity = entity.with(component.clone());
     }
@@ -75,7 +75,6 @@ impl<'a> Manufacturer {
     if let Some(component) = components.sprites.manufacture(&self.atlas) {
       entity = entity.with(Renderable { sprites: component });
     }
-
     let entity = entity.build();
 
     let mut children = vec![];
@@ -86,7 +85,8 @@ impl<'a> Manufacturer {
       children.push(child);
     }
 
-    if children.len() > 0 {
+    if !children.is_empty() {
+      // This is how Entity.build() does it and says it can't fail.
       ecs
         .write_storage::<Children>()
         .insert(entity, Children { children })
@@ -294,13 +294,6 @@ mod test {
     );
     blueprints
       .insert(BlueprintID::Button, from_json!({"id": "Button"}).unwrap());
-    let atlas = Atlas {
-      version: String::new(),
-      filename: String::new(),
-      format: String::new(),
-      wh: WH::new(0, 0),
-      animations: HashMap::new(),
-    };
     let atlas = Atlas {
       version: String::new(),
       filename: String::new(),

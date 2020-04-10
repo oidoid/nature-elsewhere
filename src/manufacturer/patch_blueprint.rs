@@ -70,9 +70,9 @@ impl<K: Clone + Eq + Hash, V: Clone> PatchBlueprint<HashMap<K, Vec<V>>>
   for HashMap<K, Vec<V>>
 {
   fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.clone());
-    meld
+    let mut patched = self.clone();
+    patched.extend(patch.clone());
+    patched
   }
 }
 
@@ -117,9 +117,9 @@ impl PatchBlueprint<Option<String>> for Option<String> {
 
 impl<T: Clone> PatchBlueprint<Vec<T>> for Vec<T> {
   fn patch(&self, patch: &Self) -> Self {
-    let mut meld = self.clone();
-    meld.extend(patch.clone());
-    meld
+    let mut patched = self.clone();
+    patched.extend(patch.clone());
+    patched
   }
 }
 
