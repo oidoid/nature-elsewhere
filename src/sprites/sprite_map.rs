@@ -1,5 +1,5 @@
 use super::Sprite;
-use crate::blueprints::SpriteBlueprint;
+use crate::manufacturer::SpriteBlueprint;
 use std::collections::HashMap;
 
 pub type State = String;

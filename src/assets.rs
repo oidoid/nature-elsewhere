@@ -1,7 +1,7 @@
 use super::atlas;
 use super::atlas::Atlas;
 use super::graphics::ShaderLayout;
-use crate::blueprints::{Blueprint, BlueprintID};
+use crate::manufacturer::{Blueprint, BlueprintID};
 use crate::text::Font;
 use crate::wasm;
 use std::collections::HashMap;
@@ -102,8 +102,8 @@ impl BlueprintID {
       Self::UIText => "ui_text",
       Self::UIToolbar => "ui_toolbar",
     };
-    // format!("/blueprints/{}.json", name)
-    "/blueprints/foo.json".to_string()
+    // format!("/manufacturer/blueprints/{}.json", name)
+    "/manufacturer/blueprints/foo.json".to_string()
   }
 }
 

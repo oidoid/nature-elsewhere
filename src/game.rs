@@ -1,11 +1,11 @@
 use super::assets::Assets;
 use super::graphics::RendererStateMachine;
 use crate::atlas::{AnimationID, Animator, Atlas};
-use crate::blueprints::{BlueprintID, Manufacturer};
 use crate::components::{FollowMouse, Position, RenderBuddy, Renderable};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::inputs::InputPoller;
+use crate::manufacturer::{BlueprintID, Manufacturer};
 use crate::math::Millis;
 use crate::math::R16;
 use crate::math::{XY, XY16};

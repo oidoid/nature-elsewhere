@@ -2,11 +2,11 @@
 mod utils;
 mod assets;
 mod atlas;
-mod blueprints;
 mod components;
 mod game;
 mod graphics;
 mod inputs;
+mod manufacturer;
 mod math;
 mod resources;
 mod settings;
