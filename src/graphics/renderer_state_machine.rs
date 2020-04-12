@@ -7,7 +7,7 @@ use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
 use std::time::Duration;
-use web_sys::{Document, Event, HtmlCanvasElement, Window};
+use web_sys::{Document, Event, HtmlCanvasElement, VisibilityState, Window};
 
 #[derive(Clone)]
 pub struct RendererStateMachine {
@@ -110,7 +110,11 @@ impl RendererStateMachine {
         self.canvas.clone(),
       );
       self.resume();
-    } else if event.type_() == "focus" {
+    } else if event.type_() == "focus"
+      || event.type_() == "visibilitychange"
+        && self.document.visibility_state() == VisibilityState::Visible
+      || event.type_() == "resize"
+    {
       self.resume();
     } else {
       self.pause();
@@ -139,7 +143,9 @@ impl RendererStateMachine {
 
     let rc = Rc::new(RefCell::new(self.clone()));
     Self::add_win_on_event_listener(&rc, "focus");
+    Self::add_win_on_event_listener(&rc, "visibilitychange");
     Self::add_win_on_event_listener(&rc, "blur");
+    Self::add_win_on_event_listener(&rc, "resize");
     Self::add_canvas_on_event_listener(&rc, "webglcontextrestored");
     Self::add_canvas_on_event_listener(&rc, "webglcontextlost");
   }

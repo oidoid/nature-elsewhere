@@ -38,7 +38,7 @@ impl<'a> Animator<'a> {
       // cannot change frames, do not provide an Animator for it either.
       return None;
     }
-    Some(Animator { animation, period, exposure })
+    Some(Self { animation, period, exposure })
   }
 
   /// Reset the animation and exposure.
@@ -73,8 +73,8 @@ impl<'a> Animator<'a> {
     if animation.cels.is_empty() {
       return None;
     }
-    let len: AnimatorPeriod = animation.cels.len().try_into().unwrap();
-    Some((self.period % len).abs().try_into().unwrap())
+    let len: AnimatorPeriod = animation.cels.len().try_into().ok()?;
+    (self.period % len).abs().try_into().ok()
   }
 
   /// Apply the time since last frame was shown, possibly advancing the
@@ -95,7 +95,7 @@ impl<'a> Animator<'a> {
 
 impl Playback {
   /// Returns the next period.
-  fn advance(self, period: AnimatorPeriod, len: usize) -> AnimatorPeriod {
+  fn advance(&self, period: AnimatorPeriod, len: usize) -> AnimatorPeriod {
     let len = len.try_into().unwrap();
     match self {
       // An integer in the domain [0, +∞).

@@ -61,9 +61,10 @@ version = '=0.3.37'
 features = [
   'AngleInstancedArrays', 'console', 'Document', 'Headers', 'HtmlCanvasElement',
   'HtmlImageElement', 'OesVertexArrayObject', 'PointerEvent', 'Response',
-  'Request', 'WebGlActiveInfo', 'WebGlBuffer', 'WebGlContextAttributes',
-  'WebglLoseContext', 'WebGlProgram', 'WebGlRenderingContext', 'WebGlShader',
-  'WebGlTexture', 'WebGlUniformLocation', 'WebGlVertexArrayObject', 'Window'
+  'Request', 'VisibilityState', 'WebGlActiveInfo', 'WebGlBuffer',
+  'WebGlContextAttributes', 'WebglLoseContext', 'WebGlProgram',
+  'WebGlRenderingContext', 'WebGlShader', 'WebGlTexture',
+  'WebGlUniformLocation', 'WebGlVertexArrayObject', 'Window'
 ]
 
 [dev-dependencies]
