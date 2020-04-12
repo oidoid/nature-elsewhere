@@ -313,8 +313,8 @@ impl<T: AddAssign + Any + Default + Send + Sync + Clone> AddAssign<&XY<T>>
   for Rect<T>
 {
   fn add_assign(&mut self, rhs: &XY<T>) {
-    self.from += rhs;
-    self.to += rhs;
+    self.from += rhs.clone();
+    self.to += rhs.clone();
   }
 }
 

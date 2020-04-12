@@ -35,19 +35,19 @@ impl<T: Hash + Eq + Clone>
   for HashMap<T, Vec<SpriteBlueprint>>
 {
   fn manufacture(&self, atlas: &Atlas) -> Option<HashMap<T, Vec<Sprite>>> {
-    let mut sprites = HashMap::new();
-    for (state, sprite_components) in self.iter() {
-      // this is inflating all the states which seems bad
-      let spriteology: Vec<_> = sprite_components
+    let mut sprite_map = HashMap::new();
+    for (state, blueprints) in self.iter() {
+      // this is inflating all the states which seems bad <-- this needs to be runtime... how can runtime and manufacturer work together? i need a lut for this.
+      let sprites: Vec<_> = blueprints
         .iter()
         .map(|component| component.manufacture(atlas))
         .collect();
-      sprites.insert(state.clone(), spriteology);
+      sprite_map.insert(state.clone(), sprites);
     }
-    if sprites.is_empty() {
+    if sprite_map.is_empty() {
       None
     } else {
-      Some(sprites)
+      Some(sprite_map)
     }
   }
 }

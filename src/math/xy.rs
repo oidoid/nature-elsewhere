@@ -4,9 +4,10 @@ use num::{
   traits::{cast::NumCast, clamp, Signed},
 };
 use serde::Serialize;
+use std::convert::TryFrom;
 use std::{
   fmt,
-  ops::{Add, AddAssign, Div, Mul, Sub},
+  ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
 
 #[derive(Clone, Eq, PartialEq, Serialize)]
@@ -16,23 +17,9 @@ pub struct XY<T> {
 }
 pub type XY16 = XY<i16>;
 
-// impl<T, Into: NumCast> From<XY<T>> for XY<Into> {
-//   fn from(XY { x, y }: T) -> XY<Into> {
-//     XY { x: Into::from(x).unwrap(), y: Into::from(y).unwrap() }
-//   }
-// }
-// impl NumCast's from and return an option self?
-
-impl<T: Default> XY<T> {
+impl<T> XY<T> {
   pub fn new(x: T, y: T) -> Self {
     Self { x, y }
-  }
-
-  pub fn add(&self, rhs: &XY<T>) -> XY<T>
-  where
-    T: Add<Output = T> + Copy,
-  {
-    Self { x: self.x + rhs.x, y: self.y + rhs.y }
   }
 
   /// Cast each component passed and returns a new XY. Cast::from() differs from
@@ -46,7 +33,7 @@ impl<T: Default> XY<T> {
   }
 
   /// Cast each component of self and returns a new XY.
-  pub fn into<Into: NumCast + Default>(self) -> XY<Into>
+  pub fn into<Into: NumCast>(self) -> XY<Into>
   where
     T: NumCast,
     Into: NumCast,
@@ -57,37 +44,40 @@ impl<T: Default> XY<T> {
   /// Returns a new XY with equal x and y components.
   pub fn square(component: T) -> Self
   where
-    T: Copy,
+    T: Clone,
   {
-    Self { x: component, y: component }
+    Self { x: component.clone(), y: component }
   }
 
   pub fn area(&self) -> T
   where
-    T: Copy + Mul<Output = T>,
+    T: Mul<Output = T> + Clone,
   {
-    self.x * self.y
+    self.x.clone() * self.y.clone()
   }
 
-  pub fn min(&self, &XY { x, y }: &Self) -> Self
+  pub fn min(&self, XY { x, y }: &Self) -> Self
   where
-    T: Ord + Copy,
+    T: Ord + Clone,
   {
-    Self { x: self.x.min(x), y: self.y.min(y) }
+    Self { x: self.x.clone().min(x.clone()), y: self.y.clone().min(y.clone()) }
   }
 
-  pub fn max(&self, &XY { x, y }: &Self) -> Self
+  pub fn max(&self, XY { x, y }: &Self) -> Self
   where
-    T: Ord + Copy,
+    T: Ord + Clone,
   {
-    Self { x: self.x.max(x), y: self.y.max(y) }
+    Self { x: self.x.clone().max(x.clone()), y: self.y.clone().max(y.clone()) }
   }
 
   pub fn clamp(&self, min: &Self, max: &Self) -> Self
   where
-    T: PartialOrd + Copy,
+    T: PartialOrd + Clone,
   {
-    Self { x: clamp(self.x, min.x, max.x), y: clamp(self.y, min.y, max.y) }
+    Self {
+      x: clamp(self.x.clone(), min.x.clone(), max.x.clone()),
+      y: clamp(self.y.clone(), min.y.clone(), max.y.clone()),
+    }
   }
 
   pub fn abs(&self) -> Self
@@ -96,10 +86,6 @@ impl<T: Default> XY<T> {
   {
     Self { x: self.x.abs(), y: self.y.abs() }
   }
-
-  // pub fn to_ne_bytes(self) -> [u8; mem::size_of::<Self>()] {
-  //   unsafe { mem::transmute(self) }
-  // }
 }
 
 macro_rules! impl_magnitude {
@@ -126,70 +112,105 @@ macro_rules! impl_lerp {
 impl_lerp!(f32, u8 i8 u16 i16 f32);
 impl_lerp!(f64, u32 i32 f64);
 
-impl<T: fmt::Debug + Default> fmt::Debug for XY<T> {
+impl<T: fmt::Debug> fmt::Debug for XY<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(formatter, "({:?}, {:?})", self.x, self.y)
   }
 }
 
-impl<T: fmt::Display + Default> fmt::Display for XY<T> {
+impl<T: fmt::Display> fmt::Display for XY<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(formatter, "({}, {})", self.x, self.y)
   }
 }
 
-impl<T: Add<Output = T> + Default> Add<XY<T>> for XY<T> {
-  type Output = XY<T>;
+impl<T: Add<Output = T>> Add<XY<T>> for XY<T> {
+  type Output = Self;
 
-  fn add(self, rhs: XY<T>) -> Self {
+  fn add(self, rhs: Self) -> Self {
     Self { x: self.x + rhs.x, y: self.y + rhs.y }
   }
 }
 
-impl<T: AddAssign + Default + Clone> AddAssign<&XY<T>> for XY<T> {
-  fn add_assign(&mut self, rhs: &XY<T>) {
-    self.x += rhs.x.clone();
-    self.y += rhs.y.clone();
+impl<T: AddAssign> AddAssign<XY<T>> for XY<T> {
+  fn add_assign(&mut self, rhs: Self) {
+    self.x += rhs.x;
+    self.y += rhs.y;
   }
 }
 
-impl<T: Sub<Output = T> + Default> Sub<XY<T>> for XY<T> {
-  type Output = XY<T>;
+impl<T: Sub<Output = T>> Sub<XY<T>> for XY<T> {
+  type Output = Self;
 
-  fn sub(self, rhs: XY<T>) -> Self {
+  fn sub(self, rhs: Self) -> Self {
     Self { x: self.x - rhs.x, y: self.y - rhs.y }
   }
 }
 
-impl<T: Mul<Output = T> + Default> Mul<XY<T>> for XY<T> {
-  type Output = XY<T>;
+impl<T: SubAssign> SubAssign<XY<T>> for XY<T> {
+  fn sub_assign(&mut self, rhs: Self) {
+    self.x -= rhs.x;
+    self.y -= rhs.y;
+  }
+}
 
-  fn mul(self, rhs: XY<T>) -> Self {
+impl<T: Mul<Output = T>> Mul<XY<T>> for XY<T> {
+  type Output = Self;
+
+  fn mul(self, rhs: Self) -> Self {
     Self { x: self.x * rhs.x, y: self.y * rhs.y }
   }
 }
 
-impl<T: Mul<Output = T> + Clone + Default> Mul<T> for XY<T> {
-  type Output = XY<T>;
+impl<T: Mul<Output = T> + Clone> Mul<T> for XY<T> {
+  type Output = Self;
 
   fn mul(self, rhs: T) -> Self {
     Self { x: self.x * rhs.clone(), y: self.y * rhs }
   }
 }
 
-impl<T: Div<Output = T> + Default> Div<XY<T>> for XY<T> {
-  type Output = XY<T>;
+impl<T: MulAssign> MulAssign<XY<T>> for XY<T> {
+  fn mul_assign(&mut self, rhs: Self) {
+    self.x *= rhs.x;
+    self.y *= rhs.y;
+  }
+}
 
-  fn div(self, rhs: XY<T>) -> Self {
+impl<T: MulAssign + Clone> MulAssign<T> for XY<T> {
+  fn mul_assign(&mut self, rhs: T) {
+    self.x *= rhs.clone();
+    self.y *= rhs;
+  }
+}
+
+impl<T: Div<Output = T>> Div<XY<T>> for XY<T> {
+  type Output = Self;
+
+  fn div(self, rhs: Self) -> Self {
     Self { x: self.x / rhs.x, y: self.y / rhs.y }
   }
 }
 
-impl<T: Div<Output = T> + Copy + Default> Div<T> for XY<T> {
-  type Output = XY<T>;
+impl<T: Div<Output = T> + Clone> Div<T> for XY<T> {
+  type Output = Self;
 
   fn div(self, rhs: T) -> Self {
-    Self { x: self.x / rhs, y: self.y / rhs }
+    Self { x: self.x / rhs.clone(), y: self.y / rhs }
+  }
+}
+
+impl<T: DivAssign> DivAssign<XY<T>> for XY<T> {
+  fn div_assign(&mut self, rhs: Self) {
+    self.x /= rhs.x;
+    self.y /= rhs.y;
+  }
+}
+
+impl<T: DivAssign + Clone> DivAssign<T> for XY<T> {
+  fn div_assign(&mut self, rhs: T) {
+    self.x /= rhs.clone();
+    self.y /= rhs;
   }
 }
 
@@ -218,8 +239,22 @@ mod test {
   }
 
   #[test]
+  fn add_assign() {
+    let mut xy = XY { x: 1, y: 2 };
+    xy += XY { x: 3, y: 4 };
+    assert_eq!(xy, XY { x: 4, y: 6 })
+  }
+
+  #[test]
   fn sub() {
     assert_eq!(XY { x: 1, y: 2 } - XY { x: 3, y: 4 }, XY { x: -2, y: -2 })
+  }
+
+  #[test]
+  fn sub_assign() {
+    let mut xy = XY { x: 1, y: 2 };
+    xy -= XY { x: 3, y: 4 };
+    assert_eq!(xy, XY { x: -2, y: -2 })
   }
 
   #[test]
@@ -233,6 +268,20 @@ mod test {
   }
 
   #[test]
+  fn mul_assign_xy() {
+    let mut xy = XY { x: 1, y: 2 };
+    xy *= XY { x: 3, y: 4 };
+    assert_eq!(xy, XY { x: 3, y: 8 })
+  }
+
+  #[test]
+  fn mul_assign_scalar() {
+    let mut xy = XY { x: 1, y: 2 };
+    xy *= 3;
+    assert_eq!(xy, XY { x: 3, y: 6 })
+  }
+
+  #[test]
   fn div_xy() {
     assert_eq!(XY { x: 3, y: 4 } / XY { x: 1, y: 2 }, XY { x: 3, y: 2 })
   }
@@ -240,6 +289,20 @@ mod test {
   #[test]
   fn div_scalar() {
     assert_eq!(XY { x: 3, y: 4 } / 2, XY { x: 1, y: 2 })
+  }
+
+  #[test]
+  fn div_assign_xy() {
+    let mut xy = XY { x: 3, y: 4 };
+    xy /= XY { x: 1, y: 2 };
+    assert_eq!(xy, XY { x: 3, y: 2 })
+  }
+
+  #[test]
+  fn div_assign_scalar() {
+    let mut xy = XY { x: 3, y: 4 };
+    xy /= 2;
+    assert_eq!(xy, XY { x: 1, y: 2 })
   }
 
   #[test]

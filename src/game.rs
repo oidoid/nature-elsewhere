@@ -32,6 +32,7 @@ pub struct Game {
   manufacturer: Rc<Manufacturer>,
 }
 
+// screen.orientation.lock("landscape")
 impl Game {
   fn create_entities(&mut self) {
     let mut ecs = self.ecs.borrow_mut();
