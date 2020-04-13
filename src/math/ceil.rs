@@ -13,7 +13,7 @@ pub trait CeilMultiple {
 }
 
 macro_rules! impl_CeilMultiple_float {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl CeilMultiple for $t {
       fn ceil_multiple(self, multiple: Self) -> Self {
         ceil_multiple(self, multiple)
@@ -21,10 +21,10 @@ macro_rules! impl_CeilMultiple_float {
     }
   )*)
 }
-impl_CeilMultiple_float!(f32 f64);
+impl_CeilMultiple_float!(f32, f64);
 
 macro_rules! impl_CeilMultiple_f32 {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl CeilMultiple for $t {
       fn ceil_multiple(self, multiple: Self) -> Self {
         Self::from_f32(ceil_multiple(self.into(), multiple.into())).expect(&format!("CeilMultiple conversion from f32 to {} failed.", stringify!($t)))
@@ -32,10 +32,10 @@ macro_rules! impl_CeilMultiple_f32 {
     }
   )*)
 }
-impl_CeilMultiple_f32!(u8 u16 i8 i16);
+impl_CeilMultiple_f32!(u8, u16, i8, i16);
 
 macro_rules! impl_CeilMultiple_f64 {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl CeilMultiple for $t {
       fn ceil_multiple(self, multiple: Self) -> Self {
         Self::from_f64(ceil_multiple(self.into(), multiple.into())).expect(&format!("CeilMultiple conversion from f64 to {} failed.", stringify!($t)))
@@ -43,7 +43,7 @@ macro_rules! impl_CeilMultiple_f64 {
     }
   )*)
 }
-impl_CeilMultiple_f64!(u32 i32);
+impl_CeilMultiple_f64!(u32, i32);
 
 #[cfg(test)]
 mod test {

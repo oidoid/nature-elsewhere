@@ -14,7 +14,7 @@ impl Viewport {
     let canvas_wh = canvas_wh(document);
     let scale = scale(&canvas_wh, &WH16 { w: 128, h: 128 }, 0);
     let cam_wh = cam_wh(&canvas_wh, scale);
-    Self { canvas_wh, scale, cam: R16::cast(0, 0, cam_wh.w, cam_wh.h) }
+    Self { canvas_wh, scale, cam: R16::new_wh(0, 0, cam_wh.w, cam_wh.h) }
   }
 }
 

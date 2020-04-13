@@ -100,7 +100,7 @@ mod test {
         to: None,
       };
       assert_eq!(
-        align_to.plot(&R16::cast_wh(0, 0, 7, 9), &R16::cast_wh(10, 20, 17, 19)),
+        align_to.plot(&R16::new_wh(0, 0, 7, 9), &R16::new_wh(10, 20, 17, 19)),
         *expected,
         "Case {} failed: {:?}.",
         i,

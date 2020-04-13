@@ -98,32 +98,39 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
     Self { from: XY::new(fx, fy), to: XY::new(tx, ty) }
   }
 
-  /// Cast each component passed and returns a new Rect.
-  pub fn cast<Cast>(fx: Cast, fy: Cast, tx: Cast, ty: Cast) -> Self
+  pub fn new_wh(fx: T, fy: T, w: T, h: T) -> Self
   where
-    Cast: NumCast,
-    T: NumCast,
+    T: Add<Output = T> + Clone,
   {
-    Self { from: XY::cast(fx, fy), to: XY::cast(tx, ty) }
+    Self { from: XY::new(fx.clone(), fy.clone()), to: XY::new(fx + w, fy + h) }
   }
 
-  pub fn cast_wh<From, To>(fx: From, fy: From, w: To, h: To) -> Self
+  /// Cast each component passed and returns a new Rect.
+  pub fn try_from<From>(fx: From, fy: From, tx: From, ty: From) -> Option<Self>
   where
-    T: Add<Output = T> + NumCast + Copy,
+    From: NumCast,
+    T: NumCast,
+  {
+    Some(Self { from: XY::try_from(fx, fy)?, to: XY::try_from(tx, ty)? })
+  }
+
+  pub fn try_from_wh<From, To>(fx: From, fy: From, w: To, h: To) -> Option<Self>
+  where
+    T: Add<Output = T> + NumCast + Clone,
     From: NumCast,
     To: NumCast,
   {
-    let from = XY::cast(fx, fy);
-    Self { to: from.clone() + XY::cast(w, h), from }
+    let from = XY::try_from(fx, fy)?;
+    Some(Self { to: from.clone() + XY::try_from(w, h)?, from })
   }
 
   /// Cast each component of self and returns a new Rect.
-  pub fn into<Into: Any + Default + Send + Sync>(self) -> Rect<Into>
+  pub fn try_into<Into: Any + Default + Send + Sync>(self) -> Option<Rect<Into>>
   where
     T: NumCast,
     Into: NumCast,
   {
-    Rect { from: self.from.into(), to: self.to.into() }
+    Some(Rect { from: self.from.try_into()?, to: self.to.try_into()? })
   }
 
   pub fn wh(&self) -> XY<T>
@@ -267,7 +274,7 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
 }
 
 macro_rules! impl_magnitude {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl Rect<$t> {
       pub fn magnitude(&self) -> $t {
         (self.from.clone() - self.to.clone()).magnitude()
@@ -275,7 +282,7 @@ macro_rules! impl_magnitude {
     }
   )*)
 }
-impl_magnitude!(u8 i8 u16 i16 u32 i32 f32 u64 i64 f64 usize isize);
+impl_magnitude!(u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, usize, isize);
 
 impl<T: fmt::Debug + Any + Default + Send + Sync> fmt::Debug for Rect<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -461,18 +468,35 @@ mod test {
   use super::*;
 
   #[test]
-  fn cast() {
+  fn new() {
     assert_eq!(
-      Rect::cast(1.2, 3.4, 5.6, 7.8),
+      Rect::new(1, 2, 3, 4),
+      R16 { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
+    )
+  }
+
+  #[test]
+  fn new_wh() {
+    assert_eq!(
+      Rect::new_wh(1, 2, 3, 4),
+      R16 { from: XY { x: 1, y: 2 }, to: XY { x: 4, y: 6 } }
+    )
+  }
+
+  #[test]
+  fn try_from() {
+    assert_eq!(
+      Rect::try_from(1.2, 3.4, 5.6, 7.8).unwrap(),
       R16 { from: XY { x: 1, y: 3 }, to: XY { x: 5, y: 7 } }
     )
   }
 
   #[test]
-  fn into() {
+  fn try_into() {
     assert_eq!(
       Rect::<f64> { from: XY { x: 1.2, y: 3.4 }, to: XY { x: 5.6, y: 7.8 } }
-        .into(),
+        .try_into()
+        .unwrap(),
       R16 { from: XY { x: 1, y: 3 }, to: XY { x: 5, y: 7 } }
     )
   }

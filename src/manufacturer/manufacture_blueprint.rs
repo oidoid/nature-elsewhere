@@ -90,9 +90,9 @@ impl ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
       |area| WH::new(area.w.unwrap_or(0), area.h.unwrap_or(0)),
     ); //use atlas, review ts
     let bounds = self.bounds.clone().map_or(
-      R16::cast_wh(position.x, position.y, area.w, area.h),
+      R16::new_wh(position.x, position.y, area.w, area.h),
       |bounds| {
-        R16::cast_wh(
+        R16::new_wh(
           bounds.x.unwrap_or(0),
           bounds.y.unwrap_or(0),
           bounds.w.unwrap_or(0),
@@ -128,13 +128,13 @@ impl ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
         XY::new(wrap_velocity.x.unwrap_or(0), wrap_velocity.y.unwrap_or(0))
       },
     );
-    let source = R16::cast_wh(
+    let source = R16::new_wh(
       animation.cels[0].xy.x,
       animation.cels[0].xy.y,
       animation.wh.w,
       animation.wh.h,
     );
-    let constituent = R16::cast_wh(
+    let constituent = R16::new_wh(
       atlas.animations[&constituent_id].cels[0].xy.x,
       atlas.animations[&constituent_id].cels[0].xy.y,
       atlas.animations[&constituent_id].wh.w,

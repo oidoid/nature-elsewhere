@@ -42,7 +42,7 @@ pub trait AddEventListener<T> {
 }
 
 macro_rules! impl_AddEventListener {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl<T> AddEventListener<T> for $t
     where
       T: 'static + FnMut(Event),
@@ -57,4 +57,4 @@ macro_rules! impl_AddEventListener {
     }
   )*)
 }
-impl_AddEventListener!(Window Element);
+impl_AddEventListener!(Window, Element);

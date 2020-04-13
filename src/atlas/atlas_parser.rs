@@ -422,7 +422,7 @@ pub fn parse_cel(
   Ok(Cel {
     xy: parse_xy(frame)?,
     duration: parse_duration(frame.duration)?,
-    slices: parse_slices(frame_tag, frame_number, slices),
+    slices: parse_slices(frame_tag, frame_number, slices)?,
   })
 }
 
@@ -456,7 +456,7 @@ pub fn parse_slices(
   aseprite::FrameTag { name, .. }: &aseprite::FrameTag,
   index: u32,
   slices: &[aseprite::Slice],
-) -> Vec<R16> {
+) -> Result<Vec<R16>, AtlasParseError> {
   let mut rects = Vec::new();
   for slice in slices {
     if slice.name != *name {
@@ -466,9 +466,12 @@ pub fn parse_slices(
     let key =
       slice.keys.iter().filter(|key| key.frame <= index).last().unwrap();
     let aseprite::Key { bounds, .. } = key;
-    rects.push(R16::cast_wh(bounds.x, bounds.y, bounds.w, bounds.h));
+    rects.push(
+      R16::try_from_wh(bounds.x, bounds.y, bounds.w, bounds.h)
+        .ok_or("Slice bounds conversion to R16 failed.")?,
+    );
   }
-  rects
+  Ok(rects)
 }
 
 #[derive(Debug)]
@@ -904,7 +907,7 @@ mod test {
       }],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 0, &slices),
+      parse_slices(&frame_tag, 0, &slices).unwrap(),
       vec![R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } },]
     )
   }
@@ -925,7 +928,7 @@ mod test {
         bounds: aseprite::Rect { x: 0, y: 1, w: 2, h: 3 },
       }],
     }];
-    assert_eq!(parse_slices(&frame_tag, 0, &slices), vec![])
+    assert_eq!(parse_slices(&frame_tag, 0, &slices).unwrap(), vec![])
   }
 
   #[test]
@@ -955,7 +958,7 @@ mod test {
       ],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 1, &slices),
+      parse_slices(&frame_tag, 1, &slices).unwrap(),
       vec![R16 { from: XY { x: 4, y: 5 }, to: XY { x: 10, y: 12 } }]
     )
   }
@@ -983,7 +986,7 @@ mod test {
       ],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 0, &slices),
+      parse_slices(&frame_tag, 0, &slices).unwrap(),
       vec![R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } }]
     )
   }
@@ -996,7 +999,7 @@ mod test {
       to: 0,
       direction: "forward".to_string(),
     };
-    assert_eq!(parse_slices(&frame_tag, 0, &[]), vec![]);
+    assert_eq!(parse_slices(&frame_tag, 0, &[]).unwrap(), vec![]);
   }
 
   #[test]
@@ -1016,7 +1019,7 @@ mod test {
       }],
     }];
     assert_eq!(
-      parse_slices(&frame_tag, 1, &slices),
+      parse_slices(&frame_tag, 1, &slices).unwrap(),
       vec![R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } },]
     );
   }
@@ -1074,7 +1077,7 @@ mod test {
       },
     ];
     assert_eq!(
-      parse_slices(&frame_tag, 1, &slices),
+      parse_slices(&frame_tag, 1, &slices).unwrap(),
       vec![
         R16 { from: XY { x: 4, y: 5 }, to: XY { x: 10, y: 12 } },
         R16 { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 4 } },

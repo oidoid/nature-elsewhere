@@ -10,7 +10,7 @@ pub trait Lerp<T> {
 }
 
 macro_rules! impl_Lerp_float {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl Lerp<$t> for $t {
       fn lerp(self, to: Self, ratio: Self) -> Self {
         lerp(self, to, ratio)
@@ -18,10 +18,10 @@ macro_rules! impl_Lerp_float {
     }
   )*)
 }
-impl_Lerp_float!(f32 f64);
+impl_Lerp_float!(f32, f64);
 
 macro_rules! impl_Lerp_f32 {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl Lerp<f32> for $t {
       fn lerp(self, to: Self, ratio: f32) -> Self {
         let interpolation = Self::from_f32(lerp(self.into(), to.into(), ratio)).expect(&format!("Lerp conversion from f32 to {} failed.", stringify!($t)));
@@ -35,10 +35,10 @@ macro_rules! impl_Lerp_f32 {
     }
   )*)
 }
-impl_Lerp_f32!(u8 i8 u16 i16);
+impl_Lerp_f32!(u8, i8, u16, i16);
 
 macro_rules! impl_Lerp_f64 {
-  ($($t:ty)*) => ($(
+  ($($t:ty),*) => ($(
     impl Lerp<f64> for $t {
       fn lerp(self, to: Self, ratio: f64) -> Self {
         let interpolation = Self::from_f64(lerp(self.into(), to.into(), ratio)).expect(&format!("Lerp conversion from f64 to {} failed.", stringify!($t)));
@@ -52,7 +52,7 @@ macro_rules! impl_Lerp_f64 {
     }
   )*)
 }
-impl_Lerp_f64!(u32 i32);
+impl_Lerp_f64!(u32, i32);
 
 #[cfg(test)]
 mod test {
