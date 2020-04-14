@@ -1,4 +1,4 @@
-use num::traits::cast::NumCast;
+use num::traits::cast::{NumCast, ToPrimitive};
 use std::{
   fmt,
   ops::{Add, Div, Mul, Sub},
@@ -19,58 +19,36 @@ impl<T> WH<T> {
   }
 
   /// Cast each component passed and returns a new WH.
-  pub fn from<From>(w: From, h: From) -> Self
+  pub fn try_from<From>(w: From, h: From) -> Option<Self>
   where
     T: NumCast,
-    From: NumCast,
+    From: ToPrimitive + Clone,
   {
-    Self {
-      w: T::from(w).expect(&format!(
-        "Conversion from {} to {} failed.",
-        stringify!(From),
-        stringify!(T)
-      )),
-      h: T::from(h).expect(&format!(
-        "Conversion from {} to {} failed.",
-        stringify!(From),
-        stringify!(T)
-      )),
-    }
+    Some(Self { w: T::from(w)?, h: T::from(h)? })
   }
 
   /// Cast each component of self and returns a new WH.
-  pub fn into<Into>(self) -> WH<Into>
+  pub fn try_into<Into>(&self) -> Option<WH<Into>>
   where
-    T: NumCast,
+    T: ToPrimitive + Clone,
     Into: NumCast,
   {
-    WH {
-      w: Into::from(self.w).expect(&format!(
-        "Conversion from {} to {} failed.",
-        stringify!(T),
-        stringify!(Into)
-      )),
-      h: Into::from(self.h).expect(&format!(
-        "Conversion from {} to {} failed.",
-        stringify!(T),
-        stringify!(Into)
-      )),
-    }
+    Some(WH { w: Into::from(self.w.clone())?, h: Into::from(self.h.clone())? })
   }
 
   /// Returns a new WH with equal w and h components.
   pub fn square(side: T) -> Self
   where
-    T: Copy,
+    T: Clone,
   {
-    Self { w: side, h: side }
+    Self { w: side.clone(), h: side }
   }
 
   pub fn area(&self) -> T
   where
-    T: Mul<Output = T> + Copy,
+    T: Mul<Output = T> + Clone,
   {
-    self.w * self.h
+    self.w.clone() * self.h.clone()
   }
 }
 
@@ -145,13 +123,13 @@ mod test {
   use super::*;
 
   #[test]
-  fn from() {
-    assert_eq!(WH::from(1.2, 3.4), WH16 { w: 1, h: 3 })
+  fn try_from() {
+    assert_eq!(WH::try_from(1.2, 3.4).unwrap(), WH16 { w: 1, h: 3 })
   }
 
   #[test]
   fn into() {
-    assert_eq!(WH { w: 1.2, h: 3.4 }.into(), WH16 { w: 1, h: 3 })
+    assert_eq!(WH { w: 1.2, h: 3.4 }.try_into().unwrap(), WH16 { w: 1, h: 3 })
   }
 
   #[test]

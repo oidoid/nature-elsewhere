@@ -1,175 +1,16 @@
 use super::lerp::Lerp;
-use num::traits::cast::FromPrimitive;
-use num::traits::cast::ToPrimitive;
 use num::{
   integer::Roots,
-  traits::{cast::NumCast, clamp, Signed},
+  traits::{
+    cast::{NumCast, ToPrimitive},
+    clamp, Signed,
+  },
 };
 use serde::Serialize;
-use std::convert::TryFrom;
-use std::convert::TryInto;
-use std::{f32, f64, i16};
 use std::{
   fmt,
   ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
-
-// impl<From: NumCast, To: NumCast> TryFrom<XY<From>> for XY<To> {
-//   type Error = ();
-
-//   fn try_from(XY { x, y }: XY<From>) -> Result<Self, Self::Error> {
-//     Ok(Self {
-//       //     Ok(Self { x: To::from(x)?, y: To::from(y)? })
-//       x: To::from(x).map_or(Err(()), |val| Ok(val))?,
-//       y: To::from(y).map_or(Err(()), |val| Ok(val))?,
-//     })
-//   }
-// }
-
-// macro_rules! impl_try_from {
-//   ($($t:ty)*) => ($(
-//     impl TryFrom<XY<$t>> for XY<i16> {
-//       type Error = ();
-
-//       fn try_from(XY { x, y }: XY<$t>) -> Result<Self, Self::Error> {
-//             Ok(Self { x: i16::from(x)?, y: i16::from(y)? })
-//         // Ok(Self {
-//         //   x: i16::from(x).map_or(Err(()), |val| Ok(val))?,
-//         //   y: i16::from(y).map_or(Err(()), |val| Ok(val))?,
-//         // })
-//       }
-//     }
-//   )*)
-// }
-// impl_try_from!(i32); // usize isize u8 i8 u16 i16 u32 f32 u64 i64 f64 u128 i128
-
-// impl TryFrom<XY<i32>> for XY<i16> {
-//   type Error = <i16 as std::convert::TryFrom<i32>>::Error;
-
-//   fn try_from(XY { x, y }: XY<i32>) -> Result<Self, Self::Error> {
-//     Ok(Self { x: x.try_into()?, y: y.try_into()? })
-//   }
-// }
-// i16::from_i32(y).ok_or(())?
-macro_rules! impl_TryFrom {
-  ($from:ty: $($to:ty),*) => ($(
-    impl TryFrom<XY<$from>> for XY<$to> {
-      type Error = <$to as std::convert::TryFrom<$from>>::Error;
-
-      fn try_from(XY { x, y }: XY<$from>) -> Result<Self, Self::Error> {
-        Ok(Self { x: x.try_into()?, y: y.try_into()? })
-      }
-    }
-  )*)
-}
-
-// impl TryFrom<XY<f32>> for XY<i16> {
-//   type Error = <i16 as std::convert::TryFrom<f32>>::Error;
-
-//   fn try_from(XY { x, y }: XY<f32>) -> Result<Self, Self::Error> {
-//     // Ok(Self {
-//     //   x: NumCast::from(x).ok_or(Self::Error(()))?,
-//     //   y: NumCast::from(y).ok_or(Self::Error(()))?,
-//     // })
-//     Ok(Self { x: 1, y: 2 })
-//   }
-// }
-
-impl_TryFrom!(usize: isize, u8, i8, u16, i16, u32, i32, u64, i64, u128, i128);
-impl_TryFrom!(isize: usize, u8, i8, u16, i16, u32, i32, u64, i64, u128, i128);
-impl_TryFrom!(
-  u8: usize,
-  isize,
-  i8,
-  u16,
-  i16,
-  u32,
-  i32,
-  f32,
-  u64,
-  i64,
-  f64,
-  u128,
-  i128
-);
-impl_TryFrom!(
-  i8: usize,
-  isize,
-  u8,
-  u16,
-  i16,
-  u32,
-  i32,
-  f32,
-  u64,
-  i64,
-  f64,
-  u128,
-  i128
-);
-impl_TryFrom!(
-  u16: usize,
-  isize,
-  u8,
-  i8,
-  i16,
-  u32,
-  i32,
-  f32,
-  u64,
-  i64,
-  f64,
-  u128,
-  i128
-);
-impl_TryFrom!(
-  i16: usize,
-  isize,
-  u8,
-  i8,
-  u16,
-  u32,
-  i32,
-  f32,
-  u64,
-  i64,
-  f64,
-  u128,
-  i128
-);
-impl_TryFrom!(
-  u32: usize,
-  isize,
-  u8,
-  i8,
-  u16,
-  i16,
-  i32,
-  u64,
-  i64,
-  f64,
-  u128,
-  i128
-);
-impl_TryFrom!(
-  i32: usize,
-  isize,
-  u8,
-  i8,
-  u16,
-  i16,
-  u32,
-  u64,
-  i64,
-  f64,
-  u128,
-  i128
-);
-impl_TryFrom!(f32: f64);
-impl_TryFrom!(u64: usize, isize, u8, i8, u16, i16, u32, i32, i64, u128, i128);
-impl_TryFrom!(i64: usize, isize, u8, i8, u16, i16, u32, i32, u64, u128, i128);
-impl_TryFrom!(u128: usize, isize, u8, i8, u16, i16, u32, i32, u64, i64, i128);
-impl_TryFrom!(i128: usize, isize, u8, i8, u16, i16, u32, i32, u64, i64, u128);
 
 #[derive(Clone, Eq, PartialEq, Serialize)]
 pub struct XY<T> {
@@ -183,31 +24,30 @@ impl<T> XY<T> {
     Self { x, y }
   }
 
-  /// Cast each component passed and returns a new XY. Cast::from() differs from
-  /// try_from() in that it may fail.
+  /// Cast each argument returns a new XY.
   pub fn try_from<From>(x: From, y: From) -> Option<Self>
   where
     T: NumCast,
-    From: NumCast,
+    From: ToPrimitive + Clone,
   {
     Some(Self { x: T::from(x)?, y: T::from(y)? })
   }
 
   /// Cast each component of self and returns a new XY.
-  pub fn try_into<Into: NumCast>(self) -> Option<XY<Into>>
+  pub fn try_into<Into>(&self) -> Option<XY<Into>>
   where
-    T: NumCast,
+    T: ToPrimitive + Clone,
     Into: NumCast,
   {
-    Some(XY { x: Into::from(self.x)?, y: Into::from(self.y)? })
+    Some(XY { x: Into::from(self.x.clone())?, y: Into::from(self.y.clone())? })
   }
 
   /// Returns a new XY with equal x and y components.
-  pub fn square(component: T) -> Self
+  pub fn square(side: T) -> Self
   where
     T: Clone,
   {
-    Self { x: component.clone(), y: component }
+    Self { x: side.clone(), y: side }
   }
 
   pub fn area(&self) -> T
