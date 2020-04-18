@@ -38,7 +38,7 @@ pub struct SpriteLayout {
   /// a SpriteRect composed of a mishmash of flipped sprites will mirror that
   /// mishmash and not lose each individual's sprite's relative flip.
   scale: XY16,
-
+  // use std::num::NonZeroI16;
   /// If set, the constituentID for all sprites. See Sprite._constituentID. The
   /// reversal is lossy when the transformed Sprite's original constituentID was
   /// not Sprite.id.

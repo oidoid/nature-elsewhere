@@ -1,18 +1,46 @@
-use super::sprite_composition::SpriteComposition;
-use crate::atlas::{AnimationID, Animator};
+use super::{SpriteComposition, SpriteLayer};
+use crate::atlas::{AnimationID, Animator, Atlas};
 use crate::math::{R16, XY16};
-use serde::Serialize;
 
+/// A mapping from an Atlas Animation to a level region. This includes all
+/// distinct needed to represent an instance to the shader.
 pub struct Sprite {
-  pub animator: Animator, // the animator is really useful since it reports on the current source rect. it's nice to not have to worry about this. only the animator, atlas, and animation id are needed.
-  pub source: AnimationID, // not really used after animator is made. collision doesn't change between frames either? but cna between states
-  pub constituent: AnimationID, // should be Animation reference instead i guess
+  /// Source Animation state.
+  pub animator: Animator,
+  /// The Animation subtextures identifer to draw from.
+  pub source: AnimationID,
+  /// The Animation subtextures identifer to compose with source. The
+  /// constituent uses the source Animator's period and as such cannot be
+  /// animated distinctly. Wrapping is not applied to the constituent.
+  pub constituent: AnimationID,
+  /// The composition operator for source and constituent.
   pub composition: SpriteComposition,
+  /// The level region to draw to including scale. The width and height are
+  /// unsigned and never negative even when scaling indicates the sprite will be
+  /// flipped when rendered.
+  ///
+  /// Each animation cel has the same size so an sprite's dimensions only change
+  /// when explicitly instructed. Specifying a different destination width or
+  /// height than the source truncates or repeats the scaled rendered source.
+  ///
+  /// This region is used to determine when the sprite is on screen and therefor
+  /// should be drawn, as well as for rendering itself. The region is also used
+  /// for certain collision tests.
   pub destination: R16,
+  /// The destination multiple.
   pub scale: XY16,
+  /// The initial marquee translation offset in .1 pixels. The total offset is
+  /// calculated using the global game clock and therefor synchronized by
+  /// default except where this property deviates.
   pub wrap: XY16,
+  /// The marquee translation speed in .1 pixels per second (or 1 px / 10 000 ms
+  /// or 1 px / 10 s). The offset for each render is calculated by the shader as
+  /// `wrap + wrap_velocity * game_clock`.
   pub wrap_velocity: XY16,
+  /// The painting draw order.
+  pub layer: SpriteLayer,
 }
+
 impl Sprite {
   pub fn new(
     animator: Animator,
@@ -23,6 +51,7 @@ impl Sprite {
     scale: XY16,
     wrap: XY16,
     wrap_velocity: XY16,
+    layer: SpriteLayer,
   ) -> Self {
     Self {
       animator,
@@ -33,64 +62,49 @@ impl Sprite {
       scale,
       wrap,
       wrap_velocity,
+      layer,
     }
+  }
+
+  pub fn move_by(&mut self, by: &XY16) {
+    self.destination = self.destination.clone() + by.clone();
+  }
+
+  pub fn move_to(&mut self, to: &XY16) {
+    self.destination = self.destination.move_to(to);
+  }
+
+  pub fn serialize(
+    &self,
+    config: &bincode::Config,
+    atlas: &Atlas,
+  ) -> bincode::Result<Vec<u8>> {
+    let mut bytes = Vec::new();
+    let animation = &atlas.animations[&self.source];
+    let animator = &self.animator;
+    bytes.append(&mut config.serialize(animator.cel(animation).map_or(
+      Err(bincode::ErrorKind::Custom("Source Cel unavailable".to_string())),
+      |cel| Ok(&cel.xy),
+    )?)?);
+    bytes.append(&mut config.serialize(&animation.wh)?);
+    let constituent_animation = &atlas.animations[&self.constituent];
+    bytes.append(&mut config.serialize(
+      animator.cel(constituent_animation).map_or(
+        Err(bincode::ErrorKind::Custom(
+          "Constituent Cel unavailable".to_string(),
+        )),
+        |cel| Ok(&cel.xy),
+      )?,
+    )?);
+    bytes.append(&mut config.serialize(&constituent_animation.wh)?);
+    bytes.append(&mut config.serialize(&self.composition)?);
+    bytes.append(&mut config.serialize(&self.destination)?);
+    bytes.append(&mut config.serialize(&self.scale)?);
+    bytes.append(&mut config.serialize(&self.wrap)?);
+    bytes.append(&mut config.serialize(&self.wrap_velocity)?);
+    Ok(bytes)
   }
 }
 
-// This is the actual thing that's serialized too. not sure if purely for searilziation
-// or if it should also preserve teh data itself. in the case of the bottom half, it could.
-
-// /// The lowest level drawing primitive. The inputs are derived from an Atlas
-// /// identifier and parameters. The outputs map to a shader input.
-// /// Alt name: render source. This is assumed to be ordered properly as it does not have a layer.
-// #[repr(C)] // does this need to be packed? that isn't supported with serialization any mo?
-// #[derive(Serialize, Debug)]
-// pub struct Sprite {
-//   /// The atlas region to draw from. This is specific by a Cel within an
-//   /// Animation. The data copied never changes except to copy in a new Cel's
-//   /// region. That is, AnimationID is used to access the Animation and an
-//   /// Animator to determine the Cel within. AnimationID (as a number) and Cel
-//   /// index could be passed to the shader, probably as a bitmask, instead if the
-//   /// Atlas' Animations were uploaded. WH is consistent for all Cels and is only
-//   /// needed CPU-side at construction time.
-//   pub source: R16,
-//   /// The atlas region to compose from. This is specific by a Cel within an
-//   /// Animation. The data copied never changes except to copy in a new Cel's
-//   /// region.
-//   pub constituent: R16,
-//   /// The composition operation of source and constituent.
-//   pub composition: SpriteComposition,
-//   pad: u8,
 //   /// flip can be used to determine scale butttttt not collision then. world+render... mostly render since entities may have multiple of these
 //   pub destination: R16,
-//   pub scale: XY16,
-//   pub wrap: XY16,
-//   pub wrap_velocity: XY16,
-//   // i could put a gap which could store an animator but these are serialized into bytes
-//   // or use serialize skip
-// }
-
-// impl Sprite {
-//   pub fn new(
-//     source: R16,
-//     constituent: R16,
-//     composition: SpriteComposition,
-//     destination: R16,
-//     scale: XY16,
-//     wrap: XY16,
-//     wrap_velocity: XY16,
-//   ) -> Self {
-//     // Only non-zero scales make sense.
-//     assert!(scale.area() > 0);
-//     Self {
-//       source,
-//       constituent,
-//       composition,
-//       pad: 0,
-//       destination,
-//       scale,
-//       wrap,
-//       wrap_velocity,
-//     }
-//   }
-// }

@@ -133,6 +133,7 @@ impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
       scale,
       wrap,
       wrap_velocity,
+      layer,
     )
   }
 }

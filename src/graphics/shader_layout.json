@@ -10,7 +10,7 @@
     {"name": "source", "data_type": "Short", "len": 4},
     {"name": "constituent", "data_type": "Short", "len": 4},
     {"name": "composition", "data_type": "UnsignedShort", "len": 1},
-    {"name": "target", "data_type": "Short", "len": 4},
+    {"name": "destination", "data_type": "Short", "len": 4},
     {"name": "scale", "data_type": "Short", "len": 2},
     {"name": "translate", "data_type": "Short", "len": 4}
   ]

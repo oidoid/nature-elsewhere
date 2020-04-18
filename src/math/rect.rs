@@ -64,6 +64,14 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
     Some(Rect { from: self.from.try_into()?, to: self.to.try_into()? })
   }
 
+  pub fn move_to(&self, to: &XY<T>) -> Self
+  where
+    T: Clone + Add<Output = T> + Sub<Output = T>,
+  {
+    let by = to.clone() - self.from.clone();
+    self.clone() + by
+  }
+
   pub fn wh(&self) -> XY<T>
   where
     T: Sub<Output = T> + Ord + Clone,

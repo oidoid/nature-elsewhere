@@ -45,28 +45,7 @@ impl<'a> System<'a> for RendererSystem {
     bin_config.native_endian();
     let bytes: Vec<u8> = (&sprites).join().fold(vec![], |mut bytes, sprite| {
       for sprite in &sprite.sprites["Default"] {
-        let animation = &atlas.animations[&sprite.source];
-        let animator = &sprite.animator;
-        bytes.append(
-          &mut bin_config
-            .serialize(&animator.cel(animation).unwrap().xy)
-            .unwrap(),
-        );
-        bytes.append(&mut bin_config.serialize(&animation.wh).unwrap());
-        let constituent_animation = &atlas.animations[&sprite.constituent];
-        bytes.append(
-          &mut bin_config
-            .serialize(&animator.cel(constituent_animation).unwrap().xy)
-            .unwrap(),
-        );
-        bytes.append(
-          &mut bin_config.serialize(&constituent_animation.wh).unwrap(),
-        );
-        bytes.append(&mut bin_config.serialize(&sprite.composition).unwrap());
-        bytes.append(&mut bin_config.serialize(&sprite.destination).unwrap());
-        bytes.append(&mut bin_config.serialize(&sprite.scale).unwrap());
-        bytes.append(&mut bin_config.serialize(&sprite.wrap).unwrap());
-        bytes.append(&mut bin_config.serialize(&sprite.wrap_velocity).unwrap());
+        bytes.append(&mut sprite.serialize(&mut bin_config, &atlas).unwrap());
       }
       bytes
     });

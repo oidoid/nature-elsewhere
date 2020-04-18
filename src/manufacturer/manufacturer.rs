@@ -74,6 +74,7 @@ impl Manufacturer {
       entity = entity.with(Text { text: component });
     }
     if let Some(component) = components.sprites.manufacture(&self.atlas) {
+      // todo: move by position
       entity = entity.with(Renderable { sprites: component });
     }
     let entity = entity.build();

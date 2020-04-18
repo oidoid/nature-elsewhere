@@ -5,6 +5,10 @@ use serde::{Deserialize, Serialize};
 /// greater). y-coordinate + height-ordering is the preferred resolution
 /// mechanism but the lowest possible Layer may be used where necessary. Layer
 /// is like a z-coordinate.
+///
+/// The effect is that a sprite may be drawn above or below other sprites in a
+/// controlled manner allowing for effects like shadows to consistently be drawn
+/// below the object meant to cast it.
 #[repr(u8)]
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq, Serialize)]
 pub enum SpriteLayer {
