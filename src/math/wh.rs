@@ -1,4 +1,5 @@
 use num::traits::cast::{NumCast, ToPrimitive};
+use serde::Serialize;
 use std::{
   fmt,
   ops::{Add, Div, Mul, Sub},
@@ -6,7 +7,7 @@ use std::{
 
 /// Width and height (size or area). Rects and XY are generally preferred unless
 /// just an area is needed.
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq, Serialize)]
 pub struct WH<T> {
   pub w: T,
   pub h: T,

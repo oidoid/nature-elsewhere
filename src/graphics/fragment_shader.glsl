@@ -19,9 +19,9 @@ varying vec2 v_offset;
 varying vec2 v_constituent_offset;
 
 void main() {
-  vec2 source_position = v_source.xy + vec2(ivec2(mod(v_offset, vec2(v_source.zw - v_source.xy))));
+  vec2 source_position = v_source.xy + vec2(ivec2(mod(v_offset, v_source.zw)));
   vec4 source_px = texture2D(atlas, source_position / vec2(atlas_size));
-  vec2 constituentPosition = v_constituent.xy + vec2(ivec2(mod(v_constituent_offset, vec2(v_constituent.zw - v_constituent.xy))));
+  vec2 constituentPosition = v_constituent.xy + vec2(ivec2(mod(v_constituent_offset, v_constituent.zw)));
   vec4 constituentPx = texture2D(atlas, constituentPosition / vec2(atlas_size));
 
   if (v_composition == COMPOSITION_SOURCE) {

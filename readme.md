@@ -1,45 +1,23 @@
-<details>
-  <summary>More Concept sketches</summary>
-[TOC]
-
-    ## More Stuff
-
-    lotso f stuff
-
-</details>
-
-# 72 chars wide
-
-config
-utils
-len
-
-revisit other abbreviations. maybe rust-like but hard to follow
-
-# Globally install wasm-pack.
-
-cargo install wasm-pack
-
-# Useful derivations for enums
-
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
-
-I tend not to use the expect since it's so verbose.
-
-Roadmap
-
-    ✓ Get the barebone working, we should be able to type in the code and execute, see the output
-    ✓ Share the code via a sharable URL
-    ? Auto-Complete, Linting, LSP integration
-    ? Save to Gist or Dropbox
-    ? Personal snippet gallery
-
-✓?⭐
-
-# nature elsewhere: beyond living memory (Terra incognita)
+# nature elsewhere
 
 An isometric adventure in an idealized state of nature. Play at
-[ne.netlify.com](https://natureelsewhere.com).
+[natureelsewhere.com](https://natureelsewhere.com).
+
+<details markdown>
+  <summary>History and concepts…</summary>
+
+I often daydream of lifeforms that might exist in other places. For instance,
+maybe an odd organism would be found in a pond on Venus and it would be
+spectacularly alien but perhaps remarkably similar in parts to a strange
+crustacean living in a tidal pool on Earth. My thoughts often return to a
+romanticized view of nature elsewhere.
+
+Subtitles being considered:
+
+- beyond living memory
+- episode 0
+- terra incognita
+</details>
 
 ## Table of Contents
 
@@ -48,6 +26,7 @@ An isometric adventure in an idealized state of nature. Play at
 
 - [Table of Contents](#table-of-contents)
 - [Development](#development)
+  - [Globally install wasm-pack.](#globally-install-wasm-pack)
   - [Install and Execute](#install-and-execute)
   - [Versioning](#versioning)
   - [Tracking Work](#tracking-work)
@@ -90,7 +69,7 @@ An isometric adventure in an idealized state of nature. Play at
   - [Summary](#summary)
   - [Goals and Selling Points](#goals-and-selling-points)
   - [Palette, Lighting, Perspective, and Scale](#palette-lighting-perspective-and-scale)
-    - [Palette History](#palette-history)
+    - [Palette History and Rationale](#palette-history-and-rationale)
   - [Language and Framework](#language-and-framework)
     - [Language and Framework History](#language-and-framework-history)
   - [Inspiration](#inspiration)
@@ -105,7 +84,9 @@ An isometric adventure in an idealized state of nature. Play at
 
 ### Install and Execute
 
-`npm -s i && npm -s start`
+- Globally install wasm-pack: `cargo install wasm-pack`.
+- Install NPM dependencies: `npm -s i`.
+- Build and execute: `npm -s start`.
 
 ### Versioning
 
@@ -113,7 +94,7 @@ Before publishing a new version, grep for the `[version]` tag.
 
 ### Tracking Work
 
-Work is tracked loosely in [text](toDo.txt).
+Work is tracked loosely in [todo.md](todo.md).
 
 ### Rounding Errors
 
@@ -195,8 +176,12 @@ to occur on the same frame.
 Fractional numbers are unfriendly to pixel art. A recurring problem in the
 project has been weird pixel glitches and these have often been rooted in
 rounding errors. Since JavaScript only supports BigInt and typed arrays
-natively, the [XY](src/math/XY.ts) and [WH](src/math/WH.ts) classes help
-encapsulate some of the truncation inherent when working with strictly integers.
+natively, the [XY] and [WH] TypeScript classes helped encapsulate some of the
+truncation inherent when working with strictly integers. They surprisingly
+worked extraordinarily well but Rust has support for many integral types.
+
+[xy]: https://github.com/oddoid/nature-elsewhere/blob/typescript/src/math/XY.ts
+[wh]: https://github.com/oddoid/nature-elsewhere/blob/typescript/src/math/WH.ts
 
 #### Shader Floating Point Limits
 
@@ -218,6 +203,28 @@ val = val - Math.trunc(val / 0x4000) \* 0x4000
 ```
 
 [the following]: https://wikipedia.org/wiki/Modulo_operation#Remainder_calculation_for_the_modulo_operation
+
+config
+utils
+len
+
+revisit other abbreviations. maybe rust-like but hard to follow
+
+# Useful derivations for enums
+
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+
+I tend not to use the expect since it's so verbose.
+
+Roadmap
+
+    ✓ Get the barebone working, we should be able to type in the code and execute, see the output
+    ✓ Share the code via a sharable URL
+    ? Auto-Complete, Linting, LSP integration
+    ? Save to Gist or Dropbox
+    ? Personal snippet gallery
+
+✓?⭐
 
 ### Scaling
 
@@ -313,6 +320,9 @@ there are some inherent limitations in the language that are not obvious and are
 big time sinks where one tries to figure out if they're truly misusing the
 language or not. Combined with the other complexities of a game and it's proven
 quite difficult at times.
+
+[todo] Rust and old JavaScript
+[todo] version history but screenshots and binaries
 
 ### Device Support
 

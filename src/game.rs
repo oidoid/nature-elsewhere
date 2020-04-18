@@ -29,6 +29,7 @@ pub struct Game {
   dispatcher: Rc<RefCell<Dispatcher<'static, 'static>>>,
   renderer_state_machine: Rc<RefCell<Option<RendererStateMachine>>>,
   input_poller: Rc<RefCell<InputPoller>>,
+  atlas: Rc<Atlas>,
   manufacturer: Rc<Manufacturer>,
 }
 
@@ -42,6 +43,7 @@ impl Game {
 
     self.manufacturer.manufacture(&mut ecs, BlueprintID::Bee);
     self.dispatcher.borrow_mut().setup(&mut ecs);
+    ecs.insert(self.atlas.clone());
 
     // i can get the entity ID at construction time of composed in entities
     // with(Cursor::new()).
@@ -129,8 +131,10 @@ impl Game {
     canvas: HtmlCanvasElement,
     assets: Assets,
   ) -> Self {
-    let manufacturer =
-      Rc::new(Manufacturer::new(assets.blueprints, assets.atlas));
+    let Assets { renderer_assets, atlas, font, blueprints } = assets;
+    let atlas = Rc::new(atlas);
+
+    let manufacturer = Rc::new(Manufacturer::new(blueprints, atlas.clone()));
     let dispatcher = DispatcherBuilder::new()
       .with(InputProcessorSystem, "input_processor_system", &[])
       .with(RendererSystem, "render_system", &["input_processor_system"])
@@ -144,22 +148,18 @@ impl Game {
       dispatcher: Rc::new(RefCell::new(dispatcher)),
       renderer_state_machine: Rc::new(RefCell::new(None)),
       input_poller: Rc::new(RefCell::new(InputPoller::new(&window))),
+      atlas,
       manufacturer,
     };
 
     game.create_entities();
-    let renderer_state_machine = RendererStateMachine::new(
-      window,
-      document,
-      canvas,
-      assets.renderer_assets,
-      {
+    let renderer_state_machine =
+      RendererStateMachine::new(window, document, canvas, renderer_assets, {
         let mut clone = game.clone();
         move |renderer, play_time, delta| {
           clone.on_loop(renderer, play_time, delta)
         }
-      },
-    );
+      });
     *game.renderer_state_machine.borrow_mut() = Some(renderer_state_machine);
 
     game

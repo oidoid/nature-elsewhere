@@ -12,16 +12,17 @@ use specs::world::Entity;
 use specs::world::WorldExt;
 use specs::World;
 use std::collections::HashMap;
+use std::rc::Rc;
 
 pub struct Manufacturer {
   blueprints: HashMap<BlueprintID, Blueprint>,
-  atlas: Atlas,
+  atlas: Rc<Atlas>,
 }
 
-impl<'a> Manufacturer {
+impl Manufacturer {
   pub fn new(
     blueprints: HashMap<BlueprintID, Blueprint>,
-    atlas: Atlas,
+    atlas: Rc<Atlas>,
   ) -> Self {
     Self { blueprints, atlas }
   }
@@ -116,7 +117,7 @@ mod test {
       wh: WH::new(0, 0),
       animations: HashMap::new(),
     };
-    let manufacturer = Manufacturer::new(blueprints, atlas);
+    let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
     let mut ecs = World::new();
 
     manufacturer.manufacture(&mut ecs, BlueprintID::Bee);
@@ -146,7 +147,7 @@ mod test {
       wh: WH::new(0, 0),
       animations: HashMap::new(),
     };
-    let manufacturer = Manufacturer::new(blueprints, atlas);
+    let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
     let mut ecs = World::new();
     ecs.register::<Position>();
     ecs.register::<Velocity>();
@@ -181,7 +182,7 @@ mod test {
       wh: WH::new(0, 0),
       animations: HashMap::new(),
     };
-    let manufacturer = Manufacturer::new(blueprints, atlas);
+    let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
     let mut ecs = World::new();
     ecs.register::<FollowMouse>();
 
@@ -226,7 +227,7 @@ mod test {
       wh: WH::new(0, 0),
       animations: HashMap::new(),
     };
-    let manufacturer = Manufacturer::new(blueprints, atlas);
+    let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
     let mut ecs = World::new();
     ecs.register::<Parent>();
     ecs.register::<Children>();
@@ -301,7 +302,7 @@ mod test {
       wh: WH::new(0, 0),
       animations: HashMap::new(),
     };
-    let manufacturer = Manufacturer::new(blueprints, atlas);
+    let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
     let mut ecs = World::new();
     ecs.register::<Parent>();
     ecs.register::<Children>();

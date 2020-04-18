@@ -1,3 +1,4 @@
+use crate::atlas::Atlas;
 use crate::components::{Bounds, MaxWH, Renderable, Text};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
@@ -15,6 +16,7 @@ pub struct RendererSystem;
 
 #[derive(SystemData)]
 pub struct RenderData<'a> {
+  atlas: ReadExpect<'a, Rc<Atlas>>,
   timing: ReadExpect<'a, Timing>,
   renderer: ReadExpect<'a, Rc<RefCell<Renderer>>>,
   viewport: ReadExpect<'a, Viewport>,
@@ -29,6 +31,7 @@ impl<'a> System<'a> for RendererSystem {
 
   fn run(&mut self, data: Self::SystemData) {
     let RenderData {
+      atlas,
       timing,
       renderer,
       viewport,
@@ -38,19 +41,35 @@ impl<'a> System<'a> for RendererSystem {
       sprites,
     } = data;
 
+    let mut bin_config = bincode::config();
+    bin_config.native_endian();
     let bytes: Vec<u8> = (&sprites).join().fold(vec![], |mut bytes, sprite| {
-      let mut more_bytes = bincode::config()
-        .native_endian()
-        .serialize(&sprite.sprites["Default"])
-        .unwrap();
-      // Drop the size in the header.
-      for _ in 0..8 {
-        more_bytes.remove(0);
+      for sprite in &sprite.sprites["Default"] {
+        let animation = &atlas.animations[&sprite.source];
+        let animator = &sprite.animator;
+        bytes.append(
+          &mut bin_config
+            .serialize(&animator.cel(animation).unwrap().xy)
+            .unwrap(),
+        );
+        bytes.append(&mut bin_config.serialize(&animation.wh).unwrap());
+        let constituent_animation = &atlas.animations[&sprite.constituent];
+        bytes.append(
+          &mut bin_config
+            .serialize(&animator.cel(constituent_animation).unwrap().xy)
+            .unwrap(),
+        );
+        bytes.append(
+          &mut bin_config.serialize(&constituent_animation.wh).unwrap(),
+        );
+        bytes.append(&mut bin_config.serialize(&sprite.composition).unwrap());
+        bytes.append(&mut bin_config.serialize(&sprite.destination).unwrap());
+        bytes.append(&mut bin_config.serialize(&sprite.scale).unwrap());
+        bytes.append(&mut bin_config.serialize(&sprite.wrap).unwrap());
+        bytes.append(&mut bin_config.serialize(&sprite.wrap_velocity).unwrap());
       }
-      bytes.append(&mut more_bytes);
       bytes
     });
-    web_sys::console::log_1(&format!("{:?}", bytes).into());
 
     let mut renderer = renderer.borrow_mut();
     renderer.render(

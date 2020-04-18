@@ -11,34 +11,21 @@ pub type AnimatorPeriod = i32;
 
 /// Record and update an Animation's state.
 #[derive(Debug)]
-pub struct Animator<'a> {
-  /// Animations are generally immutable and referenced by multiple Animators.
-  pub animation: &'a Animation,
-
+pub struct Animator {
   /// The current cycle offset used to track oscillation state and calculate
   /// index.
-  pub period: AnimatorPeriod,
+  period: AnimatorPeriod,
 
   /// Current cel exposure in milliseconds. When the fractional value meets or
   /// exceeds the cel exposure duration, the cel is advanced according to
   /// direction. This value should be carried over from each call with the
   /// current time step added, and zeroed on manual cel change.
-  pub exposure: Millis,
+  exposure: Millis,
 }
 
-impl<'a> Animator<'a> {
-  pub fn new(
-    animation: &'a Animation,
-    period: AnimatorPeriod,
-    exposure: Millis,
-  ) -> Option<Self> {
-    if animation.cels.len() < 2 {
-      // A zero-length animation would require special-casing elsewhere. Handle
-      // it here only instead. Also, since an animation with only one cell
-      // cannot change frames, do not provide an Animator for it either.
-      return None;
-    }
-    Some(Self { animation, period, exposure })
+impl Animator {
+  pub fn new(period: AnimatorPeriod, exposure: Millis) -> Self {
+    Self { period, exposure }
   }
 
   /// Reset the animation and exposure.
@@ -47,29 +34,19 @@ impl<'a> Animator<'a> {
     self.exposure = 0.;
   }
 
-  /// Change the animation cel period and reset the period.
+  /// Change the animation cel and reset the exposure.
   pub fn set(&mut self, period: AnimatorPeriod) {
     self.period = period;
     self.exposure = 0.;
   }
 
-  /// Returns the current animation cel.
-  pub fn cel(&self) -> &Cel {
-    self.cel_for_animation(&self.animation).unwrap()
+  /// Returns the current animation cel for the Animator's period.
+  pub fn cel<'a>(&self, animation: &'a Animation) -> Option<&'a Cel> {
+    Some(&animation.cels[self.index(animation)?])
   }
 
   /// Returns the current animation cel index for the Animator's period.
-  pub fn cel_for_animation(&self, animation: &Animation) -> Option<&Cel> {
-    Some(&self.animation.cels[self.index_for_animation(animation)?])
-  }
-
-  /// Returns the current animation cel index for the Animator's period.
-  pub fn index(&self) -> usize {
-    self.index_for_animation(self.animation).unwrap()
-  }
-
-  /// Returns the current animation cel index for the Animator's period.
-  pub fn index_for_animation(&self, animation: &Animation) -> Option<usize> {
+  pub fn index(&self, animation: &Animation) -> Option<usize> {
     if animation.cels.is_empty() {
       return None;
     }
@@ -79,16 +56,18 @@ impl<'a> Animator<'a> {
 
   /// Apply the time since last frame was shown, possibly advancing the
   /// animation period.
-  pub fn animate(&mut self, exposure: Millis) {
+  pub fn animate(&mut self, animation: &Animation, exposure: Millis) {
+    if animation.cels.len() < 2 || animation.duration == 0. {
+      return;
+    }
+
     // Avoid unnecessary iterations by skipping complete animation cycles.
     // Modulo by infinity is the number.
-    self.exposure = (self.exposure + exposure) % self.animation.duration;
-    while self.exposure >= self.cel().duration {
-      self.exposure -= self.cel().duration;
-      self.period = self
-        .animation
-        .direction
-        .advance(self.period, self.animation.cels.len());
+    self.exposure = (self.exposure + exposure) % animation.duration;
+    while self.exposure >= self.cel(animation).unwrap().duration {
+      self.exposure -= self.cel(animation).unwrap().duration;
+      self.period =
+        animation.direction.advance(self.period, animation.cels.len());
     }
   }
 }
@@ -115,34 +94,6 @@ mod test {
   use std::f64;
 
   #[test]
-  fn new() {
-    let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 0., slices: vec![] };
-    [
-      (vec![], false),
-      (vec![cel.clone()], false),
-      (vec![cel.clone(), cel.clone()], true),
-    ]
-    .iter()
-    .enumerate()
-    .for_each(|(i, (cels, expected))| {
-      let animation = Animation {
-        wh: WH { w: 0, h: 0 },
-        cels: cels.clone(),
-        duration: 0.,
-        direction: Playback::Forward,
-      };
-      let animator = Animator::new(&animation, 0, 0.);
-      assert_eq!(
-        animator.is_some(),
-        *expected,
-        "Case {} failed: {:?}.",
-        i,
-        (cels, expected),
-      )
-    });
-  }
-
-  #[test]
   fn reset() {
     let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
     let animation = Animation {
@@ -151,8 +102,8 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
-    animator.animate(1.5);
+    let mut animator = Animator::new(0, 0.);
+    animator.animate(&animation, 1.5);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.5);
     animator.reset();
@@ -175,8 +126,8 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
-    animator.animate(1.5);
+    let mut animator = Animator::new(0, 0.);
+    animator.animate(&animation, 1.5);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.5);
     animator.set(3);
@@ -193,8 +144,8 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
-    animator.animate(0.5);
+    let mut animator = Animator::new(0, 0.);
+    animator.animate(&animation, 0.5);
     assert_eq!(animator.period, 0);
     assert_eq!(animator.exposure, 0.5);
   }
@@ -208,8 +159,8 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
-    animator.animate(1.);
+    let mut animator = Animator::new(0, 0.);
+    animator.animate(&animation, 1.);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.);
   }
@@ -223,8 +174,8 @@ mod test {
       duration: 2.,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
-    animator.animate(1.5);
+    let mut animator = Animator::new(0, 0.);
+    animator.animate(&animation, 1.5);
     assert_eq!(animator.period, 1);
     assert_eq!(animator.exposure, 0.5);
   }
@@ -239,8 +190,8 @@ mod test {
       duration: f64::INFINITY,
       direction: Playback::Forward,
     };
-    let mut animator = Animator::new(&animation, 0, 0.).unwrap();
-    animator.animate(1.5);
+    let mut animator = Animator::new(0, 0.);
+    animator.animate(&animation, 1.5);
     assert_eq!(animator.period, 0);
     assert_eq!(animator.exposure, 1.5);
   }
@@ -258,9 +209,15 @@ mod test {
           duration: 2.,
           direction,
         };
-        let mut animator = Animator::new(&animation, 0, 0.).unwrap();
-        animator.animate(1.);
-        assert_eq!(animator.index(), 1, "Case {} failed: {:?}.", i, direction);
+        let mut animator = Animator::new(0, 0.);
+        animator.animate(&animation, 1.);
+        assert_eq!(
+          animator.index(&animation,).unwrap(),
+          1,
+          "Case {} failed: {:?}.",
+          i,
+          direction
+        );
       });
   }
 
@@ -277,10 +234,16 @@ mod test {
           duration: 2.,
           direction,
         };
-        let mut animator = Animator::new(&animation, 0, 0.).unwrap();
+        let mut animator = Animator::new(0, 0.);
         animator.period = 1;
-        animator.animate(1.);
-        assert_eq!(animator.index(), 0, "Case {} failed: {:?}.", i, direction);
+        animator.animate(&animation, 1.);
+        assert_eq!(
+          animator.index(&animation,).unwrap(),
+          0,
+          "Case {} failed: {:?}.",
+          i,
+          direction
+        );
       });
   }
 
@@ -333,12 +296,12 @@ mod test {
         duration: 4.,
         direction,
       };
-      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
+      let mut animator = Animator::new(0, 0.);
       animator.period = period;
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 5 {
-        animator.animate(1.);
-        recording.push(animator.index())
+        animator.animate(&animation, 1.);
+        recording.push(animator.index(&animation).unwrap())
       }
       assert_eq!(
         recording,
@@ -373,11 +336,11 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
+      let mut animator = Animator::new(0, 0.);
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 3 {
-        animator.animate(1.);
-        recording.push(animator.index())
+        animator.animate(&animation, 1.);
+        recording.push(animator.index(&animation).unwrap())
       }
       assert_eq!(
         recording,
@@ -412,11 +375,11 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
+      let mut animator = Animator::new(0, 0.);
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 3 {
-        animator.animate(6.);
-        recording.push(animator.index())
+        animator.animate(&animation, 6.);
+        recording.push(animator.index(&animation).unwrap())
       }
       assert_eq!(
         recording,
@@ -469,11 +432,11 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
+      let mut animator = Animator::new(0, 0.);
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 6 {
-        animator.animate(0.9);
-        recording.push(animator.index())
+        animator.animate(&animation, 0.9);
+        recording.push(animator.index(&animation).unwrap())
       }
       assert_eq!(
         recording,
@@ -526,11 +489,11 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
+      let mut animator = Animator::new(0, 0.);
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 6 {
-        animator.animate(0.5);
-        recording.push(animator.index())
+        animator.animate(&animation, 0.5);
+        recording.push(animator.index(&animation).unwrap())
       }
       assert_eq!(
         recording,
@@ -583,11 +546,11 @@ mod test {
         duration: 5.,
         direction,
       };
-      let mut animator = Animator::new(&animation, 0, 0.).unwrap();
+      let mut animator = Animator::new(0, 0.);
       let mut recording = Vec::new();
       for _ in 0..animation.cels.len() * 6 {
-        animator.animate(5.5);
-        recording.push(animator.index())
+        animator.animate(&animation, 5.5);
+        recording.push(animator.index(&animation).unwrap())
       }
       assert_eq!(
         recording,

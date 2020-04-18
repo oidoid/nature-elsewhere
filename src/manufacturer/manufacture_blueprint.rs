@@ -1,7 +1,7 @@
 use super::{
   AlignToBlueprint, MarkerBlueprint, SpriteBlueprint, WHBlueprint, XYBlueprint,
 };
-use crate::atlas::{Animator, Atlas};
+use crate::atlas::{AnimationID, Animator, Atlas};
 use crate::components::AlignTo;
 use crate::math::{R16, WH, XY};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
@@ -30,7 +30,7 @@ impl ManufactureBlueprint<Option<AlignTo>> for Option<AlignToBlueprint> {
   }
 }
 
-impl<T: Hash + Eq + Clone>
+impl<'a, T: Hash + Eq + Clone>
   ManufactureAtlasBlueprint<Option<HashMap<T, Vec<Sprite>>>>
   for HashMap<T, Vec<SpriteBlueprint>>
 {
@@ -62,7 +62,7 @@ impl ManufactureBlueprint<Option<()>> for Option<MarkerBlueprint> {
   }
 }
 
-impl ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
+impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
   fn manufacture(&self, atlas: &Atlas) -> Sprite {
     //another name is props
     let id = self.id;
@@ -103,14 +103,9 @@ impl ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
 
     let layer = self.layer.unwrap_or(SpriteLayer::Default);
     let animator = self.animator.clone().map_or(
-      Animator::new(
-        animation,
-        self.period.unwrap_or(0),
-        self.exposure.unwrap_or(0.),
-      ),
+      Animator::new(self.period.unwrap_or(0), self.exposure.unwrap_or(0.)),
       |animator| {
         Animator::new(
-          animation,
           animator.period.unwrap_or(0),
           animator.exposure.unwrap_or(0.),
         )
@@ -128,22 +123,11 @@ impl ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
         XY::new(wrap_velocity.x.unwrap_or(0), wrap_velocity.y.unwrap_or(0))
       },
     );
-    let source = R16::new_wh(
-      animation.cels[0].xy.x,
-      animation.cels[0].xy.y,
-      animation.wh.w,
-      animation.wh.h,
-    );
-    let constituent = R16::new_wh(
-      atlas.animations[&constituent_id].cels[0].xy.x,
-      atlas.animations[&constituent_id].cels[0].xy.y,
-      atlas.animations[&constituent_id].wh.w,
-      atlas.animations[&constituent_id].wh.h,
-    );
-    // how does this work with animations? offsets are applied to everything.
+
     Sprite::new(
-      source,
-      constituent,
+      animator,
+      id,
+      constituent_id,
       composition,
       bounds,
       scale,
