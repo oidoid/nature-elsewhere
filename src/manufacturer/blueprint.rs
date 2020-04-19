@@ -43,6 +43,7 @@ use crate::sprites::{SpriteComposition, SpriteLayer};
 use serde::{Deserialize, Serialize};
 use specs::Entity;
 use std::collections::HashMap;
+use std::num::NonZeroI16;
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
@@ -204,11 +205,11 @@ pub struct SpriteBlueprint {
   pub layer: Option<SpriteLayer>,
 
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub scale: Option<XY16Blueprint>,
+  pub scale: Option<XYBlueprint<NonZeroI16>>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub sx: Option<i16>,
+  pub sx: Option<NonZeroI16>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub sy: Option<i16>,
+  pub sy: Option<NonZeroI16>,
 
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wrap: Option<XY16Blueprint>,

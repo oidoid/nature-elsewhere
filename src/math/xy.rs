@@ -8,7 +8,9 @@ use num::{
 };
 use serde::Serialize;
 use std::{
+  convert::TryFrom,
   fmt,
+  num::NonZeroI16,
   ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
 
@@ -214,6 +216,36 @@ impl<T: DivAssign + Clone> DivAssign<T> for XY<T> {
   fn div_assign(&mut self, rhs: T) {
     self.x /= rhs.clone();
     self.y /= rhs;
+  }
+}
+
+impl From<XY<NonZeroI16>> for XY<i16> {
+  fn from(XY { x, y }: XY<NonZeroI16>) -> Self {
+    Self { x: x.get(), y: y.get() }
+  }
+}
+
+impl TryFrom<XY<i16>> for XY<NonZeroI16> {
+  type Error = ();
+
+  fn try_from(XY { x, y }: XY<i16>) -> Result<Self, ()> {
+    Ok(Self {
+      x: NonZeroI16::new(x).ok_or(())?,
+      y: NonZeroI16::new(y).ok_or(())?,
+    })
+  }
+}
+
+impl XY<NonZeroI16> {
+  /// Cast each argument returns a new XY.
+  pub fn try_into_non_zero_i16<From>(x: From, y: From) -> Option<Self>
+  where
+    From: ToPrimitive + Clone,
+  {
+    Some(Self {
+      x: NonZeroI16::new(NumCast::from(x)?)?,
+      y: NonZeroI16::new(NumCast::from(y)?)?,
+    })
   }
 }
 

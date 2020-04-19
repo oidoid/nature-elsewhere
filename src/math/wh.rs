@@ -1,3 +1,4 @@
+use super::XY;
 use num::traits::cast::{NumCast, ToPrimitive};
 use serde::Serialize;
 use std::{
@@ -97,6 +98,14 @@ impl<T: Mul<Output = T> + Copy> Mul<T> for WH<T> {
   }
 }
 
+impl<T: Mul<Output = T>> Mul<XY<T>> for WH<T> {
+  type Output = Self;
+
+  fn mul(self, rhs: XY<T>) -> Self {
+    Self { w: self.w * rhs.x, h: self.h * rhs.y }
+  }
+}
+
 impl<T: Div<Output = T>> Div<WH<T>> for WH<T> {
   type Output = Self;
 
@@ -113,9 +122,23 @@ impl<T: Div<Output = T> + Copy> Div<T> for WH<T> {
   }
 }
 
+impl<T: Div<Output = T>> Div<XY<T>> for WH<T> {
+  type Output = Self;
+
+  fn div(self, rhs: XY<T>) -> Self {
+    Self { w: self.w / rhs.x, h: self.h / rhs.y }
+  }
+}
+
 impl<T: Default> Default for WH<T> {
   fn default() -> Self {
     WH { w: T::default(), h: T::default() }
+  }
+}
+
+impl<T> Into<XY<T>> for WH<T> {
+  fn into(self) -> XY<T> {
+    XY { x: self.w, y: self.h }
   }
 }
 

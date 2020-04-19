@@ -1,6 +1,8 @@
 use super::{SpriteComposition, SpriteLayer};
 use crate::atlas::{AnimationID, Animator, Atlas};
-use crate::math::{R16, XY16};
+use crate::math::{Millis, R16, WH16, XY, XY16};
+use std::convert::TryInto;
+use std::num::NonZeroI16;
 
 /// A mapping from an Atlas Animation to a level region. This includes all
 /// distinct needed to represent an instance to the shader.
@@ -28,7 +30,7 @@ pub struct Sprite {
   /// for certain collision tests.
   pub destination: R16,
   /// The destination multiple.
-  pub scale: XY16,
+  pub scale: XY<NonZeroI16>,
   /// The initial marquee translation offset in .1 pixels. The total offset is
   /// calculated using the global game clock and therefor synchronized by
   /// default except where this property deviates.
@@ -48,7 +50,7 @@ impl Sprite {
     constituent: AnimationID,
     composition: SpriteComposition,
     destination: R16,
-    scale: XY16,
+    scale: XY<NonZeroI16>,
     wrap: XY16,
     wrap_velocity: XY16,
     layer: SpriteLayer,
@@ -66,12 +68,52 @@ impl Sprite {
     }
   }
 
+  pub fn reset_animation(&mut self) {
+    self.animator.reset();
+  }
+
+  pub fn animate(&mut self, atlas: &Atlas, exposure: Millis) {
+    self.animator.animate(&atlas.animations[&self.source], exposure);
+  }
+
   pub fn move_by(&mut self, by: &XY16) {
     self.destination = self.destination.clone() + by.clone();
   }
 
   pub fn move_to(&mut self, to: &XY16) {
     self.destination = self.destination.move_to(to);
+  }
+
+  pub fn scale_by(&mut self, by: &XY<NonZeroI16>) {
+    let by: XY16 = by.clone().into();
+    self.destination.to = self.destination.from.clone()
+      + (self.destination.to.clone() - self.destination.from.clone())
+        * by.abs();
+    let scale: XY16 = self.scale.clone().into();
+    self.scale = (scale * by).try_into().expect("Scalar is zero.");
+  }
+
+  pub fn scale_to(&mut self, to: &XY<NonZeroI16>) {
+    let scale: XY16 = self.scale.clone().into();
+    self.scale = to.clone();
+    let to: XY16 = to.clone().into();
+    self.destination.to = self.destination.from.clone()
+      + (self.destination.to.clone() - self.destination.from.clone())
+        * (to / scale).abs();
+  }
+
+  pub fn size_to(&mut self, unscaled_to: &WH16) {
+    let scale: XY16 = self.scale.clone().into();
+    self.destination.to = self.destination.from.clone()
+      + (unscaled_to.clone() * scale.abs()).into();
+  }
+
+  pub fn wrap_to(&mut self, to: &XY16) {
+    self.wrap = to.clone();
+  }
+
+  pub fn wrap_velocity_to(&mut self, to: &XY16) {
+    self.wrap_velocity = to.clone();
   }
 
   pub fn serialize(

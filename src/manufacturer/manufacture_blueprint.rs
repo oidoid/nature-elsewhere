@@ -1,12 +1,13 @@
 use super::{
   AlignToBlueprint, MarkerBlueprint, SpriteBlueprint, WHBlueprint, XYBlueprint,
 };
-use crate::atlas::{AnimationID, Animator, Atlas};
+use crate::atlas::{Animator, Atlas};
 use crate::components::AlignTo;
 use crate::math::{R16, WH, XY};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
 use std::collections::HashMap;
 use std::hash::Hash;
+use std::num::NonZeroI16;
 
 /// Unfortunately, due to the deep patching of components, type mapping with
 /// `deserialize_with` is not possible. Thus, component blueprints are patches
@@ -68,12 +69,18 @@ impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
     let id = self.id;
     let constituent_id = self.constituent_id.unwrap_or(id);
     let composition = self.composition.unwrap_or(SpriteComposition::Source);
-    let scale = self
-      .scale
-      .clone()
-      .map_or(XY::new(self.sx.unwrap_or(1), self.sy.unwrap_or(1)), |scale| {
-        XY::new(scale.x.unwrap_or(1), scale.y.unwrap_or(1))
-      });
+    let scale = self.scale.clone().map_or(
+      XY::new(
+        self.sx.unwrap_or(NonZeroI16::new(1).unwrap()),
+        self.sy.unwrap_or(NonZeroI16::new(1).unwrap()),
+      ),
+      |scale| {
+        XY::new(
+          scale.x.unwrap_or(NonZeroI16::new(1).unwrap()),
+          scale.y.unwrap_or(NonZeroI16::new(1).unwrap()),
+        )
+      },
+    );
     // valid ate scale is nonzero or enforce it with templatized XY<nonzero thingy>
     let position =
       self.position.clone().map_or(
