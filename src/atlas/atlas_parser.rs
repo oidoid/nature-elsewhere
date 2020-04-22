@@ -342,7 +342,7 @@ pub fn parse_animation(
   let direction = Playback::parse(&frame_tag.direction)?;
   let frames = parse_tag_frames(frame_tag, frame_map);
   if frames.is_empty() {
-    return Err(format!("No cels in {} animation.", frame_tag.name).into());
+    return Err(format!("No cels in \"{}\" animation.", frame_tag.name).into());
   }
   let size = &frames[0].source_size;
 
@@ -351,12 +351,10 @@ pub fn parse_animation(
     if &frame.source_size != size {
       return Err(
         format!(
-          "Intermediate cel {} size mismatch of \"{}\" animation. Expected {}, got {}.",
-          i,
-          frame_tag.name,
-          size,
-          frame.source_size
-        ).into(),
+          "Cel {} size mismatch of \"{}\" animation. Expected {}, got {}.",
+          i, frame_tag.name, size, frame.source_size
+        )
+        .into(),
       );
     }
     cels.push(parse_cel(frame_tag, frame, i.try_into()?, slices)?);
@@ -370,18 +368,19 @@ pub fn parse_animation(
 
   if duration == 0. {
     return Err(
-      format!("Zero duration for \"{}\" animation.", frame_tag.name).into(),
+      format!("Zero total duration for \"{}\" animation.", frame_tag.name)
+        .into(),
     );
   }
 
-  if cels.len() > 2 {
-    if let Some(i) = cels[1..cels.len() - 1]
+  if cels.len() > 1 {
+    if let Some(i) = cels[0..cels.len() - 1]
       .iter()
       .position(|Cel { duration, .. }| duration.is_infinite())
     {
       return Err(
         format!(
-          "Infinite duration for intermediate cel {} of \"{}\" animation.",
+          "Infinite duration for non-final cel {} of \"{}\" animation.",
           i, frame_tag.name
         )
         .into(),
@@ -446,15 +445,20 @@ pub fn parse_bounds(frame: &aseprite::Frame) -> Result<R16, AtlasParseError> {
   ))
 }
 
+/// Returns evenly divisible padding.
 pub fn parse_padding(
   aseprite::Frame { frame, source_size, .. }: &aseprite::Frame,
 ) -> Result<WH16, AtlasParseError> {
   let w = (frame.w - source_size.w).try_into()?;
   let h = (frame.h - source_size.h).try_into()?;
-  if w & 1 == 1 || h & 1 == 1 {
+  if is_odd(w) || is_odd(h) {
     return Err("Cel padding is not evenly divisible.".into());
   }
   Ok(WH { w, h })
+}
+
+fn is_odd(val: i16) -> bool {
+  val & 1 == 1
 }
 
 pub fn parse_duration(

@@ -255,7 +255,7 @@ mod test {
 
   #[test]
   fn try_from() {
-    assert_eq!(XY::try_from(-1.2, -3.4).unwrap(), XY16 { x: -1, y: -3 })
+    assert_eq!(XY::try_from(-1.2, -3.4).unwrap(), XY16 { x: -1, y: -3 });
   }
 
   #[test]
@@ -263,36 +263,36 @@ mod test {
     assert_eq!(
       XY { x: -1.2, y: -3.4 }.try_into().unwrap(),
       XY16 { x: -1, y: -3 }
-    )
+    );
   }
 
   #[test]
   fn square() {
-    assert_eq!(XY::square(1), XY16 { x: 1, y: 1 })
+    assert_eq!(XY::square(1), XY16 { x: 1, y: 1 });
   }
 
   #[test]
   fn add() {
-    assert_eq!(XY { x: 1, y: 2 } + XY { x: 3, y: 4 }, XY { x: 4, y: 6 })
+    assert_eq!(XY { x: 1, y: 2 } + XY { x: 3, y: 4 }, XY { x: 4, y: 6 });
   }
 
   #[test]
   fn add_assign() {
     let mut xy = XY { x: 1, y: 2 };
     xy += XY { x: 3, y: 4 };
-    assert_eq!(xy, XY { x: 4, y: 6 })
+    assert_eq!(xy, XY { x: 4, y: 6 });
   }
 
   #[test]
   fn sub() {
-    assert_eq!(XY { x: 1, y: 2 } - XY { x: 3, y: 4 }, XY { x: -2, y: -2 })
+    assert_eq!(XY { x: 1, y: 2 } - XY { x: 3, y: 4 }, XY { x: -2, y: -2 });
   }
 
   #[test]
   fn sub_assign() {
     let mut xy = XY { x: 1, y: 2 };
     xy -= XY { x: 3, y: 4 };
-    assert_eq!(xy, XY { x: -2, y: -2 })
+    assert_eq!(xy, XY { x: -2, y: -2 });
   }
 
   #[test]
@@ -302,50 +302,50 @@ mod test {
 
   #[test]
   fn mul_scalar() {
-    assert_eq!(XY { x: 1, y: 2 } * 3, XY { x: 3, y: 6 })
+    assert_eq!(XY { x: 1, y: 2 } * 3, XY { x: 3, y: 6 });
   }
 
   #[test]
   fn mul_assign_xy() {
     let mut xy = XY { x: 1, y: 2 };
     xy *= XY { x: 3, y: 4 };
-    assert_eq!(xy, XY { x: 3, y: 8 })
+    assert_eq!(xy, XY { x: 3, y: 8 });
   }
 
   #[test]
   fn mul_assign_scalar() {
     let mut xy = XY { x: 1, y: 2 };
     xy *= 3;
-    assert_eq!(xy, XY { x: 3, y: 6 })
+    assert_eq!(xy, XY { x: 3, y: 6 });
   }
 
   #[test]
   fn div_xy() {
-    assert_eq!(XY { x: 3, y: 4 } / XY { x: 1, y: 2 }, XY { x: 3, y: 2 })
+    assert_eq!(XY { x: 3, y: 4 } / XY { x: 1, y: 2 }, XY { x: 3, y: 2 });
   }
 
   #[test]
   fn div_scalar() {
-    assert_eq!(XY { x: 3, y: 4 } / 2, XY { x: 1, y: 2 })
+    assert_eq!(XY { x: 3, y: 4 } / 2, XY { x: 1, y: 2 });
   }
 
   #[test]
   fn div_assign_xy() {
     let mut xy = XY { x: 3, y: 4 };
     xy /= XY { x: 1, y: 2 };
-    assert_eq!(xy, XY { x: 3, y: 2 })
+    assert_eq!(xy, XY { x: 3, y: 2 });
   }
 
   #[test]
   fn div_assign_scalar() {
     let mut xy = XY { x: 3, y: 4 };
     xy /= 2;
-    assert_eq!(xy, XY { x: 1, y: 2 })
+    assert_eq!(xy, XY { x: 1, y: 2 });
   }
 
   #[test]
   fn area() {
-    assert_eq!(XY { x: 10, y: 200 }.area(), 2000)
+    assert_eq!(XY { x: 10, y: 200 }.area(), 2000);
   }
 
   #[test]
@@ -365,8 +365,8 @@ mod test {
         "Case {} failed: {:?}.",
         i,
         (lhs, rhs, expected)
-      )
-    })
+      );
+    });
   }
 
   #[test]
@@ -386,8 +386,8 @@ mod test {
         "Case {} failed: {:?}.",
         i,
         (lhs, rhs, expected)
-      )
-    })
+      );
+    });
   }
 
   #[test]
@@ -421,38 +421,38 @@ mod test {
         "Case {} failed: {:?}.",
         i,
         (val, min, max, expected)
-      )
-    })
+      );
+    });
   }
 
   #[test]
   pub fn abs_neg() {
-    assert_eq!(XY { x: -1, y: -2 }.abs(), XY { x: 1, y: 2 })
+    assert_eq!(XY { x: -1, y: -2 }.abs(), XY { x: 1, y: 2 });
   }
 
   #[test]
   pub fn abs_mix() {
-    assert_eq!(XY { x: -1, y: 2 }.abs(), XY { x: 1, y: 2 })
+    assert_eq!(XY { x: -1, y: 2 }.abs(), XY { x: 1, y: 2 });
   }
 
   #[test]
   pub fn abs_pos() {
-    assert_eq!(XY { x: 1, y: 2 }.abs(), XY { x: 1, y: 2 })
+    assert_eq!(XY { x: 1, y: 2 }.abs(), XY { x: 1, y: 2 });
   }
 
   #[test]
   pub fn magnitude_int() {
-    assert_eq!(XY16 { x: 3, y: 4 }.magnitude(), 5)
+    assert_eq!(XY16 { x: 3, y: 4 }.magnitude(), 5);
   }
 
   #[test]
   pub fn magnitude_int_trunc() {
-    assert_eq!(XY16 { x: 2, y: 2 }.magnitude(), 2)
+    assert_eq!(XY16 { x: 2, y: 2 }.magnitude(), 2);
   }
 
   #[test]
   pub fn magnitude_float() {
-    assert_eq!(XY { x: 3f32, y: 4. }.magnitude(), 5.)
+    assert_eq!(XY { x: 3f32, y: 4. }.magnitude(), 5.);
   }
 
   #[test]
@@ -460,7 +460,7 @@ mod test {
     assert_eq!(
       XY16 { x: 1, y: 2 }.lerp(&XY { x: 3, y: 4 }, 0.5),
       XY { x: 2, y: 3 }
-    )
+    );
   }
 
   #[test]
@@ -468,6 +468,6 @@ mod test {
     assert_eq!(
       XY { x: 1f64, y: 2. }.lerp(&XY { x: 3., y: 4. }, 0.5),
       XY { x: 2., y: 3. }
-    )
+    );
   }
 }
