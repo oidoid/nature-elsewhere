@@ -114,7 +114,8 @@ impl RendererAssets {
   ) -> Result<Self, JsValue> {
     let shader_layout =
       wasm::fetch_json(window, "/graphics/shader_layout.json").await?;
-    let shader_layout = ShaderLayout::parse(shader_layout);
+    let shader_layout = ShaderLayout::parse(shader_layout)
+      .ok_or("ShaderLayout parsing failed.")?;
     let vertex_glsl = wasm::fetch_text(
       window,
       "/graphics/vertex_shader.glsl",

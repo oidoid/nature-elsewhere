@@ -1,4 +1,4 @@
-use crate::math::CeilMultiple;
+use crate::math::TryCeilMultiple;
 use serde::Deserialize;
 use std::collections::HashMap;
 use web_sys::WebGlRenderingContext as Gl;
@@ -55,19 +55,19 @@ pub enum GlDataType {
 }
 
 impl ShaderLayout {
-  pub fn parse(config: ShaderLayoutConfig) -> Self {
-    Self {
+  pub fn parse(config: ShaderLayoutConfig) -> Option<Self> {
+    Some(Self {
       uniforms: config.uniforms,
-      per_vertex: parse_attributes(0, &config.per_vertex),
-      per_instance: parse_attributes(1, &config.per_instance),
-    }
+      per_vertex: parse_attributes(0, &config.per_vertex)?,
+      per_instance: parse_attributes(1, &config.per_instance)?,
+    })
   }
 }
 
 fn parse_attributes(
   divisor: u32,
   configs: &Vec<AttributeConfig>,
-) -> AttributeBuffer {
+) -> Option<AttributeBuffer> {
   let attributes = configs.iter().fold(vec![], fold_attribute);
   let max_data_type_size = attributes
     .iter()
@@ -78,12 +78,12 @@ fn parse_attributes(
   } else {
     next_attribute_offset(attributes[attributes.len() - 1].clone())
   };
-  AttributeBuffer {
+  Some(AttributeBuffer {
     len: attributes.iter().fold(0, |sum, Attribute { len, .. }| sum + len),
-    stride: max_data_type_size.ceil_multiple(size),
+    stride: max_data_type_size.try_ceil_multiple(size)?,
     divisor,
     attributes,
-  }
+  })
 }
 
 fn fold_attribute(
@@ -131,7 +131,7 @@ mod test {
   fn parse() {
     let config =
       serde_json::from_str(include_str!("shader_layout.json")).unwrap();
-    let layout = ShaderLayout::parse(config);
+    let layout = ShaderLayout::parse(config).unwrap();
     assert_ne!(layout.uniforms.len(), 0);
     assert_ne!(layout.per_vertex.len, 0);
     assert_ne!(layout.per_instance.len, 0);
