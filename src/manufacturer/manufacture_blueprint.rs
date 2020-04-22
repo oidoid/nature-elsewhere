@@ -89,15 +89,15 @@ impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
       );
     let animation = &atlas.animations[&id];
     // do i need to validate area too?
-    let area = self.area.clone().map_or(
+    let size = self.size.clone().map_or(
       WH::new(
         self.w.unwrap_or(animation.wh.w),
         self.h.unwrap_or(animation.wh.h),
       ),
-      |area| WH::new(area.w.unwrap_or(0), area.h.unwrap_or(0)),
+      |size| WH::new(size.w.unwrap_or(0), size.h.unwrap_or(0)),
     ); //use atlas, review ts
     let bounds = self.bounds.clone().map_or(
-      R16::new_wh(position.x, position.y, area.w, area.h),
+      R16::new_wh(position.x, position.y, size.w, size.h),
       |bounds| {
         R16::new_wh(
           bounds.x.unwrap_or(0),

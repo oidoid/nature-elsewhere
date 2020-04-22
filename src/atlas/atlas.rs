@@ -1,6 +1,6 @@
 use super::AnimationID;
 use crate::math::Millis;
-use crate::math::{R16, WH16, XY16};
+use crate::math::{R16, WH16};
 use std::collections::HashMap;
 
 pub struct Atlas {
@@ -50,8 +50,9 @@ pub enum Playback {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Cel {
   /// Location within the source atlas image in integral pixels from the
-  /// top-left.
-  pub xy: XY16,
+  /// top-left. The width and height are provided for convenience, only XY vary
+  /// from Cel to Cel.
+  pub bounds: R16,
   /// Positive cel exposure, possibly infinite.
   pub duration: Millis,
   /// Slices within the cel in local pixels.

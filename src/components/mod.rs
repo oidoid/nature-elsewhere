@@ -39,12 +39,12 @@ pub struct Text {
 
 #[derive(Component)]
 pub struct MaxWH {
-  pub area: WH16,
+  pub size: WH16,
 }
 
 #[derive(Component)]
 pub struct Cam {
-  pub area: WH16,
+  pub size: WH16,
 }
 
 #[derive(Clone, Component)]

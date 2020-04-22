@@ -33,7 +33,9 @@ pub struct Game {
   manufacturer: Rc<Manufacturer>,
 }
 
-// screen.orientation.lock("landscape")
+// screen.orientation.lock("landscape") (within context of full screen only, and most probably only if setting is enabled)
+// https://w3c-test.org/screen-orientation/lock-basic.html
+// https://w3c.github.io/screen-orientation/#dom-screenorientation-lock
 impl Game {
   fn create_entities(&mut self) {
     let mut ecs = self.ecs.borrow_mut();

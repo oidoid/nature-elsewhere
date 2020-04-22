@@ -90,12 +90,13 @@ impl Playback {
 #[cfg(test)]
 mod test {
   use super::*;
-  use crate::math::{WH, XY};
+  use crate::math::{R16, WH};
   use std::f64;
 
   #[test]
   fn reset() {
-    let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+    let cel =
+      Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
       wh: WH { w: 0, h: 0 },
       cels: vec![cel.clone(), cel.clone()],
@@ -113,7 +114,8 @@ mod test {
 
   #[test]
   fn set() {
-    let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+    let cel =
+      Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
       wh: WH { w: 0, h: 0 },
       cels: vec![
@@ -137,7 +139,8 @@ mod test {
 
   #[test]
   fn animate_exposure_lt_duration() {
-    let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+    let cel =
+      Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
       wh: WH { w: 0, h: 0 },
       cels: vec![cel.clone(), cel.clone()],
@@ -152,7 +155,8 @@ mod test {
 
   #[test]
   fn animate_exposure_eq_duration() {
-    let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+    let cel =
+      Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
       wh: WH { w: 0, h: 0 },
       cels: vec![cel.clone(), cel.clone()],
@@ -167,7 +171,8 @@ mod test {
 
   #[test]
   fn animate_exposure_gt_duration() {
-    let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+    let cel =
+      Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
       wh: WH { w: 0, h: 0 },
       cels: vec![cel.clone(), cel.clone()],
@@ -182,8 +187,11 @@ mod test {
 
   #[test]
   fn animate_infinite_duration() {
-    let cel =
-      Cel { xy: XY { x: 0, y: 0 }, duration: f64::INFINITY, slices: vec![] };
+    let cel = Cel {
+      bounds: R16::new(0, 0, 0, 0),
+      duration: f64::INFINITY,
+      slices: vec![],
+    };
     let animation = Animation {
       wh: WH { w: 0, h: 0 },
       cels: vec![cel.clone(), cel.clone()],
@@ -202,7 +210,8 @@ mod test {
       .iter()
       .enumerate()
       .for_each(|(i, &direction)| {
-        let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+        let cel =
+          Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
         let animation = Animation {
           wh: WH { w: 0, h: 0 },
           cels: vec![cel.clone(), cel.clone()],
@@ -227,7 +236,8 @@ mod test {
       .iter()
       .enumerate()
       .for_each(|(i, &direction)| {
-        let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+        let cel =
+          Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
         let animation = Animation {
           wh: WH { w: 0, h: 0 },
           cels: vec![cel.clone(), cel.clone()],
@@ -289,7 +299,8 @@ mod test {
     .iter()
     .enumerate()
     .for_each(|(i, &(direction, period, expected))| {
-      let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+      let cel =
+        Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
         wh: WH { w: 0, h: 0 },
         cels: vec![cel.clone(), cel.clone(), cel.clone(), cel.clone()],
@@ -323,7 +334,8 @@ mod test {
     .iter()
     .enumerate()
     .for_each(|(i, &(direction, expected))| {
-      let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+      let cel =
+        Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
         wh: WH { w: 0, h: 0 },
         cels: vec![
@@ -362,7 +374,8 @@ mod test {
     .iter()
     .enumerate()
     .for_each(|(i, &(direction, expected))| {
-      let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+      let cel =
+        Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
         wh: WH { w: 0, h: 0 },
         cels: vec![
@@ -419,7 +432,8 @@ mod test {
     .iter()
     .enumerate()
     .for_each(|(i, &(direction, expected))| {
-      let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+      let cel =
+        Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
         wh: WH { w: 0, h: 0 },
         cels: vec![
@@ -476,7 +490,8 @@ mod test {
     .iter()
     .enumerate()
     .for_each(|(i, &(direction, expected))| {
-      let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+      let cel =
+        Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
         wh: WH { w: 0, h: 0 },
         cels: vec![
@@ -533,7 +548,8 @@ mod test {
     .iter()
     .enumerate()
     .for_each(|(i, &(direction, expected))| {
-      let cel = Cel { xy: XY { x: 0, y: 0 }, duration: 1., slices: vec![] };
+      let cel =
+        Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
         wh: WH { w: 0, h: 0 },
         cels: vec![

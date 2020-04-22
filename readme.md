@@ -1,10 +1,30 @@
+Roadmap
+
+    ✓ Get the barebone working, we should be able to type in the code and execute, see the output
+    ✓ Share the code via a sharable URL
+    ? Auto-Complete, Linting, LSP integration
+    ? Save to Gist or Dropbox
+    ? Personal snippet gallery
+
+✓?⭐
+
+config
+utils
+len
+
+revisit other abbreviations. maybe rust-like but hard to follow
+
+test on screen, test scale, test layer
+
+i was transcribing Sprite and cleaning things up. reworking this readme. reevaluating blueprint and manufacturer shortcomings and other stuff. lots of clean up, mostly around the sprites and sprite_layout and that sort of thing
+
 # nature elsewhere
 
 An isometric adventure in an idealized state of nature. Play at
 [natureelsewhere.com](https://natureelsewhere.com).
 
 <details markdown>
-  <summary>History and concepts…</summary>
+<summary>History and concepts…</summary>
 
 I often daydream of lifeforms that might exist in other places. For instance,
 maybe an odd organism would be found in a pond on Venus and it would be
@@ -26,7 +46,6 @@ Subtitles being considered:
 
 - [Table of Contents](#table-of-contents)
 - [Development](#development)
-  - [Globally install wasm-pack.](#globally-install-wasm-pack)
   - [Install and Execute](#install-and-execute)
   - [Versioning](#versioning)
   - [Tracking Work](#tracking-work)
@@ -79,6 +98,8 @@ Subtitles being considered:
   - [CC-BY-SA-4.0](#cc-by-sa-40)
 
 <!-- /code_chunk_output -->
+
+</details>
 
 ## Development
 
@@ -203,28 +224,6 @@ val = val - Math.trunc(val / 0x4000) \* 0x4000
 ```
 
 [the following]: https://wikipedia.org/wiki/Modulo_operation#Remainder_calculation_for_the_modulo_operation
-
-config
-utils
-len
-
-revisit other abbreviations. maybe rust-like but hard to follow
-
-# Useful derivations for enums
-
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
-
-I tend not to use the expect since it's so verbose.
-
-Roadmap
-
-    ✓ Get the barebone working, we should be able to type in the code and execute, see the output
-    ✓ Share the code via a sharable URL
-    ? Auto-Complete, Linting, LSP integration
-    ? Save to Gist or Dropbox
-    ? Personal snippet gallery
-
-✓?⭐
 
 ### Scaling
 

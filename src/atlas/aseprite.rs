@@ -10,6 +10,7 @@
 
 use serde::Deserialize;
 use std::collections::HashMap;
+use std::fmt;
 
 /// The topmost data type for JSON exported from Aseprite. This format contains
 /// all the image and animation information for every file packed in the atlas.
@@ -124,10 +125,16 @@ pub struct Rect {
   pub h: u16,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, PartialEq)]
 pub struct WH {
   /// Width in pixels.
   pub w: u16,
   /// Height in pixels.
   pub h: u16,
+}
+
+impl fmt::Display for WH {
+  fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(formatter, "({}, {})", self.w, self.h)
+  }
 }

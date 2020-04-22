@@ -3,7 +3,6 @@ use super::{Animation, AnimationID, AnimationMap, Atlas, Cel, Playback};
 use crate::math::Millis;
 use crate::math::R16;
 use crate::math::{WH, WH16};
-use crate::math::{XY, XY16};
 use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
 use strum::IntoEnumIterator;
@@ -345,9 +344,21 @@ pub fn parse_animation(
   if frames.is_empty() {
     return Err(format!("No cels in {} animation.", frame_tag.name).into());
   }
+  let size = &frames[0].source_size;
 
   let mut cels = Vec::new();
   for (i, frame) in frames.iter().enumerate() {
+    if &frame.source_size != size {
+      return Err(
+        format!(
+          "Intermediate cel {} size mismatch of \"{}\" animation. Expected {}, got {}.",
+          i,
+          frame_tag.name,
+          size,
+          frame.source_size
+        ).into(),
+      );
+    }
     cels.push(parse_cel(frame_tag, frame, i.try_into()?, slices)?);
   }
 
@@ -359,7 +370,7 @@ pub fn parse_animation(
 
   if duration == 0. {
     return Err(
-      format!("Zero duration for {} animation.", frame_tag.name).into(),
+      format!("Zero duration for \"{}\" animation.", frame_tag.name).into(),
     );
   }
 
@@ -370,7 +381,7 @@ pub fn parse_animation(
     {
       return Err(
         format!(
-          "Infinite duration for intermediate cel {} of {} animation.",
+          "Infinite duration for intermediate cel {} of \"{}\" animation.",
           i, frame_tag.name
         )
         .into(),
@@ -378,9 +389,8 @@ pub fn parse_animation(
     }
   }
 
-  let aseprite::WH { w, h } = frames[0].source_size;
   Ok(Animation {
-    wh: WH { w: w.try_into()?, h: h.try_into()? },
+    wh: WH { w: size.w.try_into()?, h: size.h.try_into()? },
     cels,
     duration,
     direction,
@@ -420,15 +430,20 @@ pub fn parse_cel(
   slices: &[aseprite::Slice],
 ) -> Result<Cel, AtlasParseError> {
   Ok(Cel {
-    xy: parse_xy(frame)?,
+    bounds: parse_bounds(frame)?,
     duration: parse_duration(frame.duration)?,
     slices: parse_slices(frame_tag, frame_number, slices)?,
   })
 }
 
-pub fn parse_xy(frame: &aseprite::Frame) -> Result<XY16, AtlasParseError> {
-  let WH { w, h } = parse_padding(frame)?;
-  Ok(XY { x: (frame.frame.x + w / 2), y: (frame.frame.y + h / 2) })
+pub fn parse_bounds(frame: &aseprite::Frame) -> Result<R16, AtlasParseError> {
+  let pad = parse_padding(frame)?;
+  Ok(R16::new_wh(
+    frame.frame.x + pad.w / 2,
+    frame.frame.y + pad.h / 2,
+    frame.source_size.w.try_into()?,
+    frame.source_size.h.try_into()?,
+  ))
 }
 
 pub fn parse_padding(
@@ -498,6 +513,7 @@ impl From<TryFromIntError> for AtlasParseError {
 #[cfg(test)]
 mod test {
   use super::*;
+  use crate::math::XY;
   use std::collections::HashMap;
 
   #[test]
@@ -598,7 +614,7 @@ mod test {
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
-          xy: XY { x: 221, y: 19 },
+          bounds: R16::new_wh(221, 19, 16, 16),
           duration: 1.,
           slices: vec![R16 {
             from: XY { x: 8, y: 12 },
@@ -614,7 +630,7 @@ mod test {
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
-          xy: XY { x: 91, y: 55 },
+          bounds: R16::new_wh(91, 55, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 11 },
@@ -630,7 +646,7 @@ mod test {
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
-          xy: XY { x: 73, y: 55 },
+          bounds: R16::new_wh(73, 55, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 10 },
@@ -646,7 +662,7 @@ mod test {
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
-          xy: XY { x: 55, y: 55 },
+          bounds: R16::new_wh(55, 55, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 9 },
@@ -743,7 +759,7 @@ mod test {
       Animation {
         wh: WH { w: 16, h: 16 },
         cels: vec![Cel {
-          xy: XY { x: 185, y: 37 },
+          bounds: R16::new_wh(185, 37, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 4, y: 11 },
@@ -795,7 +811,7 @@ mod test {
     assert_eq!(
       super::parse_cel(&frame_tag, &frame, 0, &slices).unwrap(),
       Cel {
-        xy: XY { x: 131, y: 19 },
+        bounds: R16::new_wh(131, 19, 16, 16),
         duration: f64::INFINITY,
         slices: vec![R16 { from: XY { x: 4, y: 4 }, to: XY { x: 12, y: 16 } }]
       }
@@ -812,7 +828,7 @@ mod test {
       source_size: aseprite::WH { w: 3, h: 4 },
       duration: 1,
     };
-    assert_eq!(parse_xy(&frame).unwrap(), XY { x: 1, y: 2 });
+    assert_eq!(parse_bounds(&frame).unwrap(), R16::new_wh(1, 2, 3, 4));
   }
 
   #[test]
@@ -825,7 +841,7 @@ mod test {
       source_size: aseprite::WH { w: 3, h: 4 },
       duration: 1,
     };
-    assert_eq!(parse_xy(&frame).unwrap(), XY { x: 2, y: 3 });
+    assert_eq!(parse_bounds(&frame).unwrap(), R16::new_wh(2, 3, 3, 4));
   }
 
   #[test]

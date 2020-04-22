@@ -59,10 +59,11 @@ impl Manufacturer {
       entity = entity.with(FollowMouse {});
     }
     if let Some(component) = components.cam.manufacture() {
-      entity = entity.with(Cam { area: component });
+      entity = entity.with(Cam { size: component });
     }
     if let Some(component) = components.max_wh.manufacture() {
-      entity = entity.with(MaxWH { area: component });
+      // [todo] use NonZeroI16? Flesh out NonZeroI16 ops?
+      entity = entity.with(MaxWH { size: component });
     }
     if let Some(component) = components.position.manufacture() {
       entity = entity.with(Position { position: component });

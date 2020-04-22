@@ -159,9 +159,10 @@ pub struct R16Blueprint {
   pub h: Option<i16>,
 }
 
-/// This Blueprint is special. It's prevalent and so provides shorthands for
-/// most properties, even composed objects. Precedence is given to the highest
-/// level object(s) defined (i.e., the greatest composition). E.g., consider:
+/// This Blueprint is special. It's prevalent and so provides destructured
+/// property shorthands for most properties, even composed objects. Precedence
+/// is given to the highest level object(s) defined (i.e., the greatest
+/// composition). E.g., consider:
 ///
 /// {
 ///   ...,
@@ -176,16 +177,18 @@ pub struct R16Blueprint {
 /// The above deserializes to an `R16` with an `x` of 1 and default `y`, `w`,
 /// and `h` values. If `bounds` had been omitted the result would be an `x` of
 /// 2, `y` of 1, `w` of default value, and `h` of 6.
-///
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct SpriteBlueprint {
   pub id: AnimationID,
+  /// Defaults to source.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub constituent_id: Option<AnimationID>,
+  /// Defaults to SpriteComposition::Default.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub composition: Option<SpriteComposition>,
 
+  /// Defaults to a rectangle with Animation source width and height at 0, 0.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub bounds: Option<R16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -195,15 +198,17 @@ pub struct SpriteBlueprint {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub y: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub area: Option<WH16Blueprint>,
+  pub size: Option<WH16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub w: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub h: Option<i16>,
 
+  /** Defaults to SpriteLayer::Default. */
   #[serde(skip_serializing_if = "Option::is_none")]
   pub layer: Option<SpriteLayer>,
 
+  /** Defaults to (1, 1). */
   #[serde(skip_serializing_if = "Option::is_none")]
   pub scale: Option<XYBlueprint<NonZeroI16>>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,6 +216,7 @@ pub struct SpriteBlueprint {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub sy: Option<NonZeroI16>,
 
+  /** Defaults to (0, 0). */
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wrap: Option<XY16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -218,6 +224,7 @@ pub struct SpriteBlueprint {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wy: Option<i16>,
 
+  /** Defaults to (0, 0). */
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wrap_velocity: Option<XY16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -225,6 +232,7 @@ pub struct SpriteBlueprint {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub wvy: Option<i16>,
 
+  /** Defaults to (0, 0). */
   #[serde(skip_serializing_if = "Option::is_none")]
   pub animator: Option<AnimatorBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
