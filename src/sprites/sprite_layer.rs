@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+use std::fmt;
+use std::fmt::Formatter;
 
 /// The sprite draw order from bottom (lesser) to top (greater). Within a Layer,
 /// sprites are drawn in y-coordinate + height ascending order (lesser to
@@ -36,4 +38,16 @@ pub enum SpriteLayer {
   /// Special entity offset hack.
   UIPickerOffset,
   UICursor = !0,
+}
+
+impl fmt::LowerHex for SpriteLayer {
+  fn fmt(&self, formatter: &mut Formatter) -> Result<(), fmt::Error> {
+    write!(formatter, "{:#04x}", *self as u8)
+  }
+}
+
+impl fmt::Display for SpriteLayer {
+  fn fmt(&self, formatter: &mut Formatter) -> Result<(), fmt::Error> {
+    write!(formatter, "{:#04x}", self)
+  }
 }
