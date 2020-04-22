@@ -20,46 +20,50 @@ macro_rules! impl_Lerp_float {
 }
 impl_Lerp_float!(f32, f64);
 
-macro_rules! impl_Lerp_f32 {
+pub trait TryLerp<T>: Sized {
+  fn try_lerp(self, to: Self, ratio: T) -> Option<Self>;
+}
+
+macro_rules! impl_TryLerp_f32 {
   ($($t:ty),*) => ($(
-    impl Lerp<f32> for $t {
-      fn lerp(self, to: Self, ratio: f32) -> Self {
-        let interpolation = Self::from_f32(lerp(self.into(), to.into(), ratio)).expect(&format!("Lerp conversion from f32 to {} failed.", stringify!($t)));
+    impl TryLerp<f32> for $t {
+      fn try_lerp(self, to: Self, ratio: f32) -> Option<Self> {
+        let interpolation = Self::from_f32(lerp(self.into(), to.into(), ratio))?;
         if self == to || self != interpolation || ratio == 0. {
-          return interpolation;
+          return Some(interpolation);
         }
         // Guarantee that integer T accumulations always progress.
         let delta: f32 = (to - interpolation).into();
-        interpolation + Self::from_f32(delta.signum()).expect(&format!("Lerp delta conversion from f32 to {} failed.", stringify!($t)))
+        Some(interpolation + Self::from_f32(delta.signum())?)
       }
     }
   )*)
 }
-impl_Lerp_f32!(u8, i8, u16, i16);
+impl_TryLerp_f32!(u8, i8, u16, i16);
 
-macro_rules! impl_Lerp_f64 {
+macro_rules! impl_TryLerp_f64 {
   ($($t:ty),*) => ($(
-    impl Lerp<f64> for $t {
-      fn lerp(self, to: Self, ratio: f64) -> Self {
-        let interpolation = Self::from_f64(lerp(self.into(), to.into(), ratio)).expect(&format!("Lerp conversion from f64 to {} failed.", stringify!($t)));
+    impl TryLerp<f64> for $t {
+      fn try_lerp(self, to: Self, ratio: f64) -> Option<Self> {
+        let interpolation = Self::from_f64(lerp(self.into(), to.into(), ratio))?;
         if self == to || self != interpolation || ratio == 0. {
-          return interpolation;
+          return Some(interpolation);
         }
         // Guarantee that integer T accumulations always progress.
         let delta: f64 = (to - interpolation).into();
-        interpolation + Self::from_f64(delta.signum()).expect(&format!("Lerp delta conversion from f64 to {} failed.", stringify!($t)))
+        Some(interpolation + Self::from_f64(delta.signum())?)
       }
     }
   )*)
 }
-impl_Lerp_f64!(u32, i32);
+impl_TryLerp_f64!(u32, i32);
 
 #[cfg(test)]
 mod test {
   use super::*;
 
   #[test]
-  fn lerp_float() {
+  fn lerp() {
     [
       // Negative to.
       (-5., -10., 0.1, -5.5),
@@ -126,7 +130,7 @@ mod test {
     .enumerate()
     .for_each(|(i, &(val, to, ratio, expected))| {
       assert_approx!(
-        lerp(val, to, ratio),
+        super::lerp(val, to, ratio),
         expected,
         "Function case {} failed: {:?}.",
         i,
@@ -143,7 +147,7 @@ mod test {
   }
 
   #[test]
-  fn lerp_int() {
+  fn try_lerp() {
     [
       // Negative to.
       (-5, -10, 0.1, -6),
@@ -210,7 +214,7 @@ mod test {
     .enumerate()
     .for_each(|(i, &(val, to, ratio, expected))| {
       assert_eq!(
-        val.lerp(to, ratio),
+        val.try_lerp(to, ratio).unwrap(),
         expected,
         "Case {} failed: {:?}.",
         i,

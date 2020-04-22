@@ -1,4 +1,5 @@
-use super::lerp::Lerp;
+use super::lerp::{lerp, Lerp, TryLerp};
+use num::traits::real::Real;
 use num::{
   integer::Roots,
   traits::{
@@ -89,6 +90,13 @@ impl<T> XY<T> {
   {
     Self { x: self.x.abs(), y: self.y.abs() }
   }
+
+  pub fn lerp(&self, to: &Self, ratio: T) -> Self
+  where
+    T: Real,
+  {
+    Self { x: lerp(self.x, to.x, ratio), y: lerp(self.y, to.y, ratio) }
+  }
 }
 
 macro_rules! impl_magnitude {
@@ -105,17 +113,19 @@ impl_magnitude!(
   usize, isize, u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, u128, i128
 );
 
-macro_rules! impl_lerp {
+macro_rules! impl_try_lerp {
   ($ratio:ty: $($t:ty),*) => ($(
     impl XY<$t> {
-      pub fn lerp(&self, to: &Self, ratio: $ratio) -> Self {
-        Self { x: self.x.lerp(to.x, ratio), y: self.y.lerp(to.y, ratio) }
+      pub fn try_lerp(&self, to: &Self, ratio: $ratio) -> Option<Self> {
+        Some(Self {
+          x: self.x.try_lerp(to.x, ratio)?, y: self.y.try_lerp(to.y, ratio)?
+        })
       }
     }
   )*)
 }
-impl_lerp!(f32: u8, i8, u16, i16, f32);
-impl_lerp!(f64: u32, i32, f64);
+impl_try_lerp!(f32: u8, i8, u16, i16); //, f32
+impl_try_lerp!(f64: u32, i32); //, f64
 
 impl<T: fmt::Debug> fmt::Debug for XY<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -456,18 +466,18 @@ mod test {
   }
 
   #[test]
-  pub fn lerp_int() {
+  pub fn lerp() {
     assert_eq!(
-      XY16 { x: 1, y: 2 }.lerp(&XY { x: 3, y: 4 }, 0.5),
-      XY { x: 2, y: 3 }
+      XY { x: 1f64, y: 2. }.lerp(&XY { x: 3., y: 4. }, 0.5),
+      XY { x: 2., y: 3. }
     );
   }
 
   #[test]
-  pub fn lerp_float() {
+  pub fn try_lerp() {
     assert_eq!(
-      XY { x: 1f64, y: 2. }.lerp(&XY { x: 3., y: 4. }, 0.5),
-      XY { x: 2., y: 3. }
+      XY16 { x: 1, y: 2 }.try_lerp(&XY { x: 3, y: 4 }, 0.5).unwrap(),
+      XY { x: 2, y: 3 }
     );
   }
 }
