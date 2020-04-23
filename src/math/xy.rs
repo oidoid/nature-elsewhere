@@ -405,8 +405,6 @@ impl XY<NonZeroI16> {
 mod test {
   use super::*;
 
-  // [todo] other conversion tests.
-
   #[test]
   fn cast_from() {
     assert_eq!(XY::cast_from(-1.2, -3.4).unwrap(), XY16 { x: -1, y: -3 });
@@ -580,37 +578,37 @@ mod test {
   }
 
   #[test]
-  pub fn abs_neg() {
+  fn abs_neg() {
     assert_eq!(XY { x: -1, y: -2 }.abs(), XY { x: 1, y: 2 });
   }
 
   #[test]
-  pub fn abs_mix() {
+  fn abs_mix() {
     assert_eq!(XY { x: -1, y: 2 }.abs(), XY { x: 1, y: 2 });
   }
 
   #[test]
-  pub fn abs_pos() {
+  fn abs_pos() {
     assert_eq!(XY { x: 1, y: 2 }.abs(), XY { x: 1, y: 2 });
   }
 
   #[test]
-  pub fn magnitude_int() {
+  fn magnitude_int() {
     assert_eq!(XY16 { x: 3, y: 4 }.magnitude(), 5);
   }
 
   #[test]
-  pub fn magnitude_int_trunc() {
+  fn magnitude_int_trunc() {
     assert_eq!(XY16 { x: 2, y: 2 }.magnitude(), 2);
   }
 
   #[test]
-  pub fn magnitude_float() {
+  fn magnitude_float() {
     assert_eq!(XY { x: 3f32, y: 4. }.magnitude(), 5.);
   }
 
   #[test]
-  pub fn lerp() {
+  fn lerp() {
     assert_eq!(
       XY { x: 1., y: 2. }.lerp(&XY { x: 3., y: 4. }, 0.5),
       XY { x: 2., y: 3. }
@@ -618,10 +616,49 @@ mod test {
   }
 
   #[test]
-  pub fn try_lerp() {
+  fn try_lerp() {
     assert_eq!(
       XY16 { x: 1, y: 2 }.try_lerp(&XY { x: 3, y: 4 }, 0.5).unwrap(),
       XY { x: 2, y: 3 }
+    );
+  }
+
+  #[test]
+  fn from_int_to_float() {
+    assert_eq!(XY::from(XY::new(1, 2)), XY::new(1., 2.));
+  }
+
+  #[test]
+  fn try_from_float() {
+    assert_eq!(XY::try_from(XY::new(1., 2.)).unwrap(), XY::new(1, 2));
+  }
+
+  #[test]
+  fn from_non_zero_to_int() {
+    assert_eq!(XY::from(XY::cast_into_non_zero(1, 2).unwrap()), XY::new(1, 2));
+  }
+
+  #[test]
+  fn try_from_int_to_non_zero() {
+    assert_eq!(
+      XY::try_from(XY::new(1, 2)).unwrap(),
+      XY::cast_into_non_zero(1, 2).unwrap()
+    );
+  }
+
+  #[test]
+  fn from_non_zero_to_float() {
+    assert_eq!(
+      XY::from(XY::cast_into_non_zero(1, 2).unwrap()),
+      XY::new(1., 2.),
+    );
+  }
+
+  #[test]
+  fn try_from_float_to_non_zero() {
+    assert_eq!(
+      XY::try_from(XY::new(1., 2.)).unwrap(),
+      XY::cast_into_non_zero(1, 2).unwrap()
     );
   }
 }

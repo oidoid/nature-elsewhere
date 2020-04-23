@@ -15,14 +15,14 @@ pub struct WH<T> {
 }
 pub type WH16 = WH<i16>;
 
-// [todo] sync with XY.
+// [todo] sync with XY. Area is a product. Size is dimensions. Bounds are side + position.
 impl<T> WH<T> {
   pub fn new(w: T, h: T) -> Self {
     Self { w, h }
   }
 
   /// Cast each component passed and returns a new WH.
-  pub fn try_from<From>(w: From, h: From) -> Option<Self>
+  pub fn cast_from<From>(w: From, h: From) -> Option<Self>
   where
     T: NumCast,
     From: ToPrimitive + Clone,
@@ -31,7 +31,7 @@ impl<T> WH<T> {
   }
 
   /// Cast each component of self and returns a new WH.
-  pub fn try_into<Into>(&self) -> Option<WH<Into>>
+  pub fn cast_into<Into>(&self) -> Option<WH<Into>>
   where
     T: ToPrimitive + Clone,
     Into: NumCast,
@@ -149,12 +149,12 @@ mod test {
 
   #[test]
   fn try_from() {
-    assert_eq!(WH::try_from(1.2, 3.4).unwrap(), WH16 { w: 1, h: 3 })
+    assert_eq!(WH::cast_from(1.2, 3.4).unwrap(), WH16 { w: 1, h: 3 })
   }
 
   #[test]
   fn into() {
-    assert_eq!(WH { w: 1.2, h: 3.4 }.try_into().unwrap(), WH16 { w: 1, h: 3 })
+    assert_eq!(WH { w: 1.2, h: 3.4 }.cast_into().unwrap(), WH16 { w: 1, h: 3 })
   }
 
   #[test]
