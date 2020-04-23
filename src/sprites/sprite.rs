@@ -1,6 +1,7 @@
 use super::{SpriteComposition, SpriteLayer};
 use crate::atlas::{AnimationID, Animator, Atlas};
 use crate::math::{Millis, R16, WH16, XY, XY16};
+use std::convert::TryFrom;
 use std::{convert::TryInto, num::NonZeroI16};
 
 /// A mapping from an Atlas Animation to a level region. This includes all
@@ -118,12 +119,13 @@ impl Sprite {
   }
 
   pub fn scale_to(&mut self, to: &XY<NonZeroI16>) {
-    let scale: XY16 = self.scale.clone().into();
+    let scale: XY<f32> = self.scale.clone().into();
     self.scale = to.clone();
-    let to: XY16 = to.clone().into();
+    let wh: XY<f32> =
+      (self.bounds.to.clone() - self.bounds.from.clone()).into();
+    let scaled_wh = wh * (XY::<f32>::from(to.clone()) / scale).abs();
     self.bounds.to = self.bounds.from.clone()
-      + (self.bounds.to.clone() - self.bounds.from.clone())
-        * (to / scale).abs();
+      + scaled_wh.try_into().expect("WH f32 to i16 conversion failed.");
   }
 
   pub fn get_wrap(&self) -> &XY16 {
@@ -197,6 +199,31 @@ mod test {
   use std::collections::hash_map::HashMap;
 
   #[test]
+  fn scale() {
+    let mut sprite = Sprite::new(
+      Animator::new(0, 0.),
+      AnimationID::Bee,
+      AnimationID::Bee,
+      SpriteComposition::Source,
+      R16::new_wh(1, 2, 3, 4),
+      XY::cast_into_non_zero(1, 1).unwrap(),
+      XY::new(0, 0),
+      XY::new(0, 0),
+      SpriteLayer::Default,
+    );
+
+    assert_eq!(sprite.get_scale(), &XY::cast_into_non_zero(1, 1).unwrap());
+
+    sprite.scale_by(&XY::cast_into_non_zero(2, 2).unwrap());
+    assert_eq!(sprite.get_scale(), &XY::cast_into_non_zero(2, 2).unwrap());
+    assert_eq!(sprite.get_bounds(), &R16::new_wh(1, 2, 6, 8));
+
+    sprite.scale_to(&XY::cast_into_non_zero(3, 3).unwrap());
+    assert_eq!(sprite.get_scale(), &XY::cast_into_non_zero(3, 3).unwrap());
+    assert_eq!(sprite.get_bounds(), &R16::new_wh(1, 2, 9, 12));
+  }
+
+  #[test]
   fn wrap() {
     let mut sprite = Sprite::new(
       Animator::new(0, 0.),
@@ -204,7 +231,7 @@ mod test {
       AnimationID::Bee,
       SpriteComposition::Source,
       R16::new(1, 2, 3, 4),
-      XY::try_into_non_zero_i16(1, 1).unwrap(),
+      XY::cast_into_non_zero(1, 1).unwrap(),
       XY::new(5, 6),
       XY::new(7, 8),
       SpriteLayer::Default,
@@ -227,7 +254,7 @@ mod test {
       AnimationID::Bee,
       SpriteComposition::Source,
       R16::new(1, 2, 3, 4),
-      XY::try_into_non_zero_i16(1, 1).unwrap(),
+      XY::cast_into_non_zero(1, 1).unwrap(),
       XY::new(0, 0),
       XY::new(0, 0),
       SpriteLayer::Default,
@@ -276,7 +303,7 @@ mod test {
       AnimationID::Bee,
       SpriteComposition::SourceMask,
       R16::new(9, 10, 55, 72),
-      XY::try_into_non_zero_i16(11, 13).unwrap(),
+      XY::cast_into_non_zero(11, 13).unwrap(),
       XY::new(15, 16),
       XY::new(17, 18),
       SpriteLayer::UICursor,

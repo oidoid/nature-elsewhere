@@ -4,8 +4,9 @@ use num::traits::{
   Zero,
 };
 use serde::Serialize;
-use std::any::Any;
 use std::{
+  any::Any,
+  convert::TryInto,
   fmt,
   ops::{Add, AddAssign, Div, Mul, Sub},
 };
@@ -24,6 +25,7 @@ pub struct Rect<T: Any + Send + Sync + Default> {
 }
 pub type R16 = Rect<i16>;
 
+// [todo] sync with XY.
 impl<T: Any + Default + Send + Sync> Rect<T> {
   pub fn new(fx: T, fy: T, tx: T, ty: T) -> Self {
     Self { from: XY::new(fx, fy), to: XY::new(tx, ty) }
@@ -37,31 +39,36 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
   }
 
   /// Cast each component passed and returns a new Rect.
-  pub fn try_from<From>(fx: From, fy: From, tx: From, ty: From) -> Option<Self>
+  pub fn cast_from<From>(fx: From, fy: From, tx: From, ty: From) -> Option<Self>
   where
     T: NumCast,
     From: ToPrimitive + Clone,
   {
-    Some(Self { from: XY::try_from(fx, fy)?, to: XY::try_from(tx, ty)? })
+    Some(Self { from: XY::cast_from(fx, fy)?, to: XY::cast_from(tx, ty)? })
   }
 
-  pub fn try_from_wh<From, To>(fx: From, fy: From, w: To, h: To) -> Option<Self>
+  pub fn cast_from_wh<From, To>(
+    fx: From,
+    fy: From,
+    w: To,
+    h: To,
+  ) -> Option<Self>
   where
     T: Add<Output = T> + NumCast + Clone,
     From: ToPrimitive + Clone,
     To: ToPrimitive + Clone,
   {
-    let from = XY::try_from(fx, fy)?;
-    Some(Self { to: from.clone() + XY::try_from(w, h)?, from })
+    let from = XY::cast_from(fx, fy)?;
+    Some(Self { to: from.clone() + XY::cast_from(w, h)?, from })
   }
 
   /// Cast each component of self and returns a new Rect.
-  pub fn try_into<Into>(self) -> Option<Rect<Into>>
+  pub fn cast_into<Into>(self) -> Option<Rect<Into>>
   where
     T: ToPrimitive + Clone,
     Into: Any + Default + Send + Sync + NumCast,
   {
-    Some(Rect { from: self.from.try_into()?, to: self.to.try_into()? })
+    Some(Rect { from: self.from.cast_into()?, to: self.to.cast_into()? })
   }
 
   pub fn move_to(&self, to: &XY<T>) -> Self
@@ -426,18 +433,18 @@ mod test {
   }
 
   #[test]
-  fn try_from() {
+  fn cast_from() {
     assert_eq!(
-      Rect::try_from(1.2, 3.4, 5.6, 7.8).unwrap(),
+      Rect::cast_from(1.2, 3.4, 5.6, 7.8).unwrap(),
       R16 { from: XY { x: 1, y: 3 }, to: XY { x: 5, y: 7 } }
     )
   }
 
   #[test]
-  fn try_into() {
+  fn cast_into() {
     assert_eq!(
       Rect::<f64> { from: XY { x: 1.2, y: 3.4 }, to: XY { x: 5.6, y: 7.8 } }
-        .try_into()
+        .cast_into()
         .unwrap(),
       R16 { from: XY { x: 1, y: 3 }, to: XY { x: 5, y: 7 } }
     )

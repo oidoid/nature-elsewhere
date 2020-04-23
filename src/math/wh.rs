@@ -15,6 +15,7 @@ pub struct WH<T> {
 }
 pub type WH16 = WH<i16>;
 
+// [todo] sync with XY.
 impl<T> WH<T> {
   pub fn new(w: T, h: T) -> Self {
     Self { w, h }

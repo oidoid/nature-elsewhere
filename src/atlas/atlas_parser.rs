@@ -486,7 +486,7 @@ pub fn parse_slices(
       slice.keys.iter().filter(|key| key.frame <= index).last().unwrap();
     let aseprite::Key { bounds, .. } = key;
     rects.push(
-      R16::try_from_wh(bounds.x, bounds.y, bounds.w, bounds.h)
+      R16::cast_from_wh(bounds.x, bounds.y, bounds.w, bounds.h)
         .ok_or("Slice bounds conversion to R16 failed.")?,
     );
   }
