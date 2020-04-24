@@ -7,7 +7,7 @@ use std::{
 };
 
 /// Width and height (size or area). Rects and XY are generally preferred unless
-/// just an area is needed.
+/// just a size is needed.
 #[derive(Clone, Eq, PartialEq, Serialize)]
 pub struct WH<T> {
   pub w: T,
@@ -15,7 +15,6 @@ pub struct WH<T> {
 }
 pub type WH16 = WH<i16>;
 
-// [todo] sync with XY. Area is a product. Size is dimensions. Bounds are side + position.
 impl<T> WH<T> {
   pub fn new(w: T, h: T) -> Self {
     Self { w, h }
@@ -148,12 +147,12 @@ mod test {
   use super::*;
 
   #[test]
-  fn try_from() {
+  fn cast_from() {
     assert_eq!(WH::cast_from(1.2, 3.4).unwrap(), WH16 { w: 1, h: 3 })
   }
 
   #[test]
-  fn into() {
+  fn cast_into() {
     assert_eq!(WH { w: 1.2, h: 3.4 }.cast_into().unwrap(), WH16 { w: 1, h: 3 })
   }
 

@@ -25,7 +25,7 @@ pub struct Rect<T: Any + Send + Sync + Default> {
 }
 pub type R16 = Rect<i16>;
 
-// [todo] sync with XY.
+// [todo] sync with XY. Area is a product. Size is dimensions. Bounds are side + position.
 impl<T: Any + Default + Send + Sync> Rect<T> {
   pub fn new(fx: T, fy: T, tx: T, ty: T) -> Self {
     Self { from: XY::new(fx, fy), to: XY::new(tx, ty) }
@@ -107,7 +107,7 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
     self.wh().area()
   }
 
-  pub fn empty(&self) -> bool
+  pub fn is_empty(&self) -> bool
   where
     T: Sub<Output = T> + Mul<Output = T> + Zero + Ord + Clone,
   {
@@ -187,7 +187,7 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
     T: Sub<Output = T> + Mul<Output = T> + Ord + Zero + Clone,
   {
     let intersection = self.intersection(rhs);
-    if intersection.flipped() || intersection.empty() {
+    if intersection.flipped() || intersection.is_empty() {
       return Err(intersection);
     }
     Ok(intersection)
@@ -202,7 +202,7 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
     }
     let union =
       rects.iter().fold(rects[0].clone(), |sum, rect| sum.union(rect));
-    if union.empty() {
+    if union.is_empty() {
       return None;
     }
     Some(union)
@@ -349,7 +349,7 @@ impl<
 {
   /// Return true if rhs fits within possibly touching but not overlapping.
   fn contains(&self, rhs: &Self) -> bool {
-    if self.empty() {
+    if self.is_empty() {
       return false;
     }
     let lhs = self.order();
@@ -541,7 +541,7 @@ mod test {
   #[test]
   fn empty_zero() {
     assert_eq!(
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 5, y: 1 } }.empty(),
+      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 5, y: 1 } }.is_empty(),
       true
     )
   }
@@ -549,7 +549,7 @@ mod test {
   #[test]
   fn empty_nonzero() {
     assert_eq!(
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 5, y: 5 } }.empty(),
+      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 5, y: 5 } }.is_empty(),
       false
     )
   }
