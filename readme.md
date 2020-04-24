@@ -105,9 +105,9 @@ Subtitles being considered:
 
 ### Install and Execute
 
-- Globally install wasm-pack: `cargo install wasm-pack`.
-- Install NPM dependencies: `npm -s i`.
-- Build and execute: `npm -s start`.
+```bash
+npm -s i && npm -s start
+```
 
 ### Versioning
 
