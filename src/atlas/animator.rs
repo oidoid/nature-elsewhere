@@ -91,7 +91,6 @@ impl Playback {
 mod test {
   use super::*;
   use crate::math::{R16, WH};
-  use std::f64;
 
   #[test]
   fn reset() {

@@ -1,5 +1,3 @@
-use std::f32;
-
 pub struct RGBA {
   pub r: f32,
   pub g: f32,
