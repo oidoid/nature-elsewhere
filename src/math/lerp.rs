@@ -16,7 +16,7 @@ macro_rules! impl_Lerp_float {
         lerp(self, to, ratio)
       }
     }
-  )*)
+  )+)
 }
 impl_Lerp_float!(f32, f64);
 
@@ -37,7 +37,7 @@ macro_rules! impl_TryLerp_f32 {
         Some(interpolation + Self::from_f32(delta.signum())?)
       }
     }
-  )*)
+  )+)
 }
 impl_TryLerp_f32!(u8, i8, u16, i16);
 
@@ -54,7 +54,7 @@ macro_rules! impl_TryLerp_f64 {
         Some(interpolation + Self::from_f64(delta.signum())?)
       }
     }
-  )*)
+  )+)
 }
 impl_TryLerp_f64!(u32, i32);
 

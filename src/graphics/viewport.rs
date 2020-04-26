@@ -1,4 +1,4 @@
-use crate::math::{R16, WH, WH16, XY, XY16};
+use crate::math::{R16, WH, WH16, XY, XY16, XY32};
 use num::traits::cast::ToPrimitive;
 use std::num::NonZeroI16;
 use web_sys::Document;
@@ -61,7 +61,7 @@ pub fn cam_wh(WH { w, h }: &WH16, scale: NonZeroI16) -> WH16 {
 ///     through in level pixels.
 /// Returns the fractional position in level coordinates.
 pub fn to_level_xy(
-  &XY { x, y }: &XY<i32>,
+  &XY { x, y }: &XY32,
   &WH { w, h }: &WH16,
   cam: &R16,
 ) -> XY16 {

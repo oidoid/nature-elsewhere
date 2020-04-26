@@ -1,5 +1,5 @@
 use crate::graphics;
-use crate::math::{Millis, R16, WH16, XY, XY16};
+use crate::math::{Millis, R16, WH16, XY, XY16, XY32};
 
 static LONG_DURATION: Millis = 500.;
 
@@ -13,7 +13,7 @@ pub struct Input {
   /// The position of the input in window coordinates. Pointer state polling is
   /// simulated through events so level position must be recalculated through
   /// the camera lens of each frame.
-  pub window_position: XY<i32>,
+  pub window_position: XY32,
 }
 
 impl Input {

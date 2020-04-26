@@ -226,7 +226,7 @@ macro_rules! impl_magnitude {
         (self.from.clone() - self.to.clone()).magnitude()
       }
     }
-  )*)
+  )+)
 }
 impl_magnitude!(u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, usize, isize);
 
@@ -246,7 +246,6 @@ impl<T: Add<Output = T> + Any + Default + Send + Sync> Add<Rect<T>>
   for Rect<T>
 {
   type Output = Self;
-
   fn add(self, rhs: Self) -> Self {
     Self { from: self.from + rhs.from, to: self.to + rhs.to }
   }
@@ -256,7 +255,6 @@ impl<T: Add<Output = T> + Clone + Default + Any + Send + Sync> Add<XY<T>>
   for Rect<T>
 {
   type Output = Self;
-
   fn add(self, rhs: XY<T>) -> Self {
     Self { from: self.from + rhs.clone(), to: self.to + rhs }
   }
@@ -275,7 +273,6 @@ impl<T: Sub<Output = T> + Any + Default + Send + Sync> Sub<Rect<T>>
   for Rect<T>
 {
   type Output = Self;
-
   fn sub(self, rhs: Self) -> Self {
     Self { from: self.from - rhs.from, to: self.to - rhs.to }
   }
@@ -285,7 +282,6 @@ impl<T: Sub<Output = T> + Clone + Any + Default + Send + Sync> Sub<XY<T>>
   for Rect<T>
 {
   type Output = Self;
-
   fn sub(self, rhs: XY<T>) -> Self {
     Self { from: self.from - rhs.clone(), to: self.to - rhs }
   }
@@ -295,7 +291,6 @@ impl<T: Mul<Output = T> + Any + Default + Send + Sync> Mul<Rect<T>>
   for Rect<T>
 {
   type Output = Self;
-
   fn mul(self, rhs: Self) -> Self {
     Self { from: self.from * rhs.from, to: self.to * rhs.to }
   }
@@ -305,7 +300,6 @@ impl<T: Mul<Output = T> + Clone + Any + Default + Send + Sync> Mul<XY<T>>
   for Rect<T>
 {
   type Output = Self;
-
   fn mul(self, rhs: XY<T>) -> Self {
     Self { from: self.from * rhs.clone(), to: self.to * rhs }
   }
@@ -315,7 +309,6 @@ impl<T: Div<Output = T> + Any + Default + Send + Sync> Div<Rect<T>>
   for Rect<T>
 {
   type Output = Self;
-
   fn div(self, rhs: Self) -> Self {
     Self { from: self.from / rhs.from, to: self.to / rhs.to }
   }

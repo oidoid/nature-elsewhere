@@ -55,6 +55,6 @@ macro_rules! impl_AddEventListener {
         EventListener::new(self.clone().into(), event, listener)
       }
     }
-  )*)
+  )+)
 }
 impl_AddEventListener!(Window, Element);

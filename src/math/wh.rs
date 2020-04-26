@@ -68,7 +68,6 @@ impl<T: fmt::Display> fmt::Display for WH<T> {
 
 impl<T: Add<Output = T>> Add<WH<T>> for WH<T> {
   type Output = Self;
-
   fn add(self, rhs: Self) -> Self {
     Self { w: self.w + rhs.w, h: self.h + rhs.h }
   }
@@ -76,7 +75,6 @@ impl<T: Add<Output = T>> Add<WH<T>> for WH<T> {
 
 impl<T: Sub<Output = T>> Sub<WH<T>> for WH<T> {
   type Output = Self;
-
   fn sub(self, rhs: Self) -> Self {
     Self { w: self.w - rhs.w, h: self.h - rhs.h }
   }
@@ -84,7 +82,6 @@ impl<T: Sub<Output = T>> Sub<WH<T>> for WH<T> {
 
 impl<T: Mul<Output = T>> Mul<WH<T>> for WH<T> {
   type Output = Self;
-
   fn mul(self, rhs: Self) -> Self {
     Self { w: self.w * rhs.w, h: self.h * rhs.h }
   }
@@ -92,7 +89,6 @@ impl<T: Mul<Output = T>> Mul<WH<T>> for WH<T> {
 
 impl<T: Mul<Output = T> + Copy> Mul<T> for WH<T> {
   type Output = Self;
-
   fn mul(self, rhs: T) -> Self {
     Self { w: self.w * rhs, h: self.h * rhs }
   }
@@ -108,7 +104,6 @@ impl<T: Mul<Output = T>> Mul<XY<T>> for WH<T> {
 
 impl<T: Div<Output = T>> Div<WH<T>> for WH<T> {
   type Output = Self;
-
   fn div(self, rhs: Self) -> Self {
     Self { w: self.w / rhs.w, h: self.h / rhs.h }
   }
@@ -116,7 +111,6 @@ impl<T: Div<Output = T>> Div<WH<T>> for WH<T> {
 
 impl<T: Div<Output = T> + Copy> Div<T> for WH<T> {
   type Output = Self;
-
   fn div(self, rhs: T) -> Self {
     Self { w: self.w / rhs, h: self.h / rhs }
   }
@@ -124,7 +118,6 @@ impl<T: Div<Output = T> + Copy> Div<T> for WH<T> {
 
 impl<T: Div<Output = T>> Div<XY<T>> for WH<T> {
   type Output = Self;
-
   fn div(self, rhs: XY<T>) -> Self {
     Self { w: self.w / rhs.x, h: self.h / rhs.y }
   }

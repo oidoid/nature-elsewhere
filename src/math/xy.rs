@@ -10,7 +10,7 @@ use num::{
 };
 use serde::Serialize;
 use std::{
-  convert::{From, TryFrom},
+  convert::{From, TryFrom, TryInto},
   fmt,
   num::{
     NonZeroI128, NonZeroI16, NonZeroI32, NonZeroI64, NonZeroI8, NonZeroIsize,
@@ -25,6 +25,7 @@ pub struct XY<T> {
   pub y: T,
 }
 pub type XY16 = XY<i16>;
+pub type XY32 = XY<i32>;
 
 impl<T> XY<T> {
   pub fn new(x: T, y: T) -> Self {
@@ -111,7 +112,7 @@ macro_rules! impl_magnitude {
         (self.x * self.x + self.y * self.y).sqrt()
       }
     }
-  )*)
+  )+)
 }
 impl_magnitude!(
   usize, isize, u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, u128, i128
@@ -126,7 +127,7 @@ macro_rules! impl_try_lerp {
         })
       }
     }
-  )*)
+  )+)
 }
 impl_try_lerp!(f32; u8, i8, u16, i16);
 impl_try_lerp!(f64; u32, i32);
@@ -145,7 +146,6 @@ impl<T: fmt::Display> fmt::Display for XY<T> {
 
 impl<T: Add<Output = T>> Add<XY<T>> for XY<T> {
   type Output = Self;
-
   fn add(self, rhs: Self) -> Self {
     Self { x: self.x + rhs.x, y: self.y + rhs.y }
   }
@@ -160,7 +160,6 @@ impl<T: AddAssign> AddAssign<XY<T>> for XY<T> {
 
 impl<T: Sub<Output = T>> Sub<XY<T>> for XY<T> {
   type Output = Self;
-
   fn sub(self, rhs: Self) -> Self {
     Self { x: self.x - rhs.x, y: self.y - rhs.y }
   }
@@ -175,7 +174,6 @@ impl<T: SubAssign> SubAssign<XY<T>> for XY<T> {
 
 impl<T: Mul<Output = T>> Mul<XY<T>> for XY<T> {
   type Output = Self;
-
   fn mul(self, rhs: Self) -> Self {
     Self { x: self.x * rhs.x, y: self.y * rhs.y }
   }
@@ -183,7 +181,6 @@ impl<T: Mul<Output = T>> Mul<XY<T>> for XY<T> {
 
 impl<T: Mul<Output = T> + Clone> Mul<T> for XY<T> {
   type Output = Self;
-
   fn mul(self, rhs: T) -> Self {
     Self { x: self.x * rhs.clone(), y: self.y * rhs }
   }
@@ -205,7 +202,6 @@ impl<T: MulAssign + Clone> MulAssign<T> for XY<T> {
 
 impl<T: Div<Output = T>> Div<XY<T>> for XY<T> {
   type Output = Self;
-
   fn div(self, rhs: Self) -> Self {
     Self { x: self.x / rhs.x, y: self.y / rhs.y }
   }
@@ -213,7 +209,6 @@ impl<T: Div<Output = T>> Div<XY<T>> for XY<T> {
 
 impl<T: Div<Output = T> + Clone> Div<T> for XY<T> {
   type Output = Self;
-
   fn div(self, rhs: T) -> Self {
     Self { x: self.x / rhs.clone(), y: self.y / rhs }
   }
@@ -245,7 +240,7 @@ macro_rules! impl_From_to_float {
         Self { x: From::from(x), y: From::from(y) }
       }
     }
-)*)
+)+)
 }
 impl_From_to_float!(f32; u8, i8, u16, i16);
 impl_From_to_float!(f64; u8, i8, u16, i16, u32, i32, f32);
@@ -254,17 +249,17 @@ macro_rules! impl_TryFrom_float {
   ($From:ty; $($To:ty),+) => ($(
     impl TryFrom<XY<$From>> for XY<$To> {
       type Error = ();
-      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, ()> {
+      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, Self::Error> {
         Ok(Self { x: NumCast::from(x).ok_or(())?, y: NumCast::from(y).ok_or(())? })
       }
     }
     impl TryFrom<($From, $From)> for XY<$To> {
       type Error = ();
-      fn try_from((x, y): ($From, $From)) -> Result<Self, ()> {
+      fn try_from((x, y): ($From, $From)) -> Result<Self, Self::Error> {
         Ok(Self { x: NumCast::from(x).ok_or(())?, y: NumCast::from(y).ok_or(())? })
       }
     }
-  )*)
+  )+)
 }
 impl_TryFrom_float!(
   f32; usize,
@@ -295,6 +290,58 @@ impl_TryFrom_float!(
   u128,
   i128
 );
+
+macro_rules! impl_From_widen {
+  ($From:ty; $($To:ty),+) => ($(
+    impl From<XY<$From>> for XY<$To> {
+      fn from(XY { x, y }: XY<$From>) -> Self {
+        Self { x: x.into(), y: y.into() }
+      }
+    }
+    impl From<($From, $From)> for XY<$To> {
+      fn from((x, y): ($From, $From)) -> Self {
+        Self { x: x.into(), y: y.into() }
+      }
+    }
+  )+)
+}
+impl_From_widen!(u8; u16, i16, u32, i32, u64, i64, u128, i128);
+impl_From_widen!(i8; i16, i32, i64, i128);
+impl_From_widen!(u16; u32, i32, u64, i64, u128, i128);
+impl_From_widen!(i16; i32, i64, i128);
+impl_From_widen!(u32; u64, i64, u128, i128);
+impl_From_widen!(i32; i64, i128);
+impl_From_widen!(u64; u128, i128);
+impl_From_widen!(i64; i128);
+
+macro_rules! impl_TryFrom_int {
+  ($From:ty; $($To:ty),+) => ($(
+    impl TryFrom<XY<$From>> for XY<$To> {
+      type Error = ();
+      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, Self::Error> {
+        Ok(Self { x: x.try_into().map_err(|_| ())?, y: y.try_into().map_err(|_| ())? })
+      }
+    }
+    impl TryFrom<($From, $From)> for XY<$To> {
+      type Error = ();
+      fn try_from((x, y): ($From, $From)) -> Result<Self, Self::Error> {
+        Ok(Self { x: x.try_into().map_err(|_| ())?, y: y.try_into().map_err(|_| ())? })
+      }
+    }
+  )+)
+}
+impl_TryFrom_int!(usize; isize, u8, i8, u16, i16, u32, i32, u64, i64, u128, i128);
+impl_TryFrom_int!(isize; usize, u8, i8, u16, i16, u32, i32, u64, i64, u128, i128);
+impl_TryFrom_int!(u8; usize, isize, i8);
+impl_TryFrom_int!(i8; usize, isize, u8, u16, u32, u64, u128);
+impl_TryFrom_int!(u16; usize, isize, u8, i8, i16);
+impl_TryFrom_int!(i16; usize, isize, u8, i8, u16, u32, u64, u128);
+impl_TryFrom_int!(u32; usize, isize, u8, i8, u16, i16, i32);
+impl_TryFrom_int!(i32; usize, isize, u8, i8, u16, i16, u32, u64, u128);
+impl_TryFrom_int!(u64; usize, isize, u8, i8, u16, i16, u32, i32, i64);
+impl_TryFrom_int!(i64; usize, isize, u8, i8, u16, i16, u32, i32, u64, u128);
+impl_TryFrom_int!(u128; usize, isize, u8, i8, u16, i16, u32, i32, u64, i64, i128);
+impl_TryFrom_int!(i128; usize, isize, u8, i8, u16, i16, u32, i32, u64, i64, u128);
 
 macro_rules! impl_From_non_zero_to_int {
   ($To:ty, $From:ty) => {
@@ -327,13 +374,13 @@ macro_rules! impl_TryFrom_int_to_non_zero {
   ($To:ty, $From:ty) => {
     impl TryFrom<XY<$From>> for XY<$To> {
       type Error = ();
-      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, ()> {
+      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, Self::Error> {
         Ok(Self { x: <$To>::new(x).ok_or(())?, y: <$To>::new(y).ok_or(())? })
       }
     }
     impl TryFrom<($From, $From)> for XY<$To> {
       type Error = ();
-      fn try_from((x, y): ($From, $From)) -> Result<Self, ()> {
+      fn try_from((x, y): ($From, $From)) -> Result<Self, Self::Error> {
         Ok(Self { x: <$To>::new(x).ok_or(())?, y: <$To>::new(y).ok_or(())? })
       }
     }
@@ -364,7 +411,7 @@ macro_rules! impl_From_non_zero_to_float {
         Self { x: From::from(x.get()), y: From::from(y.get()) }
       }
     }
-  )*)
+  )+)
 }
 impl_From_non_zero_to_float!(f32; NonZeroU8, NonZeroI8, NonZeroU16, NonZeroI16);
 impl_From_non_zero_to_float!(
@@ -380,7 +427,7 @@ macro_rules! impl_TryFrom_float_to_non_zero {
   ($From:ty; $($To:ty),+) => ($(
     impl TryFrom<XY<$From>> for XY<$To> {
       type Error = ();
-      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, ()> {
+      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, Self::Error> {
         Ok(Self {
           x: <$To>::new(NumCast::from(x).ok_or(())?).ok_or(())?,
           y: <$To>::new(NumCast::from(y).ok_or(())?).ok_or(())?
@@ -389,14 +436,14 @@ macro_rules! impl_TryFrom_float_to_non_zero {
     }
     impl TryFrom<($From, $From)> for XY<$To> {
       type Error = ();
-      fn try_from((x, y): ($From, $From)) -> Result<Self, ()> {
+      fn try_from((x, y): ($From, $From)) -> Result<Self, Self::Error> {
         Ok(Self {
           x: <$To>::new(NumCast::from(x).ok_or(())?).ok_or(())?,
           y: <$To>::new(NumCast::from(y).ok_or(())?).ok_or(())?
         })
       }
     }
-  )*)
+  )+)
 }
 impl_TryFrom_float_to_non_zero!(
   f32; NonZeroUsize,
@@ -427,6 +474,24 @@ impl_TryFrom_float_to_non_zero!(
   NonZeroI128
 );
 
+macro_rules! impl_From_tuple {
+  ($($T:ty),+) => ($(
+    impl From<($T, $T)> for XY<$T> {
+      fn from((x, y): ($T, $T)) -> Self {
+        Self { x, y }
+      }
+    }
+    impl From<XY<$T>> for ($T, $T) {
+      fn from(XY { x, y }: XY<$T>) -> Self {
+        (x, y)
+      }
+    }
+  )+)
+}
+impl_From_tuple!(
+  usize, isize, u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, u128, i128
+);
+
 #[cfg(test)]
 mod test {
   use super::*;
@@ -438,10 +503,7 @@ mod test {
 
   #[test]
   fn cast_into() {
-    assert_eq!(
-      XY { x: -1.2, y: -3.4 }.cast_into().unwrap(),
-      XY16 { x: -1, y: -3 }
-    );
+    assert_eq!(XY::new(-1.2, -3.4).cast_into().unwrap(), XY16 { x: -1, y: -3 });
   }
 
   #[test]
@@ -451,95 +513,95 @@ mod test {
 
   #[test]
   fn add() {
-    assert_eq!(XY { x: 1, y: 2 } + XY { x: 3, y: 4 }, XY { x: 4, y: 6 });
+    assert_eq!(XY::new(1, 2) + XY::new(3, 4), XY::new(4, 6));
   }
 
   #[test]
   fn add_assign() {
-    let mut xy = XY { x: 1, y: 2 };
-    xy += XY { x: 3, y: 4 };
-    assert_eq!(xy, XY { x: 4, y: 6 });
+    let mut xy = XY::new(1, 2);
+    xy += XY::new(3, 4);
+    assert_eq!(xy, XY::new(4, 6));
   }
 
   #[test]
   fn sub() {
-    assert_eq!(XY { x: 1, y: 2 } - XY { x: 3, y: 4 }, XY { x: -2, y: -2 });
+    assert_eq!(XY::new(1, 2) - XY::new(3, 4), XY::new(-2, -2));
   }
 
   #[test]
   fn sub_assign() {
-    let mut xy = XY { x: 1, y: 2 };
-    xy -= XY { x: 3, y: 4 };
-    assert_eq!(xy, XY { x: -2, y: -2 });
+    let mut xy = XY::new(1, 2);
+    xy -= XY::new(3, 4);
+    assert_eq!(xy, XY::new(-2, -2));
   }
 
   #[test]
   fn mul_xy() {
-    assert_eq!(XY { x: 1, y: 2 } * XY { x: 3, y: 4 }, XY { x: 3, y: 8 })
+    assert_eq!(XY::new(1, 2) * XY::new(3, 4), XY::new(3, 8))
   }
 
   #[test]
   fn mul_scalar() {
-    assert_eq!(XY { x: 1, y: 2 } * 3, XY { x: 3, y: 6 });
+    assert_eq!(XY::new(1, 2) * 3, XY::new(3, 6));
   }
 
   #[test]
   fn mul_assign_xy() {
-    let mut xy = XY { x: 1, y: 2 };
-    xy *= XY { x: 3, y: 4 };
-    assert_eq!(xy, XY { x: 3, y: 8 });
+    let mut xy = XY::new(1, 2);
+    xy *= XY::new(3, 4);
+    assert_eq!(xy, XY::new(3, 8));
   }
 
   #[test]
   fn mul_assign_scalar() {
-    let mut xy = XY { x: 1, y: 2 };
+    let mut xy = XY::new(1, 2);
     xy *= 3;
-    assert_eq!(xy, XY { x: 3, y: 6 });
+    assert_eq!(xy, XY::new(3, 6));
   }
 
   #[test]
   fn div_xy() {
-    assert_eq!(XY { x: 3, y: 4 } / XY { x: 1, y: 2 }, XY { x: 3, y: 2 });
+    assert_eq!(XY::new(3, 4) / XY::new(1, 2), XY::new(3, 2));
   }
 
   #[test]
   fn div_scalar() {
-    assert_eq!(XY { x: 3, y: 4 } / 2, XY { x: 1, y: 2 });
+    assert_eq!(XY::new(3, 4) / 2, XY::new(1, 2));
   }
 
   #[test]
   fn div_assign_xy() {
-    let mut xy = XY { x: 3, y: 4 };
-    xy /= XY { x: 1, y: 2 };
-    assert_eq!(xy, XY { x: 3, y: 2 });
+    let mut xy = XY::new(3, 4);
+    xy /= XY::new(1, 2);
+    assert_eq!(xy, XY::new(3, 2));
   }
 
   #[test]
   fn div_assign_scalar() {
-    let mut xy = XY { x: 3, y: 4 };
+    let mut xy = XY::new(3, 4);
     xy /= 2;
-    assert_eq!(xy, XY { x: 1, y: 2 });
+    assert_eq!(xy, XY::new(1, 2));
   }
 
   #[test]
   fn area() {
-    assert_eq!(XY { x: 10, y: 200 }.area(), 2000);
+    assert_eq!(XY::new(10, 200).area(), 2000);
   }
 
   #[test]
   fn min() {
     [
-      (XY { x: 1, y: 20 }, XY { x: 300, y: 4000 }, XY { x: 1, y: 20 }),
-      (XY { x: 100, y: 20 }, XY { x: 3, y: 4000 }, XY { x: 3, y: 20 }),
-      (XY { x: 1, y: 2000 }, XY { x: 300, y: 40 }, XY { x: 1, y: 40 }),
-      (XY { x: 100, y: 2000 }, XY { x: 3, y: 40 }, XY { x: 3, y: 40 }),
+      ((1, 20), (300, 4000), (1, 20)),
+      ((100, 20), (3, 4000), (3, 20)),
+      ((1, 2000), (300, 40), (1, 40)),
+      ((100, 2000), (3, 40), (3, 40)),
     ]
     .iter()
     .enumerate()
-    .for_each(|(i, (lhs, rhs, expected))| {
+    .for_each(|(i, &(lhs, rhs, expected))| {
       assert_eq!(
-        lhs.min(rhs),
-        *expected,
+        XY32::from(lhs).min(&rhs.into()),
+        expected.into(),
         "Case {} failed: {:?}.",
         i,
         (lhs, rhs, expected)
@@ -550,17 +612,17 @@ mod test {
   #[test]
   fn max() {
     [
-      (XY { x: 1, y: 20 }, XY { x: 300, y: 4000 }, XY { x: 300, y: 4000 }),
-      (XY { x: 100, y: 20 }, XY { x: 3, y: 4000 }, XY { x: 100, y: 4000 }),
-      (XY { x: 1, y: 2000 }, XY { x: 300, y: 40 }, XY { x: 300, y: 2000 }),
-      (XY { x: 100, y: 2000 }, XY { x: 3, y: 40 }, XY { x: 100, y: 2000 }),
+      ((1, 20), (300, 4000), (300, 4000)),
+      ((100, 20), (3, 4000), (100, 4000)),
+      ((1, 2000), (300, 40), (300, 2000)),
+      ((100, 2000), (3, 40), (100, 2000)),
     ]
     .iter()
     .enumerate()
-    .for_each(|(i, (lhs, rhs, expected))| {
+    .for_each(|(i, &(lhs, rhs, expected))| {
       assert_eq!(
-        lhs.max(rhs),
-        *expected,
+        XY32::from(lhs).max(&rhs.into()),
+        expected.into(),
         "Case {} failed: {:?}.",
         i,
         (lhs, rhs, expected)
@@ -571,31 +633,16 @@ mod test {
   #[test]
   fn clamp() {
     [
-      (
-        XY { x: 10, y: 200 },
-        XY { x: 11, y: 201 },
-        XY { x: 1000, y: 1000 },
-        XY { x: 11, y: 201 },
-      ),
-      (
-        XY { x: 10, y: 200 },
-        XY { x: 0, y: 0 },
-        XY { x: 1000, y: 1000 },
-        XY { x: 10, y: 200 },
-      ),
-      (
-        XY { x: 10, y: 200 },
-        XY { x: 0, y: 0 },
-        XY { x: 9, y: 199 },
-        XY { x: 9, y: 199 },
-      ),
+      ((10, 200), (11, 201), (1000, 1000), (11, 201)),
+      ((10, 200), (0, 0), (1000, 1000), (10, 200)),
+      ((10, 200), (0, 0), (9, 199), (9, 199)),
     ]
     .iter()
     .enumerate()
-    .for_each(|(i, (val, min, max, expected))| {
+    .for_each(|(i, &(val, min, max, expected))| {
       assert_eq!(
-        val.clamp(min, max),
-        *expected,
+        XY32::from(val).clamp(&min.into(), &max.into()),
+        expected.into(),
         "Case {} failed: {:?}.",
         i,
         (val, min, max, expected)
@@ -605,17 +652,17 @@ mod test {
 
   #[test]
   fn abs_neg() {
-    assert_eq!(XY { x: -1, y: -2 }.abs(), XY { x: 1, y: 2 });
+    assert_eq!(XY::new(-1, -2).abs(), XY::new(1, 2));
   }
 
   #[test]
   fn abs_mix() {
-    assert_eq!(XY { x: -1, y: 2 }.abs(), XY { x: 1, y: 2 });
+    assert_eq!(XY::new(-1, 2).abs(), XY::new(1, 2));
   }
 
   #[test]
   fn abs_pos() {
-    assert_eq!(XY { x: 1, y: 2 }.abs(), XY { x: 1, y: 2 });
+    assert_eq!(XY::new(1, 2).abs(), XY::new(1, 2));
   }
 
   #[test]
@@ -630,22 +677,19 @@ mod test {
 
   #[test]
   fn magnitude_float() {
-    assert_eq!(XY { x: 3f32, y: 4. }.magnitude(), 5.);
+    assert_eq!(XY::new(3f32, 4.).magnitude(), 5.);
   }
 
   #[test]
   fn lerp() {
-    assert_eq!(
-      XY { x: 1., y: 2. }.lerp(&XY { x: 3., y: 4. }, 0.5),
-      XY { x: 2., y: 3. }
-    );
+    assert_eq!(XY::new(1., 2.).lerp(&XY::new(3., 4.), 0.5), XY::new(2., 3.));
   }
 
   #[test]
   fn try_lerp() {
     assert_eq!(
-      XY16 { x: 1, y: 2 }.try_lerp(&XY { x: 3, y: 4 }, 0.5).unwrap(),
-      XY { x: 2, y: 3 }
+      XY16 { x: 1, y: 2 }.try_lerp(&XY::new(3, 4), 0.5).unwrap(),
+      XY::new(2, 3)
     );
   }
 
@@ -662,6 +706,12 @@ mod test {
   }
 
   #[test]
+  fn try_from_int() {
+    assert_eq!(XY::try_from(XY::new(1i64, 2)).unwrap(), XY::new(1i32, 2));
+    assert_eq!(XY::try_from((1i64, 2)).unwrap(), XY::new(1i32, 2));
+  }
+
+  #[test]
   fn from_non_zero_to_int() {
     assert_eq!(
       XY::from(XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())),
@@ -675,14 +725,9 @@ mod test {
 
   #[test]
   fn try_from_int_to_non_zero() {
-    assert_eq!(
-      XY::try_from(XY::new(1, 2)).unwrap(),
-      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
-    );
-    assert_eq!(
-      XY::try_from((1, 2)).unwrap(),
-      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
-    );
+    let xy = XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap());
+    assert_eq!(XY::try_from(XY::new(1, 2)).unwrap(), xy);
+    assert_eq!(XY::try_from((1, 2)).unwrap(), xy);
   }
 
   #[test]
@@ -699,13 +744,14 @@ mod test {
 
   #[test]
   fn try_from_float_to_non_zero() {
-    assert_eq!(
-      XY::try_from(XY::new(1., 2.)).unwrap(),
-      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
-    );
-    assert_eq!(
-      XY::try_from((1., 2.)).unwrap(),
-      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
-    );
+    let xy = XY::<NonZeroI8>::try_from((1, 2)).unwrap();
+    assert_eq!(XY::try_from(XY::new(1., 2.)).unwrap(), xy);
+    assert_eq!(XY::try_from((1., 2.)).unwrap(), xy);
+  }
+
+  #[test]
+  fn from_tuple() {
+    assert_eq!(XY::from((1, 2)), XY::new(1, 2));
+    assert_eq!(<(i32, i32)>::from(XY::new(1, 2)), (1, 2));
   }
 }

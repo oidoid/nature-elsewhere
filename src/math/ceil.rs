@@ -23,7 +23,7 @@ macro_rules! impl_CeilMultiple_float {
         ceil_multiple(self, multiple)
       }
     }
-  )*)
+  )+)
 }
 impl_CeilMultiple_float!(f32, f64);
 
@@ -34,7 +34,7 @@ macro_rules! impl_TryCeilMultiple_f32 {
         Self::from_f32(ceil_multiple(self.into(), multiple.into()))
       }
     }
-  )*)
+  )+)
 }
 impl_TryCeilMultiple_f32!(u8, u16, i8, i16);
 
@@ -45,7 +45,7 @@ macro_rules! impl_TryCeilMultiple_f64 {
         Self::from_f64(ceil_multiple(self.into(), multiple.into()))
       }
     }
-  )*)
+  )+)
 }
 impl_TryCeilMultiple_f64!(u32, i32);
 
