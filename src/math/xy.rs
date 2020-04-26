@@ -104,10 +104,10 @@ impl<T> XY<T> {
 }
 
 macro_rules! impl_magnitude {
-  ($($t:ty),*) => ($(
-    impl XY<$t> {
+  ($($T:ty),+) => ($(
+    impl XY<$T> {
       /// Returns the length.
-      pub fn magnitude(&self) -> $t {
+      pub fn magnitude(&self) -> $T {
         (self.x * self.x + self.y * self.y).sqrt()
       }
     }
@@ -118,9 +118,9 @@ impl_magnitude!(
 );
 
 macro_rules! impl_try_lerp {
-  ($ratio:ty: $($t:ty),*) => ($(
-    impl XY<$t> {
-      pub fn try_lerp(&self, to: &Self, ratio: $ratio) -> Option<Self> {
+  ($Ratio:ty; $($T:ty),+) => ($(
+    impl XY<$T> {
+      pub fn try_lerp(&self, to: &Self, ratio: $Ratio) -> Option<Self> {
         Some(Self {
           x: self.x.try_lerp(to.x, ratio)?, y: self.y.try_lerp(to.y, ratio)?
         })
@@ -128,8 +128,8 @@ macro_rules! impl_try_lerp {
     }
   )*)
 }
-impl_try_lerp!(f32: u8, i8, u16, i16);
-impl_try_lerp!(f64: u32, i32);
+impl_try_lerp!(f32; u8, i8, u16, i16);
+impl_try_lerp!(f64; u32, i32);
 
 impl<T: fmt::Debug> fmt::Debug for XY<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -233,30 +233,41 @@ impl<T: DivAssign + Clone> DivAssign<T> for XY<T> {
   }
 }
 
-macro_rules! impl_From_int_to_float {
-  ($T:ty: $($t:ty),*) => ($(
-    impl From<XY<$t>> for XY<$T> {
-      fn from(XY { x, y }: XY<$t>) -> Self {
+macro_rules! impl_From_to_float {
+  ($To:ty; $($From:ty),+) => ($(
+    impl From<XY<$From>> for XY<$To> {
+      fn from(XY {x, y}: XY<$From>) -> Self {
         Self { x: From::from(x), y: From::from(y) }
       }
     }
-  )*)
+    impl From<($From, $From)> for XY<$To> {
+      fn from((x, y): ($From, $From)) -> Self {
+        Self { x: From::from(x), y: From::from(y) }
+      }
+    }
+)*)
 }
-impl_From_int_to_float!(f32: u8, i8, u16, i16);
-impl_From_int_to_float!(f64: u8, i8, u16, i16, u32, i32, f32);
+impl_From_to_float!(f32; u8, i8, u16, i16);
+impl_From_to_float!(f64; u8, i8, u16, i16, u32, i32, f32);
 
 macro_rules! impl_TryFrom_float {
-  ($t:ty: $($T:ty),*) => ($(
-    impl TryFrom<XY<$t>> for XY<$T> {
+  ($From:ty; $($To:ty),+) => ($(
+    impl TryFrom<XY<$From>> for XY<$To> {
       type Error = ();
-      fn try_from(XY { x, y }: XY<$t>) -> Result<Self, ()> {
+      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, ()> {
+        Ok(Self { x: NumCast::from(x).ok_or(())?, y: NumCast::from(y).ok_or(())? })
+      }
+    }
+    impl TryFrom<($From, $From)> for XY<$To> {
+      type Error = ();
+      fn try_from((x, y): ($From, $From)) -> Result<Self, ()> {
         Ok(Self { x: NumCast::from(x).ok_or(())?, y: NumCast::from(y).ok_or(())? })
       }
     }
   )*)
 }
 impl_TryFrom_float!(
-  f32: usize,
+  f32; usize,
   isize,
   u8,
   i8,
@@ -270,7 +281,7 @@ impl_TryFrom_float!(
   i128
 );
 impl_TryFrom_float!(
-  f64: usize,
+  f64; usize,
   isize,
   u8,
   i8,
@@ -286,62 +297,78 @@ impl_TryFrom_float!(
 );
 
 macro_rules! impl_From_non_zero_to_int {
-  ($T:ty: $t:ty) => {
-    impl From<XY<$t>> for XY<$T> {
-      fn from(XY { x, y }: XY<$t>) -> Self {
+  ($To:ty, $From:ty) => {
+    impl From<XY<$From>> for XY<$To> {
+      fn from(XY { x, y }: XY<$From>) -> Self {
+        Self { x: x.get(), y: y.get() }
+      }
+    }
+    impl From<($From, $From)> for XY<$To> {
+      fn from((x, y): ($From, $From)) -> Self {
         Self { x: x.get(), y: y.get() }
       }
     }
   };
 }
-impl_From_non_zero_to_int!(usize: NonZeroUsize);
-impl_From_non_zero_to_int!(isize: NonZeroIsize);
-impl_From_non_zero_to_int!(u8: NonZeroU8);
-impl_From_non_zero_to_int!(i8: NonZeroI8);
-impl_From_non_zero_to_int!(u16: NonZeroU16);
-impl_From_non_zero_to_int!(i16: NonZeroI16);
-impl_From_non_zero_to_int!(u32: NonZeroU32);
-impl_From_non_zero_to_int!(i32: NonZeroI32);
-impl_From_non_zero_to_int!(u64: NonZeroU64);
-impl_From_non_zero_to_int!(i64: NonZeroI64);
-impl_From_non_zero_to_int!(u128: NonZeroU128);
-impl_From_non_zero_to_int!(i128: NonZeroI128);
+impl_From_non_zero_to_int!(usize, NonZeroUsize);
+impl_From_non_zero_to_int!(isize, NonZeroIsize);
+impl_From_non_zero_to_int!(u8, NonZeroU8);
+impl_From_non_zero_to_int!(i8, NonZeroI8);
+impl_From_non_zero_to_int!(u16, NonZeroU16);
+impl_From_non_zero_to_int!(i16, NonZeroI16);
+impl_From_non_zero_to_int!(u32, NonZeroU32);
+impl_From_non_zero_to_int!(i32, NonZeroI32);
+impl_From_non_zero_to_int!(u64, NonZeroU64);
+impl_From_non_zero_to_int!(i64, NonZeroI64);
+impl_From_non_zero_to_int!(u128, NonZeroU128);
+impl_From_non_zero_to_int!(i128, NonZeroI128);
 
 macro_rules! impl_TryFrom_int_to_non_zero {
-  ($T:ty: $t:ty) => {
-    impl TryFrom<XY<$t>> for XY<$T> {
+  ($To:ty, $From:ty) => {
+    impl TryFrom<XY<$From>> for XY<$To> {
       type Error = ();
-      fn try_from(XY { x, y }: XY<$t>) -> Result<Self, ()> {
-        Ok(Self { x: <$T>::new(x).ok_or(())?, y: <$T>::new(y).ok_or(())? })
+      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, ()> {
+        Ok(Self { x: <$To>::new(x).ok_or(())?, y: <$To>::new(y).ok_or(())? })
+      }
+    }
+    impl TryFrom<($From, $From)> for XY<$To> {
+      type Error = ();
+      fn try_from((x, y): ($From, $From)) -> Result<Self, ()> {
+        Ok(Self { x: <$To>::new(x).ok_or(())?, y: <$To>::new(y).ok_or(())? })
       }
     }
   };
 }
-impl_TryFrom_int_to_non_zero!(NonZeroUsize: usize);
-impl_TryFrom_int_to_non_zero!(NonZeroIsize: isize);
-impl_TryFrom_int_to_non_zero!(NonZeroU8: u8);
-impl_TryFrom_int_to_non_zero!(NonZeroI8: i8);
-impl_TryFrom_int_to_non_zero!(NonZeroU16: u16);
-impl_TryFrom_int_to_non_zero!(NonZeroI16: i16);
-impl_TryFrom_int_to_non_zero!(NonZeroU32: u32);
-impl_TryFrom_int_to_non_zero!(NonZeroI32: i32);
-impl_TryFrom_int_to_non_zero!(NonZeroU64: u64);
-impl_TryFrom_int_to_non_zero!(NonZeroI64: i64);
-impl_TryFrom_int_to_non_zero!(NonZeroU128: u128);
-impl_TryFrom_int_to_non_zero!(NonZeroI128: i128);
+impl_TryFrom_int_to_non_zero!(NonZeroUsize, usize);
+impl_TryFrom_int_to_non_zero!(NonZeroIsize, isize);
+impl_TryFrom_int_to_non_zero!(NonZeroU8, u8);
+impl_TryFrom_int_to_non_zero!(NonZeroI8, i8);
+impl_TryFrom_int_to_non_zero!(NonZeroU16, u16);
+impl_TryFrom_int_to_non_zero!(NonZeroI16, i16);
+impl_TryFrom_int_to_non_zero!(NonZeroU32, u32);
+impl_TryFrom_int_to_non_zero!(NonZeroI32, i32);
+impl_TryFrom_int_to_non_zero!(NonZeroU64, u64);
+impl_TryFrom_int_to_non_zero!(NonZeroI64, i64);
+impl_TryFrom_int_to_non_zero!(NonZeroU128, u128);
+impl_TryFrom_int_to_non_zero!(NonZeroI128, i128);
 
 macro_rules! impl_From_non_zero_to_float {
-  ($T:ty: $($t:ty),*) => ($(
-    impl From<XY<$t>> for XY<$T> {
-      fn from(XY { x, y }: XY<$t>) -> Self {
+  ($To:ty; $($From:ty),+) => ($(
+    impl From<XY<$From>> for XY<$To> {
+      fn from(XY { x, y }: XY<$From>) -> Self {
+        Self { x: From::from(x.get()), y: From::from(y.get()) }
+      }
+    }
+    impl From<($From, $From)> for XY<$To> {
+      fn from((x, y): ($From, $From)) -> Self {
         Self { x: From::from(x.get()), y: From::from(y.get()) }
       }
     }
   )*)
 }
-impl_From_non_zero_to_float!(f32: NonZeroU8, NonZeroI8, NonZeroU16, NonZeroI16);
+impl_From_non_zero_to_float!(f32; NonZeroU8, NonZeroI8, NonZeroU16, NonZeroI16);
 impl_From_non_zero_to_float!(
-  f64: NonZeroU8,
+  f64; NonZeroU8,
   NonZeroI8,
   NonZeroU16,
   NonZeroI16,
@@ -350,17 +377,29 @@ impl_From_non_zero_to_float!(
 );
 
 macro_rules! impl_TryFrom_float_to_non_zero {
-  ($t:ty: $($T:ty),*) => ($(
-    impl TryFrom<XY<$t>> for XY<$T> {
+  ($From:ty; $($To:ty),+) => ($(
+    impl TryFrom<XY<$From>> for XY<$To> {
       type Error = ();
-      fn try_from(XY { x, y }: XY<$t>) -> Result<Self, ()> {
-        Ok(Self { x: <$T>::new(NumCast::from(x).ok_or(())?).ok_or(())?, y: <$T>::new(NumCast::from(y).ok_or(())?).ok_or(())? })
+      fn try_from(XY { x, y }: XY<$From>) -> Result<Self, ()> {
+        Ok(Self {
+          x: <$To>::new(NumCast::from(x).ok_or(())?).ok_or(())?,
+          y: <$To>::new(NumCast::from(y).ok_or(())?).ok_or(())?
+        })
+      }
+    }
+    impl TryFrom<($From, $From)> for XY<$To> {
+      type Error = ();
+      fn try_from((x, y): ($From, $From)) -> Result<Self, ()> {
+        Ok(Self {
+          x: <$To>::new(NumCast::from(x).ok_or(())?).ok_or(())?,
+          y: <$To>::new(NumCast::from(y).ok_or(())?).ok_or(())?
+        })
       }
     }
   )*)
 }
 impl_TryFrom_float_to_non_zero!(
-  f32: NonZeroUsize,
+  f32; NonZeroUsize,
   NonZeroIsize,
   NonZeroU8,
   NonZeroI8,
@@ -374,7 +413,7 @@ impl_TryFrom_float_to_non_zero!(
   NonZeroI128
 );
 impl_TryFrom_float_to_non_zero!(
-  f64: NonZeroUsize,
+  f64; NonZeroUsize,
   NonZeroIsize,
   NonZeroU8,
   NonZeroI8,
@@ -387,19 +426,6 @@ impl_TryFrom_float_to_non_zero!(
   NonZeroU128,
   NonZeroI128
 );
-
-impl XY<NonZeroI16> {
-  /// Cast each argument returns a new XY.
-  pub fn cast_into_non_zero<From>(x: From, y: From) -> Option<Self>
-  where
-    From: ToPrimitive + Clone,
-  {
-    Some(Self {
-      x: NonZeroI16::new(NumCast::from(x)?)?,
-      y: NonZeroI16::new(NumCast::from(y)?)?,
-    })
-  }
-}
 
 #[cfg(test)]
 mod test {
@@ -624,32 +650,49 @@ mod test {
   }
 
   #[test]
-  fn from_int_to_float() {
+  fn from_to_float() {
     assert_eq!(XY::from(XY::new(1, 2)), XY::new(1., 2.));
+    assert_eq!(XY::from((1, 2)), XY::new(1., 2.));
   }
 
   #[test]
   fn try_from_float() {
     assert_eq!(XY::try_from(XY::new(1., 2.)).unwrap(), XY::new(1, 2));
+    assert_eq!(XY::try_from((1., 2.)).unwrap(), XY::new(1, 2));
   }
 
   #[test]
   fn from_non_zero_to_int() {
-    assert_eq!(XY::from(XY::cast_into_non_zero(1, 2).unwrap()), XY::new(1, 2));
+    assert_eq!(
+      XY::from(XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())),
+      XY::new(1, 2)
+    );
+    assert_eq!(
+      XY::from((NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())),
+      XY::new(1, 2)
+    );
   }
 
   #[test]
   fn try_from_int_to_non_zero() {
     assert_eq!(
       XY::try_from(XY::new(1, 2)).unwrap(),
-      XY::cast_into_non_zero(1, 2).unwrap()
+      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
+    );
+    assert_eq!(
+      XY::try_from((1, 2)).unwrap(),
+      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
     );
   }
 
   #[test]
   fn from_non_zero_to_float() {
     assert_eq!(
-      XY::from(XY::cast_into_non_zero(1, 2).unwrap()),
+      XY::from(XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())),
+      XY::new(1., 2.),
+    );
+    assert_eq!(
+      XY::from((NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())),
       XY::new(1., 2.),
     );
   }
@@ -658,7 +701,11 @@ mod test {
   fn try_from_float_to_non_zero() {
     assert_eq!(
       XY::try_from(XY::new(1., 2.)).unwrap(),
-      XY::cast_into_non_zero(1, 2).unwrap()
+      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
+    );
+    assert_eq!(
+      XY::try_from((1., 2.)).unwrap(),
+      XY::new(NonZeroI8::new(1).unwrap(), NonZeroI8::new(2).unwrap())
     );
   }
 }

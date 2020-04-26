@@ -17,7 +17,7 @@ pub trait TryCeilMultiple: Sized {
 }
 
 macro_rules! impl_CeilMultiple_float {
-  ($($t:ty),*) => ($(
+  ($($t:ty),+) => ($(
     impl CeilMultiple for $t {
       fn ceil_multiple(self, multiple: Self) -> Self {
         ceil_multiple(self, multiple)
@@ -28,7 +28,7 @@ macro_rules! impl_CeilMultiple_float {
 impl_CeilMultiple_float!(f32, f64);
 
 macro_rules! impl_TryCeilMultiple_f32 {
-  ($($t:ty),*) => ($(
+  ($($t:ty),+) => ($(
     impl TryCeilMultiple for $t {
       fn try_ceil_multiple(self, multiple: Self) -> Option<Self> {
         Self::from_f32(ceil_multiple(self.into(), multiple.into()))
@@ -39,7 +39,7 @@ macro_rules! impl_TryCeilMultiple_f32 {
 impl_TryCeilMultiple_f32!(u8, u16, i8, i16);
 
 macro_rules! impl_TryCeilMultiple_f64 {
-  ($($t:ty),*) => ($(
+  ($($t:ty),+) => ($(
     impl TryCeilMultiple for $t {
       fn try_ceil_multiple(self, multiple: Self) -> Option<Self> {
         Self::from_f64(ceil_multiple(self.into(), multiple.into()))

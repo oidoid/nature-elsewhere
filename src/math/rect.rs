@@ -220,7 +220,7 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
 }
 
 macro_rules! impl_magnitude {
-  ($($t:ty),*) => ($(
+  ($($t:ty),+) => ($(
     impl Rect<$t> {
       pub fn magnitude(&self) -> $t {
         (self.from.clone() - self.to.clone()).magnitude()

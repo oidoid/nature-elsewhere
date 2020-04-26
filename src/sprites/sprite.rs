@@ -206,20 +206,20 @@ mod test {
       AnimationID::Bee,
       SpriteComposition::Source,
       R16::new_wh(1, 2, 3, 4),
-      XY::cast_into_non_zero(1, 1).unwrap(),
+      (1, 1).try_into().unwrap(),
       XY::new(0, 0),
       XY::new(0, 0),
       SpriteLayer::Default,
     );
 
-    assert_eq!(sprite.get_scale(), &XY::cast_into_non_zero(1, 1).unwrap());
+    assert_eq!(sprite.get_scale(), &(1, 1).try_into().unwrap());
 
-    sprite.scale_by(&XY::cast_into_non_zero(2, 2).unwrap());
-    assert_eq!(sprite.get_scale(), &XY::cast_into_non_zero(2, 2).unwrap());
+    sprite.scale_by(&(2, 2).try_into().unwrap());
+    assert_eq!(sprite.get_scale(), &(2, 2).try_into().unwrap());
     assert_eq!(sprite.get_bounds(), &R16::new_wh(1, 2, 6, 8));
 
-    sprite.scale_to(&XY::cast_into_non_zero(3, 3).unwrap());
-    assert_eq!(sprite.get_scale(), &XY::cast_into_non_zero(3, 3).unwrap());
+    sprite.scale_to(&(3, 3).try_into().unwrap());
+    assert_eq!(sprite.get_scale(), &(3, 3).try_into().unwrap());
     assert_eq!(sprite.get_bounds(), &R16::new_wh(1, 2, 9, 12));
   }
 
@@ -231,7 +231,7 @@ mod test {
       AnimationID::Bee,
       SpriteComposition::Source,
       R16::new(1, 2, 3, 4),
-      XY::cast_into_non_zero(1, 1).unwrap(),
+      (1, 1).try_into().unwrap(),
       XY::new(5, 6),
       XY::new(7, 8),
       SpriteLayer::Default,
@@ -254,7 +254,7 @@ mod test {
       AnimationID::Bee,
       SpriteComposition::Source,
       R16::new(1, 2, 3, 4),
-      XY::cast_into_non_zero(1, 1).unwrap(),
+      (1, 1).try_into().unwrap(),
       XY::new(0, 0),
       XY::new(0, 0),
       SpriteLayer::Default,
@@ -303,7 +303,7 @@ mod test {
       AnimationID::Bee,
       SpriteComposition::SourceMask,
       R16::new(9, 10, 55, 72),
-      XY::cast_into_non_zero(11, 13).unwrap(),
+      (11, 13).try_into().unwrap(),
       XY::new(15, 16),
       XY::new(17, 18),
       SpriteLayer::UICursor,

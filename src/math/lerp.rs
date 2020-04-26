@@ -10,7 +10,7 @@ pub trait Lerp<T> {
 }
 
 macro_rules! impl_Lerp_float {
-  ($($t:ty),*) => ($(
+  ($($t:ty),+) => ($(
     impl Lerp<$t> for $t {
       fn lerp(self, to: Self, ratio: Self) -> Self {
         lerp(self, to, ratio)
@@ -25,7 +25,7 @@ pub trait TryLerp<T>: Sized {
 }
 
 macro_rules! impl_TryLerp_f32 {
-  ($($t:ty),*) => ($(
+  ($($t:ty),+) => ($(
     impl TryLerp<f32> for $t {
       fn try_lerp(self, to: Self, ratio: f32) -> Option<Self> {
         let interpolation = Self::from_f32(lerp(self.into(), to.into(), ratio))?;
@@ -42,7 +42,7 @@ macro_rules! impl_TryLerp_f32 {
 impl_TryLerp_f32!(u8, i8, u16, i16);
 
 macro_rules! impl_TryLerp_f64 {
-  ($($t:ty),*) => ($(
+  ($($t:ty),+) => ($(
     impl TryLerp<f64> for $t {
       fn try_lerp(self, to: Self, ratio: f64) -> Option<Self> {
         let interpolation = Self::from_f64(lerp(self.into(), to.into(), ratio))?;
@@ -131,14 +131,14 @@ mod test {
     .for_each(|(i, &(val, to, ratio, expected))| {
       assert_approx!(
         super::lerp(val, to, ratio),
-        expected,
+        expected;
         "Function case {} failed: {:?}.",
         i,
         (val, to, ratio, expected)
       );
       assert_approx!(
         val.lerp(to, ratio),
-        expected,
+        expected;
         "Method case {} failed: {:?}.",
         i,
         (val, to, ratio, expected)
