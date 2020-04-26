@@ -536,51 +536,33 @@ mod test {
   }
 
   #[test]
-  fn mul_xy() {
-    assert_eq!(XY::new(1, 2) * XY::new(3, 4), XY::new(3, 8))
-  }
-
-  #[test]
-  fn mul_scalar() {
+  fn mul() {
+    assert_eq!(XY::new(1, 2) * XY::new(3, 4), XY::new(3, 8));
     assert_eq!(XY::new(1, 2) * 3, XY::new(3, 6));
   }
 
   #[test]
-  fn mul_assign_xy() {
+  fn mul_assign() {
     let mut xy = XY::new(1, 2);
     xy *= XY::new(3, 4);
     assert_eq!(xy, XY::new(3, 8));
+    xy *= 5;
+    assert_eq!(xy, XY::new(15, 40));
   }
 
   #[test]
-  fn mul_assign_scalar() {
-    let mut xy = XY::new(1, 2);
-    xy *= 3;
-    assert_eq!(xy, XY::new(3, 6));
-  }
-
-  #[test]
-  fn div_xy() {
+  fn div() {
     assert_eq!(XY::new(3, 4) / XY::new(1, 2), XY::new(3, 2));
-  }
-
-  #[test]
-  fn div_scalar() {
     assert_eq!(XY::new(3, 4) / 2, XY::new(1, 2));
   }
 
   #[test]
-  fn div_assign_xy() {
-    let mut xy = XY::new(3, 4);
-    xy /= XY::new(1, 2);
-    assert_eq!(xy, XY::new(3, 2));
-  }
-
-  #[test]
-  fn div_assign_scalar() {
-    let mut xy = XY::new(3, 4);
+  fn div_assign() {
+    let mut xy = XY::new(64, 256);
+    xy /= XY::new(2, 4);
+    assert_eq!(xy, XY::new(32, 64));
     xy /= 2;
-    assert_eq!(xy, XY::new(1, 2));
+    assert_eq!(xy, XY::new(16, 32));
   }
 
   #[test]

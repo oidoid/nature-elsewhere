@@ -101,9 +101,8 @@ impl Sprite {
   }
 
   pub fn size_to(&mut self, unscaled_to: &WH16) {
-    let scale: XY16 = self.scale.clone().into();
-    self.bounds.to =
-      self.bounds.from.clone() + (unscaled_to.clone() * scale.abs()).into();
+    self.bounds.to = self.bounds.from.clone()
+      + (unscaled_to.clone() * XY16::from(self.scale.clone()).abs()).into();
   }
 
   pub fn get_scale(&self) -> &XY<NonZeroI16> {
