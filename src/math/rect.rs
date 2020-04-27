@@ -787,7 +787,15 @@ mod test {
   }
 
   // (diagram, lhs, rhs, intersects, contains, intersection, union)
-  const CASES: &[(&str, R16, R16, bool, bool, R16, R16)] = &[
+  const CASES: &[(
+    &str,
+    (i16, i16, i16, i16),
+    (i16, i16, i16, i16),
+    bool,
+    bool,
+    (i16, i16, i16, i16),
+    (i16, i16, i16, i16),
+  )] = &[
     (
       "
         0   │    Overlapping Square
@@ -796,12 +804,12 @@ mod test {
           └─╄━┹─┘
             │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 0, y: -1 }, to: XY { x: 2, y: 1 } },
+      (-1, -1, 1, 1),
+      (0, -1, 2, 1),
       true,
       false,
-      Rect { from: XY { x: 0, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 2, y: 1 } },
+      (0, -1, 1, 1),
+      (-1, -1, 2, 1),
     ),
     (
       "
@@ -811,12 +819,12 @@ mod test {
           └─┼─┘
             │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 0, y: -2 }, to: XY { x: 2, y: 0 } },
+      (-1, -1, 1, 1),
+      (0, -2, 2, 0),
       true,
       false,
-      Rect { from: XY { x: 0, y: -1 }, to: XY { x: 1, y: 0 } },
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 2, y: 1 } },
+      (0, -1, 1, 0),
+      (-1, -2, 2, 1),
     ),
     (
       "
@@ -826,12 +834,12 @@ mod test {
           └─┼─┘
             │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 1, y: 0 } },
+      (-1, -1, 1, 1),
+      (-1, -2, 1, 0),
       true,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 0 } },
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 1, 0),
+      (-1, -2, 1, 1),
     ),
     (
       "
@@ -841,12 +849,12 @@ mod test {
           └─┼─┘
             │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: -2 }, to: XY { x: 0, y: 0 } },
+      (-1, -1, 1, 1),
+      (-2, -2, 0, 0),
       true,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 0, y: 0 } },
-      Rect { from: XY { x: -2, y: -2 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 0, 0),
+      (-2, -2, 1, 1),
     ),
     (
       "
@@ -856,12 +864,12 @@ mod test {
         └─┺━╃─┘
             │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: -1 }, to: XY { x: 0, y: 1 } },
+      (-1, -1, 1, 1),
+      (-2, -1, 0, 1),
       true,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 0, y: 1 } },
-      Rect { from: XY { x: -2, y: -1 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 0, 1),
+      (-2, -1, 1, 1),
     ),
     (
       "
@@ -871,12 +879,12 @@ mod test {
         │R┗━╃─┘
         └───┤
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: 0 }, to: XY { x: 0, y: 2 } },
+      (-1, -1, 1, 1),
+      (-2, 0, 0, 2),
       true,
       false,
-      Rect { from: XY { x: -1, y: 0 }, to: XY { x: 0, y: 1 } },
-      Rect { from: XY { x: -2, y: -1 }, to: XY { x: 1, y: 2 } },
+      (-1, 0, 0, 1),
+      (-2, -1, 1, 2),
     ),
     (
       "
@@ -886,12 +894,12 @@ mod test {
           ┡━┿━┩
           └─R─┘
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: 0 }, to: XY { x: 1, y: 2 } },
+      (-1, -1, 1, 1),
+      (-1, 0, 1, 2),
       true,
       false,
-      Rect { from: XY { x: -1, y: 0 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 2 } },
+      (-1, 0, 1, 1),
+      (-1, -1, 1, 2),
     ),
     (
       "
@@ -901,12 +909,12 @@ mod test {
           └─╄━┛R│
             ├───┘
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 2, y: 2 } },
+      (-1, -1, 1, 1),
+      (0, 0, 2, 2),
       true,
       false,
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 2, y: 2 } },
+      (0, 0, 1, 1),
+      (-1, -1, 2, 2),
     ),
     (
       "
@@ -918,12 +926,12 @@ mod test {
             └─┼─┘
               │
       ",
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 1, y: 2 } },
-      Rect { from: XY { x: -2, y: -3 }, to: XY { x: 2, y: -1 } },
+      (-1, -2, 1, 2),
+      (-2, -3, 2, -1),
       true,
       false,
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 1, y: -1 } },
-      Rect { from: XY { x: -2, y: -3 }, to: XY { x: 2, y: 2 } },
+      (-1, -2, 1, -1),
+      (-2, -3, 2, 2),
     ),
     (
       "
@@ -935,12 +943,12 @@ mod test {
             └─┼─┘
               │
       ",
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 1, y: 2 } },
-      Rect { from: XY { x: -2, y: -1 }, to: XY { x: 2, y: 1 } },
+      (-1, -2, 1, 2),
+      (-2, -1, 2, 1),
       true,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: -2 }, to: XY { x: 2, y: 2 } },
+      (-1, -1, 1, 1),
+      (-2, -2, 2, 2),
     ),
     (
       "
@@ -952,12 +960,12 @@ mod test {
           │ ┗━┿━┛R│
           └───┼───┘
       ",
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 1, y: 2 } },
-      Rect { from: XY { x: -2, y: 1 }, to: XY { x: 2, y: 3 } },
+      (-1, -2, 1, 2),
+      (-2, 1, 2, 3),
       true,
       false,
-      Rect { from: XY { x: -1, y: 1 }, to: XY { x: 1, y: 2 } },
-      Rect { from: XY { x: -2, y: -2 }, to: XY { x: 2, y: 3 } },
+      (-1, 1, 1, 2),
+      (-2, -2, 2, 3),
     ),
     (
       "
@@ -968,12 +976,12 @@ mod test {
         ┼────┼───┼
         └────┼───┘
       ",
-      Rect { from: XY { x: -3, y: -4 }, to: XY { x: 2, y: 1 } },
-      Rect { from: XY { x: -2, y: -3 }, to: XY { x: -1, y: -1 } },
+      (-3, -4, 2, 1),
+      (-2, -3, -1, -1),
       true,
       true,
-      Rect { from: XY { x: -2, y: -3 }, to: XY { x: -1, y: -1 } },
-      Rect { from: XY { x: -3, y: -4 }, to: XY { x: 2, y: 1 } },
+      (-2, -3, -1, -1),
+      (-3, -4, 2, 1),
     ),
     (
       "
@@ -983,12 +991,12 @@ mod test {
           ┗━┿━┛
             │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 1, 1),
+      (-1, -1, 1, 1),
       true,
       true,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 1, 1),
+      (-1, -1, 1, 1),
     ),
     (
       "
@@ -998,12 +1006,12 @@ mod test {
             │
             │
       ",
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 0, y: 0 } },
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 0, y: 0 } },
+      (0, 0, 0, 0),
+      (0, 0, 0, 0),
       false,
       false,
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 0, y: 0 } },
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 0, y: 0 } },
+      (0, 0, 0, 0),
+      (0, 0, 0, 0),
     ),
     (
       "
@@ -1015,12 +1023,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 1, y: -1 }, to: XY { x: 3, y: 1 } },
+      (-1, -1, 1, 1),
+      (1, -1, 3, 1),
       false,
       false,
-      Rect { from: XY { x: 1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 3, y: 1 } },
+      (1, -1, 1, 1),
+      (-1, -1, 3, 1),
     ),
     (
       "
@@ -1032,12 +1040,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 1, y: -2 }, to: XY { x: 3, y: 0 } },
+      (-1, -1, 1, 1),
+      (1, -2, 3, 0),
       false,
       false,
-      Rect { from: XY { x: 1, y: -1 }, to: XY { x: 1, y: 0 } },
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 3, y: 1 } },
+      (1, -1, 1, 0),
+      (-1, -2, 3, 1),
     ),
     (
       "
@@ -1049,12 +1057,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 1, y: -3 }, to: XY { x: 3, y: -1 } },
+      (-1, -1, 1, 1),
+      (1, -3, 3, -1),
       false,
       false,
-      Rect { from: XY { x: 1, y: -1 }, to: XY { x: 1, y: -1 } },
-      Rect { from: XY { x: -1, y: -3 }, to: XY { x: 3, y: 1 } },
+      (1, -1, 1, -1),
+      (-1, -3, 3, 1),
     ),
     (
       "
@@ -1066,12 +1074,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 0, y: -3 }, to: XY { x: 2, y: -1 } },
+      (-1, -1, 1, 1),
+      (0, -3, 2, -1),
       false,
       false,
-      Rect { from: XY { x: 0, y: -1 }, to: XY { x: 1, y: -1 } },
-      Rect { from: XY { x: -1, y: -3 }, to: XY { x: 2, y: 1 } },
+      (0, -1, 1, -1),
+      (-1, -3, 2, 1),
     ),
     (
       "
@@ -1083,12 +1091,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -3 }, to: XY { x: 1, y: -1 } },
+      (-1, -1, 1, 1),
+      (-1, -3, 1, -1),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: -1 } },
-      Rect { from: XY { x: -1, y: -3 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 1, -1),
+      (-1, -3, 1, 1),
     ),
     (
       "
@@ -1100,12 +1108,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: -3 }, to: XY { x: 0, y: -1 } },
+      (-1, -1, 1, 1),
+      (-2, -3, 0, -1),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 0, y: -1 } },
-      Rect { from: XY { x: -2, y: -3 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 0, -1),
+      (-2, -3, 1, 1),
     ),
     (
       "
@@ -1117,12 +1125,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -3, y: -3 }, to: XY { x: -1, y: -1 } },
+      (-1, -1, 1, 1),
+      (-3, -3, -1, -1),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: -1, y: -1 } },
-      Rect { from: XY { x: -3, y: -3 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, -1, -1),
+      (-3, -3, 1, 1),
     ),
     (
       "
@@ -1134,12 +1142,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -3, y: -2 }, to: XY { x: -1, y: 0 } },
+      (-1, -1, 1, 1),
+      (-3, -2, -1, 0),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: -1, y: 0 } },
-      Rect { from: XY { x: -3, y: -2 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, -1, 0),
+      (-3, -2, 1, 1),
     ),
     (
       "
@@ -1151,12 +1159,12 @@ mod test {
               │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -3, y: -1 }, to: XY { x: -1, y: 1 } },
+      (-1, -1, 1, 1),
+      (-3, -1, -1, 1),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: -1, y: 1 } },
-      Rect { from: XY { x: -3, y: -1 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, -1, 1),
+      (-3, -1, 1, 1),
     ),
     (
       "
@@ -1168,12 +1176,12 @@ mod test {
         └───┘ │
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -3, y: 0 }, to: XY { x: -1, y: 2 } },
+      (-1, -1, 1, 1),
+      (-3, 0, -1, 2),
       false,
       false,
-      Rect { from: XY { x: -1, y: 0 }, to: XY { x: -1, y: 1 } },
-      Rect { from: XY { x: -3, y: -1 }, to: XY { x: 1, y: 2 } },
+      (-1, 0, -1, 1),
+      (-3, -1, 1, 2),
     ),
     (
       "
@@ -1185,12 +1193,12 @@ mod test {
         │  R│ │
         └───┘ │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -3, y: 1 }, to: XY { x: -1, y: 3 } },
+      (-1, -1, 1, 1),
+      (-3, 1, -1, 3),
       false,
       false,
-      Rect { from: XY { x: -1, y: 1 }, to: XY { x: -1, y: 1 } },
-      Rect { from: XY { x: -3, y: -1 }, to: XY { x: 1, y: 3 } },
+      (-1, 1, -1, 1),
+      (-3, -1, 1, 3),
     ),
     (
       "
@@ -1202,12 +1210,12 @@ mod test {
           │  R│
           └───┤
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: 1 }, to: XY { x: 0, y: 3 } },
+      (-1, -1, 1, 1),
+      (-2, 1, 0, 3),
       false,
       false,
-      Rect { from: XY { x: -1, y: 1 }, to: XY { x: 0, y: 1 } },
-      Rect { from: XY { x: -2, y: -1 }, to: XY { x: 1, y: 3 } },
+      (-1, 1, 0, 1),
+      (-2, -1, 1, 3),
     ),
     (
       "
@@ -1219,12 +1227,12 @@ mod test {
             │ │R│
             └─┼─┘
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: 1 }, to: XY { x: 1, y: 3 } },
+      (-1, -1, 1, 1),
+      (-1, 1, 1, 3),
       false,
       false,
-      Rect { from: XY { x: -1, y: 1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 3 } },
+      (-1, 1, 1, 1),
+      (-1, -1, 1, 3),
     ),
     (
       "
@@ -1236,12 +1244,12 @@ mod test {
               │  R│
               ├───┘
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 0, y: 1 }, to: XY { x: 2, y: 3 } },
+      (-1, -1, 1, 1),
+      (0, 1, 2, 3),
       false,
       false,
-      Rect { from: XY { x: 0, y: 1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 2, y: 3 } },
+      (0, 1, 1, 1),
+      (-1, -1, 2, 3),
     ),
     (
       "
@@ -1253,12 +1261,12 @@ mod test {
               │ │  R│
               │ └───┘
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 3, y: 3 } },
+      (-1, -1, 1, 1),
+      (1, 1, 3, 3),
       false,
       false,
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 3, y: 3 } },
+      (1, 1, 1, 1),
+      (-1, -1, 3, 3),
     ),
     (
       "
@@ -1270,12 +1278,12 @@ mod test {
               │ └───┘
               │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 1, y: 0 }, to: XY { x: 3, y: 2 } },
+      (-1, -1, 1, 1),
+      (1, 0, 3, 2),
       false,
       false,
-      Rect { from: XY { x: 1, y: 0 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 3, y: 2 } },
+      (1, 0, 1, 1),
+      (-1, -1, 3, 2),
     ),
     (
       "
@@ -1289,12 +1297,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 2, y: -1 }, to: XY { x: 4, y: 1 } },
+      (-1, -1, 1, 1),
+      (2, -1, 4, 1),
       false,
       false,
-      Rect { from: XY { x: 2, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 4, y: 1 } },
+      (2, -1, 1, 1),
+      (-1, -1, 4, 1),
     ),
     (
       "
@@ -1308,12 +1316,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 2, y: -2 }, to: XY { x: 4, y: 0 } },
+      (-1, -1, 1, 1),
+      (2, -2, 4, 0),
       false,
       false,
-      Rect { from: XY { x: 2, y: -1 }, to: XY { x: 1, y: 0 } },
-      Rect { from: XY { x: -1, y: -2 }, to: XY { x: 4, y: 1 } },
+      (2, -1, 1, 0),
+      (-1, -2, 4, 1),
     ),
     (
       "
@@ -1327,12 +1335,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 0, y: -4 }, to: XY { x: 2, y: -2 } },
+      (-1, -1, 1, 1),
+      (0, -4, 2, -2),
       false,
       false,
-      Rect { from: XY { x: 0, y: -1 }, to: XY { x: 1, y: -2 } },
-      Rect { from: XY { x: -1, y: -4 }, to: XY { x: 2, y: 1 } },
+      (0, -1, 1, -2),
+      (-1, -4, 2, 1),
     ),
     (
       "
@@ -1346,12 +1354,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -4 }, to: XY { x: 1, y: -2 } },
+      (-1, -1, 1, 1),
+      (-1, -4, 1, -2),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: -2 } },
-      Rect { from: XY { x: -1, y: -4 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 1, -2),
+      (-1, -4, 1, 1),
     ),
     (
       "
@@ -1365,12 +1373,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: -4 }, to: XY { x: 0, y: -2 } },
+      (-1, -1, 1, 1),
+      (-2, -4, 0, -2),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 0, y: -2 } },
-      Rect { from: XY { x: -2, y: -4 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, 0, -2),
+      (-2, -4, 1, 1),
     ),
     (
       "
@@ -1384,12 +1392,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -4, y: -2 }, to: XY { x: -2, y: 0 } },
+      (-1, -1, 1, 1),
+      (-4, -2, -2, 0),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: -2, y: 0 } },
-      Rect { from: XY { x: -4, y: -2 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, -2, 0),
+      (-4, -2, 1, 1),
     ),
     (
       "
@@ -1403,12 +1411,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -4, y: -1 }, to: XY { x: -2, y: 1 } },
+      (-1, -1, 1, 1),
+      (-4, -1, -2, 1),
       false,
       false,
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: -2, y: 1 } },
-      Rect { from: XY { x: -4, y: -1 }, to: XY { x: 1, y: 1 } },
+      (-1, -1, -2, 1),
+      (-4, -1, 1, 1),
     ),
     (
       "
@@ -1422,12 +1430,12 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -4, y: 0 }, to: XY { x: -2, y: 2 } },
+      (-1, -1, 1, 1),
+      (-4, 0, -2, 2),
       false,
       false,
-      Rect { from: XY { x: -1, y: 0 }, to: XY { x: -2, y: 1 } },
-      Rect { from: XY { x: -4, y: -1 }, to: XY { x: 1, y: 2 } },
+      (-1, 0, -2, 1),
+      (-4, -1, 1, 2),
     ),
     (
       "
@@ -1441,12 +1449,12 @@ mod test {
            │  R│
            └───┤
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -2, y: 2 }, to: XY { x: 0, y: 4 } },
+      (-1, -1, 1, 1),
+      (-2, 2, 0, 4),
       false,
       false,
-      Rect { from: XY { x: -1, y: 2 }, to: XY { x: 0, y: 1 } },
-      Rect { from: XY { x: -2, y: -1 }, to: XY { x: 1, y: 4 } },
+      (-1, 2, 0, 1),
+      (-2, -1, 1, 4),
     ),
     (
       "
@@ -1460,12 +1468,12 @@ mod test {
              │ │R│
              └─┼─┘
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: 2 }, to: XY { x: 1, y: 4 } },
+      (-1, -1, 1, 1),
+      (-1, 2, 1, 4),
       false,
       false,
-      Rect { from: XY { x: -1, y: 2 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 4 } },
+      (-1, 2, 1, 1),
+      (-1, -1, 1, 4),
     ),
     (
       "
@@ -1479,12 +1487,12 @@ mod test {
                │  R│
                ├───┘
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 0, y: 2 }, to: XY { x: 2, y: 4 } },
+      (-1, -1, 1, 1),
+      (0, 2, 2, 4),
       false,
       false,
-      Rect { from: XY { x: 0, y: 2 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 2, y: 4 } },
+      (0, 2, 1, 1),
+      (-1, -1, 2, 4),
     ),
     (
       "
@@ -1498,84 +1506,84 @@ mod test {
                │
                │
       ",
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: 2, y: 0 }, to: XY { x: 4, y: 2 } },
+      (-1, -1, 1, 1),
+      (2, 0, 4, 2),
       false,
       false,
-      Rect { from: XY { x: 2, y: 0 }, to: XY { x: 1, y: 1 } },
-      Rect { from: XY { x: -1, y: -1 }, to: XY { x: 4, y: 2 } },
+      (2, 0, 1, 1),
+      (-1, -1, 4, 2),
     ),
     (
       "0 Distant Disjoint",
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 10, y: 10 } },
-      Rect { from: XY { x: 17, y: -22 }, to: XY { x: 25, y: -17 } },
+      (0, 0, 10, 10),
+      (17, -22, 25, -17),
       false,
       false,
-      Rect { from: XY { x: 17, y: 0 }, to: XY { x: 10, y: -17 } },
-      Rect { from: XY { x: 0, y: -22 }, to: XY { x: 25, y: 10 } },
+      (17, 0, 10, -17),
+      (0, -22, 25, 10),
     ),
     (
       "1 Distant Disjoint",
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 10, y: 10 } },
-      Rect { from: XY { x: -17, y: -22 }, to: XY { x: -9, y: -17 } },
+      (0, 0, 10, 10),
+      (-17, -22, -9, -17),
       false,
       false,
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: -9, y: -17 } },
-      Rect { from: XY { x: -17, y: -22 }, to: XY { x: 10, y: 10 } },
+      (0, 0, -9, -17),
+      (-17, -22, 10, 10),
     ),
     (
       "2 Distant Disjoint",
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 10, y: 10 } },
-      Rect { from: XY { x: -17, y: 22 }, to: XY { x: -9, y: 27 } },
+      (0, 0, 10, 10),
+      (-17, 22, -9, 27),
       false,
       false,
-      Rect { from: XY { x: 0, y: 22 }, to: XY { x: -9, y: 10 } },
-      Rect { from: XY { x: -17, y: 0 }, to: XY { x: 10, y: 27 } },
+      (0, 22, -9, 10),
+      (-17, 0, 10, 27),
     ),
     (
       "3 Distant Disjoint",
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 10, y: 10 } },
-      Rect { from: XY { x: 17, y: 22 }, to: XY { x: 25, y: 27 } },
+      (0, 0, 10, 10),
+      (17, 22, 25, 27),
       false,
       false,
-      Rect { from: XY { x: 17, y: 22 }, to: XY { x: 10, y: 10 } },
-      Rect { from: XY { x: 0, y: 0 }, to: XY { x: 25, y: 27 } },
+      (17, 22, 10, 10),
+      (0, 0, 25, 27),
     ),
     (
       "0 Disparate Disjoint",
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: 500, y: 1100 } },
-      Rect { from: XY { x: 20, y: -39 }, to: XY { x: 32, y: -1 } },
+      (100, 100, 500, 1100),
+      (20, -39, 32, -1),
       false,
       false,
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: 32, y: -1 } },
-      Rect { from: XY { x: 20, y: -39 }, to: XY { x: 500, y: 1100 } },
+      (100, 100, 32, -1),
+      (20, -39, 500, 1100),
     ),
     (
       "1 Disparate Disjoint",
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: 500, y: 1100 } },
-      Rect { from: XY { x: -20, y: -39 }, to: XY { x: -8, y: -1 } },
+      (100, 100, 500, 1100),
+      (-20, -39, -8, -1),
       false,
       false,
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: -8, y: -1 } },
-      Rect { from: XY { x: -20, y: -39 }, to: XY { x: 500, y: 1100 } },
+      (100, 100, -8, -1),
+      (-20, -39, 500, 1100),
     ),
     (
       "2 Disparate Disjoint",
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: 500, y: 1100 } },
-      Rect { from: XY { x: -20, y: 39 }, to: XY { x: -8, y: 77 } },
+      (100, 100, 500, 1100),
+      (-20, 39, -8, 77),
       false,
       false,
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: -8, y: 77 } },
-      Rect { from: XY { x: -20, y: 39 }, to: XY { x: 500, y: 1100 } },
+      (100, 100, -8, 77),
+      (-20, 39, 500, 1100),
     ),
     (
       "3 Disparate Disjoint",
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: 500, y: 1100 } },
-      Rect { from: XY { x: 20, y: 39 }, to: XY { x: 32, y: 77 } },
+      (100, 100, 500, 1100),
+      (20, 39, 32, 77),
       false,
       false,
-      Rect { from: XY { x: 100, y: 100 }, to: XY { x: 32, y: 77 } },
-      Rect { from: XY { x: 20, y: 39 }, to: XY { x: 500, y: 1100 } },
+      (100, 100, 32, 77),
+      (20, 39, 500, 1100),
     ),
   ];
 
@@ -1584,19 +1592,19 @@ mod test {
     CASES.iter().enumerate().for_each(
       |(
         i,
-        (diagram, lhs, rhs, intersects, _contains, _intersection, _union),
+        &(diagram, lhs, rhs, intersects, _contains, _intersection, _union),
       )| {
         assert_eq!(
-          lhs.intersects(rhs),
-          *intersects,
+          R16::from(lhs).intersects(&R16::from(rhs)),
+          intersects,
           "Case {} failed: {:?}.{}",
           i,
           (lhs, rhs, intersects),
           diagram
         );
         assert_eq!(
-          rhs.intersects(lhs),
-          *intersects,
+          R16::from(rhs).intersects(&R16::from(lhs)),
+          intersects,
           "Case {} (flipped) failed: {:?}.{}",
           i,
           (lhs, rhs, intersects),
@@ -1611,11 +1619,11 @@ mod test {
     CASES.iter().enumerate().for_each(
       |(
         i,
-        (diagram, lhs, rhs, _intersects, contains, _intersection, _union),
+        &(diagram, lhs, rhs, _intersects, contains, _intersection, _union),
       )| {
         assert_eq!(
-          lhs.contains(rhs),
-          *contains,
+          R16::from(lhs).contains(&R16::from(rhs)),
+          contains,
           "Case {} failed: {:?}.{}",
           i,
           (lhs, rhs, contains),
@@ -1630,19 +1638,19 @@ mod test {
     CASES.iter().enumerate().for_each(
       |(
         i,
-        (diagram, lhs, rhs, _intersects, _contains, intersection, _union),
+        &(diagram, lhs, rhs, _intersects, _contains, intersection, _union),
       )| {
         assert_eq!(
-          lhs.intersection(rhs),
-          *intersection,
+          R16::from(lhs).intersection(&R16::from(rhs)),
+          R16::from(intersection),
           "Case {} failed: {:?}.{}",
           i,
           (lhs, rhs, intersection),
           diagram
         );
         assert_eq!(
-          rhs.intersection(lhs),
-          *intersection,
+          R16::from(rhs).intersection(&R16::from(lhs)),
+          R16::from(intersection),
           "Case {} (flipped) failed: {:?}.{}",
           i,
           (lhs, rhs, intersection),
@@ -1657,19 +1665,19 @@ mod test {
     CASES.iter().enumerate().for_each(
       |(
         i,
-        (diagram, lhs, rhs, _intersects, _contains, _intersection, union),
+        &(diagram, lhs, rhs, _intersects, _contains, _intersection, union),
       )| {
         assert_eq!(
-          lhs.union(rhs),
-          *union,
+          R16::from(lhs).union(&R16::from(rhs)),
+          R16::from(union),
           "Case {} failed: {:?}.{}",
           i,
           (lhs, rhs, union),
           diagram
         );
         assert_eq!(
-          rhs.union(lhs),
-          *union,
+          R16::from(rhs).union(&R16::from(lhs)),
+          R16::from(union),
           "Case {} (flipped) failed: {:?}.{}",
           i,
           (lhs, rhs, union),
