@@ -1,6 +1,6 @@
 use super::AnimationID;
 use crate::math::Millis;
-use crate::math::{R16, WH16};
+use crate::math::{R16, XY16};
 use std::collections::HashMap;
 
 pub struct Atlas {
@@ -11,7 +11,7 @@ pub struct Atlas {
   /// Atlas image format. E.g., 'RGBA8888' or 'I8'.
   pub format: String,
   /// Atlas image dimensions (power of 2).
-  pub wh: WH16,
+  pub size: XY16,
   pub animations: AnimationMap,
 }
 
@@ -22,7 +22,7 @@ pub type AnimationMap = HashMap<AnimationID, Animation>;
 pub struct Animation {
   /// Width and height within the source atlas image in integral pixels.
   /// Dimensions are identical for every cel.
-  pub wh: WH16,
+  pub size: XY16,
   pub cels: Vec<Cel>,
   /// Positive animation length in milliseconds for a full cycle or infinite.
   /// For a ping-pong animation, this is a full traversal forward plus the

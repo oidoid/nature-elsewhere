@@ -1,12 +1,11 @@
 use super::gl_util;
 use super::rgba::RGBA;
 use super::shader_layout::ShaderLayout;
-use crate::math::R16;
-use crate::math::WH16;
+use crate::math::{R16, XY, XY16, XY32};
 use num::traits::cast::ToPrimitive;
 use std::collections::HashMap;
-use std::convert::From;
-use std::num::NonZeroI16;
+use std::convert::{From, TryFrom};
+use std::num::NonZeroU16;
 use wasm_bindgen::JsCast;
 use web_sys::{
   AngleInstancedArrays, HtmlCanvasElement, HtmlImageElement,
@@ -183,8 +182,8 @@ impl Renderer {
   pub fn render(
     &mut self,
     play_time: f32,
-    canvas_wh: &WH16,
-    scale: NonZeroI16,
+    canvas_wh: &XY16,
+    scale: NonZeroU16,
     cam: &R16,
     dat: &[u8],
   ) {
@@ -214,16 +213,11 @@ impl Renderer {
     );
   }
 
-  fn resize(&mut self, canvas_wh: &WH16, scale: NonZeroI16, cam: &R16) {
-    self.canvas.set_width(
-      canvas_wh.w.to_u32().expect("Canvas width i16 to u32 conversion failed."),
-    );
-    self.canvas.set_height(
-      canvas_wh
-        .h
-        .to_u32()
-        .expect("Canvas height i16 to u32 conversion failed."),
-    );
+  fn resize(&mut self, canvas_wh: &XY16, scale: NonZeroU16, cam: &R16) {
+    let canvas_wh = XY::try_from(canvas_wh.clone())
+      .expect("Canvas i16 to u32 conversion failed.");
+    self.canvas.set_width(canvas_wh.x);
+    self.canvas.set_height(canvas_wh.y);
 
     self.project_through(cam);
 
@@ -244,16 +238,8 @@ impl Renderer {
     // exceeds the canvas and the viewport's dimensions must be an integer
     // multiple of the camera. The negative consequence is that the first pixel
     // on the y-axis and last pixel on the x-axis may be partly truncated.
-    self.gl.viewport(
-      0,
-      0,
-      (scale.get() * cam.width())
-        .to_i32()
-        .expect("Cam width i16 to i32 conversion failed."),
-      (scale.get() * cam.height())
-        .to_i32()
-        .expect("Cam height i16 to i32 conversion failed."),
-    );
+    let viewport_size = XY32::from(cam.size()) * i32::from(scale.get());
+    self.gl.viewport(0, 0, viewport_size.x, viewport_size.y);
   }
 
   #[rustfmt::skip]
@@ -261,8 +247,9 @@ impl Renderer {
     // Convert the pixels to clipspace by taking them as a fraction of the cam
     // resolution, scaling to 0-2, flipping the y-coordinate so that positive y
     // is downward, and translating to -1 to 1 and again by the camera position.
-    let w = 2. / f32::from(cam.width());
-    let h = 2. / f32::from(cam.height());
+    let size = XY::<f32>::from(cam.size());
+    let w = 2. / size.x;
+    let h = 2. / size.y;
     self.projection[ 0] = w;  self.projection[ 1] =  0.; self.projection[ 2] = 0.; self.projection[ 3] = -1. - f32::from(cam.from.x) * w;
     self.projection[ 4] = 0.; self.projection[ 5] = -h;  self.projection[ 6] = 0.; self.projection[ 7] =  1. + f32::from(cam.from.y) * h;
     self.projection[ 8] = 0.; self.projection[ 9] =  0.; self.projection[10] = 1.; self.projection[11] =  0.;

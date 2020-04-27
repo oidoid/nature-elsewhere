@@ -52,10 +52,10 @@ impl AlignTo {
             self.margin.x
           }
           Alignment::SouthEast | Alignment::East | Alignment::NorthEast => {
-            to.width() - (bounds.width() + self.margin.x)
+            to.size().x - (bounds.size().x + self.margin.x)
           }
           Alignment::North | Alignment::South | Alignment::Center => {
-            (to.width() / 2) - ((bounds.width() / 2) + self.margin.x)
+            (to.size().x / 2) - ((bounds.size().x / 2) + self.margin.x)
           }
         },
       y: to.from.y
@@ -64,10 +64,10 @@ impl AlignTo {
             self.margin.y
           }
           Alignment::SouthEast | Alignment::South | Alignment::SouthWest => {
-            to.height() - (bounds.height() + self.margin.y)
+            to.size().y - (bounds.size().y + self.margin.y)
           }
           Alignment::East | Alignment::West | Alignment::Center => {
-            (to.height() / 2) - ((bounds.height() / 2) + self.margin.y)
+            (to.size().y / 2) - ((bounds.size().y / 2) + self.margin.y)
           }
         },
     }

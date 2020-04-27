@@ -2,7 +2,6 @@ use crate::atlas::Atlas;
 use crate::components::{Bounds, MaxWH, Renderable, Text};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
-use crate::math::WH16;
 use crate::resources::Timing;
 use crate::sprites::Sprite;
 use specs::prelude::{ResourceId, SystemData};

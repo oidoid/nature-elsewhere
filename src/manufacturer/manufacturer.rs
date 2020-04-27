@@ -104,7 +104,7 @@ impl Manufacturer {
 mod test {
   use super::*;
   use crate::components::{FollowMouse, Position, Velocity};
-  use crate::math::{WH, XY, XY16};
+  use crate::math::{XY, XY16};
   use specs::join::Join;
   use specs::ReadStorage;
 
@@ -116,7 +116,7 @@ mod test {
       version: String::new(),
       filename: String::new(),
       format: String::new(),
-      wh: WH::new(0, 0),
+      size: XY::new(0, 0),
       animations: HashMap::new(),
     };
     let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
@@ -146,7 +146,7 @@ mod test {
       version: String::new(),
       filename: String::new(),
       format: String::new(),
-      wh: WH::new(0, 0),
+      size: XY::new(0, 0),
       animations: HashMap::new(),
     };
     let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
@@ -181,7 +181,7 @@ mod test {
       version: String::new(),
       filename: String::new(),
       format: String::new(),
-      wh: WH::new(0, 0),
+      size: XY::new(0, 0),
       animations: HashMap::new(),
     };
     let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
@@ -226,7 +226,7 @@ mod test {
       version: String::new(),
       filename: String::new(),
       format: String::new(),
-      wh: WH::new(0, 0),
+      size: XY::new(0, 0),
       animations: HashMap::new(),
     };
     let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));
@@ -301,7 +301,7 @@ mod test {
       version: String::new(),
       filename: String::new(),
       format: String::new(),
-      wh: WH::new(0, 0),
+      size: XY::new(0, 0),
       animations: HashMap::new(),
     };
     let manufacturer = Manufacturer::new(blueprints, Rc::new(atlas));

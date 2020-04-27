@@ -3,7 +3,7 @@ use super::{
 };
 use crate::atlas::{Animator, Atlas};
 use crate::components::AlignTo;
-use crate::math::{R16, WH, XY};
+use crate::math::{R16, XY};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
 use std::collections::HashMap;
 use std::hash::Hash;
@@ -90,14 +90,14 @@ impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
     let animation = &atlas.animations[&id];
     // do i need to validate area too?
     let size = self.size.clone().map_or(
-      WH::new(
-        self.w.unwrap_or(animation.wh.w),
-        self.h.unwrap_or(animation.wh.h),
+      XY::new(
+        self.w.unwrap_or(animation.size.x),
+        self.h.unwrap_or(animation.size.y),
       ),
-      |size| WH::new(size.w.unwrap_or(0), size.h.unwrap_or(0)),
+      |size| XY::new(size.w.unwrap_or(0), size.h.unwrap_or(0)),
     ); //use atlas, review ts
     let bounds = self.bounds.clone().map_or(
-      R16::new_wh(position.x, position.y, size.w, size.h),
+      R16::new_wh(position.x, position.y, size.x, size.y),
       |bounds| {
         R16::new_wh(
           bounds.x.unwrap_or(0),
@@ -155,12 +155,12 @@ impl ManufactureBlueprint<Option<String>> for Option<String> {
   }
 }
 
-impl<T: Clone + Default> ManufactureBlueprint<Option<WH<T>>>
+impl<T: Clone + Default> ManufactureBlueprint<Option<XY<T>>>
   for Option<WHBlueprint<T>>
 {
-  fn manufacture(&self) -> Option<WH<T>> {
+  fn manufacture(&self) -> Option<XY<T>> {
     if let Some(blueprint) = self {
-      Some(WH::new(
+      Some(XY::new(
         blueprint.w.clone().unwrap_or_default(),
         blueprint.h.clone().unwrap_or_default(),
       ))

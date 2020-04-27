@@ -1,6 +1,6 @@
 use super::{SpriteComposition, SpriteLayer};
 use crate::atlas::{AnimationID, Animator, Atlas};
-use crate::math::{Millis, R16, WH16, XY, XY16};
+use crate::math::{Millis, R16, XY, XY16};
 use std::convert::TryFrom;
 use std::{convert::TryInto, num::NonZeroI16};
 
@@ -100,7 +100,7 @@ impl Sprite {
     self.bounds = self.bounds.move_to(to);
   }
 
-  pub fn size_to(&mut self, unscaled_to: &WH16) {
+  pub fn size_to(&mut self, unscaled_to: &XY16) {
     self.bounds.to = self.bounds.from.clone()
       + (unscaled_to.clone() * XY16::from(self.scale.clone()).abs()).into();
   }
@@ -120,11 +120,11 @@ impl Sprite {
   pub fn scale_to(&mut self, to: &XY<NonZeroI16>) {
     let scale: XY<f32> = self.scale.clone().into();
     self.scale = to.clone();
-    let wh: XY<f32> =
+    let size: XY<f32> =
       (self.bounds.to.clone() - self.bounds.from.clone()).into();
-    let scaled_wh = wh * (XY::<f32>::from(to.clone()) / scale).abs();
+    let scaled_wh = size * (XY::<f32>::from(to.clone()) / scale).abs();
     self.bounds.to = self.bounds.from.clone()
-      + scaled_wh.try_into().expect("WH f32 to i16 conversion failed.");
+      + scaled_wh.try_into().expect("Size f32 to i16 conversion failed.");
   }
 
   pub fn get_wrap(&self) -> &XY16 {
@@ -194,7 +194,6 @@ impl Sprite {
 mod test {
   use super::*;
   use crate::atlas::{Animation, Cel, Playback};
-  use crate::math::WH;
   use std::collections::hash_map::HashMap;
 
   #[test]
@@ -283,7 +282,7 @@ mod test {
     animations.insert(
       AnimationID::Bee,
       Animation {
-        wh: WH::new(5, 6),
+        size: XY::new(5, 6),
         cels,
         duration: 100.,
         direction: Playback::Forward,
@@ -293,7 +292,7 @@ mod test {
       version: "1.2.3.4".to_string(),
       filename: "atlas.png".to_string(),
       format: "I8".to_string(),
-      wh: WH::new(256, 256),
+      size: XY::new(256, 256),
       animations,
     };
     let sprite = Sprite::new(

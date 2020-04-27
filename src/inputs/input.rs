@@ -1,5 +1,5 @@
 use crate::graphics;
-use crate::math::{Millis, R16, WH16, XY, XY16, XY32};
+use crate::math::{Millis, R16, XY16, XY32};
 
 static LONG_DURATION: Millis = 500.;
 
@@ -29,7 +29,7 @@ impl Input {
     !self.active && self.timer == 0.
   }
 
-  pub fn to_level_xy(&self, canvas: &WH16, cam: &R16) -> XY16 {
+  pub fn to_level_xy(&self, canvas: &XY16, cam: &R16) -> XY16 {
     graphics::to_level_xy(&self.window_position, canvas, cam)
   }
 

@@ -90,14 +90,14 @@ impl Playback {
 #[cfg(test)]
 mod test {
   use super::*;
-  use crate::math::{R16, WH};
+  use crate::math::{R16, XY};
 
   #[test]
   fn reset() {
     let cel =
       Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
-      wh: WH { w: 0, h: 0 },
+      size: XY::new(0, 0),
       cels: vec![cel.clone(), cel.clone()],
       duration: 2.,
       direction: Playback::Forward,
@@ -116,7 +116,7 @@ mod test {
     let cel =
       Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
-      wh: WH { w: 0, h: 0 },
+      size: XY::new(0, 0),
       cels: vec![
         cel.clone(),
         cel.clone(),
@@ -141,7 +141,7 @@ mod test {
     let cel =
       Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
-      wh: WH { w: 0, h: 0 },
+      size: XY::new(0, 0),
       cels: vec![cel.clone(), cel.clone()],
       duration: 2.,
       direction: Playback::Forward,
@@ -157,7 +157,7 @@ mod test {
     let cel =
       Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
-      wh: WH { w: 0, h: 0 },
+      size: XY::new(0, 0),
       cels: vec![cel.clone(), cel.clone()],
       duration: 2.,
       direction: Playback::Forward,
@@ -173,7 +173,7 @@ mod test {
     let cel =
       Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
     let animation = Animation {
-      wh: WH { w: 0, h: 0 },
+      size: XY::new(0, 0),
       cels: vec![cel.clone(), cel.clone()],
       duration: 2.,
       direction: Playback::Forward,
@@ -192,7 +192,7 @@ mod test {
       slices: vec![],
     };
     let animation = Animation {
-      wh: WH { w: 0, h: 0 },
+      size: XY::new(0, 0),
       cels: vec![cel.clone(), cel.clone()],
       duration: f64::INFINITY,
       direction: Playback::Forward,
@@ -212,7 +212,7 @@ mod test {
         let cel =
           Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
         let animation = Animation {
-          wh: WH { w: 0, h: 0 },
+          size: XY::new(0, 0),
           cels: vec![cel.clone(), cel.clone()],
           duration: 2.,
           direction,
@@ -238,7 +238,7 @@ mod test {
         let cel =
           Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
         let animation = Animation {
-          wh: WH { w: 0, h: 0 },
+          size: XY::new(0, 0),
           cels: vec![cel.clone(), cel.clone()],
           duration: 2.,
           direction,
@@ -301,7 +301,7 @@ mod test {
       let cel =
         Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
-        wh: WH { w: 0, h: 0 },
+        size: XY::new(0, 0),
         cels: vec![cel.clone(), cel.clone(), cel.clone(), cel.clone()],
         duration: 4.,
         direction,
@@ -336,7 +336,7 @@ mod test {
       let cel =
         Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
-        wh: WH { w: 0, h: 0 },
+        size: XY::new(0, 0),
         cels: vec![
           cel.clone(),
           cel.clone(),
@@ -376,7 +376,7 @@ mod test {
       let cel =
         Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
-        wh: WH { w: 0, h: 0 },
+        size: XY::new(0, 0),
         cels: vec![
           cel.clone(),
           cel.clone(),
@@ -434,7 +434,7 @@ mod test {
       let cel =
         Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
-        wh: WH { w: 0, h: 0 },
+        size: XY::new(0, 0),
         cels: vec![
           cel.clone(),
           cel.clone(),
@@ -492,7 +492,7 @@ mod test {
       let cel =
         Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
-        wh: WH { w: 0, h: 0 },
+        size: XY::new(0, 0),
         cels: vec![
           cel.clone(),
           cel.clone(),
@@ -550,7 +550,7 @@ mod test {
       let cel =
         Cel { bounds: R16::new(0, 0, 0, 0), duration: 1., slices: vec![] };
       let animation = Animation {
-        wh: WH { w: 0, h: 0 },
+        size: XY::new(0, 0),
         cels: vec![
           cel.clone(),
           cel.clone(),

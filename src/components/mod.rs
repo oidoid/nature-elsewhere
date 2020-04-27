@@ -8,8 +8,8 @@ pub use collision::*;
 pub use cursor::*;
 pub use wraparound::*;
 
-use crate::atlas::{AnimationID, Animator};
-use crate::math::{R16, WH16, XY16};
+use crate::atlas::AnimationID;
+use crate::math::{R16, XY16};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
 use specs::prelude::DenseVecStorage;
 use specs::{Component, Entity};
@@ -39,12 +39,12 @@ pub struct Text {
 
 #[derive(Component)]
 pub struct MaxWH {
-  pub size: WH16,
+  pub size: XY16,
 }
 
 #[derive(Component)]
 pub struct Cam {
-  pub size: WH16,
+  pub size: XY16,
 }
 
 #[derive(Clone, Component)]

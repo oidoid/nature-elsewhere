@@ -25,7 +25,6 @@ pub struct Rect<T: Any + Send + Sync + Default> {
 }
 pub type R16 = Rect<i16>;
 
-// [todo] sync with XY. Area is a product. Size is dimensions. Bounds are side + position.
 impl<T: Any + Default + Send + Sync> Rect<T> {
   pub fn new(fx: T, fy: T, tx: T, ty: T) -> Self {
     Self { from: XY::new(fx, fy), to: XY::new(tx, ty) }
@@ -79,40 +78,28 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
     self.clone() + by
   }
 
-  pub fn wh(&self) -> XY<T>
+  /// Components may be negative.
+  pub fn size(&self) -> XY<T>
   where
     T: Sub<Output = T> + Ord + Clone,
   {
-    self.max() - self.min()
+    self.to.clone() - self.from.clone()
   }
 
-  pub fn width(&self) -> T
-  where
-    T: Sub<Output = T> + Ord + Clone,
-  {
-    self.wh().x
-  }
-
-  pub fn height(&self) -> T
-  where
-    T: Sub<Output = T> + Ord + Clone,
-  {
-    self.wh().y
-  }
-
+  /// May be negative.
   pub fn area(&self) -> T
   where
     T: Sub<Output = T> + Mul<Output = T> + Ord + Clone,
   {
-    self.wh().area()
+    self.size().area()
   }
 
   pub fn is_empty(&self) -> bool
   where
     T: Sub<Output = T> + Mul<Output = T> + Zero + Ord + Clone,
   {
-    let XY { x, y } = self.wh();
-    x.is_zero() || y.is_zero()
+    let size = self.size();
+    size.x.is_zero() || size.y.is_zero()
   }
 
   /// Returns true if Rect is back-facing (from < to), false if front-facing.
@@ -152,6 +139,7 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
   where
     T: Ord + Clone,
   {
+    // [todo] don't attempt to reorder self?
     let lhs = self.order();
     let rhs = rhs.order();
     lhs.from.x < rhs.to.x
@@ -518,7 +506,7 @@ mod test {
   #[test]
   fn wh() {
     assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }.wh(),
+      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }.size(),
       XY { x: 2, y: 2 }
     )
   }

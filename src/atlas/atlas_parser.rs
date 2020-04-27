@@ -1,15 +1,11 @@
 use super::aseprite;
 use super::{Animation, AnimationID, AnimationMap, Atlas, Cel, Playback};
-use crate::math::Millis;
-use crate::math::R16;
-use crate::math::{WH, WH16};
+use crate::math::{Millis, R16, XY, XY16};
 use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
 use strum::IntoEnumIterator;
 
 pub fn parse(file: &aseprite::File) -> Result<Atlas, AtlasParseError> {
-  let aseprite::WH { w, h } = file.meta.size;
-
   let animations = parse_animation_map(file)?;
   // animations can only contain valid (present) AnimationIDs, exactly zero or
   // one of each, but are all AnimationIDs present in animations?
@@ -25,7 +21,7 @@ pub fn parse(file: &aseprite::File) -> Result<Atlas, AtlasParseError> {
     version: file.meta.version.clone(),
     filename: file.meta.image.clone(),
     format: file.meta.format.clone(),
-    wh: WH { w: w.try_into()?, h: h.try_into()? },
+    size: XY::new(file.meta.size.w.try_into()?, file.meta.size.h.try_into()?),
     animations,
   })
 }
@@ -389,7 +385,7 @@ pub fn parse_animation(
   }
 
   Ok(Animation {
-    wh: WH { w: size.w.try_into()?, h: size.h.try_into()? },
+    size: XY16::new(size.w.try_into()?, size.h.try_into()?),
     cels,
     duration,
     direction,
@@ -438,8 +434,8 @@ pub fn parse_cel(
 pub fn parse_bounds(frame: &aseprite::Frame) -> Result<R16, AtlasParseError> {
   let pad = parse_padding(frame)?;
   Ok(R16::new_wh(
-    frame.frame.x + pad.w / 2,
-    frame.frame.y + pad.h / 2,
+    frame.frame.x + pad.x / 2,
+    frame.frame.y + pad.y / 2,
     frame.source_size.w.try_into()?,
     frame.source_size.h.try_into()?,
   ))
@@ -448,13 +444,13 @@ pub fn parse_bounds(frame: &aseprite::Frame) -> Result<R16, AtlasParseError> {
 /// Returns evenly divisible padding.
 pub fn parse_padding(
   aseprite::Frame { frame, source_size, .. }: &aseprite::Frame,
-) -> Result<WH16, AtlasParseError> {
+) -> Result<XY16, AtlasParseError> {
   let w = (frame.w - source_size.w).try_into()?;
   let h = (frame.h - source_size.h).try_into()?;
   if is_odd(w) || is_odd(h) {
     return Err("Cel padding is not evenly divisible.".into());
   }
-  Ok(WH { w, h })
+  Ok(XY16::new(w, h))
 }
 
 fn is_odd(val: i16) -> bool {
@@ -616,7 +612,7 @@ mod test {
     expected.insert(
       AnimationID::CloudLarge,
       Animation {
-        wh: WH { w: 16, h: 16 },
+        size: XY::new(16, 16),
         cels: vec![Cel {
           bounds: R16::new_wh(221, 19, 16, 16),
           duration: 1.,
@@ -632,7 +628,7 @@ mod test {
     expected.insert(
       AnimationID::PaletteRed,
       Animation {
-        wh: WH { w: 16, h: 16 },
+        size: XY::new(16, 16),
         cels: vec![Cel {
           bounds: R16::new_wh(91, 55, 16, 16),
           duration: f64::INFINITY,
@@ -648,7 +644,7 @@ mod test {
     expected.insert(
       AnimationID::Conifer,
       Animation {
-        wh: WH { w: 16, h: 16 },
+        size: XY::new(16, 16),
         cels: vec![Cel {
           bounds: R16::new_wh(73, 55, 16, 16),
           duration: f64::INFINITY,
@@ -664,7 +660,7 @@ mod test {
     expected.insert(
       AnimationID::ConiferShadow,
       Animation {
-        wh: WH { w: 16, h: 16 },
+        size: XY::new(16, 16),
         cels: vec![Cel {
           bounds: R16::new_wh(55, 55, 16, 16),
           duration: f64::INFINITY,
@@ -761,7 +757,7 @@ mod test {
     assert_eq!(
       super::parse_animation(&frame_tag, &frames, &slices).unwrap(),
       Animation {
-        wh: WH { w: 16, h: 16 },
+        size: XY::new(16, 16),
         cels: vec![Cel {
           bounds: R16::new_wh(185, 37, 16, 16),
           duration: f64::INFINITY,
@@ -858,7 +854,7 @@ mod test {
       source_size: aseprite::WH { w: 3, h: 4 },
       duration: 1,
     };
-    assert_eq!(parse_padding(&frame).unwrap(), WH { w: 0, h: 0 });
+    assert_eq!(parse_padding(&frame).unwrap(), XY::new(0, 0));
   }
 
   #[test]
@@ -871,7 +867,7 @@ mod test {
       source_size: aseprite::WH { w: 2, h: 3 },
       duration: 1,
     };
-    assert_eq!(parse_padding(&frame).unwrap(), WH { w: 2, h: 2 });
+    assert_eq!(parse_padding(&frame).unwrap(), XY::new(2, 2));
   }
 
   #[test]
@@ -884,7 +880,7 @@ mod test {
       source_size: aseprite::WH { w: 2, h: 2 },
       duration: 1,
     };
-    assert_eq!(parse_padding(&frame).unwrap(), WH { w: 2, h: 4 });
+    assert_eq!(parse_padding(&frame).unwrap(), XY::new(2, 4));
   }
 
   #[test]
