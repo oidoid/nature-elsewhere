@@ -25,6 +25,7 @@ pub struct XY<T> {
   pub y: T,
 }
 pub type XY16 = XY<i16>;
+pub type XYU16 = XY<u16>;
 pub type XY32 = XY<i32>;
 
 impl<T> XY<T> {

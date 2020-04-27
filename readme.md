@@ -970,17 +970,15 @@ The following abbreviations are only used for function parameters and locals:
 
 ##### Terminology
 
+- area: a product of width and height
 - atlas: a composite texture.
 - bounds: having a position and size (usually a [`Rect`](src/math/Rect.ts)).
 - length: usually the number of elements in a collection.
 - location: a WebGL shader program variable index.
-- new / make: like the `new` operator; new is preferred where the language
-  allows.
 - position: an _x_ and _y_ cartesian location (usually an
   [`XY`](src/math/XY.ts)).
-- size: an area (usually a [`WH`](src/math/WH.ts)) or size in bytes like
-  `sizeof` in the C programming language.
-- WH: having width and height.
+- size: a width and height (usually an [`XY`](src/math/XY.ts)) or size in bytes
+  like `sizeof` in the C programming language.
 - XY: having _x_- and _y_-coordinate dimensions such as a position.
 
 ## Design

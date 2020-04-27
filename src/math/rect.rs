@@ -19,13 +19,14 @@ use std::{
 /// `Rect.flipped()`. A back-facing rectangle can be recomputed to a
 /// front-facing rectangle by calling order().
 #[derive(Clone, Eq, PartialEq, Serialize)]
-pub struct Rect<T: Any + Send + Sync + Default> {
+pub struct Rect<T> {
   pub from: XY<T>,
   pub to: XY<T>,
 }
 pub type R16 = Rect<i16>;
+pub type R32 = Rect<i32>;
 
-impl<T: Any + Default + Send + Sync> Rect<T> {
+impl<T> Rect<T> {
   pub fn new(fx: T, fy: T, tx: T, ty: T) -> Self {
     Self { from: XY::new(fx, fy), to: XY::new(tx, ty) }
   }
@@ -65,7 +66,7 @@ impl<T: Any + Default + Send + Sync> Rect<T> {
   pub fn cast_into<Into>(self) -> Option<Rect<Into>>
   where
     T: ToPrimitive + Clone,
-    Into: Any + Default + Send + Sync + NumCast,
+    Into: NumCast,
   {
     Some(Rect { from: self.from.cast_into()?, to: self.to.cast_into()? })
   }
@@ -218,93 +219,75 @@ macro_rules! impl_magnitude {
 }
 impl_magnitude!(u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, usize, isize);
 
-impl<T: fmt::Debug + Any + Default + Send + Sync> fmt::Debug for Rect<T> {
+impl<T: fmt::Debug> fmt::Debug for Rect<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(formatter, "[{:?}, {:?}]", self.from, self.to)
   }
 }
 
-impl<T: fmt::Display + Any + Default + Send + Sync> fmt::Display for Rect<T> {
+impl<T: fmt::Display> fmt::Display for Rect<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(formatter, "[{}, {}]", self.from, self.to)
   }
 }
 
-impl<T: Add<Output = T> + Any + Default + Send + Sync> Add<Rect<T>>
-  for Rect<T>
-{
+impl<T: Add<Output = T>> Add<Rect<T>> for Rect<T> {
   type Output = Self;
   fn add(self, rhs: Self) -> Self {
     Self { from: self.from + rhs.from, to: self.to + rhs.to }
   }
 }
 
-impl<T: Add<Output = T> + Clone + Default + Any + Send + Sync> Add<XY<T>>
-  for Rect<T>
-{
+impl<T: Add<Output = T> + Clone> Add<XY<T>> for Rect<T> {
   type Output = Self;
   fn add(self, rhs: XY<T>) -> Self {
     Self { from: self.from + rhs.clone(), to: self.to + rhs }
   }
 }
 
-impl<T: AddAssign + Any + Default + Send + Sync + Clone> AddAssign<&XY<T>>
-  for Rect<T>
-{
+impl<T: AddAssign + Clone> AddAssign<&XY<T>> for Rect<T> {
   fn add_assign(&mut self, rhs: &XY<T>) {
     self.from += rhs.clone();
     self.to += rhs.clone();
   }
 }
 
-impl<T: Sub<Output = T> + Any + Default + Send + Sync> Sub<Rect<T>>
-  for Rect<T>
-{
+impl<T: Sub<Output = T>> Sub<Rect<T>> for Rect<T> {
   type Output = Self;
   fn sub(self, rhs: Self) -> Self {
     Self { from: self.from - rhs.from, to: self.to - rhs.to }
   }
 }
 
-impl<T: Sub<Output = T> + Clone + Any + Default + Send + Sync> Sub<XY<T>>
-  for Rect<T>
-{
+impl<T: Sub<Output = T> + Clone> Sub<XY<T>> for Rect<T> {
   type Output = Self;
   fn sub(self, rhs: XY<T>) -> Self {
     Self { from: self.from - rhs.clone(), to: self.to - rhs }
   }
 }
 
-impl<T: Mul<Output = T> + Any + Default + Send + Sync> Mul<Rect<T>>
-  for Rect<T>
-{
+impl<T: Mul<Output = T>> Mul<Rect<T>> for Rect<T> {
   type Output = Self;
   fn mul(self, rhs: Self) -> Self {
     Self { from: self.from * rhs.from, to: self.to * rhs.to }
   }
 }
 
-impl<T: Mul<Output = T> + Clone + Any + Default + Send + Sync> Mul<XY<T>>
-  for Rect<T>
-{
+impl<T: Mul<Output = T> + Clone> Mul<XY<T>> for Rect<T> {
   type Output = Self;
   fn mul(self, rhs: XY<T>) -> Self {
     Self { from: self.from * rhs.clone(), to: self.to * rhs }
   }
 }
 
-impl<T: Div<Output = T> + Any + Default + Send + Sync> Div<Rect<T>>
-  for Rect<T>
-{
+impl<T: Div<Output = T>> Div<Rect<T>> for Rect<T> {
   type Output = Self;
   fn div(self, rhs: Self) -> Self {
     Self { from: self.from / rhs.from, to: self.to / rhs.to }
   }
 }
 
-impl<T: Div<Output = T> + Clone + Any + Default + Send + Sync> Div<XY<T>>
-  for Rect<T>
-{
+impl<T: Div<Output = T> + Clone> Div<XY<T>> for Rect<T> {
   type Output = Self;
 
   fn div(self, rhs: XY<T>) -> Self {
@@ -316,17 +299,8 @@ pub trait Contains<T> {
   fn contains(&self, rhs: &T) -> bool;
 }
 
-impl<
-    T: Sub<Output = T>
-      + Mul<Output = T>
-      + Ord
-      + Zero
-      + Clone
-      + Any
-      + Default
-      + Send
-      + Sync,
-  > Contains<Rect<T>> for Rect<T>
+impl<T: Sub<Output = T> + Mul<Output = T> + Ord + Zero + Clone>
+  Contains<Rect<T>> for Rect<T>
 {
   /// Return true if rhs fits within possibly touching but not overlapping.
   fn contains(&self, rhs: &Self) -> bool {
@@ -342,7 +316,10 @@ impl<
   }
 }
 
-impl<T: Ord + Clone + Any + Default + Send + Sync> Contains<XY<T>> for Rect<T> {
+impl<T> Contains<XY<T>> for Rect<T>
+where
+  T: Ord + Clone,
+{
   fn contains(&self, XY { x, y }: &XY<T>) -> bool {
     let lhs = self.order();
     x.clone() < lhs.to.x
@@ -359,15 +336,7 @@ pub trait CenterOn<T> {
 }
 
 impl<
-    T: Add<Output = T>
-      + Sub<Output = T>
-      + Div<Output = T>
-      + NumCast
-      + Clone
-      + Any
-      + Default
-      + Send
-      + Sync,
+    T: Add<Output = T> + Sub<Output = T> + Div<Output = T> + NumCast + Clone,
   > CenterOn<Rect<T>> for Rect<T>
 {
   fn center_on(&self, on: &Self) -> Rect<T> {
@@ -376,15 +345,7 @@ impl<
 }
 
 impl<
-    T: Add<Output = T>
-      + Sub<Output = T>
-      + Div<Output = T>
-      + NumCast
-      + Clone
-      + Any
-      + Default
-      + Send
-      + Sync,
+    T: Add<Output = T> + Sub<Output = T> + Div<Output = T> + NumCast + Clone,
   > CenterOn<XY<T>> for Rect<T>
 {
   fn center_on(&self, on: &XY<T>) -> Rect<T> {
