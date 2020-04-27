@@ -59,6 +59,7 @@ impl<T> XY<T> {
     Self { x: side.clone(), y: side }
   }
 
+  /// May be negative.
   pub fn area(&self) -> T
   where
     T: Mul<Output = T> + Clone,

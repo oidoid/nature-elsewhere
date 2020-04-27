@@ -1,14 +1,14 @@
 use super::xy::XY;
 use num::traits::{
   cast::{NumCast, ToPrimitive},
+  real::Real,
   Zero,
 };
 use serde::Serialize;
 use std::{
-  any::Any,
-  convert::TryInto,
+  convert::{From, TryFrom, TryInto},
   fmt,
-  ops::{Add, AddAssign, Div, Mul, Sub},
+  ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
 
 /// Axis-aligned rectangle. Rectangles are considered front-facing when both
@@ -82,7 +82,7 @@ impl<T> Rect<T> {
   /// Components may be negative.
   pub fn size(&self) -> XY<T>
   where
-    T: Sub<Output = T> + Ord + Clone,
+    T: Sub<Output = T> + Clone,
   {
     self.to.clone() - self.from.clone()
   }
@@ -90,14 +90,14 @@ impl<T> Rect<T> {
   /// May be negative.
   pub fn area(&self) -> T
   where
-    T: Sub<Output = T> + Mul<Output = T> + Ord + Clone,
+    T: Sub<Output = T> + Mul<Output = T> + Clone,
   {
     self.size().area()
   }
 
   pub fn is_empty(&self) -> bool
   where
-    T: Sub<Output = T> + Mul<Output = T> + Zero + Ord + Clone,
+    T: Sub<Output = T> + Zero + Clone,
   {
     let size = self.size();
     size.x.is_zero() || size.y.is_zero()
@@ -206,18 +206,46 @@ impl<T> Rect<T> {
         / T::from(2)
           .expect(&format!("Conversion from i32 to {} failed.", stringify!(T)))
   }
+
+  pub fn clamp(&self, min: &XY<T>, max: &XY<T>) -> Self
+  where
+    T: PartialOrd + Clone,
+  {
+    Self { from: self.from.clamp(min, max), to: self.to.clamp(min, max) }
+  }
+
+  pub fn lerp(&self, to: &XY<T>, ratio: T) -> Self
+  where
+    T: Real,
+  {
+    let from = self.from.lerp(to, ratio);
+    Self { from: from.clone(), to: self.to.clone() + from - self.from.clone() }
+  }
 }
 
 macro_rules! impl_magnitude {
   ($($t:ty),+) => ($(
     impl Rect<$t> {
       pub fn magnitude(&self) -> $t {
-        (self.from.clone() - self.to.clone()).magnitude()
+        self.size().magnitude()
       }
     }
   )+)
 }
-impl_magnitude!(u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, usize, isize);
+impl_magnitude!(usize, isize, u8, i8, u16, i16, u32, i32, f32, u64, i64, f64);
+
+macro_rules! impl_try_lerp {
+  ($Ratio:ty; $($T:ty),+) => ($(
+    impl Rect<$T> {
+      pub fn try_lerp(&self, to: &XY<$T>, ratio: $Ratio) -> Option<Self> {
+        let from = self.from.try_lerp(to, ratio)?;
+        Some(Self { from: from.clone(), to: self.to.clone() + from - self.from.clone() })
+      }
+    }
+  )+)
+}
+impl_try_lerp!(f32; u8, i8, u16, i16);
+impl_try_lerp!(f64; u32, i32);
 
 impl<T: fmt::Debug> fmt::Debug for Rect<T> {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -245,10 +273,17 @@ impl<T: Add<Output = T> + Clone> Add<XY<T>> for Rect<T> {
   }
 }
 
-impl<T: AddAssign + Clone> AddAssign<&XY<T>> for Rect<T> {
-  fn add_assign(&mut self, rhs: &XY<T>) {
+impl<T: AddAssign> AddAssign<Rect<T>> for Rect<T> {
+  fn add_assign(&mut self, rhs: Self) {
+    self.from += rhs.from;
+    self.to += rhs.to;
+  }
+}
+
+impl<T: AddAssign + Clone> AddAssign<XY<T>> for Rect<T> {
+  fn add_assign(&mut self, rhs: XY<T>) {
     self.from += rhs.clone();
-    self.to += rhs.clone();
+    self.to += rhs;
   }
 }
 
@@ -266,6 +301,20 @@ impl<T: Sub<Output = T> + Clone> Sub<XY<T>> for Rect<T> {
   }
 }
 
+impl<T: SubAssign> SubAssign<Rect<T>> for Rect<T> {
+  fn sub_assign(&mut self, rhs: Self) {
+    self.from -= rhs.from;
+    self.to -= rhs.to;
+  }
+}
+
+impl<T: SubAssign + Clone> SubAssign<XY<T>> for Rect<T> {
+  fn sub_assign(&mut self, rhs: XY<T>) {
+    self.from -= rhs.clone();
+    self.to -= rhs;
+  }
+}
+
 impl<T: Mul<Output = T>> Mul<Rect<T>> for Rect<T> {
   type Output = Self;
   fn mul(self, rhs: Self) -> Self {
@@ -277,6 +326,35 @@ impl<T: Mul<Output = T> + Clone> Mul<XY<T>> for Rect<T> {
   type Output = Self;
   fn mul(self, rhs: XY<T>) -> Self {
     Self { from: self.from * rhs.clone(), to: self.to * rhs }
+  }
+}
+
+impl<T: Mul<Output = T> + Clone> Mul<T> for Rect<T> {
+  type Output = Self;
+
+  fn mul(self, rhs: T) -> Self {
+    Self { from: self.from * rhs.clone(), to: self.to * rhs }
+  }
+}
+
+impl<T: MulAssign> MulAssign<Rect<T>> for Rect<T> {
+  fn mul_assign(&mut self, rhs: Self) {
+    self.from *= rhs.from;
+    self.to *= rhs.to;
+  }
+}
+
+impl<T: MulAssign + Clone> MulAssign<XY<T>> for Rect<T> {
+  fn mul_assign(&mut self, rhs: XY<T>) {
+    self.from *= rhs.clone();
+    self.to *= rhs;
+  }
+}
+
+impl<T: MulAssign + Clone> MulAssign<T> for Rect<T> {
+  fn mul_assign(&mut self, rhs: T) {
+    self.from *= rhs.clone();
+    self.to *= rhs;
   }
 }
 
@@ -292,6 +370,35 @@ impl<T: Div<Output = T> + Clone> Div<XY<T>> for Rect<T> {
 
   fn div(self, rhs: XY<T>) -> Self {
     Self { from: self.from / rhs.clone(), to: self.to / rhs }
+  }
+}
+
+impl<T: Div<Output = T> + Clone> Div<T> for Rect<T> {
+  type Output = Self;
+
+  fn div(self, rhs: T) -> Self {
+    Self { from: self.from / rhs.clone(), to: self.to / rhs }
+  }
+}
+
+impl<T: DivAssign> DivAssign<Rect<T>> for Rect<T> {
+  fn div_assign(&mut self, rhs: Self) {
+    self.from /= rhs.from;
+    self.to /= rhs.to;
+  }
+}
+
+impl<T: DivAssign + Clone> DivAssign<XY<T>> for Rect<T> {
+  fn div_assign(&mut self, rhs: XY<T>) {
+    self.from /= rhs.clone();
+    self.to /= rhs;
+  }
+}
+
+impl<T: DivAssign + Clone> DivAssign<T> for Rect<T> {
+  fn div_assign(&mut self, rhs: T) {
+    self.from /= rhs.clone();
+    self.to /= rhs;
   }
 }
 
@@ -353,6 +460,139 @@ impl<
     Self { from: self.from.clone() + mv.clone(), to: self.to.clone() + mv }
   }
 }
+
+macro_rules! impl_From_to_float {
+  ($To:ty; $($From:ty),+) => ($(
+    impl From<Rect<$From>> for Rect<$To> {
+      fn from(Rect {from, to}: Rect<$From>) -> Self {
+        Self { from: XY::from(from), to: XY::from(to) }
+      }
+    }
+    impl From<($From, $From, $From, $From)> for Rect<$To> {
+      fn from((fx, fy, tx, ty): ($From, $From, $From, $From)) -> Self {
+        Self { from: XY::from((fx, fy)), to: XY::from((tx, ty)) }
+      }
+    }
+)+)
+}
+impl_From_to_float!(f32; u8, i8, u16, i16);
+impl_From_to_float!(f64; u8, i8, u16, i16, u32, i32, f32);
+
+macro_rules! impl_TryFrom_float {
+  ($From:ty; $($To:ty),+) => ($(
+    impl TryFrom<Rect<$From>> for Rect<$To> {
+      type Error = ();
+      fn try_from(Rect { from, to }: Rect<$From>) -> Result<Self, Self::Error> {
+        Ok(Self { from: XY::try_from(from)?, to: XY::try_from(to)? })
+      }
+    }
+    impl TryFrom<($From, $From, $From, $From)> for Rect<$To> {
+      type Error = ();
+      fn try_from((fx, fy, tx, ty): ($From, $From, $From, $From)) -> Result<Self, Self::Error> {
+        Ok(Self { from: XY::try_from((fx, fy))?, to: XY::try_from((tx, ty))? })
+      }
+    }
+  )+)
+}
+impl_TryFrom_float!(
+  f32; usize,
+  isize,
+  u8,
+  i8,
+  u16,
+  i16,
+  u32,
+  i32,
+  u64,
+  i64,
+  u128,
+  i128
+);
+impl_TryFrom_float!(
+  f64; usize,
+  isize,
+  u8,
+  i8,
+  u16,
+  i16,
+  u32,
+  i32,
+  f32,
+  u64,
+  i64,
+  u128,
+  i128
+);
+
+macro_rules! impl_From_widen {
+  ($From:ty; $($To:ty),+) => ($(
+    impl From<Rect<$From>> for Rect<$To> {
+      fn from(Rect { from, to }: Rect<$From>) -> Self {
+        Self { from: from.into(), to: to.into() }
+      }
+    }
+    impl From<($From, $From, $From, $From)> for Rect<$To> {
+      fn from((fx, fy, tx, ty): ($From, $From, $From, $From)) -> Self {
+        Self { from: (fx, fy).into(), to: (tx, ty).into() }
+      }
+    }
+  )+)
+}
+impl_From_widen!(u8; u16, i16, u32, i32, u64, i64, u128, i128);
+impl_From_widen!(i8; i16, i32, i64, i128);
+impl_From_widen!(u16; u32, i32, u64, i64, u128, i128);
+impl_From_widen!(i16; i32, i64, i128);
+impl_From_widen!(u32; u64, i64, u128, i128);
+impl_From_widen!(i32; i64, i128);
+impl_From_widen!(u64; u128, i128);
+impl_From_widen!(i64; i128);
+
+macro_rules! impl_TryFrom_int {
+  ($From:ty; $($To:ty),+) => ($(
+    impl TryFrom<Rect<$From>> for Rect<$To> {
+      type Error = ();
+      fn try_from(Rect { from, to }: Rect<$From>) -> Result<Self, Self::Error> {
+        Ok(Self { from: from.try_into()?, to: to.try_into()? })
+      }
+    }
+    impl TryFrom<($From, $From, $From, $From)> for Rect<$To> {
+      type Error = ();
+      fn try_from((fx, fy, tx, ty): ($From, $From, $From, $From)) -> Result<Self, Self::Error> {
+        Ok(Self { from: (fx, fy).try_into()?, to: (tx, ty).try_into()? })
+      }
+    }
+  )+)
+}
+impl_TryFrom_int!(usize; isize, u8, i8, u16, i16, u32, i32, u64, i64, u128, i128);
+impl_TryFrom_int!(isize; usize, u8, i8, u16, i16, u32, i32, u64, i64, u128, i128);
+impl_TryFrom_int!(u8; usize, isize, i8);
+impl_TryFrom_int!(i8; usize, isize, u8, u16, u32, u64, u128);
+impl_TryFrom_int!(u16; usize, isize, u8, i8, i16);
+impl_TryFrom_int!(i16; usize, isize, u8, i8, u16, u32, u64, u128);
+impl_TryFrom_int!(u32; usize, isize, u8, i8, u16, i16, i32);
+impl_TryFrom_int!(i32; usize, isize, u8, i8, u16, i16, u32, u64, u128);
+impl_TryFrom_int!(u64; usize, isize, u8, i8, u16, i16, u32, i32, i64);
+impl_TryFrom_int!(i64; usize, isize, u8, i8, u16, i16, u32, i32, u64, u128);
+impl_TryFrom_int!(u128; usize, isize, u8, i8, u16, i16, u32, i32, u64, i64, i128);
+impl_TryFrom_int!(i128; usize, isize, u8, i8, u16, i16, u32, i32, u64, i64, u128);
+
+macro_rules! impl_From_tuple {
+  ($($T:ty),+) => ($(
+    impl From<($T, $T, $T, $T)> for Rect<$T> {
+      fn from((fx, fy, tx, ty): ($T, $T, $T, $T)) -> Self {
+        Self::new(fx, fy, tx, ty)
+      }
+    }
+    impl From<Rect<$T>> for ($T, $T, $T, $T) {
+      fn from(Rect { from, to }: Rect<$T>) -> Self {
+        (from.x, from.y, to.x, to.y)
+      }
+    }
+  )+)
+}
+impl_From_tuple!(
+  usize, isize, u8, i8, u16, i16, u32, i32, f32, u64, i64, f64, u128, i128
+);
 
 #[cfg(test)]
 mod test {
