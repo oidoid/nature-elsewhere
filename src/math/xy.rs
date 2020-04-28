@@ -690,6 +690,12 @@ mod test {
   }
 
   #[test]
+  fn from_widen() {
+    assert_eq!(XY::from(XY::new(1u8, 2)), XY::new(1u16, 2));
+    assert_eq!(XY::from((1u8, 2)), XY::new(1u16, 2));
+  }
+
+  #[test]
   fn try_from_int() {
     assert_eq!(XY::try_from(XY::new(1i64, 2)).unwrap(), XY::new(1i32, 2));
     assert_eq!(XY::try_from((1i64, 2)).unwrap(), XY::new(1i32, 2));

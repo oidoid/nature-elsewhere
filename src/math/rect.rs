@@ -711,58 +711,6 @@ mod test {
   }
 
   #[test]
-  fn add_rect() {
-    assert_eq!(
-      Rect::new(1, 2, 3, 4) + Rect::new(5, 6, 7, 8),
-      Rect::new(6, 8, 10, 12)
-    )
-  }
-
-  #[test]
-  fn add_xy() {
-    assert_eq!(Rect::new(1, 2, 3, 4) + XY::new(5, 6), Rect::new(6, 8, 8, 10))
-  }
-
-  #[test]
-  fn sub_rect() {
-    assert_eq!(
-      Rect::new(1, 2, 3, 4) - Rect::new(5, 6, 7, 8),
-      Rect::new(-4, -4, -4, -4)
-    )
-  }
-
-  #[test]
-  fn sub_xy() {
-    assert_eq!(Rect::new(1, 2, 3, 4) - XY::new(5, 6), Rect::new(-4, -4, -2, -2))
-  }
-
-  #[test]
-  fn mul_rect() {
-    assert_eq!(
-      Rect::new(1, 2, 3, 4) * Rect::new(5, 6, 7, 8),
-      Rect::new(5, 12, 21, 32)
-    )
-  }
-
-  #[test]
-  fn mul_xy() {
-    assert_eq!(Rect::new(1, 2, 3, 4) * XY::new(5, 6), Rect::new(5, 12, 15, 24))
-  }
-
-  #[test]
-  fn div_rect() {
-    assert_eq!(
-      Rect::new(5, 6, 7, 8) / Rect::new(1, 2, 3, 4),
-      Rect::new(5, 3, 2, 2)
-    )
-  }
-
-  #[test]
-  fn div_xy() {
-    assert_eq!(Rect::new(6, 5, 4, 3) / XY::new(2, 1), Rect::new(3, 5, 2, 3))
-  }
-
-  #[test]
   fn contains_xy_external() {
     assert_eq!(Rect::new(1, 1, 4, 4).contains(&XY::new(5, 5)), false)
   }
@@ -1676,5 +1624,139 @@ mod test {
   #[test]
   fn magnitude() {
     assert_eq!(R16 { from: XY::new(1, 2), to: XY::new(4, 6) }.magnitude(), 5)
+  }
+
+  #[test]
+  fn try_lerp() {
+    assert_eq!(
+      XY16 { x: 1, y: 2 }.try_lerp(&XY::new(3, 4), 0.5).unwrap(),
+      XY::new(2, 3)
+    );
+  }
+
+  #[test]
+  fn add() {
+    assert_eq!(
+      Rect::new(1, 2, 3, 4) + Rect::new(5, 6, 7, 8),
+      Rect::new(6, 8, 10, 12)
+    );
+    assert_eq!(Rect::new(1, 2, 3, 4) + XY::new(5, 6), Rect::new(6, 8, 8, 10));
+  }
+
+  #[test]
+  fn add_assign() {
+    let mut rect = Rect::new(1, 2, 3, 4);
+    rect += Rect::new(5, 6, 7, 8);
+    assert_eq!(rect, Rect::new(6, 8, 10, 12));
+    rect += XY::new(5, 6);
+    assert_eq!(rect, Rect::new(11, 14, 15, 18));
+  }
+
+  #[test]
+  fn sub() {
+    assert_eq!(
+      Rect::new(1, 2, 3, 4) - Rect::new(5, 6, 7, 8),
+      Rect::new(-4, -4, -4, -4)
+    );
+    assert_eq!(
+      Rect::new(1, 2, 3, 4) - XY::new(5, 6),
+      Rect::new(-4, -4, -2, -2)
+    );
+  }
+
+  #[test]
+  fn sub_assign() {
+    let mut rect = Rect::new(1, 2, 3, 4);
+    rect -= Rect::new(5, 6, 7, 8);
+    assert_eq!(rect, Rect::new(-4, -4, -4, -4));
+    rect -= XY::new(5, 6);
+    assert_eq!(rect, Rect::new(-9, -10, -9, -10));
+  }
+
+  #[test]
+  fn mul() {
+    assert_eq!(
+      Rect::new(1, 2, 3, 4) * Rect::new(5, 6, 7, 8),
+      Rect::new(5, 12, 21, 32)
+    );
+    assert_eq!(Rect::new(1, 2, 3, 4) * XY::new(5, 6), Rect::new(5, 12, 15, 24));
+    assert_eq!(Rect::new(1, 2, 3, 4) * 5, Rect::new(5, 10, 15, 20));
+  }
+
+  #[test]
+  fn mul_assign() {
+    let mut rect = Rect::new(1, 2, 3, 4);
+    rect *= Rect::new(5, 6, 7, 8);
+    assert_eq!(rect, Rect::new(5, 12, 21, 32));
+    rect *= XY::new(5, 6);
+    assert_eq!(rect, Rect::new(25, 72, 105, 192));
+    rect *= 5;
+    assert_eq!(rect, Rect::new(125, 360, 525, 960));
+  }
+
+  #[test]
+  fn div() {
+    assert_eq!(
+      Rect::new(5, 6, 7, 8) / Rect::new(1, 2, 3, 4),
+      Rect::new(5, 3, 2, 2)
+    );
+    assert_eq!(Rect::new(6, 5, 4, 3) / XY::new(2, 1), Rect::new(3, 5, 2, 3));
+    assert_eq!(Rect::new(6, 5, 4, 3) / 2, Rect::new(3, 2, 2, 1));
+  }
+
+  #[test]
+  fn div_assign() {
+    let mut rect = Rect::new(1000, 2000, 3000, 4000);
+    rect /= Rect::new(1, 2, 3, 4);
+    assert_eq!(rect, Rect::new(1000, 1000, 1000, 1000));
+    rect /= XY::new(5, 6);
+    assert_eq!(rect, Rect::new(200, 166, 200, 166));
+    rect /= 5;
+    assert_eq!(rect, Rect::new(40, 33, 40, 33));
+  }
+
+  #[test]
+  fn from_to_float() {
+    assert_eq!(Rect::from(Rect::new(1, 2, 3, 4)), Rect::new(1., 2., 3., 4.));
+    assert_eq!(Rect::from((1, 2, 3, 4)), Rect::new(1., 2., 3., 4.));
+  }
+
+  #[test]
+  fn try_from_float() {
+    assert_eq!(
+      Rect::try_from(Rect::new(1., 2., 3., 4.)).unwrap(),
+      Rect::new(1, 2, 3, 4)
+    );
+    assert_eq!(
+      Rect::try_from((1., 2., 3., 4.)).unwrap(),
+      Rect::new(1, 2, 3, 4)
+    );
+  }
+
+  #[test]
+  fn from_widen() {
+    assert_eq!(Rect::from(Rect::new(1u8, 2, 3, 4)), Rect::new(1u16, 2, 3, 4));
+    assert_eq!(Rect::from((1u8, 2, 3, 4)), Rect::new(1u16, 2, 3, 4));
+  }
+
+  #[test]
+  fn try_from_int() {
+    assert_eq!(
+      Rect::try_from(Rect::new(1i64, 2, 3, 4)).unwrap(),
+      Rect::new(1i32, 2, 3, 4)
+    );
+    assert_eq!(
+      Rect::try_from((1i64, 2, 3, 4)).unwrap(),
+      Rect::new(1i32, 2, 3, 4)
+    );
+  }
+
+  #[test]
+  fn from_tuple() {
+    assert_eq!(Rect::from((1, 2, 3, 4)), Rect::new(1, 2, 3, 4));
+    assert_eq!(
+      <(i32, i32, i32, i32)>::from(Rect::new(1, 2, 3, 4)),
+      (1, 2, 3, 4)
+    );
   }
 }
