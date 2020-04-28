@@ -104,7 +104,7 @@ impl<T> Rect<T> {
   }
 
   /// Returns true if Rect is back-facing (from < to), false if front-facing.
-  pub fn flipped(&self) -> bool
+  pub fn is_flipped(&self) -> bool
   where
     T: PartialOrd,
   {
@@ -132,6 +132,34 @@ impl<T> Rect<T> {
     T: Ord + Clone,
   {
     Self { from: self.min(), to: self.max() }
+  }
+
+  pub fn center(&self) -> XY<T>
+  where
+    T: Add<Output = T> + Sub<Output = T> + Div<Output = T> + NumCast + Clone,
+  {
+    self.from.clone()
+      + (self.to.clone() - self.from.clone())
+        / T::from(2)
+          .expect(&format!("Conversion from i32 to {} failed.", stringify!(T)))
+  }
+
+  pub fn clamp(&self, bounds: &Rect<T>) -> Self
+  where
+    T: PartialOrd + Clone,
+  {
+    Self {
+      from: self.from.clamp(&bounds.from, &bounds.to),
+      to: self.to.clamp(&bounds.from, &bounds.to),
+    }
+  }
+
+  pub fn lerp(&self, to: &XY<T>, ratio: T) -> Self
+  where
+    T: Real,
+  {
+    let from = self.from.lerp(to, ratio);
+    Self { from: from.clone(), to: self.to.clone() + from - self.from.clone() }
   }
 
   /// Return true if self and rhs are overlapping, false if touching or
@@ -176,7 +204,7 @@ impl<T> Rect<T> {
     T: Sub<Output = T> + Mul<Output = T> + Ord + Zero + Clone,
   {
     let intersection = self.intersection(rhs);
-    if intersection.flipped() || intersection.is_empty() {
+    if intersection.is_flipped() || intersection.is_empty() {
       return Err(intersection);
     }
     Ok(intersection)
@@ -195,31 +223,6 @@ impl<T> Rect<T> {
       return None;
     }
     Some(union)
-  }
-
-  pub fn center(&self) -> XY<T>
-  where
-    T: Add<Output = T> + Sub<Output = T> + Div<Output = T> + NumCast + Clone,
-  {
-    self.from.clone()
-      + (self.to.clone() - self.from.clone())
-        / T::from(2)
-          .expect(&format!("Conversion from i32 to {} failed.", stringify!(T)))
-  }
-
-  pub fn clamp(&self, min: &XY<T>, max: &XY<T>) -> Self
-  where
-    T: PartialOrd + Clone,
-  {
-    Self { from: self.from.clamp(min, max), to: self.to.clamp(min, max) }
-  }
-
-  pub fn lerp(&self, to: &XY<T>, ratio: T) -> Self
-  where
-    T: Real,
-  {
-    let from = self.from.lerp(to, ratio);
-    Self { from: from.clone(), to: self.to.clone() + from - self.from.clone() }
   }
 }
 
@@ -597,12 +600,13 @@ impl_From_tuple!(
 #[cfg(test)]
 mod test {
   use super::*;
+  use crate::math::XY16;
 
   #[test]
   fn new() {
     assert_eq!(
       Rect::new(1, 2, 3, 4),
-      R16 { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
+      R16 { from: XY::new(1, 2), to: XY::new(3, 4) }
     )
   }
 
@@ -610,7 +614,7 @@ mod test {
   fn new_wh() {
     assert_eq!(
       Rect::new_wh(1, 2, 3, 4),
-      R16 { from: XY { x: 1, y: 2 }, to: XY { x: 4, y: 6 } }
+      R16 { from: XY::new(1, 2), to: XY::new(4, 6) }
     )
   }
 
@@ -618,7 +622,15 @@ mod test {
   fn cast_from() {
     assert_eq!(
       Rect::cast_from(1.2, 3.4, 5.6, 7.8).unwrap(),
-      R16 { from: XY { x: 1, y: 3 }, to: XY { x: 5, y: 7 } }
+      R16 { from: XY::new(1, 3), to: XY::new(5, 7) }
+    )
+  }
+
+  #[test]
+  fn cast_from_wh() {
+    assert_eq!(
+      Rect::cast_from_wh(1.2, 3.4, 5.6, 7.8).unwrap(),
+      R16 { from: XY::new(1, 3), to: XY::new(6, 10) }
     )
   }
 
@@ -628,162 +640,136 @@ mod test {
       Rect::<f64> { from: XY { x: 1.2, y: 3.4 }, to: XY { x: 5.6, y: 7.8 } }
         .cast_into()
         .unwrap(),
-      R16 { from: XY { x: 1, y: 3 }, to: XY { x: 5, y: 7 } }
+      R16 { from: XY::new(1, 3), to: XY::new(5, 7) }
     )
+  }
+
+  #[test]
+  fn move_to() {
+    assert_eq!(
+      R16::new(1, 2, 3, 4).move_to(&XY16::new(3, 3)),
+      R16::new(3, 3, 5, 5)
+    );
+  }
+
+  #[test]
+  fn size() {
+    assert_eq!(R16::new(1, 2, 3, 4).size(), XY16::new(2, 2));
+  }
+
+  #[test]
+  fn area() {
+    assert_eq!(R16::new(1, 2, 3, 4).area(), 4);
+  }
+
+  #[test]
+  fn is_empty() {
+    assert_eq!(R16::new(1, 2, 3, 4).is_empty(), false);
+    assert_eq!(R16::new(3, 4, 3, 4).is_empty(), true);
+  }
+
+  #[test]
+  fn is_flipped() {
+    assert_eq!(Rect::new(1, 2, 3, 4).is_flipped(), false);
+    assert_eq!(Rect::new(3, 4, 1, 2).is_flipped(), true);
+  }
+
+  #[test]
+  fn min() {
+    assert_eq!(R16::new(4, 1, 2, 3).min(), XY16::new(2, 1));
+  }
+
+  #[test]
+  fn max() {
+    assert_eq!(R16::new(4, 1, 2, 3).max(), XY16::new(4, 3));
+  }
+
+  #[test]
+  fn order() {
+    assert_eq!(R16::new(4, 1, 2, 3).order(), R16::new(2, 1, 4, 3));
+  }
+
+  #[test]
+  fn center() {
+    assert_eq!(R16::new(10, 15, 20, 30).center(), XY::new(15, 22));
+  }
+
+  #[test]
+  fn clamp() {
+    assert_eq!(
+      R16::new(10, 15, 20, 30).clamp(&Rect::new(3, 3, 11, 16)),
+      Rect::new(10, 15, 11, 16)
+    );
+  }
+
+  #[test]
+  fn lerp() {
+    assert_eq!(
+      Rect::new(1., 2., 3., 4.).lerp(&XY::new(11., 12.), 0.5),
+      Rect::new(6., 7., 8., 9.)
+    );
   }
 
   #[test]
   fn add_rect() {
     assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
-        + Rect { from: XY { x: 5, y: 6 }, to: XY { x: 7, y: 8 } },
-      Rect { from: XY { x: 6, y: 8 }, to: XY { x: 10, y: 12 } }
+      Rect::new(1, 2, 3, 4) + Rect::new(5, 6, 7, 8),
+      Rect::new(6, 8, 10, 12)
     )
   }
 
   #[test]
   fn add_xy() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
-        + XY { x: 5, y: 6 },
-      Rect { from: XY { x: 6, y: 8 }, to: XY { x: 8, y: 10 } }
-    )
+    assert_eq!(Rect::new(1, 2, 3, 4) + XY::new(5, 6), Rect::new(6, 8, 8, 10))
   }
 
   #[test]
   fn sub_rect() {
     assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
-        - Rect { from: XY { x: 5, y: 6 }, to: XY { x: 7, y: 8 } },
-      Rect { from: XY { x: -4, y: -4 }, to: XY { x: -4, y: -4 } }
+      Rect::new(1, 2, 3, 4) - Rect::new(5, 6, 7, 8),
+      Rect::new(-4, -4, -4, -4)
     )
   }
 
   #[test]
   fn sub_xy() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
-        - XY { x: 5, y: 6 },
-      Rect { from: XY { x: -4, y: -4 }, to: XY { x: -2, y: -2 } }
-    )
+    assert_eq!(Rect::new(1, 2, 3, 4) - XY::new(5, 6), Rect::new(-4, -4, -2, -2))
   }
 
   #[test]
   fn mul_rect() {
     assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
-        * Rect { from: XY { x: 5, y: 6 }, to: XY { x: 7, y: 8 } },
-      Rect { from: XY { x: 5, y: 12 }, to: XY { x: 21, y: 32 } }
+      Rect::new(1, 2, 3, 4) * Rect::new(5, 6, 7, 8),
+      Rect::new(5, 12, 21, 32)
     )
   }
 
   #[test]
   fn mul_xy() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }
-        * XY { x: 5, y: 6 },
-      Rect { from: XY { x: 5, y: 12 }, to: XY { x: 15, y: 24 } }
-    )
+    assert_eq!(Rect::new(1, 2, 3, 4) * XY::new(5, 6), Rect::new(5, 12, 15, 24))
   }
 
   #[test]
   fn div_rect() {
     assert_eq!(
-      Rect { from: XY { x: 5, y: 6 }, to: XY { x: 7, y: 8 } }
-        / Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } },
-      Rect { from: XY { x: 5, y: 3 }, to: XY { x: 2, y: 2 } }
+      Rect::new(5, 6, 7, 8) / Rect::new(1, 2, 3, 4),
+      Rect::new(5, 3, 2, 2)
     )
   }
 
   #[test]
   fn div_xy() {
-    assert_eq!(
-      Rect { from: XY { x: 6, y: 5 }, to: XY { x: 4, y: 3 } }
-        / XY { x: 2, y: 1 },
-      Rect { from: XY { x: 3, y: 5 }, to: XY { x: 2, y: 3 } }
-    )
-  }
-
-  #[test]
-  fn wh() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }.size(),
-      XY { x: 2, y: 2 }
-    )
-  }
-
-  #[test]
-  fn area() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 2 }, to: XY { x: 3, y: 4 } }.area(),
-      4
-    )
-  }
-
-  #[test]
-  fn empty_zero() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 5, y: 1 } }.is_empty(),
-      true
-    )
-  }
-
-  #[test]
-  fn empty_nonzero() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 5, y: 5 } }.is_empty(),
-      false
-    )
-  }
-
-  #[test]
-  fn magnitude() {
-    assert_eq!(
-      R16 { from: XY { x: 1, y: 2 }, to: XY { x: 4, y: 6 } }.magnitude(),
-      5
-    )
-  }
-
-  #[test]
-  fn min() {
-    assert_eq!(
-      Rect { from: XY { x: 4, y: 1 }, to: XY { x: 2, y: 3 } }.min(),
-      XY { x: 2, y: 1 }
-    )
-  }
-
-  #[test]
-  fn max() {
-    assert_eq!(
-      Rect { from: XY { x: 4, y: 1 }, to: XY { x: 2, y: 3 } }.max(),
-      XY { x: 4, y: 3 }
-    )
-  }
-
-  #[test]
-  fn order() {
-    assert_eq!(
-      Rect { from: XY { x: 4, y: 1 }, to: XY { x: 2, y: 3 } }.order(),
-      Rect { from: XY { x: 2, y: 1 }, to: XY { x: 4, y: 3 } }
-    )
+    assert_eq!(Rect::new(6, 5, 4, 3) / XY::new(2, 1), Rect::new(3, 5, 2, 3))
   }
 
   #[test]
   fn contains_xy_external() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 4, y: 4 } }
-        .contains(&XY { x: 5, y: 5 }),
-      false
-    )
+    assert_eq!(Rect::new(1, 1, 4, 4).contains(&XY::new(5, 5)), false)
   }
 
   #[test]
   fn contains_xy_internal() {
-    assert_eq!(
-      Rect { from: XY { x: 1, y: 1 }, to: XY { x: 4, y: 4 } }
-        .contains(&XY { x: 2, y: 2 }),
-      true
-    )
+    assert_eq!(Rect::new(1, 1, 4, 4).contains(&XY::new(2, 2)), true)
   }
 
   // (diagram, lhs, rhs, intersects, contains, intersection, union)
@@ -1685,5 +1671,10 @@ mod test {
         );
       },
     )
+  }
+
+  #[test]
+  fn magnitude() {
+    assert_eq!(R16 { from: XY::new(1, 2), to: XY::new(4, 6) }.magnitude(), 5)
   }
 }
