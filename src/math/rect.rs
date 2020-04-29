@@ -144,14 +144,11 @@ impl<T> Rect<T> {
           .expect(&format!("Conversion from i32 to {} failed.", stringify!(T)))
   }
 
-  pub fn clamp(&self, bounds: &Rect<T>) -> Self
+  pub fn clamp(&self, Rect { from, to }: &Rect<T>) -> Self
   where
     T: PartialOrd + Clone,
   {
-    Self {
-      from: self.from.clamp(&bounds.from, &bounds.to),
-      to: self.to.clamp(&bounds.from, &bounds.to),
-    }
+    Self { from: self.from.clamp(from, to), to: self.to.clamp(from, to) }
   }
 
   pub fn lerp(&self, to: &XY<T>, ratio: T) -> Self

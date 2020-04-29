@@ -132,7 +132,6 @@ impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
     );
 
     Sprite::new(
-      animator,
       id,
       constituent_id,
       composition,
@@ -141,6 +140,7 @@ impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
       wrap,
       wrap_velocity,
       layer,
+      animator,
     )
   }
 }

@@ -7,8 +7,6 @@ use std::{convert::TryInto, num::NonZeroI16};
 /// A mapping from an Atlas Animation to a level region. This includes all
 /// distinct state needed to represent an instance to the shader.
 pub struct Sprite {
-  /// Source Animation state.
-  animator: Animator,
   /// The source Animation subtextures identifer to draw from.
   id: AnimationID,
   /// The Animation subtextures identifer to compose with source. The
@@ -41,11 +39,12 @@ pub struct Sprite {
   wrap_velocity: XY16,
   /// The painting draw order.
   layer: u8,
+  /// Source Animation state.
+  animator: Animator,
 }
 
 impl Sprite {
   pub fn new(
-    animator: Animator,
     id: AnimationID,
     constituent: AnimationID,
     composition: SpriteComposition,
@@ -54,6 +53,7 @@ impl Sprite {
     wrap: XY16,
     wrap_velocity: XY16,
     layer: SpriteLayer,
+    animator: Animator,
   ) -> Self {
     Self {
       animator,
@@ -199,7 +199,6 @@ mod test {
   #[test]
   fn scale() {
     let mut sprite = Sprite::new(
-      Animator::new(0, 0.),
       AnimationID::Bee,
       AnimationID::Bee,
       SpriteComposition::Source,
@@ -208,6 +207,7 @@ mod test {
       XY::new(0, 0),
       XY::new(0, 0),
       SpriteLayer::Default,
+      Animator::new(0, 0.),
     );
 
     assert_eq!(sprite.get_scale(), &(1, 1).try_into().unwrap());
@@ -224,7 +224,6 @@ mod test {
   #[test]
   fn wrap() {
     let mut sprite = Sprite::new(
-      Animator::new(0, 0.),
       AnimationID::Bee,
       AnimationID::Bee,
       SpriteComposition::Source,
@@ -233,6 +232,7 @@ mod test {
       XY::new(5, 6),
       XY::new(7, 8),
       SpriteLayer::Default,
+      Animator::new(0, 0.),
     );
 
     assert_eq!(sprite.get_wrap(), &XY::new(5, 6));
@@ -247,7 +247,6 @@ mod test {
   #[test]
   fn layer() {
     let mut sprite = Sprite::new(
-      Animator::new(0, 0.),
       AnimationID::Bee,
       AnimationID::Bee,
       SpriteComposition::Source,
@@ -256,6 +255,7 @@ mod test {
       XY::new(0, 0),
       XY::new(0, 0),
       SpriteLayer::Default,
+      Animator::new(0, 0.),
     );
 
     assert_eq!(sprite.get_layer(), SpriteLayer::Default as u8);
@@ -296,7 +296,6 @@ mod test {
       animations,
     };
     let sprite = Sprite::new(
-      Animator::new(0, 0.),
       AnimationID::Bee,
       AnimationID::Bee,
       SpriteComposition::SourceMask,
@@ -305,6 +304,7 @@ mod test {
       XY::new(15, 16),
       XY::new(17, 18),
       SpriteLayer::UICursor,
+      Animator::new(0, 0.),
     );
     let bytes =
       sprite.serialize(bincode::config().big_endian(), &atlas).unwrap();
