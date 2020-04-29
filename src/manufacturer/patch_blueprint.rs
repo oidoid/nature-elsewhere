@@ -1,6 +1,6 @@
 use super::{
   AlignToBlueprint, Blueprint, ComponentBlueprints, MarkerBlueprint,
-  WH16Blueprint, XYBlueprint,
+  SizeU16Blueprint, XYBlueprint,
 };
 use crate::components::{Children, Parent};
 use std::collections::HashMap;
@@ -85,13 +85,13 @@ impl PatchBlueprint<Option<MarkerBlueprint>> for Option<MarkerBlueprint> {
   }
 }
 
-impl PatchBlueprint<Option<WH16Blueprint>> for Option<WH16Blueprint> {
+impl PatchBlueprint<Option<SizeU16Blueprint>> for Option<SizeU16Blueprint> {
   fn patch(&self, patch: &Self) -> Self {
     match (self, patch) {
       (_, None) => self.clone(),
       (None, _) => patch.clone(),
       (Some(base), Some(patch)) => {
-        Some(WH16Blueprint { w: patch.w.or(base.w), h: patch.h.or(base.h) })
+        Some(SizeU16Blueprint { w: patch.w.or(base.w), h: patch.h.or(base.h) })
       }
     }
   }

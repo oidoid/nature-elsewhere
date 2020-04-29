@@ -1,6 +1,7 @@
 use super::aseprite;
 use super::{Animation, AnimationID, AnimationMap, Atlas, Cel, Playback};
 use crate::math::{Millis, R16, XY, XY16};
+use std::convert::TryFrom;
 use std::num::TryFromIntError;
 use std::{convert::TryInto, f64};
 use strum::IntoEnumIterator;
@@ -21,7 +22,7 @@ pub fn parse(file: &aseprite::File) -> Result<Atlas, AtlasParseError> {
     version: file.meta.version.clone(),
     filename: file.meta.image.clone(),
     format: file.meta.format.clone(),
-    size: XY::new(file.meta.size.w.try_into()?, file.meta.size.h.try_into()?),
+    size: XY::new(file.meta.size.w, file.meta.size.h),
     animations,
   })
 }
@@ -384,12 +385,7 @@ pub fn parse_animation(
     }
   }
 
-  Ok(Animation {
-    size: XY16::new(size.w.try_into()?, size.h.try_into()?),
-    cels,
-    duration,
-    direction,
-  })
+  Ok(Animation { size: XY::new(size.w, size.h), cels, duration, direction })
 }
 
 pub fn parse_tag_frames<'a>(
@@ -432,8 +428,9 @@ pub fn parse_cel(
 }
 
 pub fn parse_bounds(frame: &aseprite::Frame) -> Result<R16, AtlasParseError> {
-  let pad = parse_padding(frame)?;
-  Ok(R16::new_wh(
+  let pad = XY16::try_from(parse_padding(frame)?)
+    .or(Err("XY<u16> to XY16 conversion failed."))?;
+  Ok(R16::new_size(
     frame.frame.x + pad.x / 2,
     frame.frame.y + pad.y / 2,
     frame.source_size.w.try_into()?,
@@ -444,16 +441,16 @@ pub fn parse_bounds(frame: &aseprite::Frame) -> Result<R16, AtlasParseError> {
 /// Returns evenly divisible padding.
 pub fn parse_padding(
   aseprite::Frame { frame, source_size, .. }: &aseprite::Frame,
-) -> Result<XY16, AtlasParseError> {
-  let w = (frame.w - source_size.w).try_into()?;
-  let h = (frame.h - source_size.h).try_into()?;
+) -> Result<XY<u16>, AtlasParseError> {
+  let w = frame.w - source_size.w;
+  let h = frame.h - source_size.h;
   if is_odd(w) || is_odd(h) {
     return Err("Cel padding is not evenly divisible.".into());
   }
-  Ok(XY16::new(w, h))
+  Ok(XY::new(w, h))
 }
 
-fn is_odd(val: i16) -> bool {
+fn is_odd(val: u16) -> bool {
   val & 1 == 1
 }
 
@@ -482,7 +479,7 @@ pub fn parse_slices(
       slice.keys.iter().filter(|key| key.frame <= index).last().unwrap();
     let aseprite::Key { bounds, .. } = key;
     rects.push(
-      R16::cast_from_wh(bounds.x, bounds.y, bounds.w, bounds.h)
+      R16::cast_from_size(bounds.x, bounds.y, bounds.w, bounds.h)
         .ok_or("Slice bounds conversion to R16 failed.")?,
     );
   }
@@ -614,7 +611,7 @@ mod test {
       Animation {
         size: XY::new(16, 16),
         cels: vec![Cel {
-          bounds: R16::new_wh(221, 19, 16, 16),
+          bounds: R16::new_size(221, 19, 16, 16),
           duration: 1.,
           slices: vec![R16 {
             from: XY { x: 8, y: 12 },
@@ -630,7 +627,7 @@ mod test {
       Animation {
         size: XY::new(16, 16),
         cels: vec![Cel {
-          bounds: R16::new_wh(91, 55, 16, 16),
+          bounds: R16::new_size(91, 55, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 11 },
@@ -646,7 +643,7 @@ mod test {
       Animation {
         size: XY::new(16, 16),
         cels: vec![Cel {
-          bounds: R16::new_wh(73, 55, 16, 16),
+          bounds: R16::new_size(73, 55, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 10 },
@@ -662,7 +659,7 @@ mod test {
       Animation {
         size: XY::new(16, 16),
         cels: vec![Cel {
-          bounds: R16::new_wh(55, 55, 16, 16),
+          bounds: R16::new_size(55, 55, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 7, y: 9 },
@@ -702,7 +699,7 @@ mod test {
         rotated: false,
         trimmed: false,
         sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 16, h: 16 },
-        source_size: aseprite::WH { w: 16, h: 16 },
+        source_size: aseprite::Size { w: 16, h: 16 },
         duration: 65535,
       },
     );
@@ -713,7 +710,7 @@ mod test {
         rotated: false,
         trimmed: false,
         sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 16, h: 16 },
-        source_size: aseprite::WH { w: 16, h: 16 },
+        source_size: aseprite::Size { w: 16, h: 16 },
         duration: 65535,
       },
     );
@@ -724,7 +721,7 @@ mod test {
         rotated: false,
         trimmed: false,
         sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 16, h: 16 },
-        source_size: aseprite::WH { w: 16, h: 16 },
+        source_size: aseprite::Size { w: 16, h: 16 },
         duration: 65535,
       },
     );
@@ -759,7 +756,7 @@ mod test {
       Animation {
         size: XY::new(16, 16),
         cels: vec![Cel {
-          bounds: R16::new_wh(185, 37, 16, 16),
+          bounds: R16::new_size(185, 37, 16, 16),
           duration: f64::INFINITY,
           slices: vec![R16 {
             from: XY { x: 4, y: 11 },
@@ -797,7 +794,7 @@ mod test {
       rotated: false,
       trimmed: false,
       sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 16, h: 16 },
-      source_size: aseprite::WH { w: 16, h: 16 },
+      source_size: aseprite::Size { w: 16, h: 16 },
       duration: 65535,
     };
     let slices = [aseprite::Slice {
@@ -811,7 +808,7 @@ mod test {
     assert_eq!(
       super::parse_cel(&frame_tag, &frame, 0, &slices).unwrap(),
       Cel {
-        bounds: R16::new_wh(131, 19, 16, 16),
+        bounds: R16::new_size(131, 19, 16, 16),
         duration: f64::INFINITY,
         slices: vec![R16 { from: XY { x: 4, y: 4 }, to: XY { x: 12, y: 16 } }]
       }
@@ -825,10 +822,10 @@ mod test {
       rotated: false,
       trimmed: false,
       sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 3, h: 4 },
-      source_size: aseprite::WH { w: 3, h: 4 },
+      source_size: aseprite::Size { w: 3, h: 4 },
       duration: 1,
     };
-    assert_eq!(parse_bounds(&frame).unwrap(), R16::new_wh(1, 2, 3, 4));
+    assert_eq!(parse_bounds(&frame).unwrap(), R16::new_size(1, 2, 3, 4));
   }
 
   #[test]
@@ -838,10 +835,10 @@ mod test {
       rotated: false,
       trimmed: false,
       sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 3, h: 4 },
-      source_size: aseprite::WH { w: 3, h: 4 },
+      source_size: aseprite::Size { w: 3, h: 4 },
       duration: 1,
     };
-    assert_eq!(parse_bounds(&frame).unwrap(), R16::new_wh(2, 3, 3, 4));
+    assert_eq!(parse_bounds(&frame).unwrap(), R16::new_size(2, 3, 3, 4));
   }
 
   #[test]
@@ -851,7 +848,7 @@ mod test {
       rotated: false,
       trimmed: false,
       sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 3, h: 4 },
-      source_size: aseprite::WH { w: 3, h: 4 },
+      source_size: aseprite::Size { w: 3, h: 4 },
       duration: 1,
     };
     assert_eq!(parse_padding(&frame).unwrap(), XY::new(0, 0));
@@ -864,7 +861,7 @@ mod test {
       rotated: false,
       trimmed: false,
       sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 2, h: 3 },
-      source_size: aseprite::WH { w: 2, h: 3 },
+      source_size: aseprite::Size { w: 2, h: 3 },
       duration: 1,
     };
     assert_eq!(parse_padding(&frame).unwrap(), XY::new(2, 2));
@@ -877,7 +874,7 @@ mod test {
       rotated: false,
       trimmed: false,
       sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 2, h: 2 },
-      source_size: aseprite::WH { w: 2, h: 2 },
+      source_size: aseprite::Size { w: 2, h: 2 },
       duration: 1,
     };
     assert_eq!(parse_padding(&frame).unwrap(), XY::new(2, 4));
@@ -890,7 +887,7 @@ mod test {
       rotated: false,
       trimmed: false,
       sprite_source_size: aseprite::Rect { x: 0, y: 0, w: 3, h: 6 },
-      source_size: aseprite::WH { w: 3, h: 6 },
+      source_size: aseprite::Size { w: 3, h: 6 },
       duration: 1,
     };
     assert_eq!(parse_padding(&frame).is_err(), true);

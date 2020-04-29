@@ -36,7 +36,7 @@ pub struct Meta {
   /// E.g., "RGBA8888" or "I8".
   pub format: String,
   /// Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2.
-  pub size: WH,
+  pub size: Size,
   /// E.g., "1".
   pub scale: String,
   /// All FrameTags for all files packed **via CLI** `--list-tags`.
@@ -68,7 +68,7 @@ pub struct Frame {
   pub sprite_source_size: Rect,
   /// The width and height components of spriteSourceSize.
   #[serde(rename = "sourceSize")]
-  pub source_size: WH,
+  pub source_size: Size,
   pub duration: Duration,
 }
 
@@ -126,14 +126,14 @@ pub struct Rect {
 }
 
 #[derive(Deserialize, PartialEq)]
-pub struct WH {
+pub struct Size {
   /// Width in pixels.
   pub w: u16,
   /// Height in pixels.
   pub h: u16,
 }
 
-impl fmt::Display for WH {
+impl fmt::Display for Size {
   fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(formatter, "({}, {})", self.w, self.h)
   }

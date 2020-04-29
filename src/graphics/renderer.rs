@@ -182,12 +182,12 @@ impl Renderer {
   pub fn render(
     &mut self,
     play_time: f32,
-    canvas_wh: &XY16,
+    canvas_size: &XY<u16>,
     scale: NonZeroU16,
     cam: &R16,
     dat: &[u8],
   ) {
-    self.resize(canvas_wh, scale, cam);
+    self.resize(canvas_size, scale, cam);
     self.gl.uniform1f(
       self.uniforms.get(
         self.layout.uniforms.get("time").expect("Missing \"time\" uniform."),
@@ -213,8 +213,8 @@ impl Renderer {
     );
   }
 
-  fn resize(&mut self, canvas_wh: &XY16, scale: NonZeroU16, cam: &R16) {
-    let canvas_wh = XY::try_from(canvas_wh.clone())
+  fn resize(&mut self, canvas_size: &XY<u16>, scale: NonZeroU16, cam: &R16) {
+    let canvas_wh = XY::try_from(canvas_size.clone())
       .expect("Canvas i16 to u32 conversion failed.");
     self.canvas.set_width(canvas_wh.x);
     self.canvas.set_height(canvas_wh.y);

@@ -105,7 +105,7 @@ pub struct Blueprint {
 pub struct ComponentBlueprints {
   pub align_to: Option<AlignToBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub cam: Option<WH16Blueprint>,
+  pub cam: Option<SizeU16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub follow_mouse: Option<MarkerBlueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -115,7 +115,7 @@ pub struct ComponentBlueprints {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub text: Option<String>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub max_wh: Option<WH16Blueprint>,
+  pub max_wh: Option<SizeU16Blueprint>,
   #[serde(default, skip_serializing_if = "HashMap::is_empty")]
   pub sprites: HashMap<String, Vec<SpriteBlueprint>>,
 
@@ -198,11 +198,11 @@ pub struct SpriteBlueprint {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub y: Option<i16>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub size: Option<WH16Blueprint>,
+  pub size: Option<SizeU16Blueprint>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub w: Option<i16>,
+  pub w: Option<u16>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub h: Option<i16>,
+  pub h: Option<u16>,
 
   /** Defaults to SpriteLayer::Default. */
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -250,13 +250,14 @@ pub struct XYBlueprint<T> {
   pub y: Option<T>,
 }
 pub type XY16Blueprint = XYBlueprint<i16>;
+pub type XYU16Blueprint = XYBlueprint<u16>;
 
 #[serde(deny_unknown_fields)]
 #[derive(Clone, Deserialize, Serialize)]
-pub struct WHBlueprint<T> {
+pub struct SizeBlueprint<T> {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub w: Option<T>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub h: Option<T>,
 }
-pub type WH16Blueprint = WHBlueprint<i16>;
+pub type SizeU16Blueprint = SizeBlueprint<u16>;

@@ -1,11 +1,13 @@
 use super::{
-  AlignToBlueprint, MarkerBlueprint, SpriteBlueprint, WHBlueprint, XYBlueprint,
+  AlignToBlueprint, MarkerBlueprint, SizeBlueprint, SpriteBlueprint,
+  XYBlueprint,
 };
 use crate::atlas::{Animator, Atlas};
 use crate::components::AlignTo;
-use crate::math::{R16, XY};
+use crate::math::{R16, XY, XY16};
 use crate::sprites::{Sprite, SpriteComposition, SpriteLayer};
 use std::collections::HashMap;
+use std::convert::TryFrom;
 use std::hash::Hash;
 use std::num::NonZeroI16;
 
@@ -89,17 +91,18 @@ impl<'a> ManufactureAtlasBlueprint<Sprite> for SpriteBlueprint {
       );
     let animation = &atlas.animations[&id];
     // do i need to validate area too?
-    let size = self.size.clone().map_or(
+    let size = XY16::try_from(self.size.clone().map_or(
       XY::new(
         self.w.unwrap_or(animation.size.x),
         self.h.unwrap_or(animation.size.y),
       ),
       |size| XY::new(size.w.unwrap_or(0), size.h.unwrap_or(0)),
-    ); //use atlas, review ts
+    ))
+    .expect("XY<u16> to XY16 conversion failed."); //use atlas, review ts
     let bounds = self.bounds.clone().map_or(
-      R16::new_wh(position.x, position.y, size.x, size.y),
+      R16::new_size(position.x, position.y, size.x, size.y),
       |bounds| {
-        R16::new_wh(
+        R16::new_size(
           bounds.x.unwrap_or(0),
           bounds.y.unwrap_or(0),
           bounds.w.unwrap_or(0),
@@ -156,7 +159,7 @@ impl ManufactureBlueprint<Option<String>> for Option<String> {
 }
 
 impl<T: Clone + Default> ManufactureBlueprint<Option<XY<T>>>
-  for Option<WHBlueprint<T>>
+  for Option<SizeBlueprint<T>>
 {
   fn manufacture(&self) -> Option<XY<T>> {
     if let Some(blueprint) = self {

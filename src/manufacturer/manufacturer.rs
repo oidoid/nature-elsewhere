@@ -4,7 +4,7 @@ use super::{
 };
 use crate::atlas::Atlas;
 use crate::components::{
-  Cam, Children, FollowMouse, MaxWH, Parent, Position, Renderable, Text,
+  Cam, Children, FollowMouse, MaxSize, Parent, Position, Renderable, Text,
   Velocity,
 };
 use specs::world::Builder;
@@ -63,7 +63,7 @@ impl Manufacturer {
     }
     if let Some(component) = components.max_wh.manufacture() {
       // [todo] use NonZeroI16? Flesh out NonZeroI16 ops?
-      entity = entity.with(MaxWH { size: component });
+      entity = entity.with(MaxSize { size: component });
     }
     if let Some(component) = components.position.manufacture() {
       entity = entity.with(Position { position: component });

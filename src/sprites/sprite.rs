@@ -202,7 +202,7 @@ mod test {
       AnimationID::Bee,
       AnimationID::Bee,
       SpriteComposition::Source,
-      R16::new_wh(1, 2, 3, 4),
+      R16::new_size(1, 2, 3, 4),
       (1, 1).try_into().unwrap(),
       XY::new(0, 0),
       XY::new(0, 0),
@@ -214,11 +214,11 @@ mod test {
 
     sprite.scale_by(&(2, 2).try_into().unwrap());
     assert_eq!(sprite.get_scale(), &(2, 2).try_into().unwrap());
-    assert_eq!(sprite.get_bounds(), &R16::new_wh(1, 2, 6, 8));
+    assert_eq!(sprite.get_bounds(), &R16::new_size(1, 2, 6, 8));
 
     sprite.scale_to(&(3, 3).try_into().unwrap());
     assert_eq!(sprite.get_scale(), &(3, 3).try_into().unwrap());
-    assert_eq!(sprite.get_bounds(), &R16::new_wh(1, 2, 9, 12));
+    assert_eq!(sprite.get_bounds(), &R16::new_size(1, 2, 9, 12));
   }
 
   #[test]

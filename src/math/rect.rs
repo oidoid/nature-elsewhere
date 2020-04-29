@@ -31,7 +31,7 @@ impl<T> Rect<T> {
     Self { from: XY::new(fx, fy), to: XY::new(tx, ty) }
   }
 
-  pub fn new_wh(fx: T, fy: T, w: T, h: T) -> Self
+  pub fn new_size(fx: T, fy: T, w: T, h: T) -> Self
   where
     T: Add<Output = T> + Clone,
   {
@@ -47,7 +47,7 @@ impl<T> Rect<T> {
     Some(Self { from: XY::cast_from(fx, fy)?, to: XY::cast_from(tx, ty)? })
   }
 
-  pub fn cast_from_wh<From, To>(
+  pub fn cast_from_size<From, To>(
     fx: From,
     fy: From,
     w: To,
@@ -608,9 +608,9 @@ mod test {
   }
 
   #[test]
-  fn new_wh() {
+  fn new_size() {
     assert_eq!(
-      Rect::new_wh(1, 2, 3, 4),
+      Rect::new_size(1, 2, 3, 4),
       R16 { from: XY::new(1, 2), to: XY::new(4, 6) }
     )
   }
@@ -624,9 +624,9 @@ mod test {
   }
 
   #[test]
-  fn cast_from_wh() {
+  fn cast_from_size() {
     assert_eq!(
-      Rect::cast_from_wh(1.2, 3.4, 5.6, 7.8).unwrap(),
+      Rect::cast_from_size(1.2, 3.4, 5.6, 7.8).unwrap(),
       R16 { from: XY::new(1, 3), to: XY::new(6, 10) }
     )
   }

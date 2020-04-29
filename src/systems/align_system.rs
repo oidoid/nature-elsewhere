@@ -1,4 +1,4 @@
-use crate::components::{AlignTo, Bounds, MaxWH, Text};
+use crate::components::{AlignTo, Bounds, MaxSize, Text};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::math::XY16;

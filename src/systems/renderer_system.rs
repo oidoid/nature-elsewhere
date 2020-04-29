@@ -1,5 +1,5 @@
 use crate::atlas::Atlas;
-use crate::components::{Bounds, MaxWH, Renderable, Text};
+use crate::components::{Bounds, MaxSize, Renderable, Text};
 use crate::graphics::Renderer;
 use crate::graphics::Viewport;
 use crate::resources::Timing;
@@ -21,7 +21,7 @@ pub struct RenderData<'a> {
   viewport: ReadExpect<'a, Viewport>,
   // bounds: ReadStorage<'a, Bounds>,
   // text: ReadStorage<'a, Text>,
-  // max_wh: ReadStorage<'a, MaxWH>,
+  // max_size: ReadStorage<'a, MaxWH>,
   sprites: ReadStorage<'a, Renderable<String>>,
 }
 
@@ -36,7 +36,7 @@ impl<'a> System<'a> for RendererSystem {
       viewport,
       // bounds,
       // text,
-      // max_wh,
+      // max_size,
       sprites,
     } = data;
 
@@ -52,20 +52,20 @@ impl<'a> System<'a> for RendererSystem {
     let mut renderer = renderer.borrow_mut();
     renderer.render(
       timing.play_time.as_secs_f32(),
-      &viewport.canvas_wh,
+      &viewport.canvas_size,
       viewport.scale,
       &viewport.cam,
       &bytes,
     );
 
-    // for (bounds, text, max_wh) in (&bounds, &text, (&max_wh).maybe()).join() {
+    // for (bounds, text, max_size) in (&bounds, &text, (&max_size).maybe()).join() {
     //   console::log_1(
     //     &format!(
     //       "Hello {:?} {} {} {:?}",
     //       &bounds,
     //       timing.delta,
     //       text.0,
-    //       max_wh.unwrap_or(&MaxWH(WH16::from(255, 255))).0
+    //       max_size.unwrap_or(&MaxWH(WH16::from(255, 255))).0
     //     )
     //     .into(),
     //   );
