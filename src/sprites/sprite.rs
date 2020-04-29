@@ -1,7 +1,6 @@
 use super::{SpriteComposition, SpriteLayer};
 use crate::atlas::{AnimationID, Animator, Atlas};
 use crate::math::{Millis, R16, XY, XY16};
-use std::convert::TryFrom;
 use std::{convert::TryInto, num::NonZeroI16};
 
 /// A mapping from an Atlas Animation to a level region. This includes all
@@ -32,13 +31,17 @@ pub struct Sprite {
   /// The initial marquee translation offset in .1 pixels. The total offset is
   /// calculated using the global game clock and therefor synchronized by
   /// default except where this property deviates.
+  /// [todo]: should this use a custom type or should everything be i32 and
+  /// divide by 10 000 / 2^13? It's really easy to overflow i16 in general.
+  /// E.g., area (width * height) would overflow 2^19 at on a 725px square. Even
+  /// 2^24 can only go up to a 4096px square.
   wrap: XY16,
   /// The marquee translation speed in .1 pixels per second (or 1 px / 10 000 ms
   /// or 1 px / 10 s). The offset for each render is calculated by the shader as
   /// `wrap + wrap_velocity * game_clock`.
   wrap_velocity: XY16,
   /// The painting draw order.
-  layer: u8,
+  layer: i16,
   /// Source Animation state.
   animator: Animator,
 }
@@ -64,7 +67,7 @@ impl Sprite {
       scale,
       wrap,
       wrap_velocity,
-      layer: layer as u8,
+      layer: layer as i16,
     }
   }
 
@@ -143,16 +146,16 @@ impl Sprite {
     self.wrap_velocity = to.clone();
   }
 
-  pub fn get_layer(&self) -> u8 {
+  pub fn get_layer(&self) -> i16 {
     self.layer
   }
 
-  pub fn elevate_layer_to(&mut self, layer: SpriteLayer) {
-    self.layer = layer as u8;
+  pub fn elevate_layer_to(&mut self, layer: i16) {
+    self.layer = layer;
   }
 
-  pub fn elevate_layer_by(&mut self, layer: SpriteLayer) {
-    self.layer += layer as u8;
+  pub fn elevate_layer_by(&mut self, layer: i16) {
+    self.layer += layer;
   }
 
   pub fn serialize(
@@ -258,16 +261,16 @@ mod test {
       Animator::new(0, 0.),
     );
 
-    assert_eq!(sprite.get_layer(), SpriteLayer::Default as u8);
+    assert_eq!(sprite.get_layer(), SpriteLayer::Default as i16);
 
-    sprite.elevate_layer_by(SpriteLayer::UILo);
+    sprite.elevate_layer_by(SpriteLayer::UILo as i16);
     assert_eq!(
       sprite.get_layer(),
-      (SpriteLayer::Default as u8) + (SpriteLayer::UILo as u8)
+      (SpriteLayer::Default as i16) + (SpriteLayer::UILo as i16)
     );
 
-    sprite.elevate_layer_to(SpriteLayer::Default);
-    assert_eq!(sprite.get_layer(), (SpriteLayer::Default as u8));
+    sprite.elevate_layer_to(SpriteLayer::Default as i16);
+    assert_eq!(sprite.get_layer(), (SpriteLayer::Default as i16));
   }
 
   #[rustfmt::skip]
